@@ -17,6 +17,7 @@ import com.jangletech.qoogol.databinding.FragmentEditProfileBinding;
 
 import static com.jangletech.qoogol.util.Constant.add_edu;
 
+
 /**
  * A simple {@link Fragment} subclass.
  */
