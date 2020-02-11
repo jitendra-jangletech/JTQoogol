@@ -38,6 +38,12 @@
                         android:layout_height="wrap_content" />
 
                     <TextView
+                        android:id="@+id/nav_home"
+                        style="@style/menu_item_style"
+                        android:drawableLeft="@drawable/ic_learning"
+                        android:text="@string/menu_home" />
+
+                    <TextView
                         android:id="@+id/nav_learning"
                         style="@style/menu_item_style"
                         android:drawableLeft="@drawable/ic_learning"
