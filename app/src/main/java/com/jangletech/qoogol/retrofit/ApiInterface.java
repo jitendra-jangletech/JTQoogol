@@ -49,7 +49,8 @@ public interface ApiInterface {
     @POST("auth/classesForCourse")
     Call<List<ClassData>> signUpApi(@QueryMap Map<String, Object> request);
 
-    @POST("auth/generateAndSendOtpMobile")
+//    @POST("auth/generateAndSendOtpMobile")
+    @POST("auth/verifyMobileNo")
     Call<MobileOtp> getMobileOtp(@QueryMap Map<String, String> request);
 
 }

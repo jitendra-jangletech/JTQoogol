@@ -15,8 +15,12 @@
         android:layout_marginTop="72dp"
         android:inputType="number"
         android:itemBackground="@color/colorWhite"
-        android:textColor="@android:color/white"
+        android:textColor="@android:color/black"
         app:itemCount="4"
+        android:cursorVisible="true"
+        android:focusable="true"
+        android:focusedByDefault="true"
+        android:defaultFocusHighlightEnabled="true"
         app:lineColor="@color/colorPrimary"
         app:viewType="line"
         />

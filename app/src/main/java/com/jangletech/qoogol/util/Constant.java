@@ -51,7 +51,7 @@ public class Constant {
     public static final String degree = "degree";
     public static final String course = "course";
     public static final String cyNum = "cyNum";
-    public static final String mobile_number = "mobilenumber";
+    public static final String mobile_number = "mobileNo";
 
     //edit profile
     public static final int add_edu = 0;

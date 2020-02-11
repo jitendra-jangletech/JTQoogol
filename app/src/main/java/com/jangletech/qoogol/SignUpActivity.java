@@ -84,7 +84,7 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
         setListeners();
         fetchCountryData();
         fetchDegreeData();
-        createVerifyOTPDialog();
+//        createVerifyOTPDialog();
 
 
 
@@ -99,6 +99,8 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
 
     private void setListeners() {
         mBinding.btnSignUp.setOnClickListener(this);
+        mBinding.tvMobileVerify.setOnClickListener(this);
+        mBinding.tvEmailVerify.setOnClickListener(this);
         mBinding.countryAutocompleteView.setOnItemClickListener((parent, view, position, id) -> {
             final String name = ((TextView) view).getText().toString();
             int key = UtilHelper.getKeyFromValue(mViewModel.mMapCountry, name);
@@ -484,19 +486,30 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
                     callSignUpApi();
                 }
                 break;
+            case R.id.tvMobileVerify:
+                if (!TextUtils.isEmpty(mBinding.tilMobile.getEditText().getText())) {
+                    callMobileVerifyApi();
+                } else {
+                    mBinding.tilMobile.setError(getResources().getString(R.string.empty_mobile));
+                }
+
+                break;
         }
     }
 
-    private void getMobileOtp() {
+    private void callMobileVerifyApi() {
         Map<String, String> requestBody = new HashMap<>();
-        requestBody.put(mobile_number, "7448148405");
+        requestBody.put(mobile_number, mBinding.tilMobile.getEditText().getText().toString());
         Call<MobileOtp> call = apiService.getMobileOtp(requestBody);
         call.enqueue(new Callback<MobileOtp>() {
             @Override
             public void onResponse(Call<MobileOtp> call, Response<MobileOtp> response) {
                 try {
-
-                    Log.i(TAG, response.body().toString());
+                    if (response.body().getStatusCode().equalsIgnoreCase("1")) {
+                        createVerifyOTPDialog();
+                    } else {
+                        Toast.makeText(SignUpActivity.this,response.body().getMessage(),Toast.LENGTH_SHORT).show();
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -508,6 +521,7 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
             }
         });
     }
+
 
     private void callSignUpApi() {
         Map<String, Object> requestBody = new HashMap<>();

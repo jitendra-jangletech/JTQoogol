@@ -10,7 +10,7 @@ public class MobileOtp
 
     private String statusCode;
 
-    private int object;
+    private String object;
 
     public String getMessage ()
     {
@@ -32,11 +32,11 @@ public class MobileOtp
         this.statusCode = statusCode;
     }
 
-    public int getObject() {
+    public String getObject() {
         return object;
     }
 
-    public void setObject(int object) {
+    public void setObject(String object) {
         this.object = object;
     }
 
