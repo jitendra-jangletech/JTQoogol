@@ -566,9 +566,9 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
         Dialog dialog = new Dialog(this);
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setCancelable(false);
         dialog.setContentView(R.layout.otp_layout);
         final OtpView otpText = dialog.findViewById(R.id.otp_view);
+
 
         dialog.show();
     }
