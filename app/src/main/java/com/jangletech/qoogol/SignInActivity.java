@@ -55,13 +55,13 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_sign_in);
         setTextWatcher();
         initGoogleSdk();
-        mViewModel = ViewModelProviders.of(this).get(SignUpViewModel.class);
         CallbackManager callbackManager = CallbackManager.Factory.create();
+        mViewModel = ViewModelProviders.of(this).get(SignUpViewModel.class);
 
         Objects.requireNonNull(getSupportActionBar(), "Action Bar ").setDisplayHomeAsUpEnabled(true);
         setTitle(getResources().getString(R.string.sign_in_title));
 
-        mBinding.signInBtn.setOnClickListener(this);
+        mBinding.signInBtn.setOnClickListener(v -> validateSignInForm());
 
         mBinding.googleSignIn.setOnClickListener(v -> {
             //Toast.makeText(this, "Hi", Toast.LENGTH_SHORT).show();
@@ -107,10 +107,7 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
         }
 
         if (!hasError(mBinding.signInLayout)) {
-           /* Intent i = new Intent(this, MainActivity.class);
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(i);*/
-           callSignInApi();
+            callSignInApi();
         }
     }
 
@@ -166,7 +163,7 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
         switch (v.getId()) {
             case R.id.signInBtn:
                 validateSignInForm();
-                //callSignInApi();
+
                 break;
         }
     }
@@ -181,8 +178,16 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
             @Override
             public void onResponse(Call<SignInModel> call, Response<SignInModel> response) {
                 try {
-                    SignInModel signInModel = (SignInModel) response.body();
-                    mViewModel.setData(signInModel);
+                    if (response.body().getStatusCode().equalsIgnoreCase("1")) {
+                        SignInModel signInModel = (SignInModel) response.body();
+                        mViewModel.setData(signInModel);
+                        Intent i = new Intent(SignInActivity.this, MainActivity.class);
+                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(i);
+                    } else {
+                        Toast.makeText(SignInActivity.this,response.body().getMessage(),Toast.LENGTH_SHORT).show();
+                    }
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

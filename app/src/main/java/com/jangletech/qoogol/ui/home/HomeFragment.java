@@ -34,7 +34,7 @@ public class HomeFragment extends Fragment {
                 ViewModelProviders.of(this).get(HomeViewModel.class);
         fragmentHomeBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false);
 
-
+        itemlist.clear();
         Home home = new Home("100", "2200", "50");
         itemlist.add(home);
 
