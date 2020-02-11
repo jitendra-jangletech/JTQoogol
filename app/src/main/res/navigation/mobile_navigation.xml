@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.jangletech.qoogol.ui.home.HomeFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_home" >
+
+        <action
+            android:id="@+id/action_nav_home_to_nav_exam"
+            app:destination="@id/nav_exam" />
+        <action
+            android:id="@+id/action_nav_home_to_nav_reviews"
+            app:destination="@id/nav_reviews" />
+        <action
+            android:id="@+id/action_nav_home_to_nav_course"
+            app:destination="@id/nav_course" />
+        <action
+            android:id="@+id/action_nav_home_to_nav_saved_drafts"
+            app:destination="@id/nav_saved_drafts" />
+        <action
+            android:id="@+id/action_nav_home_to_nav_published"
+            app:destination="@id/nav_published" />
+        <action
+            android:id="@+id/action_nav_home_to_nav_edit_profile"
+            app:destination="@id/nav_edit_profile" />
+
+    </fragment>
+
+    //Learning Section Fragments
+    <fragment
+        android:id="@+id/nav_course"
+        android:name="com.jangletech.qoogol.ui.learning.course.CourseFragment"
+        android:label="@string/menu_course"
+        tools:layout="@layout/fragment_course" />
+
+    <fragment
+        android:id="@+id/nav_exam"
+        android:name="com.jangletech.qoogol.ui.learning.exam.ExamFragment"
+        android:label="@string/menu_exam"
+        tools:layout="@layout/fragment_exam" />
+
+    //Test Section Fragments
+    <fragment
+        android:id="@+id/nav_practice_test"
+        android:name="com.jangletech.qoogol.ui.test.practice_test.TestPracticeFragment"
+        android:label="@string/menu_test_practice"
+        tools:layout="@layout/fragment_test_practice" />
+
+    <fragment
+        android:id="@+id/nav_test_my"
+        android:name="com.jangletech.qoogol.ui.test.my_test.MyTestFragment"
+        android:label="@string/menu_test_my"
+        tools:layout="@layout/fragment_test_my" />
+
+    <fragment
+        android:id="@+id/nav_test_popular"
+        android:name="com.jangletech.qoogol.ui.test.popular_test.TestPopularFragment"
+        android:label="@string/menu_test_popular"
+        tools:layout="@layout/fragment_test_popular" />
+
+    <fragment
+        android:id="@+id/nav_attended_by_friends"
+        android:name="com.jangletech.qoogol.ui.test.attended_by_friends.TestAttentedByFriendsFragment"
+        android:label="@string/menu_test_attended_by_friends"
+        tools:layout="@layout/fragment_test_attented_by_friends" />
+
+    <fragment
+        android:id="@+id/nav_shared_with_you"
+        android:name="com.jangletech.qoogol.ui.test.shared_with_you.TestSharedWithYouFragment"
+        android:label="@string/menu_test_shared_with_you"
+        tools:layout="@layout/fragment_test_shared_with_you" />
+
+    <fragment
+        android:id="@+id/nav_shared_by_you"
+        android:name="com.jangletech.qoogol.ui.test.shared_by_you.TestSharedByYouFragment"
+        android:label="@string/menu_test_shared_by_you"
+        tools:layout="@layout/fragment_test_shared_by_you" />
+
+    <fragment
+        android:id="@+id/nav_create_test"
+        android:name="com.jangletech.qoogol.ui.test.create_test.CreateTestFragment"
+        android:label="@string/menu_test_create"
+        tools:layout="@layout/fragment_test_create" />
+
+
+
+    //Question Section Fragments
+    <fragment
+        android:id="@+id/nav_quest_trending"
+        android:name="com.jangletech.qoogol.ui.questions.trending_quesions.TrendingQuestFragment"
+        android:label="@string/menu_quest_trending"
+        tools:layout="@layout/fragment_quest_trending" />
+
+    <fragment
+        android:id="@+id/nav_quest_popular"
+        android:name="com.jangletech.qoogol.ui.questions.popular_questions.PopularQuestFragment"
+        android:label="@string/menu_quest_popular"
+        tools:layout="@layout/fragment_quest_popular" />
+
+    <fragment
+        android:id="@+id/nav_quest_recent"
+        android:name="com.jangletech.qoogol.ui.questions.recent_questions.RecentQuestFragment"
+        android:label="@string/menu_quest_popular"
+        tools:layout="@layout/fragment_quest_recent" />
+
+    <fragment
+        android:id="@+id/nav_saved_drafts"
+        android:name="com.jangletech.qoogol.ui.questions.saved_drafts.SavedDraftsFragment"
+        android:label="@string/menu_quest_popular"
+        tools:layout="@layout/fragment_quest_saved_drafts" />
+
+    //Review Fragment
+    <fragment
+        android:id="@+id/nav_reviews"
+        android:name="com.jangletech.qoogol.ui.reviews.ReviewFragment"
+        android:label="@string/menu_review"
+        tools:layout="@layout/fragment_review" />
+
+    //Published Fragment
+    <fragment
+        android:id="@+id/nav_published"
+        android:name="com.jangletech.qoogol.ui.published.PublishedFragment"
+        android:label="@string/menu_review"
+        tools:layout="@layout/fragment_published" />
+
+    //Published Fragment
+    <fragment
+        android:id="@+id/nav_notifications"
+        android:name="com.jangletech.qoogol.ui.notifications.NotificationsFragment"
+        android:label="@string/menu_review"
+        tools:layout="@layout/fragment_published" />
+
+
+    //Published Fragment
+    <fragment
+        android:id="@+id/nav_settings"
+        android:name="com.jangletech.qoogol.ui.settings.SettingsFragment"
+        android:label="@string/menu_review"
+        tools:layout="@layout/fragment_published" />
+
+    //Edit Profile
+    <fragment
+        android:id="@+id/nav_edit_profile"
+        android:name="com.jangletech.qoogol.ui.edit_profile.EditProfileFragment"
+        android:label="@string/menu_edit_profile"
+        tools:layout="@layout/fragment_edit_profile" />
+
+
+</navigation>

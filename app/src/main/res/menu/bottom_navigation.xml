@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_home"
+        android:icon="@drawable/ic_learning"
+        android:title="@string/home"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_learning"
+        android:icon="@drawable/ic_learning"
+        android:title="@string/learning"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_test"
+        android:icon="@drawable/ic_test"
+        android:title="@string/test"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/actions_questions"
+        android:checkable="false"
+        android:icon="@drawable/ic_questions"
+        android:title="@string/questions"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/actions_saved_drafts"
+        android:checkable="false"
+        android:icon="@drawable/ic_saved_drafts"
+        android:title="@string/saved_drafts"
+        app:showAsAction="ifRoom" />
+</menu>

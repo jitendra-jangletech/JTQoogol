@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/educational_info_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:padding="@dimen/_10sdp"
+            android:visibility="visible"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnEducationInfo">
+
+            <com.jangletech.qoogol.view.CustomAutoCompleteTextView
+                android:id="@+id/countryAutocompleteTextview"
+                style="@style/AutoCompleteTextViewStyle"
+                android:hint="@string/country"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.jangletech.qoogol.view.CustomAutoCompleteTextView
+                android:id="@+id/stateAutocompleteTextview"
+                style="@style/AutoCompleteTextViewStyle"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:hint="@string/state"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/countryAutocompleteTextview" />
+
+            <com.jangletech.qoogol.view.CustomAutoCompleteTextView
+                android:id="@+id/boardAutocompleteTextview"
+                style="@style/AutoCompleteTextViewStyle"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:hint="@string/university"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/stateAutocompleteTextview" />
+
+            <com.jangletech.qoogol.view.CustomAutoCompleteTextView
+                android:id="@+id/instituteAutocompleteTextview"
+                style="@style/AutoCompleteTextViewStyle"
+                android:hint="@string/institute"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/boardAutocompleteTextview" />
+
+            <com.jangletech.qoogol.view.CustomAutoCompleteTextView
+                android:id="@+id/degreeAutocompleteTextview"
+                style="@style/AutoCompleteTextViewStyle"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:hint="@string/degree"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/instituteAutocompleteTextview" />
+
+            <com.jangletech.qoogol.view.CustomAutoCompleteTextView
+                android:id="@+id/courseAutocompleteTextview"
+                style="@style/AutoCompleteTextViewStyle"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:hint="@string/course"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/degreeAutocompleteTextview" />
+
+            <com.jangletech.qoogol.view.CustomAutoCompleteTextView
+                android:id="@+id/classAutocompleteTextview"
+                style="@style/AutoCompleteTextViewStyle"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:hint="@string/classes"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/courseAutocompleteTextview" />
+
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/save_edu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:padding="@dimen/_10sdp"
+                android:text="Save"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/classAutocompleteTextview" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</layout>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout  xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            app:cardCornerRadius="@dimen/_20sdp"
+            android:id="@+id/container"
+            android:minHeight="@dimen/_150sdp"
+            android:layout_margin="@dimen/_40sdp"
+            app:cardBackgroundColor="@color/colorBlue"
+            app:cardElevation="@dimen/_5sdp"
+            android:layout_height="wrap_content">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_gravity="center"
+                android:padding="@dimen/_15sdp"
+                android:layout_height="match_parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/heading"
+                        android:textStyle="bold"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        android:layout_width="wrap_content"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="@dimen/_17ssp"
+                        android:text="Q &amp; A Log"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:id="@+id/course_count"
+                        android:textStyle="bold"
+                        app:layout_constraintTop_toBottomOf="@+id/heading"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        android:layout_width="wrap_content"
+                        android:visibility="gone"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="@dimen/_17ssp"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:id="@+id/courses"
+                        android:text="Courses"
+                        app:layout_constraintTop_toBottomOf="@+id/course_count"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        android:layout_width="wrap_content"
+                        android:textColor="@color/colorWhite"
+                        android:visibility="gone"
+                        android:textSize="@dimen/_14ssp"
+                        android:layout_height="wrap_content"/>
+
+
+                    <TextView
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:id="@+id/questions_count"
+                        app:layout_constraintTop_toBottomOf="@+id/courses"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        android:layout_width="wrap_content"
+                        android:textColor="@color/colorWhite"
+                        android:textStyle="bold"
+                        android:visibility="gone"
+                        android:textSize="@dimen/_17ssp"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:id="@+id/questions"
+                        android:text="Questions Submitted"
+                        app:layout_constraintTop_toBottomOf="@+id/questions_count"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        android:layout_width="wrap_content"
+                        android:textColor="@color/colorWhite"
+                        android:visibility="gone"
+                        android:textSize="@dimen/_14ssp"
+                        android:layout_height="wrap_content"/>
+
+
+                    <TextView
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:id="@+id/exams_count"
+                        android:textStyle="bold"
+                        android:visibility="gone"
+                        app:layout_constraintTop_toBottomOf="@+id/questions"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        android:layout_width="wrap_content"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="@dimen/_17ssp"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:id="@+id/exams"
+                        android:text="Exams"
+                        android:visibility="gone"
+                        app:layout_constraintTop_toBottomOf="@+id/exams_count"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        android:layout_width="wrap_content"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="@dimen/_14ssp"
+                        android:layout_height="wrap_content"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+</layout>

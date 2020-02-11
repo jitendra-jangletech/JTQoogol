@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <ScrollView
+        android:fillViewport="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/rootLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorWhite"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:padding="@dimen/_15sdp"
+            tools:context=".ui.signup.SignUpFragment">
+
+            <LinearLayout
+                android:id="@+id/signInImage"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_200sdp"
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_200sdp"
+                    android:src="@drawable/sign_in_image" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/signInLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/signInImage"
+                android:orientation="vertical">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilEmail"
+                    style="@style/TextInputLayoutStyle"
+                    android:hint="@string/email"
+                    app:errorEnabled="true">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:inputType="textNoSuggestions"
+                        android:id="@+id/et_email"
+                        style="@style/EditTextStyle" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilPassword"
+                    style="@style/TextInputLayoutStyle"
+                    android:hint="@string/password">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:inputType="textPassword|textNoSuggestions"
+                        android:id="@+id/et_password"
+                        style="@style/EditTextStyle" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/signInBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/forgotPasswordLink"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:text="@string/sign_in_title"
+                android:textAllCaps="false"
+                app:cornerRadius="@dimen/_12sdp" />
+
+            <TextView
+                android:id="@+id/forgotPasswordLink"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/signInLayout"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:text="@string/forgot_password" />
+
+            <TextView
+                android:id="@+id/OR"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/signInBtn"
+                android:layout_centerInParent="true"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:text="OR"
+                android:textSize="@dimen/_15ssp" />
+
+            <TextView
+                android:id="@+id/useSocialAccount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/OR"
+                android:layout_centerInParent="true"
+                android:layout_marginBottom="@dimen/_6sdp"
+                android:text="@string/use_social_account"
+                android:textSize="@dimen/_11ssp" />
+
+            <LinearLayout
+                android:id="@+id/social_account"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/useSocialAccount"
+                android:layout_centerInParent="true"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@+id/googleSignIn"
+                    android:layout_width="@dimen/_50sdp"
+                    android:layout_height="@dimen/_50sdp"
+                    android:src="@drawable/ic_google" />
+
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@+id/linkedInSignIn"
+                    android:layout_width="@dimen/_50sdp"
+                    android:layout_height="@dimen/_50sdp"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:layout_marginRight="@dimen/_10sdp"
+                    android:background="@color/colorWhite"
+                    android:src="@drawable/ic_linkedin" />
+
+                <FrameLayout
+                    android:layout_below="@+id/no_network_bar"
+                    android:id="@+id/FrameLayout1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.facebook.login.widget.LoginButton
+                        android:id="@+id/login_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone" />
+
+                    <ImageView
+                        android:id="@+id/facebookSignIn"
+                        android:layout_width="@dimen/_50sdp"
+                        android:layout_height="@dimen/_50sdp"
+                        android:src="@drawable/ic_facebook" />
+                </FrameLayout>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/social_account"
+                android:gravity="center"
+                android:text="@string/terms_privacy" />
+
+        </RelativeLayout>
+    </ScrollView>
+</layout>

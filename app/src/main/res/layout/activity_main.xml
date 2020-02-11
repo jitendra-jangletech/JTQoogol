@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.drawerlayout.widget.DrawerLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/drawer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        tools:openDrawer="start">
+
+        <include
+            layout="@layout/app_bar_main"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <com.google.android.material.navigation.NavigationView
+            android:id="@+id/nav_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:fitsSystemWindows="true"
+            app:itemTextColor="@color/colorBlack">
+
+            <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <include
+                        layout="@layout/nav_header_main"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/nav_learning"
+                        style="@style/menu_item_style"
+                        android:drawableLeft="@drawable/ic_learning"
+                        android:text="@string/learning" />
+
+                    <TextView
+                        android:id="@+id/nav_course"
+                        style="@style/sub_menu_item_style"
+                        android:text="@string/course" />
+
+                    <TextView
+                        android:id="@+id/nav_exam"
+                        style="@style/sub_menu_item_style"
+                        android:text="@string/exam" />
+
+
+                    <TextView
+                        android:id="@+id/nav_test"
+                        style="@style/menu_item_style"
+                        android:drawableLeft="@drawable/ic_test"
+                        android:text="@string/test" />
+
+                    <TextView
+                        android:id="@+id/nav_practice_test"
+                        style="@style/sub_menu_item_style"
+                        android:text="@string/practice_test" />
+
+                    <TextView
+                        android:id="@+id/nav_my_test"
+                        style="@style/sub_menu_item_style"
+                        android:text="@string/my_test" />
+
+                    <TextView
+                        android:id="@+id/nav_popular_test"
+                        style="@style/sub_menu_item_style"
+                        android:text="@string/popular_test" />
+
+                    <TextView
+                        android:id="@+id/nav_attended_by_friends"
+                        style="@style/sub_menu_item_style"
+                        android:text="@string/attended_by_friends" />
+
+                    <TextView
+                        android:id="@+id/nav_shared_with_you"
+                        style="@style/sub_menu_item_style"
+                        android:text="@string/shared_with_you" />
+
+                    <TextView
+                        android:id="@+id/nav_shared_by_you"
+                        style="@style/sub_menu_item_style"
+                        android:text="@string/shared_by_you" />
+
+                    <TextView
+                        android:id="@+id/nav_create_test"
+                        style="@style/sub_menu_item_style"
+                        android:text="@string/create_test" />
+
+                    <TextView
+                        style="@style/menu_item_style"
+                        android:drawableLeft="@drawable/ic_questions"
+                        android:text="@string/questions" />
+
+                    <TextView
+                        android:id="@+id/nav_trending_quest"
+                        style="@style/sub_menu_item_style"
+                        android:text="@string/trending_questions" />
+
+
+                    <TextView
+                        android:id="@+id/nav_popular_quest"
+                        style="@style/sub_menu_item_style"
+                        android:text="@string/popular_questions" />
+
+
+                    <TextView
+                        android:id="@+id/nav_recent_quest"
+                        style="@style/sub_menu_item_style"
+                        android:text="@string/recent_questions" />
+
+
+                    <TextView
+                        android:id="@+id/nav_saved_drafts"
+                        style="@style/sub_menu_item_style"
+                        android:text="@string/saved_drafts" />
+
+
+                    <TextView
+                        android:id="@+id/nav_reviews"
+                        style="@style/menu_item_style"
+                        android:drawableLeft="@drawable/ic_reviews"
+                        android:text="@string/reviews" />
+
+                    <TextView
+                        android:id="@+id/nav_published"
+                        style="@style/menu_item_style"
+                        android:drawableLeft="@drawable/ic_published"
+                        android:text="@string/published" />
+
+
+                    <TextView
+                        android:id="@+id/nav_notifications"
+                        style="@style/menu_item_style"
+                        android:drawableLeft="@drawable/ic_notifications"
+                        android:text="@string/notifications" />
+
+
+                    <TextView
+                        android:id="@+id/nav_settings"
+                        style="@style/menu_item_style"
+                        android:drawableLeft="@drawable/ic_settings"
+                        android:text="@string/settings" />
+
+
+                    <TextView
+                        android:layout_marginBottom="@dimen/_20sdp"
+                        android:id="@+id/nav_logout"
+                        style="@style/menu_item_style"
+                        android:drawableLeft="@drawable/ic_logout"
+                        android:text="@string/logout" />
+
+                </LinearLayout>
+
+            </ScrollView>
+
+        </com.google.android.material.navigation.NavigationView>
+
+
+    </androidx.drawerlayout.widget.DrawerLayout>
+</layout>
