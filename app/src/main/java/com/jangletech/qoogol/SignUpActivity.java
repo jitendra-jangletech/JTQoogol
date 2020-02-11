@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -567,8 +568,10 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.otp_layout);
+        dialog.setCancelable(false);
         final OtpView otpText = dialog.findViewById(R.id.otp_view);
-
+        ImageView close= dialog.findViewById(R.id.btnClose);
+        close.setOnClickListener(v-> dialog.dismiss());
 
         dialog.show();
     }
