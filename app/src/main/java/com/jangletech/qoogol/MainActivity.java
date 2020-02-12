@@ -2,7 +2,6 @@ package com.jangletech.qoogol;
 
 import android.os.Bundle;
 import android.view.Menu;
-import android.widget.Toast;
 
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
@@ -16,6 +15,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jangletech.qoogol.databinding.ActivityMainBinding;
+import com.jangletech.qoogol.dialog.UniversalDialog;
 
 public class MainActivity extends BaseActivity {
 
@@ -32,11 +32,7 @@ public class MainActivity extends BaseActivity {
         GsonBuilder gsonBuilder = new GsonBuilder();
         Gson gson = gsonBuilder.create();
 
-
-        //DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.edit_profile,
                 R.id.nav_home, R.id.nav_course, R.id.nav_exam,
@@ -59,7 +55,6 @@ public class MainActivity extends BaseActivity {
             if (navController.getCurrentDestination().getId() != R.id.nav_home) {
                 navController.popBackStack();
                 navController.navigate(R.id.nav_home);
-
             }
         });
 
@@ -155,7 +150,6 @@ public class MainActivity extends BaseActivity {
 
         findViewById(R.id.nav_quest_recent).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
-
             if (navController.getCurrentDestination().getId() != R.id.nav_quest_recent) {
                 navController.popBackStack();
                 navController.navigate(R.id.nav_quest_recent);
@@ -209,6 +203,19 @@ public class MainActivity extends BaseActivity {
                 navController.navigate(R.id.nav_edit_profile);
             }
         });
+
+        findViewById(R.id.nav_logout).setOnClickListener(v -> {
+            mBinding.drawerLayout.closeDrawers();
+            /*DialogUtils.showYesNoAlert(this, "Confirm Sign Out",
+                    "you are signing out of your Qoogol app on this device",
+                    "Logout", "Cancel", (dialog, which) -> finish(),
+                    (dialog, which) -> dialog.dismiss());*/
+            UniversalDialog universalDialog = new UniversalDialog(this,MainActivity.this,"Confirm Log Out",
+                    "you are signing out of your Qoogol app on this device",
+                    "Logout", "Cancel");
+            universalDialog.show();
+        });
+
     }
 
 
