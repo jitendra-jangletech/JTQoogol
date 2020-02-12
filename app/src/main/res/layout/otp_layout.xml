@@ -1,30 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:minWidth="@dimen/_300sdp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/round_white"
     android:padding="25dp">
 
 
+    <TextView
+        android:textSize="@dimen/_15ssp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:text="Verification Code"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:textSize="@dimen/_12ssp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:text="Please type the verification code sent to your mobile number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
 
     <com.mukesh.OtpView
+        android:layout_gravity="center"
         android:id="@+id/otp_view"
+        android:focusable="true"
+        android:focusedByDefault="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="72dp"
+        android:layout_marginTop="@dimen/_40sdp"
         android:inputType="number"
         android:itemBackground="@color/colorWhite"
         android:textColor="@android:color/black"
         app:itemCount="4"
         android:cursorVisible="true"
-        android:focusable="true"
-        android:focusedByDefault="true"
-        android:defaultFocusHighlightEnabled="true"
         app:lineColor="@color/colorPrimary"
         app:viewType="line"
+        android:layout_marginBottom="@dimen/_40sdp"
         />
 
+    <!--<com.mukesh.OtpView
+        android:layout_gravity="center"
+        android:id="@+id/otp_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="72dp"
+        android:inputType="number"
+        android:itemBackground="@color/colorPrimary"
+        android:textColor="@android:color/white"
+        app:itemCount="4"
+        app:lineColor="@color/colorPrimary"
+        android:layout_marginBottom="@dimen/_30sdp"
+        app:viewType="line"
+        />-->
 
-</RelativeLayout>
+    <Button
+        android:id="@+id/btnValidate"
+        android:layout_gravity="center"
+        android:textAllCaps="false"
+        android:text="Validate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+
+</LinearLayout>
 

@@ -37,7 +37,53 @@
         android:id="@+id/nav_course"
         android:name="com.jangletech.qoogol.ui.learning.course.CourseFragment"
         android:label="@string/menu_course"
-        tools:layout="@layout/fragment_course" />
+        tools:layout="@layout/fragment_course" >
+        <action
+            android:id="@+id/action_nav_course_to_nav_home"
+            app:destination="@id/nav_home" />
+        <action
+            android:id="@+id/action_nav_course_to_nav_saved_drafts"
+            app:destination="@id/nav_saved_drafts" />
+        <action
+            android:id="@+id/action_nav_course_to_nav_published"
+            app:destination="@id/nav_published" />
+        <action
+            android:id="@+id/action_nav_course_to_nav_create_test"
+            app:destination="@id/nav_create_test" />
+        <action
+            android:id="@+id/action_nav_course_to_nav_shared_by_you"
+            app:destination="@id/nav_shared_by_you" />
+        <action
+            android:id="@+id/action_nav_course_to_nav_shared_with_you"
+            app:destination="@id/nav_shared_with_you" />
+        <action
+            android:id="@+id/action_nav_course_to_nav_attended_by_friends"
+            app:destination="@id/nav_attended_by_friends" />
+        <action
+            android:id="@+id/action_nav_course_to_nav_practice_test"
+            app:destination="@id/nav_practice_test" />
+        <action
+            android:id="@+id/action_nav_course_to_nav_test_popular"
+            app:destination="@id/nav_test_popular" />
+        <action
+            android:id="@+id/action_nav_course_to_nav_test_my"
+            app:destination="@id/nav_test_my" />
+        <action
+            android:id="@+id/action_nav_course_to_nav_settings"
+            app:destination="@id/nav_settings" />
+        <action
+            android:id="@+id/action_nav_course_to_nav_quest_trending"
+            app:destination="@id/nav_quest_trending" />
+        <action
+            android:id="@+id/action_nav_course_to_nav_notifications"
+            app:destination="@id/nav_notifications" />
+        <action
+            android:id="@+id/action_nav_course_to_nav_quest_recent"
+            app:destination="@id/nav_quest_recent" />
+        <action
+            android:id="@+id/action_nav_course_to_nav_quest_popular"
+            app:destination="@id/nav_quest_popular" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_exam"
@@ -50,7 +96,17 @@
         android:id="@+id/nav_practice_test"
         android:name="com.jangletech.qoogol.ui.test.practice_test.TestPracticeFragment"
         android:label="@string/menu_test_practice"
-        tools:layout="@layout/fragment_test_practice" />
+        tools:layout="@layout/fragment_test_practice" >
+        <action
+            android:id="@+id/action_nav_practice_test_to_nav_test_my"
+            app:destination="@id/nav_test_my" />
+        <action
+            android:id="@+id/action_nav_practice_test_to_nav_test_popular"
+            app:destination="@id/nav_test_popular" />
+        <action
+            android:id="@+id/action_nav_practice_test_to_nav_test_popular2"
+            app:destination="@id/nav_test_popular" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_test_my"
@@ -127,7 +183,44 @@
         android:id="@+id/nav_published"
         android:name="com.jangletech.qoogol.ui.published.PublishedFragment"
         android:label="@string/menu_review"
-        tools:layout="@layout/fragment_published" />
+        tools:layout="@layout/fragment_published" >
+        <action
+            android:id="@+id/action_nav_published_to_nav_edit_profile"
+            app:destination="@id/nav_edit_profile" />
+        <action
+            android:id="@+id/action_nav_published_to_nav_exam"
+            app:destination="@id/nav_exam" />
+        <action
+            android:id="@+id/action_nav_published_to_nav_reviews"
+            app:destination="@id/nav_reviews" />
+        <action
+            android:id="@+id/action_nav_published_to_nav_saved_drafts"
+            app:destination="@id/nav_saved_drafts" />
+        <action
+            android:id="@+id/action_nav_published_to_nav_course"
+            app:destination="@id/nav_course" />
+        <action
+            android:id="@+id/action_nav_published_to_nav_create_test"
+            app:destination="@id/nav_create_test" />
+        <action
+            android:id="@+id/action_nav_published_to_nav_settings"
+            app:destination="@id/nav_settings" />
+        <action
+            android:id="@+id/action_nav_published_to_nav_notifications"
+            app:destination="@id/nav_notifications" />
+        <action
+            android:id="@+id/action_nav_published_to_nav_quest_recent"
+            app:destination="@id/nav_quest_recent" />
+        <action
+            android:id="@+id/action_nav_published_to_nav_quest_popular"
+            app:destination="@id/nav_quest_popular" />
+        <action
+            android:id="@+id/action_nav_published_to_nav_quest_trending"
+            app:destination="@id/nav_quest_trending" />
+        <action
+            android:id="@+id/action_nav_published_to_nav_saved_drafts2"
+            app:destination="@id/nav_saved_drafts" />
+    </fragment>
 
     //Published Fragment
     <fragment

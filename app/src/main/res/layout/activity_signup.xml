@@ -91,7 +91,7 @@
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/et_mobile"
                             style="@style/EditTextStyle"
-                            android:inputType="phone"
+                            android:inputType="number"
                             android:maxLength="10" />
                     </com.google.android.material.textfield.TextInputLayout>
 

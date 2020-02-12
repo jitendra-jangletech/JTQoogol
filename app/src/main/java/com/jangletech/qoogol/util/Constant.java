@@ -52,6 +52,8 @@ public class Constant {
     public static final String course = "course";
     public static final String cyNum = "cyNum";
     public static final String mobile_number = "mobileNo";
+    public static final String is_mobile_verified = "mobile1Verified";
+    public static final String is_email_verified = "emailVerified";
 
     //edit profile
     public static final int add_edu = 0;
