@@ -137,6 +137,15 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
             }
         });
 
+        mBinding.instituteAutocompleteView.setOnItemClickListener((parent, view, position, id) -> {
+            final String name = ((TextView) view).getText().toString();
+            int key = UtilHelper.getKeyFromValue(mViewModel.mMapInstitute, name);
+            if (key != -1) {
+                signUpData.setInstitute(key);
+            }
+        });
+
+
         mBinding.degreeAutocompleteView.setOnItemClickListener((parent, view, position, id) -> {
             final String name = ((TextView) view).getText().toString();
             int key = UtilHelper.getKeyFromValue(mViewModel.mMapDegree, name);
@@ -542,8 +551,8 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
             requestBody.put(degree, signUpData.getDegree());
             requestBody.put(course, signUpData.getCourse());
             requestBody.put(cyNum, signUpData.getCyNum());
-//        requestBody.put(is_mobile_verified, false);
-//        requestBody.put(is_email_verified, false);
+            requestBody.put(is_mobile_verified, false);
+            requestBody.put(is_email_verified, false);
 
             Call<SignUp> call = apiService.signUpApi(requestBody);
             call.enqueue(new Callback<SignUp>() {
