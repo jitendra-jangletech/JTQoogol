@@ -1,12 +1,14 @@
 package com.jangletech.qoogol.retrofit;
 
 import com.jangletech.qoogol.model.ClassData;
+import com.jangletech.qoogol.model.Classes;
 import com.jangletech.qoogol.model.Country;
 import com.jangletech.qoogol.model.Course;
 import com.jangletech.qoogol.model.Degree;
 import com.jangletech.qoogol.model.Institute;
 import com.jangletech.qoogol.model.MobileOtp;
 import com.jangletech.qoogol.model.SignInModel;
+import com.jangletech.qoogol.model.SignUp;
 import com.jangletech.qoogol.model.State;
 import com.jangletech.qoogol.model.University;
 
@@ -43,14 +45,15 @@ public interface ApiInterface {
     @POST("auth/coursesForDegree")
     Call<List<Course>> getCourses(@QueryMap Map<String, Integer> request);
 
-    @POST("auth/classesForCourse")
-    Call<List<ClassData>> getClasses(@QueryMap Map<String, Object> request);
+    @POST("auth/classesForDegreeNew")
+    Call<Classes> getClasses(@QueryMap Map<String, Object> request);
 
-    @POST("auth/classesForCourse")
-    Call<List<ClassData>> signUpApi(@QueryMap Map<String, Object> request);
+    @POST("auth/signUpNew")
+    Call<SignUp> signUpApi(@QueryMap Map<String, Object> request);
 
 //    @POST("auth/generateAndSendOtpMobile")
     @POST("auth/verifyMobileNo")
     Call<MobileOtp> getMobileOtp(@QueryMap Map<String, String> request);
+
 
 }

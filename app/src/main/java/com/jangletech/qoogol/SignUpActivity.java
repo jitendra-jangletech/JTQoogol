@@ -89,12 +89,8 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
         fetchDegreeData();
 
 
-        mBinding.selectAutocompleteView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(SignUpActivity.this, "" + parent.getSelectedItem(), Toast.LENGTH_SHORT).show();
-            }
-        });
+        mBinding.selectAutocompleteView.setOnItemClickListener((parent, view, position, id) ->
+                Toast.makeText(SignUpActivity.this, "" + parent.getSelectedItem(), Toast.LENGTH_SHORT).show());
     }
 
 
@@ -483,12 +479,6 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnSignUp:
-                DialogUtils.showOKAlert(this, "Title", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                });
                 if (validateSignUpForm()) {
                     callSignUpApi();
                 }
