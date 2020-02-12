@@ -72,12 +72,12 @@
                         android:text="@string/practice_test" />
 
                     <TextView
-                        android:id="@+id/nav_my_test"
+                        android:id="@+id/nav_test_my"
                         style="@style/sub_menu_item_style"
                         android:text="@string/my_test" />
 
                     <TextView
-                        android:id="@+id/nav_popular_test"
+                        android:id="@+id/nav_test_popular"
                         style="@style/sub_menu_item_style"
                         android:text="@string/popular_test" />
 
@@ -107,19 +107,19 @@
                         android:text="@string/questions" />
 
                     <TextView
-                        android:id="@+id/nav_trending_quest"
+                        android:id="@+id/nav_quest_trending"
                         style="@style/sub_menu_item_style"
                         android:text="@string/trending_questions" />
 
 
                     <TextView
-                        android:id="@+id/nav_popular_quest"
+                        android:id="@+id/nav_quest_popular"
                         style="@style/sub_menu_item_style"
                         android:text="@string/popular_questions" />
 
 
                     <TextView
-                        android:id="@+id/nav_recent_quest"
+                        android:id="@+id/nav_quest_recent"
                         style="@style/sub_menu_item_style"
                         android:text="@string/recent_questions" />
 

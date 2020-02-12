@@ -1,6 +1,7 @@
 package com.jangletech.qoogol;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -18,6 +19,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.jangletech.qoogol.databinding.ActivitySignupBinding;
+import com.jangletech.qoogol.dialog.DialogUtils;
 import com.jangletech.qoogol.model.ClassData;
 import com.jangletech.qoogol.model.Country;
 import com.jangletech.qoogol.model.Course;
@@ -85,8 +87,6 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
         setListeners();
         fetchCountryData();
         fetchDegreeData();
-        createVerifyOTPDialog();
-
 
 
         mBinding.selectAutocompleteView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -100,6 +100,8 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
 
     private void setListeners() {
         mBinding.btnSignUp.setOnClickListener(this);
+        mBinding.tvMobileVerify.setOnClickListener(this);
+        mBinding.tvEmailVerify.setOnClickListener(this);
         mBinding.countryAutocompleteView.setOnItemClickListener((parent, view, position, id) -> {
             final String name = ((TextView) view).getText().toString();
             int key = UtilHelper.getKeyFromValue(mViewModel.mMapCountry, name);
@@ -481,23 +483,40 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnSignUp:
+                DialogUtils.showOKAlert(this, "Title", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
                 if (validateSignUpForm()) {
                     callSignUpApi();
                 }
                 break;
+            case R.id.tvMobileVerify:
+                if (!TextUtils.isEmpty(mBinding.tilMobile.getEditText().getText())) {
+                    callMobileVerifyApi();
+                } else {
+                    mBinding.tilMobile.setError(getResources().getString(R.string.empty_mobile));
+                }
+
+                break;
         }
     }
 
-    private void getMobileOtp() {
+    private void callMobileVerifyApi() {
         Map<String, String> requestBody = new HashMap<>();
-        requestBody.put(mobile_number, "7448148405");
+        requestBody.put(mobile_number, mBinding.tilMobile.getEditText().getText().toString());
         Call<MobileOtp> call = apiService.getMobileOtp(requestBody);
         call.enqueue(new Callback<MobileOtp>() {
             @Override
             public void onResponse(Call<MobileOtp> call, Response<MobileOtp> response) {
                 try {
-
-                    Log.i(TAG, response.body().toString());
+                    if (response.body().getStatusCode().equalsIgnoreCase("1")) {
+                        createVerifyOTPDialog();
+                    } else {
+                        Toast.makeText(SignUpActivity.this,response.body().getMessage(),Toast.LENGTH_SHORT).show();
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -509,6 +528,7 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
             }
         });
     }
+
 
     private void callSignUpApi() {
         Map<String, Object> requestBody = new HashMap<>();
@@ -569,18 +589,9 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.otp_layout);
         dialog.setCancelable(false);
-        final OtpView otpText = dialog.findViewById(R.id.otp_view);
+        OtpView otpText = dialog.findViewById(R.id.otp_view);
         ImageView close= dialog.findViewById(R.id.btnClose);
         close.setOnClickListener(v-> dialog.dismiss());
-
         dialog.show();
-    }
-
-    private void verifyMobileOtp() {
-
-    }
-
-    private void verifyEmailOtp() {
-
     }
 }

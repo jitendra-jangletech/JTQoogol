@@ -89,7 +89,11 @@
         android:id="@+id/nav_exam"
         android:name="com.jangletech.qoogol.ui.learning.exam.ExamFragment"
         android:label="@string/menu_exam"
-        tools:layout="@layout/fragment_exam" />
+        tools:layout="@layout/fragment_exam" >
+        <action
+            android:id="@+id/action_nav_exam_to_nav_course"
+            app:destination="@id/nav_course" />
+    </fragment>
 
     //Test Section Fragments
     <fragment
@@ -104,8 +108,8 @@
             android:id="@+id/action_nav_practice_test_to_nav_test_popular"
             app:destination="@id/nav_test_popular" />
         <action
-            android:id="@+id/action_nav_practice_test_to_nav_test_popular2"
-            app:destination="@id/nav_test_popular" />
+            android:id="@+id/action_nav_practice_test_to_nav_course"
+            app:destination="@id/nav_course" />
     </fragment>
 
     <fragment

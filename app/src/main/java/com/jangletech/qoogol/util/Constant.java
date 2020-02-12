@@ -5,7 +5,6 @@ package com.jangletech.qoogol.util;
  */
 public class Constant {
 
-
     //Preference
     public static final String PREF_NAME = "qoogol";
     public static final String IS_LOGGED_IN = "LOGGED_IN";
@@ -14,9 +13,6 @@ public class Constant {
     public static final  String SIGN_IN_FIELD = "signInField";
     public static final  String PASSWORD = "password";
     public static final  String OBJECT = "object";
-
-
-
 
     //user
     public static final String user_id = "userId";
@@ -51,7 +47,7 @@ public class Constant {
     public static final String degree = "degree";
     public static final String course = "course";
     public static final String cyNum = "cyNum";
-    public static final String mobile_number = "mobilenumber";
+    public static final String mobile_number = "mobileNo";
 
     //edit profile
     public static final int add_edu = 0;

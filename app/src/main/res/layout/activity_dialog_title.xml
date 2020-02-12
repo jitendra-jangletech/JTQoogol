@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:layout_gravity="left"
+    android:background="@color/colorPrimary"
+    android:gravity="left"
+    android:orientation="horizontal"
+    android:padding="5dp">
+
+    <ImageView
+        android:id="@+id/iv_error"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="5dp"
+        android:src="@drawable/icon_error"
+        android:text="Error"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/iv_sucess"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="5dp"
+        android:src="@drawable/icon_tick"
+        android:text="Success"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/iv_warning"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="5dp"
+        android:src="@drawable/ic_warning_black_24dp"
+        android:text="Warning"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/iv_confirm"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="5dp"
+        android:src="@drawable/ic_error_outline_black_24dp"
+        android:text="Confirm"
+        android:visibility="gone" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+
+        <TextView
+            android:id="@+id/tv_title"
+            style="?android:attr/spinnerItemStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="5dp"
+            android:height="50dp"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:layout_alignParentStart="true"
+            android:text="test"
+            android:textAlignment="inherit"
+            android:textColor="@color/colorWhite"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_select_all"
+            style="?android:attr/spinnerItemStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="5dp"
+            android:height="50dp"
+            android:visibility="gone"
+            android:layout_alignParentEnd="true"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:text="Select All"
+            android:textAlignment="inherit"
+            android:textColor="@color/colorWhite"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+</LinearLayout>
