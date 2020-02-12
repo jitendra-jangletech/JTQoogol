@@ -2,6 +2,7 @@ package com.jangletech.qoogol;
 
 import android.os.Bundle;
 import android.view.Menu;
+import android.widget.Toast;
 
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
@@ -37,6 +38,7 @@ public class MainActivity extends BaseActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
+                R.id.edit_profile,
                 R.id.nav_home, R.id.nav_course, R.id.nav_exam,
                 R.id.nav_practice_test,R.id.nav_test_my,R.id.nav_test_popular,R.id.nav_attended_by_friends,
                 R.id.nav_shared_with_you,R.id.nav_shared_by_you,R.id.nav_create_test,
@@ -55,13 +57,16 @@ public class MainActivity extends BaseActivity {
         mBinding.navHome.setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
             if (navController.getCurrentDestination().getId() != R.id.nav_home) {
+                navController.popBackStack();
                 navController.navigate(R.id.nav_home);
+
             }
         });
 
         findViewById(R.id.nav_course).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
             if (navController.getCurrentDestination().getId() != R.id.nav_course) {
+                navController.popBackStack();
                 navController.navigate(R.id.nav_course);
             }
         });
@@ -69,6 +74,7 @@ public class MainActivity extends BaseActivity {
         findViewById(R.id.nav_exam).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
             if (navController.getCurrentDestination().getId() != R.id.nav_exam) {
+                navController.popBackStack();
                 navController.navigate(R.id.nav_exam);
             }
         });
@@ -76,6 +82,7 @@ public class MainActivity extends BaseActivity {
         findViewById(R.id.nav_practice_test).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
             if (navController.getCurrentDestination().getId() != R.id.nav_practice_test) {
+                navController.popBackStack();
                 navController.navigate(R.id.nav_practice_test);
             }
         });
@@ -83,6 +90,7 @@ public class MainActivity extends BaseActivity {
         findViewById(R.id.nav_test_my).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
             if (navController.getCurrentDestination().getId() != R.id.nav_test_my) {
+                navController.popBackStack();
                 navController.navigate(R.id.nav_test_my);
             }
         });
@@ -91,6 +99,7 @@ public class MainActivity extends BaseActivity {
         findViewById(R.id.nav_test_popular).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
             if (navController.getCurrentDestination().getId() != R.id.nav_test_popular) {
+                navController.popBackStack();
                 navController.navigate(R.id.nav_test_popular);
             }
         });
@@ -99,6 +108,7 @@ public class MainActivity extends BaseActivity {
         findViewById(R.id.nav_attended_by_friends).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
             if (navController.getCurrentDestination().getId() != R.id.nav_attended_by_friends) {
+                navController.popBackStack();
                 navController.navigate(R.id.nav_attended_by_friends);
             }
         });
@@ -106,6 +116,7 @@ public class MainActivity extends BaseActivity {
         findViewById(R.id.nav_shared_with_you).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
             if (navController.getCurrentDestination().getId() != R.id.nav_shared_with_you){
+                navController.popBackStack();
                 navController.navigate(R.id.nav_shared_with_you);
             }
         });
@@ -113,6 +124,7 @@ public class MainActivity extends BaseActivity {
         findViewById(R.id.nav_shared_by_you).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
             if (navController.getCurrentDestination().getId() != R.id.nav_shared_by_you) {
+                navController.popBackStack();
                 navController.navigate(R.id.nav_shared_by_you);
             }
         });
@@ -120,6 +132,7 @@ public class MainActivity extends BaseActivity {
         findViewById(R.id.nav_create_test).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
             if (navController.getCurrentDestination().getId() != R.id.nav_create_test) {
+                navController.popBackStack();
                 navController.navigate(R.id.nav_create_test);
             }
         });
@@ -127,6 +140,7 @@ public class MainActivity extends BaseActivity {
         findViewById(R.id.nav_quest_trending).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
             if (navController.getCurrentDestination().getId() != R.id.nav_quest_trending) {
+                navController.popBackStack();
                 navController.navigate(R.id.nav_quest_trending);
             }
         });
@@ -134,13 +148,16 @@ public class MainActivity extends BaseActivity {
         findViewById(R.id.nav_quest_popular).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
             if (navController.getCurrentDestination().getId() != R.id.nav_quest_popular) {
+                navController.popBackStack();
                 navController.navigate(R.id.nav_quest_popular);
             }
         });
 
         findViewById(R.id.nav_quest_recent).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
+
             if (navController.getCurrentDestination().getId() != R.id.nav_quest_recent) {
+                navController.popBackStack();
                 navController.navigate(R.id.nav_quest_recent);
             }
         });
@@ -148,6 +165,7 @@ public class MainActivity extends BaseActivity {
         findViewById(R.id.nav_saved_drafts).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
             if (navController.getCurrentDestination().getId() != R.id.nav_saved_drafts) {
+                navController.popBackStack();
                 navController.navigate(R.id.nav_saved_drafts);
             }
         });
@@ -155,6 +173,7 @@ public class MainActivity extends BaseActivity {
         findViewById(R.id.nav_reviews).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
             if (navController.getCurrentDestination().getId() != R.id.nav_reviews) {
+                navController.popBackStack();
                 navController.navigate(R.id.nav_reviews);
             }
         });
@@ -162,6 +181,7 @@ public class MainActivity extends BaseActivity {
         findViewById(R.id.nav_published).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
             if (navController.getCurrentDestination().getId() != R.id.nav_published) {
+                navController.popBackStack();
                 navController.navigate(R.id.nav_published);
             }
         });
@@ -169,6 +189,7 @@ public class MainActivity extends BaseActivity {
         findViewById(R.id.nav_notifications).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
             if (navController.getCurrentDestination().getId() != R.id.nav_notifications) {
+                navController.popBackStack();
                 navController.navigate(R.id.nav_notifications);
             }
         });
@@ -176,14 +197,16 @@ public class MainActivity extends BaseActivity {
         findViewById(R.id.nav_settings).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
             if (navController.getCurrentDestination().getId() != R.id.nav_settings) {
+                navController.popBackStack();
                 navController.navigate(R.id.nav_settings);
             }
         });
 
         findViewById(R.id.edit_profile).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
-            if (navController.getCurrentDestination().getId() != R.id.edit_profile) {
-                navController.navigate(R.id.edit_profile);
+            if (navController.getCurrentDestination().getId() != R.id.nav_edit_profile) {
+                navController.popBackStack();
+                navController.navigate(R.id.nav_edit_profile);
             }
         });
     }
@@ -204,6 +227,5 @@ public class MainActivity extends BaseActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
-
 
 }

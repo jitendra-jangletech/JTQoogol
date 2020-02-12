@@ -16,7 +16,6 @@ import com.jangletech.qoogol.R;
 public class DialogUtils {
 
     private static AlertDialog mDialog;
-    private static AlertDialog mDialog1;
     private static DialogInterface.OnClickListener mDefaultListener = new DialogInterface.OnClickListener() {
 
         @Override
@@ -83,17 +82,6 @@ public class DialogUtils {
         showOKAlert(context, null, msg, null);
     }
 
-    public static void showOKAlert(Context context, String msg, DialogInterface.OnClickListener listener) {
-        showOKAlert(context, null, msg, listener);
-    }
-
-    public static void showOKAlert(Context context, int resId, DialogInterface.OnClickListener listener) {
-        showOKAlert(context, null, context.getResources().getString(resId), listener);
-    }
-
-    public static void showOKAlert(Context context, int resId) {
-        showOKAlert(context, context.getResources().getString(resId));
-    }
 
     public static void showYesNoAlert(Context context, String title, String msg,
                                       String yesLabel, String noLabel, DialogInterface.OnClickListener yesListener,
@@ -147,7 +135,6 @@ public class DialogUtils {
         try {
             if (isDialogShowing())
                 return;
-
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
             View view = setCustomView(context, title);
             builder.setCustomTitle(view);
@@ -163,26 +150,6 @@ public class DialogUtils {
         }
     }
 
-    public static void showDialog(Context context, String title, String message, boolean cancelable) {
-        try {
-            if (isDialogShowing())
-                return;
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            View view = setCustomView(context, title);
-            builder.setCustomTitle(view);
-            builder.setTitle(title)
-                    .setMessage(message)
-                    .setCancelable(cancelable);
-
-            mDialog = builder.create();
-            mDialog.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
-    }
 
     private static View setCustomView(Context context, String title) {
         View view = null;
@@ -222,11 +189,4 @@ public class DialogUtils {
         return view;
     }
 
-    public static void showSettingsCancelAlert(Context context, String msg, DialogInterface.OnClickListener yesListener) {
-        showYesNoAlert(context, null, msg, yesListener, null);
-    }
-
-    public static void showSettingsCancelAlert(Context context, int resId, DialogInterface.OnClickListener yesListener) {
-        showYesNoAlert(context, context.getResources().getString(resId), yesListener);
-    }
 }
