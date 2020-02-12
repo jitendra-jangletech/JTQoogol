@@ -495,9 +495,9 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnSignUp:
-//                if (validateSignUpForm()) {
+                if (validateSignUpForm()) {
                     callSignUpApi();
-//                }
+                }
                 break;
             case R.id.tvMobileVerify:
                 if (!TextUtils.isEmpty(mBinding.tilMobile.getEditText().getText())) {
@@ -519,7 +519,7 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
             public void onResponse(Call<MobileOtp> call, Response<MobileOtp> response) {
                 try {
                     if (response.body().getStatusCode().equalsIgnoreCase("1")) {
-                        createVerifyOTPDialog();
+                        createVerifyOTPDialog(response.body().getObject());
                     } else {
                         Toast.makeText(SignUpActivity.this,response.body().getMessage(),Toast.LENGTH_SHORT).show();
                     }
@@ -616,12 +616,24 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
         });
     }
 
-    private void createVerifyOTPDialog() {
+    private void createVerifyOTPDialog(String otp) {
         Dialog dialog = new Dialog(this);
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.otp_layout);
         final OtpView otpText = dialog.findViewById(R.id.otp_view);
+        dialog.findViewById(R.id.btnValidate).setOnClickListener(v -> {
+            if (!otpText.getText().toString().isEmpty()) {
+                if (otp.equalsIgnoreCase(otpText.getText().toString())) {
+                    signUpData.setMobile1Verified("true");
+                    mBinding.tvMobileVerify.setText("Verified");
+                    mBinding.tvMobileVerify.setTextColor(getResources().getColor(R.color.color_green));
+                } else {
+                    signUpData.setMobile1Verified("false");
+                }
+            }
+            dialog.dismiss();
+        });
         dialog.show();
     }
 

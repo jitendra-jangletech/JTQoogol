@@ -25,6 +25,7 @@ import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.GenericTextWatcher;
+import com.jangletech.qoogol.util.PreferenceManager;
 import com.linkedin.platform.LISessionManager;
 import com.linkedin.platform.errors.LIAuthError;
 import com.linkedin.platform.listeners.AuthListener;
@@ -180,6 +181,7 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
                 try {
                     if (response.body().getStatusCode().equalsIgnoreCase("1")) {
                         SignInModel signInModel = (SignInModel) response.body();
+                        new PreferenceManager(getApplicationContext()).saveUserId(response.body().getObject().getUserId());
                         mViewModel.setData(signInModel);
                         Intent i = new Intent(SignInActivity.this, MainActivity.class);
                         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
