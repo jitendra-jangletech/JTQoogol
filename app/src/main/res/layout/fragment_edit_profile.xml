@@ -309,6 +309,9 @@
 
                         <com.google.android.material.textfield.TextInputEditText
                             style="@style/EditTextStyle"
+                            android:editable="false"
+                            android:focusable="false"
+                            android:cursorVisible="false"
                             android:maxLength="15" />
                     </com.google.android.material.textfield.TextInputLayout>
 

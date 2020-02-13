@@ -8,6 +8,7 @@ import androidx.appcompat.app.AlertDialog;
 
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,6 +19,8 @@ import android.widget.Toast;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.AddEducationBinding;
 import com.jangletech.qoogol.databinding.FragmentEditProfileBinding;
+import com.jangletech.qoogol.model.Profile;
+import com.jangletech.qoogol.model.ProfileData;
 import com.jangletech.qoogol.model.SignUp;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
@@ -42,40 +45,113 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
     FragmentEditProfileBinding fragmentEditProfileBinding;
     AddEducationBinding addEducationBinding;
     AlertDialog educationDialog;
-    ApiInterface apiService = ApiClient.getInstance().getApi();
+    ApiInterface apiService;
     private static final String TAG = "EditProfileFragment";
+    private ProfileViewModel mViewModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         fragmentEditProfileBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_edit_profile, container, false);
+        initView();
         setListeners();
-        fetAccountDetails();
+        fetchAccountDetails();
+        fetchPersonalDetails();
         return fragmentEditProfileBinding.getRoot();
     }
 
-    private void fetAccountDetails() {
-        Map<String, Integer> requestBody = new HashMap<>();
-        requestBody.put(user_id, Integer.parseInt(new PreferenceManager(getActivity()).getUserId()));
-        Call<SignUp> call = apiService.getAccountDetails(requestBody);
-        call.enqueue(new Callback<SignUp>() {
-            @Override
-            public void onResponse(Call<SignUp> call, Response<SignUp> response) {
+    private void initView() {
+        mViewModel = ViewModelProviders.of(this).get(ProfileViewModel.class);
+        apiService = ApiClient.getInstance().getApi();
+    }
 
-               // if(response.)
+    private void fetchAccountDetails() {
+        Map<String, Integer> requestBody = new HashMap<>();
+        requestBody.put(user_id,Integer.parseInt(new PreferenceManager(getActivity()).getUserId()));
+        Call<Profile> call = apiService.getAccountDetails(requestBody);
+        call.enqueue(new Callback<Profile>() {
+            @Override
+            public void onResponse(Call<Profile> call, Response<Profile> response) {
+                try {
                     if (response.body().getStatusCode().equalsIgnoreCase("1")) {
                     } else {
                         Toast.makeText(getActivity(),response.body().getMessage(),Toast.LENGTH_SHORT).show();
                     }
-
+                } catch(Exception e) {
+                    Log.e(TAG,e.toString());
+                }
             }
 
             @Override
-            public void onFailure(Call<SignUp> call, Throwable t) {
+            public void onFailure(Call<Profile> call, Throwable t) {
                 Log.i(TAG, t.toString());
             }
         });
     }
+
+
+    private void fetchPersonalDetails() {
+        Map<String, Integer> requestBody = new HashMap<>();
+        requestBody.put(user_id,Integer.parseInt(new PreferenceManager(getActivity()).getUserId()));
+        Call<Profile> call = apiService.getPersonalDetails(requestBody);
+        call.enqueue(new Callback<Profile>() {
+            @Override
+            public void onResponse(Call<Profile> call, Response<Profile> response) {
+                try {
+                    if (response.body().getStatusCode().equalsIgnoreCase("1")) {
+                        mViewModel.mpersonalData = new ProfileData();
+                        if (response.body().getObject()!=null)
+                            mViewModel.mpersonalData = response.body().getObject();
+                            setPersonalDetails(mViewModel.mpersonalData);
+                    } else {
+                        Toast.makeText(getActivity(),response.body().getMessage(),Toast.LENGTH_SHORT).show();
+                    }
+                } catch(Exception e) {
+                    Log.e(TAG,e.toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Profile> call, Throwable t) {
+                Log.i(TAG, t.toString());
+            }
+        });
+    }
+
+    private void setPersonalDetails(ProfileData mpersonalData) {
+        fragmentEditProfileBinding.etFirstName.setText(mpersonalData.getFirstName());
+        fragmentEditProfileBinding.etLastName.setText(mpersonalData.getLastName());
+        fragmentEditProfileBinding.genderAutocompleteView.setText(mpersonalData.getGender());
+        fragmentEditProfileBinding.birthdate.getEditText().setText(mpersonalData.getDobString());
+        fragmentEditProfileBinding.countryAutocompleteTextview.setText(mpersonalData.getCountryName());
+        fragmentEditProfileBinding.stateAutocompleteTextview.setText(mpersonalData.getStateName());
+        fragmentEditProfileBinding.cityAutocompleteTextview.setText(mpersonalData.getCityName());
+    }
+
+    private void fetchEducationalDetails() {
+        Map<String, Integer> requestBody = new HashMap<>();
+        requestBody.put(user_id,Integer.parseInt(new PreferenceManager(getActivity()).getUserId()));
+        Call<Profile> call = apiService.getEducationDetails(requestBody);
+        call.enqueue(new Callback<Profile>() {
+            @Override
+            public void onResponse(Call<Profile> call, Response<Profile> response) {
+                try {
+                    if (response.body().getStatusCode().equalsIgnoreCase("1")) {
+                    } else {
+                        Toast.makeText(getActivity(),response.body().getMessage(),Toast.LENGTH_SHORT).show();
+                    }
+                } catch(Exception e) {
+                    Log.e(TAG,e.toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Profile> call, Throwable t) {
+                Log.i(TAG, t.toString());
+            }
+        });
+    }
+
 
     private void setListeners() {
         fragmentEditProfileBinding.btnPersonalInfo.setOnClickListener(this);
@@ -128,6 +204,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
                 break;
         }
     }
+
 
     private void addEducation(final int called_from) {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());

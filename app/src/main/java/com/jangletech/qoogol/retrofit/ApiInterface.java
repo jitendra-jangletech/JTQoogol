@@ -7,6 +7,7 @@ import com.jangletech.qoogol.model.Course;
 import com.jangletech.qoogol.model.Degree;
 import com.jangletech.qoogol.model.Institute;
 import com.jangletech.qoogol.model.MobileOtp;
+import com.jangletech.qoogol.model.Profile;
 import com.jangletech.qoogol.model.SignInModel;
 import com.jangletech.qoogol.model.SignUp;
 import com.jangletech.qoogol.model.State;
@@ -56,7 +57,13 @@ public interface ApiInterface {
     Call<MobileOtp> getMobileOtp(@QueryMap Map<String, String> request);
 
     @POST("user/fetchUserAccountDetails")
-    Call<SignUp> getAccountDetails(@QueryMap Map<String, Integer> request);
+    Call<Profile> getAccountDetails(@QueryMap Map<String, Integer> request);
+
+    @POST("user/fetchPersonalDetails")
+    Call<Profile> getPersonalDetails(@QueryMap Map<String, Integer> request);
+
+    @POST("user/fetchEduDetails")
+    Call<Profile> getEducationDetails(@QueryMap Map<String, Integer> request);
 
 
 }
