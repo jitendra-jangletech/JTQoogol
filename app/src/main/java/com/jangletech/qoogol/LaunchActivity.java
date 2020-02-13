@@ -23,6 +23,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.jangletech.qoogol.databinding.ActivityLaunchBinding;
+import com.jangletech.qoogol.util.PreferenceManager;
 import com.linkedin.platform.LISessionManager;
 import com.linkedin.platform.errors.LIAuthError;
 import com.linkedin.platform.listeners.AuthListener;
@@ -46,6 +47,7 @@ public class LaunchActivity extends BaseActivity implements
         computePakageHash();
         //Init Google sdk
         initGoogleSdk();
+        performAutoSignIn();
 
         CallbackManager callbackManager = CallbackManager.Factory.create();
 
@@ -90,12 +92,6 @@ public class LaunchActivity extends BaseActivity implements
         });
     }
 
-    /*@Override
-    protected void onStart() {
-        super.onStart();
-        Intent startServiceIntent = new Intent(this, NetworkSchedulerService.class);
-        startService(startServiceIntent);
-    }*/
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
@@ -183,7 +179,6 @@ public class LaunchActivity extends BaseActivity implements
         super.onDestroy();
     }
 
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -194,4 +189,13 @@ public class LaunchActivity extends BaseActivity implements
         super.onStop();
     }
 
+    private void performAutoSignIn(){
+        if(new PreferenceManager(getApplicationContext()).isLoggedIn()){
+            Intent intent = new Intent(this,MainActivity.class);
+            startActivity(intent);
+            finish();
+        }else{
+            //Sign In Manually
+        }
+    }
 }

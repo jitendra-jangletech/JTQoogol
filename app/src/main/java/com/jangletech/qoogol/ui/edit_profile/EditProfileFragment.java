@@ -104,9 +104,9 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
                             mViewModel.mpersonalData = response.body().getObject();
                             setPersonalDetails(mViewModel.mpersonalData);
                     } else {
-                        Toast.makeText(getActivity(),response.body().getMessage(),Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
                     }
-                } catch(Exception e) {
+                }catch(Exception e) {
                     Log.e(TAG,e.toString());
                 }
             }
@@ -204,7 +204,6 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
                 break;
         }
     }
-
 
     private void addEducation(final int called_from) {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());

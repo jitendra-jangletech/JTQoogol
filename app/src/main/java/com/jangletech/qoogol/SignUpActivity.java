@@ -8,8 +8,8 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -88,16 +88,10 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
         setListeners();
         fetchCountryData();
         fetchDegreeData();
-//        createVerifyOTPDialog();
 
 
-
-        mBinding.selectAutocompleteView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(SignUpActivity.this, "" + parent.getSelectedItem(), Toast.LENGTH_SHORT).show();
-            }
-        });
+        mBinding.selectAutocompleteView.setOnItemClickListener((parent, view, position, id) ->
+                Toast.makeText(SignUpActivity.this, "" + parent.getSelectedItem(), Toast.LENGTH_SHORT).show());
     }
 
 
@@ -621,7 +615,10 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.otp_layout);
-        final OtpView otpText = dialog.findViewById(R.id.otp_view);
+        dialog.setCancelable(false);
+        OtpView otpText = dialog.findViewById(R.id.otp_view);
+        ImageView close= dialog.findViewById(R.id.btnClose);
+        close.setOnClickListener(v-> dialog.dismiss());
         dialog.findViewById(R.id.btnValidate).setOnClickListener(v -> {
             if (!otpText.getText().toString().isEmpty()) {
                 if (otp.equalsIgnoreCase(otpText.getText().toString())) {
@@ -637,11 +634,5 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
         dialog.show();
     }
 
-    private void verifyMobileOtp() {
 
-    }
-
-    private void verifyEmailOtp() {
-
-    }
 }
