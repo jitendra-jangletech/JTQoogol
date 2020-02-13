@@ -92,12 +92,6 @@ public class LaunchActivity extends BaseActivity implements
         });
     }
 
-    /*@Override
-    protected void onStart() {
-        super.onStart();
-        Intent startServiceIntent = new Intent(this, NetworkSchedulerService.class);
-        startService(startServiceIntent);
-    }*/
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
@@ -198,12 +192,10 @@ public class LaunchActivity extends BaseActivity implements
     private void performAutoSignIn(){
         if(new PreferenceManager(getApplicationContext()).isLoggedIn()){
             Intent intent = new Intent(this,MainActivity.class);
-            //intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(intent);
             finish();
         }else{
             //Sign In Manually
         }
     }
-
 }

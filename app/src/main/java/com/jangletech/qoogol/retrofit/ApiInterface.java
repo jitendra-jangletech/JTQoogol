@@ -1,6 +1,5 @@
 package com.jangletech.qoogol.retrofit;
 
-import com.jangletech.qoogol.model.ClassData;
 import com.jangletech.qoogol.model.Classes;
 import com.jangletech.qoogol.model.Country;
 import com.jangletech.qoogol.model.Course;

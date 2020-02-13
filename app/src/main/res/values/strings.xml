@@ -179,6 +179,11 @@
     <string name="alt_mobile">Alternate Mobile</string>
     <string name="available_courses">Available courses for study</string>
     <string name="no_education">No education details available</string>
+    <string name="copyrights">\u00a9 JangleTech All rights reserved</string>
+    <string name="qoogol_version_1_0">Qoogol Version 1.0</string>
+    <string name="menu_learning">Learning</string>
+    <string name="menu_test">Test</string>
+    <string name="menu_questions">Questions</string>
 
 
 </resources>

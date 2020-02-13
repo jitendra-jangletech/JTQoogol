@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <ScrollView
-        android:fillViewport="true"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
         <RelativeLayout
             android:id="@+id/rootLayout"
@@ -45,9 +45,9 @@
                     app:errorEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:inputType="textNoSuggestions"
                         android:id="@+id/et_email"
-                        style="@style/EditTextStyle" />
+                        style="@style/EditTextStyle"
+                        android:inputType="textNoSuggestions" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -57,9 +57,9 @@
                     android:hint="@string/password">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:inputType="textPassword|textNoSuggestions"
                         android:id="@+id/et_password"
-                        style="@style/EditTextStyle" />
+                        style="@style/EditTextStyle"
+                        android:inputType="textPassword|textNoSuggestions" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -130,10 +130,10 @@
                     android:src="@drawable/ic_linkedin" />
 
                 <FrameLayout
-                    android:layout_below="@+id/no_network_bar"
                     android:id="@+id/FrameLayout1"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/no_network_bar">
 
                     <com.facebook.login.widget.LoginButton
                         android:id="@+id/login_button"

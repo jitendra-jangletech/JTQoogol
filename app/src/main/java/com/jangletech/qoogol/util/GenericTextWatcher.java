@@ -1,8 +1,6 @@
 package com.jangletech.qoogol.util;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -16,10 +14,7 @@ import java.util.Objects;
 
 public class GenericTextWatcher implements TextWatcher {
 
-    private static final String TAG = "GenericTextWatcher";
     private TextInputLayout view;
-    private TextInputLayout view1;
-    private TextInputLayout view2;
     private Context mContext;
 
     public GenericTextWatcher(TextInputLayout view, Context mContext) {
@@ -74,15 +69,7 @@ public class GenericTextWatcher implements TextWatcher {
                     view.setError(null);
                     hideErrorSpace(view);
                 }
-            }/*else if(view.getId() == R.id.til_confirm_password){
-                if (TextUtils.isEmpty(Objects.requireNonNull(view.getEditText()).getText().toString().trim())) {
-                    view.setError(mContext.getResources().getString(R.string.empty_confirm_password));
-                }
-                else {
-                    view.setError(null);
-                    hideErrorSpace(view);
-                }
-            }*/
+            }
 
         }
 

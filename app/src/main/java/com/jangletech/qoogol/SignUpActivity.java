@@ -1,7 +1,6 @@
 package com.jangletech.qoogol;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -9,7 +8,6 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,7 +17,6 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.jangletech.qoogol.databinding.ActivitySignupBinding;
-import com.jangletech.qoogol.dialog.DialogUtils;
 import com.jangletech.qoogol.model.ClassData;
 import com.jangletech.qoogol.model.Classes;
 import com.jangletech.qoogol.model.Country;
@@ -34,7 +31,6 @@ import com.jangletech.qoogol.model.University;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.util.GenericTextWatcher;
-import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
 import com.mukesh.OtpView;
 
@@ -623,7 +619,6 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
         OtpView otpText = dialog.findViewById(R.id.otp_view);
         ImageView close= dialog.findViewById(R.id.btnClose);
         close.setOnClickListener(v-> dialog.dismiss());
-        //final OtpView otpText = dialog.findViewById(R.id.otp_view);
         dialog.findViewById(R.id.btnValidate).setOnClickListener(v -> {
             if (!otpText.getText().toString().isEmpty()) {
                 if (otp.equalsIgnoreCase(otpText.getText().toString())) {
