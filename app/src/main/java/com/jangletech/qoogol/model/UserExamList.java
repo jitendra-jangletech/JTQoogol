@@ -3,7 +3,9 @@ package com.jangletech.qoogol.model;
 /**
  * Created by Pritali on 1/28/2020.
  */
-public class UserExamList {
+
+public class UserExamList
+{
     private String userExamId;
 
     private String completedDT;
@@ -92,11 +94,6 @@ public class UserExamList {
 
     public void setCompletedDTStr(String completedDTStr) {
         this.completedDTStr = completedDTStr;
-    }
-
-    @Override
-    public String toString() {
-        return "ClassPojo [userExamId = " + userExamId + ", completedDT = " + completedDT + ", examName = " + examName + ", examId = " + examId + ", rank = " + rank + ", marks = " + marks + ", userId = " + userId + ", status = " + status + ", completedDTStr = " + completedDTStr + "]";
     }
 }
 

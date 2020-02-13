@@ -62,18 +62,56 @@
                 app:layout_constraintTop_toBottomOf="@+id/rlParent">
 
 
-                <TextView
-                    android:id="@+id/btnAccountInfo"
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:id="@+id/AccountInfolayout"
                     android:background="@color/colorLightGray"
-                    android:drawableEnd="@drawable/ic_test"
-                    android:gravity="center_vertical"
-                    android:padding="@dimen/_5sdp"
-                    android:text="@string/account_info"
-                    android:textColor="@color/colorBlack"
+                    android:layout_marginTop="@dimen/_10sdp"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        android:id="@+id/btnAccountInfo"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintRight_toLeftOf="@+id/add_acc_info"
+                        android:gravity="center_vertical"
+                        android:padding="@dimen/_5sdp"
+                        android:text="@string/account_info"
+                        android:textColor="@color/colorBlack" />
+
+                    <ImageView
+                        android:src="@drawable/ic_test"
+                        android:scaleType="fitCenter"
+                        android:paddingStart="@dimen/_15sdp"
+                        android:paddingRight="@dimen/_5sdp"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/btnAccountInfo"
+                        app:layout_constraintBottom_toBottomOf="@+id/btnAccountInfo"
+                        android:id="@+id/add_acc_info"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+<!--                <TextView-->
+<!--                    android:id="@+id/btnAccountInfo"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:background="@color/colorLightGray"-->
+<!--                    android:drawableEnd="@drawable/ic_test"-->
+<!--                    android:gravity="center_vertical"-->
+<!--                    android:padding="@dimen/_5sdp"-->
+<!--                    android:text="@string/account_info"-->
+<!--                    android:textColor="@color/colorBlack"-->
+<!--                    app:layout_constraintLeft_toLeftOf="parent"-->
+<!--                    app:layout_constraintTop_toTopOf="parent" />-->
 
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -81,9 +119,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_2sdp"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/btnAccountInfo">
+                    app:layout_constraintTop_toBottomOf="@+id/AccountInfolayout">
 
                     <LinearLayout
                         android:id="@+id/email_layout"

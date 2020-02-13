@@ -34,6 +34,7 @@ import com.jangletech.qoogol.model.University;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.util.GenericTextWatcher;
+import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
 import com.mukesh.OtpView;
 
@@ -133,6 +134,15 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
                 fetchInstituteData(key);
             }
         });
+
+        mBinding.instituteAutocompleteView.setOnItemClickListener((parent, view, position, id) -> {
+            final String name = ((TextView) view).getText().toString();
+            int key = UtilHelper.getKeyFromValue(mViewModel.mMapInstitute, name);
+            if (key != -1) {
+                signUpData.setInstitute(key);
+            }
+        });
+
 
         mBinding.degreeAutocompleteView.setOnItemClickListener((parent, view, position, id) -> {
             final String name = ((TextView) view).getText().toString();
@@ -507,7 +517,7 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
             public void onResponse(Call<MobileOtp> call, Response<MobileOtp> response) {
                 try {
                     if (response.body().getStatusCode().equalsIgnoreCase("1")) {
-                        createVerifyOTPDialog();
+                        createVerifyOTPDialog(response.body().getObject());
                     } else {
                         Toast.makeText(SignUpActivity.this,response.body().getMessage(),Toast.LENGTH_SHORT).show();
                     }
@@ -525,19 +535,46 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
 
 
     private void callSignUpApi() {
-        Map<String, Object> requestBody = new HashMap<>();
-        requestBody.put(first_name, mBinding.tilFirstName.getEditText().getText().toString());
-        requestBody.put(last_name, mBinding.tilLastName.getEditText().getText().toString());
-        requestBody.put(email, mBinding.tilEmail.getEditText().getText().toString());
-        requestBody.put(mobile_no, Integer.parseInt(mBinding.tilMobile.getEditText().getText().toString()));
-        requestBody.put(password, mBinding.tilCreatePassword.getEditText().getText().toString());
-        requestBody.put(country, signUpData.getCountryId());
-        requestBody.put(state, signUpData.getStateId());
-        requestBody.put(board, signUpData.getBoard());
-        requestBody.put(institute, signUpData.getInstitute());
-        requestBody.put(degree, signUpData.getDegree());
-        requestBody.put(course, signUpData.getCourse());
-        requestBody.put(cyNum, signUpData.getCyNum());
+        try {
+            Map<String, Object> requestBody = new HashMap<>();
+            requestBody.put(first_name, mBinding.tilFirstName.getEditText().getText().toString());
+            requestBody.put(last_name, mBinding.tilLastName.getEditText().getText().toString());
+            requestBody.put(email, mBinding.tilEmail.getEditText().getText().toString());
+            requestBody.put(mobile_no, mBinding.etMobile.getText().toString());
+            requestBody.put(password, mBinding.tilCreatePassword.getEditText().getText().toString());
+            requestBody.put(country, signUpData.getCountryId());
+            requestBody.put(state, signUpData.getStateId());
+            requestBody.put(board, signUpData.getBoard());
+            requestBody.put(institute, signUpData.getInstitute());
+            requestBody.put(degree, signUpData.getDegree());
+            requestBody.put(course, signUpData.getCourse());
+            requestBody.put(cyNum, signUpData.getCyNum());
+            requestBody.put(is_mobile_verified, false);
+            requestBody.put(is_email_verified, false);
+
+            Call<SignUp> call = apiService.signUpApi(requestBody);
+            call.enqueue(new Callback<SignUp>() {
+                @Override
+                public void onResponse(Call<SignUp> call, Response<SignUp> response) {
+                    try {
+                        if (response.body().getStatusCode().equalsIgnoreCase("1")) {
+
+                        } else {
+                            Toast.makeText(SignUpActivity.this,response.body().getMessage(),Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<SignUp> call, Throwable t) {
+                    Log.i(TAG, t.toString());
+                }
+            });
+        } catch (Exception e) {
+
+        }
 
     }
 
@@ -577,7 +614,7 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
         });
     }
 
-    private void createVerifyOTPDialog() {
+    private void createVerifyOTPDialog(String otp) {
         Dialog dialog = new Dialog(this);
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -586,6 +623,21 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
         OtpView otpText = dialog.findViewById(R.id.otp_view);
         ImageView close= dialog.findViewById(R.id.btnClose);
         close.setOnClickListener(v-> dialog.dismiss());
+        //final OtpView otpText = dialog.findViewById(R.id.otp_view);
+        dialog.findViewById(R.id.btnValidate).setOnClickListener(v -> {
+            if (!otpText.getText().toString().isEmpty()) {
+                if (otp.equalsIgnoreCase(otpText.getText().toString())) {
+                    signUpData.setMobile1Verified("true");
+                    mBinding.tvMobileVerify.setText("Verified");
+                    mBinding.tvMobileVerify.setTextColor(getResources().getColor(R.color.color_green));
+                } else {
+                    signUpData.setMobile1Verified("false");
+                }
+            }
+            dialog.dismiss();
+        });
         dialog.show();
     }
+
+
 }

@@ -9,7 +9,7 @@ public class SignUp
 
     private String statusCode;
 
-    private Object object;
+    private SignUpData object;
 
     public String getMessage ()
     {
@@ -31,20 +31,12 @@ public class SignUp
         this.statusCode = statusCode;
     }
 
-    public Object getObject ()
-    {
+    public SignUpData getObject() {
         return object;
     }
 
-    public void setObject (Object object)
-    {
+    public void setObject(SignUpData object) {
         this.object = object;
-    }
-
-    @Override
-    public String toString()
-    {
-        return "ClassPojo [message = "+message+", statusCode = "+statusCode+", object = "+object+"]";
     }
 }
 

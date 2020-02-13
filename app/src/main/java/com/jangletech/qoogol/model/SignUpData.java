@@ -6,11 +6,11 @@ import java.util.List;
  * Created by Pritali on 2/3/2020.
  */
 
+
 public class SignUpData
 {
 
-    private int  board, institute, degree, course, cyNum;
-
+    private  int board, institute, degree, course, cyNum;
     private String lastName;
 
     private String personalDetailsCached;
@@ -33,7 +33,7 @@ public class SignUpData
 
     private String stateName;
 
-    private String userCourse;
+    private UserCourse userCourse;
 
     private int mobile1Otp;
 
@@ -43,7 +43,7 @@ public class SignUpData
 
     private int stateId;
 
-    private String langPrefId;
+    private int langPrefId;
 
     private String userName;
 
@@ -57,57 +57,17 @@ public class SignUpData
 
     private int emailOtp;
 
-    private String dob;
+    private int dob;
 
     private String mobileNo1;
 
-    private int mobileNo2;
+    private String mobileNo2;
 
     private UserEduList userEduList;
 
     private String userType;
 
     private String countryName;
-
-    public int getBoard() {
-        return board;
-    }
-
-    public void setBoard(int board) {
-        this.board = board;
-    }
-
-    public int getInstitute() {
-        return institute;
-    }
-
-    public void setInstitute(int institute) {
-        this.institute = institute;
-    }
-
-    public int getDegree() {
-        return degree;
-    }
-
-    public void setDegree(int degree) {
-        this.degree = degree;
-    }
-
-    public int getCourse() {
-        return course;
-    }
-
-    public void setCourse(int course) {
-        this.course = course;
-    }
-
-    public int getCyNum() {
-        return cyNum;
-    }
-
-    public void setCyNum(int cyNum) {
-        this.cyNum = cyNum;
-    }
 
     public String getLastName() {
         return lastName;
@@ -197,11 +157,11 @@ public class SignUpData
         this.stateName = stateName;
     }
 
-    public String getUserCourse() {
+    public UserCourse getUserCourse() {
         return userCourse;
     }
 
-    public void setUserCourse(String userCourse) {
+    public void setUserCourse(UserCourse userCourse) {
         this.userCourse = userCourse;
     }
 
@@ -237,11 +197,11 @@ public class SignUpData
         this.stateId = stateId;
     }
 
-    public String getLangPrefId() {
+    public int getLangPrefId() {
         return langPrefId;
     }
 
-    public void setLangPrefId(String langPrefId) {
+    public void setLangPrefId(int langPrefId) {
         this.langPrefId = langPrefId;
     }
 
@@ -293,11 +253,11 @@ public class SignUpData
         this.emailOtp = emailOtp;
     }
 
-    public String getDob() {
+    public int getDob() {
         return dob;
     }
 
-    public void setDob(String dob) {
+    public void setDob(int dob) {
         this.dob = dob;
     }
 
@@ -309,11 +269,11 @@ public class SignUpData
         this.mobileNo1 = mobileNo1;
     }
 
-    public int getMobileNo2() {
+    public String getMobileNo2() {
         return mobileNo2;
     }
 
-    public void setMobileNo2(int mobileNo2) {
+    public void setMobileNo2(String mobileNo2) {
         this.mobileNo2 = mobileNo2;
     }
 
@@ -340,5 +300,44 @@ public class SignUpData
     public void setCountryName(String countryName) {
         this.countryName = countryName;
     }
-}
 
+    public int getBoard() {
+        return board;
+    }
+
+    public void setBoard(int board) {
+        this.board = board;
+    }
+
+    public int getInstitute() {
+        return institute;
+    }
+
+    public void setInstitute(int institute) {
+        this.institute = institute;
+    }
+
+    public int getDegree() {
+        return degree;
+    }
+
+    public void setDegree(int degree) {
+        this.degree = degree;
+    }
+
+    public int getCourse() {
+        return course;
+    }
+
+    public void setCourse(int course) {
+        this.course = course;
+    }
+
+    public int getCyNum() {
+        return cyNum;
+    }
+
+    public void setCyNum(int cyNum) {
+        this.cyNum = cyNum;
+    }
+}

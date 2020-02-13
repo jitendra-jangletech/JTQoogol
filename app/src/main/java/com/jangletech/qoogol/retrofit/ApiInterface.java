@@ -55,5 +55,8 @@ public interface ApiInterface {
     @POST("auth/verifyMobileNo")
     Call<MobileOtp> getMobileOtp(@QueryMap Map<String, String> request);
 
+    @POST("user/fetchUserAccountDetails")
+    Call<SignUp> getAccountDetails(@QueryMap Map<String, Integer> request);
+
 
 }

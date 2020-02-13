@@ -2,6 +2,7 @@ package com.jangletech.qoogol;
 
 import android.os.Bundle;
 import android.view.Menu;
+import android.widget.Toast;
 
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
@@ -16,8 +17,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jangletech.qoogol.databinding.ActivityMainBinding;
 import com.jangletech.qoogol.dialog.UniversalDialog;
+import com.jangletech.qoogol.util.PreferenceManager;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements UniversalDialog.DialogButtonClickListener{
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding mBinding;
@@ -212,16 +214,14 @@ public class MainActivity extends BaseActivity {
                     (dialog, which) -> dialog.dismiss());*/
             UniversalDialog universalDialog = new UniversalDialog(this,MainActivity.this,"Confirm Log Out",
                     "you are signing out of your Qoogol app on this device",
-                    "Logout", "Cancel");
+                    "Logout", "Cancel",this);
             universalDialog.show();
         });
-
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.action_search, menu);
         SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
         searchView.setMaxWidth(Integer.MAX_VALUE);
@@ -233,6 +233,12 @@ public class MainActivity extends BaseActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    @Override
+    public void onPositiveButtonClick() {
+        new PreferenceManager(getApplicationContext()).setIsLoggedIn(false);
+        finish();
     }
 
 }
