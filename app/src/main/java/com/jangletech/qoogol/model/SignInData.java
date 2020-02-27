@@ -33,7 +33,15 @@ public class SignInData {
 
     private int mobile1Otp;
 
-    private int email;
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    private String email;
 
     private String eduDetailsCached;
 
@@ -169,13 +177,6 @@ public class SignInData {
         this.mobile1Otp = mobile1Otp;
     }
 
-    public int getEmail() {
-        return email;
-    }
-
-    public void setEmail(int email) {
-        this.email = email;
-    }
 
     public String getEduDetailsCached() {
         return eduDetailsCached;

@@ -2,11 +2,12 @@ package com.jangletech.qoogol;
 
 import android.os.Bundle;
 import android.view.Menu;
-import android.widget.Toast;
 
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -47,6 +48,49 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+
+       /* BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener =
+                new BottomNavigationView.OnNavigationItemSelectedListener() {
+                    @Override public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.navigation_home:
+                                Toast.makeText(MainActivity.this, "Home", Toast.LENGTH_SHORT).show();
+                                openFragment(new HomeFragment());
+                                return true;
+                            case R.id.navigation_learning:
+                                openFragment(new ExamFragment());
+                                return true;
+                            case R.id.navigation_test:
+                                openFragment(new TestPopularFragment());
+                                return true;
+                            case R.id.navigation_Questions:
+                                if (navController.getCurrentDestination().getId() != R.id.nav_quest_trending) {
+                                    navController.popBackStack();
+                                    navController.navigate(R.id.nav_quest_trending);
+                                }
+                                return true;
+
+                            case R.id.navigation_saved_drafts:
+                                if (navController.getCurrentDestination().getId() != R.id.nav_saved_drafts) {
+                                    navController.popBackStack();
+                                    navController.navigate(R.id.nav_saved_drafts);
+                                }
+                                return true;
+                        }
+                        return false;
+                    }
+                };*/
+
+       /* BottomNavigationMenuView menuView = (BottomNavigationMenuView)bottom_navigation_menu;
+        for (int i = 0; i < menuView.getChildCount(); i++) {
+            BottomNavigationItemView item = (BottomNavigationItemView) menuView.getChildAt(i);
+            View activeLabel = item.findViewById(R.id.largeLabel);
+            if (activeLabel instanceof TextView) {
+                activeLabel.setPadding(0, 0, 0, 0);
+            }
+        }*/
+
 
 
         /***
@@ -208,11 +252,7 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
 
         findViewById(R.id.nav_logout).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
-            /*DialogUtils.showYesNoAlert(this, "Confirm Sign Out",
-                    "you are signing out of your Qoogol app on this device",
-                    "Logout", "Cancel", (dialog, which) -> finish(),
-                    (dialog, which) -> dialog.dismiss());*/
-            UniversalDialog universalDialog = new UniversalDialog(this,MainActivity.this,"Confirm Log Out",
+            UniversalDialog universalDialog = new UniversalDialog(this,"Confirm Log Out",
                     "you are signing out of your Qoogol app on this device",
                     "Logout", "Cancel",this);
             universalDialog.show();
@@ -239,6 +279,18 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
     public void onPositiveButtonClick() {
         new PreferenceManager(getApplicationContext()).setIsLoggedIn(false);
         finish();
+    }
+
+    public void openFragment(Fragment fragment) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.nav_host_fragment, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
+    public void hideBottomNavigation(){
+
+
     }
 
 }

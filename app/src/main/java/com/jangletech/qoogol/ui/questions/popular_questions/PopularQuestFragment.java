@@ -32,7 +32,6 @@ public class PopularQuestFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(PopularQuestViewModel.class);
-        // TODO: Use the ViewModel
     }
 
 }

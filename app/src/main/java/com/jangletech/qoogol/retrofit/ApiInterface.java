@@ -4,12 +4,15 @@ import com.jangletech.qoogol.model.Classes;
 import com.jangletech.qoogol.model.Country;
 import com.jangletech.qoogol.model.Course;
 import com.jangletech.qoogol.model.Degree;
+import com.jangletech.qoogol.model.FetchEducationsResponseDto;
+import com.jangletech.qoogol.model.FetchPreferableExamsResponseDto;
+import com.jangletech.qoogol.model.GetUserPersonalDetails;
 import com.jangletech.qoogol.model.Institute;
 import com.jangletech.qoogol.model.MobileOtp;
 import com.jangletech.qoogol.model.SignInModel;
-import com.jangletech.qoogol.model.SignUp;
 import com.jangletech.qoogol.model.State;
 import com.jangletech.qoogol.model.University;
+import com.jangletech.qoogol.model.signup.SignUpResponseDto;
 
 import java.util.List;
 import java.util.Map;
@@ -48,14 +51,22 @@ public interface ApiInterface {
     Call<Classes> getClasses(@QueryMap Map<String, Object> request);
 
     @POST("auth/signUpNew")
-    Call<SignUp> signUpApi(@QueryMap Map<String, Object> request);
+    Call<SignUpResponseDto> signUpApi(@QueryMap Map<String, Object> request);
 
-//    @POST("auth/generateAndSendOtpMobile")
     @POST("auth/verifyMobileNo")
     Call<MobileOtp> getMobileOtp(@QueryMap Map<String, String> request);
 
-    @POST("user/fetchUserAccountDetails")
-    Call<SignUp> getAccountDetails(@QueryMap Map<String, Integer> request);
+    @POST("auth/verifyEmail")
+    Call<MobileOtp> getEmailOtp(@QueryMap Map<String, String> request);
+
+    @POST("user/fetchEduDetails")
+    Call<FetchEducationsResponseDto> getEducationDetails(@QueryMap Map<String, String> request);
+
+    @POST("user/getApplicableExams")
+    Call<FetchPreferableExamsResponseDto> getApplicableExams(@QueryMap Map<String, String> request);
+
+    @POST("user/fetchPersonalDetails")
+    Call<GetUserPersonalDetails> getPersonalDetails(@QueryMap Map<String, String> request);
 
 
 }

@@ -32,7 +32,6 @@ public class NotificationsFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(NotificationsViewModel.class);
-        // TODO: Use the ViewModel
     }
 
 }

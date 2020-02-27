@@ -1,6 +1,5 @@
 package com.jangletech.qoogol.dialog;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -24,7 +23,7 @@ public class UniversalDialog extends Dialog {
     private TextView tvPositiveTxt;
     private TextView tvNegativeTxt;
 
-    public UniversalDialog(@NonNull Context context, Activity activity,
+    public UniversalDialog(@NonNull Context context,
                            String title, String msg, String positiveText, String negativeText,
                            DialogButtonClickListener buttonclickListener) {
         super(context);
@@ -46,6 +45,12 @@ public class UniversalDialog extends Dialog {
         tvPositiveTxt = findViewById(R.id.tvPositiveBtn);
         tvNegativeTxt = findViewById(R.id.tvNegativeBtn);
 
+        //set Dialog Title
+        tvTitle.setText(strTitle);
+
+        //set Dialog Message
+        tvMessage.setText(strMsg);
+
         //CallBack For Negative Button
         tvPositiveTxt.setOnClickListener(v->{
             dismiss();
@@ -58,7 +63,6 @@ public class UniversalDialog extends Dialog {
 
     public interface DialogButtonClickListener {
         void onPositiveButtonClick();
-        //void onNegativeButtonClick();
     }
 
 

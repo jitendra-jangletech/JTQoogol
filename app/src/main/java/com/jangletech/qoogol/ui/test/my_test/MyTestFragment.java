@@ -32,7 +32,6 @@ public class MyTestFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(com.jangletech.qoogol.ui.test.my_test.MyTestViewModel.class);
-        // TODO: Use the ViewModel
     }
 
 }

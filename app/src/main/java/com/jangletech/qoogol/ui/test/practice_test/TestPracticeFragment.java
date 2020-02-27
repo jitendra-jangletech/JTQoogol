@@ -32,7 +32,6 @@ public class TestPracticeFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(TestPracticeViewModel.class);
-        // TODO: Use the ViewModel
     }
 
 }

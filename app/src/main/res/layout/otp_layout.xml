@@ -35,10 +35,11 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/tvDialogMsg"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Please type the verification code sent to your mobile number"
+                android:text=""
                 android:textSize="@dimen/_12ssp"
                 android:textStyle="bold" />
 

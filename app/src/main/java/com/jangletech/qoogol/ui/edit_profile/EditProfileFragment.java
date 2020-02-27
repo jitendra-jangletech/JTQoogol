@@ -2,42 +2,36 @@ package com.jangletech.qoogol.ui.edit_profile;
 
 
 import android.os.Bundle;
-
-import androidx.appcompat.app.AlertDialog;
-
-
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.AddEducationBinding;
 import com.jangletech.qoogol.databinding.FragmentEditProfileBinding;
-import com.jangletech.qoogol.model.SignUp;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
-import com.jangletech.qoogol.util.PreferenceManager;
+import com.jangletech.qoogol.ui.educational_info.EducationInfoFragment;
+import com.jangletech.qoogol.ui.personal_info.PersonalInfoFragment;
+import com.jangletech.qoogol.ui.preference.PreferenceFragment;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.jangletech.qoogol.util.Constant.add_edu;
-import static com.jangletech.qoogol.util.Constant.user_id;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class EditProfileFragment extends Fragment implements View.OnClickListener {
+public class EditProfileFragment extends Fragment {
 
     FragmentEditProfileBinding fragmentEditProfileBinding;
     AddEducationBinding addEducationBinding;
@@ -49,88 +43,12 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         fragmentEditProfileBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_edit_profile, container, false);
-        setListeners();
-        fetAccountDetails();
+        setupViewPager(fragmentEditProfileBinding.viewpager);
+        fragmentEditProfileBinding.resultTabs.setupWithViewPager(fragmentEditProfileBinding.viewpager);
+
         return fragmentEditProfileBinding.getRoot();
     }
 
-    private void fetAccountDetails() {
-        Map<String, Integer> requestBody = new HashMap<>();
-        int userId = Integer.parseInt(new PreferenceManager(getActivity()).getUserId());
-        requestBody.put(user_id, userId);
-        Call<SignUp> call = apiService.getAccountDetails(requestBody);
-        call.enqueue(new Callback<SignUp>() {
-            @Override
-            public void onResponse(Call<SignUp> call, Response<SignUp> response) {
-
-                if (response.isSuccessful()) {
-                    if (response.body().getStatusCode().equalsIgnoreCase("1")) {
-                    } else {
-                        Toast.makeText(getActivity(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Log.d(TAG, "onResponse: Failed");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<SignUp> call, Throwable t) {
-                Log.i(TAG, t.toString());
-            }
-        });
-    }
-
-    private void setListeners() {
-        fragmentEditProfileBinding.btnPersonalInfo.setOnClickListener(this);
-        fragmentEditProfileBinding.btnEducationInfo.setOnClickListener(this);
-        fragmentEditProfileBinding.btnAccountInfo.setOnClickListener(this);
-        fragmentEditProfileBinding.EducationInfolayout.setOnClickListener(this);
-        fragmentEditProfileBinding.btnPreferences.setOnClickListener(this);
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btnPersonalInfo:
-                if (fragmentEditProfileBinding.personalInfoLayout.getVisibility() == View.GONE) {
-                    fragmentEditProfileBinding.personalInfoLayout.setVisibility(View.VISIBLE);
-//                    fragmentEditProfileBinding.btnPersonalInfo.setCompoundDrawablesWithIntrinsicBounds(null, null, getActivity().getResources().getDrawable(R.drawable.ic_minus_gray), null);
-                } else {
-                    fragmentEditProfileBinding.personalInfoLayout.setVisibility(View.GONE);
-//                    fragmentEditProfileBinding.btnPersonalInfo.setCompoundDrawablesWithIntrinsicBounds(null, null, mContext.getResources().getDrawable(R.drawable.ic_add_gray), null);
-                }
-                break;
-
-            case R.id.btnEducationInfo:
-                if (fragmentEditProfileBinding.educationalInfoLayout.getVisibility() == View.GONE) {
-                    fragmentEditProfileBinding.educationalInfoLayout.setVisibility(View.VISIBLE);
-//                    fragmentEditProfileBinding.btnEducationInfo.setCompoundDrawablesWithIntrinsicBounds(null, null, getActivity().getResources().getDrawable(R.drawable.ic_minus_gray), null);
-                } else {
-                    fragmentEditProfileBinding.educationalInfoLayout.setVisibility(View.GONE);
-//                    fragmentEditProfileBinding.btnEducationInfo.setCompoundDrawablesWithIntrinsicBounds(null, null, mContext.getResources().getDrawable(R.drawable.ic_add_gray), null);
-                }
-                break;
-
-            case R.id.EducationInfolayout:
-                addEducation(add_edu);
-                break;
-
-            case R.id.btnAccountInfo:
-                if (fragmentEditProfileBinding.accountInfoLayout.getVisibility() == View.GONE) {
-                    fragmentEditProfileBinding.accountInfoLayout.setVisibility(View.VISIBLE);
-                } else {
-                    fragmentEditProfileBinding.accountInfoLayout.setVisibility(View.GONE);
-                }
-                break;
-            case R.id.btnPreferences:
-                if (fragmentEditProfileBinding.preferencesLayout.getVisibility() == View.GONE) {
-                    fragmentEditProfileBinding.preferencesLayout.setVisibility(View.VISIBLE);
-                } else {
-                    fragmentEditProfileBinding.preferencesLayout.setVisibility(View.GONE);
-                }
-                break;
-        }
-    }
 
     private void addEducation(final int called_from) {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
@@ -151,4 +69,43 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
     private void saveEducation() {
         educationDialog.dismiss();
     }
+
+    private void setupViewPager(ViewPager viewPager){
+        Adapter adapter = new Adapter(getChildFragmentManager());
+        adapter.addFragment(new PersonalInfoFragment(), getContext().getString(R.string.personal_info_tab));
+        adapter.addFragment(new EducationInfoFragment(), getContext().getString(R.string.educational_info_tab));
+        adapter.addFragment(new PreferenceFragment(), getString(R.string.preference_tab));
+        viewPager.setAdapter(adapter);
+    }
+
+
+    static class Adapter extends FragmentPagerAdapter {
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<String> mFragmentTitleList = new ArrayList<>();
+
+        public Adapter(FragmentManager manager) {
+            super(manager);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragmentList.size();
+        }
+
+        public void addFragment(Fragment fragment, String title) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitleList.get(position);
+        }
+    }
+
 }

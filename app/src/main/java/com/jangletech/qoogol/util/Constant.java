@@ -17,6 +17,9 @@ public class Constant {
     //user
     public static final String user_id = "userId";
 
+    //course
+    public static final String courseId = "courseId";
+
     //country
     public static final String country_id = "countryId";
     public static final String country_name = "name";

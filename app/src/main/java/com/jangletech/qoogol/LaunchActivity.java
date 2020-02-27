@@ -44,9 +44,9 @@ public class LaunchActivity extends BaseActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_launch);
-        computePakageHash();
+        //computePakageHash();
         //Init Google sdk
-        initGoogleSdk();
+        //initGoogleSdk();
         performAutoSignIn();
 
         CallbackManager callbackManager = CallbackManager.Factory.create();

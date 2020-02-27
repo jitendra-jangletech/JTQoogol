@@ -124,6 +124,8 @@
                                     <com.google.android.material.textfield.TextInputEditText
                                         android:id="@+id/et_mobile"
                                         style="@style/EditTextStyle"
+                                        android:drawableLeft="@drawable/ic_phone"
+                                        android:drawablePadding="@dimen/_5sdp"
                                         android:inputType="phone"
                                         android:maxLength="10" />
                                 </com.google.android.material.textfield.TextInputLayout>
@@ -157,6 +159,8 @@
                                     <com.google.android.material.textfield.TextInputEditText
                                         android:id="@+id/et_email"
                                         style="@style/EditTextStyle"
+                                        android:drawableLeft="@drawable/ic_email"
+                                        android:drawablePadding="@dimen/_5sdp"
                                         android:inputType="textEmailAddress" />
                                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -179,7 +183,7 @@
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/_40sdp"
+                        android:layout_marginBottom="@dimen/_10sdp"
                         android:background="@color/colorWhite"
                         android:elevation="@dimen/_40sdp">
 
@@ -264,18 +268,21 @@
                             </LinearLayout>
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:layout_gravity="center_horizontal"
+                        android:id="@+id/btnSignUp"
+                        android:layout_marginBottom="@dimen/_20sdp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/sign_up_title"
+                        android:textAllCaps="false" />
+
                 </LinearLayout>
             </RelativeLayout>
         </ScrollView>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnSignUp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:text="@string/sign_up_title"
-            android:textAllCaps="false" />
+
     </RelativeLayout>
 
 </layout>

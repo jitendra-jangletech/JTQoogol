@@ -32,7 +32,6 @@ public class TestPopularFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(TestPopularViewModel.class);
-        // TODO: Use the ViewModel
     }
 
 }

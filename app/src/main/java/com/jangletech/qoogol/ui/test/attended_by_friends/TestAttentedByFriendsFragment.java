@@ -32,7 +32,6 @@ public class TestAttentedByFriendsFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(TestAttentedByFriendsViewModel.class);
-        // TODO: Use the ViewModel
     }
 
 }

@@ -51,19 +51,15 @@ public class HomeFragment extends Fragment {
         itemlist.add(home4);
 
 
-
         HomeAdapter homeAdapter = new HomeAdapter(getActivity(), itemlist);
-        // vertical and cycle layout
         final CarouselLayoutManager layoutManager = new CarouselLayoutManager(CarouselLayoutManager.HORIZONTAL, true);
         layoutManager.setPostLayoutListener(new CarouselZoomPostLayoutListener());
-//        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
 
         layoutManager.setMaxVisibleItems(10);
         fragmentHomeBinding.itemRecycler.setLayoutManager(layoutManager);
         fragmentHomeBinding.itemRecycler.setHasFixedSize(true);
         fragmentHomeBinding.itemRecycler.setAdapter(homeAdapter);
         fragmentHomeBinding.itemRecycler.addOnScrollListener(new CenterScrollListener());
-
         return fragmentHomeBinding.getRoot();
     }
 }

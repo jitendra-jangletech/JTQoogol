@@ -8,14 +8,12 @@ public enum Params {
     DISTRICT("D"),
     CITY("CT"),
 
-
     BOARD("B"),
     COMPANY("CM"),
     COLLEGE("CG"),
     COURSE("CU"),
     DEGREE("DG"),
     COURSEYEAR("CY");
-
 
 
     public String value;

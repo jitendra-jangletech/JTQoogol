@@ -1,7 +1,5 @@
 package com.jangletech.qoogol.model;
 
-import java.util.List;
-
 /**
  * Created by Pritali on 1/28/2020.
  */

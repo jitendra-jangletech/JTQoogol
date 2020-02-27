@@ -17,6 +17,8 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.jangletech.qoogol.databinding.ActivitySignupBinding;
+import com.jangletech.qoogol.dialog.ProgressDialog;
+import com.jangletech.qoogol.dialog.UniversalDialog;
 import com.jangletech.qoogol.model.ClassData;
 import com.jangletech.qoogol.model.Classes;
 import com.jangletech.qoogol.model.Country;
@@ -24,10 +26,10 @@ import com.jangletech.qoogol.model.Course;
 import com.jangletech.qoogol.model.Degree;
 import com.jangletech.qoogol.model.Institute;
 import com.jangletech.qoogol.model.MobileOtp;
-import com.jangletech.qoogol.model.SignUp;
-import com.jangletech.qoogol.model.SignUpData;
 import com.jangletech.qoogol.model.State;
 import com.jangletech.qoogol.model.University;
+import com.jangletech.qoogol.model.signup.SignUpRequestDto;
+import com.jangletech.qoogol.model.signup.SignUpResponseDto;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.util.GenericTextWatcher;
@@ -66,14 +68,15 @@ import static com.jangletech.qoogol.util.Constant.password;
 import static com.jangletech.qoogol.util.Constant.state;
 import static com.jangletech.qoogol.util.Constant.state_id;
 
-public class SignUpActivity extends BaseActivity implements View.OnClickListener {
+public class SignUpActivity extends BaseActivity implements View.OnClickListener,UniversalDialog.DialogButtonClickListener {
 
     private ActivitySignupBinding mBinding;
     private SignUpViewModel mViewModel;
+    private UniversalDialog.DialogButtonClickListener uni;
+    SignUpRequestDto signUpRequestDto;
     ApiInterface apiService = ApiClient.getInstance().getApi();
     private static final String TAG = "SignUpActivity";
     boolean isValid = true;
-    SignUpData signUpData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,14 +84,14 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_signup);
         mViewModel = ViewModelProviders.of(this).get(SignUpViewModel.class);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        signUpData = new SignUpData();
+        signUpRequestDto = new SignUpRequestDto();
         setTitle(getResources().getString(R.string.sign_up_title));
+        uni = this;
         confirmPasswordCheck();
         setTextWatcher();
         setListeners();
         fetchCountryData();
         fetchDegreeData();
-
 
         mBinding.selectAutocompleteView.setOnItemClickListener((parent, view, position, id) ->
                 Toast.makeText(SignUpActivity.this, "" + parent.getSelectedItem(), Toast.LENGTH_SHORT).show());
@@ -105,7 +108,7 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
             if (key != -1) {
                 mBinding.countryAutocompleteView.setTag(key);
                 fetchStateData(key);
-                signUpData.setCountryId(key);
+                //signUpData.setCountryId(key);
             }
         });
 
@@ -115,7 +118,7 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
             int state_id = UtilHelper.getKeyFromValue(mViewModel.mMapState, state);
             int country_id = UtilHelper.getKeyFromValue(mViewModel.mMapCountry, country);
             if (state_id != -1 && country_id != -1) {
-                signUpData.setStateId(state_id);
+                //signUpData.setStateId(state_id);
                 mBinding.stateAutocompleteView.setTag(state_id);
                 fetchUniversityData(country_id, state_id);
             }
@@ -125,7 +128,7 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
             final String name = ((TextView) view).getText().toString();
             int key = UtilHelper.getKeyFromValue(mViewModel.mMapUniversity, name);
             if (key != -1) {
-                signUpData.setBoard(key);
+                //signUpData.setBoard(key);
                 mBinding.universityBoardAutocompleteView.setTag(key);
                 fetchInstituteData(key);
             }
@@ -135,7 +138,7 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
             final String name = ((TextView) view).getText().toString();
             int key = UtilHelper.getKeyFromValue(mViewModel.mMapInstitute, name);
             if (key != -1) {
-                signUpData.setInstitute(key);
+                //signUpData.setInstitute(key);
             }
         });
 
@@ -144,7 +147,7 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
             final String name = ((TextView) view).getText().toString();
             int key = UtilHelper.getKeyFromValue(mViewModel.mMapDegree, name);
             if (key != -1) {
-                signUpData.setDegree(key);
+                //signUpData.setDegree(key);
                 mBinding.degreeAutocompleteView.setTag(key);
                 fetchCourseData(key);
             }
@@ -154,7 +157,8 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
             final String name = ((TextView) view).getText().toString();
             int key = UtilHelper.getKeyFromValue(mViewModel.mMapCourse, name);
             if (key != -1) {
-                signUpData.setCourse(key);
+                //signUpData.setCourse(key);
+                Log.d(TAG, "courseAutocompleteView value : " + key);
                 mBinding.courseAutocompleteView.setTag(key);
                 fetchClassData(name, mViewModel.getCourseList().getValue().get(position).getDuration());
             }
@@ -164,7 +168,7 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
             final String name = ((TextView) view).getText().toString();
             int key = UtilHelper.getKeyFromValue(mViewModel.mMapClass, name);
             if (key != -1) {
-                signUpData.setCyNum(key);
+                //signUpData.setCyNum(key);
                 mBinding.classAutocompleteView.setTag(key);
             }
         });
@@ -275,6 +279,7 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
     }
 
     private void fetchCountryData() {
+        ProgressDialog.getInstance().show(this);
         Call<List<Country>> call = apiService.getCountries();
         call.enqueue(new Callback<List<Country>>() {
             @Override
@@ -287,21 +292,25 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
                         for (Country country : list) {
                             mViewModel.mMapCountry.put(country.getCountryId(), country.getCountryName());
                         }
+                        ProgressDialog.getInstance().dismiss();
                         populateCountries(mViewModel.mMapCountry);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
+                    ProgressDialog.getInstance().dismiss();
                 }
             }
 
             @Override
             public void onFailure(Call<List<Country>> call, Throwable t) {
-                Log.i("", t.toString());
+                t.printStackTrace();
+                ProgressDialog.getInstance().dismiss();
             }
         });
     }
 
     public void fetchStateData(int countryId) {
+        ProgressDialog.getInstance().show(this);
         Map<String, Integer> requestBody = new HashMap<>();
         requestBody.put("countryId", countryId);
         Call<List<State>> call = apiService.getStates(requestBody);
@@ -316,21 +325,25 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
                         for (State state : list) {
                             mViewModel.mMapState.put(Integer.valueOf(state.getStateId()), state.getStateName());
                         }
+                        ProgressDialog.getInstance().dismiss();
                         populateStates(mViewModel.mMapState);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
+                    ProgressDialog.getInstance().dismiss();
                 }
             }
 
             @Override
             public void onFailure(Call<List<State>> call, Throwable t) {
-                Log.i(TAG, t.toString());
+                t.printStackTrace();
+                ProgressDialog.getInstance().dismiss();
             }
         });
     }
 
     private void fetchUniversityData(int country, int state) {
+        ProgressDialog.getInstance().show(this);
         Map<String, Integer> requestBody = new HashMap<>();
         requestBody.put(country_id, country);
         requestBody.put(state_id, state);
@@ -346,21 +359,25 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
                         for (University university : list) {
                             mViewModel.mMapUniversity.put(Integer.valueOf(university.getUnivBoardId()), university.getName());
                         }
+                        ProgressDialog.getInstance().dismiss();
                         populateUniversityBoard(mViewModel.mMapUniversity);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
+                    ProgressDialog.getInstance().dismiss();
                 }
             }
 
             @Override
             public void onFailure(Call<List<University>> call, Throwable t) {
-                Log.i(TAG, t.toString());
+                t.printStackTrace();
+                ProgressDialog.getInstance().dismiss();
             }
         });
     }
 
     private void fetchInstituteData(int university) {
+        ProgressDialog.getInstance().show(this);
         Map<String, Integer> requestBody = new HashMap<>();
         requestBody.put(board_id, university);
         Call<List<Institute>> call = apiService.getInstitute(requestBody);
@@ -375,21 +392,26 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
                         for (Institute institute : list) {
                             mViewModel.mMapInstitute.put(Integer.valueOf(institute.getInstOrgId()), institute.getName());
                         }
+                        ProgressDialog.getInstance().dismiss();
                         populateInstitutre(mViewModel.mMapInstitute);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
+                    ProgressDialog.getInstance().dismiss();
+
                 }
             }
 
             @Override
             public void onFailure(Call<List<Institute>> call, Throwable t) {
-                Log.i(TAG, t.toString());
+                t.printStackTrace();
+                ProgressDialog.getInstance().dismiss();
             }
         });
     }
 
     private void fetchDegreeData() {
+        ProgressDialog.getInstance().show(this);
         Call<List<Degree>> call = apiService.getDegrees();
         call.enqueue(new Callback<List<Degree>>() {
             @Override
@@ -402,22 +424,26 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
                         for (Degree degree : list) {
                             mViewModel.mMapDegree.put(degree.getDegreeId(), degree.getName());
                         }
+                        ProgressDialog.getInstance().dismiss();
                         populateDegrees(mViewModel.mMapDegree);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
+                    ProgressDialog.getInstance().dismiss();
                 }
             }
 
             @Override
             public void onFailure(Call<List<Degree>> call, Throwable t) {
-                Log.i("", t.toString());
+                t.printStackTrace();
+                ProgressDialog.getInstance().dismiss();
             }
         });
     }
 
 
     private void fetchCourseData(int degree) {
+        ProgressDialog.getInstance().show(this);
         Map<String, Integer> requestBody = new HashMap<>();
         requestBody.put(degree_id, degree);
         Call<List<Course>> call = apiService.getCourses(requestBody);
@@ -432,25 +458,33 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
                         for (Course course : list) {
                             mViewModel.mMapCourse.put(Integer.valueOf(course.getCourseId()), course.getName());
                         }
+                        ProgressDialog.getInstance().dismiss();
                         populateCourse(mViewModel.mMapCourse);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
+                    ProgressDialog.getInstance().dismiss();
                 }
             }
 
             @Override
             public void onFailure(Call<List<Course>> call, Throwable t) {
-                Log.i(TAG, t.toString());
+                t.printStackTrace();
+                ProgressDialog.getInstance().dismiss();
             }
         });
     }
 
     private void fetchClassData(String course_name, int course_duration) {
+        ProgressDialog.getInstance().show(this);
         Map<String, Object> requestBody = new HashMap<>();
         Course course = new Course();
         course.setDuration(course_duration);
         course.setName(course_name);
+
+        Log.d(TAG, "degree_name : " + course.getName());
+        Log.d(TAG, "duration : " + course.getDuration());
+
         requestBody.put(degree_name, course.getName());
         requestBody.put(duration, course.getDuration());
         Call<Classes> call = apiService.getClasses(requestBody);
@@ -465,10 +499,12 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
                         for (ClassData classitem : list) {
                             mViewModel.mMapClass.put(Integer.valueOf(classitem.getValue()), classitem.getDispText());
                         }
+                        ProgressDialog.getInstance().dismiss();
                         populateClass(mViewModel.mMapClass);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
+                    ProgressDialog.getInstance().dismiss();
                 }
             }
 
@@ -489,6 +525,7 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnSignUp:
+                callSignUpApi();
                 if (validateSignUpForm()) {
                     callSignUpApi();
                 }
@@ -499,12 +536,20 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
                 } else {
                     mBinding.tilMobile.setError(getResources().getString(R.string.empty_mobile));
                 }
+                break;
 
+            case R.id.tvEmailVerify:
+                if (!TextUtils.isEmpty(mBinding.tilEmail.getEditText().getText())) {
+                    callEmailVerifyApi();
+                } else {
+                    mBinding.tilEmail.setError(getResources().getString(R.string.empty_email));
+                }
                 break;
         }
     }
 
     private void callMobileVerifyApi() {
+        ProgressDialog.getInstance().show(this);
         Map<String, String> requestBody = new HashMap<>();
         requestBody.put(mobile_number, mBinding.tilMobile.getEditText().getText().toString());
         Call<MobileOtp> call = apiService.getMobileOtp(requestBody);
@@ -513,65 +558,91 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
             public void onResponse(Call<MobileOtp> call, Response<MobileOtp> response) {
                 try {
                     if (response.body().getStatusCode().equalsIgnoreCase("1")) {
-                        createVerifyOTPDialog(response.body().getObject());
+                        ProgressDialog.getInstance().dismiss();
+                        createVerifySmsOtpDialog(response.body().getObject());
                     } else {
-                        Toast.makeText(SignUpActivity.this,response.body().getMessage(),Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SignUpActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
+                    ProgressDialog.getInstance().dismiss();
                 }
             }
 
             @Override
             public void onFailure(Call<MobileOtp> call, Throwable t) {
-                Log.i(TAG, t.toString());
+                t.printStackTrace();
+                ProgressDialog.getInstance().dismiss();
+            }
+        });
+    }
+
+    private void callEmailVerifyApi() {
+        ProgressDialog.getInstance().show(this);
+        Map<String, String> requestBody = new HashMap<>();
+        requestBody.put(email, mBinding.tilEmail.getEditText().getText().toString());
+        Call<MobileOtp> call = apiService.getEmailOtp(requestBody);
+        call.enqueue(new Callback<MobileOtp>() {
+            @Override
+            public void onResponse(Call<MobileOtp> call, Response<MobileOtp> response) {
+                try {
+                    if (response.body().getStatusCode().equalsIgnoreCase("1")) {
+                        ProgressDialog.getInstance().dismiss();
+                        createVerifyEmailOtpDialog(response.body().getObject());
+                    } else {
+                        //Todo Fixed Universal Dialog Issue
+                       /* UniversalDialog universalDialog = new UniversalDialog(getApplicationContext(),"Error",
+                                response.body().getMessage(),
+                                "", "Ok",uni);
+                        universalDialog.show();*/
+                        Toast.makeText(SignUpActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    ProgressDialog.getInstance().dismiss();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MobileOtp> call, Throwable t) {
+                t.printStackTrace();
+                ProgressDialog.getInstance().dismiss();
             }
         });
     }
 
 
     private void callSignUpApi() {
-        try {
-            Map<String, Object> requestBody = new HashMap<>();
-            requestBody.put(first_name, mBinding.tilFirstName.getEditText().getText().toString());
-            requestBody.put(last_name, mBinding.tilLastName.getEditText().getText().toString());
-            requestBody.put(email, mBinding.tilEmail.getEditText().getText().toString());
-            requestBody.put(mobile_no, mBinding.etMobile.getText().toString());
-            requestBody.put(password, mBinding.tilCreatePassword.getEditText().getText().toString());
-            requestBody.put(country, signUpData.getCountryId());
-            requestBody.put(state, signUpData.getStateId());
-            requestBody.put(board, signUpData.getBoard());
-            requestBody.put(institute, signUpData.getInstitute());
-            requestBody.put(degree, signUpData.getDegree());
-            requestBody.put(course, signUpData.getCourse());
-            requestBody.put(cyNum, signUpData.getCyNum());
-            requestBody.put(is_mobile_verified, false);
-            requestBody.put(is_email_verified, false);
 
-            Call<SignUp> call = apiService.signUpApi(requestBody);
-            call.enqueue(new Callback<SignUp>() {
-                @Override
-                public void onResponse(Call<SignUp> call, Response<SignUp> response) {
-                    try {
-                        if (response.body().getStatusCode().equalsIgnoreCase("1")) {
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put(first_name, "Jitendra");
+        requestBody.put(last_name, "Patil");
+        requestBody.put(email, "jituoo722@gmail.com");
+        requestBody.put(mobile_no, "1245245786");
+        requestBody.put(password, "1234");
+        requestBody.put(country, mBinding.countryAutocompleteView.getTag());
+        requestBody.put(state, mBinding.stateAutocompleteView.getTag());
+        requestBody.put(board, mBinding.universityBoardAutocompleteView.getTag());
+        requestBody.put(institute, mBinding.instituteAutocompleteView.getTag());
+        requestBody.put(degree, mBinding.degreeAutocompleteView.getTag());
+        requestBody.put(course, mBinding.courseAutocompleteView.getTag());
+        requestBody.put(cyNum, mBinding.classAutocompleteView.getTag());
+        requestBody.put(is_mobile_verified, true);
+        requestBody.put(is_email_verified, true);
 
-                        } else {
-                            Toast.makeText(SignUpActivity.this,response.body().getMessage(),Toast.LENGTH_SHORT).show();
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
 
-                @Override
-                public void onFailure(Call<SignUp> call, Throwable t) {
-                    Log.i(TAG, t.toString());
-                }
-            });
-        } catch (Exception e) {
+        Call<SignUpResponseDto> call = apiService.signUpApi(requestBody);
+        call.enqueue(new Callback<SignUpResponseDto>() {
+            @Override
+            public void onResponse(Call<SignUpResponseDto> call, Response<SignUpResponseDto> response) {
+                Log.d(TAG, "onResponse SignUpResponseDto : " + response.body());
+            }
 
-        }
-
+            @Override
+            public void onFailure(Call<SignUpResponseDto> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
     }
 
     private void setTextWatcher() {
@@ -610,23 +681,29 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
         });
     }
 
-    private void createVerifyOTPDialog(String otp) {
+    private void createVerifySmsOtpDialog(String otp) {
         Dialog dialog = new Dialog(this);
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.otp_layout);
         dialog.setCancelable(false);
         OtpView otpText = dialog.findViewById(R.id.otp_view);
-        ImageView close= dialog.findViewById(R.id.btnClose);
-        close.setOnClickListener(v-> dialog.dismiss());
+        ImageView close = dialog.findViewById(R.id.btnClose);
+
+        TextView textViewMsg = dialog.findViewById(R.id.tvDialogMsg);
+        textViewMsg.setText(getResources().getString(R.string.verify_mobile_dialog_msg));
+
+        close.setOnClickListener(v -> dialog.dismiss());
         dialog.findViewById(R.id.btnValidate).setOnClickListener(v -> {
             if (!otpText.getText().toString().isEmpty()) {
                 if (otp.equalsIgnoreCase(otpText.getText().toString())) {
-                    signUpData.setMobile1Verified("true");
+                    signUpRequestDto.setMobileVerified(true);
                     mBinding.tvMobileVerify.setText("Verified");
+                    mBinding.tvMobileVerify.setClickable(false);
+                    mBinding.etMobile.setEnabled(false);
                     mBinding.tvMobileVerify.setTextColor(getResources().getColor(R.color.color_green));
                 } else {
-                    signUpData.setMobile1Verified("false");
+                    signUpRequestDto.setMobileVerified(false);
                 }
             }
             dialog.dismiss();
@@ -634,5 +711,38 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
         dialog.show();
     }
 
+    private void createVerifyEmailOtpDialog(String otp) {
+        Dialog dialog = new Dialog(this);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.otp_layout);
+        dialog.setCancelable(false);
+        OtpView otpText = dialog.findViewById(R.id.otp_view);
+        ImageView close = dialog.findViewById(R.id.btnClose);
+        TextView textViewMsg = dialog.findViewById(R.id.tvDialogMsg);
 
+        textViewMsg.setText(getResources().getString(R.string.verify_email_dialog_msg));
+
+        close.setOnClickListener(v -> dialog.dismiss());
+        dialog.findViewById(R.id.btnValidate).setOnClickListener(v -> {
+            if (!otpText.getText().toString().isEmpty()) {
+                if (otp.equalsIgnoreCase(otpText.getText().toString())) {
+                    signUpRequestDto.setMobileVerified(true);
+                    mBinding.tvMobileVerify.setText("Verified");
+                    mBinding.tvMobileVerify.setClickable(false);
+                    mBinding.etMobile.setEnabled(false);
+                    mBinding.tvEmailVerify.setTextColor(getResources().getColor(R.color.color_green));
+                } else {
+                    signUpRequestDto.setEmailVerified(false);
+                }
+            }
+            dialog.dismiss();
+        });
+        dialog.show();
+    }
+
+    @Override
+    public void onPositiveButtonClick() {
+
+    }
 }

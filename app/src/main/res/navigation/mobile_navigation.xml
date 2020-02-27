@@ -10,8 +10,6 @@
         android:name="com.jangletech.qoogol.ui.home.HomeFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home" >
-
-
     </fragment>
 
     //Learning Section Fragments

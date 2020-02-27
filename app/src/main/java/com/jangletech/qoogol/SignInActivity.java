@@ -1,6 +1,7 @@
 package com.jangletech.qoogol;
 
 import android.content.Intent;
+import android.media.tv.TvContract;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -20,6 +21,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.jangletech.qoogol.databinding.ActivitySignInBinding;
+import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.model.SignInModel;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
@@ -164,12 +166,12 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
         switch (v.getId()) {
             case R.id.signInBtn:
                 validateSignInForm();
-
                 break;
         }
     }
 
     private void callSignInApi() {
+        ProgressDialog.getInstance().show(this);
         Map<String, String> arguments = new HashMap<>();
         arguments.put(Constant.SIGN_IN_FIELD, mBinding.tilEmail.getEditText().getText().toString());
         arguments.put(Constant.PASSWORD, mBinding.tilPassword.getEditText().getText().toString());
@@ -178,28 +180,25 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
         call.enqueue(new Callback<SignInModel>() {
             @Override
             public void onResponse(Call<SignInModel> call, Response<SignInModel> response) {
-                try {
-                    if (response.body().getStatusCode().equalsIgnoreCase("1")) {
-                        SignInModel signInModel = (SignInModel) response.body();
-                        new PreferenceManager(getApplicationContext()).saveUserId(response.body().getObject().getUserId());
-                        //auto sign-in flag set
-                        new PreferenceManager(getApplicationContext()).setIsLoggedIn(true);
-                        mViewModel.setData(signInModel);
-                        Intent i = new Intent(SignInActivity.this, MainActivity.class);
-                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(i);
-                    } else {
-                        Toast.makeText(SignInActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
+                if (response.body().getStatusCode().equalsIgnoreCase("1")) {
+                    SignInModel signInModel = (SignInModel) response.body();
+                    new PreferenceManager(getApplicationContext()).saveUserId(response.body().getObject().getUserId());
+                    //auto sign-in flag set
+                    new PreferenceManager(getApplicationContext()).setIsLoggedIn(true);
+                    mViewModel.setData(signInModel);
+                    ProgressDialog.getInstance().dismiss();
+                    Intent i = new Intent(SignInActivity.this, MainActivity.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(i);
+                } else {
+                    Toast.makeText(SignInActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<SignInModel> call, Throwable t) {
-                Log.i("", t.toString());
+                t.printStackTrace();
+                ProgressDialog.getInstance().dismiss();
             }
         });
     }

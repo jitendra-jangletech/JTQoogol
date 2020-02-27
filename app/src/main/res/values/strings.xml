@@ -184,6 +184,12 @@
     <string name="menu_learning">Learning</string>
     <string name="menu_test">Test</string>
     <string name="menu_questions">Questions</string>
+    <string name="personal_info_tab">Personal</string>
+    <string name="educational_info_tab">Educational</string>
+    <string name="preference_tab">Preferences</string>
+    <string name="date_of_birth">Date Of Birth</string>
+    <string name="verify_mobile_dialog_msg">Please type the verification code sent to your mobile number</string>
+    <string name="verify_email_dialog_msg">Please type the verification code sent to your email</string>
 
 
 </resources>
