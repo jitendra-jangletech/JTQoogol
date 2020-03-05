@@ -1,6 +1,7 @@
 package com.jangletech.qoogol.ui.edit_profile;
 
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
@@ -26,8 +27,12 @@ import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.util.PreferenceManager;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -48,6 +53,8 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
     ApiInterface apiService;
     private static final String TAG = "EditProfileFragment";
     private ProfileViewModel mViewModel;
+    private Calendar mCalendar;
+    DatePickerDialog.OnDateSetListener date;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,6 +70,21 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
     private void initView() {
         mViewModel = ViewModelProviders.of(this).get(ProfileViewModel.class);
         apiService = ApiClient.getInstance().getApi();
+        mCalendar = Calendar.getInstance();
+
+
+        date = (view, year, monthOfYear, dayOfMonth) -> {
+            mCalendar.set(Calendar.YEAR, year);
+            mCalendar.set(Calendar.MONTH, monthOfYear);
+            mCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            EditProfileFragment.this.updateLabel();
+        };
+    }
+
+    private void updateLabel() {
+        String myFormat = "dd-MMM-yyyy"; //In which you need put here
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.ENGLISH);
+        fragmentEditProfileBinding.birthdate.getEditText().setText(sdf.format(mCalendar.getTime()));
     }
 
     private void fetchAccountDetails() {
@@ -159,6 +181,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         fragmentEditProfileBinding.btnAccountInfo.setOnClickListener(this);
         fragmentEditProfileBinding.EducationInfolayout.setOnClickListener(this);
         fragmentEditProfileBinding.btnPreferences.setOnClickListener(this);
+        fragmentEditProfileBinding.birthdate.setOnClickListener(this);
     }
 
     @Override
@@ -201,6 +224,14 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
                 } else {
                     fragmentEditProfileBinding.preferencesLayout.setVisibility(View.GONE);
                 }
+                break;
+            case R.id.birthdate:
+                new DatePickerDialog(Objects.requireNonNull(EditProfileFragment.this.getActivity()),
+                        android.R.style.Theme_Holo_Dialog,
+                        date,
+                        mCalendar.get(Calendar.YEAR),
+                        mCalendar.get(Calendar.MONTH),
+                        mCalendar.get(Calendar.DAY_OF_MONTH)).show();
                 break;
         }
     }

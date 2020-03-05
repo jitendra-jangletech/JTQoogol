@@ -515,7 +515,7 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
                     if (response.body().getStatusCode().equalsIgnoreCase("1")) {
                         createVerifyOTPDialog(response.body().getObject());
                     } else {
-                        Toast.makeText(SignUpActivity.this,response.body().getMessage(),Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SignUpActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -556,7 +556,7 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
                         if (response.body().getStatusCode().equalsIgnoreCase("1")) {
 
                         } else {
-                            Toast.makeText(SignUpActivity.this,response.body().getMessage(),Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SignUpActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -571,7 +571,6 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
         } catch (Exception e) {
 
         }
-
     }
 
     private void setTextWatcher() {
@@ -617,8 +616,8 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
         dialog.setContentView(R.layout.otp_layout);
         dialog.setCancelable(false);
         OtpView otpText = dialog.findViewById(R.id.otp_view);
-        ImageView close= dialog.findViewById(R.id.btnClose);
-        close.setOnClickListener(v-> dialog.dismiss());
+        ImageView close = dialog.findViewById(R.id.btnClose);
+        close.setOnClickListener(v -> dialog.dismiss());
         dialog.findViewById(R.id.btnValidate).setOnClickListener(v -> {
             if (!otpText.getText().toString().isEmpty()) {
                 if (otp.equalsIgnoreCase(otpText.getText().toString())) {

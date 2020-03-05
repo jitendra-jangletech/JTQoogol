@@ -38,7 +38,7 @@ public class HomeFragment extends Fragment {
         Home home = new Home("100", "2200", "50");
         itemlist.add(home);
 
-        Home home1 = new Home("200", "2000",null);
+        Home home1 = new Home("200", "2000", null);
         itemlist.add(home1);
 
         Home home2 = new Home("150", "1500", null);
@@ -49,7 +49,6 @@ public class HomeFragment extends Fragment {
 
         Home home4 = new Home("150", "1500", null);
         itemlist.add(home4);
-
 
 
         HomeAdapter homeAdapter = new HomeAdapter(getActivity(), itemlist);
