@@ -7,7 +7,7 @@ import android.text.TextWatcher;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.jangletech.qoogol.R;
-import com.jangletech.qoogol.SignInActivity;
+import com.jangletech.qoogol.activities.SignInActivity;
 import com.jangletech.qoogol.SignUpActivity;
 
 import java.util.Objects;

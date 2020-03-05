@@ -29,7 +29,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/toplayout"
                 android:layout_width="match_parent"
@@ -204,8 +203,6 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/toplayout" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 
         </RelativeLayout>
 

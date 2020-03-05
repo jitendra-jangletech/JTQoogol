@@ -16,6 +16,7 @@ import android.widget.Toast;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.jangletech.qoogol.activities.BaseActivity;
 import com.jangletech.qoogol.databinding.ActivitySignupBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.dialog.UniversalDialog;
@@ -108,7 +109,6 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
             if (key != -1) {
                 mBinding.countryAutocompleteView.setTag(key);
                 fetchStateData(key);
-                //signUpData.setCountryId(key);
             }
         });
 
@@ -118,7 +118,6 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
             int state_id = UtilHelper.getKeyFromValue(mViewModel.mMapState, state);
             int country_id = UtilHelper.getKeyFromValue(mViewModel.mMapCountry, country);
             if (state_id != -1 && country_id != -1) {
-                //signUpData.setStateId(state_id);
                 mBinding.stateAutocompleteView.setTag(state_id);
                 fetchUniversityData(country_id, state_id);
             }

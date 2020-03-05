@@ -190,6 +190,15 @@
     <string name="date_of_birth">Date Of Birth</string>
     <string name="verify_mobile_dialog_msg">Please type the verification code sent to your mobile number</string>
     <string name="verify_email_dialog_msg">Please type the verification code sent to your email</string>
+    <string name="question">A pie chart with one or more slices offset is called a(n)_____________ple chart.</string>
+    <string name="previous"> <![CDATA[<]]> Previous</string>
+    <string name="next"> Next <![CDATA[>]]> </string>
+    <string name="title_activity_practise_questions">PractiseQuestionsActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
 
+    <string name="home_second">Home Second</string>
 
 </resources>

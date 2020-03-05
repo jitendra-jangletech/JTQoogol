@@ -55,7 +55,6 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
             holder.homeitemBinding.examsCount.setText(home.getExams());
             holder.homeitemBinding.examsCount.setVisibility(View.VISIBLE);
             holder.homeitemBinding.exams.setVisibility(View.VISIBLE);
-
         }
         if (position == 0) {
             holder.homeitemBinding.container.setCardBackgroundColor(activity.getResources().getColor(R.color.colorBlue));

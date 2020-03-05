@@ -21,6 +21,16 @@
     <color name="menu_item_text_color">#3B6289</color>
     <color name="sub_menu_item_text_color">#B1B1B1</color>
 
+    <color name="green">#FF2BC22B</color>
 
+    <color name="grey">#95A0A4</color>
+
+    <color name="quest_bg">#EDF1F4</color>
+
+    <color name="quest_wrong_bg">#F2DEDF</color>
+    <color name="quest_right_bg">#D5EADB</color>
+
+    <color name="quest_wrong_border">#B07474</color>
+    <color name="quest_right_border">#96B798</color>
 
 </resources>

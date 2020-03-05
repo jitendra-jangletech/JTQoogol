@@ -46,7 +46,6 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.View
         holder.itemEducationBinding.country.setText(fetchEducationsObject.getCountryName());
         holder.itemEducationBinding.state.setText(fetchEducationsObject.getStateName());
         holder.itemEducationBinding.city.setText(fetchEducationsObject.getCityName());
-
     }
 
     @Override
