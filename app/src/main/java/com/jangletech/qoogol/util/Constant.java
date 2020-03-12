@@ -56,5 +56,6 @@ public class Constant {
 
     //edit profile
     public static final int add_edu = 0;
+    public static final String user_eduid = "userEduId";
 
 }

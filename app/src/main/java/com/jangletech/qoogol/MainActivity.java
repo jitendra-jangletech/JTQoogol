@@ -1,5 +1,6 @@
 package com.jangletech.qoogol;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 
@@ -107,11 +108,11 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
 
         findViewById(R.id.nav_course).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
-            if (navController.getCurrentDestination().getId() != R.id.nav_course) {
-                navController.popBackStack();
-
-                navController.navigate(R.id.nav_course);
-            }
+            startActivity(new Intent(this,CourseActivity.class));
+//            if (navController.getCurrentDestination().getId() != R.id.nav_course) {
+//                navController.popBackStack();
+//                navController.navigate(R.id.nav_course);
+//            }
         });
 
         findViewById(R.id.nav_exam).setOnClickListener(v -> {
@@ -283,6 +284,16 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
         finish();
     }
 
+    public void openFragment(Fragment fragment) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.nav_host_fragment, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
 
+    public void hideBottomNavigation(){
+
+
+    }
 
 }

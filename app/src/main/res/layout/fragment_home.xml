@@ -60,6 +60,7 @@
                         android:src="@drawable/ic_connect_theme" />
 
                     <TextView
+                        android:id="@+id/credit_points"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
@@ -100,6 +101,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
                         android:text="90"
+                        android:id="@+id/friends"
                         android:textColor="@color/colorBlack"
                         android:textSize="@dimen/_20ssp"
                         android:textStyle="bold" />
@@ -136,6 +138,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
                         android:text="790"
+                        android:id="@+id/followers"
                         android:textColor="@color/colorBlack"
                         android:textSize="@dimen/_20ssp"
                         android:textStyle="bold" />
@@ -173,6 +176,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
                         android:text="2245"
+                        android:id="@+id/following"
                         android:textColor="@color/colorBlack"
                         android:textSize="@dimen/_20ssp"
                         android:textStyle="bold" />
@@ -192,12 +196,10 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/item_recycler"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:layout_marginBottom="@dimen/_10sdp"
-                android:minHeight="@dimen/_280sdp"
-                android:padding="@dimen/_10sdp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_35sdp"
                 app:layout_constraintBottom_toBottomOf="parent"
+                android:minHeight="@dimen/_280sdp"
                 app:layout_constraintHeight_min="@dimen/_280sdp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"

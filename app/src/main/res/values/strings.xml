@@ -200,6 +200,8 @@
     <string name="menu_slideshow">Slideshow</string>
 
     <string name="home_second">Home Second</string>
+   <string name="drawer_open">Open</string>
+   <string name="drawer_close">Close</string>
     <string name="new_password">New Password</string>
     <string name="confirm_new_password">Confirm New Password</string>
     <string name="old_password">Current Password</string>

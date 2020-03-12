@@ -30,6 +30,11 @@
         <item name="android:strokeColor">@color/color_button_background</item>
     </style>
 
+    <style name="Dialog" parent="Theme.MaterialComponents.Light.Dialog.Alert">
+        <item name="android:windowNoTitle">false</item>
+        <item name="android:windowIsFloating">true</item>
+    </style>
+
     <style name="AutoCompleteTextViewStyle">
         <item name="android:layout_marginBottom">@dimen/_10sdp</item>
         <item name="android:textSize">@dimen/textSizeMedium</item>

@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout  xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
-
         <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             app:cardCornerRadius="@dimen/_20sdp"
             android:id="@+id/container"
+            android:minWidth="@dimen/_200sdp"
+            android:layout_marginRight="@dimen/_20sdp"
             android:minHeight="@dimen/_150sdp"
-            android:layout_margin="@dimen/_40sdp"
             app:cardBackgroundColor="@color/colorBlue"
             app:cardElevation="@dimen/_5sdp"
             android:layout_height="wrap_content">
@@ -25,6 +24,8 @@
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     android:orientation="vertical"
+                    android:id="@+id/qalog_layout"
+                    android:visibility="visible"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
@@ -48,20 +49,19 @@
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
                         android:layout_width="wrap_content"
-                        android:visibility="gone"
+                        android:visibility="visible"
                         android:textColor="@color/colorWhite"
                         android:textSize="@dimen/_17ssp"
                         android:layout_height="wrap_content"/>
 
                     <TextView
                         android:id="@+id/courses"
-                        android:text="Courses"
                         app:layout_constraintTop_toBottomOf="@+id/course_count"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
                         android:layout_width="wrap_content"
                         android:textColor="@color/colorWhite"
-                        android:visibility="gone"
+                        android:visibility="visible"
                         android:textSize="@dimen/_14ssp"
                         android:layout_height="wrap_content"/>
 
@@ -75,19 +75,18 @@
                         android:layout_width="wrap_content"
                         android:textColor="@color/colorWhite"
                         android:textStyle="bold"
-                        android:visibility="gone"
+                        android:visibility="visible"
                         android:textSize="@dimen/_17ssp"
                         android:layout_height="wrap_content"/>
 
                     <TextView
                         android:id="@+id/questions"
-                        android:text="Questions Submitted"
                         app:layout_constraintTop_toBottomOf="@+id/questions_count"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
                         android:layout_width="wrap_content"
                         android:textColor="@color/colorWhite"
-                        android:visibility="gone"
+                        android:visibility="visible"
                         android:textSize="@dimen/_14ssp"
                         android:layout_height="wrap_content"/>
 
@@ -96,7 +95,7 @@
                         android:layout_marginTop="@dimen/_10sdp"
                         android:id="@+id/exams_count"
                         android:textStyle="bold"
-                        android:visibility="gone"
+                        android:visibility="visible"
                         app:layout_constraintTop_toBottomOf="@+id/questions"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
@@ -107,8 +106,32 @@
 
                     <TextView
                         android:id="@+id/exams"
-                        android:text="Exams"
-                        android:visibility="gone"
+                        android:visibility="visible"
+                        app:layout_constraintTop_toBottomOf="@+id/exams_count"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        android:layout_width="wrap_content"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="@dimen/_14ssp"
+                        android:layout_height="wrap_content"/>
+
+
+                    <TextView
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:id="@+id/item4_count"
+                        android:textStyle="bold"
+                        android:visibility="visible"
+                        app:layout_constraintTop_toBottomOf="@+id/questions"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        android:layout_width="wrap_content"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="@dimen/_17ssp"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:id="@+id/item4"
+                        android:visibility="visible"
                         app:layout_constraintTop_toBottomOf="@+id/exams_count"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
@@ -118,6 +141,10 @@
                         android:layout_height="wrap_content"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
 
