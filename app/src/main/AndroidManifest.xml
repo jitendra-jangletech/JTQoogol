@@ -23,10 +23,7 @@
         <activity android:name=".activities.ViewPagerActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
 
-
-
-
-
+        <activity android:name=".CourseActivity"/>
 
         <activity android:name=".Test.QuestionsActivity" />
         <activity android:name=".activities.SignInActivity" />
