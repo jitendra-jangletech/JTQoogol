@@ -1,7 +1,23 @@
 package com.jangletech.qoogol.ui.personal_info;
 
-import androidx.lifecycle.ViewModel;
+import android.app.Application;
 
-public class PersonalInfoViewModel extends ViewModel {
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
+
+import com.jangletech.qoogol.model.GetUserPersonalDetails;
+
+public class PersonalInfoViewModel extends AndroidViewModel {
+
+    private PersonalInfoRepository personalInfoRepository;
+
+    public PersonalInfoViewModel(@NonNull Application application) {
+        super(application);
+        personalInfoRepository = new PersonalInfoRepository(application);
+    }
+    public LiveData<GetUserPersonalDetails> getUserPersonalDetailsLiveData() {
+        return personalInfoRepository.getMutableLiveData();
+    }
 
 }

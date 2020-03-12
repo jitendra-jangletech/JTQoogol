@@ -59,6 +59,8 @@ dependencies {
     //google sing-in
     implementation 'com.google.android.gms:play-services-auth:17.0.0'
 
+    implementation 'com.github.drawers:SpinnerDatePicker:2.0.1'
+
     //image loading
     implementation 'com.github.bumptech.glide:glide:4.10.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.10.0'

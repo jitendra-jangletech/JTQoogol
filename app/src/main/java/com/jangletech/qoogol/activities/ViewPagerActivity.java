@@ -49,7 +49,6 @@ public class ViewPagerActivity extends AppCompatActivity {
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-                //Toast.makeText(getActivity(), "Tab Selected : " + tab.getPosition()+1, Toast.LENGTH_SHORT).show();
             }
         });
 

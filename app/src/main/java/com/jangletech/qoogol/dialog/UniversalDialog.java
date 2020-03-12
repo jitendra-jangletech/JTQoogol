@@ -6,11 +6,14 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
 
 import com.jangletech.qoogol.R;
+import com.jangletech.qoogol.databinding.LayoutUniversalDialogBinding;
 
 public class UniversalDialog extends Dialog {
 
+    private LayoutUniversalDialogBinding layoutUniversalDialogBinding;
     public DialogButtonClickListener buttonclickListener;
     private Context context;
     private String strTitle;
@@ -39,25 +42,18 @@ public class UniversalDialog extends Dialog {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.layout_universal_dialog);
-        tvTitle = findViewById(R.id.tv_title);
-        tvMessage = findViewById(R.id.tvMessage);
-        tvPositiveTxt = findViewById(R.id.tvPositiveBtn);
-        tvNegativeTxt = findViewById(R.id.tvNegativeBtn);
+        layoutUniversalDialogBinding = DataBindingUtil.setContentView(getOwnerActivity(),R.layout.layout_universal_dialog);
 
-        //set Dialog Title
-        tvTitle.setText(strTitle);
-
-        //set Dialog Message
-        tvMessage.setText(strMsg);
+        layoutUniversalDialogBinding.tvTitle.setText(strTitle);
+        layoutUniversalDialogBinding.tvMessage.setText(strMsg);
 
         //CallBack For Negative Button
-        tvPositiveTxt.setOnClickListener(v->{
+        layoutUniversalDialogBinding.tvPositiveBtn.setOnClickListener(v->{
             dismiss();
             buttonclickListener.onPositiveButtonClick();
 
         });
-        tvNegativeTxt.setOnClickListener(v-> dismiss());
+        layoutUniversalDialogBinding.tvNegativeBtn.setOnClickListener(v-> dismiss());
 
     }
 

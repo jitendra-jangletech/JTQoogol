@@ -2,26 +2,17 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fillViewport="true">
+        android:layout_height="match_parent"
+        android:background="@color/colorLightGray"
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:background="@color/colorLightGray"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/educationListRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/educationListRecyclerView"
-                android:paddingBottom="10dp"
-                android:clipToPadding="false"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false"
-                tools:listitem="@layout/item_education" />
-
-        </LinearLayout>
-    </ScrollView>
+            android:layout_height="match_parent"
+            android:paddingBottom="10dp"
+            tools:listitem="@layout/item_education" />
+    </LinearLayout>
 </layout>

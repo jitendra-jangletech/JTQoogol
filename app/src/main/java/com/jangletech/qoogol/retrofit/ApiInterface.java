@@ -1,5 +1,6 @@
 package com.jangletech.qoogol.retrofit;
 
+import com.jangletech.qoogol.model.ChangePassword;
 import com.jangletech.qoogol.model.Classes;
 import com.jangletech.qoogol.model.Country;
 import com.jangletech.qoogol.model.Course;
@@ -67,6 +68,9 @@ public interface ApiInterface {
 
     @POST("user/fetchPersonalDetails")
     Call<GetUserPersonalDetails> getPersonalDetails(@QueryMap Map<String, String> request);
+
+    @POST("user/updatePassword")
+    Call<ChangePassword> changePassword(@QueryMap Map<String, String> request);
 
 
 }

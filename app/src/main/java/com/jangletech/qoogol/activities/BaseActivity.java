@@ -16,14 +16,12 @@ import androidx.core.content.ContextCompat;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import com.jangletech.qoogol.R;
-import com.jangletech.qoogol.receiver.ConnectivityReceiver;
 import com.jangletech.qoogol.service.NetworkSchedulerService;
 import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.NetworkUtil;
 
 
 public class BaseActivity extends AppCompatActivity {
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

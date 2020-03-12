@@ -192,6 +192,7 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(i);
                 } else {
+                    ProgressDialog.getInstance().dismiss();
                     Toast.makeText(SignInActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }

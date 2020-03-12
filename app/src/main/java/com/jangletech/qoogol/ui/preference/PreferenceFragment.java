@@ -56,7 +56,6 @@ public class PreferenceFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(PreferenceViewModel.class);
         Log.d(TAG, "onActivityCreated PreferenceFragment : ");
-        ProgressDialog.getInstance().show(getActivity());
         fetchApplicableExams();
     }
 
@@ -76,6 +75,7 @@ public class PreferenceFragment extends Fragment {
     }
 
     public void fetchApplicableExams() {
+        ProgressDialog.getInstance().show(getActivity());
         Map<String, String> arguments = new HashMap<>();
         arguments.put(Constant.courseId, "1");
 
@@ -83,18 +83,18 @@ public class PreferenceFragment extends Fragment {
         call.enqueue(new Callback<FetchPreferableExamsResponseDto>() {
             @Override
             public void onResponse(Call<FetchPreferableExamsResponseDto> call, Response<FetchPreferableExamsResponseDto> response) {
-                if (response.isSuccessful()) {
+                if (response.body()!=null && response.body().getStatusCode()!=null && response.body().getStatusCode().equalsIgnoreCase("1")) {
                     FetchPreferableExamsResponseDto fetchPreferableExamsResponseDto = (FetchPreferableExamsResponseDto) response.body();
                     setPreferenceChips(fetchPreferableExamsResponseDto.getObject());
+                    ProgressDialog.getInstance().dismiss();
                     Log.d(TAG, "onResponse fetchPreferableExamsResponseDto : "+ fetchPreferableExamsResponseDto.getObject().get(0).getDispText());
-                } else {
-                    Log.e(TAG, "Response Failed:");
                 }
             }
 
             @Override
             public void onFailure(Call<FetchPreferableExamsResponseDto> call, Throwable t) {
                 t.printStackTrace();
+                ProgressDialog.getInstance().dismiss();
             }
         });
     }

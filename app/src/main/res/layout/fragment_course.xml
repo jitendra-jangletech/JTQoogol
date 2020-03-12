@@ -16,11 +16,11 @@
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/result_tabs"
-                app:tabIndicatorHeight="@dimen/_3sdp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/colorPrimary"
                 app:tabIndicatorColor="@color/grey"
+                app:tabIndicatorHeight="@dimen/_3sdp"
                 app:tabMode="scrollable"
                 app:tabSelectedTextColor="@color/colorLightGrey"
                 app:tabTextAppearance="@style/CustomTextAppearanceTab"
@@ -32,15 +32,15 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:background="@color/quest_bg"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 
         <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/questRelativeLayout"
-            android:layout_marginTop="@dimen/_10sdp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
             android:background="@color/grey"
             tools:context=".Test.TestFragment">
 
@@ -103,9 +103,9 @@
 
                 <LinearLayout
                     android:id="@+id/QuestLinearLayout"
-                    android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="match_parent"
@@ -130,59 +130,59 @@
                     </com.google.android.material.card.MaterialCardView>
 
                     <LinearLayout
-                        android:background="@color/grey"
-                        android:padding="@dimen/_10sdp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_5sdp"
-                        android:orientation="vertical">
+                        android:background="@color/grey"
+                        android:orientation="vertical"
+                        android:padding="@dimen/_10sdp">
 
                         <TextView
                             android:id="@+id/incorrect"
-                            android:drawableRight="@drawable/ic_wrong"
-                            android:layout_marginBottom="@dimen/_4sdp"
-                            android:background="@drawable/bg_ans_wrong"
-                            android:padding="@dimen/_15sdp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/_4sdp"
+                            android:background="@drawable/bg_ans_wrong"
+                            android:drawableRight="@drawable/ic_wrong"
+                            android:padding="@dimen/_15sdp"
                             android:text="1. Imported"
                             android:textColor="@color/colorBlack" />
 
                         <TextView
-                            android:drawableRight="@drawable/ic_right"
                             android:id="@+id/correct"
-                            android:layout_marginBottom="@dimen/_4sdp"
-                            android:background="@drawable/bg_ans_right"
-                            android:padding="@dimen/_15sdp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/_4sdp"
+                            android:background="@drawable/bg_ans_right"
+                            android:drawableRight="@drawable/ic_right"
+                            android:padding="@dimen/_15sdp"
                             android:text="2. Exploded"
                             android:textColor="@color/colorBlack" />
 
                         <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
                             android:layout_marginBottom="@dimen/_4sdp"
                             android:background="@color/colorWhite"
                             android:padding="@dimen/_15sdp"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
                             android:text="3. Extensive"
                             android:textColor="@color/colorBlack" />
 
                         <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
                             android:layout_marginBottom="@dimen/_4sdp"
                             android:background="@color/colorWhite"
                             android:padding="@dimen/_15sdp"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
                             android:text="4. Absolute"
                             android:textColor="@color/colorBlack" />
 
                         <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
                             android:layout_marginBottom="@dimen/_4sdp"
                             android:background="@color/colorWhite"
                             android:padding="@dimen/_15sdp"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
                             android:text="5. None of the Above"
                             android:textColor="@color/colorBlack" />
 
@@ -192,35 +192,34 @@
             </ScrollView>
 
             <LinearLayout
-                android:weightSum="2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:weightSum="2">
 
                 <TextView
                     android:id="@+id/btnPrevious"
-                    android:textStyle="bold"
-                    android:textColor="@color/colorWhite"
-                    android:gravity="center"
-                    android:layout_marginRight="@dimen/_2sdp"
-                    android:text="@string/previous"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_30sdp"
+                    android:layout_marginRight="@dimen/_2sdp"
+                    android:layout_weight="1"
                     android:background="@color/colorBlack"
-                    android:layout_weight="1" />
+                    android:gravity="center"
+                    android:text="@string/previous"
+                    android:textColor="@color/colorWhite"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/btnNext"
-                    android:textStyle="bold"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_30sdp"
+                    android:layout_weight="1"
+                    android:background="@color/colorBlack"
                     android:gravity="center"
                     android:text="@string/next"
                     android:textColor="@color/colorWhite"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_30sdp"
-                    android:background="@color/colorBlack"
-                    android:layout_weight="1" />
-
+                    android:textStyle="bold" />
             </LinearLayout>
         </RelativeLayout>
     </LinearLayout>

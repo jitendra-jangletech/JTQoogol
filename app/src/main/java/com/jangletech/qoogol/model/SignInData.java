@@ -63,9 +63,24 @@ public class SignInData {
 
     private String dob;
 
-    private String mobileNo1;
+    public long getMobileNo1() {
+        return mobileNo1;
+    }
 
-    private int mobileNo2;
+    public void setMobileNo1(long mobileNo1) {
+        this.mobileNo1 = mobileNo1;
+    }
+
+    public long getMobileNo2() {
+        return mobileNo2;
+    }
+
+    public void setMobileNo2(long mobileNo2) {
+        this.mobileNo2 = mobileNo2;
+    }
+
+    private long mobileNo1;
+    private long mobileNo2;
 
     private List<UserEduList> userEduList;
 
@@ -256,18 +271,6 @@ public class SignInData {
 
     public void setDob(String dob) {
         this.dob = dob;
-    }
-
-    public String getMobileNo1() {
-        return mobileNo1;
-    }
-
-    public void setMobileNo1(String mobileNo1) {
-        this.mobileNo1 = mobileNo1;
-    }
-
-    public int getMobileNo2() {
-        return mobileNo2;
     }
 
     public void setMobileNo2(int mobileNo2) {

@@ -15,11 +15,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.EducationAdapter;
-
 import com.jangletech.qoogol.databinding.FragmentEducationInfoBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
-import com.jangletech.qoogol.model.FetchEducationsResponseDto;
 import com.jangletech.qoogol.model.FetchEducationsObject;
+import com.jangletech.qoogol.model.FetchEducationsResponseDto;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.util.Constant;
@@ -43,7 +42,6 @@ public class EducationInfoFragment extends Fragment {
     ApiInterface apiService = ApiClient.getInstance().getApi();
 
 
-
     public static EducationInfoFragment newInstance() {
         return new EducationInfoFragment();
     }
@@ -55,34 +53,7 @@ public class EducationInfoFragment extends Fragment {
         mViewModel =
                 ViewModelProviders.of(this).get(EducationInfoViewModel.class);
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_education_info, container, false);
-
-       /* fetchEducationsObjectList.clear();
-
-        FetchEducationsObject fetchEducationsObject = new FetchEducationsObject(123, "123", 12345, 12456, "17-Jul-2007",
-                "15-Mar-2008", 15, 5, 45, 1, 1, "Maharashtra State Board"
-                , 5, "Britia School", 7, "", 12, "SSC", 45, "India", 1, "Maharashtra",
-                3, "Mumbai");
-        fetchEducationsObjectList.add(fetchEducationsObject);
-
-
-        FetchEducationsObject fetchEducationsObject1 = new FetchEducationsObject(123, "123", 12345, 12456, "17-Jul-2007",
-                "15-Mar-2008", 15, 5, 45, 1, 1, "Maharashtra State Board"
-                , 5, "Britia School", 7, "", 12, "SSC", 45, "India", 1, "Maharashtra",
-                3, "Mumbai");
-        fetchEducationsObjectList.add(fetchEducationsObject1);
-
-        FetchEducationsObject fetchEducationsObject2 = new FetchEducationsObject(123, "123", 12345, 12456, "17-Jul-2007",
-                "15-Mar-2008", 15, 5, 45, 1, 1, "Maharashtra State Board"
-                , 5, "Britia School", 7, "", 12, "SSC", 45, "India", 1, "Maharashtra",
-                3, "Mumbai");
-        fetchEducationsObjectList.add(fetchEducationsObject2);
-
-        EducationAdapter educationAdapter = new EducationAdapter(getActivity(), fetchEducationsObjectList);
-
-        mBinding.educationListRecyclerView.setHasFixedSize(true);
-        mBinding.educationListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mBinding.educationListRecyclerView.setAdapter(educationAdapter);*/
-
+        fetchEducationDetails();
         return mBinding.getRoot();
     }
 
@@ -91,29 +62,24 @@ public class EducationInfoFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(EducationInfoViewModel.class);
         Log.d(TAG, "onActivityCreated EducationInfoFragment : ");
-        fetchEducationDetails();
+
     }
 
     public void fetchEducationDetails() {
         ProgressDialog.getInstance().show(getActivity());
         Map<String, String> arguments = new HashMap<>();
-        Log.d(TAG, "fetchEducationDetails userId : "+new PreferenceManager(getContext()).getUserId());
+        Log.d(TAG, "fetchEducationDetails userId : " + new PreferenceManager(getContext()).getUserId());
         arguments.put(Constant.user_id, new PreferenceManager(getContext()).getUserId());
         Call<FetchEducationsResponseDto> call = apiService.getEducationDetails(arguments);
         call.enqueue(new Callback<FetchEducationsResponseDto>() {
             @Override
             public void onResponse(Call<FetchEducationsResponseDto> call, Response<FetchEducationsResponseDto> response) {
-                if(response.isSuccessful()){
-                    FetchEducationsResponseDto education = (FetchEducationsResponseDto)response.body();
-                    setEducationListUi(education);
-                    Log.d(TAG, "onResponse Board: "+education.getObject().get(0).getUnivBrdName());
-
-                }else{
-                    Log.e(TAG, "onResponse Failed : ");
+                if (response.body()!=null && response.body().getObject()!=null && response.body().getStatusCode() == 1) {
+                    FetchEducationsResponseDto education = (FetchEducationsResponseDto) response.body();
                     ProgressDialog.getInstance().dismiss();
+                    setEducationListUi(education);
+                    Log.d(TAG, "onResponse Board: " + education.getObject().get(0).getUnivBrdName());
                 }
-
-                Log.d(TAG, "onResponse: "+response.body());
             }
 
             @Override
@@ -124,21 +90,21 @@ public class EducationInfoFragment extends Fragment {
         });
     }
 
-    public void setEducationListUi(FetchEducationsResponseDto education){
+    public void setEducationListUi(FetchEducationsResponseDto education) {
 
         fetchEducationsObjectList.clear();
         fetchEducationsObjectList = education.getObject();
 
-        Log.d(TAG, "setEducationListUi Size : "+fetchEducationsObjectList.size());
+        Log.d(TAG, "setEducationListUi Size : " + fetchEducationsObjectList.size());
+
+        for (int i = 0; i <fetchEducationsObjectList.size() ; i++) {
+            Log.d(TAG, "fetchEducationsObjectList : "+fetchEducationsObjectList.get(i).getStateName());
+        }
 
         EducationAdapter educationAdapter = new EducationAdapter(getActivity(), fetchEducationsObjectList);
 
-        mBinding.educationListRecyclerView.setHasFixedSize(true);
         mBinding.educationListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mBinding.educationListRecyclerView.setAdapter(educationAdapter);
-
-
-
 
     }
 

@@ -17,6 +17,7 @@
         android:id="@+id/nav_course"
         android:name="com.jangletech.qoogol.ui.learning.course.CourseFragment"
         android:label="@string/menu_course"
+        app:enterAnim="@anim/enter_from_left"
         tools:layout="@layout/fragment_course" >
     </fragment>
 

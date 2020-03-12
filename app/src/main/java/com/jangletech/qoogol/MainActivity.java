@@ -109,6 +109,7 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
             mBinding.drawerLayout.closeDrawers();
             if (navController.getCurrentDestination().getId() != R.id.nav_course) {
                 navController.popBackStack();
+
                 navController.navigate(R.id.nav_course);
             }
         });
@@ -282,16 +283,6 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
         finish();
     }
 
-    public void openFragment(Fragment fragment) {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.nav_host_fragment, fragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
-    }
 
-    public void hideBottomNavigation(){
-
-
-    }
 
 }
