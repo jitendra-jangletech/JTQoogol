@@ -19,9 +19,12 @@ import com.jangletech.qoogol.databinding.FragmentPreferableExamBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.model.FetchPreferableExamsResponseDto;
 import com.jangletech.qoogol.model.Exams;
+import com.jangletech.qoogol.model.UserSelectedExams;
+import com.jangletech.qoogol.model.UserSelectedExamsData;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.util.Constant;
+import com.jangletech.qoogol.util.PreferenceManager;
 
 import java.util.HashMap;
 import java.util.List;
@@ -60,10 +63,17 @@ public class PreferenceFragment extends Fragment {
         fetchApplicableExams();
     }
 
-    public void setPreferenceChips(List<Exams> chipTextList) {
 
+    public void setPreferenceChips(List<Exams> chipTextList, List<UserSelectedExamsData> selectedExamList) {
         for (int i = 0; i < chipTextList.size(); i++) {
             Chip chip = new Chip(getActivity());
+            if (selectedExamList !=null) {
+                for (int j = 0; j < selectedExamList.size(); j++) {
+                    if (chipTextList.get(i).getDispText().equals(selectedExamList.get(j).getExamName()) && chipTextList.get(i).getValue().equals(selectedExamList.get(j).getUserExamId())) {
+                        chip.setChecked(true);
+                    }
+                }
+            }
             chip.setText(chipTextList.get(i).getDispText());
             chip.setClickable(true);
             chip.setFocusable(true);
@@ -71,9 +81,33 @@ public class PreferenceFragment extends Fragment {
             chip.setChipBackgroundColor(AppCompatResources.getColorStateList(getActivity(), R.color.chip_bg_state));
             mBinding.examChipGroup.addView(chip);
         }
-
         ProgressDialog.getInstance().dismiss();
     }
+
+    public void fetchUserSelectedExams(List<Exams> chipTextList) {
+        Map<String, Integer> arguments = new HashMap<>();
+        arguments.put(Constant.user_id, Integer.parseInt(new PreferenceManager(getContext()).getUserId()));
+        Call<UserSelectedExams> call = apiService.getUserSelectedExams(arguments);
+        call.enqueue(new Callback<UserSelectedExams>() {
+            @Override
+            public void onResponse(Call<UserSelectedExams> call, Response<UserSelectedExams> response) {
+                if (response.isSuccessful()) {
+                    List<UserSelectedExamsData> userSelectedExamsData =  response.body().getObject();
+                    setPreferenceChips(chipTextList,userSelectedExamsData);
+                } else {
+                    Log.e(TAG, "Response Failed:");
+                    setPreferenceChips(chipTextList,null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserSelectedExams> call, Throwable t) {
+                t.printStackTrace();
+                setPreferenceChips(chipTextList,null);
+            }
+        });
+    }
+
 
     public void fetchApplicableExams() {
         Map<String, String> arguments = new HashMap<>();
@@ -85,7 +119,8 @@ public class PreferenceFragment extends Fragment {
             public void onResponse(Call<FetchPreferableExamsResponseDto> call, Response<FetchPreferableExamsResponseDto> response) {
                 if (response.isSuccessful()) {
                     FetchPreferableExamsResponseDto fetchPreferableExamsResponseDto = (FetchPreferableExamsResponseDto) response.body();
-                    setPreferenceChips(fetchPreferableExamsResponseDto.getObject());
+//                    setPreferenceChips(fetchPreferableExamsResponseDto.getObject());
+                    fetchUserSelectedExams(fetchPreferableExamsResponseDto.getObject());
                     Log.d(TAG, "onResponse fetchPreferableExamsResponseDto : "+ fetchPreferableExamsResponseDto.getObject().get(0).getDispText());
                 } else {
                     Log.e(TAG, "Response Failed:");

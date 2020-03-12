@@ -1,10 +1,15 @@
 package com.jangletech.qoogol.adapter;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,15 +19,19 @@ import com.jangletech.qoogol.model.FetchEducationsObject;
 
 import java.util.List;
 
+import static com.facebook.FacebookSdk.getApplicationContext;
+
 public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.ViewHolder>  {
 
     Activity activity;
     List<FetchEducationsObject> educationList;
     ItemEducationBinding itemEducationBinding;
+    OnEduClick onEduClick;
 
-    public EducationAdapter(Activity activity, List<FetchEducationsObject> itemlist) {
+    public EducationAdapter(Activity activity, List<FetchEducationsObject> itemlist, OnEduClick onEduClick) {
         this.activity = activity;
         this.educationList = itemlist;
+        this.onEduClick = onEduClick;
     }
 
     @NonNull
@@ -42,10 +51,25 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.View
         holder.itemEducationBinding.institute.setText(fetchEducationsObject.getInstOrgName());
         holder.itemEducationBinding.startDate.setText(fetchEducationsObject.getStartDateStr());
         holder.itemEducationBinding.endDate.setText(fetchEducationsObject.getEndDateStr());
-
         holder.itemEducationBinding.country.setText(fetchEducationsObject.getCountryName());
         holder.itemEducationBinding.state.setText(fetchEducationsObject.getStateName());
         holder.itemEducationBinding.city.setText(fetchEducationsObject.getCityName());
+
+        holder.itemEducationBinding.deleteEdu.setOnClickListener(v -> {
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(activity, R.style.Dialog);
+            alertDialogBuilder.setMessage("Are you sure you want to delete?");
+                    alertDialogBuilder.setPositiveButton("yes",
+                            (arg0, arg1) -> onEduClick.onDelete(fetchEducationsObject));
+
+            alertDialogBuilder.setNegativeButton("No", (dialog, which) -> {
+            });
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
+        });
+    }
+
+    public interface OnEduClick {
+        void onDelete(FetchEducationsObject fetchEducationsObject);
     }
 
     @Override

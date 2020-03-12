@@ -34,6 +34,7 @@ public class CourseFragment extends Fragment{
     public static int selectedPos;
     int position;
 
+
     public static CourseFragment newInstance() {
         return new CourseFragment();
     }
@@ -91,7 +92,6 @@ public class CourseFragment extends Fragment{
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
     }
 
     private void setupViewPager(ViewPager viewPager) {

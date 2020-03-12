@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.HomeitemBinding;
+import com.jangletech.qoogol.model.DashboardData;
 import com.jangletech.qoogol.model.Home;
 
 import java.util.List;
@@ -20,10 +21,10 @@ import java.util.List;
  */
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
     Activity activity;
-    List<Home> itemlist;
+    List<DashboardData> itemlist;
     HomeitemBinding homeitemBinding;
 
-    public HomeAdapter(Activity activity, List<Home> itemlist) {
+    public HomeAdapter(Activity activity, List<DashboardData> itemlist) {
         this.activity = activity;
         this.itemlist = itemlist;
     }
@@ -33,29 +34,51 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         homeitemBinding = DataBindingUtil.inflate(
                 LayoutInflater.from(parent.getContext()),
-                R.layout.homeitem, null, false);
-
+                R.layout.homeitem, parent, false);
         return  new ViewHolder(homeitemBinding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Home home = itemlist.get(position);
-        if (home.getCourses()!=null) {
-            holder.homeitemBinding.courseCount.setText(home.getCourses());
-            holder.homeitemBinding.courseCount.setVisibility(View.VISIBLE);
-            holder.homeitemBinding.courses.setVisibility(View.VISIBLE);
+        DashboardData dashboardData = itemlist.get(position);
+        if (dashboardData.getAttendedTests()!=null) {
+            holder.homeitemBinding.heading.setText("Test Log");
+            holder.homeitemBinding.courseCount.setText(dashboardData.getAttendedTests());
+            holder.homeitemBinding.courses.setText("Attended Tests");
+            holder.homeitemBinding.questionsCount.setText(dashboardData.getCreatedTests());
+            holder.homeitemBinding.questions.setText("Self Tests");
+
+            holder.homeitemBinding.exams.setVisibility(View.GONE);
+            holder.homeitemBinding.examsCount.setVisibility(View.GONE);
+            holder.homeitemBinding.item4.setVisibility(View.GONE);
+            holder.homeitemBinding.item4Count.setVisibility(View.GONE);
         }
-        if (home.getQuestions()!=null) {
-            holder.homeitemBinding.questionsCount.setText(home.getQuestions());
-            holder.homeitemBinding.questionsCount.setVisibility(View.VISIBLE);
-            holder.homeitemBinding.questions.setVisibility(View.VISIBLE);
+
+        if (dashboardData.getFavQA()!=null) {
+            holder.homeitemBinding.heading.setText("Faviourites");
+            holder.homeitemBinding.courseCount.setText(dashboardData.getFavQA());
+            holder.homeitemBinding.courses.setText("Faviourite Q & A");
+            holder.homeitemBinding.questionsCount.setText(dashboardData.getFavTests());
+            holder.homeitemBinding.questions.setText("Faviourite Tests");
+
+            holder.homeitemBinding.exams.setVisibility(View.GONE);
+            holder.homeitemBinding.examsCount.setVisibility(View.GONE);
+            holder.homeitemBinding.item4.setVisibility(View.GONE);
+            holder.homeitemBinding.item4Count.setVisibility(View.GONE);
         }
-        if (home.getExams()!=null) {
-            holder.homeitemBinding.examsCount.setText(home.getExams());
-            holder.homeitemBinding.examsCount.setVisibility(View.VISIBLE);
-            holder.homeitemBinding.exams.setVisibility(View.VISIBLE);
+
+        if (dashboardData.getAvgRating()!=null) {
+            holder.homeitemBinding.heading.setText("Avg Ratings");
+            holder.homeitemBinding.courseCount.setText(dashboardData.getAvgRating());
+
+            holder.homeitemBinding.questions.setVisibility(View.GONE);
+            holder.homeitemBinding.questionsCount.setVisibility(View.GONE);
+            holder.homeitemBinding.exams.setVisibility(View.GONE);
+            holder.homeitemBinding.examsCount.setVisibility(View.GONE);
+            holder.homeitemBinding.item4.setVisibility(View.GONE);
+            holder.homeitemBinding.item4Count.setVisibility(View.GONE);
         }
+
         if (position == 0) {
             holder.homeitemBinding.container.setCardBackgroundColor(activity.getResources().getColor(R.color.colorBlue));
         } else if (position == 1) {

@@ -15,15 +15,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".CourseActivity"></activity>
         <activity
             android:name=".activities.PractiseQuestionsActivity"
             android:label="@string/title_activity_practise_questions"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
-        <activity android:name=".activities.ViewPagerActivity">
-
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activities.ViewPagerActivity" />
         <activity android:name=".Test.QuestionsActivity" />
         <activity android:name=".activities.SignInActivity" />
         <activity
