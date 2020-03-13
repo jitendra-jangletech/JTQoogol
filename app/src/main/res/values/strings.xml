@@ -89,7 +89,7 @@
     <string name="empty_last_name">Please enter last name.</string>
     <string name="empty_mobile">Please enter valid mobile number.</string>
     <string name="empty_confirm_password">Please re-enter password.</string>
-    <string name="valid_email">Please Enter valid Email.</string>
+    <string name="valid_email">Please enter valid email.</string>
     <string name="search">Search</string>
 
     <string name="resend_otp">Resend OTP</string>
@@ -205,5 +205,6 @@
     <string name="new_password">New Password</string>
     <string name="confirm_new_password">Confirm New Password</string>
     <string name="old_password">Current Password</string>
+    <string name="select_country">Please select country.</string>
 
 </resources>

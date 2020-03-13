@@ -98,8 +98,9 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
         fetchCountryData();
         fetchDegreeData();
 
-        mBinding.selectAutocompleteView.setOnItemClickListener((parent, view, position, id) ->
-                Toast.makeText(SignUpActivity.this, "" + parent.getSelectedItem(), Toast.LENGTH_SHORT).show());
+        mBinding.selectAutocompleteView.setOnItemClickListener((parent, view, position, id) -> {
+
+        });
     }
 
 
@@ -179,31 +180,51 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
 
     private boolean validateSignUpForm() {
         isValid = true;
-
         if (TextUtils.isEmpty(mBinding.tilFirstName.getEditText().getText())) {
             mBinding.tilFirstName.setError(getResources().getString(R.string.empty_first_name));
+            mBinding.etFirstName.requestFocus();
             isValid = false;
-        }
-        if (TextUtils.isEmpty(mBinding.tilLastName.getEditText().getText())) {
+        } else if (TextUtils.isEmpty(mBinding.tilLastName.getEditText().getText())) {
             mBinding.tilLastName.setError(getResources().getString(R.string.empty_last_name));
+            mBinding.etLastName.requestFocus();
             isValid = false;
-        }
-        if (TextUtils.isEmpty(mBinding.tilMobile.getEditText().getText())) {
+        } else if (TextUtils.isEmpty(mBinding.tilMobile.getEditText().getText())) {
             mBinding.tilMobile.setError(getResources().getString(R.string.empty_mobile));
+            mBinding.etMobile.requestFocus();
             isValid = false;
-        }
-        if (TextUtils.isEmpty(mBinding.tilEmail.getEditText().getText())) {
+        } else if (TextUtils.isEmpty(mBinding.tilEmail.getEditText().getText())) {
             mBinding.tilEmail.setError(getResources().getString(R.string.empty_email));
+            mBinding.etEmail.requestFocus();
             isValid = false;
         } else if (!UtilHelper.isValidEmail(mBinding.tilEmail.getEditText().getText().toString())) {
             mBinding.tilEmail.setError(getResources().getString(R.string.valid_email));
+            mBinding.etEmail.requestFocus();
             isValid = false;
-        }
-        if (TextUtils.isEmpty(mBinding.tilCreatePassword.getEditText().getText())) {
+        } else if (mBinding.countryAutocompleteView.getTag() == null) {
+            Toast.makeText(this, R.string.select_country, Toast.LENGTH_SHORT).show();
+            isValid = false;
+        } else if (mBinding.stateAutocompleteView.getTag() == null) {
+            Toast.makeText(this, "Please select state.", Toast.LENGTH_SHORT).show();
+            isValid = false;
+        } else if (mBinding.universityBoardAutocompleteView.getTag() == null) {
+            Toast.makeText(this, "Please select university/board", Toast.LENGTH_SHORT).show();
+            isValid = false;
+        } else if (mBinding.instituteAutocompleteView.getTag() == null) {
+            Toast.makeText(this, "Please select institute", Toast.LENGTH_SHORT).show();
+            isValid = false;
+        } else if (mBinding.degreeAutocompleteView.getTag() == null) {
+            Toast.makeText(this, "Please select degree", Toast.LENGTH_SHORT).show();
+            isValid = false;
+        } else if (mBinding.courseAutocompleteView.getTag() == null) {
+            Toast.makeText(this, "Please select course", Toast.LENGTH_SHORT).show();
+            isValid = false;
+        } else if (mBinding.classAutocompleteView.getTag() == null) {
+            Toast.makeText(this, "Please select class", Toast.LENGTH_SHORT).show();
+            isValid = false;
+        } else if (TextUtils.isEmpty(mBinding.tilCreatePassword.getEditText().getText())) {
             mBinding.tilCreatePassword.setError(getResources().getString(R.string.empty_password));
             isValid = false;
-        }
-        if (TextUtils.isEmpty(mBinding.tilConfirmPassword.getEditText().getText())) {
+        } else if (TextUtils.isEmpty(mBinding.tilConfirmPassword.getEditText().getText())) {
             mBinding.tilConfirmPassword.setError(getResources().getString(R.string.empty_confirm_password));
             isValid = false;
         }
@@ -319,6 +340,7 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
         call.enqueue(new Callback<List<State>>() {
             @Override
             public void onResponse(Call<List<State>> call, retrofit2.Response<List<State>> response) {
+                ProgressDialog.getInstance().dismiss();
                 try {
                     List<State> list = response.body();
                     mViewModel.setStateList(list);
@@ -353,6 +375,7 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
         call.enqueue(new Callback<List<University>>() {
             @Override
             public void onResponse(Call<List<University>> call, Response<List<University>> response) {
+                ProgressDialog.getInstance().dismiss();
                 try {
                     List<University> list = response.body();
                     mViewModel.setUniversityList(list);
@@ -361,7 +384,6 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
                         for (University university : list) {
                             mViewModel.mMapUniversity.put(Integer.valueOf(university.getUnivBoardId()), university.getName());
                         }
-                        ProgressDialog.getInstance().dismiss();
                         populateUniversityBoard(mViewModel.mMapUniversity);
                     }
                 } catch (Exception e) {
@@ -527,7 +549,6 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnSignUp:
-                //callSignUpApi();
                 if (validateSignUpForm()) {
                     callSignUpApi();
                 }
@@ -559,7 +580,7 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
             @Override
             public void onResponse(Call<MobileOtp> call, Response<MobileOtp> response) {
                 try {
-                    if (response.body()!=null && response.body().getStatusCode().equalsIgnoreCase("1")) {
+                    if (response.body() != null && response.body().getStatusCode().equalsIgnoreCase("1")) {
                         ProgressDialog.getInstance().dismiss();
                         createVerifySmsOtpDialog(response.body().getObject());
                     } else {
@@ -623,7 +644,7 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
         requestBody.put(last_name, mBinding.etLastName.getText().toString());
         requestBody.put(email, mBinding.etEmail.getText().toString());
         requestBody.put(mobile_no, mBinding.etMobile.getText().toString());
-        requestBody.put(password,mBinding.etCreatePassword.getText().toString());
+        requestBody.put(password, mBinding.etCreatePassword.getText().toString());
         requestBody.put(country, mBinding.countryAutocompleteView.getTag());
         requestBody.put(state, mBinding.stateAutocompleteView.getTag());
         requestBody.put(board, mBinding.universityBoardAutocompleteView.getTag());
@@ -643,7 +664,7 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
                     Log.d(TAG, "onResponse SignUpResponseDto : " + response.body());
                     ProgressDialog.getInstance().dismiss();
                     if (response.body() != null && response.body().getStatusCode() == 1) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(SignUpActivity.this,R.style.AlertDialogStyle);
+                        AlertDialog.Builder builder = new AlertDialog.Builder(SignUpActivity.this, R.style.AlertDialogStyle);
                         builder.setTitle("Success");
                         builder.setMessage("Sign-up successfully, Please sing in with your credentials.");
                         builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
@@ -653,7 +674,7 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(intent);
                             }
-                        }).show();
+                        }).setCancelable(false).show();
                     } else {
                         Toast.makeText(SignUpActivity.this, "Error : " + response.body().getMessage(), Toast.LENGTH_SHORT).show();
                     }

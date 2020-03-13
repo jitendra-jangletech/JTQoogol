@@ -47,7 +47,6 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
 
     ActivitySignInBinding mBinding;
     private GoogleApiClient googleApiClient;
-    private GoogleSignInOptions gso;
     private static final int RC_SIGN_IN = 1;
     private SignUpViewModel mViewModel;
     ApiInterface apiService = ApiClient.getInstance().getApi();
