@@ -103,11 +103,19 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
 
 
     private void validateSignInForm() {
-        if (TextUtils.isEmpty(Objects.requireNonNull(mBinding.tilEmail.getEditText()).getText().toString().trim())) {
-            mBinding.tilEmail.setError(getResources().getString(R.string.empty_email));
+
+
+        if (mBinding.tilEmail.getEditText().getText().toString().trim().isEmpty()) {
+            mBinding.tilEmail.setError(getResources().getString(R.string.valid_email));
+            return;
         }
-        if (TextUtils.isEmpty(mBinding.tilEmail.getEditText().getText().toString().trim())) {
+        if (TextUtils.isEmpty(Objects.requireNonNull(mBinding.tilEmail.getEditText()).getText().toString().trim())) {
+            mBinding.tilEmail.setError(getResources().getString(R.string.valid_email));
+            return;
+        }
+        if (TextUtils.isEmpty(mBinding.tilPassword.getEditText().getText().toString().trim())) {
             mBinding.tilPassword.setError(getResources().getString(R.string.empty_password));
+            return;
         }
 
         if (!hasError(mBinding.signInLayout)) {

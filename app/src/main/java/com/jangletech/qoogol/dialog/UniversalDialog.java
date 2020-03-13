@@ -3,6 +3,7 @@ package com.jangletech.qoogol.dialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -42,18 +43,21 @@ public class UniversalDialog extends Dialog {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        layoutUniversalDialogBinding = DataBindingUtil.setContentView(getOwnerActivity(),R.layout.layout_universal_dialog);
 
+        //DialogOlaBookingConfirmedBinding binding = DataBindingUtil.inflate(LayoutInflater.from(getContext()), R.layout. dialog_ola_booking_confirmed, null, false);
+
+
+        layoutUniversalDialogBinding = DataBindingUtil.inflate(LayoutInflater.from(getContext()), R.layout.layout_universal_dialog, null, false);
+        setContentView(layoutUniversalDialogBinding.getRoot());
         layoutUniversalDialogBinding.tvTitle.setText(strTitle);
         layoutUniversalDialogBinding.tvMessage.setText(strMsg);
 
         //CallBack For Negative Button
-        layoutUniversalDialogBinding.tvPositiveBtn.setOnClickListener(v->{
+        layoutUniversalDialogBinding.tvPositiveBtn.setOnClickListener(v -> {
             dismiss();
             buttonclickListener.onPositiveButtonClick();
-
         });
-        layoutUniversalDialogBinding.tvNegativeBtn.setOnClickListener(v-> dismiss());
+        layoutUniversalDialogBinding.tvNegativeBtn.setOnClickListener(v -> dismiss());
 
     }
 

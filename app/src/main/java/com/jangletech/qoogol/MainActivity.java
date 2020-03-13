@@ -7,8 +7,6 @@ import android.view.Menu;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -18,11 +16,12 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jangletech.qoogol.activities.BaseActivity;
+import com.jangletech.qoogol.activities.SignInActivity;
 import com.jangletech.qoogol.databinding.ActivityMainBinding;
 import com.jangletech.qoogol.dialog.UniversalDialog;
 import com.jangletech.qoogol.util.PreferenceManager;
 
-public class MainActivity extends BaseActivity implements UniversalDialog.DialogButtonClickListener{
+public class MainActivity extends BaseActivity implements UniversalDialog.DialogButtonClickListener {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding mBinding;
@@ -41,10 +40,10 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.edit_profile,
                 R.id.nav_home, R.id.nav_course, R.id.nav_exam,
-                R.id.nav_practice_test,R.id.nav_test_my,R.id.nav_test_popular,R.id.nav_attended_by_friends,
-                R.id.nav_shared_with_you,R.id.nav_shared_by_you,R.id.nav_create_test,
-                R.id.nav_quest_trending,R.id.nav_quest_popular,R.id.nav_quest_recent,R.id.nav_saved_drafts,
-                R.id.nav_reviews, R.id.nav_published,R.id.nav_notifications,R.id.nav_settings)
+                R.id.nav_practice_test, R.id.nav_test_my, R.id.nav_test_popular, R.id.nav_attended_by_friends,
+                R.id.nav_shared_with_you, R.id.nav_shared_by_you, R.id.nav_create_test,
+                R.id.nav_quest_trending, R.id.nav_quest_popular, R.id.nav_quest_recent, R.id.nav_saved_drafts,
+                R.id.nav_reviews, R.id.nav_published, R.id.nav_notifications, R.id.nav_settings)
                 .setDrawerLayout(mBinding.drawerLayout)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -94,7 +93,6 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
         }*/
 
 
-
         /***
          * Navigations From Home Fragment
          */
@@ -108,7 +106,7 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
 
         findViewById(R.id.nav_course).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
-            startActivity(new Intent(this,CourseActivity.class));
+            startActivity(new Intent(this, CourseActivity.class));
 //            if (navController.getCurrentDestination().getId() != R.id.nav_course) {
 //                navController.popBackStack();
 //                navController.navigate(R.id.nav_course);
@@ -159,7 +157,7 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
 
         findViewById(R.id.nav_shared_with_you).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
-            if (navController.getCurrentDestination().getId() != R.id.nav_shared_with_you){
+            if (navController.getCurrentDestination().getId() != R.id.nav_shared_with_you) {
                 navController.popBackStack();
                 navController.navigate(R.id.nav_shared_with_you);
             }
@@ -255,9 +253,9 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
 
         findViewById(R.id.nav_logout).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
-            UniversalDialog universalDialog = new UniversalDialog(this,"Confirm Log Out",
+            UniversalDialog universalDialog = new UniversalDialog(this, "Confirm Log Out",
                     "you are signing out of your Qoogol app on this device",
-                    "Logout", "Cancel",this);
+                    "Logout", "Cancel", this);
             universalDialog.show();
         });
     }
@@ -281,19 +279,11 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
     @Override
     public void onPositiveButtonClick() {
         new PreferenceManager(getApplicationContext()).setIsLoggedIn(false);
-        finish();
+        //finish();
+        Intent intent = new Intent(this, SignInActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 
-    public void openFragment(Fragment fragment) {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.nav_host_fragment, fragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
-    }
-
-    public void hideBottomNavigation(){
-
-
-    }
 
 }

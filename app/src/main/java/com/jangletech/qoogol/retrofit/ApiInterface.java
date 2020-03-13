@@ -1,12 +1,15 @@
 package com.jangletech.qoogol.retrofit;
 
 import com.jangletech.qoogol.model.ChangePassword;
+import com.jangletech.qoogol.model.City;
 import com.jangletech.qoogol.model.Classes;
+import com.jangletech.qoogol.model.CommonResponseObject;
 import com.jangletech.qoogol.model.Country;
 import com.jangletech.qoogol.model.Course;
 import com.jangletech.qoogol.model.DashboardInfo;
 import com.jangletech.qoogol.model.Degree;
 import com.jangletech.qoogol.model.EmptyObject;
+import com.jangletech.qoogol.model.Exams;
 import com.jangletech.qoogol.model.FetchEducationsResponseDto;
 import com.jangletech.qoogol.model.FetchPreferableExamsResponseDto;
 import com.jangletech.qoogol.model.GetUserPersonalDetails;
@@ -22,13 +25,17 @@ import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 
 /**
  * Created by Pritali on 1/30/2020.
  */
 public interface ApiInterface {
+
+    //Todo Change Master Data Url
 
     @POST("auth/signInNew")
     Call<SignInModel> signCall(@QueryMap Map<String, String> request);
@@ -38,6 +45,9 @@ public interface ApiInterface {
 
     @POST("auth/statesForCountry")
     Call<List<State>> getStates(@QueryMap Map<String, Integer> request);
+
+    @POST("masterData/citiesForState")
+    Call<City> getCities(@QueryMap Map<String, Integer> request);
 
     @POST("auth/getUnivBoard")
     Call<List<University>> getUniversity(@QueryMap Map<String, Integer> request);
@@ -51,7 +61,7 @@ public interface ApiInterface {
     @POST("auth/coursesForDegree")
     Call<List<Course>> getCourses(@QueryMap Map<String, Integer> request);
 
-    @POST("auth/classesForDegreeNew")
+    @POST("masterData/classesForDegreeNew")
     Call<Classes> getClasses(@QueryMap Map<String, Object> request);
 
     @POST("auth/signUpNew")
@@ -83,6 +93,13 @@ public interface ApiInterface {
 
     @POST("user/updatePassword")
     Call<ChangePassword> changePassword(@QueryMap Map<String, String> request);
+
+    @POST("user/updatePersonalDetails")
+    Call<GetUserPersonalDetails> updatePersonalDetails(@QueryMap Map<String, String> request);
+
+    @POST("user/saveUserSelectedExams")
+    Call<CommonResponseObject> saveUserSelectedExams(@Query("userId") int userId,
+                                                     @Body List<Exams> selectedExamsList);
 
 
 }

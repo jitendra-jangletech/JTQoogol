@@ -83,7 +83,7 @@
 
 
     <!--Error Messages-->
-    <string name="empty_email">Please enter valid email.</string>
+    <string name="empty_email">Please enter email.</string>
     <string name="empty_password">Please enter password.</string>
     <string name="empty_first_name">Please enter first name.</string>
     <string name="empty_last_name">Please enter last name.</string>

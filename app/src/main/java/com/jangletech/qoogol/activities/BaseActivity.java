@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import com.jangletech.qoogol.util.NetworkUtil;
 
 public class BaseActivity extends AppCompatActivity {
 
+    private static final String TAG = "BaseActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,11 +105,10 @@ public class BaseActivity extends AppCompatActivity {
             if (viewGroup.getChildAt(i) instanceof TextInputLayout) {
                 if (((TextInputLayout) viewGroup.getChildAt(i)).getError() != null) {
                     result = true;
-                } else {
-                    result = false;
                 }
             }
         }
+        Log.d(TAG, "hasError: "+result);
         return result;
     }
 

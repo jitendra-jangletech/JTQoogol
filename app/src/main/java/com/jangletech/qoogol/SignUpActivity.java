@@ -1,6 +1,9 @@
 package com.jangletech.qoogol;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -17,6 +20,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.jangletech.qoogol.activities.BaseActivity;
+import com.jangletech.qoogol.activities.SignInActivity;
 import com.jangletech.qoogol.databinding.ActivitySignupBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.dialog.UniversalDialog;
@@ -69,7 +73,7 @@ import static com.jangletech.qoogol.util.Constant.password;
 import static com.jangletech.qoogol.util.Constant.state;
 import static com.jangletech.qoogol.util.Constant.state_id;
 
-public class SignUpActivity extends BaseActivity implements View.OnClickListener,UniversalDialog.DialogButtonClickListener {
+public class SignUpActivity extends BaseActivity implements View.OnClickListener, UniversalDialog.DialogButtonClickListener {
 
     private ActivitySignupBinding mBinding;
     private SignUpViewModel mViewModel;
@@ -137,7 +141,7 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
             final String name = ((TextView) view).getText().toString();
             int key = UtilHelper.getKeyFromValue(mViewModel.mMapInstitute, name);
             if (key != -1) {
-                //signUpData.setInstitute(key);
+                mBinding.instituteAutocompleteView.setTag(key);
             }
         });
 
@@ -146,7 +150,6 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
             final String name = ((TextView) view).getText().toString();
             int key = UtilHelper.getKeyFromValue(mViewModel.mMapDegree, name);
             if (key != -1) {
-                //signUpData.setDegree(key);
                 mBinding.degreeAutocompleteView.setTag(key);
                 fetchCourseData(key);
             }
@@ -524,7 +527,7 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnSignUp:
-                callSignUpApi();
+                //callSignUpApi();
                 if (validateSignUpForm()) {
                     callSignUpApi();
                 }
@@ -556,7 +559,7 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
             @Override
             public void onResponse(Call<MobileOtp> call, Response<MobileOtp> response) {
                 try {
-                    if (response.body().getStatusCode().equalsIgnoreCase("1")) {
+                    if (response.body()!=null && response.body().getStatusCode().equalsIgnoreCase("1")) {
                         ProgressDialog.getInstance().dismiss();
                         createVerifySmsOtpDialog(response.body().getObject());
                     } else {
@@ -613,12 +616,14 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
 
     private void callSignUpApi() {
 
+        ProgressDialog.getInstance().show(this);
+
         Map<String, Object> requestBody = new HashMap<>();
-        requestBody.put(first_name, "Jitendra");
-        requestBody.put(last_name, "Patil");
-        requestBody.put(email, "jituoo722@gmail.com");
-        requestBody.put(mobile_no, "1245245786");
-        requestBody.put(password, "1234");
+        requestBody.put(first_name, mBinding.etFirstName.getText().toString());
+        requestBody.put(last_name, mBinding.etLastName.getText().toString());
+        requestBody.put(email, mBinding.etEmail.getText().toString());
+        requestBody.put(mobile_no, mBinding.etMobile.getText().toString());
+        requestBody.put(password,mBinding.etCreatePassword.getText().toString());
         requestBody.put(country, mBinding.countryAutocompleteView.getTag());
         requestBody.put(state, mBinding.stateAutocompleteView.getTag());
         requestBody.put(board, mBinding.universityBoardAutocompleteView.getTag());
@@ -630,18 +635,40 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
         requestBody.put(is_email_verified, true);
 
 
-        Call<SignUpResponseDto> call = apiService.signUpApi(requestBody);
-        call.enqueue(new Callback<SignUpResponseDto>() {
-            @Override
-            public void onResponse(Call<SignUpResponseDto> call, Response<SignUpResponseDto> response) {
-                Log.d(TAG, "onResponse SignUpResponseDto : " + response.body());
-            }
+        try {
+            Call<SignUpResponseDto> call = apiService.signUpApi(requestBody);
+            call.enqueue(new Callback<SignUpResponseDto>() {
+                @Override
+                public void onResponse(Call<SignUpResponseDto> call, Response<SignUpResponseDto> response) {
+                    Log.d(TAG, "onResponse SignUpResponseDto : " + response.body());
+                    ProgressDialog.getInstance().dismiss();
+                    if (response.body() != null && response.body().getStatusCode() == 1) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(SignUpActivity.this,R.style.AlertDialogStyle);
+                        builder.setTitle("Success");
+                        builder.setMessage("Sign-up successfully, Please sing in with your credentials.");
+                        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
+                            }
+                        }).show();
+                    } else {
+                        Toast.makeText(SignUpActivity.this, "Error : " + response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
 
-            @Override
-            public void onFailure(Call<SignUpResponseDto> call, Throwable t) {
-                t.printStackTrace();
-            }
-        });
+                @Override
+                public void onFailure(Call<SignUpResponseDto> call, Throwable t) {
+                    t.printStackTrace();
+                    ProgressDialog.getInstance().dismiss();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            ProgressDialog.getInstance().dismiss();
+        }
     }
 
     private void setTextWatcher() {

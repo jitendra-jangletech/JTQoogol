@@ -8,27 +8,9 @@ public class UserPersonalDetails {
     private String firstName;
     private String lastName;
     private String userType;
-
-    public long getMobileNo1() {
-        return mobileNo1;
-    }
-
-    public void setMobileNo1(long mobileNo1) {
-        this.mobileNo1 = mobileNo1;
-    }
-
-    public long getMobileNo2() {
-        return mobileNo2;
-    }
-
-    public void setMobileNo2(long mobileNo2) {
-        this.mobileNo2 = mobileNo2;
-    }
-
     private long mobileNo1;
     private long mobileNo2;
     private Boolean mobile1Verified;
-
     private String mobile2Verified;
     private String email;
     private Boolean emailVerified;
@@ -51,6 +33,23 @@ public class UserPersonalDetails {
     private String userCourse;
     private String userExamList;
     private String userEduList;
+
+    public long getMobileNo1() {
+        return mobileNo1;
+    }
+
+    public void setMobileNo1(long mobileNo1) {
+        this.mobileNo1 = mobileNo1;
+    }
+
+    public long getMobileNo2() {
+        return mobileNo2;
+    }
+
+    public void setMobileNo2(long mobileNo2) {
+        this.mobileNo2 = mobileNo2;
+    }
+
 
     public int getUserId() {
         return userId;
