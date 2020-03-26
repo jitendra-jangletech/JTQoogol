@@ -58,7 +58,7 @@ public class CourseActivity extends AppCompatActivity{
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
-        resulttabs.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        /*resulttabs.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 position = tab.getPosition();
@@ -76,7 +76,7 @@ public class CourseActivity extends AppCompatActivity{
             public void onTabReselected(TabLayout.Tab tab) {
             }
         });
-
+*/
         prev.setOnClickListener(v ->
                viewPager.setCurrentItem(resulttabs.getSelectedTabPosition() - 1, true));
 

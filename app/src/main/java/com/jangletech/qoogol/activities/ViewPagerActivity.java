@@ -34,7 +34,7 @@ public class ViewPagerActivity extends AppCompatActivity {
         setDefaultQuestView();
         setVisitedInit();
 
-        mBinding.resultTabs.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+       /* mBinding.resultTabs.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 setVisitedView();
@@ -50,7 +50,7 @@ public class ViewPagerActivity extends AppCompatActivity {
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
             }
-        });
+        });*/
 
         mBinding.incorrect.setOnClickListener(v -> {
             setInCorrectView();

@@ -12,16 +12,12 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.azoft.carousellayoutmanager.CarouselLayoutManager;
-import com.azoft.carousellayoutmanager.CarouselZoomPostLayoutListener;
-import com.azoft.carousellayoutmanager.CenterScrollListener;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.HomeAdapter;
 import com.jangletech.qoogol.databinding.FragmentHomeBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.model.DashboardData;
 import com.jangletech.qoogol.model.DashboardInfo;
-import com.jangletech.qoogol.model.Home;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.util.Constant;
@@ -53,14 +49,10 @@ public class HomeFragment extends Fragment {
 
         getStatisticsData();
         homeAdapter = new HomeAdapter(getActivity(), itemlist);
-//        final CarouselLayoutManager layoutManager = new CarouselLayoutManager(CarouselLayoutManager.HORIZONTAL, true);
-//        layoutManager.setPostLayoutListener(new CarouselZoomPostLayoutListener());
-//
-//        layoutManager.setMaxVisibleItems(1);
         fragmentHomeBinding.itemRecycler.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, true));
         fragmentHomeBinding.itemRecycler.setHasFixedSize(true);
         fragmentHomeBinding.itemRecycler.setAdapter(homeAdapter);
-        fragmentHomeBinding.itemRecycler.addOnScrollListener(new CenterScrollListener());
+        //fragmentHomeBinding.itemRecycler.addOnScrollListener(new CenterScrollListener());
         return fragmentHomeBinding.getRoot();
     }
 

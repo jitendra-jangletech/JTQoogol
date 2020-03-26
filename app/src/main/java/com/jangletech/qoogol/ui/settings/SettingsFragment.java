@@ -1,22 +1,30 @@
 package com.jangletech.qoogol.ui.settings;
 
-import androidx.lifecycle.ViewModelProviders;
-
+import android.graphics.Color;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.jangletech.qoogol.R;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProviders;
 
-public class SettingsFragment extends Fragment {
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
+import com.jangletech.qoogol.R;
+import com.jangletech.qoogol.databinding.FragmentSettingsBinding;
+import com.jangletech.qoogol.model.MobileOtp;
+import com.jangletech.qoogol.ui.BaseFragment;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class SettingsFragment extends BaseFragment {
 
     private SettingsViewModel mViewModel;
+    private FragmentSettingsBinding mBinding;
 
     public static SettingsFragment newInstance() {
         return new SettingsFragment();
@@ -25,13 +33,323 @@ public class SettingsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_settings, container, false);
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_settings, container, false);
+        return mBinding.getRoot();
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(SettingsViewModel.class);
+
+
+        mBinding.boardChipGrp.setOnCheckedChangeListener((chipGroup, id) -> {
+            Chip chip = ((Chip) chipGroup.getChildAt(chipGroup.getCheckedChipId()));
+            if (chip != null) {
+                if (chip.isChecked()) {
+                    setCheckedChip(mBinding.boardChipGrp);
+                    //showToast("Selected : " + chip.getText().toString());
+                }
+            }
+        });
+
+        mBinding.classChipGrp.setOnCheckedChangeListener((chipGroup, id) -> {
+            //showToast("id : " + id);
+            Chip chip = ((Chip) chipGroup.getChildAt(chipGroup.getCheckedChipId()));
+            if (chip != null) {
+                if (chip.isChecked()) {
+                    setCheckedChip(mBinding.classChipGrp);
+                    if (chip.getText().toString().contains("11")
+                            || chip.getText().toString().contains("12")) {
+                        mBinding.layoutStream.setVisibility(View.VISIBLE);
+                        mBinding.layoutSubjects.setVisibility(View.VISIBLE);
+                        mBinding.layoutExams.setVisibility(View.VISIBLE);
+                    } else {
+                        mBinding.layoutStream.setVisibility(View.GONE);
+                        mBinding.layoutSubjects.setVisibility(View.VISIBLE);
+                        mBinding.layoutExams.setVisibility(View.VISIBLE);
+                    }
+
+                    /*if(!chip.getText().toString().equals("11") ||
+                            !chip.getText().toString().equals("12")
+                            || !chip.getText().toString().equals("Degree")){
+                        mBinding.layoutSubjects.setVisibility(View.VISIBLE);
+                    }*/
+
+                    if (chip.getText().toString().contains("Degree")) {
+                        mBinding.layoutStream.setVisibility(View.GONE);
+                        mBinding.layoutDegree.setVisibility(View.VISIBLE);
+                        mBinding.layoutSubjects.setVisibility(View.GONE);
+                        mBinding.layoutExams.setVisibility(View.GONE);
+
+                    } else {
+                        mBinding.layoutDegree.setVisibility(View.GONE);
+
+                        mBinding.layoutDegreeStream.setVisibility(View.GONE);
+                        mBinding.layoutCourseYear.setVisibility(View.GONE);
+                        mBinding.layoutSubjects.setVisibility(View.VISIBLE);
+                        mBinding.layoutExams.setVisibility(View.VISIBLE);
+
+                    }
+                    //showToast("Selected : " + chip.getText().toString());
+                }
+            }
+        });
+
+        mBinding.hscChipGrp.setOnCheckedChangeListener((chipGroup, id) -> {
+            //showToast("id : " + id);
+            Chip chip = ((Chip) chipGroup.getChildAt(chipGroup.getCheckedChipId()));
+            if (chip != null) {
+                if (chip.isChecked()) {
+                    setCheckedChip(mBinding.hscChipGrp);
+                    mBinding.layoutSubjects.setVisibility(View.VISIBLE);
+                    mBinding.layoutExams.setVisibility(View.VISIBLE);
+                    //showToast("Selected : " + chip.getText().toString());
+                }
+            }
+        });
+
+        mBinding.degreeChipGrp.setOnCheckedChangeListener((chipGroup, id) -> {
+            //showToast("id : " + id);
+            Chip chip = ((Chip) chipGroup.getChildAt(chipGroup.getCheckedChipId()));
+            if (chip != null) {
+                if (chip.isChecked()) {
+                    setCheckedChip(mBinding.degreeChipGrp);
+                    mBinding.layoutDegreeStream.setVisibility(View.VISIBLE);
+                    mBinding.layoutSubjects.setVisibility(View.GONE);
+                    mBinding.layoutExams.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        mBinding.degreeStreamChipGrp.setOnCheckedChangeListener((chipGroup, id) -> {
+            //showToast("id : " + id);
+            Chip chip = ((Chip) chipGroup.getChildAt(chipGroup.getCheckedChipId()));
+            if (chip != null) {
+                if (chip.isChecked()) {
+                    setCheckedChip(mBinding.degreeStreamChipGrp);
+                    mBinding.layoutCourseYear.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        mBinding.CourseYearChipGrp.setOnCheckedChangeListener((chipGroup, id) -> {
+            //showToast("id : " + id);
+            Chip chip = ((Chip) chipGroup.getChildAt(chipGroup.getCheckedChipId()));
+            if (chip != null) {
+                if (chip.isChecked()) {
+                    setCheckedChip(mBinding.CourseYearChipGrp);
+                    mBinding.layoutSubjects.setVisibility(View.VISIBLE);
+                    mBinding.layoutExams.setVisibility(View.VISIBLE);
+                    //showToast("Selected : " + chip.getText().toString());
+                }
+            }
+        });
+
+        mBinding.subjectsChipGrp.setOnCheckedChangeListener((chipGroup, id) -> {
+            //showToast("id : " + id);
+            Chip chip = ((Chip) chipGroup.getChildAt(chipGroup.getCheckedChipId()));
+            if (chip != null) {
+                if (chip.isChecked()) {
+                    setCheckedChip(mBinding.subjectsChipGrp);
+                    //showToast("Selected : " + chip.getText().toString());
+                }
+            }
+        });
+
+        mBinding.examsChipGrp.setOnCheckedChangeListener((chipGroup, id) -> {
+            //showToast("id : " + id);
+            Chip chip = ((Chip) chipGroup.getChildAt(chipGroup.getCheckedChipId()));
+            if (chip != null) {
+                if (chip.isChecked()) {
+                    setCheckedChip(mBinding.examsChipGrp);
+
+                    //showToast("Selected : " + chip.getText().toString());
+                }
+            }
+        });
+
+
+        List boardList = new ArrayList();
+        boardList.add("Maharashtra State Board");
+        boardList.add("ICSE");
+        boardList.add("CBSE");
+        prepareBoardChips(boardList);
+
+        List classList = new ArrayList();
+        classList.add("5th Std.");
+        classList.add("6th Std");
+        classList.add("7th Std");
+        classList.add("8th Std.");
+        classList.add("9th Std");
+        classList.add("10th Std");
+        classList.add("11th Std.");
+        classList.add("12th Std");
+        classList.add("Degree");
+        prepareClassesChips(classList);
+
+        List hscStreamList = new ArrayList();
+        hscStreamList.add("Science");
+        hscStreamList.add("Commerce");
+        prepareHscStreamChips(hscStreamList);
+
+        List degreeList = new ArrayList();
+        degreeList.add("B-Tech");
+        degreeList.add("M-Tech");
+        degreeList.add("Bsc");
+        degreeList.add("Msc");
+        degreeList.add("MBBS");
+        prepareDegreeChips(degreeList);
+
+        List degreeStreamList = new ArrayList();
+        degreeStreamList.add("Computer Science");
+        degreeStreamList.add("Mechanical");
+        degreeStreamList.add("Civil");
+        degreeStreamList.add("Electrical");
+        degreeStreamList.add("Instrumentation");
+        prepareDegreeStreamChips(degreeStreamList);
+
+        List courseYearList = new ArrayList();
+        courseYearList.add("1st Year");
+        courseYearList.add("2nd Year");
+        courseYearList.add("3rd Year");
+        courseYearList.add("4th Year");
+        prepareCourseYearList(courseYearList);
+
+        List examsList = new ArrayList();
+        examsList.add("MPSC");
+        examsList.add("UPSC");
+        examsList.add("GATE");
+        examsList.add("GRE");
+        prepareExamList(examsList);
+
+        List subjectList = new ArrayList();
+        subjectList.add("Physics");
+        subjectList.add("Maths");
+        subjectList.add("Engineering Drawing");
+        subjectList.add("Chemistry");
+        subjectList.add("English");
+        subjectList.add("Networking");
+        subjectList.add("Database Management Systems");
+        subjectList.add("All");
+        prepareSubjectChips(subjectList);
+
     }
 
+    private void prepareBoardChips(List boardList) {
+        mBinding.boardChipGrp.removeAllViews();
+        for (int i = 0; i < boardList.size(); i++) {
+            Chip chip = (Chip) LayoutInflater.from(mBinding.classChipGrp.getContext()).inflate(R.layout.chip_layout, mBinding.boardChipGrp, false);
+            chip.setText(boardList.get(i).toString());
+            chip.setTag(boardList.get(i).toString());
+            chip.setId(i);
+            chip.setClickable(true);
+            chip.setCheckable(true);
+            mBinding.boardChipGrp.addView(chip);
+        }
+    }
+
+    private void prepareClassesChips(List classList) {
+        mBinding.classChipGrp.removeAllViews();
+        for (int i = 0; i < classList.size(); i++) {
+            Chip chip = (Chip) LayoutInflater.from(mBinding.classChipGrp.getContext()).inflate(R.layout.chip_layout, mBinding.classChipGrp, false);
+            //chip = new Chip(getActivity());
+            chip.setText(classList.get(i).toString());
+            chip.setTag(classList.get(i).toString());
+            chip.setId(i);
+            chip.setClickable(true);
+            chip.setFocusable(true);
+            chip.setCheckable(true);
+            mBinding.classChipGrp.addView(chip);
+        }
+    }
+
+    private void prepareHscStreamChips(List classList) {
+        mBinding.hscChipGrp.removeAllViews();
+        for (int i = 0; i < classList.size(); i++) {
+            Chip chip = (Chip) LayoutInflater.from(mBinding.hscChipGrp.getContext()).inflate(R.layout.chip_layout, mBinding.hscChipGrp, false);
+            chip.setText(classList.get(i).toString());
+            chip.setTag(classList.get(i).toString());
+            chip.setId(i);
+            chip.setClickable(true);
+            chip.setCheckable(true);
+            mBinding.hscChipGrp.addView(chip);
+        }
+    }
+
+    private void prepareDegreeChips(List degreeList) {
+        mBinding.degreeChipGrp.removeAllViews();
+        for (int i = 0; i < degreeList.size(); i++) {
+            Chip chip = (Chip) LayoutInflater.from(mBinding.degreeChipGrp.getContext()).inflate(R.layout.chip_layout, mBinding.degreeChipGrp, false);
+            chip.setText(degreeList.get(i).toString());
+            chip.setTag(degreeList.get(i).toString());
+            chip.setId(i);
+            chip.setClickable(true);
+            chip.setCheckable(true);
+            mBinding.degreeChipGrp.addView(chip);
+        }
+    }
+
+    private void prepareDegreeStreamChips(List degreeStreamList) {
+        mBinding.degreeStreamChipGrp.removeAllViews();
+        for (int i = 0; i < degreeStreamList.size(); i++) {
+            Chip chip = (Chip) LayoutInflater.from(mBinding.degreeStreamChipGrp.getContext()).inflate(R.layout.chip_layout, mBinding.degreeStreamChipGrp, false);
+            chip.setText(degreeStreamList.get(i).toString());
+            chip.setTag(degreeStreamList.get(i).toString());
+            chip.setId(i);
+            chip.setClickable(true);
+            chip.setCheckable(true);
+            mBinding.degreeStreamChipGrp.addView(chip);
+        }
+    }
+
+    private void prepareCourseYearList(List degreeStreamList) {
+        mBinding.CourseYearChipGrp.removeAllViews();
+        for (int i = 0; i < degreeStreamList.size(); i++) {
+            Chip chip = (Chip) LayoutInflater.from(mBinding.CourseYearChipGrp.getContext()).inflate(R.layout.chip_layout, mBinding.CourseYearChipGrp, false);
+            chip.setText(degreeStreamList.get(i).toString());
+            chip.setTag(degreeStreamList.get(i).toString());
+            chip.setId(i);
+            chip.setClickable(true);
+            chip.setCheckable(true);
+            mBinding.CourseYearChipGrp.addView(chip);
+        }
+    }
+
+    private void prepareExamList(List examsList) {
+        mBinding.examsChipGrp.removeAllViews();
+        for (int i = 0; i < examsList.size(); i++) {
+            Chip chip = (Chip) LayoutInflater.from(mBinding.examsChipGrp.getContext()).inflate(R.layout.chip_layout, mBinding.examsChipGrp, false);
+            chip.setText(examsList.get(i).toString());
+            chip.setTag(examsList.get(i).toString());
+            chip.setId(i);
+            chip.setClickable(true);
+            chip.setCheckable(true);
+            mBinding.examsChipGrp.addView(chip);
+        }
+    }
+
+    private void prepareSubjectChips(List subjectList) {
+        mBinding.subjectsChipGrp.removeAllViews();
+        for (int i = 0; i < subjectList.size(); i++) {
+            Chip chip = (Chip) LayoutInflater.from(mBinding.subjectsChipGrp.getContext()).inflate(R.layout.chip_layout, mBinding.subjectsChipGrp, false);
+            chip.setText(subjectList.get(i).toString());
+            chip.setTag(subjectList.get(i).toString());
+            chip.setId(i);
+            chip.setClickable(true);
+            chip.setCheckable(true);
+            mBinding.subjectsChipGrp.addView(chip);
+        }
+    }
+
+    private void setCheckedChip(ChipGroup chipGroup) {
+        for (int i = 0; i < chipGroup.getChildCount(); i++) {
+            Chip chip = (Chip) chipGroup.getChildAt(i);
+            if (chip.isChecked()) {
+                chip.setTextColor(Color.WHITE);
+            } else {
+                chip.setTextColor(Color.BLACK);
+            }
+        }
+    }
 }

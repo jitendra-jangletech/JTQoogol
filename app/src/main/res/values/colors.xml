@@ -33,4 +33,6 @@
     <color name="quest_wrong_border">#B07474</color>
     <color name="quest_right_border">#96B798</color>
 
+    <color name="icon_color">#0682FF</color>
+
 </resources>

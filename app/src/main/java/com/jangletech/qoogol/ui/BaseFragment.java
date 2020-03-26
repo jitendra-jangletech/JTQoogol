@@ -2,10 +2,15 @@ package com.jangletech.qoogol.ui;
 
 import android.util.Log;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.textfield.TextInputLayout;
+import com.jangletech.qoogol.R;
+import com.jangletech.qoogol.databinding.FragmentClassBinding;
+import com.jangletech.qoogol.ui.syllabus.ClassFragment;
 
 public class BaseFragment extends Fragment {
 
@@ -32,5 +37,16 @@ public class BaseFragment extends Fragment {
                 }
             }
         }
+    }
+
+    public void addFragment(Fragment fragment){
+        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.fragmentContainer, fragment);
+        ft.addToBackStack(null);
+        ft.commit();
+    }
+
+    public void showToast(String msg) {
+        Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
     }
 }

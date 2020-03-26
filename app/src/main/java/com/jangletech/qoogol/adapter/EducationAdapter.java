@@ -1,12 +1,8 @@
 package com.jangletech.qoogol.adapter;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -18,8 +14,6 @@ import com.jangletech.qoogol.databinding.ItemEducationBinding;
 import com.jangletech.qoogol.model.FetchEducationsObject;
 
 import java.util.List;
-
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.ViewHolder>  {
 

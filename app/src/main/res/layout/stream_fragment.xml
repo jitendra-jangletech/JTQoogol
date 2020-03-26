@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/_10sdp"
+        tools:context=".activities.SingleSelectionActivity">
+
+        <TextView
+            android:layout_marginTop="@dimen/_20sdp"
+            android:textSize="@dimen/_25ssp"
+            android:textColor="@color/icon_color"
+            android:gravity="center"
+            android:text="My Stream is"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:background="@drawable/item_class_shape"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/btnNext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_gravity="center"
+            android:text="Next" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_centerInParent="true"
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+    </RelativeLayout>
+</layout>
