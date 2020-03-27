@@ -2,6 +2,7 @@ package com.jangletech.qoogol.ui.settings;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,20 +12,25 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.facebook.appevents.codeless.CodelessLoggingEventListener;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.jangletech.qoogol.R;
+
 import com.jangletech.qoogol.databinding.FragmentSettingsBinding;
-import com.jangletech.qoogol.model.MobileOtp;
 import com.jangletech.qoogol.ui.BaseFragment;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
-public class SettingsFragment extends BaseFragment {
+public class SettingsFragment extends BaseFragment implements View.OnClickListener {
 
+    private static final String TAG = "SettingsFragment";
     private SettingsViewModel mViewModel;
     private FragmentSettingsBinding mBinding;
+    private HashMap<Integer,Chip> mapExamChips = new HashMap();
+    private HashMap<Integer, Chip> mapSubjectChips = new HashMap();
 
     public static SettingsFragment newInstance() {
         return new SettingsFragment();
@@ -146,14 +152,15 @@ public class SettingsFragment extends BaseFragment {
             }
         });
 
-        mBinding.subjectsChipGrp.setOnCheckedChangeListener((chipGroup, id) -> {
+        /*mBinding.subjectsChipGrp.setOnCheckedChangeListener((chipGroup, id) -> {
             //showToast("id : " + id);
             Chip chip = ((Chip) chipGroup.getChildAt(chipGroup.getCheckedChipId()));
             if (chip != null) {
-                if (chip.isChecked()) {
-                    setCheckedChip(mBinding.subjectsChipGrp);
-                    //showToast("Selected : " + chip.getText().toString());
-                }
+                *//*if (chip.isChecked()) {
+                    setSelectedSubjectsChips(chip);
+                    showToast("Selected : " +chip.getId()+","+ chip.getText().toString());
+                }*//*
+                setSelectedSubjectsChips(chip);
             }
         });
 
@@ -161,13 +168,12 @@ public class SettingsFragment extends BaseFragment {
             //showToast("id : " + id);
             Chip chip = ((Chip) chipGroup.getChildAt(chipGroup.getCheckedChipId()));
             if (chip != null) {
-                if (chip.isChecked()) {
-                    setCheckedChip(mBinding.examsChipGrp);
-
-                    //showToast("Selected : " + chip.getText().toString());
-                }
+                *//*if (chip.isChecked()) {
+                    setSelectedExamChips(chip);
+                }*//*
+                setSelectedExamChips(chip);
             }
-        });
+        });*/
 
 
         List boardList = new ArrayList();
@@ -321,8 +327,10 @@ public class SettingsFragment extends BaseFragment {
         for (int i = 0; i < examsList.size(); i++) {
             Chip chip = (Chip) LayoutInflater.from(mBinding.examsChipGrp.getContext()).inflate(R.layout.chip_layout, mBinding.examsChipGrp, false);
             chip.setText(examsList.get(i).toString());
-            chip.setTag(examsList.get(i).toString());
+            chip.setTag("Exams");
             chip.setId(i);
+            mapExamChips.put(i, chip);
+            chip.setOnClickListener(this);
             chip.setClickable(true);
             chip.setCheckable(true);
             mBinding.examsChipGrp.addView(chip);
@@ -334,8 +342,10 @@ public class SettingsFragment extends BaseFragment {
         for (int i = 0; i < subjectList.size(); i++) {
             Chip chip = (Chip) LayoutInflater.from(mBinding.subjectsChipGrp.getContext()).inflate(R.layout.chip_layout, mBinding.subjectsChipGrp, false);
             chip.setText(subjectList.get(i).toString());
-            chip.setTag(subjectList.get(i).toString());
+            chip.setTag("Subjects");
             chip.setId(i);
+            mapSubjectChips.put(i, chip);
+            chip.setOnClickListener(this);
             chip.setClickable(true);
             chip.setCheckable(true);
             mBinding.subjectsChipGrp.addView(chip);
@@ -349,6 +359,44 @@ public class SettingsFragment extends BaseFragment {
                 chip.setTextColor(Color.WHITE);
             } else {
                 chip.setTextColor(Color.BLACK);
+            }
+        }
+    }
+
+    private void setSelectedExamChips(Chip chip) {
+        showToast("Selected : " + chip.getText().toString());
+        Chip selectedChip = mapExamChips.put(chip.getId(),chip);
+        for (int i = 0; i <mapExamChips.size() ; i++) {
+            if(mapExamChips.get(i).isChecked()){
+                mapExamChips.get(i).setTextColor(Color.WHITE);
+            }else{
+                mapExamChips.get(i).setTextColor(Color.BLACK);
+            }
+        }
+    }
+
+    private void setSelectedSubjectsChips(Chip chip) {
+        showToast("Selected : " + chip.getText().toString());
+        Chip selectedChip = mapSubjectChips.put(chip.getId(),chip);
+        for (int i = 0; i <mapSubjectChips.size() ; i++) {
+         if(mapSubjectChips.get(i).isChecked()){
+             mapSubjectChips.get(i).setTextColor(Color.WHITE);
+         }else{
+             mapSubjectChips.get(i).setTextColor(Color.BLACK);
+         }
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v != null) {
+            if (v.getTag().toString().equalsIgnoreCase("Subjects")) {
+                Chip chip = (Chip) v;
+                setSelectedSubjectsChips(chip);
+            }
+            if (v.getTag().toString().equalsIgnoreCase("Exams")) {
+                Chip chip = (Chip) v;
+                setSelectedExamChips(chip);
             }
         }
     }

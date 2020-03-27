@@ -31,7 +31,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHo
     public QuestionAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         itemBinding = DataBindingUtil.inflate(
                 LayoutInflater.from(parent.getContext()),
-                R.layout.test_detail_question_item, null, false);
+                R.layout.test_detail_question_item, parent, false);
 
         return new QuestionAdapter.ViewHolder(itemBinding);
     }
@@ -41,6 +41,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHo
         Question question = questionList.get(position);
         holder.itemQuestionBinding.tvQuestNo.setText(""+question.getId());
         holder.itemQuestionBinding.tvQuestDesc.setText(question.getStrQuestion());
+        holder.itemQuestionBinding.tvQuestInfo.setText(question.getStrQuestInfo());
     }
 
     @Override

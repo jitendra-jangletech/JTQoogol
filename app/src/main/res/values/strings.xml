@@ -178,6 +178,7 @@
     <string name="birthdate">Birth Date</string>
     <string name="city">City</string>
     <string name="alt_email">Alternate Email</string>
+    <string name="negative_marks">Marks (<u>-ve</u>)</string>
     <string name="alt_mobile">Alternate Mobile</string>
     <string name="available_courses">Available courses for study</string>
     <string name="no_education">No education details available</string>

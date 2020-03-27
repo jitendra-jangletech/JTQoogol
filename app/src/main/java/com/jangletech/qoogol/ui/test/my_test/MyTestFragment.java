@@ -55,13 +55,13 @@ public class MyTestFragment extends BaseFragment implements TestAdapter.TestClic
 
         TestModel testModel = new TestModel("Shapes and Angles","Maths","40",
                 "30","Hard","88/100","219","Jan 2020","2093",
-                true,false,"Mr. Sharan","Phd. Maths","Unit Test-Final","4.3","100");
+                true,true,"Mr. Sharan","Phd. Maths","Unit Test-Final","4.3","100");
 
-        TestModel testModel1 = new TestModel("Reading Comprehension","English","120 Mins",
+        TestModel testModel1 = new TestModel("Reading Comprehension","English","120",
                 "40","Easy","53/100","102","Mar 2019","1633",
                 false,true,"Mr. Goswami","Phd. English","Unit Test-Final","2.7","60");
 
-        TestModel testModel2 = new TestModel("When the Earth Shook!","Evs","40 Mins",
+        TestModel testModel2 = new TestModel("When the Earth Shook!","Evs","40",
                 "60","Medium","12/100","10","Jul 2019","8353",
                 true,false,"Mr. Narayan","Phd. Evs","Unit Test-Final","2","30");
 

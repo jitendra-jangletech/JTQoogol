@@ -64,10 +64,10 @@ public class PractiseQuestionsActivity extends AppCompatActivity {
 
     public void prepareQuestions(){
         SectionedRecyclerViewAdapter sectionAdapter = new SectionedRecyclerViewAdapter();
-        Question question = new Question(1,"If x is a prime number, LCM of x and its successive number would be");
-        Question question1 = new Question(2,"If x is a prime number, LCM of x and its successive number would be");
-        Question question2 = new Question(3,"If x is a prime number, LCM of x and its successive number would be");
-        Question question3 = new Question(4,"If x is a prime number, LCM of x and its successive number would be");
+        Question question = new Question(1,"If x is a prime number, LCM of x and its successive number would be","");
+        Question question1 = new Question(2,"If x is a prime number, LCM of x and its successive number would be","");
+        Question question2 = new Question(3,"If x is a prime number, LCM of x and its successive number would be","");
+        Question question3 = new Question(4,"If x is a prime number, LCM of x and its successive number would be","");
         List<Question> contactList = new ArrayList<>();
         contactList.add(question);
         contactList.add(question1);

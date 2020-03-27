@@ -1,6 +1,5 @@
 package com.jangletech.qoogol.adapter;
 
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -42,20 +41,20 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.ViewHolder> {
 
         TestModel testModel = testModelList.get(position);
         holder.itemBinding.tvTestNameSubject.setText(testModel.getName() + " (" + testModel.getSubject() + ")");
-        holder.itemBinding.tvQuestCount.setText(testModel.getQuestionCount() + " Qs.");
+        holder.itemBinding.tvQuestCount.setText(testModel.getQuestionCount());
         holder.itemBinding.tvDuration.setText(testModel.getDuration() + " Mins.");
-        holder.itemBinding.tvTotalMarks.setText(testModel.getTotalMarks() + " Marks");
+        holder.itemBinding.tvTotalMarks.setText(testModel.getTotalMarks());
 
-        holder.itemBinding.tvDifficultyLevel.setText("Difficulty (" + testModel.getDifficultyLevel() + ")");
-        holder.itemBinding.tvRanking.setText("Ranking (" + testModel.getRanking() + ")");
-        holder.itemBinding.tvAttendedBy.setText("Attended By (" + testModel.getAttendedBy() + ")");
+        holder.itemBinding.tvDifficultyLevel.setText(testModel.getDifficultyLevel());
+        holder.itemBinding.tvRanking.setText(testModel.getRanking());
+        holder.itemBinding.tvAttendedBy.setText(testModel.getAttendedBy());
 
         holder.itemBinding.tvPublishedDate.setText(testModel.getPublishedDate());
         holder.itemBinding.tvRatingStartCount.setText(testModel.getRatingStarCount());
-        holder.itemBinding.tvRatingCount.setText(" (" + testModel.getRatingCount() + ")");
+        holder.itemBinding.tvRatingCount.setText("("+testModel.getRatingCount()+")");
 
-        if (!testModel.isNegativeMarks()) {
-            holder.itemBinding.tvNegativeMarks.setBackgroundColor(Color.WHITE);
+        if (testModel.isNegativeMarks()) {
+            holder.itemBinding.tvNegativeMarks.setText(itemBinding.getRoot().getResources().getString(R.string.negative_marks));
         }
 
         if(testModel.isFavourite()){
@@ -63,8 +62,8 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.ViewHolder> {
         }
 
 
-        holder.itemBinding.tvAuthorNameEdu.setText(testModel.getAuthor()+" ("+testModel.getAuthorEdu()+")");
-        holder.itemBinding.tvCategory.setText(testModel.getCategory());
+        //holder.itemBinding.tvAuthorNameEdu.setText(testModel.getAuthor()+" ("+testModel.getAuthorEdu()+")");
+        //holder.itemBinding.tvCategory.setText(testModel.getCategory());
 
         holder.itemBinding.testItemCard.setOnClickListener(v -> {
             testClickListener.onTestItemClick(testModel);

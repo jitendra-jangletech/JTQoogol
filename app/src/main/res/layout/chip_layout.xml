@@ -5,6 +5,7 @@
     android:layout_width="wrap_content"
     android:layout_height="@dimen/_40sdp"
     android:checkable="true"
+    android:textStyle="bold"
     android:textColor="@color/colorBlack"
     android:gravity="center_vertical"
     android:text="Maharashtra state board"

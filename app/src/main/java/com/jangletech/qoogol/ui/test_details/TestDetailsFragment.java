@@ -54,8 +54,8 @@ public class TestDetailsFragment extends Fragment {
 
         List<Question> questionList = new ArrayList<>();
         questionList.clear();
-        Question question = new Question(1,"If x is a prime number, LCM of x and its successive number would be");
-        Question question1 = new Question(2,"If x is a prime number, LCM of x and its successive number would be");
+        Question question = new Question(1,"which country owns Alaska Region?","Scored (5/40)");
+        Question question1 = new Question(2,"which country is exporter of titanium?","Scored (10/60)");
         questionList.add(question);
         questionList.add(question1);
         QuestionAdapter testAdapter = new QuestionAdapter(getActivity(), questionList);
@@ -70,8 +70,8 @@ public class TestDetailsFragment extends Fragment {
         mBinding.topScoredQuestRecyclerView.addItemDecoration(dividerItemDecoration);
         List<Question> questionList = new ArrayList<>();
         questionList.clear();
-        Question question = new Question(1,"If x is a prime number, LCM of x and its successive number would be");
-        Question question1 = new Question(2,"If x is a prime number, LCM of x and its successive number would be");
+        Question question = new Question(1,"Who is Prime Minister of United Kingdom?","Scored (10/20)");
+        Question question1 = new Question(2,"What is story line for parasite movie?","Scored (95/100)");
         questionList.add(question);
         questionList.add(question1);
         QuestionAdapter testAdapter = new QuestionAdapter(getActivity(), questionList);
@@ -86,8 +86,8 @@ public class TestDetailsFragment extends Fragment {
         mBinding.recentlyAddedQuestRecyclerView.addItemDecoration(dividerItemDecoration);
         List<Question> questionList = new ArrayList<>();
         questionList.clear();
-        Question question = new Question(1,"If x is a prime number, LCM of x and its successive number would be");
-        Question question1 = new Question(2,"If x is a prime number, LCM of x and its successive number would be");
+        Question question = new Question(1,"What is Hanta Virus?","Published (27 Mar 2020)");
+        Question question1 = new Question(2,"Is there any vaccine available for corona virus?","Published (26 Mar 2020)");
         questionList.add(question);
         questionList.add(question1);
         QuestionAdapter testAdapter = new QuestionAdapter(getActivity(), questionList);
