@@ -39,7 +39,8 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
         NavigationView navigationView = findViewById(R.id.nav_view);
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.edit_profile,
-                R.id.nav_home, R.id.nav_course, R.id.nav_exam,
+                R.id.nav_home,R.id.nav_learning,
+//                R.id.nav_course, R.id.nav_exam,
                 R.id.nav_practice_test, R.id.nav_test_my, R.id.nav_test_popular, R.id.nav_attended_by_friends,
                 R.id.nav_shared_with_you, R.id.nav_shared_by_you, R.id.nav_create_test,
                 R.id.nav_quest_trending, R.id.nav_quest_popular, R.id.nav_quest_recent, R.id.nav_saved_drafts,
@@ -104,22 +105,30 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
             }
         });
 
-        findViewById(R.id.nav_course).setOnClickListener(v -> {
+        findViewById(R.id.nav_learning).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
-            startActivity(new Intent(this, CourseActivity.class));
-//            if (navController.getCurrentDestination().getId() != R.id.nav_course) {
-//                navController.popBackStack();
-//                navController.navigate(R.id.nav_course);
-//            }
-        });
-
-        findViewById(R.id.nav_exam).setOnClickListener(v -> {
-            mBinding.drawerLayout.closeDrawers();
-            if (navController.getCurrentDestination().getId() != R.id.nav_exam) {
+            if (navController.getCurrentDestination().getId() != R.id.nav_learning) {
                 navController.popBackStack();
-                navController.navigate(R.id.nav_exam);
+                navController.navigate(R.id.nav_learning);
             }
         });
+//
+//        findViewById(R.id.nav_course).setOnClickListener(v -> {
+//            mBinding.drawerLayout.closeDrawers();
+//            startActivity(new Intent(this, CourseActivity.class));
+////            if (navController.getCurrentDestination().getId() != R.id.nav_course) {
+////                navController.popBackStack();
+////                navController.navigate(R.id.nav_course);
+////            }
+//        });
+//
+//        findViewById(R.id.nav_exam).setOnClickListener(v -> {
+//            mBinding.drawerLayout.closeDrawers();
+//            if (navController.getCurrentDestination().getId() != R.id.nav_exam) {
+//                navController.popBackStack();
+//                navController.navigate(R.id.nav_exam);
+//            }
+//        });
 
         findViewById(R.id.nav_practice_test).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();

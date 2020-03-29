@@ -108,12 +108,14 @@ public class PreferenceFragment extends Fragment {
     }
 
     private void fetchUserSelectedExams(List<Exams> chipTextList) {
+        ProgressDialog.getInstance().show(getActivity());
         Map<String, Integer> arguments = new HashMap<>();
         arguments.put(Constant.user_id, Integer.parseInt(new PreferenceManager(getContext()).getUserId()));
         Call<UserSelectedExams> call = apiService.getUserSelectedExams(arguments);
         call.enqueue(new Callback<UserSelectedExams>() {
             @Override
             public void onResponse(Call<UserSelectedExams> call, Response<UserSelectedExams> response) {
+                ProgressDialog.getInstance().dismiss();
                 if (response.isSuccessful()) {
                     List<UserSelectedExamsData> userSelectedExamsData = response.body().getObject();
                     setPreferenceChips(chipTextList, userSelectedExamsData);
@@ -126,16 +128,19 @@ public class PreferenceFragment extends Fragment {
             @Override
             public void onFailure(Call<UserSelectedExams> call, Throwable t) {
                 t.printStackTrace();
+                ProgressDialog.getInstance().dismiss();
                 setPreferenceChips(chipTextList, null);
             }
         });
     }
 
     public void saveUserSelectedExams(List<Exams> selectedExamsList) {
+        ProgressDialog.getInstance().show(getActivity());
         Call<CommonResponseObject> call = apiService.saveUserSelectedExams(Integer.parseInt(new PreferenceManager(getContext()).getUserId()), selectedExamsList);
         call.enqueue(new Callback<CommonResponseObject>() {
             @Override
             public void onResponse(Call<CommonResponseObject> call, Response<CommonResponseObject> response) {
+                ProgressDialog.getInstance().dismiss();
                 Log.d(TAG, "onResponse Exams : " + response.body().getStatusCode());
                 if (response.body() != null && response.body().getStatusCode() == 1) {
                     Log.d(TAG, "onResponse: "+response.body().getExamsList());
@@ -147,6 +152,7 @@ public class PreferenceFragment extends Fragment {
 
             @Override
             public void onFailure(Call<CommonResponseObject> call, Throwable t) {
+                ProgressDialog.getInstance().dismiss();
                 t.printStackTrace();
             }
         });
@@ -162,6 +168,7 @@ public class PreferenceFragment extends Fragment {
         call.enqueue(new Callback<FetchPreferableExamsResponseDto>() {
             @Override
             public void onResponse(Call<FetchPreferableExamsResponseDto> call, Response<FetchPreferableExamsResponseDto> response) {
+                ProgressDialog.getInstance().dismiss();
                 if (response.body() != null && response.body().getStatusCode().equals("1")) {
                     FetchPreferableExamsResponseDto fetchPreferableExamsResponseDto = (FetchPreferableExamsResponseDto) response.body();
                     fetchUserSelectedExams(fetchPreferableExamsResponseDto.getObject());
@@ -172,6 +179,7 @@ public class PreferenceFragment extends Fragment {
 
             @Override
             public void onFailure(Call<FetchPreferableExamsResponseDto> call, Throwable t) {
+                ProgressDialog.getInstance().dismiss();
                 t.printStackTrace();
             }
         });

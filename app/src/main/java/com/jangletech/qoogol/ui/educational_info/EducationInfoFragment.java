@@ -17,6 +17,7 @@ import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.EducationAdapter;
 
 import com.jangletech.qoogol.databinding.FragmentEducationInfoBinding;
+import com.jangletech.qoogol.dialog.ChangePasswordDialog;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.model.EmptyObject;
 import com.jangletech.qoogol.model.FetchEducationsResponseDto;
@@ -35,7 +36,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class EducationInfoFragment extends Fragment implements EducationAdapter.OnEduClick {
+public class EducationInfoFragment extends Fragment implements EducationAdapter.OnEduClick, View.OnClickListener {
 
     private static final String TAG = "EducationInfoFragment";
     private EducationInfoViewModel mViewModel;
@@ -56,34 +57,6 @@ public class EducationInfoFragment extends Fragment implements EducationAdapter.
         mViewModel =
                 ViewModelProviders.of(this).get(EducationInfoViewModel.class);
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_education_info, container, false);
-
-       /* fetchEducationsObjectList.clear();
-
-        FetchEducationsObject fetchEducationsObject = new FetchEducationsObject(123, "123", 12345, 12456, "17-Jul-2007",
-                "15-Mar-2008", 15, 5, 45, 1, 1, "Maharashtra State Board"
-                , 5, "Britia School", 7, "", 12, "SSC", 45, "India", 1, "Maharashtra",
-                3, "Mumbai");
-        fetchEducationsObjectList.add(fetchEducationsObject);
-
-
-        FetchEducationsObject fetchEducationsObject1 = new FetchEducationsObject(123, "123", 12345, 12456, "17-Jul-2007",
-                "15-Mar-2008", 15, 5, 45, 1, 1, "Maharashtra State Board"
-                , 5, "Britia School", 7, "", 12, "SSC", 45, "India", 1, "Maharashtra",
-                3, "Mumbai");
-        fetchEducationsObjectList.add(fetchEducationsObject1);
-
-        FetchEducationsObject fetchEducationsObject2 = new FetchEducationsObject(123, "123", 12345, 12456, "17-Jul-2007",
-                "15-Mar-2008", 15, 5, 45, 1, 1, "Maharashtra State Board"
-                , 5, "Britia School", 7, "", 12, "SSC", 45, "India", 1, "Maharashtra",
-                3, "Mumbai");
-        fetchEducationsObjectList.add(fetchEducationsObject2);
-
-        EducationAdapter educationAdapter = new EducationAdapter(getActivity(), fetchEducationsObjectList);
-
-        mBinding.educationListRecyclerView.setHasFixedSize(true);
-        mBinding.educationListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mBinding.educationListRecyclerView.setAdapter(educationAdapter);*/
-
         return mBinding.getRoot();
     }
 
@@ -92,7 +65,13 @@ public class EducationInfoFragment extends Fragment implements EducationAdapter.
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(EducationInfoViewModel.class);
         Log.d(TAG, "onActivityCreated EducationInfoFragment : ");
+        setListeners();
         fetchEducationDetails();
+    }
+
+
+    private void setListeners() {
+        mBinding.addedu.setOnClickListener(this);
     }
 
     public void fetchEducationDetails() {
@@ -163,5 +142,15 @@ public class EducationInfoFragment extends Fragment implements EducationAdapter.
                 ProgressDialog.getInstance().dismiss();
             }
         });
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.addedu:
+                AddEduDialog addEduDialog = new AddEduDialog(getActivity());
+                addEduDialog.show();
+                break;
+        }
     }
 }

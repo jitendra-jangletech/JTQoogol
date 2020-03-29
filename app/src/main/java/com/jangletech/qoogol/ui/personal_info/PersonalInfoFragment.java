@@ -133,7 +133,6 @@ public class PersonalInfoFragment extends BaseFragment implements ChangePassword
             dialog.show();
 
         });*/
-
     }
 
     private void showChangePasswordDialog() {
@@ -179,7 +178,6 @@ public class PersonalInfoFragment extends BaseFragment implements ChangePassword
                         layoutChangePasswordBinding.tilNewPassword.getEditText().getText().toString().trim());
             }
         });
-
     }
 
 
@@ -193,6 +191,7 @@ public class PersonalInfoFragment extends BaseFragment implements ChangePassword
             call.enqueue(new Callback<GetUserPersonalDetails>() {
                 @Override
                 public void onResponse(Call<GetUserPersonalDetails> call, Response<GetUserPersonalDetails> response) {
+                    ProgressDialog.getInstance().dismiss();
                     if (response.body() != null && response.body().getObject() != null
                             && response.body().getStatusCode().equalsIgnoreCase("1")) {
                         GetUserPersonalDetails getUserPersonalDetails = (GetUserPersonalDetails) response.body();
@@ -209,6 +208,7 @@ public class PersonalInfoFragment extends BaseFragment implements ChangePassword
                 }
             });
         } catch (Exception e) {
+            ProgressDialog.getInstance().dismiss();
             e.printStackTrace();
         }
     }
@@ -358,6 +358,7 @@ public class PersonalInfoFragment extends BaseFragment implements ChangePassword
             @Override
             public void onResponse(Call<List<Country>> call, retrofit2.Response<List<Country>> response) {
                 try {
+                    ProgressDialog.getInstance().dismiss();
                     List<Country> list = response.body();
                     mViewModel.setCountryList(list);
                     if (list != null && list.size() > 0) {
@@ -365,7 +366,6 @@ public class PersonalInfoFragment extends BaseFragment implements ChangePassword
                         for (Country country : list) {
                             mViewModel.mMapCountry.put(country.getCountryId(), country.getCountryName());
                         }
-                        ProgressDialog.getInstance().dismiss();
                         populateCountries(mViewModel.mMapCountry);
                     }
                 } catch (Exception e) {
@@ -391,6 +391,7 @@ public class PersonalInfoFragment extends BaseFragment implements ChangePassword
             @Override
             public void onResponse(Call<List<State>> call, retrofit2.Response<List<State>> response) {
                 try {
+                    ProgressDialog.getInstance().dismiss();
                     List<State> list = response.body();
                     mViewModel.setStateList(list);
                     if (list != null && list.size() > 0) {
@@ -398,7 +399,7 @@ public class PersonalInfoFragment extends BaseFragment implements ChangePassword
                         for (State state : list) {
                             mViewModel.mMapState.put(Integer.valueOf(state.getStateId()), state.getStateName());
                         }
-                        ProgressDialog.getInstance().dismiss();
+
                         populateStates(mViewModel.mMapState);
                     }
                 } catch (Exception e) {
@@ -469,6 +470,7 @@ public class PersonalInfoFragment extends BaseFragment implements ChangePassword
             @Override
             public void onResponse(Call<City> call, retrofit2.Response<City> response) {
                 try {
+                    ProgressDialog.getInstance().dismiss();
                     List<CityObject> list = response.body().getObject();
                     mViewModel.setCityList(list);
                     if (list != null && list.size() > 0) {
@@ -476,7 +478,7 @@ public class PersonalInfoFragment extends BaseFragment implements ChangePassword
                         for (CityObject cityObject : list) {
                             mViewModel.mMapCity.put(Integer.valueOf(cityObject.getCityId()), cityObject.getCityName());
                         }
-                        ProgressDialog.getInstance().dismiss();
+
                         populateCities(mViewModel.mMapCity);
                     }
                 } catch (Exception e) {

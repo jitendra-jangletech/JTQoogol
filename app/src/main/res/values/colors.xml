@@ -10,18 +10,19 @@
     <color name="colorNavyBlue">#6642E0</color>
     <color name="colorLightGrey">#dbdbdb</color>
     <color name="colorBlue">#1262B3</color>
+    <color name="colorSkyBlue">#0682FF</color>
     <color name="colorOrangePeel">#FFA000</color>
     <color name="color_red">#FF0000</color>
 
     <color name="color_green">#FFA2E9A2</color>
-    <color name="colorLightGray">#DEDEDE</color>
+    <color name="colorLightGray">#e2e2e2</color>
 
     <color name="color_label">#00DEDEDE</color>
 
     <color name="menu_item_text_color">#3B6289</color>
     <color name="sub_menu_item_text_color">#B1B1B1</color>
 
-    <color name="green">#FF2BC22B</color>
+    <color name="green">#1bdd3c</color>
 
     <color name="grey">#95A0A4</color>
 

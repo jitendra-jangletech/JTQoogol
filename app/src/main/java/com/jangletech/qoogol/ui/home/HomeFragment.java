@@ -1,5 +1,6 @@
 package com.jangletech.qoogol.ui.home;
 
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,11 +11,14 @@ import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.azoft.carousellayoutmanager.CarouselLayoutManager;
 import com.azoft.carousellayoutmanager.CarouselZoomPostLayoutListener;
 import com.azoft.carousellayoutmanager.CenterScrollListener;
+import com.jangletech.qoogol.CenterZoomLayoutManager;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.HomeAdapter;
 import com.jangletech.qoogol.databinding.FragmentHomeBinding;
@@ -36,6 +40,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.facebook.FacebookSdk.getApplicationContext;
+
 public class HomeFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
@@ -51,18 +57,86 @@ public class HomeFragment extends Fragment {
                 ViewModelProviders.of(this).get(HomeViewModel.class);
         fragmentHomeBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false);
 
-        getStatisticsData();
+//        getStatisticsData();
         homeAdapter = new HomeAdapter(getActivity(), itemlist);
 //        final CarouselLayoutManager layoutManager = new CarouselLayoutManager(CarouselLayoutManager.HORIZONTAL, true);
 //        layoutManager.setPostLayoutListener(new CarouselZoomPostLayoutListener());
 //
 //        layoutManager.setMaxVisibleItems(1);
-        fragmentHomeBinding.itemRecycler.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, true));
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getApplicationContext(),2);
+        fragmentHomeBinding.itemRecycler.setLayoutManager(new CenterZoomLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL, false));
+
+
+
+        //        fragmentHomeBinding.itemRecycler.addItemDecoration(new RecyclerView.ItemDecoration() {
+//            @Override
+//            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+//                int position = parent.getChildAdapterPosition(view); // item position
+//                int spanCount = 2;
+//                int spacing = 30;//spacing between views in grid
+//
+//                if (position >= 0) {
+//                    int column = position % spanCount; // item column
+//
+//                    outRect.left = spacing - column * spacing / spanCount; // spacing - column * ((1f / spanCount) * spacing)
+//                    outRect.right = (column + 1) * spacing / spanCount; // (column + 1) * ((1f / spanCount) * spacing)
+//
+//                    if (position < spanCount) { // top edge
+//                        outRect.top = spacing;
+//                    }
+//                    outRect.bottom = spacing; // item bottom
+//                } else {
+//                    outRect.left = 0;
+//                    outRect.right = 0;
+//                    outRect.top = 0;
+//                    outRect.bottom = 0;
+//                }
+//            }
+//        });
+//        fragmentHomeBinding.itemRecycler.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, true));
         fragmentHomeBinding.itemRecycler.setHasFixedSize(true);
         fragmentHomeBinding.itemRecycler.setAdapter(homeAdapter);
         fragmentHomeBinding.itemRecycler.addOnScrollListener(new CenterScrollListener());
+
+        setDummyData();
         return fragmentHomeBinding.getRoot();
     }
+
+    private void setDummyData() {
+
+        ProgressDialog.getInstance().dismiss();
+        fragmentHomeBinding.creditPoints.setText("100");
+        fragmentHomeBinding.friends.setText("0");
+        fragmentHomeBinding.followers.setText("0");
+        fragmentHomeBinding.following.setText("0");
+
+        itemlist.clear();
+
+        DashboardData dashboardData1 = new DashboardData();
+        dashboardData1.setAnswers("80");
+        dashboardData1.setQuestions("90");
+        dashboardData1.setTests("90");
+        itemlist.add(dashboardData1);
+
+        DashboardData dashboardData2 = new DashboardData();
+        dashboardData2.setAttendedTests("80");
+        dashboardData2.setCreatedTests("90");
+        itemlist.add(dashboardData2);
+
+        DashboardData dashboardData3 = new DashboardData();
+        dashboardData3.setAvg_user("80");
+        dashboardData3.setFeed_tests("90");
+        dashboardData3.setCourse("90");
+        dashboardData3.setExam("90");
+        itemlist.add(dashboardData3);
+
+        DashboardData dashboardData4 = new DashboardData();
+        dashboardData4.setFavQA("99");
+        dashboardData4.setFavTests("900");
+        itemlist.add(dashboardData4);
+        homeAdapter.notifyDataSetChanged();
+    }
+
 
     private void getStatisticsData() {
         ProgressDialog.getInstance().show(getActivity());
@@ -102,7 +176,6 @@ public class HomeFragment extends Fragment {
 
         itemlist.clear();
 
-
         DashboardData dashboardData1 = new DashboardData();
         dashboardData1.setAttendedTests(dashboardData.getAttendedTests());
         dashboardData1.setCreatedTests(dashboardData.getCreatedTests());
@@ -116,9 +189,6 @@ public class HomeFragment extends Fragment {
         DashboardData dashboardData3 = new DashboardData();
         dashboardData3.setAvgRating(dashboardData.getAvgRating());
         itemlist.add(dashboardData3);
-
-
-
         homeAdapter.notifyDataSetChanged();
     }
 }

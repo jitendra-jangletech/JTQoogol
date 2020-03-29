@@ -81,6 +81,7 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
     SignUpRequestDto signUpRequestDto;
     ApiInterface apiService = ApiClient.getInstance().getApi();
     private static final String TAG = "SignUpActivity";
+
     boolean isValid = true;
 
     @Override
