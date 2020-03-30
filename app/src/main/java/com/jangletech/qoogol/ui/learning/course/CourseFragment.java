@@ -19,13 +19,14 @@ import com.google.android.material.tabs.TabLayout;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.Test.TestFragment;
 import com.jangletech.qoogol.databinding.FragmentCourseBinding;
+import com.jangletech.qoogol.ui.BaseFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class CourseFragment extends Fragment{
+public class CourseFragment extends BaseFragment {
 
     private static final String TAG = "CourseFragment";
     private CourseViewModel mViewModel;
@@ -49,7 +50,7 @@ public class CourseFragment extends Fragment{
         setDefaultQuestView();
         setVisitedInit();
 
-        fragmentCourseBinding.resultTabs.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        /*fragmentCourseBinding.resultTabs.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 position = tab.getPosition();
@@ -67,7 +68,7 @@ public class CourseFragment extends Fragment{
             public void onTabReselected(TabLayout.Tab tab) {
                 //Toast.makeText(getActivity(), "Tab Selected : " + tab.getPosition()+1, Toast.LENGTH_SHORT).show();
             }
-        });
+        });*/
 
         fragmentCourseBinding.incorrect.setOnClickListener(v -> {
             setInCorrectView();

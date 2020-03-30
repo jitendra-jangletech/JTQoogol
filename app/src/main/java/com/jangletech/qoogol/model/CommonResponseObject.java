@@ -1,31 +1,23 @@
 package com.jangletech.qoogol.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 public class CommonResponseObject {
 
     private int statusCode;
     private String message;
+    private List<Exams> object;
 
-    public List<UserPersonalDetails> getUserPersonalDetailsList() {
-        return userPersonalDetailsList;
+    public List<Exams> getObject() {
+        return object;
     }
 
-    public void setUserPersonalDetailsList(List<UserPersonalDetails> userPersonalDetailsList) {
-        this.userPersonalDetailsList = userPersonalDetailsList;
+    public void setObject(List<Exams> object) {
+        this.object = object;
     }
 
-    private List<UserPersonalDetails> userPersonalDetailsList;
-
-    public List<Exams> getExamsList() {
-        return examsList;
-    }
-
-    public void setExamsList(List<Exams> examsList) {
-        this.examsList = examsList;
-    }
-
-    private List<Exams> examsList;
 
     public int getStatusCode() {
         return statusCode;

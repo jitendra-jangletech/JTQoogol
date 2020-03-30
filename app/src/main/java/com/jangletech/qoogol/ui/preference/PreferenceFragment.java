@@ -84,8 +84,28 @@ public class PreferenceFragment extends Fragment {
         saveUserSelectedExams(examsList);
     }
 
+    private void saveSelectedChips(List<Exams> chipTextList) {
+        for (int i = 0; i < chipTextList.size(); i++) {
+            Chip chip = new Chip(getActivity());
+            if (chipTextList != null) {
+                for (int j = 0; j < chipTextList.size(); j++) {
+                    if (chipTextList.get(i).getDispText().equals(chip.getText().toString())) {
+                        chip.setChecked(true);
+                    }
+                }
+            }
+            chip.setText(chipTextList.get(i).getDispText());
+            chip.setTag(chipTextList.get(i).getValue());
+            chip.setClickable(true);
+            chip.setFocusable(true);
+            chip.setCheckable(true);
+            chip.setChipBackgroundColor(AppCompatResources.getColorStateList(getActivity(), R.color.chip_bg_state));
+        }
+    }
+
 
     private void setPreferenceChips(List<Exams> chipTextList, List<UserSelectedExamsData> selectedExamList) {
+        mBinding.examChipGroup.removeAllViews();
         for (int i = 0; i < chipTextList.size(); i++) {
             Chip chip = new Chip(getActivity());
             if (selectedExamList != null) {
@@ -143,9 +163,8 @@ public class PreferenceFragment extends Fragment {
                 ProgressDialog.getInstance().dismiss();
                 Log.d(TAG, "onResponse Exams : " + response.body().getStatusCode());
                 if (response.body() != null && response.body().getStatusCode() == 1) {
-                    Log.d(TAG, "onResponse: "+response.body().getExamsList());
-                    setPreferenceChips(response.body().getExamsList(),null);
-                    Toast.makeText(getActivity(), ""+response.body().getExamsList(), Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "onResponse: "+response.body().getObject());
+                    saveSelectedChips(response.body().getObject());
                     Toast.makeText(getActivity(), "Preferences updated.", Toast.LENGTH_SHORT).show();
                 }
             }

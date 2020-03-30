@@ -32,7 +32,7 @@ public class QuestionsActivity extends AppCompatActivity {
         setupViewPager(mViewPager);
         tabLayout.setupWithViewPager(mViewPager);
 
-        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener(){
+       /* tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener(){
             @Override
             public void onTabSelected(TabLayout.Tab tab){
                 int position = tab.getPosition();
@@ -58,7 +58,7 @@ public class QuestionsActivity extends AppCompatActivity {
             public void onTabReselected(TabLayout.Tab tab) {
 
             }
-        });
+        });*/
 
     }
 

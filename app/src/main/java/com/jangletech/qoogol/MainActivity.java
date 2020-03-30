@@ -3,6 +3,7 @@ package com.jangletech.qoogol;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.widget.Toast;
 
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
@@ -25,6 +26,7 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding mBinding;
+    public static NavController navController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,13 +43,13 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
                 R.id.edit_profile,
                 R.id.nav_home,R.id.nav_learning,
 //                R.id.nav_course, R.id.nav_exam,
+                R.id.nav_home, R.id.nav_course, R.id.nav_exam,R.id.nav_questions,
                 R.id.nav_practice_test, R.id.nav_test_my, R.id.nav_test_popular, R.id.nav_attended_by_friends,
-                R.id.nav_shared_with_you, R.id.nav_shared_by_you, R.id.nav_create_test,
-                R.id.nav_quest_trending, R.id.nav_quest_popular, R.id.nav_quest_recent, R.id.nav_saved_drafts,
-                R.id.nav_reviews, R.id.nav_published, R.id.nav_notifications, R.id.nav_settings)
+                R.id.nav_shared_with_you, R.id.nav_shared_by_you,
+                R.id.nav_reviews, R.id.nav_published, R.id.nav_notifications, R.id.nav_settings,R.id.nav_fav_test)
                 .setDrawerLayout(mBinding.drawerLayout)
                 .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
@@ -129,6 +131,16 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
 //                navController.navigate(R.id.nav_exam);
 //            }
 //        });
+//            startActivity(new Intent(this, CourseActivity.class));
+//        });
+
+//        findViewById(R.id.nav_exam).setOnClickListener(v -> {
+//            mBinding.drawerLayout.closeDrawers();
+//            if (navController.getCurrentDestination().getId() != R.id.nav_exam) {
+//                navController.popBackStack();
+//                navController.navigate(R.id.nav_exam);
+//            }
+//        });
 
         findViewById(R.id.nav_practice_test).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
@@ -180,43 +192,20 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
             }
         });
 
-        findViewById(R.id.nav_create_test).setOnClickListener(v -> {
+        findViewById(R.id.nav_fav_test).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
-            if (navController.getCurrentDestination().getId() != R.id.nav_create_test) {
+            if (navController.getCurrentDestination().getId() != R.id.nav_fav_test) {
                 navController.popBackStack();
-                navController.navigate(R.id.nav_create_test);
+                navController.navigate(R.id.nav_fav_test);
             }
         });
 
-        findViewById(R.id.nav_quest_trending).setOnClickListener(v -> {
-            mBinding.drawerLayout.closeDrawers();
-            if (navController.getCurrentDestination().getId() != R.id.nav_quest_trending) {
-                navController.popBackStack();
-                navController.navigate(R.id.nav_quest_trending);
-            }
-        });
 
-        findViewById(R.id.nav_quest_popular).setOnClickListener(v -> {
+        findViewById(R.id.nav_questions).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
-            if (navController.getCurrentDestination().getId() != R.id.nav_quest_popular) {
+            if (navController.getCurrentDestination().getId() != R.id.nav_questions) {
                 navController.popBackStack();
-                navController.navigate(R.id.nav_quest_popular);
-            }
-        });
-
-        findViewById(R.id.nav_quest_recent).setOnClickListener(v -> {
-            mBinding.drawerLayout.closeDrawers();
-            if (navController.getCurrentDestination().getId() != R.id.nav_quest_recent) {
-                navController.popBackStack();
-                navController.navigate(R.id.nav_quest_recent);
-            }
-        });
-
-        findViewById(R.id.nav_saved_drafts).setOnClickListener(v -> {
-            mBinding.drawerLayout.closeDrawers();
-            if (navController.getCurrentDestination().getId() != R.id.nav_saved_drafts) {
-                navController.popBackStack();
-                navController.navigate(R.id.nav_saved_drafts);
+                navController.navigate(R.id.nav_questions);
             }
         });
 

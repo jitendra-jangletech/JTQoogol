@@ -34,7 +34,7 @@ import static com.jangletech.qoogol.util.Constant.add_edu;
 public class EditProfileFragment extends Fragment {
 
     FragmentEditProfileBinding fragmentEditProfileBinding;
-    AddEducationBinding addEducationBinding;
+    private AddEducationBinding addEducationBinding;
     AlertDialog educationDialog;
     ApiInterface apiService = ApiClient.getInstance().getApi();
     private static final String TAG = "EditProfileFragment";

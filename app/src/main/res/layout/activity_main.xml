@@ -97,16 +97,17 @@
                         android:text="@string/shared_by_you" />
 
                     <TextView
-                        android:id="@+id/nav_create_test"
+                        android:id="@+id/nav_fav_test"
                         style="@style/sub_menu_item_style"
-                        android:text="@string/create_test" />
+                        android:text="@string/favourite_test" />
 
                     <TextView
+                        android:id="@+id/nav_questions"
                         style="@style/menu_item_style"
                         android:drawableLeft="@drawable/ic_questions"
                         android:text="@string/questions" />
 
-                    <TextView
+                   <!-- <TextView
                         android:id="@+id/nav_quest_trending"
                         style="@style/sub_menu_item_style"
                         android:text="@string/trending_questions" />
@@ -127,7 +128,7 @@
                     <TextView
                         android:id="@+id/nav_saved_drafts"
                         style="@style/sub_menu_item_style"
-                        android:text="@string/saved_drafts" />
+                        android:text="@string/saved_drafts" />-->
 
 
                     <TextView

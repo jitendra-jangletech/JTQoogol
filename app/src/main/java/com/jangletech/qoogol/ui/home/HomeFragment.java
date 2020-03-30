@@ -1,6 +1,5 @@
 package com.jangletech.qoogol.ui.home;
 
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,10 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.azoft.carousellayoutmanager.CarouselLayoutManager;
-import com.azoft.carousellayoutmanager.CarouselZoomPostLayoutListener;
 import com.azoft.carousellayoutmanager.CenterScrollListener;
 import com.jangletech.qoogol.CenterZoomLayoutManager;
 import com.jangletech.qoogol.R;
@@ -25,7 +21,6 @@ import com.jangletech.qoogol.databinding.FragmentHomeBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.model.DashboardData;
 import com.jangletech.qoogol.model.DashboardInfo;
-import com.jangletech.qoogol.model.Home;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.util.Constant;
@@ -63,9 +58,8 @@ public class HomeFragment extends Fragment {
 //        layoutManager.setPostLayoutListener(new CarouselZoomPostLayoutListener());
 //
 //        layoutManager.setMaxVisibleItems(1);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getApplicationContext(),2);
-        fragmentHomeBinding.itemRecycler.setLayoutManager(new CenterZoomLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL, false));
-
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getApplicationContext(), 2);
+        fragmentHomeBinding.itemRecycler.setLayoutManager(new CenterZoomLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
 
 
         //        fragmentHomeBinding.itemRecycler.addItemDecoration(new RecyclerView.ItemDecoration() {
@@ -141,22 +135,22 @@ public class HomeFragment extends Fragment {
     private void getStatisticsData() {
         ProgressDialog.getInstance().show(getActivity());
         Map<String, String> arguments = new HashMap<>();
-        Log.d(TAG, "fetchEducationDetails userId : "+new PreferenceManager(getContext()).getUserId());
+        Log.d(TAG, "fetchEducationDetails userId : " + new PreferenceManager(getContext()).getUserId());
         arguments.put(Constant.user_id, new PreferenceManager(getContext()).getUserId());
         Call<DashboardInfo> call = apiService.getDashboardStatistics(arguments);
         call.enqueue(new Callback<DashboardInfo>() {
             @Override
             public void onResponse(Call<DashboardInfo> call, Response<DashboardInfo> response) {
-                if(response.isSuccessful()){
-                    DashboardData dashboardData = (DashboardData)response.body().getObject();
+                if (response.isSuccessful()) {
+                    DashboardData dashboardData = (DashboardData) response.body().getObject();
                     setData(dashboardData);
 
-                }else{
+                } else {
                     Log.e(TAG, "onResponse Failed : ");
                     ProgressDialog.getInstance().dismiss();
                 }
 
-                Log.d(TAG, "onResponse: "+response.body());
+                Log.d(TAG, "onResponse: " + response.body());
             }
 
             @Override

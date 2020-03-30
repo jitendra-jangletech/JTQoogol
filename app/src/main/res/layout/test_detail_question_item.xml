@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/_5sdp"
+        android:layout_marginBottom="@dimen/_1sdp"
+        app:cardElevation="@dimen/_20sdp">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/colorWhite"
+                android:orientation="horizontal"
+                android:weightSum="2"
+                android:padding="@dimen/_5sdp">
+
+                <TextView
+                    android:layout_weight="0.2"
+                    android:id="@+id/tv_quest_no"
+                    android:layout_marginRight="@dimen/_10sdp"
+                    android:padding="@dimen/_2sdp"
+                    android:textSize="@dimen/_15ssp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="01"
+                    android:textColor="@color/icon_color"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:textSize="@dimen/_12ssp"
+                    android:layout_weight="1.8"
+                    android:id="@+id/tv_quest_desc"
+                    android:layout_width="0dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_height="wrap_content"
+                    android:text="If x is a primeber would be"
+                    android:textColor="@color/colorBlack" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvQuestInfo"
+                android:textStyle="bold"
+                android:textColor="@color/icon_color"
+                android:text="Scored(10/100)"
+                android:gravity="right"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+
+    </androidx.cardview.widget.CardView>
+</layout>

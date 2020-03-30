@@ -7,8 +7,8 @@ import android.text.TextWatcher;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.jangletech.qoogol.R;
-import com.jangletech.qoogol.activities.SignInActivity;
 import com.jangletech.qoogol.SignUpActivity;
+import com.jangletech.qoogol.activities.SignInActivity;
 
 import java.util.Objects;
 
@@ -55,9 +55,10 @@ public class GenericTextWatcher implements TextWatcher {
                     hideErrorSpace(view);
                 }
             } else if (view.getId() == R.id.til_email) {
-                if (TextUtils.isEmpty(Objects.requireNonNull(view.getEditText()).getText().toString().trim())
-                        || !isEmailValid(view.getEditText().getText().toString().trim())) {
+                if (TextUtils.isEmpty(Objects.requireNonNull(view.getEditText()).getText().toString().trim())) {
                     view.setError(mContext.getResources().getString(R.string.empty_email));
+                } else if (!isEmailValid(view.getEditText().getText().toString().trim())) {
+                    view.setError(mContext.getResources().getString(R.string.valid_email));
                 } else {
                     view.setError(null);
                     hideErrorSpace(view);
@@ -75,9 +76,10 @@ public class GenericTextWatcher implements TextWatcher {
 
         if (mContext instanceof SignInActivity) {
             if (view.getId() == R.id.tilEmail) {
-                if (TextUtils.isEmpty(Objects.requireNonNull(view.getEditText()).getText().toString().trim())
-                        || !isEmailValid(view.getEditText().getText())) {
+                if (TextUtils.isEmpty(Objects.requireNonNull(view.getEditText()).getText().toString().trim())) {
                     view.setError(mContext.getResources().getString(R.string.empty_email));
+                } else if (!isEmailValid(view.getEditText().getText())) {
+                    view.setError(mContext.getResources().getString(R.string.valid_email));
                 } else {
                     view.setError(null);
                     hideErrorSpace(view);
@@ -92,6 +94,7 @@ public class GenericTextWatcher implements TextWatcher {
             }
         }
     }
+
 
     private boolean isEmailValid(CharSequence email) {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email)

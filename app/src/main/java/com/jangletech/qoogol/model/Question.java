@@ -2,13 +2,16 @@ package com.jangletech.qoogol.model;
 
 public class Question {
 
-    public Question(int id, String strQuestion) {
+    private int id;
+
+    public Question(int id, String strQuestion, String strQuestInfo) {
         this.id = id;
         this.strQuestion = strQuestion;
+        this.strQuestInfo = strQuestInfo;
     }
 
-    private int id;
     private String strQuestion;
+    private String strQuestInfo;
 
     public int getId() {
         return id;
@@ -25,4 +28,15 @@ public class Question {
     public void setStrQuestion(String strQuestion) {
         this.strQuestion = strQuestion;
     }
+
+    public String getStrQuestInfo() {
+        return strQuestInfo;
+    }
+
+    public void setStrQuestInfo(String strQuestInfo) {
+        this.strQuestInfo = strQuestInfo;
+    }
+
+
+
 }

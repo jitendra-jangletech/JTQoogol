@@ -86,13 +86,6 @@
         android:label="@string/menu_test_shared_by_you"
         tools:layout="@layout/fragment_test_shared_by_you" />
 
-    <fragment
-        android:id="@+id/nav_create_test"
-        android:name="com.jangletech.qoogol.ui.test.create_test.CreateTestFragment"
-        android:label="@string/menu_test_create"
-        tools:layout="@layout/fragment_test_create" />
-
-
     //Question Section Fragments
     <fragment
         android:id="@+id/nav_quest_trending"
@@ -114,9 +107,9 @@
 
     <fragment
         android:id="@+id/nav_saved_drafts"
-        android:name="com.jangletech.qoogol.ui.questions.saved_drafts.SavedDraftsFragment"
+        android:name="com.jangletech.qoogol.ui.questions.questions.QuestionsFragment"
         android:label="@string/menu_quest_saved_drafts"
-        tools:layout="@layout/fragment_quest_saved_drafts" />
+        tools:layout="@layout/fragment_questions" />
 
     //Review Fragment
     <fragment
@@ -154,5 +147,25 @@
         android:name="com.jangletech.qoogol.ui.edit_profile.EditProfileFragment"
         android:label="@string/menu_edit_profile"
         tools:layout="@layout/fragment_edit_profile" />
+
+    //Test Details
+    <fragment
+        android:id="@+id/nav_test_details"
+        android:name="com.jangletech.qoogol.ui.test_details.TestDetailsFragment"
+        android:label="@string/menu_test_details"
+        tools:layout="@layout/test_details_fragment" />
+
+    //Favourite Test
+    <fragment
+    android:id="@+id/nav_fav_test"
+    android:name="com.jangletech.qoogol.ui.test.favourite.TestFavouriteFragment"
+    android:label="@string/favourite_test"
+    tools:layout="@layout/test_favourite_fragment" />
+
+    <fragment
+        android:id="@+id/nav_questions"
+        android:name="com.jangletech.qoogol.ui.questions.questions.QuestionsFragment"
+        android:label="@string/questions"
+        tools:layout="@layout/test_favourite_fragment" />
 
 </navigation>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:background="@drawable/item_board_bg"
+        android:gravity="center"
+        android:padding="@dimen/_10sdp">
+
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="@dimen/_50sdp"
+            android:layout_height="@dimen/_50sdp"
+            android:layout_weight="1"
+            android:src="@drawable/maha_board" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/logo"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:padding="@dimen/_10sdp">
+
+            <TextView
+                android:id="@+id/tvBoardName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CBSE"
+                android:textColor="@color/colorBlack"
+                android:textStyle="bold" />
+
+            <TextView
+                android:ellipsize="end"
+                android:id="@+id/tvBoard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Central Board of Secondary Education" />
+
+        </LinearLayout>
+
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:src="@drawable/icon_tick"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+</layout>

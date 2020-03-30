@@ -44,14 +44,11 @@ import retrofit2.Response;
 
 public class SignInActivity extends BaseActivity implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
 
-
     ActivitySignInBinding mBinding;
     private GoogleApiClient googleApiClient;
-    private GoogleSignInOptions gso;
     private static final int RC_SIGN_IN = 1;
     private SignUpViewModel mViewModel;
     ApiInterface apiService = ApiClient.getInstance().getApi();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +65,6 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
         mBinding.signInBtn.setOnClickListener(v -> validateSignInForm());
 
         mBinding.googleSignIn.setOnClickListener(v -> {
-            //Toast.makeText(this, "Hi", Toast.LENGTH_SHORT).show();
             Intent intent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
             startActivityForResult(intent, RC_SIGN_IN);
         });
