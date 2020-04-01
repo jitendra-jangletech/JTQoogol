@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:padding="@dimen/_10sdp"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:padding="@dimen/_10sdp"
+        android:elevation="@dimen/_4sdp"
+        android:id="@+id/mcq1_layout"
+        android:background="@drawable/grey_border"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_height="wrap_content">
+
+
+        <TextView
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:text="mcq1"
+            android:layout_width="wrap_content"
+            android:textColor="@color/colorBlack"
+            android:layout_height="wrap_content"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:padding="@dimen/_10sdp"
+        android:elevation="@dimen/_4sdp"
+        android:id="@+id/mcq2_layout"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:background="@drawable/grey_border"
+        app:layout_constraintTop_toBottomOf="@+id/mcq1_layout"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_height="wrap_content">
+
+
+        <TextView
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:text="mcq2"
+            android:layout_width="wrap_content"
+            android:textColor="@color/colorBlack"
+            android:layout_height="wrap_content"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:padding="@dimen/_10sdp"
+        android:elevation="@dimen/_4sdp"
+        android:id="@+id/mcq3_layout"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:background="@drawable/grey_border"
+        app:layout_constraintTop_toBottomOf="@+id/mcq2_layout"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_height="wrap_content">
+
+
+        <TextView
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:text="mcq3"
+            android:layout_width="wrap_content"
+            android:textColor="@color/colorBlack"
+            android:layout_height="wrap_content"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:padding="@dimen/_10sdp"
+        android:elevation="@dimen/_4sdp"
+        android:id="@+id/mcq4_layout"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:background="@drawable/grey_border"
+        app:layout_constraintTop_toBottomOf="@+id/mcq3_layout"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_height="wrap_content">
+
+
+        <TextView
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:text="mcq4"
+            android:layout_width="wrap_content"
+            android:textColor="@color/colorBlack"
+            android:layout_height="wrap_content"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <!--        <androidx.constraintlayout.widget.ConstraintLayout-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:padding="@dimen/_10sdp"-->
+    <!--            android:elevation="@dimen/_4sdp"-->
+    <!--            android:id="@+id/solution_layout"-->
+    <!--            android:layout_marginTop="@dimen/_10sdp"-->
+    <!--            android:background="#98FB98	"-->
+    <!--            app:layout_constraintTop_toBottomOf="@+id/mcq4_layout"-->
+    <!--            app:layout_constraintLeft_toLeftOf="parent"-->
+    <!--            android:layout_height="wrap_content">-->
+
+
+    <!--            <TextView-->
+    <!--                app:layout_constraintTop_toTopOf="parent"-->
+    <!--                app:layout_constraintLeft_toLeftOf="parent"-->
+    <!--                android:text="Solution"-->
+    <!--                android:textAllCaps="true"-->
+    <!--                android:layout_width="wrap_content"-->
+    <!--                android:textColor="#228B22	"-->
+    <!--                android:id="@+id/solution"-->
+    <!--                android:layout_height="wrap_content"/>-->
+
+    <!--            <TextView-->
+    <!--                android:layout_marginTop="@dimen/_5sdp"-->
+    <!--                app:layout_constraintTop_toBottomOf="@+id/solution"-->
+    <!--                app:layout_constraintLeft_toLeftOf="parent"-->
+    <!--                android:id="@+id/solution_desc"-->
+    <!--                android:textColor="@color/colorBlack"-->
+    <!--                android:text="solution desc"-->
+    <!--                android:layout_width="match_parent"-->
+    <!--                android:layout_height="wrap_content"/>-->
+
+    <!--            <TextView-->
+    <!--                android:layout_width="match_parent"-->
+    <!--                android:id="@+id/revised_concepts"-->
+    <!--                android:padding="@dimen/_10sdp"-->
+    <!--                android:textAlignment="center"-->
+    <!--                android:background="@drawable/revised_concepts"-->
+    <!--                android:text="Reviced Concepts"-->
+    <!--                android:textColor="@color/colorSkyBlue"-->
+    <!--                android:layout_marginTop="@dimen/_15sdp"-->
+    <!--                app:layout_constraintTop_toBottomOf="@+id/solution_desc"-->
+    <!--                app:layout_constraintLeft_toLeftOf="parent"-->
+    <!--                android:layout_height="wrap_content"/>-->
+    <!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
