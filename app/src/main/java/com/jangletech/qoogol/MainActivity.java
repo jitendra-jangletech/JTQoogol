@@ -3,9 +3,8 @@ package com.jangletech.qoogol;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
-import android.widget.Toast;
 
-import androidx.appcompat.widget.SearchView;
+import android.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import androidx.navigation.NavController;
@@ -52,48 +51,6 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
-
-
-       /* BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener =
-                new BottomNavigationView.OnNavigationItemSelectedListener() {
-                    @Override public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.navigation_home:
-                                Toast.makeText(MainActivity.this, "Home", Toast.LENGTH_SHORT).show();
-                                openFragment(new HomeFragment());
-                                return true;
-                            case R.id.navigation_learning:
-                                openFragment(new ExamFragment());
-                                return true;
-                            case R.id.navigation_test:
-                                openFragment(new TestPopularFragment());
-                                return true;
-                            case R.id.navigation_Questions:
-                                if (navController.getCurrentDestination().getId() != R.id.nav_quest_trending) {
-                                    navController.popBackStack();
-                                    navController.navigate(R.id.nav_quest_trending);
-                                }
-                                return true;
-
-                            case R.id.navigation_saved_drafts:
-                                if (navController.getCurrentDestination().getId() != R.id.nav_saved_drafts) {
-                                    navController.popBackStack();
-                                    navController.navigate(R.id.nav_saved_drafts);
-                                }
-                                return true;
-                        }
-                        return false;
-                    }
-                };*/
-
-       /* BottomNavigationMenuView menuView = (BottomNavigationMenuView)bottom_navigation_menu;
-        for (int i = 0; i < menuView.getChildCount(); i++) {
-            BottomNavigationItemView item = (BottomNavigationItemView) menuView.getChildAt(i);
-            View activeLabel = item.findViewById(R.id.largeLabel);
-            if (activeLabel instanceof TextView) {
-                activeLabel.setPadding(0, 0, 0, 0);
-            }
-        }*/
 
 
         /***
@@ -259,13 +216,6 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
     }
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.action_search, menu);
-        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-        searchView.setMaxWidth(Integer.MAX_VALUE);
-        return true;
-    }
 
     @Override
     public boolean onSupportNavigateUp() {

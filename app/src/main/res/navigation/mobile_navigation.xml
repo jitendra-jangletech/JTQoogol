@@ -168,4 +168,10 @@
         android:label="@string/questions"
         tools:layout="@layout/test_favourite_fragment" />
 
+    <fragment
+        android:id="@+id/nav_test_filter"
+        android:name="com.jangletech.qoogol.ui.test.filter.TestFilterFragment"
+        android:label="@string/test_filter"
+        tools:layout="@layout/test_filter_fragment" />
+
 </navigation>

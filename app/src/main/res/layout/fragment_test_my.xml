@@ -1,29 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <RelativeLayout
-        android:background="@color/colorLightGray"
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_marginBottom="@dimen/_10sdp"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/_20sdp"
+        android:background="@color/colorLightGray">
+
+        <HorizontalScrollView
+            android:fillViewport="true"
+            android:padding="@dimen/_5sdp"
+            android:id="@+id/horizontalScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none">
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/subjectsChipGrp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:singleSelection="true"
+                app:selectionRequired="true" />
+
+        </HorizontalScrollView>
+
 
         <androidx.recyclerview.widget.RecyclerView
+            android:layout_below="@+id/horizontalScrollView"
             android:id="@+id/testListRecyclerView"
-            tools:listitem="@layout/test_item"
-            android:layout_marginTop="@dimen/_10sdp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            tools:listitem="@layout/test_item" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:layout_margin="@dimen/_10sdp"
+            android:id="@+id/fab_filter"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
-            android:src="@drawable/ic_filter"
+            android:layout_margin="@dimen/_10sdp"
             android:foregroundTint="@color/colorWhite"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:src="@drawable/ic_filter" />
     </RelativeLayout>
 
 </layout>

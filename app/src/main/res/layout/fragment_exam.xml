@@ -45,15 +45,17 @@
     auto:engine="KaTeX"
     auto:text="$$y-y_0=m(x-x_0)$$"></io.github.kexanie.library.MathView>
 
-
     <io.github.kexanie.library.MathView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         auto:engine="KaTeX"
         auto:text="$$\\vec{F}=\\frac{d \\vec{p}}{dt}=m \\frac{d \\vec{v}}{dt} = m \\vec{a}$$"></io.github.kexanie.library.MathView>
 
-
-
+    <io.github.kexanie.library.MathView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        auto:engine="KaTeX"
+        auto:text="$$$\-2^25$"></io.github.kexanie.library.MathView>
 
 
 </LinearLayout>

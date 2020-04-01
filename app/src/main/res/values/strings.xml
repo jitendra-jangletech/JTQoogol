@@ -120,6 +120,7 @@
     <string name="create_test">Create Test</string>
     <string name="favourite_test">Favourite Test</string>
     <string name="questions">Questions</string>
+    <string name="test_filter">Test Filters</string>
     <string name="trending_questions">Trending Questions</string>
     <string name="popular_questions">Popular Questions</string>
     <string name="recent_questions">Recent Questions</string>
@@ -172,6 +173,21 @@
         <item>Gujrat</item>
         <item>Delhi</item>
         <item>Goa</item>
+    </string-array>
+
+    <string-array name="author">
+        <item>Sharan</item>
+        <item>Narayana</item>
+        <item>Dannis Ritche</item>
+        <item>Kiran Kumar</item>
+        <item>Navneet</item>
+        <item>All In One</item>
+        <item>Sharan</item>
+        <item>Narayana</item>
+        <item>Dannis Ritche</item>
+        <item>Kiran Kumar</item>
+        <item>Navneet</item>
+        <item>All In One</item>
     </string-array>
 
     <!--edit profile-->

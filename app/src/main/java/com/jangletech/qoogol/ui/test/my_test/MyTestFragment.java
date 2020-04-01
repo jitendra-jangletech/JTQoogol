@@ -1,18 +1,26 @@
 package com.jangletech.qoogol.ui.test.my_test;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.MenuItemCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.jangletech.qoogol.CourseActivity;
 import com.jangletech.qoogol.MainActivity;
 import com.jangletech.qoogol.R;
@@ -24,14 +32,22 @@ import com.jangletech.qoogol.ui.BaseFragment;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyTestFragment extends BaseFragment implements TestAdapter.TestClickListener {
+public class MyTestFragment extends BaseFragment implements TestAdapter.TestClickListener, SearchView.OnQueryTextListener {
 
     private static final String TAG = "MyTestFragment";
     private com.jangletech.qoogol.ui.test.my_test.MyTestViewModel mViewModel;
     private FragmentTestMyBinding mBinding;
+    private TestAdapter testAdapter;
+    private List<TestModel> testList;
 
     public static MyTestFragment newInstance() {
         return new MyTestFragment();
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -42,37 +58,137 @@ public class MyTestFragment extends BaseFragment implements TestAdapter.TestClic
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.action_search, menu);
+
+        final MenuItem item = menu.findItem(R.id.action_search);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
+        searchView.setOnQueryTextListener(this);
+
+        item.setOnActionExpandListener( new MenuItem.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                return true;
+            }
+        });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_filter:
+                MainActivity.navController.navigate(R.id.nav_test_filter);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(com.jangletech.qoogol.ui.test.my_test.MyTestViewModel.class);
         setMyTestList();
+        prepareSubjectChips();
+
+        mBinding.subjectsChipGrp.setOnCheckedChangeListener((chipGroup, id) -> {
+            Chip chip = ((Chip) chipGroup.getChildAt(chipGroup.getCheckedChipId()));
+            if (chip != null) {
+                if (chip.isChecked()) {
+                    setCheckedChip(mBinding.subjectsChipGrp);
+                    List<TestModel> filteredModelList = filterBySubject(testList, chip.getText().toString());
+                    testAdapter.setSearchResult(filteredModelList);
+                }
+            }
+        });
+        mBinding.fabFilter.setOnClickListener(v->{
+            MainActivity.navController.navigate(R.id.nav_test_filter);
+        });
     }
 
     public void setMyTestList(){
-
-        List<TestModel> testList = new ArrayList<>();
+        testList = new ArrayList<>();
         testList.clear();
 
-        TestModel testModel = new TestModel("Shapes and Angles","Maths","40",
+        TestModel testModel = new TestModel("Shapes and Angles","Mathematics","40",
                 "30","Hard","88/100","219","Jan 2020","2093",
-                true,true,"Mr. Sharan","Phd. Maths","Unit Test-Final","4.3","100");
+                true,true,"Mr. Sharan","Phd. Mathematics","Unit Test-Final","4.3","100");
 
         TestModel testModel1 = new TestModel("Reading Comprehension","English","120",
                 "40","Easy","53/100","102","Mar 2019","1633",
                 false,true,"Mr. Goswami","Phd. English","Unit Test-Final","2.7","60");
 
-        TestModel testModel2 = new TestModel("When the Earth Shook!","Evs","40",
+        TestModel testModel2 = new TestModel("When the Earth Shook!","Physics","40",
+                "60","Medium","12/100","10","Jul 2019","8353",
+                true,false,"Mr. Narayan","Phd. Physics","Unit Test-Final","2","30");
+
+        TestModel testModel3 = new TestModel("Shapes and Angles","Mathematics","40",
+                "30","Hard","88/100","219","Jan 2020","2093",
+                true,true,"Mr. Sharan","Phd. Mathematics","Unit Test-Final","4.3","100");
+
+        TestModel testModel4 = new TestModel("Reading Comprehension","English","120",
+                "40","Easy","53/100","102","Mar 2019","1633",
+                false,true,"Mr. Goswami","Phd. English","Unit Test-Final","2.7","60");
+
+        TestModel testModel5 = new TestModel("When the Earth Shook!","Evs","40",
                 "60","Medium","12/100","10","Jul 2019","8353",
                 true,false,"Mr. Narayan","Phd. Evs","Unit Test-Final","2","30");
 
         testList.add(testModel);
         testList.add(testModel1);
         testList.add(testModel2);
+        testList.add(testModel3);
+        testList.add(testModel4);
+        testList.add(testModel5);
 
-        TestAdapter testAdapter = new TestAdapter(new MyTestFragment(), testList,this);
+
+        testAdapter = new TestAdapter(new MyTestFragment(), testList,this);
         mBinding.testListRecyclerView.setHasFixedSize(true);
         mBinding.testListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mBinding.testListRecyclerView.setAdapter(testAdapter);
+    }
+
+    private void prepareSubjectChips() {
+        List subjectList = new ArrayList();
+        subjectList.add("All");
+        subjectList.add("Physics");
+        subjectList.add("Mathematics");
+        subjectList.add("Chemistry");
+        subjectList.add("English");
+        subjectList.add("Networking");
+        subjectList.add("DBMS");
+        subjectList.add("Engineering Drawing");
+
+
+        mBinding.subjectsChipGrp.removeAllViews();
+        for (int i = 0; i < subjectList.size(); i++) {
+            Chip chip = (Chip) LayoutInflater.from(mBinding.subjectsChipGrp.getContext()).inflate(R.layout.chip_layout, mBinding.subjectsChipGrp, false);
+            chip.setText(subjectList.get(i).toString());
+            chip.setTag("Subjects");
+            chip.setId(i);
+            if(i==0){
+                chip.setChecked(true);
+            }
+            chip.setClickable(true);
+            chip.setCheckable(true);
+            mBinding.subjectsChipGrp.addView(chip);
+        }
+    }
+    private void setCheckedChip(ChipGroup chipGroup) {
+        for (int i = 0; i < chipGroup.getChildCount(); i++) {
+            Chip chip = (Chip) chipGroup.getChildAt(i);
+            if (chip.isChecked()) {
+                chip.setTextColor(Color.WHITE);
+            } else {
+                chip.setTextColor(Color.BLACK);
+            }
+        }
     }
 
     @Override
@@ -99,5 +215,46 @@ public class MyTestFragment extends BaseFragment implements TestAdapter.TestClic
     @Override
     public void onFavouriteClick(TestModel testModel) {
         Toast.makeText(getActivity(), "Added to favourite list", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        final List<TestModel> filteredModelList = filter(testList, newText);
+        testAdapter.setSearchResult(filteredModelList);
+        return true;
+    }
+
+    private List<TestModel> filter(List<TestModel> models, String query) {
+        query = query.toLowerCase();
+        final List<TestModel> filteredModelList = new ArrayList<>();
+        for (TestModel model : models) {
+            String testName = model.getName().toLowerCase();
+            if (testName.contains(query)) {
+                filteredModelList.add(model);
+            }
+        }
+        return filteredModelList;
+    }
+
+    private List<TestModel> filterBySubject(List<TestModel> models, String subject) {
+        subject = subject.toLowerCase();
+        List<TestModel> filteredModelList = new ArrayList<>();
+        if(!subject.equalsIgnoreCase("All")){
+            for (TestModel model : models) {
+                String testSubject = model.getSubject().toLowerCase();
+                if (testSubject.contains(subject)) {
+                    filteredModelList.add(model);
+                }
+            }
+        }else{
+            filteredModelList = models;
+        }
+
+        return filteredModelList;
     }
 }
