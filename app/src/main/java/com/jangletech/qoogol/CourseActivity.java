@@ -1,18 +1,5 @@
 package com.jangletech.qoogol;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.ViewCompat;
-import androidx.databinding.DataBindingUtil;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.viewpager.widget.ViewPager;
-
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,18 +7,27 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
 import com.jangletech.qoogol.Test.TestFragment;
 import com.jangletech.qoogol.databinding.ActivityCourseBinding;
 import com.jangletech.qoogol.listener.QueViewClick;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class CourseActivity extends AppCompatActivity{
 
     DrawerLayout drawerLayout;
-    Toolbar toolbar;
     ActionBarDrawerToggle actionBarDrawerToggle;
     ActivityCourseBinding activityCourseBinding;
     ViewPager viewPager;
@@ -58,7 +54,7 @@ public class CourseActivity extends AppCompatActivity{
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
-        /*resulttabs.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        resulttabs.setOnTabSelectedListener(new TabLayout.BaseOnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 position = tab.getPosition();
@@ -76,7 +72,6 @@ public class CourseActivity extends AppCompatActivity{
             public void onTabReselected(TabLayout.Tab tab) {
             }
         });
-*/
         prev.setOnClickListener(v ->
                viewPager.setCurrentItem(resulttabs.getSelectedTabPosition() - 1, true));
 
@@ -166,16 +161,24 @@ public class CourseActivity extends AppCompatActivity{
 
     private void setupViewPager(ViewPager viewPager) {
         TabsPagerAdapter adapter = new TabsPagerAdapter(getSupportFragmentManager());
-        for (int i = 0; i < 10; i++) {
-            testFragment = new TestFragment();
-            adapter.addFragment(testFragment, "" + (i + 1));
-            viewPager.setAdapter(adapter);
+        List<String> questTypeList = new ArrayList();
+        for (int i = 0; i <100 ; i++) {
+            if(i % 2 == 0){
+                questTypeList.add("SCQ");
+            }else{
+                questTypeList.add("MCQ");
+            }
         }
+
+        for (int i = 0; i < 100; i++) {
+            adapter.addFragment(new TestFragment(questTypeList.get(i)), "" + (i + 1));
+        }
+        viewPager.setAdapter(adapter);
     }
 
 
 
-    public class TabsPagerAdapter extends FragmentPagerAdapter {
+    public class TabsPagerAdapter extends FragmentStatePagerAdapter {
         private final List<TestFragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
 
@@ -212,11 +215,6 @@ public class CourseActivity extends AppCompatActivity{
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // it will not work for right to left navigation drawer
-/*        if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }*/
-        // so we have to open and close the navigation drawer ourselves
         if(item.getItemId() == android.R.id.home) {
             if(drawerLayout.isDrawerOpen(Gravity.LEFT)) {
                 drawerLayout.closeDrawer(Gravity.LEFT);

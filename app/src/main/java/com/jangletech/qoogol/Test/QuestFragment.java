@@ -52,7 +52,7 @@ public class QuestFragment extends Fragment {
     private void setupViewPager(ViewPager viewPager){
         TabsPagerAdapter adapter = new TabsPagerAdapter(getFragmentManager());
         for (int i = 0; i <100 ; i++) {
-            adapter.addFragment(new TestFragment(),""+(i+1));
+            adapter.addFragment(new TestFragment(""),""+(i+1));
             viewPager.setAdapter(adapter);
         }
     }

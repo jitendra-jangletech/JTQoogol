@@ -98,7 +98,7 @@ public class CourseFragment extends BaseFragment {
     private void setupViewPager(ViewPager viewPager) {
         TabsPagerAdapter adapter = new TabsPagerAdapter(getFragmentManager());
         for (int i = 0; i < 50; i++) {
-            adapter.addFragment(new TestFragment(), "" + (i + 1));
+            adapter.addFragment(new TestFragment(""), "" + (i + 1));
             viewPager.setAdapter(adapter);
         }
     }

@@ -42,7 +42,6 @@
                     android:textColor="@color/grey"
                     android:textStyle="bold" />
 
-
                 <ImageView
                     android:id="@+id/img_save"
                     android:layout_width="wrap_content"
