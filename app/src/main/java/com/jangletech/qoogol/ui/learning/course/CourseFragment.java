@@ -31,8 +31,6 @@ public class CourseFragment extends BaseFragment {
     private static final String TAG = "CourseFragment";
     private CourseViewModel mViewModel;
     private FragmentCourseBinding fragmentCourseBinding;
-    public static int selectedPos;
-    int position;
 
 
     public static CourseFragment newInstance() {
@@ -79,7 +77,6 @@ public class CourseFragment extends BaseFragment {
             setCorrectView();
             setQuestNoView();
         });
-
 
         fragmentCourseBinding.btnPrevious.setOnClickListener(v ->
                 fragmentCourseBinding.viewpager.setCurrentItem(fragmentCourseBinding.resultTabs.getSelectedTabPosition() - 1, true));
