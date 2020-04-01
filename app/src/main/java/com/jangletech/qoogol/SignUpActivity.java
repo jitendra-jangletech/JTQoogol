@@ -82,6 +82,7 @@ public class SignUpActivity extends BaseActivity
     SignUpRequestDto signUpRequestDto;
     ApiInterface apiService = ApiClient.getInstance().getApi();
     private static final String TAG = "SignUpActivity";
+
     boolean isValid = true;
 
     @Override

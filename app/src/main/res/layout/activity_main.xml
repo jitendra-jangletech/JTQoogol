@@ -49,15 +49,15 @@
                         android:drawableLeft="@drawable/ic_learning"
                         android:text="@string/learning" />
 
-                    <TextView
-                        android:id="@+id/nav_course"
-                        style="@style/sub_menu_item_style"
-                        android:text="@string/course" />
+<!--                    <TextView-->
+<!--                        android:id="@+id/nav_course"-->
+<!--                        style="@style/sub_menu_item_style"-->
+<!--                        android:text="@string/course" />-->
 
-                    <TextView
-                        android:id="@+id/nav_exam"
-                        style="@style/sub_menu_item_style"
-                        android:text="@string/exam" />
+<!--                    <TextView-->
+<!--                        android:id="@+id/nav_exam"-->
+<!--                        style="@style/sub_menu_item_style"-->
+<!--                        android:text="@string/exam" />-->
 
 
                     <TextView

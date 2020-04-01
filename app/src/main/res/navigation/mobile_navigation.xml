@@ -13,6 +13,26 @@
     </fragment>
 
     //Learning Section Fragments
+
+    <fragment
+        android:id="@+id/nav_learning"
+        android:name="com.jangletech.qoogol.ui.learning.LearningFragment"
+        android:label="@string/menu_learning"
+        app:enterAnim="@anim/enter_from_left"
+        tools:layout="@layout/learning_fragment" >
+        <action
+            android:id="@+id/action_nav_learning_to_nav_learning_details"
+            app:destination="@id/nav_learning_details" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_learning_details"
+        android:name="com.jangletech.qoogol.ui.learning.LearningDetailsFragment"
+        android:label="@string/menu_learning_details"
+        app:enterAnim="@anim/enter_from_left"
+        tools:layout="@layout/fragment_learning_details" >
+    </fragment>
+
     <fragment
         android:id="@+id/nav_course"
         android:name="com.jangletech.qoogol.ui.learning.course.CourseFragment"

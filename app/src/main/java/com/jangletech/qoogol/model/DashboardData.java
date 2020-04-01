@@ -4,6 +4,16 @@ package com.jangletech.qoogol.model;
  * Created by Pritali on 3/9/2020.
  */
 public class DashboardData {
+
+    private String answers;
+    private String questions;
+    private String tests;
+
+    private String avg_user;
+    private String feed_tests;
+    private String course;
+    private String exam;
+
     private String favQA;
 
     private String creditPoints;
@@ -134,6 +144,62 @@ public class DashboardData {
     public void setFriends (String friends)
     {
         this.friends = friends;
+    }
+
+    public String getAnswers() {
+        return answers;
+    }
+
+    public void setAnswers(String answers) {
+        this.answers = answers;
+    }
+
+    public String getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(String questions) {
+        this.questions = questions;
+    }
+
+    public String getTests() {
+        return tests;
+    }
+
+    public void setTests(String tests) {
+        this.tests = tests;
+    }
+
+    public String getAvg_user() {
+        return avg_user;
+    }
+
+    public void setAvg_user(String avg_user) {
+        this.avg_user = avg_user;
+    }
+
+    public String getFeed_tests() {
+        return feed_tests;
+    }
+
+    public void setFeed_tests(String feed_tests) {
+        this.feed_tests = feed_tests;
+    }
+
+    public String getCourse() {
+        return course;
+    }
+
+    public void setCourse(String course) {
+        this.course = course;
+    }
+
+    public String getExam() {
+        return exam;
+    }
+
+    public void setExam(String exam) {
+        this.exam = exam;
     }
 
     @Override

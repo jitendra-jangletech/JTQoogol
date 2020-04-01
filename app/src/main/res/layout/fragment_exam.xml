@@ -12,13 +12,13 @@
         android:text="Formula one: from xml with MathJax"
         android:textStyle="bold" />
 
-    <io.github.kexanie.library.MathView
+    <io.github.kexanie.library.MathViewm
         android:id="@+id/formula_one"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         auto:engine="MathJax"
         auto:text="When \\(a \\ne 0\\), there are two solutions to \\(ax^2 + bx + c = 0\\)
-        and they are $$x = {-b \\pm \\sqrt{b^2-4ac} \\over 2a}.$$"></io.github.kexanie.library.MathView>
+        and they are $$x = {-b \\pm \\sqrt{b^2-4ac} \\over 2a}.$$"></io.github.kexanie.library.MathViewm>
 
     <TextView
         android:layout_width="match_parent"
@@ -40,10 +40,10 @@
         auto:text="$$x ={-x \\over y}.$$"></io.github.kexanie.library.MathView>
 
     <io.github.kexanie.library.MathView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        auto:engine="KaTeX"
-        auto:text="$$y-y_0=m(x-x_0)$$"></io.github.kexanie.library.MathView>
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    auto:engine="KaTeX"
+    auto:text="$$y-y_0=m(x-x_0)$$"></io.github.kexanie.library.MathView>
 
     <io.github.kexanie.library.MathView
         android:layout_width="match_parent"

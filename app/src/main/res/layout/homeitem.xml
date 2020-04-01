@@ -5,9 +5,9 @@
             android:layout_width="wrap_content"
             app:cardCornerRadius="@dimen/_20sdp"
             android:id="@+id/container"
-            android:minWidth="@dimen/_200sdp"
-            android:layout_marginRight="@dimen/_20sdp"
-            android:minHeight="@dimen/_150sdp"
+            android:minWidth="@dimen/_180sdp"
+            android:layout_marginRight="@dimen/_15sdp"
+            android:minHeight="@dimen/_240sdp"
             app:cardBackgroundColor="@color/colorBlue"
             app:cardElevation="@dimen/_5sdp"
             android:layout_height="wrap_content">
@@ -30,6 +30,7 @@
                     android:layout_height="wrap_content">
 
                     <TextView
+                        android:textAlignment="center"
                         android:id="@+id/heading"
                         android:textStyle="bold"
                         app:layout_constraintTop_toTopOf="parent"
@@ -37,7 +38,7 @@
                         app:layout_constraintRight_toRightOf="parent"
                         android:layout_width="wrap_content"
                         android:textColor="@color/colorWhite"
-                        android:textSize="@dimen/_17ssp"
+                        android:textSize="@dimen/_14ssp"
                         android:text="Q &amp; A Log"
                         android:layout_height="wrap_content"/>
 
@@ -51,7 +52,7 @@
                         android:layout_width="wrap_content"
                         android:visibility="visible"
                         android:textColor="@color/colorWhite"
-                        android:textSize="@dimen/_17ssp"
+                        android:textSize="@dimen/_14ssp"
                         android:layout_height="wrap_content"/>
 
                     <TextView
@@ -62,7 +63,7 @@
                         android:layout_width="wrap_content"
                         android:textColor="@color/colorWhite"
                         android:visibility="visible"
-                        android:textSize="@dimen/_14ssp"
+                        android:textSize="@dimen/_11ssp"
                         android:layout_height="wrap_content"/>
 
 
@@ -76,7 +77,7 @@
                         android:textColor="@color/colorWhite"
                         android:textStyle="bold"
                         android:visibility="visible"
-                        android:textSize="@dimen/_17ssp"
+                        android:textSize="@dimen/_14ssp"
                         android:layout_height="wrap_content"/>
 
                     <TextView
@@ -87,7 +88,7 @@
                         android:layout_width="wrap_content"
                         android:textColor="@color/colorWhite"
                         android:visibility="visible"
-                        android:textSize="@dimen/_14ssp"
+                        android:textSize="@dimen/_11ssp"
                         android:layout_height="wrap_content"/>
 
 
@@ -101,7 +102,7 @@
                         app:layout_constraintRight_toRightOf="parent"
                         android:layout_width="wrap_content"
                         android:textColor="@color/colorWhite"
-                        android:textSize="@dimen/_17ssp"
+                        android:textSize="@dimen/_14ssp"
                         android:layout_height="wrap_content"/>
 
                     <TextView
@@ -112,7 +113,7 @@
                         app:layout_constraintRight_toRightOf="parent"
                         android:layout_width="wrap_content"
                         android:textColor="@color/colorWhite"
-                        android:textSize="@dimen/_14ssp"
+                        android:textSize="@dimen/_11ssp"
                         android:layout_height="wrap_content"/>
 
 
@@ -121,18 +122,7 @@
                         android:id="@+id/item4_count"
                         android:textStyle="bold"
                         android:visibility="visible"
-                        app:layout_constraintTop_toBottomOf="@+id/questions"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        android:layout_width="wrap_content"
-                        android:textColor="@color/colorWhite"
-                        android:textSize="@dimen/_17ssp"
-                        android:layout_height="wrap_content"/>
-
-                    <TextView
-                        android:id="@+id/item4"
-                        android:visibility="visible"
-                        app:layout_constraintTop_toBottomOf="@+id/exams_count"
+                        app:layout_constraintTop_toBottomOf="@+id/exams"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
                         android:layout_width="wrap_content"
@@ -140,11 +130,18 @@
                         android:textSize="@dimen/_14ssp"
                         android:layout_height="wrap_content"/>
 
+                    <TextView
+                        android:id="@+id/item4"
+                        android:visibility="visible"
+                        app:layout_constraintTop_toBottomOf="@+id/item4_count"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        android:layout_width="wrap_content"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="@dimen/_11ssp"
+                        android:layout_height="wrap_content"/>
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
 

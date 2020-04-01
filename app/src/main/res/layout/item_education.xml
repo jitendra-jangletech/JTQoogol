@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
         <variable
@@ -9,298 +10,358 @@
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@color/colorWhite"
         android:elevation="@dimen/_40sdp">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/_8sdp"
-            android:orientation="vertical">
+            android:padding="@dimen/_10sdp"
+            android:layout_height="wrap_content">
 
-            <LinearLayout
+            <ImageView
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:src="@drawable/ic_delete"
+            android:layout_width="wrap_content"
+            android:id="@+id/delete"
+            android:layout_height="wrap_content"/>
+
+
+            <ImageView
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/delete"
+                android:src="@drawable/ic_edit"
+                android:layout_width="wrap_content"
+                android:id="@+id/edit"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/edit"
+                android:id="@+id/course_textview"
+                android:text="Course"
+                android:textSize="@dimen/_12ssp"
+                android:padding="@dimen/_3sdp"
+                android:textColor="@color/colorBlack"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:layout_marginTop="@dimen/_2sdp"
+                app:layout_constraintTop_toBottomOf="@+id/course_textview"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:id="@+id/degree_textview"
+                android:text="Degree"
+                android:textSize="@dimen/_12ssp"
+                android:padding="@dimen/_3sdp"
+                android:textColor="@color/colorBlack"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="2">
+                android:layout_height="wrap_content"/>
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Board"
-                    android:textColor="@color/colorLightGray" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Institute"
-                    android:textColor="@color/sub_menu_item_text_color" />
-
-            </LinearLayout>
-
-            <LinearLayout
+            <TextView
+                android:layout_marginTop="@dimen/_2sdp"
+                app:layout_constraintTop_toBottomOf="@+id/degree_textview"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:id="@+id/date_textview"
+                android:text="Date"
+                android:textSize="@dimen/_12ssp"
+                android:padding="@dimen/_3sdp"
+                android:textColor="@color/colorBlack"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="2">
+                android:layout_height="wrap_content"/>
 
-                <TextView
-                    android:id="@+id/board"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Maharashtra State Board"
-                    android:textColor="@color/colorBlack" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <TextView
-                    android:id="@+id/institute"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Britia School"
-                    android:textColor="@color/colorBlack" />
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:padding="@dimen/_8sdp"-->
+<!--            android:orientation="vertical">-->
 
-            </LinearLayout>
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="horizontal"-->
+<!--                android:weightSum="2">-->
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:orientation="horizontal"
-                android:weightSum="2">
+<!--                <TextView-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:text="Board"-->
+<!--                    android:textColor="@color/colorLightGray" />-->
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Degree"
-                    android:textColor="@color/sub_menu_item_text_color" />
+<!--                <TextView-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:text="Institute"-->
+<!--                    android:textColor="@color/sub_menu_item_text_color" />-->
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Course"
-                    android:textColor="@color/sub_menu_item_text_color" />
+<!--            </LinearLayout>-->
 
-            </LinearLayout>
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="horizontal"-->
+<!--                android:weightSum="2">-->
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="2">
+<!--                <TextView-->
+<!--                    android:id="@+id/board"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:text="Maharashtra State Board"-->
+<!--                    android:textColor="@color/colorBlack" />-->
 
-                <TextView
-                    android:id="@+id/degree"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="SSC"
-                    android:textColor="@color/colorBlack" />
+<!--                <TextView-->
+<!--                    android:id="@+id/institute"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:text="Britia School"-->
+<!--                    android:textColor="@color/colorBlack" />-->
 
-                <TextView
-                    android:id="@+id/course"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="SSC-Eng"
-                    android:textColor="@color/colorBlack" />
+<!--            </LinearLayout>-->
 
-            </LinearLayout>
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="@dimen/_5sdp"-->
+<!--                android:orientation="horizontal"-->
+<!--                android:weightSum="2">-->
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:orientation="horizontal"
-                android:weightSum="2">
+<!--                <TextView-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:text="Degree"-->
+<!--                    android:textColor="@color/sub_menu_item_text_color" />-->
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Class"
-                    android:textColor="@color/sub_menu_item_text_color" />
+<!--                <TextView-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:text="Course"-->
+<!--                    android:textColor="@color/sub_menu_item_text_color" />-->
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Grade"
-                    android:textColor="@color/sub_menu_item_text_color" />
+<!--            </LinearLayout>-->
 
-            </LinearLayout>
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="horizontal"-->
+<!--                android:weightSum="2">-->
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="2">
+<!--                <TextView-->
+<!--                    android:id="@+id/degree"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:text="SSC"-->
+<!--                    android:textColor="@color/colorBlack" />-->
 
-                <TextView
-                    android:id="@+id/cclass"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="6"
-                    android:textColor="@color/colorBlack" />
+<!--                <TextView-->
+<!--                    android:id="@+id/course"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:text="SSC-Eng"-->
+<!--                    android:textColor="@color/colorBlack" />-->
 
-                <TextView
-                    android:id="@+id/grade"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="2"
-                    android:textColor="@color/colorBlack" />
+<!--            </LinearLayout>-->
 
-            </LinearLayout>
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="@dimen/_5sdp"-->
+<!--                android:orientation="horizontal"-->
+<!--                android:weightSum="2">-->
 
+<!--                <TextView-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:text="Class"-->
+<!--                    android:textColor="@color/sub_menu_item_text_color" />-->
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:orientation="horizontal"
-                android:weightSum="2">
+<!--                <TextView-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:text="Grade"-->
+<!--                    android:textColor="@color/sub_menu_item_text_color" />-->
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Start Date"
-                    android:textColor="@color/sub_menu_item_text_color" />
+<!--            </LinearLayout>-->
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="End Date"
-                    android:textColor="@color/sub_menu_item_text_color" />
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="horizontal"-->
+<!--                android:weightSum="2">-->
 
-            </LinearLayout>
+<!--                <TextView-->
+<!--                    android:id="@+id/cclass"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:text="6"-->
+<!--                    android:textColor="@color/colorBlack" />-->
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="2">
+<!--                <TextView-->
+<!--                    android:id="@+id/grade"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:text="2"-->
+<!--                    android:textColor="@color/colorBlack" />-->
 
-                <TextView
-                    android:id="@+id/startDate"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="07-Jul-2007"
-                    android:textColor="@color/colorBlack" />
-
-                <TextView
-                    android:id="@+id/endDate"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="07-Mar-2008"
-                    android:textColor="@color/colorBlack" />
-
-            </LinearLayout>
+<!--            </LinearLayout>-->
 
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:orientation="horizontal"
-                android:weightSum="3">
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="@dimen/_5sdp"-->
+<!--                android:orientation="horizontal"-->
+<!--                android:weightSum="2">-->
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Country"
-                    android:textColor="@color/sub_menu_item_text_color" />
+<!--                <TextView-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:text="Start Date"-->
+<!--                    android:textColor="@color/sub_menu_item_text_color" />-->
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="State"
-                    android:textColor="@color/sub_menu_item_text_color" />
+<!--                <TextView-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:text="End Date"-->
+<!--                    android:textColor="@color/sub_menu_item_text_color" />-->
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="City"
-                    android:textColor="@color/sub_menu_item_text_color" />
+<!--            </LinearLayout>-->
 
-            </LinearLayout>
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="horizontal"-->
+<!--                android:weightSum="2">-->
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="3">
+<!--                <TextView-->
+<!--                    android:id="@+id/startDate"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:text="07-Jul-2007"-->
+<!--                    android:textColor="@color/colorBlack" />-->
 
-                <TextView
-                    android:id="@+id/country"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="India"
-                    android:textColor="@color/colorBlack" />
+<!--                <TextView-->
+<!--                    android:id="@+id/endDate"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:text="07-Mar-2008"-->
+<!--                    android:textColor="@color/colorBlack" />-->
 
-                <TextView
-                    android:id="@+id/state"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Maharashtra"
-                    android:textColor="@color/colorBlack" />
+<!--            </LinearLayout>-->
 
-                <TextView
-                    android:id="@+id/city"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Mumbai"
-                    android:textColor="@color/colorBlack" />
 
-            </LinearLayout>
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="@dimen/_5sdp"-->
+<!--                android:orientation="horizontal"-->
+<!--                android:weightSum="3">-->
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:orientation="horizontal"
-                android:weightSum="3">
+<!--                <TextView-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:text="Country"-->
+<!--                    android:textColor="@color/sub_menu_item_text_color" />-->
 
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="1" />
+<!--                <TextView-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:text="State"-->
+<!--                    android:textColor="@color/sub_menu_item_text_color" />-->
 
-                <Button
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/_5sdp"
-                    android:layout_weight="1"
-                    android:text="Edit"
-                    android:textAllCaps="false" />
+<!--                <TextView-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:text="City"-->
+<!--                    android:textColor="@color/sub_menu_item_text_color" />-->
 
-                <Button
-                    android:id="@+id/delete_edu"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Delete"
-                    android:textAllCaps="false" />
+<!--            </LinearLayout>-->
 
-            </LinearLayout>
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="horizontal"-->
+<!--                android:weightSum="3">-->
 
-        </LinearLayout>
+<!--                <TextView-->
+<!--                    android:id="@+id/country"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:text="India"-->
+<!--                    android:textColor="@color/colorBlack" />-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/state"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:text="Maharashtra"-->
+<!--                    android:textColor="@color/colorBlack" />-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/city"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:text="Mumbai"-->
+<!--                    android:textColor="@color/colorBlack" />-->
+
+<!--            </LinearLayout>-->
+
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="@dimen/_10sdp"-->
+<!--                android:orientation="horizontal"-->
+<!--                android:weightSum="3">-->
+
+<!--                <View-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="0dp"-->
+<!--                    android:layout_weight="1" />-->
+
+<!--                <Button-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginRight="@dimen/_5sdp"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:text="Edit"-->
+<!--                    android:textAllCaps="false" />-->
+
+<!--                <Button-->
+<!--                    android:id="@+id/delete_edu"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:text="Delete"-->
+<!--                    android:textAllCaps="false" />-->
+
+<!--            </LinearLayout>-->
+
+<!--        </LinearLayout>-->
 
     </com.google.android.material.card.MaterialCardView>
 
