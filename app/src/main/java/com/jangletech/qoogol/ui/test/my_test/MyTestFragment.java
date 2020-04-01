@@ -84,9 +84,6 @@ public class MyTestFragment extends BaseFragment implements TestAdapter.TestClic
             case R.id.action_filter:
                 MainActivity.navController.navigate(R.id.nav_test_filter);
                 return true;
-            case R.id.action_search:
-                searchTest();
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -101,11 +98,12 @@ public class MyTestFragment extends BaseFragment implements TestAdapter.TestClic
         prepareSubjectChips();
 
         mBinding.subjectsChipGrp.setOnCheckedChangeListener((chipGroup, id) -> {
-            //showToast("id : " + id);
             Chip chip = ((Chip) chipGroup.getChildAt(chipGroup.getCheckedChipId()));
             if (chip != null) {
                 if (chip.isChecked()) {
                     setCheckedChip(mBinding.subjectsChipGrp);
+                    List<TestModel> filteredModelList = filterBySubject(testList, chip.getText().toString());
+                    testAdapter.setSearchResult(filteredModelList);
                 }
             }
         });
@@ -118,21 +116,37 @@ public class MyTestFragment extends BaseFragment implements TestAdapter.TestClic
         testList = new ArrayList<>();
         testList.clear();
 
-        TestModel testModel = new TestModel("Shapes and Angles","Maths","40",
+        TestModel testModel = new TestModel("Shapes and Angles","Mathematics","40",
                 "30","Hard","88/100","219","Jan 2020","2093",
-                true,true,"Mr. Sharan","Phd. Maths","Unit Test-Final","4.3","100");
+                true,true,"Mr. Sharan","Phd. Mathematics","Unit Test-Final","4.3","100");
 
         TestModel testModel1 = new TestModel("Reading Comprehension","English","120",
                 "40","Easy","53/100","102","Mar 2019","1633",
                 false,true,"Mr. Goswami","Phd. English","Unit Test-Final","2.7","60");
 
-        TestModel testModel2 = new TestModel("When the Earth Shook!","Evs","40",
+        TestModel testModel2 = new TestModel("When the Earth Shook!","Physics","40",
+                "60","Medium","12/100","10","Jul 2019","8353",
+                true,false,"Mr. Narayan","Phd. Physics","Unit Test-Final","2","30");
+
+        TestModel testModel3 = new TestModel("Shapes and Angles","Mathematics","40",
+                "30","Hard","88/100","219","Jan 2020","2093",
+                true,true,"Mr. Sharan","Phd. Mathematics","Unit Test-Final","4.3","100");
+
+        TestModel testModel4 = new TestModel("Reading Comprehension","English","120",
+                "40","Easy","53/100","102","Mar 2019","1633",
+                false,true,"Mr. Goswami","Phd. English","Unit Test-Final","2.7","60");
+
+        TestModel testModel5 = new TestModel("When the Earth Shook!","Evs","40",
                 "60","Medium","12/100","10","Jul 2019","8353",
                 true,false,"Mr. Narayan","Phd. Evs","Unit Test-Final","2","30");
 
         testList.add(testModel);
         testList.add(testModel1);
         testList.add(testModel2);
+        testList.add(testModel3);
+        testList.add(testModel4);
+        testList.add(testModel5);
+
 
         testAdapter = new TestAdapter(new MyTestFragment(), testList,this);
         mBinding.testListRecyclerView.setHasFixedSize(true);
@@ -177,10 +191,6 @@ public class MyTestFragment extends BaseFragment implements TestAdapter.TestClic
         }
     }
 
-    private void searchTest(){
-        Toast.makeText(getActivity(), "Search For The Test.", Toast.LENGTH_SHORT).show();
-    }
-
     @Override
     public void onTestItemClick(TestModel testModel) {
         Toast.makeText(getActivity(), ""+testModel.getName(), Toast.LENGTH_SHORT).show();
@@ -223,11 +233,28 @@ public class MyTestFragment extends BaseFragment implements TestAdapter.TestClic
         query = query.toLowerCase();
         final List<TestModel> filteredModelList = new ArrayList<>();
         for (TestModel model : models) {
-            final String text = model.getName().toLowerCase();
-            if (text.contains(query)) {
+            String testName = model.getName().toLowerCase();
+            if (testName.contains(query)) {
                 filteredModelList.add(model);
             }
         }
+        return filteredModelList;
+    }
+
+    private List<TestModel> filterBySubject(List<TestModel> models, String subject) {
+        subject = subject.toLowerCase();
+        List<TestModel> filteredModelList = new ArrayList<>();
+        if(!subject.equalsIgnoreCase("All")){
+            for (TestModel model : models) {
+                String testSubject = model.getSubject().toLowerCase();
+                if (testSubject.contains(subject)) {
+                    filteredModelList.add(model);
+                }
+            }
+        }else{
+            filteredModelList = models;
+        }
+
         return filteredModelList;
     }
 }
