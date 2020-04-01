@@ -109,4 +109,9 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.ViewHolder> {
             this.itemBinding = itemView;
         }
     }
+
+    public void setSearchResult(List<TestModel> result) {
+        testModelList = result;
+        notifyDataSetChanged();
+    }
 }

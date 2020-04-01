@@ -73,7 +73,8 @@ import static com.jangletech.qoogol.util.Constant.password;
 import static com.jangletech.qoogol.util.Constant.state;
 import static com.jangletech.qoogol.util.Constant.state_id;
 
-public class SignUpActivity extends BaseActivity implements View.OnClickListener, UniversalDialog.DialogButtonClickListener {
+public class SignUpActivity extends BaseActivity
+        implements View.OnClickListener, UniversalDialog.DialogButtonClickListener {
 
     private ActivitySignupBinding mBinding;
     private SignUpViewModel mViewModel;

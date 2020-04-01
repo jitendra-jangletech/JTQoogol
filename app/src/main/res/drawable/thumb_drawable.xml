@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~
+  ~ /*
+  ~  * /////////////////////////////////////////////////////////////////////////////////////////////////
+  ~  * //
+  ~  * //            Copyright (c) 2020. JangleTech Systems Private Limited, Thane, India
+  ~  * //
+  ~  * /////////////////////////////////////////////////////////////////////////////////////////////////
+  ~  */
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="51.4dp"
+    android:height="48dp"
+    android:tint="?attr/colorPrimaryDark"
+    android:viewportWidth="51.4"
+    android:viewportHeight="48">
+    <path
+        android:fillColor="#ffc107"
+        android:pathData="M25.7,24m-20,0a20,20 0,1 1,40 0a20,20 0,1 1,-40 0" />
+</vector>

@@ -54,13 +54,11 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
             if (chip != null) {
                 if (chip.isChecked()) {
                     setCheckedChip(mBinding.boardChipGrp);
-                    //showToast("Selected : " + chip.getText().toString());
                 }
             }
         });
 
         mBinding.classChipGrp.setOnCheckedChangeListener((chipGroup, id) -> {
-            //showToast("id : " + id);
             Chip chip = ((Chip) chipGroup.getChildAt(chipGroup.getCheckedChipId()));
             if (chip != null) {
                 if (chip.isChecked()) {
@@ -75,12 +73,6 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
                         mBinding.layoutSubjects.setVisibility(View.VISIBLE);
                         mBinding.layoutExams.setVisibility(View.VISIBLE);
                     }
-
-                    /*if(!chip.getText().toString().equals("11") ||
-                            !chip.getText().toString().equals("12")
-                            || !chip.getText().toString().equals("Degree")){
-                        mBinding.layoutSubjects.setVisibility(View.VISIBLE);
-                    }*/
 
                     if (chip.getText().toString().contains("Degree")) {
                         mBinding.layoutStream.setVisibility(View.GONE);
@@ -152,28 +144,7 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
             }
         });
 
-        /*mBinding.subjectsChipGrp.setOnCheckedChangeListener((chipGroup, id) -> {
-            //showToast("id : " + id);
-            Chip chip = ((Chip) chipGroup.getChildAt(chipGroup.getCheckedChipId()));
-            if (chip != null) {
-                *//*if (chip.isChecked()) {
-                    setSelectedSubjectsChips(chip);
-                    showToast("Selected : " +chip.getId()+","+ chip.getText().toString());
-                }*//*
-                setSelectedSubjectsChips(chip);
-            }
-        });
 
-        mBinding.examsChipGrp.setOnCheckedChangeListener((chipGroup, id) -> {
-            //showToast("id : " + id);
-            Chip chip = ((Chip) chipGroup.getChildAt(chipGroup.getCheckedChipId()));
-            if (chip != null) {
-                *//*if (chip.isChecked()) {
-                    setSelectedExamChips(chip);
-                }*//*
-                setSelectedExamChips(chip);
-            }
-        });*/
 
 
         List boardList = new ArrayList();
