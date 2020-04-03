@@ -6,15 +6,15 @@
 6
 7    <uses-sdk
 8        android:minSdkVersion="19"
-8-->D:\Bakup\Android Projects\JTQoogol\linkedin-sdk\src\main\AndroidManifest.xml
+8-->E:\Project\JTQoogol\JTQoogol\linkedin-sdk\src\main\AndroidManifest.xml
 9        android:targetSdkVersion="29" />
-9-->D:\Bakup\Android Projects\JTQoogol\linkedin-sdk\src\main\AndroidManifest.xml
+9-->E:\Project\JTQoogol\JTQoogol\linkedin-sdk\src\main\AndroidManifest.xml
 10
 11    <uses-permission android:name="android.permission.INTERNET" />
-11-->D:\Bakup\Android Projects\JTQoogol\linkedin-sdk\src\main\AndroidManifest.xml:6:5-66
-11-->D:\Bakup\Android Projects\JTQoogol\linkedin-sdk\src\main\AndroidManifest.xml:6:22-64
+11-->E:\Project\JTQoogol\JTQoogol\linkedin-sdk\src\main\AndroidManifest.xml:6:5-66
+11-->E:\Project\JTQoogol\JTQoogol\linkedin-sdk\src\main\AndroidManifest.xml:6:22-64
 12
 13    <application />
-13-->D:\Bakup\Android Projects\JTQoogol\linkedin-sdk\src\main\AndroidManifest.xml:5:5-20
+13-->E:\Project\JTQoogol\JTQoogol\linkedin-sdk\src\main\AndroidManifest.xml:5:5-20
 14
 15</manifest>
