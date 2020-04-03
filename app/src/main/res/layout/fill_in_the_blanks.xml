@@ -9,7 +9,6 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:padding="@dimen/_10sdp"
         android:elevation="@dimen/_4sdp"
         android:id="@+id/mcq1_layout"
         android:background="@drawable/grey_border"
@@ -29,7 +28,6 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:padding="@dimen/_10sdp"
         android:elevation="@dimen/_4sdp"
         android:id="@+id/mcq2_layout"
         android:layout_marginTop="@dimen/_10sdp"
@@ -50,7 +48,6 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:padding="@dimen/_10sdp"
         android:elevation="@dimen/_4sdp"
         android:id="@+id/mcq3_layout"
         android:layout_marginTop="@dimen/_10sdp"
@@ -71,7 +68,6 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:padding="@dimen/_10sdp"
         android:elevation="@dimen/_4sdp"
         android:id="@+id/mcq4_layout"
         android:layout_marginTop="@dimen/_10sdp"
