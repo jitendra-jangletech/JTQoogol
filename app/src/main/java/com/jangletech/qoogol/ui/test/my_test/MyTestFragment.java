@@ -103,7 +103,14 @@ public class MyTestFragment extends BaseFragment implements TestAdapter.TestClic
                 if (chip.isChecked()) {
                     setCheckedChip(mBinding.subjectsChipGrp);
                     List<TestModel> filteredModelList = filterBySubject(testList, chip.getText().toString());
-                    testAdapter.setSearchResult(filteredModelList);
+                    if(filteredModelList.size()>0){
+                        mBinding.tvNoTest.setVisibility(View.GONE);
+                        testAdapter.setSearchResult(filteredModelList);
+                    }else{
+                        testAdapter.setSearchResult(filteredModelList);
+                        mBinding.tvNoTest.setVisibility(View.VISIBLE);
+                    }
+
                 }
             }
         });
@@ -146,7 +153,6 @@ public class MyTestFragment extends BaseFragment implements TestAdapter.TestClic
         testList.add(testModel3);
         testList.add(testModel4);
         testList.add(testModel5);
-
 
         testAdapter = new TestAdapter(new MyTestFragment(), testList,this);
         mBinding.testListRecyclerView.setHasFixedSize(true);

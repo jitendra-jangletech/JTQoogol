@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".Test.QuestionsActivity">
+    android:orientation="vertical">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
@@ -17,11 +15,11 @@
             android:id="@+id/result_tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:tabTextAppearance="@style/CustomTextAppearanceTab"
             android:background="@color/colorPrimary"
             app:tabIndicatorColor="@color/colorWhite"
             app:tabMode="scrollable"
             app:tabSelectedTextColor="@color/colorLightGrey"
+            app:tabTextAppearance="@style/CustomTextAppearanceTab"
             app:tabTextColor="@color/colorWhite" />
     </com.google.android.material.appbar.AppBarLayout>
 
