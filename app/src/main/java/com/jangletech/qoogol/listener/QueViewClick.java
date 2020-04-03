@@ -6,5 +6,5 @@ package com.jangletech.qoogol.listener;
 public interface QueViewClick {
     void getQueViewClick(String strQuestTag, int position);
     void onTabClickClick(int queNo,String strQuestTag, int position);
-
+    void onTabPositionChange(int position);
 }

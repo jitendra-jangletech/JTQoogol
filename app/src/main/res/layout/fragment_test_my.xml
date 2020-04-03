@@ -5,7 +5,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginBottom="@dimen/_20sdp"
         android:background="@color/colorLightGray">
 
@@ -26,12 +26,21 @@
 
         </HorizontalScrollView>
 
+        <TextView
+            android:visibility="gone"
+            android:textSize="@dimen/_15ssp"
+            android:textColor="@color/colorBlack"
+            android:layout_centerInParent="true"
+            android:text="No Tests Found."
+            android:id="@+id/tvNoTest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:layout_below="@+id/horizontalScrollView"
             android:id="@+id/testListRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             tools:listitem="@layout/test_item" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton

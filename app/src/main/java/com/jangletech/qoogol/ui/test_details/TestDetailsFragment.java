@@ -47,11 +47,6 @@ public class TestDetailsFragment extends Fragment {
     }
 
     public void setLeastScoredQuestionList(){
-
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mBinding.leastScoredQuestRecyclerView.getContext(),
-                new LinearLayoutManager(getContext()).getOrientation());
-        mBinding.leastScoredQuestRecyclerView.addItemDecoration(dividerItemDecoration);
-
         List<Question> questionList = new ArrayList<>();
         questionList.clear();
         Question question = new Question(1,"which country owns Alaska Region?","Scored (5/40)");

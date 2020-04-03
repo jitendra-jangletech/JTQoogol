@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -47,8 +46,6 @@ public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.ClassViewHol
             View view = LayoutInflater.from(context).inflate(R.layout.item_stream, viewGroup, false);
             return new ClassViewHolder(view);
         }
-
-
     }
 
     @Override
