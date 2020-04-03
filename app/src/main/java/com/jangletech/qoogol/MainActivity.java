@@ -2,9 +2,7 @@ package com.jangletech.qoogol;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
 
-import android.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import androidx.navigation.NavController;

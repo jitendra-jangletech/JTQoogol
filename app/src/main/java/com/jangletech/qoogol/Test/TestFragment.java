@@ -5,12 +5,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
+
 import com.jangletech.qoogol.CourseActivity;
 import com.jangletech.qoogol.R;
+import com.jangletech.qoogol.databinding.LayoutMultiChoiceQuestBinding;
+import com.jangletech.qoogol.databinding.LayoutSingleChoiceQuestBinding;
 import com.jangletech.qoogol.databinding.TestFragmentBinding;
 import com.jangletech.qoogol.listener.QueViewClick;
 import com.jangletech.qoogol.ui.learning.course.CourseFragment;
@@ -19,17 +23,26 @@ public class TestFragment extends CourseFragment implements QueViewClick {
 
     private TestViewModel mViewModel;
     private TestFragmentBinding testFragmentBinding;
+    private LayoutMultiChoiceQuestBinding layoutMultiChoiceQuestBinding;
+    private LayoutSingleChoiceQuestBinding layoutSingleChoiceQuestBinding;
+    private
+    String strQuestType = "";
 
-    public static TestFragment newInstance() {
-        return new TestFragment();
+    public TestFragment(String type) {
+        this.strQuestType = type;
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         ((CourseActivity) getActivity()).setListenerInstance(this);
-        testFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.test_fragment, container, false);
-        return testFragmentBinding.getRoot();
+        if (strQuestType.equalsIgnoreCase("MCQ")) {
+            layoutMultiChoiceQuestBinding = DataBindingUtil.inflate(inflater, R.layout.layout_multi_choice_quest, container, false);
+            return layoutMultiChoiceQuestBinding.getRoot();
+        } else {
+            layoutSingleChoiceQuestBinding = DataBindingUtil.inflate(inflater, R.layout.layout_single_choice_quest, container, false);
+            return layoutSingleChoiceQuestBinding.getRoot();
+        }
     }
 
     @Override
@@ -38,7 +51,7 @@ public class TestFragment extends CourseFragment implements QueViewClick {
         mViewModel = ViewModelProviders.of(this).get(TestViewModel.class);
 
         QueViewClick queViewClick = this;
-        testFragmentBinding.incorrect.setOnClickListener(v -> {
+        /*testFragmentBinding.incorrect.setOnClickListener(v -> {
             Toast.makeText(getActivity(), "Clicked", Toast.LENGTH_SHORT).show();
             ((CourseActivity) getActivity()).setInCorrectView();
             ((CourseActivity) getActivity()).getQuestNo(queViewClick);
@@ -47,7 +60,7 @@ public class TestFragment extends CourseFragment implements QueViewClick {
         testFragmentBinding.correct.setOnClickListener(v -> {
             ((CourseActivity) getActivity()).setCorrectView();
             ((CourseActivity) getActivity()).getQuestNo(queViewClick);
-        });
+        });*/
     }
 
 
@@ -71,12 +84,12 @@ public class TestFragment extends CourseFragment implements QueViewClick {
 
     @Override
     public void getQueViewClick(String strQuestTag, int position) {
-        setQue(strQuestTag, position);
+        //setQue(strQuestTag, position);
     }
 
     @Override
     public void onTabClickClick(int queNo, String strQuestTag, int position) {
-        testFragmentBinding.tvQuestNo.setText("" + queNo);
-        setQue(strQuestTag, position);
+        //testFragmentBinding.tvQuestNo.setText("" + queNo);
+        //setQue(strQuestTag, position);
     }
 }

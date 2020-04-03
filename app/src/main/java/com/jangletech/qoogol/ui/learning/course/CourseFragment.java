@@ -31,8 +31,6 @@ public class CourseFragment extends BaseFragment {
     private static final String TAG = "CourseFragment";
     private CourseViewModel mViewModel;
     private FragmentCourseBinding fragmentCourseBinding;
-    public static int selectedPos;
-    int position;
 
 
     public static CourseFragment newInstance() {
@@ -80,7 +78,6 @@ public class CourseFragment extends BaseFragment {
             setQuestNoView();
         });
 
-
         fragmentCourseBinding.btnPrevious.setOnClickListener(v ->
                 fragmentCourseBinding.viewpager.setCurrentItem(fragmentCourseBinding.resultTabs.getSelectedTabPosition() - 1, true));
 
@@ -98,7 +95,7 @@ public class CourseFragment extends BaseFragment {
     private void setupViewPager(ViewPager viewPager) {
         TabsPagerAdapter adapter = new TabsPagerAdapter(getFragmentManager());
         for (int i = 0; i < 50; i++) {
-            adapter.addFragment(new TestFragment(), "" + (i + 1));
+            adapter.addFragment(new TestFragment(""), "" + (i + 1));
             viewPager.setAdapter(adapter);
         }
     }
