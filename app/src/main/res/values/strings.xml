@@ -208,6 +208,7 @@
     <string name="qoogol_version_1_0">Qoogol Version 1.0</string>
     <string name="menu_learning">Learning</string>
     <string name="menu_learning_details">Question Details</string>
+    <string name="comments">Comments</string>
     <string name="menu_test">Test</string>
     <string name="menu_questions">Questions</string>
     <string name="personal_info_tab">Personal</string>

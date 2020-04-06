@@ -23,6 +23,9 @@
         <action
             android:id="@+id/action_nav_learning_to_nav_learning_details"
             app:destination="@id/nav_learning_details" />
+        <action
+            android:id="@+id/action_nav_learning_to_nav_comments"
+            app:destination="@id/nav_comments" />
     </fragment>
 
     <fragment
@@ -31,6 +34,14 @@
         android:label="@string/menu_learning_details"
         app:enterAnim="@anim/enter_from_left"
         tools:layout="@layout/fragment_learning_details" >
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_comments"
+        android:name="com.jangletech.qoogol.ui.learning.CommentFragment"
+        android:label="@string/comments"
+        app:enterAnim="@anim/enter_from_left"
+        tools:layout="@layout/comment_view" >
     </fragment>
 
     <fragment
