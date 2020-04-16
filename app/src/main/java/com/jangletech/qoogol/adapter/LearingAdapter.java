@@ -1,22 +1,38 @@
 package com.jangletech.qoogol.adapter;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ClipData;
 import android.graphics.Color;
+import android.os.Bundle;
+import android.view.DragEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.jangletech.qoogol.MainActivity;
 import com.jangletech.qoogol.R;
-import com.jangletech.qoogol.databinding.CommentItemBinding;
 import com.jangletech.qoogol.databinding.LearningItemBinding;
 import com.jangletech.qoogol.model.LearningQuestions;
+import com.jangletech.qoogol.ui.learning.SlideshowDialogFragment;
 
+import java.io.Serializable;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Pritali on 3/18/2020.
@@ -45,11 +61,22 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
     }
 
     @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
+    @Override
     public void onBindViewHolder(@NonNull LearingAdapter.ViewHolder holder, int position) {
         LearningQuestions learningQuestions = learningQuestionsList.get(position);
+        hideLayouts();
 
-        if (learningQuestions.getAttchment() != null && learningQuestions.getAttchment() != "")
-            learningItemBinding.attachment.setVisibility(View.VISIBLE);
+
+
 
         if (learningQuestions.getQuestiondesc() == null || learningQuestions.getQuestiondesc() == "")
             learningItemBinding.questiondescTextview.setVisibility(View.GONE);
@@ -77,6 +104,7 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
         learningItemBinding.solutionOption.setText("Answer : " + learningQuestions.getAnswer());
         learningItemBinding.solutionDesc.setText(learningQuestions.getAnswerDesc());
 
+
         if (learningQuestions.getCategory().equalsIgnoreCase("SCQ")) {
             learningItemBinding.categoryTextview.setText(learningQuestions.getCategory());
             learningItemBinding.singleChoice.setVisibility(View.VISIBLE);
@@ -103,7 +131,61 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
         } else if (learningQuestions.getCategory().equalsIgnoreCase("AIB")) {
             learningItemBinding.multiLine.setVisibility(View.VISIBLE);
             learningItemBinding.categoryTextview.setText("Answer in Brief");
+        } else if (learningQuestions.getCategory().equalsIgnoreCase("MTP")) {
+            learningItemBinding.matchThePairs.setVisibility(View.VISIBLE);
+            learningItemBinding.categoryTextview.setText("Match the Pairs");
+            learningItemBinding.a1text.setText(learningQuestions.getA1());
+            learningItemBinding.a2text.setText(learningQuestions.getA2());
+            learningItemBinding.a3text.setText(learningQuestions.getA3());
+            learningItemBinding.a4text.setText(learningQuestions.getA4());
+            learningItemBinding.b1text.setText(learningQuestions.getB1());
+            learningItemBinding.b2text.setText(learningQuestions.getB2());
+            learningItemBinding.b3text.setText(learningQuestions.getB3());
+            learningItemBinding.b4text.setText(learningQuestions.getB4());
         }
+
+        if (learningQuestions.getAttchment() != null && learningQuestions.getAttchment().size() != 0) {
+            ArrayList<String> tempimgList = new ArrayList<>();
+            tempimgList = learningQuestions.getAttchment();
+            if (tempimgList.size() == 1) {
+                try {
+                    learningItemBinding.queImg1.setVisibility(View.VISIBLE);
+                    Glide.with(activity).load(new URL(tempimgList.get(0))).into(learningItemBinding.queImg1);
+                    ArrayList<String> finalTempimgList = tempimgList;
+                    learningItemBinding.queImg1.setOnClickListener(v -> {
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("images", (Serializable) finalTempimgList);
+                        bundle.putInt("position", 0);
+                        FragmentTransaction fragmentTransaction = ((MainActivity) activity).getSupportFragmentManager().beginTransaction();
+                        SlideshowDialogFragment newFragment = SlideshowDialogFragment.newInstance();
+                        newFragment.setArguments(bundle);
+                        newFragment.show(fragmentTransaction, "slideshow");
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else if (tempimgList.size() > 1) {
+                learningItemBinding.queImg1.setVisibility(View.GONE);
+                learningItemBinding.imgRecycler.setVisibility(View.VISIBLE);
+                ImageAdapter imageAdapter = new ImageAdapter(activity, tempimgList);
+                learningItemBinding.imgRecycler.setHasFixedSize(true);
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false);
+                learningItemBinding.imgRecycler.setLayoutManager(linearLayoutManager);
+                learningItemBinding.imgRecycler.setAdapter(imageAdapter);
+            }
+        }
+    }
+
+    public void hideLayouts() {
+        learningItemBinding.queImg1.setVisibility(View.GONE);
+        learningItemBinding.imgRecycler.setVisibility(View.GONE);
+        learningItemBinding.matchThePairs.setVisibility(View.GONE);
+        learningItemBinding.trueFalse.setVisibility(View.GONE);
+        learningItemBinding.fillInTheBlanks.setVisibility(View.GONE);
+        learningItemBinding.singleLine.setVisibility(View.GONE);
+        learningItemBinding.multiChoice.setVisibility(View.GONE);
+        learningItemBinding.multiLine.setVisibility(View.GONE);
+        learningItemBinding.singleChoice.setVisibility(View.GONE);
     }
 
     @Override
@@ -116,19 +198,46 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
     }
 
 
-    public  class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         LearningItemBinding learningItemBinding;
         String scq_ans = "", mcq_ans = "", tfAns = "";
-        boolean isTrueSelected = false, isTrue;
+        HashMap<String, String> paired = new HashMap<String, String>();
+        HashMap<String, String> MTP_ans = new HashMap<String, String>();
+        boolean isB1Selected = false, isB2Selected = false, isB3Selected = false, isB4Selected = false;
 
         public ViewHolder(@NonNull LearningItemBinding itemView) {
             super(itemView.getRoot());
             this.learningItemBinding = itemView;
+            MTP_ans.clear();
+            MTP_ans.put("a1", "b3");
+            MTP_ans.put("a2", "b4");
+            MTP_ans.put("a3", "b1");
+            MTP_ans.put("a4", "b2");
+
             learningItemBinding.questiondescTextview.setShowingLine(2);
             learningItemBinding.questiondescTextview.addShowLessText("Show Less");
             learningItemBinding.questiondescTextview.addShowMoreText("Show More");
             learningItemBinding.questiondescTextview.setShowMoreColor(Color.RED);
             learningItemBinding.questiondescTextview.setShowLessTextColor(Color.RED);
+
+
+            //set touch listeners
+            learningItemBinding.a1.setOnTouchListener(new ChoiceTouchListener());
+            learningItemBinding.a2.setOnTouchListener(new ChoiceTouchListener());
+            learningItemBinding.a3.setOnTouchListener(new ChoiceTouchListener());
+            learningItemBinding.a4.setOnTouchListener(new ChoiceTouchListener());
+
+            //set drag listeners
+            learningItemBinding.b1.setOnDragListener(new ChoiceDragListener());
+            learningItemBinding.b2.setOnDragListener(new ChoiceDragListener());
+            learningItemBinding.b3.setOnDragListener(new ChoiceDragListener());
+            learningItemBinding.b4.setOnDragListener(new ChoiceDragListener());
+            learningItemBinding.b4.setOnDragListener(new ChoiceDragListener());
+            learningItemBinding.b1text.setOnDragListener(new ChoiceDragListener());
+            learningItemBinding.b2text.setOnDragListener(new ChoiceDragListener());
+            learningItemBinding.b3text.setOnDragListener(new ChoiceDragListener());
+            learningItemBinding.b4text.setOnDragListener(new ChoiceDragListener());
+
 
             learningItemBinding.expand.setOnClickListener(v -> {
                 learningItemBinding.expandableLayout.setVisibility(View.VISIBLE);
@@ -142,12 +251,9 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
                 learningItemBinding.close.setVisibility(View.GONE);
             });
 
-            learningItemBinding.commentLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onIconClick.onCommentClick(learningQuestionsList.get(getAdapterPosition()).getQuestion_id());
-                }
-            });
+            learningItemBinding.reset.setOnClickListener(v -> reset());
+
+            learningItemBinding.commentLayout.setOnClickListener(v -> onIconClick.onCommentClick(learningQuestionsList.get(getAdapterPosition()).getQuestion_id()));
 
             learningItemBinding.mcq1Layout.setOnClickListener(v -> {
                 setMCQAnsIndicator();
@@ -305,6 +411,29 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
                     } else {
                         Toast.makeText(activity, "Please enter answer first.", Toast.LENGTH_SHORT).show();
                     }
+                } else if (learningQuestions.getCategory().equalsIgnoreCase("MTP")) {
+
+                    if (!isB1Selected || !isB2Selected || !isB3Selected || !isB4Selected) {
+                        Toast.makeText(activity, "Select all pairs first.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        boolean isFound = false;
+                        for (Map.Entry<String, String> entry : paired.entrySet()) {
+                            Iterator ansIterator = MTP_ans.entrySet().iterator();
+                            String value = entry.getValue();
+                            for (Map.Entry<String, String> ansentry : MTP_ans.entrySet()) {
+                                if (entry.equals(ansentry)) {
+                                    isFound = true;
+                                    break;
+                                }
+                            }
+                            if (isFound) {
+                                isFound = false;
+                                setRightPair(value);
+                            } else {
+                                setWrongPair(value);
+                            }
+                        }
+                    }
                 }
             });
         }
@@ -439,6 +568,251 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
                     learningItemBinding.btnfalse.setBackground(activity.getResources().getDrawable(R.drawable.bg_red_round));
                     break;
             }
+        }
+
+        private final class ChoiceTouchListener implements View.OnTouchListener {
+            @SuppressLint("NewApi")
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                    /*
+                     * Drag details: we only need default behavior
+                     * - clip data could be set to pass data as part of drag
+                     * - shadow can be tailored
+                     */
+                    ClipData data = ClipData.newPlainText("", "");
+                    View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
+                    //start dragging the item touched
+                    view.startDrag(data, shadowBuilder, view, 0);
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }
+
+        @SuppressLint("NewApi")
+        private class ChoiceDragListener implements View.OnDragListener {
+
+            @Override
+            public boolean onDrag(View v, DragEvent event) {
+                switch (event.getAction()) {
+                    case DragEvent.ACTION_DRAG_STARTED:
+                        break;
+                    case DragEvent.ACTION_DRAG_ENTERED:
+                        break;
+                    case DragEvent.ACTION_DRAG_EXITED:
+                        break;
+                    case DragEvent.ACTION_DROP:
+                        View view = (View) event.getLocalState();
+                        LinearLayout dropped = (LinearLayout) view;
+
+                        //make it bold to highlight the fact that an item has been dropped
+                        switch (v.getId()) {
+                            case R.id.b1:
+                            case R.id.b1text:
+                                checkAvailability(getNameFromId(dropped.getId()), "b1");
+                                paired.put(getNameFromId(dropped.getId()), "b1");
+                                isB1Selected = true;
+                                dropped.setBackgroundColor(activity.getResources().getColor(R.color.hotpink));
+                                learningItemBinding.b1.setBackgroundColor(activity.getResources().getColor(R.color.hotpink));
+
+                                break;
+                            case R.id.b2:
+                            case R.id.b2text:
+                                checkAvailability(getNameFromId(dropped.getId()), "b2");
+                                paired.put(getNameFromId(dropped.getId()), "b2");
+                                isB2Selected = true;
+                                dropped.setBackgroundColor(activity.getResources().getColor(R.color.slateblue));
+                                learningItemBinding.b2.setBackgroundColor(activity.getResources().getColor(R.color.slateblue));
+                                break;
+                            case R.id.b3:
+                            case R.id.b3text:
+                                checkAvailability(getNameFromId(dropped.getId()), "b3");
+                                paired.put(getNameFromId(dropped.getId()), "b3");
+                                isB3Selected = true;
+                                dropped.setBackgroundColor(activity.getResources().getColor(R.color.steelblue));
+                                learningItemBinding.b3.setBackgroundColor(activity.getResources().getColor(R.color.steelblue));
+                                break;
+                            case R.id.b4:
+                            case R.id.b4text:
+                                checkAvailability(getNameFromId(dropped.getId()), "b4");
+                                paired.put(getNameFromId(dropped.getId()), "b4");
+                                isB4Selected = true;
+                                dropped.setBackgroundColor(activity.getResources().getColor(R.color.cadetblue));
+                                learningItemBinding.b4.setBackgroundColor(activity.getResources().getColor(R.color.cadetblue));
+                                break;
+                            default:
+                                break;
+                        }
+
+                        break;
+                    case DragEvent.ACTION_DRAG_ENDED:
+                        break;
+                    default:
+                        break;
+                }
+                return true;
+            }
+        }
+
+        private void setRightPair(String option) {
+            switch (option) {
+                case "b1":
+                    learningItemBinding.img1.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_right_mtp));
+                    learningItemBinding.img1.setVisibility(View.VISIBLE);
+                    break;
+                case "b2":
+                    learningItemBinding.img2.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_right_mtp));
+                    learningItemBinding.img2.setVisibility(View.VISIBLE);
+                    break;
+                case "b3":
+                    learningItemBinding.img3.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_right_mtp));
+                    learningItemBinding.img3.setVisibility(View.VISIBLE);
+                    break;
+                case "b4":
+                    learningItemBinding.img4.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_right_mtp));
+                    learningItemBinding.img4.setVisibility(View.VISIBLE);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+
+        private void setWrongPair(String option) {
+            switch (option) {
+                case "b1":
+                    learningItemBinding.img1.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_wrong_mtp));
+                    learningItemBinding.img1.setVisibility(View.VISIBLE);
+                    break;
+                case "b2":
+                    learningItemBinding.img2.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_wrong_mtp));
+                    learningItemBinding.img2.setVisibility(View.VISIBLE);
+                    break;
+                case "b3":
+                    learningItemBinding.img3.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_wrong_mtp));
+                    learningItemBinding.img3.setVisibility(View.VISIBLE);
+                    break;
+                case "b4":
+                    learningItemBinding.img4.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_wrong_mtp));
+                    learningItemBinding.img4.setVisibility(View.VISIBLE);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+
+        private void setListeners() {
+
+        }
+
+        private void checkAvailability(String option_1, String option_b) {
+            Iterator myVeryOwnIterator = paired.keySet().iterator();
+            while (myVeryOwnIterator.hasNext()) {
+                String key = (String) myVeryOwnIterator.next();
+                String value = (String) paired.get(key);
+                if (key.equalsIgnoreCase(option_1)) {
+                    setLayoutBg(option_1);
+                    setLayoutBg(value);
+                    paired.remove(key);
+                    break;
+                }
+            }
+
+            Iterator myVeryOwnIterator1 = paired.keySet().iterator();
+            while (myVeryOwnIterator1.hasNext()) {
+                String key = (String) myVeryOwnIterator1.next();
+                String value = (String) paired.get(key);
+                if (value.equalsIgnoreCase(option_b)) {
+                    setLayoutBg(option_b);
+                    setLayoutBg(key);
+                    paired.remove(key);
+                    break;
+                }
+            }
+        }
+
+        private void setLayoutBg(String option) {
+            switch (option) {
+                case "a1":
+                    learningItemBinding.a1.setBackground(activity.getResources().getDrawable(R.drawable.grey_round_border));
+                    break;
+                case "a2":
+                    learningItemBinding.a2.setBackground(activity.getResources().getDrawable(R.drawable.grey_round_border));
+                    break;
+                case "a3":
+                    learningItemBinding.a3.setBackground(activity.getResources().getDrawable(R.drawable.grey_round_border));
+                    break;
+                case "a4":
+                    learningItemBinding.a4.setBackground(activity.getResources().getDrawable(R.drawable.grey_round_border));
+                    break;
+                case "b1":
+                    isB1Selected = false;
+                    learningItemBinding.b1.setBackground(activity.getResources().getDrawable(R.drawable.grey_round_border));
+                    break;
+                case "b2":
+                    isB2Selected = false;
+                    learningItemBinding.b2.setBackground(activity.getResources().getDrawable(R.drawable.grey_round_border));
+                    break;
+                case "b3":
+                    isB3Selected = false;
+                    learningItemBinding.b3.setBackground(activity.getResources().getDrawable(R.drawable.grey_round_border));
+                    break;
+                case "b4":
+                    isB4Selected = false;
+                    learningItemBinding.b4.setBackground(activity.getResources().getDrawable(R.drawable.grey_round_border));
+                    break;
+                default:
+                    break;
+
+            }
+        }
+
+        private String getNameFromId(int id) {
+            switch (id) {
+                case R.id.a1:
+                    return "a1";
+                case R.id.a2:
+                    return "a2";
+                case R.id.a3:
+                    return "a3";
+                case R.id.a4:
+                    return "a4";
+                case R.id.b1:
+                    return "b1";
+                case R.id.b2:
+                    return "b2";
+                case R.id.b3:
+                    return "b3";
+                case R.id.b4:
+                    return "b4";
+                default:
+                    return "";
+            }
+        }
+
+        public void reset() {
+            paired.clear();
+            learningItemBinding.b1.setTag(null);
+            learningItemBinding.b2.setTag(null);
+            learningItemBinding.b3.setTag(null);
+
+            setListeners();
+            learningItemBinding.img1.setVisibility(View.GONE);
+            learningItemBinding.img2.setVisibility(View.GONE);
+            learningItemBinding.img3.setVisibility(View.GONE);
+            learningItemBinding.img4.setVisibility(View.GONE);
+
+            learningItemBinding.a1.setBackground(activity.getResources().getDrawable(R.drawable.grey_round_border));
+            learningItemBinding.a2.setBackground(activity.getResources().getDrawable(R.drawable.grey_round_border));
+            learningItemBinding.a3.setBackground(activity.getResources().getDrawable(R.drawable.grey_round_border));
+            learningItemBinding.a4.setBackground(activity.getResources().getDrawable(R.drawable.grey_round_border));
+            learningItemBinding.b1.setBackground(activity.getResources().getDrawable(R.drawable.grey_round_border));
+            learningItemBinding.b2.setBackground(activity.getResources().getDrawable(R.drawable.grey_round_border));
+            learningItemBinding.b3.setBackground(activity.getResources().getDrawable(R.drawable.grey_round_border));
+            learningItemBinding.b4.setBackground(activity.getResources().getDrawable(R.drawable.grey_round_border));
         }
     }
 }

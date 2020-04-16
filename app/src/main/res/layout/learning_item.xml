@@ -101,7 +101,6 @@
                     android:textColor="@color/colorSkyBlue"
                     android:textSize="@dimen/_10ssp" />
 
-
             </LinearLayout>
 
 
@@ -169,7 +168,7 @@
                 android:id="@+id/question_textview"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-               android:layout_margin="@dimen/_10sdp"
+               android:padding="@dimen/_10sdp"
                 android:text="question"
                 android:textColor="@color/colorSkyBlue"
                 android:textSize="@dimen/_14ssp"
@@ -182,6 +181,7 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_attach_file_black_24dp"
                 android:visibility="gone"
+                android:layout_marginEnd="@dimen/_10sdp"
                 app:layout_constraintBottom_toBottomOf="@+id/question_textview"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/question_textview" />
@@ -199,13 +199,43 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/question_textview" />
 
+
+
+            <ImageView
+                android:id="@+id/que_img1"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:scaleType="fitXY"
+                android:visibility="gone"
+                android:src="@drawable/ic_menu_share"
+                android:maxHeight="@dimen/_180sdp"
+                app:layout_constraintTop_toBottomOf="@+id/questiondesc_textview"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_180sdp"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="wrap_content"
+                android:id="@+id/img_recycler"
+                android:visibility="gone"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/_5sdp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/que_img1"
+                android:layout_height="wrap_content"/>
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/expandable_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/questiondesc_textview">
+                app:layout_constraintTop_toBottomOf="@+id/img_recycler">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/answer_layout"
@@ -221,7 +251,7 @@
                         android:id="@+id/single_choice"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        android:visibility="visible"
+                        android:visibility="gone"
                         android:layout_height="wrap_content">
 
 
@@ -364,7 +394,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/grey_border"
-                        android:maxLines="2"
+                        android:maxLines="5"
+                        android:lines="5"
                         android:textColor="@color/colorBlack"
                         android:visibility="gone"
                         app:layout_constraintLeft_toLeftOf="parent"
@@ -377,7 +408,7 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/grey_border"
                         android:gravity="top|start"
-                        android:lines="5"
+                        android:lines="10"
                         android:maxLines="10"
                         android:textColor="@color/colorBlack"
                         android:visibility="gone"
@@ -559,6 +590,243 @@
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="10dp"
+                        android:visibility="gone"
+                        app:layout_constraintTop_toBottomOf="@+id/multi_choice"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        android:id="@+id/match_the_pairs">
+
+                        <LinearLayout
+                            android:id="@+id/a"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:weightSum="2"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <LinearLayout
+                                android:id="@+id/a1"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="3dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/grey_round_border">
+
+                                <io.github.kexanie.library.MathView
+                                    android:id="@+id/a1text"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="A1" />
+                            </LinearLayout>
+
+
+                            <LinearLayout
+                                android:id="@+id/b1"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="3dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/grey_round_border">
+
+                                <io.github.kexanie.library.MathView
+                                    android:id="@+id/b1text"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="B1" />
+                            </LinearLayout>
+
+
+                        </LinearLayout>
+
+
+                        <ImageView
+                            android:id="@+id/img1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_right"
+                            android:visibility="gone"
+                            app:layout_constraintBottom_toBottomOf="@+id/a"
+                            app:layout_constraintEnd_toEndOf="@+id/a"
+                            app:layout_constraintTop_toTopOf="@+id/a" />
+
+                        <LinearLayout
+                            android:id="@+id/b"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:orientation="horizontal"
+                            android:weightSum="2"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/a">
+
+                            <LinearLayout
+                                android:id="@+id/a2"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="3dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/grey_round_border">
+
+                                <io.github.kexanie.library.MathView
+                                    android:id="@+id/a2text"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="A2" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/b2"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="3dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/grey_round_border">
+
+                                <io.github.kexanie.library.MathView
+                                    android:id="@+id/b2text"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="B2" />
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+
+                        <ImageView
+                            android:id="@+id/img2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_right"
+                            android:visibility="gone"
+                            app:layout_constraintBottom_toBottomOf="@+id/b"
+                            app:layout_constraintEnd_toEndOf="@+id/b"
+                            app:layout_constraintTop_toTopOf="@+id/b" />
+
+                        <LinearLayout
+                            android:id="@+id/c"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:orientation="horizontal"
+                            android:weightSum="2"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/b">
+
+                            <LinearLayout
+                                android:id="@+id/a3"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="3dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/grey_round_border">
+
+                                <io.github.kexanie.library.MathView
+                                    android:id="@+id/a3text"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="A3" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/b3"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="3dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/grey_round_border">
+
+                                <io.github.kexanie.library.MathView
+                                    android:id="@+id/b3text"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="B3" />
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+
+                        <ImageView
+                            android:id="@+id/img3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_right"
+                            android:visibility="gone"
+                            app:layout_constraintBottom_toBottomOf="@+id/c"
+                            app:layout_constraintEnd_toEndOf="@+id/c"
+                            app:layout_constraintTop_toTopOf="@+id/c" />
+
+                        <LinearLayout
+                            android:id="@+id/d"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:orientation="horizontal"
+                            android:weightSum="2"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/c">
+
+                            <LinearLayout
+                                android:id="@+id/a4"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="3dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/grey_round_border">
+
+                                <io.github.kexanie.library.MathView
+                                    android:id="@+id/a4text"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="A4" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/b4"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="3dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/grey_round_border">
+
+                                <io.github.kexanie.library.MathView
+                                    android:id="@+id/b4text"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="B4" />
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <ImageView
+                            android:id="@+id/img4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_right"
+                            android:visibility="gone"
+                            app:layout_constraintBottom_toBottomOf="@+id/d"
+                            app:layout_constraintEnd_toEndOf="@+id/d"
+                            app:layout_constraintTop_toTopOf="@+id/d" />
+
+                        <TextView
+                            android:id="@+id/reset"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:padding="10dp"
+                            android:text="Reset"
+                            android:textColor="@color/colorSkyBlue"
+                            android:layout_marginEnd="30dp"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/d" />
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
                     <Button
                         android:id="@+id/submit"
                         style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
@@ -571,7 +839,7 @@
                         android:textColor="@color/colorWhite"
                         app:cornerRadius="@dimen/_50sdp"
                         app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/multi_choice" />
+                        app:layout_constraintTop_toBottomOf="@+id/match_the_pairs" />
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
