@@ -104,7 +104,6 @@ public class PersonalInfoFragment extends BaseFragment implements ChangePassword
                         DatePickerDialog dialog = new DatePickerDialog(getContext(), android.R.style.Theme_Holo_Dialog, new DatePickerDialog.OnDateSetListener() {
                         @Override
                         public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-
                             mBinding.etDob.setText("" + year + "-" + (month + 1) + "-" + day);
                         }
                     }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));

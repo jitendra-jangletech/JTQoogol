@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:id="@+id/questRelativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/grey"
+        tools:context=".Test.TestFragment">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_Quest"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorWhite"
+            app:cardMaxElevation="@dimen/_40sdp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:orientation="horizontal"
+                android:padding="@dimen/_5sdp">
+
+                <TextView
+                    android:id="@+id/tv_quest_no"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:background="@drawable/bg_quest_visited"
+                    android:gravity="center"
+                    android:text="2"
+                    android:textColor="@color/colorWhite"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvtimer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/_8sdp"
+                    android:layout_marginRight="@dimen/_5sdp"
+                    android:gravity="center"
+                    android:text="00:34"
+                    android:textColor="@color/colorSkyBlue"
+                    android:textStyle="bold" />
+
+                <View
+                    android:layout_width="@dimen/_1sdp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/_5sdp"
+                    android:background="@color/colorBlack" />
+
+                <TextView
+                    android:id="@+id/tv_positive_marks"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/_8sdp"
+                    android:layout_marginRight="@dimen/_5sdp"
+                    android:gravity="center"
+                    android:text="+1.0"
+                    android:textColor="@color/colorSkyBlue"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_negative_marks"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/_8sdp"
+                    android:layout_marginRight="@dimen/_100sdp"
+                    android:gravity="center"
+                    android:text="-0.33"
+                    android:textColor="@color/colorSkyBlue"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/img_report"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/_20sdp"
+                    android:src="@drawable/ic_report" />
+
+                <ImageView
+                    android:id="@+id/img_save"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/_10sdp"
+                    android:src="@drawable/ic_star_outline" />
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/card_Quest"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:id="@+id/QuestLinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorWhite"
+                    app:cardMaxElevation="@dimen/_40sdp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorWhite"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvQuestion"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/_10sdp"
+                            android:padding="@dimen/_10sdp"
+                            android:text="@string/question"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/_12ssp" />
+
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <LinearLayout
+                    android:id="@+id/single_choice_quest_root"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:background="@color/grey"
+                    android:orientation="vertical"
+                    android:padding="@dimen/_10sdp">
+
+                    <EditText
+                        android:drawableLeft="@drawable/bg_empty"
+                        android:textColor="@color/colorSkyBlue"
+                        android:textColorHint="@color/colorSkyBlue"
+                        android:hint="Type Your Answer Here"
+                        android:background="@color/colorWhite"
+                        android:layout_marginBottom="@dimen/_4sdp"
+                        android:id="@+id/et_multi_line_answer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="top|left"
+                        android:inputType="textMultiLine|textNoSuggestions"
+                        android:lines="8"
+                        android:maxLines="10"
+                        android:scrollbars="vertical" />
+
+                    <TextView
+                        android:textStyle="bold"
+                        android:id="@+id/tvCharCounter"
+                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:textColor="@color/colorWhite"
+                        android:text="Words Remaining : 0/200"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                    <!--<EditText
+                        android:singleLine="true"
+                        android:id="@+id/et_answer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/_4sdp"
+                        android:background="@color/colorWhite"
+                        android:drawableLeft="@drawable/bg_empty"
+                        android:gravity="center_vertical"
+                        android:hint="Type Your Answer Here"
+                        android:minHeight="@dimen/_40sdp"
+                        android:textColor="@color/colorSkyBlue"
+                        android:textColorHint="@color/colorSkyBlue" />-->
+
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+
+        <RelativeLayout
+            android:layout_marginBottom="@dimen/_40sdp"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40sdp"
+            android:background="@color/grey"
+            android:padding="@dimen/_2sdp">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnMarkNext"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/_5sdp"
+                android:background="@color/colorSkyBlue"
+                android:padding="@dimen/_10sdp"
+                android:text="Mark &amp; Next"
+                android:textAllCaps="false"
+                android:textColor="@color/colorWhite" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnClearResponse"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:background="@color/colorSkyBlue"
+                android:padding="@dimen/_10sdp"
+                android:text="Reset"
+                android:textAllCaps="false"
+                android:textColor="@color/colorWhite" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnSaveNext"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/_5sdp"
+                android:background="@color/colorSkyBlue"
+                android:padding="@dimen/_10sdp"
+                android:text="Save &amp; Next"
+                android:textAllCaps="false"
+                android:textColor="@color/colorWhite" />
+        </RelativeLayout>
+    </RelativeLayout>
+</layout>

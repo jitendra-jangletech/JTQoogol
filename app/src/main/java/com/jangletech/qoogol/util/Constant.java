@@ -5,7 +5,17 @@ package com.jangletech.qoogol.util;
  */
 public class Constant {
 
-    //Preference
+    //Sort Type
+    public static final String SORT_LIST = "SORT_LIST";
+    public static final String SORT_GRID = "SORT_GRID";
+
+    /*//Different Question Types
+    public static final String SCQ = "SCQ";
+    public static final String MCQ = "MCQ";
+    public static final String FILL_THE_BLANKS = "FILL_THE_BLANKS";
+    public static final String TRUE_FALSE = "TRUE_FALSE";
+*/
+    //Preferences
     public static final String PREF_NAME = "qoogol";
     public static final String IS_LOGGED_IN = "LOGGED_IN";
 

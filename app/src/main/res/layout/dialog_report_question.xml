@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:minWidth="@dimen/_400sdp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_45sdp"
+            android:gravity="center"
+            android:text="REPORT"
+            android:textColor="@color/colorBlack"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:background="@color/colorLightGrey" />
+
+        <RelativeLayout
+            android:id="@+id/tvWrongQuest"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_35sdp"
+            android:padding="@dimen/_10sdp">
+
+            <TextView
+                android:textSize="@dimen/_12sdp"
+                android:textStyle="bold"
+                android:textColor="@color/grey"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerInParent="true"
+                android:text="Wrong Question" />
+
+            <CheckBox
+                android:id="@+id/checkWrongQuest"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true" />
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:background="@color/colorLightGrey" />
+
+        <RelativeLayout
+            android:id="@+id/tvFormattingIssue"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_35sdp"
+            android:padding="@dimen/_10sdp">
+
+            <TextView
+                android:textSize="@dimen/_12sdp"
+                android:textStyle="bold"
+                android:textColor="@color/grey"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerInParent="true"
+                android:text="Formatting Issue" />
+
+            <CheckBox
+                android:id="@+id/checkFormattingIssue"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true" />
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:background="@color/colorLightGrey" />
+
+        <RelativeLayout
+            android:id="@+id/tvOther"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_35sdp"
+            android:padding="@dimen/_10sdp">
+
+            <TextView
+                android:textSize="@dimen/_12sdp"
+                android:textStyle="bold"
+                android:textColor="@color/grey"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerInParent="true"
+                android:text="Other" />
+
+            <CheckBox
+                android:id="@+id/checkOther"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true" />
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:background="@color/colorLightGrey" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:padding="@dimen/_2sdp">
+
+            <EditText
+                android:id="@+id/et_multi_line_answer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/_4sdp"
+                android:background="@color/colorWhite"
+                android:drawableLeft="@drawable/bg_empty"
+                android:gravity="top|left"
+                android:hint="Please tell us more about the issue for the quick resolution"
+                android:inputType="textMultiLine|textNoSuggestions"
+                android:lines="6"
+                android:scrollbars="vertical"
+                android:textColor="@color/colorBlack" />
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:background="@color/colorLightGrey" />
+
+        <TextView
+            android:id="@+id/btnSubmit"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:gravity="center"
+            android:text="SUBMIT"
+            android:textColor="@color/colorBlack" />
+
+    </LinearLayout>
+
+</layout>

@@ -11,7 +11,7 @@
         android:gravity="center"
         android:id="@+id/txt"
         android:textStyle="bold"
-        android:background="@drawable/bg_quest_correct"
+        android:background="@drawable/bg_quest_attempted"
         android:textColor="@color/colorWhite"
         android:text="18"
         android:layout_width="@dimen/_25sdp"

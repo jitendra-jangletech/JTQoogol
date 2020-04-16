@@ -111,7 +111,17 @@
     <style name="AlertDialogStyle" parent="Theme.AppCompat.Light.Dialog">
         <item name="android:colorAccent">@color/colorAccent</item>
         <item name="android:textColor">@color/colorBlack</item>
+        <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
+        <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
         <item name="android:textColorPrimary">@color/colorPrimary</item>
+    </style>
+
+    <style name="NegativeButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/colorSkyBlue</item>
+    </style>
+
+    <style name="PositiveButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/colorSkyBlue</item>
     </style>
 
     <style name="DialogAnimation_2">
@@ -138,7 +148,7 @@
     </style>
 
 
-   <!-- <style name="TestTheme" parent="Theme.AppCompat.NoActionBar">
+    <!-- <style name="TestTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowTranslucentStatus">true</item>

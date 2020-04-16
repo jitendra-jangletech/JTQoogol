@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_quest_no"
+        android:layout_width="@dimen/_20sdp"
+        android:layout_height="@dimen/_20sdp"
+        android:layout_marginRight="@dimen/_4sdp"
+        android:background="@drawable/bg_quest_attempted"
+        android:gravity="center"
+        android:text="1"
+        android:textColor="@color/colorWhite"
+        android:textStyle="bold" />
+
+    <TextView
+        android:background="@drawable/ic_star"
+        android:layout_width="@dimen/_8sdp"
+        android:layout_height="@dimen/_8sdp"/>
+
+</FrameLayout>

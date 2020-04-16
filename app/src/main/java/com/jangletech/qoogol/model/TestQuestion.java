@@ -1,5 +1,7 @@
 package com.jangletech.qoogol.model;
 
+import java.util.List;
+
 public class TestQuestion {
 
     private int questId;
@@ -12,66 +14,136 @@ public class TestQuestion {
     private String answer4;
     private String answer5;
 
-    private Boolean isAnswer1Selected;
-    private Boolean isAnswer2Selected;
+    //Answer Saving Fields
+    private boolean ans1;
+    private boolean ans2;
+    private boolean ans3;
+    private boolean ans4;
+    private boolean ans5;
+    private String timeSpent;
+    private boolean isMarked;
+    private boolean isSaved;
+    private boolean isVisited;
+    private boolean isAttempted;
 
-    public Boolean getAnswer1Selected() {
-        return isAnswer1Selected;
+    public String getDescriptiveAns() {
+        return descriptiveAns;
     }
 
-    public void setAnswer1Selected(Boolean answer1Selected) {
-        isAnswer1Selected = answer1Selected;
+    public void setDescriptiveAns(String descriptiveAns) {
+        this.descriptiveAns = descriptiveAns;
     }
 
-    public Boolean getAnswer2Selected() {
-        return isAnswer2Selected;
+    //Descriptive Answer
+    private String descriptiveAns;
+
+    public boolean isVisited() {
+        return isVisited;
     }
 
-    public void setAnswer2Selected(Boolean answer2Selected) {
-        isAnswer2Selected = answer2Selected;
+    public void setVisited(boolean visited) {
+        isVisited = visited;
     }
 
-    public Boolean getAnswer3Selected() {
-        return isAnswer3Selected;
+    public boolean isAttempted() {
+        return isAttempted;
     }
 
-    public void setAnswer3Selected(Boolean answer3Selected) {
-        isAnswer3Selected = answer3Selected;
+    public void setAttempted(boolean attempted) {
+        isAttempted = attempted;
     }
 
-    public Boolean getAnswer4Selected() {
-        return isAnswer4Selected;
+    public boolean isAns1() {
+        return ans1;
     }
 
-    public void setAnswer4Selected(Boolean answer4Selected) {
-        isAnswer4Selected = answer4Selected;
+    public void setAns1(boolean ans1) {
+        this.ans1 = ans1;
     }
 
-    public Boolean getAnswer5Selected() {
-        return isAnswer5Selected;
+    public boolean isAns2() {
+        return ans2;
     }
 
-    public void setAnswer5Selected(Boolean answer5Selected) {
-        isAnswer5Selected = answer5Selected;
+    public void setAns2(boolean ans2) {
+        this.ans2 = ans2;
     }
 
-    private Boolean isAnswer3Selected;
-    private Boolean isAnswer4Selected;
-    private Boolean isAnswer5Selected;
+    public boolean isAns3() {
+        return ans3;
+    }
+
+    public void setAns3(boolean ans3) {
+        this.ans3 = ans3;
+    }
+
+    public boolean isAns4() {
+        return ans4;
+    }
+
+    public void setAns4(boolean ans4) {
+        this.ans4 = ans4;
+    }
+
+    public boolean isAns5() {
+        return ans5;
+    }
+
+    public void setAns5(boolean ans5) {
+        this.ans5 = ans5;
+    }
+
+    public String getTimeSpent() {
+        return timeSpent;
+    }
+
+    public void setTimeSpent(String timeSpent) {
+        this.timeSpent = timeSpent;
+    }
+
+    public boolean isMarked() {
+        return isMarked;
+    }
+
+    public void setMarked(boolean marked) {
+        isMarked = marked;
+    }
+
+    public boolean isSaved() {
+        return isSaved;
+    }
+
+    public void setSaved(boolean saved) {
+        isSaved = saved;
+    }
+
+    public List<Answer> getAnswerList() {
+        return answerList;
+    }
+
+    public void setAnswerList(List<Answer> answerList) {
+        this.answerList = answerList;
+    }
+
+    private List<Answer> answerList;
+
 
     public TestQuestion(int questId, int questNo, String questType, String questionDesc,
-                        String answer1, String answer2, String answer3, String answer4, String answer5) {
+                        String ans1, String ans2, String ans3, String ans4, String ans5) {
         this.questId = questId;
         this.questNo = questNo;
         this.questType = questType;
         this.questionDesc = questionDesc;
-        this.answer1 = answer1;
-        this.answer2 = answer2;
-        this.answer3 = answer3;
-        this.answer4 = answer4;
-        this.answer5 = answer5;
+        this.answer1 = ans1;
+        this.answer2 = ans2;
+        this.answer3 = ans3;
+        this.answer4 = ans4;
+        this.answer5 = ans5;
     }
 
+    public TestQuestion() {
+
+    }
 
 
     public int getQuestNo() {

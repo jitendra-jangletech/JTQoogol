@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.chip.Chip
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/Widget.MaterialComponents.Chip.Filter"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/_50sdp"
+    android:checkable="true"
+    android:clickable="true"
+    android:focusable="true"
+    android:gravity="center_vertical"
+    android:text="Maharashtra state board"
+    android:textColor="@color/colorBlack"
+    android:textStyle="bold"
+    android:textSize="@dimen/_20ssp"
+    app:chipStartPadding="@dimen/_10sdp"
+    android:minHeight="@dimen/_50sdp"
+    app:chipBackgroundColor="@drawable/chip_background"
+    app:chipStrokeColor="@color/icon_color"
+    app:chipStrokeWidth="@dimen/_2sdp" />

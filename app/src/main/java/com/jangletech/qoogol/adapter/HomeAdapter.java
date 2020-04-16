@@ -20,6 +20,7 @@ import java.util.List;
  * Created by Pritali on 1/27/2020.
  */
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
+
     Activity activity;
     List<DashboardData> itemlist;
     HomeitemBinding homeitemBinding;
@@ -35,14 +36,14 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         homeitemBinding = DataBindingUtil.inflate(
                 LayoutInflater.from(parent.getContext()),
                 R.layout.homeitem, parent, false);
-        return  new ViewHolder(homeitemBinding);
+        return new ViewHolder(homeitemBinding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         DashboardData dashboardData = itemlist.get(position);
 
-        if (dashboardData.getAnswers()!=null) {
+        if (dashboardData.getAnswers() != null) {
             holder.homeitemBinding.heading.setText("Q & A Log");
             holder.homeitemBinding.courseCount.setText(dashboardData.getAnswers());
             holder.homeitemBinding.courses.setText("Answers");
@@ -56,7 +57,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         }
 
 
-        if (dashboardData.getAttendedTests()!=null) {
+        if (dashboardData.getAttendedTests() != null) {
             holder.homeitemBinding.heading.setText("Test Log");
             holder.homeitemBinding.courseCount.setText(dashboardData.getAttendedTests());
             holder.homeitemBinding.courses.setText("Attended Tests");
@@ -69,7 +70,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
             holder.homeitemBinding.item4Count.setVisibility(View.GONE);
         }
 
-        if (dashboardData.getFavQA()!=null) {
+        if (dashboardData.getFavQA() != null) {
             holder.homeitemBinding.heading.setText("Favourites");
             holder.homeitemBinding.courseCount.setText(dashboardData.getFavQA());
             holder.homeitemBinding.courses.setText("Favourite Q & A");
@@ -82,16 +83,16 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
             holder.homeitemBinding.item4Count.setVisibility(View.GONE);
         }
 
-        if (dashboardData.getAvg_user()!=null) {
-                holder.homeitemBinding.heading.setText("Feed Popularity");
-                holder.homeitemBinding.courseCount.setText(dashboardData.getAvg_user());
-                holder.homeitemBinding.courses.setText("Average User");
-                holder.homeitemBinding.questionsCount.setText(dashboardData.getFeed_tests());
-                holder.homeitemBinding.questions.setText("Tests");
-                holder.homeitemBinding.examsCount.setText(dashboardData.getCourse());
-                holder.homeitemBinding.exams.setText("Course");
-                holder.homeitemBinding.item4Count.setText(dashboardData.getExam());
-                holder.homeitemBinding.item4.setText("Exam");
+        if (dashboardData.getAvg_user() != null) {
+            holder.homeitemBinding.heading.setText("Feed Popularity");
+            holder.homeitemBinding.courseCount.setText(dashboardData.getAvg_user());
+            holder.homeitemBinding.courses.setText("Average User");
+            holder.homeitemBinding.questionsCount.setText(dashboardData.getFeed_tests());
+            holder.homeitemBinding.questions.setText("Tests");
+            holder.homeitemBinding.examsCount.setText(dashboardData.getCourse());
+            holder.homeitemBinding.exams.setText("Course");
+            holder.homeitemBinding.item4Count.setText(dashboardData.getExam());
+            holder.homeitemBinding.item4.setText("Exam");
         }
 
         if (position == 0) {
@@ -110,6 +111,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         HomeitemBinding homeitemBinding;
+
         public ViewHolder(@NonNull HomeitemBinding itemView) {
             super(itemView.getRoot());
             this.homeitemBinding = itemView;

@@ -14,7 +14,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.tabs.TabLayout
+       <!-- <com.google.android.material.tabs.TabLayout
             android:id="@+id/result_tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -24,55 +24,67 @@
             app:tabMode="scrollable"
             app:tabSelectedTextColor="@color/colorLightGrey"
             app:tabTextAppearance="@style/CustomTextAppearanceTab"
-            app:tabTextColor="@color/colorWhite" />
+            app:tabTextColor="@color/colorWhite" />-->
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.viewpager.widget.ViewPager
+
+    <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/course_viewpager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/course_bottom_layout"
         app:layout_constraintTop_toBottomOf="@+id/appbar_course" />
 
-    <LinearLayout
+    <!--<androidx.viewpager.widget.ViewPager
+        android:id="@+id/course_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/course_bottom_layout"
+        app:layout_constraintTop_toBottomOf="@+id/appbar_course" />-->
+
+   <!-- <RelativeLayout
+        android:padding="@dimen/_2sdp"
         android:id="@+id/course_bottom_layout"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_40sdp"
-        android:background="@color/colorWhite"
-        android:orientation="horizontal"
+        android:layout_height="@dimen/_35sdp"
+        android:background="@color/grey"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent">
 
-        <Button
-            android:layout_marginLeft="@dimen/_5sdp"
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnMarkNext"
+            android:padding="@dimen/_10sdp"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginRight="@dimen/_10sdp"
-            android:background="@color/colorBlack"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_5sdp"
+            android:background="@color/colorSkyBlue"
             android:text="Mark &amp; Next"
             android:textAllCaps="false"
             android:textColor="@color/colorWhite" />
 
-        <Button
-            android:layout_marginRight="@dimen/_10sdp"
+        <androidx.appcompat.widget.AppCompatButton
+            android:padding="@dimen/_10sdp"
             android:id="@+id/btnClearResponse"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:background="@color/colorBlack"
-            android:text="Clear Response"
+            android:layout_centerInParent="true"
+            android:background="@color/colorSkyBlue"
+            android:text="Reset"
             android:textAllCaps="false"
             android:textColor="@color/colorWhite" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
+            android:padding="@dimen/_10sdp"
             android:id="@+id/btnSaveNext"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:background="@color/colorBlack"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/_5sdp"
+            android:background="@color/colorSkyBlue"
             android:text="Save &amp; Next"
             android:textAllCaps="false"
             android:textColor="@color/colorWhite" />
 
-    </LinearLayout>
+    </RelativeLayout>-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

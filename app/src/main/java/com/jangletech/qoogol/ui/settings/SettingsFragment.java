@@ -231,9 +231,9 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
             chip.setText(classList.get(i).toString());
             chip.setTag(classList.get(i).toString());
             chip.setId(i);
-            chip.setClickable(true);
+           /* chip.setClickable(true);
             chip.setFocusable(true);
-            chip.setCheckable(true);
+            chip.setCheckable(true);*/
             mBinding.classChipGrp.addView(chip);
         }
     }

@@ -1,24 +1,21 @@
 package com.jangletech.qoogol.ui.questions.questions;
 
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.lifecycle.ViewModelProviders;
-
 import android.graphics.Color;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.viewpager.widget.ViewPager;
+
 import com.github.mikephil.charting.animation.Easing;
-import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
@@ -26,9 +23,6 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.FragmentQuestionsBinding;
 import com.jangletech.qoogol.ui.edit_profile.EditProfileFragment;
-import com.jangletech.qoogol.ui.educational_info.EducationInfoFragment;
-import com.jangletech.qoogol.ui.personal_info.PersonalInfoFragment;
-import com.jangletech.qoogol.ui.preference.PreferenceFragment;
 import com.jangletech.qoogol.ui.questions.popular_questions.PopularQuestFragment;
 import com.jangletech.qoogol.ui.questions.recent_questions.RecentQuestFragment;
 import com.jangletech.qoogol.ui.questions.trending_quesions.TrendingQuestFragment;

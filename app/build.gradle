@@ -43,8 +43,16 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui:2.1.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
 
+    //ViewPager 2
+    implementation "androidx.viewpager2:viewpager2:1.0.0"
+
+
     //pie chart library
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
+    def room_version = "2.2.5"
+    implementation "androidx.room:room-runtime:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
 
     //Math Library
     implementation 'io.github.kexanie.library:MathView:0.0.6'

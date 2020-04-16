@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <LinearLayout
+        android:minWidth="@dimen/_400sdp"
+        android:minHeight="@dimen/_400sdp"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_15sdp"
+            android:text="Demo Test"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/_20ssp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_15sdp">
+
+            <TextView
+                android:id="@+id/timeLeft"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_time_left" />
+
+            <TextView
+                android:textSize="@dimen/_12ssp"
+                android:id="@+id/tvTimer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_12sdp"
+                android:layout_toRightOf="@+id/timeLeft"
+                android:gravity="center_horizontal"
+                android:text="Time Left" />
+
+            <TextView
+                android:textSize="@dimen/_12ssp"
+                android:id="@+id/tvTimerCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/_20sdp"
+                android:text="00:01:44"
+                android:textColor="@color/colorSkyBlue" />
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:background="@color/colorLightGrey" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_15sdp">
+
+            <TextView
+                android:id="@+id/attempted"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_attempted" />
+
+            <TextView
+                android:textSize="@dimen/_12ssp"
+                android:id="@+id/tvAttempted"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_12sdp"
+                android:layout_toRightOf="@+id/attempted"
+                android:gravity="center_horizontal"
+                android:text="Attempted" />
+
+            <TextView
+                android:id="@+id/tvAttemptedCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/_20sdp"
+                android:text="0"
+                android:textColor="@color/colorBlack"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:background="@color/colorLightGrey" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_15sdp">
+
+            <TextView
+                android:id="@+id/unattempted"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_unattempted" />
+
+            <TextView
+                android:textSize="@dimen/_12ssp"
+                android:id="@+id/tvUnAttempted"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_12sdp"
+                android:layout_toRightOf="@+id/unattempted"
+                android:gravity="center_horizontal"
+                android:text="Unattempted" />
+
+            <TextView
+                android:id="@+id/tvUnAttemptedCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/_20sdp"
+                android:text="0"
+                android:textColor="@color/colorBlack"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:background="@color/colorLightGrey" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_15sdp">
+
+            <TextView
+                android:id="@+id/marked"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_marked" />
+
+            <TextView
+                android:id="@+id/tvMarked"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_12sdp"
+                android:layout_toRightOf="@+id/marked"
+                android:gravity="center_horizontal"
+                android:text="Marked"
+                android:textSize="@dimen/_12ssp" />
+
+            <TextView
+                android:id="@+id/tvMarkedCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/_20sdp"
+                android:text="0"
+                android:textColor="@color/colorBlack"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_15sdp"
+            android:text="Are you sure want to submit the test?"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/_15ssp" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_20sdp"
+            android:padding="@dimen/_5sdp">
+
+            <TextView
+                android:id="@+id/tvYes"
+                android:layout_width="@dimen/_50sdp"
+                android:layout_height="@dimen/_35sdp"
+                android:background="@color/colorSkyBlue"
+                android:gravity="center"
+                android:text="Yes"
+                android:textColor="@color/colorWhite"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvNo"
+                android:layout_width="@dimen/_50sdp"
+                android:layout_height="@dimen/_35sdp"
+                android:layout_marginLeft="@dimen/_20sdp"
+                android:layout_toRightOf="@+id/tvYes"
+                android:background="@color/grey"
+                android:gravity="center"
+                android:text="No"
+                android:textColor="@color/colorWhite"
+                android:textStyle="bold" />
+
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</layout>
