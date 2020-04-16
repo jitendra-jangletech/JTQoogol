@@ -25,6 +25,9 @@ import com.jangletech.qoogol.model.LearningQuestions;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.jangletech.qoogol.util.Constant.learning;
+import static com.jangletech.qoogol.util.Constant.test;
+
 public class LearningFragment extends Fragment implements LearingAdapter.onIconClick {
 
     private LearningViewModel mViewModel;
@@ -87,7 +90,7 @@ public class LearningFragment extends Fragment implements LearingAdapter.onIconC
 
     private void initView() {
         learningQuestionsList = new ArrayList<>();
-        learingAdapter = new LearingAdapter(getActivity(), learningQuestionsList,this);
+        learingAdapter = new LearingAdapter(getActivity(), learningQuestionsList,this,test);
         learningFragmentBinding.learningRecycler.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         learningFragmentBinding.learningRecycler.setLayoutManager(linearLayoutManager);
@@ -392,7 +395,6 @@ public class LearningFragment extends Fragment implements LearingAdapter.onIconC
         learningQuestions9.setDifficulty_level("Medium");
         learningQuestions9.setMarks("3");
         learningQuestionsList.add(learningQuestions9);
-
     }
 
 

@@ -68,4 +68,8 @@ public class Constant {
     public static final int add_edu = 0;
     public static final String user_eduid = "userEduId";
 
+    //learning adapter
+    public static int learning = 0;
+    public static int test = 1;
+
 }
