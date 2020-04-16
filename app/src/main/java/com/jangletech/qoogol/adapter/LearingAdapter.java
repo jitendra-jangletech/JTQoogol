@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.jangletech.qoogol.MainActivity;
 import com.jangletech.qoogol.R;
+import com.jangletech.qoogol.activities.PracticeTestActivity;
 import com.jangletech.qoogol.databinding.LearningItemBinding;
 import com.jangletech.qoogol.model.LearningQuestions;
 import com.jangletech.qoogol.ui.learning.SlideshowDialogFragment;
@@ -157,7 +158,15 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("images", (Serializable) finalTempimgList);
                         bundle.putInt("position", 0);
-                        FragmentTransaction fragmentTransaction = ((MainActivity) activity).getSupportFragmentManager().beginTransaction();
+                        FragmentTransaction fragmentTransaction = null;
+                        if(activity instanceof MainActivity){
+                            fragmentTransaction =((MainActivity) activity).getSupportFragmentManager().beginTransaction();
+                        }
+
+                        if(activity instanceof PracticeTestActivity){
+                            fragmentTransaction =((PracticeTestActivity) activity).getSupportFragmentManager().beginTransaction();
+                        }
+
                         SlideshowDialogFragment newFragment = SlideshowDialogFragment.newInstance();
                         newFragment.setArguments(bundle);
                         newFragment.show(fragmentTransaction, "slideshow");

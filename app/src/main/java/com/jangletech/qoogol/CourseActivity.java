@@ -116,7 +116,6 @@ public class CourseActivity extends AppCompatActivity implements QuestionPaletAd
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 super.onPageScrolled(position, positionOffset, positionOffsetPixels);
-                //Toast.makeText(CourseActivity.this, ""+position, Toast.LENGTH_SHORT).show();
             }
 
             @Override
