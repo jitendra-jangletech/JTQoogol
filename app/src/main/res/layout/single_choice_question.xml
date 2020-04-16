@@ -7,7 +7,7 @@
         android:id="@+id/questRelativeLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/grey"
+        android:background="@color/colorLightGray"
         tools:context=".Test.TestFragment">
 
         <com.google.android.material.card.MaterialCardView
@@ -242,7 +242,7 @@
             android:layout_height="@dimen/_40sdp"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="@dimen/_40sdp"
-            android:background="@color/grey"
+            android:background="@color/colorLightGray"
             android:padding="@dimen/_2sdp">
 
             <androidx.appcompat.widget.AppCompatButton

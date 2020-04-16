@@ -90,7 +90,7 @@ public class TestFragment extends BaseFragment implements QueViewClick, QuestRep
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-        showToast("Position Selected " + position);
+        //showToast("Position Selected " + position);
 
         if (testQuestions.get(position).getQuestType().equalsIgnoreCase(QuestionType.MCQ.toString())) {
             multiChoiceQuestionBinding = DataBindingUtil.inflate(inflater, R.layout.multi_choice_question, container, false);

@@ -2,7 +2,6 @@ package com.jangletech.qoogol;
 
 import android.content.Intent;
 import android.os.Bundle;
-
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import androidx.navigation.NavController;
@@ -14,6 +13,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jangletech.qoogol.activities.BaseActivity;
+import com.jangletech.qoogol.activities.PracticeTestActivity;
 import com.jangletech.qoogol.activities.SignInActivity;
 import com.jangletech.qoogol.databinding.ActivityMainBinding;
 import com.jangletech.qoogol.dialog.UniversalDialog;
@@ -101,7 +101,8 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
             mBinding.drawerLayout.closeDrawers();
             if (navController.getCurrentDestination().getId() != R.id.nav_practice_test) {
                 navController.popBackStack();
-                navController.navigate(R.id.nav_practice_test);
+                //navController.navigate(R.id.nav_practice_test);
+                startActivity(new Intent(this, PracticeTestActivity.class));
             }
         });
 

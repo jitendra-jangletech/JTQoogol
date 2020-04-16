@@ -140,7 +140,6 @@ public class QuestionPaletAdapter extends RecyclerView.Adapter<QuestionPaletAdap
                 questClickListener.onQuestionSelected(question.getQuestId());
             });
         }
-
     }
 
     @Override
