@@ -1,14 +1,82 @@
 package com.jangletech.qoogol.model;
 
+import java.util.ArrayList;
+
 /**
  * Created by Pritali on 3/18/2020.
  */
 public class LearningQuestions {
     String question_id, question, questiondesc, answer, category, subject, chapter, rating, difficulty_level,
-    topic, posted_on, lastused_on, likes, comments, shares,  recommended_time, attchment, marks, answerDesc,
-    mcq1, mcq2, mcq3, mcq4;
+    topic, posted_on, lastused_on, likes, comments, shares,  recommended_time,  marks, answerDesc,
+    mcq1, mcq2, mcq3, mcq4, a1, a2, a3, a4, b1, b2, b3, b4;
     int attended_by, solve_right;
     boolean is_liked, is_fav;
+
+    ArrayList<String> attchment;
+
+    public String getA1() {
+        return a1;
+    }
+
+    public void setA1(String a1) {
+        this.a1 = a1;
+    }
+
+    public String getA2() {
+        return a2;
+    }
+
+    public void setA2(String a2) {
+        this.a2 = a2;
+    }
+
+    public String getA3() {
+        return a3;
+    }
+
+    public void setA3(String a3) {
+        this.a3 = a3;
+    }
+
+    public String getA4() {
+        return a4;
+    }
+
+    public void setA4(String a4) {
+        this.a4 = a4;
+    }
+
+    public String getB1() {
+        return b1;
+    }
+
+    public void setB1(String b1) {
+        this.b1 = b1;
+    }
+
+    public String getB2() {
+        return b2;
+    }
+
+    public void setB2(String b2) {
+        this.b2 = b2;
+    }
+
+    public String getB3() {
+        return b3;
+    }
+
+    public void setB3(String b3) {
+        this.b3 = b3;
+    }
+
+    public String getB4() {
+        return b4;
+    }
+
+    public void setB4(String b4) {
+        this.b4 = b4;
+    }
 
     public String getAnswerDesc() {
         return answerDesc;
@@ -66,11 +134,11 @@ public class LearningQuestions {
         this.recommended_time = recommended_time;
     }
 
-    public String getAttchment() {
+    public ArrayList<String> getAttchment() {
         return attchment;
     }
 
-    public void setAttchment(String attchment) {
+    public void setAttchment(ArrayList<String> attchment) {
         this.attchment = attchment;
     }
 

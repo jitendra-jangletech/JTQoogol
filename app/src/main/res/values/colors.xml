@@ -37,4 +37,9 @@
 
     <color name="icon_color">#0682FF</color>
 
+    <color name="hotpink">#F8BED9</color>
+    <color name="steelblue">#BAE0FF</color>
+    <color name="cadetblue">#CCFAFF</color>
+    <color name="slateblue">#C2BBEA</color>
+
 </resources>
