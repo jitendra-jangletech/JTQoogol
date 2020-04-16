@@ -34,6 +34,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import static com.jangletech.qoogol.util.Constant.test;
+
 /**
  * Created by Pritali on 3/18/2020.
  */
@@ -42,22 +44,24 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
     Activity activity;
     LearningItemBinding learningItemBinding;
     onIconClick onIconClick;
+    int call_from;
 
 
-    public LearingAdapter(Activity activity, List<LearningQuestions> learningQuestionsList, onIconClick onIconClick) {
+    public LearingAdapter(Activity activity, List<LearningQuestions> learningQuestionsList, onIconClick onIconClick, int call_from) {
         this.activity = activity;
         this.learningQuestionsList = learningQuestionsList;
         this.onIconClick = onIconClick;
+        this.call_from = call_from;
     }
 
     @NonNull
     @Override
-    public LearingAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         learningItemBinding = DataBindingUtil.inflate(
                 LayoutInflater.from(parent.getContext()),
                 R.layout.learning_item, parent, false);
 
-        return new LearingAdapter.ViewHolder(learningItemBinding);
+        return new ViewHolder(learningItemBinding);
     }
 
     @Override
@@ -71,7 +75,7 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(@NonNull LearingAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         LearningQuestions learningQuestions = learningQuestionsList.get(position);
         hideLayouts();
 
@@ -174,6 +178,11 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
     }
 
     public void hideLayouts() {
+        if (call_from==test) {
+            learningItemBinding.expandableLayout.setVisibility(View.VISIBLE);
+            learningItemBinding.expand.setVisibility(View.GONE);
+            learningItemBinding.close.setVisibility(View.GONE);
+        }
         learningItemBinding.queImg1.setVisibility(View.GONE);
         learningItemBinding.imgRecycler.setVisibility(View.GONE);
         learningItemBinding.matchThePairs.setVisibility(View.GONE);
