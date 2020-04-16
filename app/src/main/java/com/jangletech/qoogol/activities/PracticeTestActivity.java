@@ -1,16 +1,19 @@
 package com.jangletech.qoogol.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.jangletech.qoogol.MainActivity;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.LearingAdapter;
 import com.jangletech.qoogol.adapter.PracticeTestAdapter;
 import com.jangletech.qoogol.databinding.ActivityPracticeTestBinding;
 import com.jangletech.qoogol.model.LearningQuestions;
+import com.jangletech.qoogol.util.Constant;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +37,7 @@ public class PracticeTestActivity extends AppCompatActivity implements LearingAd
     private void initView() {
 
         mBinding.viewPager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
-        learingAdapter = new LearingAdapter(PracticeTestActivity.this, learningQuestionsList,this);
+        learingAdapter = new LearingAdapter(PracticeTestActivity.this, learningQuestionsList,this, Constant.test);
         mBinding.viewPager.setAdapter(learingAdapter);
     }
 
