@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.jangletech.qoogol.R;
@@ -24,7 +25,7 @@ import com.jangletech.qoogol.model.LearningQuestions;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LearningFragment extends Fragment {
+public class LearningFragment extends Fragment implements LearingAdapter.onIconClick {
 
     private LearningViewModel mViewModel;
     LearningFragmentBinding learningFragmentBinding;
@@ -86,7 +87,7 @@ public class LearningFragment extends Fragment {
 
     private void initView() {
         learningQuestionsList = new ArrayList<>();
-        learingAdapter = new LearingAdapter(getActivity(), learningQuestionsList);
+        learingAdapter = new LearingAdapter(getActivity(), learningQuestionsList,this);
         learningFragmentBinding.learningRecycler.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         learningFragmentBinding.learningRecycler.setLayoutManager(linearLayoutManager);
@@ -292,13 +293,13 @@ public class LearningFragment extends Fragment {
         learningQuestions8.setDifficulty_level("Easy");
         learningQuestions8.setMarks("2");
         learningQuestionsList.add(learningQuestions8);
-
-
-
-
-
-
     }
 
 
+    @Override
+    public void onCommentClick(String questionId) {
+        Bundle bundle = new Bundle();
+        bundle.putString("QuestionId", questionId);
+        NavHostFragment.findNavController(this).navigate(R.id.action_nav_learning_to_nav_comments, bundle);
+    }
 }

@@ -221,7 +221,7 @@
                         android:id="@+id/single_choice"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        android:visibility="gone"
+                        android:visibility="visible"
                         android:layout_height="wrap_content">
 
 

@@ -1,0 +1,38 @@
+<!--
+  ~
+  ~ /*
+  ~  * /////////////////////////////////////////////////////////////////////////////////////////////////
+  ~  * //
+  ~  * //            Copyright (c) 2020. JangleTech Systems Private Limited, Thane, India
+  ~  * //
+  ~  * /////////////////////////////////////////////////////////////////////////////////////////////////
+  ~  */
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="60dp"
+    android:height="60dp"
+    android:tint="@color/colorSkyBlue"
+    android:viewportWidth="40"
+    android:viewportHeight="40">
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M15.9,27.22a0.26,0.26 0,0 1,-0.06 -0.29L18.14,20l-2.32,-6.91a0.27,0.27 0,0 1,0.06 -0.3,0.34 0.34,0 0,1 0.29,0l16.36,7a0.29,0.29 0,0 1,0.18 0.25,0.24 0.24,0 0,1 -0.18,0.25l-16.36,7c-0.06,0 -0.17,0 -0.27,0ZM16.54,13.48 L18.69,19.91a0.21,0.21 0,0 1,0 0.16L16.54,26.5 31.76,20Z"
+        android:strokeWidth="0.8"
+        android:strokeColor="#242424" />
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M7.37,20.28a0.22,0.22 0,0 1,-0.08 -0.19,0.26 0.26,0 0,1 0.27,-0.27H12a0.27,0.27 0,1 1,0 0.54l-4.38,0a0.32,0.32 0,0 1,-0.21 -0.1Z"
+        android:strokeWidth="0.8"
+        android:strokeColor="#242424" />
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M8.93,16a0.26,0.26 0,0 1,-0.08 -0.2,0.27 0.27,0 0,1 0.27,-0.27h4.4a0.28,0.28 0,1 1,0 0.55l-4.38,0a0.3,0.3 0,0 1,-0.21 -0.1Z"
+        android:strokeWidth="0.8"
+        android:strokeColor="#242424" />
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M8.93,24.18a0.26,0.26 0,0 1,-0.08 -0.2,0.27 0.27,0 0,1 0.27,-0.27h4.4a0.28,0.28 0,1 1,0 0.55l-4.38,0a0.3,0.3 0,0 1,-0.21 -0.1Z"
+        android:strokeWidth="0.8"
+        android:strokeColor="#242424" />
+</vector>
