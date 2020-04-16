@@ -90,7 +90,7 @@ public class LearningFragment extends Fragment implements LearingAdapter.onIconC
 
     private void initView() {
         learningQuestionsList = new ArrayList<>();
-        learingAdapter = new LearingAdapter(getActivity(), learningQuestionsList,this,test);
+        learingAdapter = new LearingAdapter(getActivity(), learningQuestionsList,this,learning);
         learningFragmentBinding.learningRecycler.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         learningFragmentBinding.learningRecycler.setLayoutManager(linearLayoutManager);
