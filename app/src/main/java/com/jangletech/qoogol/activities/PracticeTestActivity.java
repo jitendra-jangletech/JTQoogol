@@ -34,7 +34,7 @@ public class PracticeTestActivity extends AppCompatActivity implements LearingAd
     private void initView() {
 
         mBinding.viewPager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
-        learingAdapter = new LearingAdapter(PracticeTestActivity.this, learningQuestionsList,this);
+//        learingAdapter = new LearingAdapter(PracticeTestActivity.this, learningQuestionsList,this);
         mBinding.viewPager.setAdapter(learingAdapter);
     }
 
