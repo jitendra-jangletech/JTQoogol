@@ -110,7 +110,6 @@ public class MyTestFragment extends BaseFragment implements TestAdapter.TestClic
                         testAdapter.setSearchResult(filteredModelList);
                         mBinding.tvNoTest.setVisibility(View.VISIBLE);
                     }
-
                 }
             }
         });

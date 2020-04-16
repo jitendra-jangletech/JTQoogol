@@ -75,9 +75,6 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
         LearningQuestions learningQuestions = learningQuestionsList.get(position);
         hideLayouts();
 
-
-
-
         if (learningQuestions.getQuestiondesc() == null || learningQuestions.getQuestiondesc() == "")
             learningItemBinding.questiondescTextview.setVisibility(View.GONE);
 

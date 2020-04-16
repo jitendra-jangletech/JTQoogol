@@ -124,7 +124,7 @@ public class CourseActivity extends AppCompatActivity implements QuestionPaletAd
                 super.onPageSelected(position);
                 TestQuestion testQuestion = testQuestionList.get(position);
                 testQuestion.setVisited(true);
-                Toast.makeText(CourseActivity.this, "Selected Page : "+position, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(CourseActivity.this, "Selected Page : " + position, Toast.LENGTH_SHORT).show();
                 Log.e("Selected_Page", String.valueOf(position));
             }
 
@@ -379,7 +379,7 @@ public class CourseActivity extends AppCompatActivity implements QuestionPaletAd
     }
 
     private List<TestQuestion> setQuestionList() {
-
+        testQuestionList.clear();
         TestQuestion testQuestion = new TestQuestion(0, 1, "MCQ",
                 "Web Pages are saved in which of the following format?", "http://", "HTML", "DOC", "URL", "BMP");
 
@@ -570,12 +570,14 @@ public class CourseActivity extends AppCompatActivity implements QuestionPaletAd
     }
 
     private void prepareQuestPaletGridList() {
+        Log.d(TAG, "prepareQuestPaletGridList size : " + testQuestionList.size());
         mBinding.questionsPaletListRecyclerView.setVisibility(View.GONE);
         mBinding.questionsPaletGridRecyclerView.setVisibility(View.VISIBLE);
         mBinding.questionsPaletGridRecyclerView.setNestedScrollingEnabled(false);
         mBinding.questionsPaletGridRecyclerView.setLayoutManager(new GridLayoutManager(this, 5));
         questionPaletAdapter = new QuestionPaletAdapter(testQuestionList, this, QuestionSortType.GRID.toString(), this);
         mBinding.questionsPaletGridRecyclerView.setAdapter(questionPaletAdapter);
+        questionPaletAdapter.notifyDataSetChanged();
     }
 
     private void prepareQuestPaletList() {
@@ -586,6 +588,7 @@ public class CourseActivity extends AppCompatActivity implements QuestionPaletAd
         mBinding.questionsPaletListRecyclerView.setHasFixedSize(true);
         mBinding.questionsPaletListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mBinding.questionsPaletListRecyclerView.setAdapter(questionPaletAdapter);
+        questionPaletAdapter.notifyDataSetChanged();
     }
 
     @Override
