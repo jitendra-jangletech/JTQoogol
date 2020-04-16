@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.card.MaterialCardView;
 import com.jangletech.qoogol.MainActivity;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.activities.PracticeTestActivity;
@@ -35,6 +36,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import static com.jangletech.qoogol.util.Constant.learning;
 import static com.jangletech.qoogol.util.Constant.test;
 
 /**
@@ -46,6 +48,7 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
     LearningItemBinding learningItemBinding;
     onIconClick onIconClick;
     int call_from;
+    MaterialCardView.LayoutParams params;
 
 
     public LearingAdapter(Activity activity, List<LearningQuestions> learningQuestionsList, onIconClick onIconClick, int call_from) {
@@ -61,7 +64,12 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
         learningItemBinding = DataBindingUtil.inflate(
                 LayoutInflater.from(parent.getContext()),
                 R.layout.learning_item, parent, false);
-
+        if (call_from==learning) {
+            params = new MaterialCardView.LayoutParams(MaterialCardView.LayoutParams.MATCH_PARENT, MaterialCardView.LayoutParams.WRAP_CONTENT);
+            int margin = activity.getResources().getDimensionPixelSize(R.dimen._10sdp);
+            params.setMargins(0,margin,0,margin);
+            learningItemBinding.container.setLayoutParams(params);
+        }
         return new ViewHolder(learningItemBinding);
     }
 
