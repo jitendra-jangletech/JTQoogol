@@ -22,9 +22,7 @@ public class CardFragment extends Fragment {
     private static final String ARG_COUNT = "param1";
     private Integer counter;
     private int[] COLOR_MAP = {
-            R.color.red_100, R.color.red_300, R.color.red_500, R.color.red_700, R.color.blue_100,
-            R.color.blue_300, R.color.blue_500, R.color.blue_700, R.color.green_100, R.color.green_300,
-            R.color.green_500, R.color.green_700
+            R.color.color_green,R.color.blue
     };
     public CardFragment() {
         // Required empty public constructor
