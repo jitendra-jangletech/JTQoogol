@@ -41,5 +41,6 @@
     <color name="steelblue">#BAE0FF</color>
     <color name="cadetblue">#CCFAFF</color>
     <color name="slateblue">#C2BBEA</color>
+    <color name="yellow">#fff3c2</color>
 
 </resources>

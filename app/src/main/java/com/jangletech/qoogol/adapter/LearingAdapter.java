@@ -669,6 +669,10 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
             }
         }
 
+        private void setPairs() {
+
+        }
+
         @SuppressLint("NewApi")
         private class ChoiceDragListener implements View.OnDragListener {
 
@@ -694,6 +698,9 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
                                 isB1Selected = true;
                                 dropped.setBackgroundColor(activity.getResources().getColor(R.color.hotpink));
                                 learningItemBinding.b1.setBackgroundColor(activity.getResources().getColor(R.color.hotpink));
+                                if (paired.size()==MTP_ans.size()-1) {
+                                    setLastPair();
+                                }
                                 break;
                             case R.id.b2:
                             case R.id.b2text:
@@ -702,6 +709,9 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
                                 isB2Selected = true;
                                 dropped.setBackgroundColor(activity.getResources().getColor(R.color.slateblue));
                                 learningItemBinding.b2.setBackgroundColor(activity.getResources().getColor(R.color.slateblue));
+                                if (paired.size()==MTP_ans.size()-1) {
+                                    setLastPair();
+                                }
                                 break;
                             case R.id.b3:
                             case R.id.b3text:
@@ -710,6 +720,9 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
                                 isB3Selected = true;
                                 dropped.setBackgroundColor(activity.getResources().getColor(R.color.steelblue));
                                 learningItemBinding.b3.setBackgroundColor(activity.getResources().getColor(R.color.steelblue));
+                                if (paired.size()==MTP_ans.size()-1) {
+                                    setLastPair();
+                                }
                                 break;
                             case R.id.b4:
                             case R.id.b4text:
@@ -718,6 +731,9 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
                                 isB4Selected = true;
                                 dropped.setBackgroundColor(activity.getResources().getColor(R.color.cadetblue));
                                 learningItemBinding.b4.setBackgroundColor(activity.getResources().getColor(R.color.cadetblue));
+                                if (paired.size()==MTP_ans.size()-1) {
+                                    setLastPair();
+                                }
                                 break;
                             default:
                                 break;
@@ -733,7 +749,65 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
             }
         }
 
+        private void setLastPair() {
+            String a_group = "", b_group="";
+            if (!paired.containsKey("a1")) {
+                a_group="a1";
+            } else  if (!paired.containsKey("a2")) {
+                a_group="a2";
+            } else  if (!paired.containsKey("a3")) {
+                a_group="a3";
+            } else  if (!paired.containsKey("a4")) {
+                a_group="a4";
+            }
 
+            if (!paired.containsValue("b1")) {
+                b_group="b1";
+            } else  if (!paired.containsValue("b2")) {
+                b_group="b2";
+            } else  if (!paired.containsValue("b3")) {
+                b_group="b3";
+            } else  if (!paired.containsValue("b4")) {
+                b_group="b4";
+            }
+
+            if (!a_group.equalsIgnoreCase("") && !b_group.equalsIgnoreCase("")) {
+                paired.put(a_group,b_group);
+                setmatchedPair(a_group,activity.getResources().getColor(R.color.yellow));
+                setmatchedPair(b_group,activity.getResources().getColor(R.color.yellow));
+            }
+        }
+
+        public void setmatchedPair(String option, int color) {
+            switch (option) {
+                case "b1":
+                    learningItemBinding.b1.setBackgroundColor(color);
+                    break;
+                case "b2":
+                    learningItemBinding.b2.setBackgroundColor(color);
+                    break;
+                case "b3":
+                    learningItemBinding.b3.setBackgroundColor(color);
+                    break;
+                case "b4":
+                    learningItemBinding.b4.setBackgroundColor(color);
+                    break;
+                case "a1":
+                    learningItemBinding.a1.setBackgroundColor(color);
+                    break;
+                case "a2":
+                    learningItemBinding.a2.setBackgroundColor(color);
+                    break;
+                case "a3":
+                    learningItemBinding.a3.setBackgroundColor(color);
+                    break;
+                case "a4":
+                    learningItemBinding.a4.setBackgroundColor(color);
+                    break;
+                default:
+                    break;
+            }
+        }
 
         private void setRightPair(String option) {
             switch (option) {
