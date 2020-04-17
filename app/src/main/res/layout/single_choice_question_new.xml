@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/rootLayout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_40sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:padding="@dimen/_5sdp">
+
+        <TextView
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/rootLayout"
+            android:id="@+id/tv_quest_no"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:background="@drawable/bg_quest_visited"
+            android:gravity="center"
+            android:text="2"
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold" />
+
+        <TextView
+            app:layout_constraintLeft_toRightOf="@+id/tv_quest_no"
+            android:id="@+id/tv_quest_timer"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/_8sdp"
+            android:layout_marginRight="@dimen/_5sdp"
+            android:gravity="center"
+            android:text="00:34"
+            android:textColor="@color/colorSkyBlue"
+            android:textStyle="bold" />
+
+        <View
+            android:id="@+id/divider"
+            app:layout_constraintLeft_toRightOf="@+id/tv_quest_timer"
+            android:layout_width="@dimen/_1sdp"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/_5sdp"
+            android:background="@color/colorBlack" />
+
+        <TextView
+            app:layout_constraintLeft_toRightOf="@+id/divider"
+            android:id="@+id/tv_positive_marks"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/_8sdp"
+            android:layout_marginRight="@dimen/_5sdp"
+            android:gravity="center"
+            android:text="+1.0"
+            android:textColor="@color/colorSkyBlue"
+            android:textStyle="bold" />
+
+        <TextView
+            app:layout_constraintLeft_toRightOf="@+id/tv_positive_marks"
+            android:id="@+id/tv_negative_marks"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/_8sdp"
+            android:layout_marginRight="@dimen/_100sdp"
+            android:gravity="center"
+            android:text="-0.33"
+            android:textColor="@color/colorSkyBlue"
+            android:textStyle="bold" />
+
+        <ImageView
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/tv_negative_marks"
+            android:id="@+id/img_report"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/_20sdp"
+            android:src="@drawable/ic_report" />
+
+       <!-- <ImageView
+            app:layout_constraintLeft_toRightOf="@+id/img_report"
+            app:layout_constraintTop_toTopOf="parent"
+            bottom
+            android:id="@+id/img_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/_10sdp"
+            android:src="@drawable/ic_star_outline" />-->
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -11,11 +11,16 @@
         android:fitsSystemWindows="true"
         tools:openDrawer="start">
 
-        <include
+       <!-- <include
             android:id="@+id/app_bar_main"
             layout="@layout/app_bar_course"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent" />-->
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/course_viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
 
         <com.google.android.material.navigation.NavigationView
             android:id="@+id/navigationView"
@@ -37,7 +42,7 @@
                     <LinearLayout
                         android:id="@+id/rootLayout"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/_40sdp"
+                        android:layout_height="@dimen/_65sdp"
                         android:orientation="horizontal"
                         android:weightSum="2">
 

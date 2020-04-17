@@ -4,8 +4,9 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
-import androidx.viewpager2.widget.ViewPager2;
+
 import com.jangletech.qoogol.R;
+import com.jangletech.qoogol.adapter.DummyAdapter;
 import com.jangletech.qoogol.databinding.ActivityDynamicViewPagerBinding;
 import com.jangletech.qoogol.enums.QuestionType;
 import com.jangletech.qoogol.model.TestQuestion;
@@ -17,20 +18,23 @@ public class DynamicViewPagerActivity extends AppCompatActivity {
 
     private ActivityDynamicViewPagerBinding mBinding;
     public static List<TestQuestion> testQuestionList = new ArrayList<>();
+    DummyAdapter dummyAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this,R.layout.activity_dynamic_view_pager);
-        setQuestionList();
-        mBinding.viewPager.setAdapter(createCardAdapter());
+        //setQuestionList();
+        dummyAdapter = new DummyAdapter(this);
+        mBinding.courseViewpager.setAdapter(dummyAdapter);
 
     }
+
     private ViewPagerAdapterNew createCardAdapter() {
         ViewPagerAdapterNew adapter = new ViewPagerAdapterNew(this);
         return adapter;
     }
-
+/*
     private List<TestQuestion> setQuestionList() {
 
         TestQuestion testQuestion = new TestQuestion(0, 1, "MCQ",
@@ -76,6 +80,6 @@ public class DynamicViewPagerActivity extends AppCompatActivity {
         testQuestionList.add(testQuestion7);
 
         return testQuestionList;
-    }
+    }*/
 
 }
