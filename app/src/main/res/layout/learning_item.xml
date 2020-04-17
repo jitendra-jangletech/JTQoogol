@@ -391,6 +391,18 @@
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/single_choice" />
 
+                    <ImageView
+                        android:src="@drawable/ic_right"
+                        android:id="@+id/fib_img"
+                        android:visibility="gone"
+                        app:layout_constraintRight_toRightOf="@+id/fill_in_the_blanks"
+                        app:layout_constraintTop_toTopOf="@+id/fill_in_the_blanks"
+                        app:layout_constraintBottom_toBottomOf="@+id/fill_in_the_blanks"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+
+
                     <EditText
                         android:id="@+id/single_line"
                         android:layout_width="match_parent"
@@ -402,6 +414,19 @@
                         android:visibility="gone"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/fill_in_the_blanks" />
+
+                    <TextView
+                        android:id="@+id/single_lineCounter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:text="0/200"
+                        android:visibility="gone"
+                        android:textColor="@color/colorSkyBlue"
+                        app:layout_constraintTop_toBottomOf="@+id/single_line"
+                        app:layout_constraintRight_toRightOf="parent"
+                        android:textStyle="bold" />
 
 
                     <EditText
@@ -416,6 +441,20 @@
                         android:visibility="gone"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/single_line" />
+
+                    <TextView
+                        android:id="@+id/multi_lineCounter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:text="0/200"
+                        android:visibility="gone"
+                        android:textColor="@color/colorSkyBlue"
+                        app:layout_constraintTop_toBottomOf="@+id/multi_line"
+                        app:layout_constraintRight_toRightOf="parent"
+                        android:textStyle="bold" />
+
 
                     <LinearLayout
                         android:id="@+id/true_false"
