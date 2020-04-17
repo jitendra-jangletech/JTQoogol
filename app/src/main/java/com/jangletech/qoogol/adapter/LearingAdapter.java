@@ -5,12 +5,18 @@ import android.app.Activity;
 import android.content.ClipData;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.InputFilter;
+import android.text.Spanned;
+import android.text.TextWatcher;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -137,12 +143,18 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
             learningItemBinding.categoryTextview.setText("Fill in the Blanks");
         } else if (learningQuestions.getCategory().equalsIgnoreCase("AIS")) {
             learningItemBinding.singleLine.setVisibility(View.VISIBLE);
+            learningItemBinding.singleLineCounter.setVisibility(View.VISIBLE);
             learningItemBinding.categoryTextview.setText("Answer in Short");
+            answerCharCounter(learningItemBinding.singleLine,learningItemBinding.singleLineCounter,200);
         } else if (learningQuestions.getCategory().equalsIgnoreCase("AIB")) {
             learningItemBinding.multiLine.setVisibility(View.VISIBLE);
+            learningItemBinding.multiLineCounter.setVisibility(View.VISIBLE);
+            answerCharCounter(learningItemBinding.multiLine,learningItemBinding.multiLineCounter,400);
             learningItemBinding.categoryTextview.setText("Answer in Brief");
         } else if (learningQuestions.getCategory().equalsIgnoreCase("MTP")) {
             learningItemBinding.matchThePairs.setVisibility(View.VISIBLE);
+            learningItemBinding.reset.setVisibility(View.VISIBLE);
+            learningItemBinding.resetLabel.setVisibility(View.VISIBLE);
             learningItemBinding.categoryTextview.setText("Match the Pairs");
             learningItemBinding.a1text.setText(learningQuestions.getA1());
             learningItemBinding.a2text.setText(learningQuestions.getA2());
@@ -194,20 +206,60 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
         }
     }
 
+
+    private void answerCharCounter(EditText etAnswer, TextView tvCounter, int maxWordLength) {
+
+        InputFilter filter = new InputFilter() {
+            @Override
+            public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+                return null;
+            }
+        };
+        etAnswer.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                int wordCount = 0;
+                if (s.toString().contains(" ")) {
+                    String[] words = s.toString().split(" ", -1);
+                    wordCount = words.length;
+                }
+
+                if (wordCount == maxWordLength) {
+                    etAnswer.setFilters(new InputFilter[]{new InputFilter.LengthFilter(s.length() - 1)});
+                }
+
+                tvCounter.setText((maxWordLength - wordCount + "/" + String.valueOf(maxWordLength)));
+            }
+        });
+    }
+
     public void hideLayouts() {
         if (call_from==test) {
             learningItemBinding.expandableLayout.setVisibility(View.VISIBLE);
             learningItemBinding.expand.setVisibility(View.GONE);
             learningItemBinding.close.setVisibility(View.GONE);
         }
+        learningItemBinding.reset.setVisibility(View.GONE);
+        learningItemBinding.resetLabel.setVisibility(View.GONE);
         learningItemBinding.queImg1.setVisibility(View.GONE);
         learningItemBinding.imgRecycler.setVisibility(View.GONE);
         learningItemBinding.matchThePairs.setVisibility(View.GONE);
         learningItemBinding.trueFalse.setVisibility(View.GONE);
         learningItemBinding.fillInTheBlanks.setVisibility(View.GONE);
         learningItemBinding.singleLine.setVisibility(View.GONE);
+        learningItemBinding.singleLineCounter.setVisibility(View.GONE);
         learningItemBinding.multiChoice.setVisibility(View.GONE);
         learningItemBinding.multiLine.setVisibility(View.GONE);
+        learningItemBinding.multiLineCounter.setVisibility(View.GONE);
         learningItemBinding.singleChoice.setVisibility(View.GONE);
     }
 
@@ -275,6 +327,7 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
             });
 
             learningItemBinding.reset.setOnClickListener(v -> reset());
+            learningItemBinding.resetLabel.setOnClickListener(v -> reset());
 
             learningItemBinding.commentLayout.setOnClickListener(v -> onIconClick.onCommentClick(learningQuestionsList.get(getAdapterPosition()).getQuestion_id()));
 
@@ -365,6 +418,7 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
             learningItemBinding.btntrue.setOnClickListener(v -> {
                 setTFLayoutBg();
                 tfAns = "true";
+                learningItemBinding.btnfalse.setTextColor(activity.getResources().getColor(R.color.black));
                 learningItemBinding.btntrue.setBackground(activity.getResources().getDrawable(R.drawable.grey_border_grey_bg));
 
             });
@@ -372,6 +426,7 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
             learningItemBinding.btnfalse.setOnClickListener(v -> {
                 setTFLayoutBg();
                 tfAns = "false";
+                learningItemBinding.btntrue.setTextColor(activity.getResources().getColor(R.color.black));
                 learningItemBinding.btnfalse.setBackground(activity.getResources().getDrawable(R.drawable.grey_border_grey_bg));
 
             });
@@ -415,8 +470,10 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
                     if (!tfAns.equalsIgnoreCase("")) {
                         if (tfAns.equalsIgnoreCase(learningQuestions.getAnswer())) {
                             setRightTF("true");
+                            learningItemBinding.btntrue.setTextColor(activity.getResources().getColor(R.color.white));
                         } else {
                             setWrongTF(tfAns);
+                            learningItemBinding.btnfalse.setTextColor(activity.getResources().getColor(R.color.white));
                         }
                         learningItemBinding.solutionLayout.setVisibility(View.VISIBLE);
                     } else {
@@ -426,11 +483,14 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
                     learningItemBinding.fillInTheBlanks.setBackground(activity.getResources().getDrawable(R.drawable.grey_border));
                     if (!learningItemBinding.fillInTheBlanks.getText().toString().trim().equalsIgnoreCase("")) {
                         if (learningItemBinding.fillInTheBlanks.getText().toString().trim().equalsIgnoreCase(learningQuestions.getAnswer().toString().trim())) {
+                            learningItemBinding.fibImg.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_right));
                             learningItemBinding.fillInTheBlanks.setBackground(activity.getResources().getDrawable(R.drawable.green_border));
                         } else {
                             learningItemBinding.fillInTheBlanks.setBackground(activity.getResources().getDrawable(R.drawable.red_border));
+                            learningItemBinding.fibImg.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_wrong));
                         }
                         learningItemBinding.solutionLayout.setVisibility(View.VISIBLE);
+                        learningItemBinding.fibImg.setVisibility(View.VISIBLE);
                     } else {
                         Toast.makeText(activity, "Please enter answer first.", Toast.LENGTH_SHORT).show();
                     }
@@ -614,6 +674,10 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
             }
         }
 
+        private void setPairs() {
+
+        }
+
         @SuppressLint("NewApi")
         private class ChoiceDragListener implements View.OnDragListener {
 
@@ -639,7 +703,9 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
                                 isB1Selected = true;
                                 dropped.setBackgroundColor(activity.getResources().getColor(R.color.hotpink));
                                 learningItemBinding.b1.setBackgroundColor(activity.getResources().getColor(R.color.hotpink));
-
+                                if (paired.size()==MTP_ans.size()-1) {
+                                    setLastPair();
+                                }
                                 break;
                             case R.id.b2:
                             case R.id.b2text:
@@ -648,6 +714,9 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
                                 isB2Selected = true;
                                 dropped.setBackgroundColor(activity.getResources().getColor(R.color.slateblue));
                                 learningItemBinding.b2.setBackgroundColor(activity.getResources().getColor(R.color.slateblue));
+                                if (paired.size()==MTP_ans.size()-1) {
+                                    setLastPair();
+                                }
                                 break;
                             case R.id.b3:
                             case R.id.b3text:
@@ -656,6 +725,9 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
                                 isB3Selected = true;
                                 dropped.setBackgroundColor(activity.getResources().getColor(R.color.steelblue));
                                 learningItemBinding.b3.setBackgroundColor(activity.getResources().getColor(R.color.steelblue));
+                                if (paired.size()==MTP_ans.size()-1) {
+                                    setLastPair();
+                                }
                                 break;
                             case R.id.b4:
                             case R.id.b4text:
@@ -664,6 +736,9 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
                                 isB4Selected = true;
                                 dropped.setBackgroundColor(activity.getResources().getColor(R.color.cadetblue));
                                 learningItemBinding.b4.setBackgroundColor(activity.getResources().getColor(R.color.cadetblue));
+                                if (paired.size()==MTP_ans.size()-1) {
+                                    setLastPair();
+                                }
                                 break;
                             default:
                                 break;
@@ -676,6 +751,81 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
                         break;
                 }
                 return true;
+            }
+        }
+
+        private void setLastPair() {
+            String a_group = "", b_group="";
+            if (!paired.containsKey("a1")) {
+                a_group="a1";
+            } else  if (!paired.containsKey("a2")) {
+                a_group="a2";
+            } else  if (!paired.containsKey("a3")) {
+                a_group="a3";
+            } else  if (!paired.containsKey("a4")) {
+                a_group="a4";
+            }
+
+            if (!paired.containsValue("b1")) {
+                b_group="b1";
+            } else  if (!paired.containsValue("b2")) {
+                b_group="b2";
+            } else  if (!paired.containsValue("b3")) {
+                b_group="b3";
+            } else  if (!paired.containsValue("b4")) {
+                b_group="b4";
+            }
+
+            if (!a_group.equalsIgnoreCase("") && !b_group.equalsIgnoreCase("")) {
+                paired.put(a_group,b_group);
+                setmatchedPair(a_group,getPairColor(b_group));
+                setmatchedPair(b_group,getPairColor(b_group));
+            }
+        }
+
+        private int getPairColor(String option) {
+            switch (option) {
+                    case "b1":
+                        return activity.getResources().getColor(R.color.hotpink);
+                    case "b2":
+                        return activity.getResources().getColor(R.color.slateblue);
+                    case "b3":
+                       return activity.getResources().getColor(R.color.steelblue);
+                    case "b4":
+                     return activity.getResources().getColor(R.color.cadetblue);
+                     default:
+                         return activity.getResources().getColor(R.color.yellow);
+            }
+        }
+
+        public void setmatchedPair(String option, int color) {
+            switch (option) {
+                case "b1":
+                    learningItemBinding.b1.setBackgroundColor(color);
+                    break;
+                case "b2":
+                    learningItemBinding.b2.setBackgroundColor(color);
+                    break;
+                case "b3":
+                    learningItemBinding.b3.setBackgroundColor(color);
+                    break;
+                case "b4":
+                    learningItemBinding.b4.setBackgroundColor(color);
+                    break;
+                case "a1":
+                    learningItemBinding.a1.setBackgroundColor(color);
+                    break;
+                case "a2":
+                    learningItemBinding.a2.setBackgroundColor(color);
+                    break;
+                case "a3":
+                    learningItemBinding.a3.setBackgroundColor(color);
+                    break;
+                case "a4":
+                    learningItemBinding.a4.setBackgroundColor(color);
+                    break;
+                default:
+                    break;
             }
         }
 

@@ -365,7 +365,7 @@ public class LearningFragment extends Fragment implements LearingAdapter.onIconC
         learningQuestions8.setCategory("TF");
         learningQuestions8.setAttended_by(25);
         learningQuestions8.setQuestion("The properties of solids can be explained by the structure of and the bonding among the metal atoms.");
-        learningQuestions8.setAnswer("a");
+        learningQuestions8.setAnswer("true");
         learningQuestions8.setRating("5");
         learningQuestions8.setTopic("Atoms");
         learningQuestions8.setPosted_on("2020/03/13");

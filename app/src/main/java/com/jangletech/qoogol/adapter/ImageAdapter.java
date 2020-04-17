@@ -56,23 +56,20 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
             e.printStackTrace();
         }
 
-        imageItemBinding.img.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("images", (Serializable) imgList);
-                bundle.putInt("position", position);
-                FragmentTransaction fragmentTransaction =null;
-                if(activity instanceof MainActivity) {
-                    fragmentTransaction = ((MainActivity) activity).getSupportFragmentManager().beginTransaction();
-                }
-                if(activity instanceof PracticeTestActivity) {
-                    fragmentTransaction = ((PracticeTestActivity) activity).getSupportFragmentManager().beginTransaction();
-                }
-                SlideshowDialogFragment newFragment = SlideshowDialogFragment.newInstance();
-                newFragment.setArguments(bundle);
-                newFragment.show(fragmentTransaction, "slideshow");
+        imageItemBinding.img.setOnClickListener(v -> {
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("images", (Serializable) imgList);
+            bundle.putInt("position", position);
+            FragmentTransaction fragmentTransaction =null;
+            if(activity instanceof MainActivity) {
+                fragmentTransaction = ((MainActivity) activity).getSupportFragmentManager().beginTransaction();
             }
+            if(activity instanceof PracticeTestActivity) {
+                fragmentTransaction = ((PracticeTestActivity) activity).getSupportFragmentManager().beginTransaction();
+            }
+            SlideshowDialogFragment newFragment = SlideshowDialogFragment.newInstance();
+            newFragment.setArguments(bundle);
+            newFragment.show(fragmentTransaction, "slideshow");
         });
     }
 
