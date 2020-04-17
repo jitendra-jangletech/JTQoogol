@@ -166,7 +166,7 @@
 
             <io.github.kexanie.library.MathView
                 android:id="@+id/question_textview"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                android:padding="@dimen/_10sdp"
                 android:layout_margin="@dimen/_10sdp"
@@ -174,19 +174,32 @@
                 android:text="question"
                 android:textColor="@color/colorSkyBlue"
                 android:textSize="@dimen/_14ssp"
+                app:layout_constraintRight_toLeftOf="@+id/reset"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/subheader_view" />
 
             <ImageView
-                android:id="@+id/attachment"
+                android:id="@+id/reset"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_attach_file_black_24dp"
+                android:src="@drawable/ic_reset"
+                android:visibility="gone"
+                android:layout_marginEnd="@dimen/_2sdp"
+                app:layout_constraintBottom_toBottomOf="@+id/question_textview"
+                app:layout_constraintRight_toLeftOf="@+id/reset_label"
+                app:layout_constraintTop_toTopOf="@+id/question_textview" />
+
+            <TextView
+                android:id="@+id/reset_label"
+                android:text="Reset"
                 android:visibility="gone"
                 android:layout_marginEnd="@dimen/_10sdp"
+                android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="@+id/question_textview"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/question_textview" />
+                app:layout_constraintTop_toTopOf="@+id/question_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
 
             <com.skyhope.showmoretextview.ShowMoreTextView
                 android:id="@+id/questiondesc_textview"
@@ -410,6 +423,7 @@
                         android:background="@drawable/grey_border"
                         android:maxLines="5"
                         android:lines="5"
+                        android:gravity="top|start"
                         android:textColor="@color/colorBlack"
                         android:visibility="gone"
                         app:layout_constraintLeft_toLeftOf="parent"
@@ -852,19 +866,6 @@
                             app:layout_constraintBottom_toBottomOf="@+id/d"
                             app:layout_constraintEnd_toEndOf="@+id/d"
                             app:layout_constraintTop_toTopOf="@+id/d" />
-
-                        <TextView
-                            android:id="@+id/reset"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="20dp"
-                            android:padding="10dp"
-                            android:text="Reset"
-                            android:textColor="@color/colorSkyBlue"
-                            android:layout_marginEnd="30dp"
-                            app:layout_constraintRight_toRightOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/d" />
-
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 

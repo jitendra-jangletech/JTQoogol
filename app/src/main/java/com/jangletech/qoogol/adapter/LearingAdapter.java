@@ -153,6 +153,8 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
             learningItemBinding.categoryTextview.setText("Answer in Brief");
         } else if (learningQuestions.getCategory().equalsIgnoreCase("MTP")) {
             learningItemBinding.matchThePairs.setVisibility(View.VISIBLE);
+            learningItemBinding.reset.setVisibility(View.VISIBLE);
+            learningItemBinding.resetLabel.setVisibility(View.VISIBLE);
             learningItemBinding.categoryTextview.setText("Match the Pairs");
             learningItemBinding.a1text.setText(learningQuestions.getA1());
             learningItemBinding.a2text.setText(learningQuestions.getA2());
@@ -246,6 +248,8 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
             learningItemBinding.expand.setVisibility(View.GONE);
             learningItemBinding.close.setVisibility(View.GONE);
         }
+        learningItemBinding.reset.setVisibility(View.GONE);
+        learningItemBinding.resetLabel.setVisibility(View.GONE);
         learningItemBinding.queImg1.setVisibility(View.GONE);
         learningItemBinding.imgRecycler.setVisibility(View.GONE);
         learningItemBinding.matchThePairs.setVisibility(View.GONE);
@@ -323,6 +327,7 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
             });
 
             learningItemBinding.reset.setOnClickListener(v -> reset());
+            learningItemBinding.resetLabel.setOnClickListener(v -> reset());
 
             learningItemBinding.commentLayout.setOnClickListener(v -> onIconClick.onCommentClick(learningQuestionsList.get(getAdapterPosition()).getQuestion_id()));
 
@@ -773,8 +778,23 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
 
             if (!a_group.equalsIgnoreCase("") && !b_group.equalsIgnoreCase("")) {
                 paired.put(a_group,b_group);
-                setmatchedPair(a_group,activity.getResources().getColor(R.color.yellow));
-                setmatchedPair(b_group,activity.getResources().getColor(R.color.yellow));
+                setmatchedPair(a_group,getPairColor(b_group));
+                setmatchedPair(b_group,getPairColor(b_group));
+            }
+        }
+
+        private int getPairColor(String option) {
+            switch (option) {
+                    case "b1":
+                        return activity.getResources().getColor(R.color.hotpink);
+                    case "b2":
+                        return activity.getResources().getColor(R.color.slateblue);
+                    case "b3":
+                       return activity.getResources().getColor(R.color.steelblue);
+                    case "b4":
+                     return activity.getResources().getColor(R.color.cadetblue);
+                     default:
+                         return activity.getResources().getColor(R.color.yellow);
             }
         }
 
