@@ -670,10 +670,18 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="3dp"
                                 android:layout_weight="1"
-                                android:background="@drawable/grey_round_border">
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:id="@+id/a1_img"
+                                    android:layout_marginRight="@dimen/_2sdp"
+                                    android:layout_width="wrap_content"
+                                    android:src="@drawable/ic_mtp_grey"
+                                    android:layout_height="wrap_content"/>
 
                                 <io.github.kexanie.library.MathView
                                     android:id="@+id/a1text"
+                                    android:layout_marginTop="@dimen/_3sdp"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="A1" />
@@ -685,11 +693,18 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="3dp"
-                                android:layout_weight="1"
-                                android:background="@drawable/grey_round_border">
+                                android:layout_weight="1">
+
+                                <ImageView
+                                    android:id="@+id/b1_img"
+                                    android:layout_marginEnd="@dimen/_2sdp"
+                                    android:layout_width="wrap_content"
+                                    android:src="@drawable/ic_mtp_grey"
+                                    android:layout_height="wrap_content"/>
 
                                 <io.github.kexanie.library.MathView
                                     android:id="@+id/b1text"
+                                    android:layout_marginTop="@dimen/_3sdp"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="B1" />
@@ -724,11 +739,18 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="3dp"
-                                android:layout_weight="1"
-                                android:background="@drawable/grey_round_border">
+                                android:layout_weight="1">
+
+                                <ImageView
+                                    android:id="@+id/a2_img"
+                                    android:layout_marginEnd="@dimen/_2sdp"
+                                    android:layout_width="wrap_content"
+                                    android:src="@drawable/ic_mtp_grey"
+                                    android:layout_height="wrap_content"/>
 
                                 <io.github.kexanie.library.MathView
                                     android:id="@+id/a2text"
+                                    android:layout_marginTop="@dimen/_3sdp"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="A2" />
@@ -739,11 +761,18 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="3dp"
-                                android:layout_weight="1"
-                                android:background="@drawable/grey_round_border">
+                                android:layout_weight="1">
+
+                                <ImageView
+                                    android:id="@+id/b2_img"
+                                    android:layout_marginTop="@dimen/_2sdp"
+                                    android:layout_width="wrap_content"
+                                    android:src="@drawable/ic_mtp_grey"
+                                    android:layout_height="wrap_content"/>
 
                                 <io.github.kexanie.library.MathView
                                     android:id="@+id/b2text"
+                                    android:layout_marginTop="@dimen/_3sdp"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="B2" />
@@ -777,11 +806,18 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="3dp"
-                                android:layout_weight="1"
-                                android:background="@drawable/grey_round_border">
+                                android:layout_weight="1">
+
+                                <ImageView
+                                    android:id="@+id/a3_img"
+                                    android:layout_marginEnd="@dimen/_2sdp"
+                                    android:layout_width="wrap_content"
+                                    android:src="@drawable/ic_mtp_grey"
+                                    android:layout_height="wrap_content"/>
 
                                 <io.github.kexanie.library.MathView
                                     android:id="@+id/a3text"
+                                    android:layout_marginTop="@dimen/_3sdp"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="A3" />
@@ -792,11 +828,18 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="3dp"
-                                android:layout_weight="1"
-                                android:background="@drawable/grey_round_border">
+                                android:layout_weight="1">
+
+                                <ImageView
+                                    android:id="@+id/b3_img"
+                                    android:layout_marginTop="@dimen/_2sdp"
+                                    android:layout_width="wrap_content"
+                                    android:src="@drawable/ic_mtp_grey"
+                                    android:layout_height="wrap_content"/>
 
                                 <io.github.kexanie.library.MathView
                                     android:id="@+id/b3text"
+                                    android:layout_marginTop="@dimen/_3sdp"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="B3" />
@@ -830,11 +873,18 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="3dp"
-                                android:layout_weight="1"
-                                android:background="@drawable/grey_round_border">
+                                android:layout_weight="1">
+
+                                <ImageView
+                                    android:id="@+id/a4_img"
+                                    android:layout_marginEnd="@dimen/_2sdp"
+                                    android:layout_width="wrap_content"
+                                    android:src="@drawable/ic_mtp_grey"
+                                    android:layout_height="wrap_content"/>
 
                                 <io.github.kexanie.library.MathView
                                     android:id="@+id/a4text"
+                                    android:layout_marginTop="@dimen/_3sdp"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="A4" />
@@ -845,11 +895,18 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="3dp"
-                                android:layout_weight="1"
-                                android:background="@drawable/grey_round_border">
+                                android:layout_weight="1">
+
+                                <ImageView
+                                    android:id="@+id/b4_img"
+                                    android:layout_marginEnd="@dimen/_2sdp"
+                                    android:layout_width="wrap_content"
+                                    android:src="@drawable/ic_mtp_grey"
+                                    android:layout_height="wrap_content"/>
 
                                 <io.github.kexanie.library.MathView
                                     android:id="@+id/b4text"
+                                    android:layout_marginTop="@dimen/_3sdp"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="B4" />

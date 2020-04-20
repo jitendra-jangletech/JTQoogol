@@ -82,7 +82,9 @@ public class MyTestFragment extends BaseFragment implements TestAdapter.TestClic
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_filter:
-                MainActivity.navController.navigate(R.id.nav_test_filter);
+                Bundle bundle = new Bundle();
+                bundle.putString("call_from","test");
+                MainActivity.navController.navigate(R.id.nav_test_filter, bundle);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
