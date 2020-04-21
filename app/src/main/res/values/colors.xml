@@ -19,6 +19,8 @@
 
     <color name="color_label">#00DEDEDE</color>
 
+    <color name="bg_recycler">#F6F6F6</color>
+
     <color name="menu_item_text_color">#3B6289</color>
     <color name="sub_menu_item_text_color">#B1B1B1</color>
 

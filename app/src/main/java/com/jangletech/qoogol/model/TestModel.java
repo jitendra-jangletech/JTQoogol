@@ -6,6 +6,16 @@ public class TestModel {
     private String subject;
     private String duration;
 
+    public boolean isPaused() {
+        return isPaused;
+    }
+
+    public void setPaused(boolean paused) {
+        isPaused = paused;
+    }
+
+    private boolean isPaused;
+
     public String getQuestionCount() {
         return questionCount;
     }
@@ -40,7 +50,7 @@ public class TestModel {
     public TestModel(String name, String subject, String duration, String totalMarks, String difficultyLevel,
                      String ranking, String attendedBy, String publishedDate, String ratingCount,
                      boolean isFavourite, boolean isNegativeMarks, String author, String authorEdu,
-                     String category,String ratingStarCount,String questionCount) {
+                     String category,String ratingStarCount,String questionCount,boolean isPaused) {
         this.name = name;
         this.subject = subject;
         this.duration = duration;
@@ -57,6 +67,7 @@ public class TestModel {
         this.category = category;
         this.ratingStarCount = ratingStarCount;
         this.questionCount = questionCount;
+        this.isPaused = isPaused;
     }
 
 

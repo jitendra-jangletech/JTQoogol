@@ -2,25 +2,25 @@ package com.jangletech.qoogol.adapter;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.ItemQuestPracticeBinding;
-
+import com.jangletech.qoogol.model.PracticeQuestion;
 import java.util.List;
 
 public class PracticeTestQuestPaletAdapter extends RecyclerView.Adapter<PracticeTestQuestPaletAdapter.PracticeQuestionViewHolder>  {
 
     Activity activity;
-    List<String> questionList;
+    List<PracticeQuestion> questionList;
     ItemQuestPracticeBinding itemBinding;
     QuestClickListener questClickListener;
 
-    public PracticeTestQuestPaletAdapter(Activity activity,List<String> questionList,QuestClickListener questClickListener) {
+    public PracticeTestQuestPaletAdapter(Activity activity,List<PracticeQuestion> questionList,QuestClickListener questClickListener) {
         this.activity = activity;
         this.questionList = questionList;
         this.questClickListener = questClickListener;
@@ -38,9 +38,17 @@ public class PracticeTestQuestPaletAdapter extends RecyclerView.Adapter<Practice
 
     @Override
     public void onBindViewHolder(@NonNull PracticeTestQuestPaletAdapter.PracticeQuestionViewHolder holder, int position) {
+        PracticeQuestion practiceQuestion = questionList.get(position);
         int questNo = position + 1;
         itemBinding.tvQuestNo.setText(String.valueOf(questNo));
-        itemBinding.tvQuestDesc.setText(questionList.get(position));
+
+        if(practiceQuestion.isContainsMath()){
+            itemBinding.tvQuestMath.setVisibility(View.VISIBLE);
+            itemBinding.tvQuestMath.setText(practiceQuestion.getQuestion());
+            itemBinding.tvQuest.setVisibility(View.GONE);
+        }else{
+            itemBinding.tvQuest.setText(practiceQuestion.getQuestion());
+        }
 
         itemBinding.questLayout.setOnClickListener(v->{
             questClickListener.onQuestionSelected(position);

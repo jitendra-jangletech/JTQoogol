@@ -52,18 +52,12 @@ public class TestAttentedByFriendsFragment extends BaseFragment implements TestA
 
         TestModel testModel = new TestModel("Shapes and Angles","Maths","40",
                 "30","Hard","88/100","219","Jan 2020","2093",
-                true,false,"Mr. Sharan","Phd. Maths","Unit Test-Final","4.3","100");
-
-        TestModel testModel1 = new TestModel("Reading Comprehension","English","120 Mins",
-                "40","Easy","53/100","102","Mar 2019","1633",
-                false,true,"Mr. Goswami","Phd. English","Unit Test-Final","2.7","60");
-
+                true,false,"Mr. Sharan","Phd. Maths","Unit Test-Final","4.3","100",true);
         TestModel testModel2 = new TestModel("When the Earth Shook!","Evs","40 Mins",
                 "60","Medium","12/100","10","Jul 2019","8353",
-                true,false,"Mr. Narayan","Phd. Evs","Unit Test-Final","2","30");
+                true,false,"Mr. Narayan","Phd. Evs","Unit Test-Final","2","30",false);
 
         testList.add(testModel);
-        testList.add(testModel1);
         testList.add(testModel2);
 
         TestAdapter testAdapter = new TestAdapter(new TestAttentedByFriendsFragment(), testList,this);
@@ -79,21 +73,22 @@ public class TestAttentedByFriendsFragment extends BaseFragment implements TestA
 
     @Override
     public void onStartTestClick(TestModel testModel) {
-        MainActivity.navController.navigate(R.id.nav_course);
+        //MainActivity.navController.navigate(R.id.nav_course);
+    }
+
+    @Override
+    public void onCommentClick(TestModel testModel) {
+        showToast("Comment Clicked");
     }
 
     @Override
     public void onShareClick(TestModel testModel) {
-
+        showToast("Share clicked");
     }
 
     @Override
-    public void onDownloadClick(TestModel testModel) {
-
+    public void onLikeClick(TestModel testModel) {
+        showToast("Like Clicked");
     }
 
-    @Override
-    public void onFavouriteClick(TestModel testModel) {
-
-    }
 }
