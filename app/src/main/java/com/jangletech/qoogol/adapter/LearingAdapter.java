@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ClipData;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -674,9 +675,6 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
             }
         }
 
-        private void setPairs() {
-
-        }
 
         @SuppressLint("NewApi")
         private class ChoiceDragListener implements View.OnDragListener {
@@ -701,8 +699,8 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
                                 checkAvailability(getNameFromId(dropped.getId()), "b1");
                                 paired.put(getNameFromId(dropped.getId()), "b1");
                                 isB1Selected = true;
-                                dropped.setBackgroundColor(activity.getResources().getColor(R.color.hotpink));
-                                learningItemBinding.b1.setBackgroundColor(activity.getResources().getColor(R.color.hotpink));
+                                setmatchedPair(getNameFromId(dropped.getId()),activity.getResources().getDrawable(R.drawable.ic_mtp1));
+                                learningItemBinding.b1Img.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_mtp1));
                                 if (paired.size()==MTP_ans.size()-1) {
                                     setLastPair();
                                 }
@@ -712,8 +710,8 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
                                 checkAvailability(getNameFromId(dropped.getId()), "b2");
                                 paired.put(getNameFromId(dropped.getId()), "b2");
                                 isB2Selected = true;
-                                dropped.setBackgroundColor(activity.getResources().getColor(R.color.slateblue));
-                                learningItemBinding.b2.setBackgroundColor(activity.getResources().getColor(R.color.slateblue));
+                                setmatchedPair(getNameFromId(dropped.getId()),activity.getResources().getDrawable(R.drawable.ic_mtp2));
+                                learningItemBinding.b2Img.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_mtp2));
                                 if (paired.size()==MTP_ans.size()-1) {
                                     setLastPair();
                                 }
@@ -723,8 +721,8 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
                                 checkAvailability(getNameFromId(dropped.getId()), "b3");
                                 paired.put(getNameFromId(dropped.getId()), "b3");
                                 isB3Selected = true;
-                                dropped.setBackgroundColor(activity.getResources().getColor(R.color.steelblue));
-                                learningItemBinding.b3.setBackgroundColor(activity.getResources().getColor(R.color.steelblue));
+                                setmatchedPair(getNameFromId(dropped.getId()),activity.getResources().getDrawable(R.drawable.ic_mtp3));
+                                learningItemBinding.b3Img.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_mtp3));
                                 if (paired.size()==MTP_ans.size()-1) {
                                     setLastPair();
                                 }
@@ -734,8 +732,8 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
                                 checkAvailability(getNameFromId(dropped.getId()), "b4");
                                 paired.put(getNameFromId(dropped.getId()), "b4");
                                 isB4Selected = true;
-                                dropped.setBackgroundColor(activity.getResources().getColor(R.color.cadetblue));
-                                learningItemBinding.b4.setBackgroundColor(activity.getResources().getColor(R.color.cadetblue));
+                                setmatchedPair(getNameFromId(dropped.getId()),activity.getResources().getDrawable(R.drawable.ic_mtp4));
+                                learningItemBinding.b4Img.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_mtp4));
                                 if (paired.size()==MTP_ans.size()-1) {
                                     setLastPair();
                                 }
@@ -783,46 +781,46 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
             }
         }
 
-        private int getPairColor(String option) {
+        private Drawable getPairColor(String option) {
             switch (option) {
                     case "b1":
-                        return activity.getResources().getColor(R.color.hotpink);
+                        return activity.getResources().getDrawable(R.drawable.ic_mtp1);
                     case "b2":
-                        return activity.getResources().getColor(R.color.slateblue);
+                        return activity.getResources().getDrawable(R.drawable.ic_mtp2);
                     case "b3":
-                       return activity.getResources().getColor(R.color.steelblue);
+                        return activity.getResources().getDrawable(R.drawable.ic_mtp3);
                     case "b4":
-                     return activity.getResources().getColor(R.color.cadetblue);
+                        return activity.getResources().getDrawable(R.drawable.ic_mtp4);
                      default:
-                         return activity.getResources().getColor(R.color.yellow);
+                         return activity.getResources().getDrawable(R.drawable.ic_mtp_grey);
             }
         }
 
-        public void setmatchedPair(String option, int color) {
+        public void setmatchedPair(String option, Drawable drawable) {
             switch (option) {
                 case "b1":
-                    learningItemBinding.b1.setBackgroundColor(color);
+                    learningItemBinding.b1Img.setImageDrawable(drawable);
                     break;
                 case "b2":
-                    learningItemBinding.b2.setBackgroundColor(color);
+                    learningItemBinding.b2Img.setImageDrawable(drawable);
                     break;
                 case "b3":
-                    learningItemBinding.b3.setBackgroundColor(color);
+                    learningItemBinding.b3Img.setImageDrawable(drawable);
                     break;
                 case "b4":
-                    learningItemBinding.b4.setBackgroundColor(color);
+                    learningItemBinding.b4Img.setImageDrawable(drawable);
                     break;
                 case "a1":
-                    learningItemBinding.a1.setBackgroundColor(color);
+                    learningItemBinding.a1Img.setImageDrawable(drawable);
                     break;
                 case "a2":
-                    learningItemBinding.a2.setBackgroundColor(color);
+                    learningItemBinding.a2Img.setImageDrawable(drawable);
                     break;
                 case "a3":
-                    learningItemBinding.a3.setBackgroundColor(color);
+                    learningItemBinding.a3Img.setImageDrawable(drawable);
                     break;
                 case "a4":
-                    learningItemBinding.a4.setBackgroundColor(color);
+                    learningItemBinding.a4Img.setImageDrawable(drawable);
                     break;
                 default:
                     break;
@@ -910,32 +908,32 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
         private void setLayoutBg(String option) {
             switch (option) {
                 case "a1":
-                    learningItemBinding.a1.setBackground(activity.getResources().getDrawable(R.drawable.grey_round_border));
+                    learningItemBinding.a1Img.setBackground(activity.getResources().getDrawable(R.drawable.ic_mtp_grey));
                     break;
                 case "a2":
-                    learningItemBinding.a2.setBackground(activity.getResources().getDrawable(R.drawable.grey_round_border));
+                    learningItemBinding.a2Img.setBackground(activity.getResources().getDrawable(R.drawable.ic_mtp_grey));
                     break;
                 case "a3":
-                    learningItemBinding.a3.setBackground(activity.getResources().getDrawable(R.drawable.grey_round_border));
+                    learningItemBinding.a3Img.setBackground(activity.getResources().getDrawable(R.drawable.ic_mtp_grey));
                     break;
                 case "a4":
-                    learningItemBinding.a4.setBackground(activity.getResources().getDrawable(R.drawable.grey_round_border));
+                    learningItemBinding.a4Img.setBackground(activity.getResources().getDrawable(R.drawable.ic_mtp_grey));
                     break;
                 case "b1":
                     isB1Selected = false;
-                    learningItemBinding.b1.setBackground(activity.getResources().getDrawable(R.drawable.grey_round_border));
+                    learningItemBinding.b1Img.setBackground(activity.getResources().getDrawable(R.drawable.ic_mtp_grey));
                     break;
                 case "b2":
                     isB2Selected = false;
-                    learningItemBinding.b2.setBackground(activity.getResources().getDrawable(R.drawable.grey_round_border));
+                    learningItemBinding.b2Img.setBackground(activity.getResources().getDrawable(R.drawable.ic_mtp_grey));
                     break;
                 case "b3":
                     isB3Selected = false;
-                    learningItemBinding.b3.setBackground(activity.getResources().getDrawable(R.drawable.grey_round_border));
+                    learningItemBinding.b3Img.setBackground(activity.getResources().getDrawable(R.drawable.ic_mtp_grey));
                     break;
                 case "b4":
                     isB4Selected = false;
-                    learningItemBinding.b4.setBackground(activity.getResources().getDrawable(R.drawable.grey_round_border));
+                    learningItemBinding.b4Img.setBackground(activity.getResources().getDrawable(R.drawable.ic_mtp_grey));
                     break;
                 default:
                     break;
@@ -968,24 +966,21 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
 
         public void reset() {
             paired.clear();
-            learningItemBinding.b1.setTag(null);
-            learningItemBinding.b2.setTag(null);
-            learningItemBinding.b3.setTag(null);
-
             setListeners();
             learningItemBinding.img1.setVisibility(View.GONE);
             learningItemBinding.img2.setVisibility(View.GONE);
             learningItemBinding.img3.setVisibility(View.GONE);
             learningItemBinding.img4.setVisibility(View.GONE);
 
-            learningItemBinding.a1.setBackground(activity.getResources().getDrawable(R.drawable.grey_round_border));
-            learningItemBinding.a2.setBackground(activity.getResources().getDrawable(R.drawable.grey_round_border));
-            learningItemBinding.a3.setBackground(activity.getResources().getDrawable(R.drawable.grey_round_border));
-            learningItemBinding.a4.setBackground(activity.getResources().getDrawable(R.drawable.grey_round_border));
-            learningItemBinding.b1.setBackground(activity.getResources().getDrawable(R.drawable.grey_round_border));
-            learningItemBinding.b2.setBackground(activity.getResources().getDrawable(R.drawable.grey_round_border));
-            learningItemBinding.b3.setBackground(activity.getResources().getDrawable(R.drawable.grey_round_border));
-            learningItemBinding.b4.setBackground(activity.getResources().getDrawable(R.drawable.grey_round_border));
+            learningItemBinding.a1Img.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_mtp_grey));
+            learningItemBinding.a2Img.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_mtp_grey));
+            learningItemBinding.a3Img.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_mtp_grey));
+            learningItemBinding.a4Img.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_mtp_grey));
+            learningItemBinding.b1Img.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_mtp_grey));
+            learningItemBinding.b2Img.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_mtp_grey));
+            learningItemBinding.b3Img.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_mtp_grey));
+            learningItemBinding.b4Img.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_mtp_grey));
+
         }
     }
 }

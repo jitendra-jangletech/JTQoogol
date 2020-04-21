@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.jangletech.qoogol.MainActivity;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.LearingAdapter;
 import com.jangletech.qoogol.databinding.LearningFragmentBinding;
@@ -57,7 +58,7 @@ public class LearningFragment extends Fragment implements LearingAdapter.onIconC
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.filter_menus, menu);
+        inflater.inflate(R.menu.action_search, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -65,21 +66,32 @@ public class LearningFragment extends Fragment implements LearingAdapter.onIconC
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_subject:
-                Toast.makeText(getActivity(), "Subject Icon Click", Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.action_chapter:
-                Toast.makeText(getActivity(), "Chapter Click", Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.action_rating:
-                Toast.makeText(getActivity(), "Rating  Click", Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.action_difflevel:
-                Toast.makeText(getActivity(), "Diff level Click", Toast.LENGTH_SHORT).show();
+            case R.id.action_filter:
+                Bundle bundle = new Bundle();
+                bundle.putString("call_from","learning");
+                MainActivity.navController.navigate(R.id.nav_test_filter,bundle);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+
+
+//        switch (item.getItemId()) {
+//            case R.id.action_subject:
+//                Toast.makeText(getActivity(), "Subject Icon Click", Toast.LENGTH_SHORT).show();
+//                return true;
+//            case R.id.action_chapter:
+//                Toast.makeText(getActivity(), "Chapter Click", Toast.LENGTH_SHORT).show();
+//                return true;
+//            case R.id.action_rating:
+//                Toast.makeText(getActivity(), "Rating  Click", Toast.LENGTH_SHORT).show();
+//                return true;
+//            case R.id.action_difflevel:
+//                Toast.makeText(getActivity(), "Diff level Click", Toast.LENGTH_SHORT).show();
+//                return true;
+//            default:
+//                return super.onOptionsItemSelected(item);
+//        }
     }
 
     @Override
