@@ -2,6 +2,8 @@ package com.jangletech.qoogol;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ImageView;
+
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import androidx.navigation.NavController;
@@ -9,6 +11,8 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -24,13 +28,17 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding mBinding;
     public static NavController navController;
+    private ImageView profileImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        profileImage = findViewById(R.id.profilePic);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        loadProfilePic();
 
         GsonBuilder gsonBuilder = new GsonBuilder();
         Gson gson = gsonBuilder.create();
@@ -38,12 +46,11 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
         NavigationView navigationView = findViewById(R.id.nav_view);
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.edit_profile,
-                R.id.nav_home,R.id.nav_learning,
-//                R.id.nav_course, R.id.nav_exam,
-                R.id.nav_home, R.id.nav_course, R.id.nav_exam,R.id.nav_questions,
+                R.id.nav_home, R.id.nav_learning,
+                R.id.nav_home, /*R.id.nav_course, R.id.nav_exam, R.id.nav_questions*/
                 R.id.nav_practice_test, R.id.nav_test_my, R.id.nav_test_popular, R.id.nav_attended_by_friends,
                 R.id.nav_shared_with_you, R.id.nav_shared_by_you,
-                R.id.nav_reviews, R.id.nav_published, R.id.nav_notifications, R.id.nav_settings,R.id.nav_fav_test)
+                R.id.nav_reviews, R.id.nav_published, R.id.nav_notifications, R.id.nav_settings, R.id.nav_fav_test)
                 .setDrawerLayout(mBinding.drawerLayout)
                 .build();
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -214,6 +221,12 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
         });
     }
 
+    private void loadProfilePic() {
+        Glide.with(this)
+                .load(R.drawable.profile_img)
+                .apply(RequestOptions.circleCropTransform())
+                .into(profileImage);
+    }
 
 
     @Override

@@ -6,8 +6,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="@dimen/_20sdp"
-        android:background="@color/colorLightGray">
+        android:background="@color/bg_recycler">
 
         <HorizontalScrollView
             android:fillViewport="true"
@@ -39,6 +38,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:layout_below="@+id/horizontalScrollView"
             android:id="@+id/testListRecyclerView"
+            android:background="@color/colorLightGrey"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:listitem="@layout/test_item" />

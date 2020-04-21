@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -14,66 +14,66 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <ImageView
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="@dimen/_20sdp"
+        android:id="@+id/edit_profile"
         android:layout_width="@dimen/_25sdp"
         android:layout_height="@dimen/_25sdp"
+        android:layout_marginTop="@dimen/_20sdp"
         android:src="@drawable/ic_edit_profile"
-        android:id="@+id/edit_profile"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/header_text_container"
-        app:layout_constraintBottom_toBottomOf="@+id/header_text_container"
-        android:id="@+id/imageView"
+        android:id="@+id/profilePic"
         android:layout_width="@dimen/_70sdp"
         android:layout_height="@dimen/_70sdp"
         android:contentDescription="Hello"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        app:srcCompat="@drawable/profile" />
+        android:src="@drawable/profile_img"
+        app:layout_constraintBottom_toBottomOf="@+id/header_text_container"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/header_text_container" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="wrap_content"
-        android:layout_marginTop="@dimen/_5sdp"
-        android:layout_marginLeft="@dimen/_10sdp"
-        app:layout_constraintLeft_toRightOf="@+id/imageView"
-        app:layout_constraintTop_toBottomOf="@+id/edit_profile"
         android:id="@+id/header_text_container"
-        android:layout_height="wrap_content">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_5sdp"
+        app:layout_constraintLeft_toRightOf="@+id/profilePic"
+        app:layout_constraintTop_toBottomOf="@+id/edit_profile">
 
         <TextView
             android:id="@+id/name_textview"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="Amey"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textSize="@dimen/_15ssp"
-            android:text="Pankaj Sir"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <androidx.appcompat.widget.AppCompatRatingBar
             android:id="@+id/rating"
-            android:layout_marginTop="@dimen/_5sdp"
-            android:layout_width="match_parent"
             style="?android:attr/ratingBarStyleSmall"
-            app:layout_constraintLeft_toLeftOf="parent"
-            android:theme="@style/RatingBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5sdp"
             android:numStars="5"
             android:rating="3.5"
-            app:layout_constraintTop_toBottomOf="@id/name_textview"
-            android:layout_height="wrap_content"/>
+            android:theme="@style/RatingBar"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/name_textview" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/toplayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_marginTop="@dimen/_2sdp"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/rating">
 
 
@@ -153,7 +153,6 @@
                 app:layout_constraintTop_toTopOf="parent">
 
 
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -185,7 +184,6 @@
                 app:layout_constraintTop_toTopOf="parent">
 
 
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -206,12 +204,8 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

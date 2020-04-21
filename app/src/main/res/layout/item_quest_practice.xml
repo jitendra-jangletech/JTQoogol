@@ -41,7 +41,18 @@
             </FrameLayout>
 
             <io.github.kexanie.library.MathView
-                android:id="@+id/tv_quest_desc"
+                android:visibility="gone"
+                android:id="@+id/tv_quest_math"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_toRightOf="@+id/root_quest_no"
+                android:text="If x is a prime number, LCM of x and its successive number would be"
+                android:textColor="@color/colorBlack" />
+
+            <TextView
+                android:visibility="visible"
+                android:id="@+id/tv_quest"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"

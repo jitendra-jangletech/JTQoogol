@@ -54,17 +54,13 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.ViewHolder> {
         holder.itemBinding.tvRatingStartCount.setText(testModel.getRatingStarCount());
         holder.itemBinding.tvRatingCount.setText("("+testModel.getRatingCount()+")");
 
+        if(testModel.isPaused()){
+            holder.itemBinding.btnStartTest.setText(" Resume Test ");
+        }
+
         if (testModel.isNegativeMarks()) {
             holder.itemBinding.tvNegativeMarks.setText(itemBinding.getRoot().getResources().getString(R.string.negative_marks));
         }
-
-        if(testModel.isFavourite()){
-            holder.itemBinding.tvFavourite.setChecked(true);
-        }
-
-
-        //holder.itemBinding.tvAuthorNameEdu.setText(testModel.getAuthor()+" ("+testModel.getAuthorEdu()+")");
-        //holder.itemBinding.tvCategory.setText(testModel.getCategory());
 
         holder.itemBinding.testItemCard.setOnClickListener(v -> {
             testClickListener.onTestItemClick(testModel);
@@ -74,26 +70,30 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.ViewHolder> {
             testClickListener.onStartTestClick(testModel);
         });
 
+        holder.itemBinding.likeLayout.setOnClickListener(v->{
+            testClickListener.onLikeClick(testModel);
+        });
 
-        holder.itemBinding.tvShare.setOnClickListener(v -> {
+        holder.itemBinding.commentLayout.setOnClickListener(v->{
+            testClickListener.onCommentClick(testModel);
+        });
+
+        holder.itemBinding.shareLayout.setOnClickListener(v->{
             testClickListener.onShareClick(testModel);
         });
 
-        holder.itemBinding.tvDownload.setOnClickListener(v -> {
-            testClickListener.onDownloadClick(testModel);
+        holder.itemBinding.favorite.setOnClickListener(v->{
+
         });
+
     }
 
     public interface TestClickListener {
         void onTestItemClick(TestModel testModel);
-
         void onStartTestClick(TestModel testModel);
-
+        void onCommentClick(TestModel testModel);
         void onShareClick(TestModel testModel);
-
-        void onDownloadClick(TestModel testModel);
-
-        void onFavouriteClick(TestModel testModel);
+        void onLikeClick(TestModel testModel);
     }
 
     @Override

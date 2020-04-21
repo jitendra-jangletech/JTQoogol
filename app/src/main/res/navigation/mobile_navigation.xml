@@ -44,13 +44,13 @@
         tools:layout="@layout/comment_view" >
     </fragment>
 
-    <fragment
+   <!-- <fragment
         android:id="@+id/nav_course"
         android:name="com.jangletech.qoogol.ui.learning.course.CourseFragment"
         android:label="@string/menu_course"
         app:enterAnim="@anim/enter_from_left"
         tools:layout="@layout/fragment_course" >
-    </fragment>
+    </fragment>-->
 
     <fragment
         android:id="@+id/nav_exam"
@@ -60,18 +60,22 @@
     </fragment>
 
     //Test Section Fragments
-    <fragment
+    <!--<fragment
         android:id="@+id/nav_practice_test"
         android:name="com.jangletech.qoogol.ui.test.practice_test.TestPracticeFragment"
         android:label="@string/menu_test_practice"
         tools:layout="@layout/fragment_test_practice" >
-    </fragment>
+    </fragment>-->
 
     <fragment
         android:id="@+id/nav_test_my"
         android:name="com.jangletech.qoogol.ui.test.my_test.MyTestFragment"
         android:label="@string/menu_test_my"
-        tools:layout="@layout/fragment_test_my" />
+        tools:layout="@layout/fragment_test_my" >
+        <action
+            android:id="@+id/action_nav_test_my_to_nav_comments"
+            app:destination="@id/nav_comments" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_test_popular"

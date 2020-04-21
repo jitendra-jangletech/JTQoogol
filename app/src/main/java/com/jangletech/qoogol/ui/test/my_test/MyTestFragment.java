@@ -17,6 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.core.view.MenuItemCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.material.chip.Chip;
@@ -124,27 +125,27 @@ public class MyTestFragment extends BaseFragment implements TestAdapter.TestClic
 
         TestModel testModel = new TestModel("Shapes and Angles","Mathematics","40",
                 "30","Hard","88/100","219","Jan 2020","2093",
-                true,true,"Mr. Sharan","Phd. Mathematics","Unit Test-Final","4.3","100");
+                true,true,"Mr. Sharan","Phd. Mathematics","Unit Test-Final","4.3","100",true);
 
         TestModel testModel1 = new TestModel("Reading Comprehension","English","120",
                 "40","Easy","53/100","102","Mar 2019","1633",
-                false,true,"Mr. Goswami","Phd. English","Unit Test-Final","2.7","60");
+                false,true,"Mr. Goswami","Phd. English","Unit Test-Final","2.7","60",false);
 
         TestModel testModel2 = new TestModel("When the Earth Shook!","Physics","40",
                 "60","Medium","12/100","10","Jul 2019","8353",
-                true,false,"Mr. Narayan","Phd. Physics","Unit Test-Final","2","30");
+                true,false,"Mr. Narayan","Phd. Physics","Unit Test-Final","2","30",false);
 
         TestModel testModel3 = new TestModel("Shapes and Angles","Mathematics","40",
                 "30","Hard","88/100","219","Jan 2020","2093",
-                true,true,"Mr. Sharan","Phd. Mathematics","Unit Test-Final","4.3","100");
+                true,true,"Mr. Sharan","Phd. Mathematics","Unit Test-Final","4.3","100",false);
 
         TestModel testModel4 = new TestModel("Reading Comprehension","English","120",
                 "40","Easy","53/100","102","Mar 2019","1633",
-                false,true,"Mr. Goswami","Phd. English","Unit Test-Final","2.7","60");
+                false,true,"Mr. Goswami","Phd. English","Unit Test-Final","2.7","60",true);
 
         TestModel testModel5 = new TestModel("When the Earth Shook!","Evs","40",
                 "60","Medium","12/100","10","Jul 2019","8353",
-                true,false,"Mr. Narayan","Phd. Evs","Unit Test-Final","2","30");
+                true,false,"Mr. Narayan","Phd. Evs","Unit Test-Final","2","30",true);
 
         testList.add(testModel);
         testList.add(testModel1);
@@ -208,19 +209,21 @@ public class MyTestFragment extends BaseFragment implements TestAdapter.TestClic
     }
 
     @Override
+    public void onCommentClick(TestModel testModel) {
+        showToast("Comment Clicked");
+        NavHostFragment.findNavController(this).navigate(R.id.action_nav_test_my_to_nav_comments);
+    }
+
+    @Override
     public void onShareClick(TestModel testModel) {
         Toast.makeText(getActivity(), "Test shared", Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void onDownloadClick(TestModel testModel) {
-        Toast.makeText(getActivity(), "Test downloaded", Toast.LENGTH_SHORT).show();
+    public void onLikeClick(TestModel testModel) {
+        showToast("Like Clicked");
     }
 
-    @Override
-    public void onFavouriteClick(TestModel testModel) {
-        Toast.makeText(getActivity(), "Added to favourite list", Toast.LENGTH_SHORT).show();
-    }
 
     @Override
     public boolean onQueryTextSubmit(String query) {
