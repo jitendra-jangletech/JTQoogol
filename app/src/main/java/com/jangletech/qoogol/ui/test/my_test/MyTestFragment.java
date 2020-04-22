@@ -3,6 +3,7 @@ package com.jangletech.qoogol.ui.test.my_test;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,7 +20,6 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
-
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.jangletech.qoogol.CourseActivity;
@@ -29,7 +29,6 @@ import com.jangletech.qoogol.adapter.TestAdapter;
 import com.jangletech.qoogol.databinding.FragmentTestMyBinding;
 import com.jangletech.qoogol.model.TestModel;
 import com.jangletech.qoogol.ui.BaseFragment;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +39,7 @@ public class MyTestFragment extends BaseFragment implements TestAdapter.TestClic
     private FragmentTestMyBinding mBinding;
     private TestAdapter testAdapter;
     private List<TestModel> testList;
+    public static String testName = "";
 
     public static MyTestFragment newInstance() {
         return new MyTestFragment();
@@ -127,27 +127,35 @@ public class MyTestFragment extends BaseFragment implements TestAdapter.TestClic
 
         TestModel testModel = new TestModel("Shapes and Angles","Mathematics","40",
                 "30","Hard","88/100","219","Jan 2020","2093",
-                true,true,"Mr. Sharan","Phd. Mathematics","Unit Test-Final","4.3","100",true);
+                true,true,"Mr. Sharan",
+                "Phd. Mathematics","Unit Test-Final","4.3",
+                "100",true,1,false);
 
         TestModel testModel1 = new TestModel("Reading Comprehension","English","120",
                 "40","Easy","53/100","102","Mar 2019","1633",
-                false,true,"Mr. Goswami","Phd. English","Unit Test-Final","2.7","60",false);
+                false,true,
+                "Mr. Goswami","Phd. English","Unit Test-Final","2.7",
+                "60",false,9,false);
 
         TestModel testModel2 = new TestModel("When the Earth Shook!","Physics","40",
                 "60","Medium","12/100","10","Jul 2019","8353",
-                true,false,"Mr. Narayan","Phd. Physics","Unit Test-Final","2","30",false);
+                true,false,"Mr. Narayan","Phd. Physics",
+                "Unit Test-Final","2","30",false,0,false);
 
         TestModel testModel3 = new TestModel("Shapes and Angles","Mathematics","40",
                 "30","Hard","88/100","219","Jan 2020","2093",
-                true,true,"Mr. Sharan","Phd. Mathematics","Unit Test-Final","4.3","100",false);
+                true,true,"Mr. Sharan","Phd. Mathematics",
+                "Unit Test-Final","4.3","100",false,25,false);
 
         TestModel testModel4 = new TestModel("Reading Comprehension","English","120",
                 "40","Easy","53/100","102","Mar 2019","1633",
-                false,true,"Mr. Goswami","Phd. English","Unit Test-Final","2.7","60",true);
+                false,true,"Mr. Goswami","Phd. English",
+                "Unit Test-Final","2.7","60",true,3,false);
 
         TestModel testModel5 = new TestModel("When the Earth Shook!","Evs","40",
                 "60","Medium","12/100","10","Jul 2019","8353",
-                true,false,"Mr. Narayan","Phd. Evs","Unit Test-Final","2","30",true);
+                true,false,"Mr. Narayan","Phd. Evs",
+                "Unit Test-Final","2","30",true,4,true);
 
         testList.add(testModel);
         testList.add(testModel1);
@@ -202,6 +210,8 @@ public class MyTestFragment extends BaseFragment implements TestAdapter.TestClic
     @Override
     public void onTestItemClick(TestModel testModel) {
         Toast.makeText(getActivity(), ""+testModel.getName(), Toast.LENGTH_SHORT).show();
+            testName = testModel.getName();
+            Log.d(TAG, "onTestItemClick: "+testName);
             MainActivity.navController.navigate(R.id.nav_test_details);
         }
 
@@ -222,8 +232,24 @@ public class MyTestFragment extends BaseFragment implements TestAdapter.TestClic
     }
 
     @Override
-    public void onLikeClick(TestModel testModel) {
+    public void onLikeClick(TestModel testModel,int pos) {
         showToast("Like Clicked");
+        mBinding.testListRecyclerView.post(new Runnable()
+        {
+            @Override
+            public void run() {
+                testAdapter.notifyItemChanged(pos);
+            }
+        });
+    }
+
+    @Override
+    public void onFavouriteClick(TestModel testModel,boolean isChecked) {
+        if(isChecked){
+            showToast("Added To Favourite.");
+        }else{
+            showToast("Removed From Favourite.");
+        }
     }
 
 

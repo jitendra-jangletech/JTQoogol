@@ -4,24 +4,23 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
-
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.QuestionAdapter;
 import com.jangletech.qoogol.databinding.TestDetailsFragmentBinding;
 import com.jangletech.qoogol.model.Question;
+import com.jangletech.qoogol.ui.BaseFragment;
+import com.jangletech.qoogol.ui.test.my_test.MyTestFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TestDetailsFragment extends Fragment {
+public class TestDetailsFragment extends BaseFragment {
 
     private TestDetailsViewModel mViewModel;
     private TestDetailsFragmentBinding mBinding;
@@ -41,6 +40,7 @@ public class TestDetailsFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(TestDetailsViewModel.class);
+        getActivity().setTitle(MyTestFragment.testName);
         setLeastScoredQuestionList();
         setTopScoredQuestionList();
         recentlyAddedQuestionList();

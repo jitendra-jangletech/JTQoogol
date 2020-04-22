@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -172,7 +173,6 @@ public class TestFragment extends BaseFragment implements QueViewClick, QuestRep
             question.setSaved(false);
             question.setAttempted(false);
             question.setVisited(true);
-            //resetAnswer(null, fillInTheBlanksBinding.etAnswer, QuestionType.FILL_THE_BLANKS.toString());
         });
     }
 
@@ -535,7 +535,13 @@ public class TestFragment extends BaseFragment implements QueViewClick, QuestRep
                 int wordCount = 0;
                 if (s.toString().contains(" ")) {
                     String[] words = s.toString().split(" ", -1);
-                    wordCount = words.length;
+                    for (int i = 0; i <words.length ; i++) {
+                        if(!words[i].isEmpty()){
+                            wordCount++;
+                        }
+                    }
+                    //wordCount = words.length;
+                    showToast(" Count "+wordCount);
 
                     if (wordCount > 0) {
                         testQuestions.get(position).setDescriptiveAns(s.toString());
@@ -549,7 +555,7 @@ public class TestFragment extends BaseFragment implements QueViewClick, QuestRep
                 }
 
                 if (wordCount == maxWordLength) {
-                    etAnswer.setFilters(new InputFilter[]{new InputFilter.LengthFilter(s.length() - 1)});
+                    etAnswer.setFilters(new InputFilter[]{new InputFilter.LengthFilter(s.length())});
                 }
 
                 tvCounter.setText("Words Remaining : " + (maxWordLength - wordCount + "/" + String.valueOf(maxWordLength)));

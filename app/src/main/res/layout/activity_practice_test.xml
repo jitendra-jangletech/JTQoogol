@@ -10,6 +10,7 @@
         tools:openDrawer="right">
 
         <include
+            android:id="@+id/app_bar_test"
             layout="@layout/app_bar_test"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

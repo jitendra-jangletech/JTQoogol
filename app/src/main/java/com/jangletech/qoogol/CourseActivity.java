@@ -34,9 +34,12 @@ import com.jangletech.qoogol.activities.ViewPagerAdapterNew;
 import com.jangletech.qoogol.adapter.QuestionPaletAdapter;
 import com.jangletech.qoogol.databinding.ActivityCourseBinding;
 import com.jangletech.qoogol.dialog.SubmitTestDialog;
+import com.jangletech.qoogol.enums.QuestionFilterType;
 import com.jangletech.qoogol.enums.QuestionSortType;
 import com.jangletech.qoogol.enums.QuestionType;
 import com.jangletech.qoogol.listener.QueViewClick;
+import com.jangletech.qoogol.model.Question;
+import com.jangletech.qoogol.model.TestModel;
 import com.jangletech.qoogol.model.TestQuestion;
 
 import java.util.ArrayList;
@@ -60,7 +63,6 @@ public class CourseActivity extends AppCompatActivity implements QuestionPaletAd
     private HashMap<Integer, TestQuestion> mapQuestAnswer = new HashMap<>();
     Long milliLeft, min, sec;
     SubmitTestDialog submitTestDialog;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,6 +133,43 @@ public class CourseActivity extends AppCompatActivity implements QuestionPaletAd
             public void onPageScrollStateChanged(int state) {
                 super.onPageScrollStateChanged(state);
             }
+        });
+
+        mBinding.radioAll.setOnClickListener(v -> {
+            questionPaletAdapter.setPaletFilterResults(sortQuestListByFilter(testQuestionList,QuestionFilterType.ALL.toString()));
+            mBinding.radioAttempted.setChecked(false);
+            mBinding.radioUnseen.setChecked(false);
+            mBinding.radioMarked.setChecked(false);
+            mBinding.radioUnattempted.setChecked(false);
+        });
+        mBinding.radioAttempted.setOnClickListener(v -> {
+            questionPaletAdapter.setPaletFilterResults(sortQuestListByFilter(testQuestionList,QuestionFilterType.ATTEMPTED.toString()));
+            mBinding.radioAll.setChecked(false);
+            mBinding.radioUnseen.setChecked(false);
+            mBinding.radioMarked.setChecked(false);
+            mBinding.radioUnattempted.setChecked(false);
+        });
+        mBinding.radioMarked.setOnClickListener(v -> {
+            questionPaletAdapter.setPaletFilterResults(sortQuestListByFilter(testQuestionList,QuestionFilterType.MARKED.toString()));
+            mBinding.radioAll.setChecked(false);
+            mBinding.radioUnseen.setChecked(false);
+            mBinding.radioAttempted.setChecked(false);
+            mBinding.radioUnattempted.setChecked(false);
+        });
+
+        mBinding.radioUnattempted.setOnClickListener(v -> {
+            questionPaletAdapter.setPaletFilterResults(sortQuestListByFilter(testQuestionList,QuestionFilterType.UNATTEMPTED.toString()));
+            mBinding.radioAll.setChecked(false);
+            mBinding.radioUnseen.setChecked(false);
+            mBinding.radioAttempted.setChecked(false);
+            mBinding.radioMarked.setChecked(false);
+        });
+        mBinding.radioUnseen.setOnClickListener(v -> {
+            questionPaletAdapter.setPaletFilterResults(sortQuestListByFilter(testQuestionList,QuestionFilterType.UNSEEN.toString()));
+            mBinding.radioAll.setChecked(false);
+            mBinding.radioUnattempted.setChecked(false);
+            mBinding.radioAttempted.setChecked(false);
+            mBinding.radioMarked.setChecked(false);
         });
 
         btnSubmitTest.setOnClickListener(v -> {
@@ -1012,5 +1051,30 @@ public class CourseActivity extends AppCompatActivity implements QuestionPaletAd
         }
     }*/
 
+    private List<TestQuestion> sortQuestListByFilter(List<TestQuestion> questions, String questFilterType) {
+        List<TestQuestion> questFilterList = new ArrayList<>();
+        for (TestQuestion question : questions) {
+
+            if (questFilterType.equals(QuestionFilterType.ATTEMPTED) && question.isAttempted()) {
+                questFilterList.add(question);
+            }
+            if (questFilterType.equals(QuestionFilterType.UNATTEMPTED) && question.isVisited()) {
+                questFilterList.add(question);
+            }
+            if (questFilterType.equals(QuestionFilterType.UNSEEN) && !question.isAttempted()
+                    && !question.isVisited() && !question.isMarked()) {
+                questFilterList.add(question);
+            }
+            if (questFilterType.equals(QuestionFilterType.MARKED) && question.isMarked()) {
+                questFilterList.add(question);
+            }
+            if (questFilterType.equals(QuestionFilterType.ALL)) {
+                questFilterList = questions;
+            }
+        }
+
+
+        return questFilterList;
+    }
 
 }
