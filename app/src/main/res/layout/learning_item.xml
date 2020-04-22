@@ -103,7 +103,6 @@
 
             </LinearLayout>
 
-
             <View
                 android:id="@+id/header_view"
                 android:layout_width="match_parent"
@@ -113,7 +112,6 @@
                 android:background="@color/colorLightGrey"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/header_layout" />
-
 
             <LinearLayout
                 android:id="@+id/subheader_layout"
@@ -162,7 +160,6 @@
                 android:background="@color/colorLightGrey"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/subheader_layout" />
-
 
             <io.github.kexanie.library.MathView
                 android:id="@+id/question_textview"
@@ -248,7 +245,7 @@
                 android:id="@+id/expandable_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/img_recycler">
 
@@ -1434,7 +1431,7 @@
                             android:id="@+id/like"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/ic_thumb_up_black_24dp"
+                            android:src="@drawable/ic_like"
                             app:layout_constraintLeft_toLeftOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintBottom_toBottomOf="parent" />
@@ -1522,7 +1519,7 @@
                         android:id="@+id/favorite"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_fav"
+                        android:src="@drawable/ic_favorite"
                         android:layout_weight="1"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"

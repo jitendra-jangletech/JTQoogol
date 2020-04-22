@@ -99,7 +99,7 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
             learningItemBinding.questiondescTextview.setVisibility(View.GONE);
 
         learningItemBinding.favorite.setImageDrawable(learningQuestions.isIs_fav() ? activity.getResources().getDrawable(R.drawable.ic_favorite_black_24dp) : activity.getResources().getDrawable(R.drawable.ic_fav));
-        learningItemBinding.like.setImageDrawable(learningQuestions.isIs_liked() ? activity.getResources().getDrawable(R.drawable.ic_thumb_up_black_24dp) : activity.getResources().getDrawable(R.drawable.ic_thumb_up_black_24dp));
+        learningItemBinding.like.setImageDrawable(learningQuestions.isIs_liked() ? activity.getResources().getDrawable(R.drawable.ic_thumb_up_black_24dp) : activity.getResources().getDrawable(R.drawable.ic_like));
         learningItemBinding.idTextview.setText(learningQuestions.getQuestion_id());
         learningItemBinding.timeTextview.setText("Time: " + learningQuestions.getRecommended_time() + " Sec");
         learningItemBinding.difflevelValue.setText(learningQuestions.getDifficulty_level());
