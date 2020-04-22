@@ -6,6 +6,7 @@ import android.content.ClipData;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Spanned;
@@ -99,7 +100,7 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
             learningItemBinding.questiondescTextview.setVisibility(View.GONE);
 
         learningItemBinding.favorite.setImageDrawable(learningQuestions.isIs_fav() ? activity.getResources().getDrawable(R.drawable.ic_favorite_black_24dp) : activity.getResources().getDrawable(R.drawable.ic_fav));
-        learningItemBinding.like.setImageDrawable(learningQuestions.isIs_liked() ? activity.getResources().getDrawable(R.drawable.ic_thumb_up_black_24dp) : activity.getResources().getDrawable(R.drawable.ic_thumb_up_black_24dp));
+        learningItemBinding.like.setImageDrawable(learningQuestions.isIs_liked() ? activity.getResources().getDrawable(R.drawable.ic_thumb_up_black_24dp) : activity.getResources().getDrawable(R.drawable.ic_like));
         learningItemBinding.idTextview.setText(learningQuestions.getQuestion_id());
         learningItemBinding.timeTextview.setText("Time: " + learningQuestions.getRecommended_time() + " Sec");
         learningItemBinding.difflevelValue.setText(learningQuestions.getDifficulty_level());
@@ -241,6 +242,7 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
         etAnswer.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
             }
 
             @Override
@@ -253,14 +255,18 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
                 int wordCount = 0;
                 if (s.toString().contains(" ")) {
                     String[] words = s.toString().split(" ", -1);
-                    wordCount = words.length;
+                    for (int i = 0; i <words.length ; i++) {
+                        if(!words[i].isEmpty()){
+                            wordCount++;
+                        }
+                    }
                 }
 
                 if (wordCount == maxWordLength) {
-                    etAnswer.setFilters(new InputFilter[]{new InputFilter.LengthFilter(s.length() - 1)});
+                    etAnswer.setFilters(new InputFilter[]{new InputFilter.LengthFilter(s.length())});
                 }
 
-                tvCounter.setText((maxWordLength - wordCount + "/" + String.valueOf(maxWordLength)));
+                tvCounter.setText("Words Remaining : " + (maxWordLength - wordCount + "/" + String.valueOf(maxWordLength)));
             }
         });
     }
@@ -298,6 +304,8 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         LearningItemBinding learningItemBinding;
+        CountDownTimer countDownTimer;
+        Long milliLeft, min, sec;
         String scq_ans = "", mcq_ans = "", tfAns = "", scqimg_ans="", mcqimg_ans="";
         HashMap<String, String> paired = new HashMap<String, String>();
         HashMap<String, String> MTP_ans = new HashMap<String, String>();
@@ -339,12 +347,17 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
 
             learningItemBinding.expand.setOnClickListener(v -> {
                 learningItemBinding.expandableLayout.setVisibility(View.VISIBLE);
+                learningItemBinding.timerLayout.setVisibility(View.VISIBLE);
                 learningItemBinding.close.setVisibility(View.VISIBLE);
                 learningItemBinding.expand.setVisibility(View.GONE);
+                setTimer(learningItemBinding.tvtimer,0,0);
             });
 
+
             learningItemBinding.close.setOnClickListener(v -> {
+                countDownTimer.cancel();
                 learningItemBinding.expandableLayout.setVisibility(View.GONE);
+                learningItemBinding.timerLayout.setVisibility(View.GONE);
                 learningItemBinding.expand.setVisibility(View.VISIBLE);
                 learningItemBinding.close.setVisibility(View.GONE);
             });
@@ -685,6 +698,39 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
                 }
             });
         }
+
+        private void setTimer(TextView timer, int seconds, int minutes) {
+            countDownTimer=  new CountDownTimer(60 * 1000 * 60, 1000) {
+                int timerCountSeconds = seconds;
+                int timerCountMinutes = minutes;
+                public void onTick(long millisUntilFinished) {
+                    // timer.setText(new SimpleDateFormat("mm:ss").format(new Date( millisUntilFinished)));
+                    if (timerCountSeconds < 59) {
+                        timerCountSeconds++;
+                    } else {
+                        timerCountSeconds = 0;
+                        timerCountMinutes++;
+                    }
+                    if (timerCountMinutes < 10) {
+                        if (timerCountSeconds < 10) {
+                            timer.setText(String.valueOf("0" + timerCountMinutes + ":0" + timerCountSeconds));
+                        } else {
+                            timer.setText(String.valueOf("0" + timerCountMinutes + ":" + timerCountSeconds));
+                        }
+                    } else {
+                        if (timerCountSeconds < 10) {
+                            timer.setText(String.valueOf(timerCountMinutes + ":0" + timerCountSeconds));
+                        } else {
+                            timer.setText(String.valueOf(timerCountMinutes + ":" + timerCountSeconds));
+                        }
+                    }
+                }
+                public void onFinish() {
+                    timer.setText("00:00");
+                }
+            }.start();
+        }
+
 
         private void setSCQImgAnsIndicator() {
             learningItemBinding.scqimgChck1.setVisibility(View.GONE);

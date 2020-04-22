@@ -103,7 +103,6 @@
 
             </LinearLayout>
 
-
             <View
                 android:id="@+id/header_view"
                 android:layout_width="match_parent"
@@ -113,7 +112,6 @@
                 android:background="@color/colorLightGrey"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/header_layout" />
-
 
             <LinearLayout
                 android:id="@+id/subheader_layout"
@@ -162,7 +160,6 @@
                 android:background="@color/colorLightGrey"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/subheader_layout" />
-
 
             <io.github.kexanie.library.MathView
                 android:id="@+id/question_textview"
@@ -214,6 +211,49 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/question_textview" />
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/timer_layout"
+                android:padding="@dimen/_10sdp"
+                android:visibility="gone"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/questiondesc_textview"
+                android:orientation="horizontal">
+
+                <TextView
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:id="@+id/tvtimer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="00:00"
+                    android:textColor="@color/black"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:layout_marginRight="@dimen/_3sdp"
+                    android:id="@+id/timer"
+                    android:src="@drawable/ic_timer"
+                    app:layout_constraintTop_toTopOf="@id/tvtimer"
+                    app:layout_constraintBottom_toBottomOf="@id/tvtimer"
+                    app:layout_constraintRight_toLeftOf="@+id/tvtimer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <ImageView
+                    android:layout_marginRight="@dimen/_5sdp"
+                    android:id="@+id/save_que"
+                    android:src="@drawable/ic_save"
+                    app:layout_constraintTop_toTopOf="@id/timer"
+                    app:layout_constraintBottom_toBottomOf="@id/timer"
+                    app:layout_constraintRight_toLeftOf="@+id/timer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
             <ImageView
@@ -227,7 +267,7 @@
                 android:visibility="gone"
                 android:src="@drawable/ic_menu_share"
                 android:maxHeight="@dimen/_180sdp"
-                app:layout_constraintTop_toBottomOf="@+id/questiondesc_textview"
+                app:layout_constraintTop_toBottomOf="@+id/timer_layout"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_180sdp"/>
 
@@ -420,6 +460,7 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/grey_border"
                         android:maxLines="5"
+                        android:digits="qwertyuiopasdfghjklzxcvbnm1234567890QWERTYUIOPASDFGHJKLZXCVBNM "
                         android:lines="5"
                         android:gravity="top|start"
                         android:textColor="@color/colorBlack"
@@ -442,6 +483,7 @@
 
                     <EditText
                         android:id="@+id/multi_line"
+                        android:digits="qwertyuiopasdfghjklzxcvbnm1234567890QWERTYUIOPASDFGHJKLZXCVBNM "
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/grey_border"
@@ -1434,7 +1476,7 @@
                             android:id="@+id/like"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/ic_thumb_up_black_24dp"
+                            android:src="@drawable/ic_like"
                             app:layout_constraintLeft_toLeftOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintBottom_toBottomOf="parent" />
@@ -1522,7 +1564,7 @@
                         android:id="@+id/favorite"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_fav"
+                        android:src="@drawable/ic_favorite"
                         android:layout_weight="1"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
