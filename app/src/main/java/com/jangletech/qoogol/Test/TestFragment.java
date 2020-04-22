@@ -7,6 +7,7 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.text.TextWatcher;
+import android.text.method.DigitsKeyListener;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -147,6 +148,14 @@ public class TestFragment extends BaseFragment implements QueViewClick, QuestRep
         markedQuestMap.put(question.getQuestNo(), fillInTheBlanksBinding.imgSave);
         setMarkedQuest(question, fillInTheBlanksBinding.imgSave);
 
+
+        fillInTheBlanksBinding.etAnswer.setKeyListener(DigitsKeyListener.getInstance(" qwertyuiopasdfghjklzxcvbnm1234567890QWERTYUIOPASDFGHJKLZXCVBNM,.'?!()*&amp;%^-_+=\\/;:{}[]<>@`\""));
+
+        fillInTheBlanksBinding.imgSave.setOnClickListener(v->{
+            question.setMarked(true);
+            fillInTheBlanksBinding.imgSave.setImageResource(R.drawable.ic_star);
+        });
+
         fillInTheBlanksBinding.imgReport.setOnClickListener(v -> {
             questReportDialog = new QuestReportDialog(getContext(), this);
             questReportDialog.show();
@@ -154,16 +163,16 @@ public class TestFragment extends BaseFragment implements QueViewClick, QuestRep
 
         fillInTheBlanksBinding.btnMarkNext.setOnClickListener(v -> {
             question.setDescriptiveAns(fillInTheBlanksBinding.etAnswer.getText().toString());
-            question.setMarked(true);
+            //question.setMarked(true);
             question.setVisited(true);
-            fillInTheBlanksBinding.imgSave.setImageResource(R.drawable.ic_star);
-            CourseActivity.viewPager.setCurrentItem(position + 1, true);
+            //fillInTheBlanksBinding.imgSave.setImageResource(R.drawable.ic_star);
+            CourseActivity.viewPager.setCurrentItem(position - 1, true);
         });
         fillInTheBlanksBinding.btnSaveNext.setOnClickListener(v -> {
-            question.setMarked(false);
-            question.setSaved(true);
+            //question.setMarked(false);
+            //question.setSaved(true);
             question.setVisited(true);
-            fillInTheBlanksBinding.imgSave.setImageResource(R.drawable.ic_star_border);
+            //fillInTheBlanksBinding.imgSave.setImageResource(R.drawable.ic_star_border);
             CourseActivity.viewPager.setCurrentItem(position + 1, true);
         });
         fillInTheBlanksBinding.btnClearResponse.setOnClickListener(v -> {
@@ -179,12 +188,16 @@ public class TestFragment extends BaseFragment implements QueViewClick, QuestRep
     private void setTrueFalseLayout(TrueFalseLayoutBinding trueFalseLayoutBinding, int position) {
         Log.d(TAG, "setTrueFalseLayout: ");
         TestQuestion testQuestion = testQuestions.get(position);
-        //testQuestion.setVisited(true);
         setTimer(trueFalseLayoutBinding.tvQuestTimer, 0, 0);
         trueFalseLayoutBinding.tvQuestNo.setText(String.valueOf(testQuestion.getQuestNo()));
         trueFalseLayoutBinding.tvQuestion.setText(testQuestion.getQuestionDesc());
         markedQuestMap.put(testQuestion.getQuestNo(), trueFalseLayoutBinding.imgSave);
         setMarkedQuest(testQuestion, trueFalseLayoutBinding.imgSave);
+
+        trueFalseLayoutBinding.imgSave.setOnClickListener(v->{
+            testQuestion.setMarked(true);
+            trueFalseLayoutBinding.imgSave.setImageResource(R.drawable.ic_star);
+        });
 
         trueFalseLayoutBinding.chipTrue.setOnClickListener(v -> {
             if (trueFalseLayoutBinding.chipTrue.isChecked()) {
@@ -216,14 +229,14 @@ public class TestFragment extends BaseFragment implements QueViewClick, QuestRep
         trueFalseLayoutBinding.btnMarkNext.setOnClickListener(v -> {
             //showToast("True False");
             //setMarkedQuest(testQuestion, trueFalseLayoutBinding.imgSave);
-            testQuestion.setMarked(true);
-            trueFalseLayoutBinding.imgSave.setImageResource(R.drawable.ic_star);
-            CourseActivity.viewPager.setCurrentItem(position + 1, true);
+            //testQuestion.setMarked(true);
+            //trueFalseLayoutBinding.imgSave.setImageResource(R.drawable.ic_star);
+            CourseActivity.viewPager.setCurrentItem(position - 1, true);
         });
         trueFalseLayoutBinding.btnSaveNext.setOnClickListener(v -> {
-            testQuestion.setMarked(false);
-            testQuestion.setSaved(true);
-            trueFalseLayoutBinding.imgSave.setImageResource(R.drawable.ic_star_border);
+            //testQuestion.setMarked(false);
+            //testQuestion.setSaved(true);
+            //trueFalseLayoutBinding.imgSave.setImageResource(R.drawable.ic_star_border);
             CourseActivity.viewPager.setCurrentItem(position + 1, true);
         });
         trueFalseLayoutBinding.btnClearResponse.setOnClickListener(v -> {
@@ -253,6 +266,11 @@ public class TestFragment extends BaseFragment implements QueViewClick, QuestRep
         mBinding.ans5.setText(testQuestion.getAnswer5());
         markedQuestMap.put(testQuestion.getQuestNo(), mBinding.imgSave);
         setMarkedQuest(testQuestion, mBinding.imgSave);
+
+        mBinding.imgSave.setOnClickListener(v->{
+            testQuestion.setMarked(true);
+            mBinding.imgSave.setImageResource(R.drawable.ic_star);
+        });
 
         mBinding.ans1.setOnClickListener(v -> {
             if (mBinding.ans1.isChecked()) {
@@ -301,15 +319,15 @@ public class TestFragment extends BaseFragment implements QueViewClick, QuestRep
         });
 
         mBinding.btnMarkNext.setOnClickListener(v -> {
-            testQuestion.setMarked(true);
-            mBinding.imgSave.setImageResource(R.drawable.ic_star);
-            CourseActivity.viewPager.setCurrentItem(position + 1, true);
+            //testQuestion.setMarked(true);
+            //mBinding.imgSave.setImageResource(R.drawable.ic_star);
+            CourseActivity.viewPager.setCurrentItem(position - 1, true);
         });
         mBinding.btnSaveNext.setOnClickListener(v -> {
-            testQuestion.setSaved(true);
-            testQuestion.setMarked(false);
+            //testQuestion.setSaved(true);
+            //testQuestion.setMarked(false);
             testQuestion.setVisited(true);
-            mBinding.imgSave.setImageResource(R.drawable.ic_star_border);
+            //mBinding.imgSave.setImageResource(R.drawable.ic_star_border);
             CourseActivity.viewPager.setCurrentItem(position + 1, true);
         });
         mBinding.btnClearResponse.setOnClickListener(v -> {
@@ -340,6 +358,11 @@ public class TestFragment extends BaseFragment implements QueViewClick, QuestRep
         multiChoiceQuestionBinding.ans5.setText(testQuestion.getAnswer5());
         markedQuestMap.put(testQuestion.getQuestNo(), multiChoiceQuestionBinding.imgSave);
         setMarkedQuest(testQuestion, multiChoiceQuestionBinding.imgSave);
+
+        multiChoiceQuestionBinding.imgSave.setOnClickListener(v->{
+            testQuestion.setMarked(true);
+            multiChoiceQuestionBinding.imgSave.setImageResource(R.drawable.ic_star);
+        });
 
         multiChoiceQuestionBinding.ans1.setOnClickListener(v -> {
             if (multiChoiceQuestionBinding.ans1.isChecked()) {
@@ -389,14 +412,14 @@ public class TestFragment extends BaseFragment implements QueViewClick, QuestRep
 
         multiChoiceQuestionBinding.btnMarkNext.setOnClickListener(v -> {
             //setMarkedQuest(testQuestion, multiChoiceQuestionBinding.imgSave);
-            testQuestion.setMarked(true);
-            multiChoiceQuestionBinding.imgSave.setImageResource(R.drawable.ic_star);
-            CourseActivity.viewPager.setCurrentItem(position + 1, true);
+            //testQuestion.setMarked(true);
+            //multiChoiceQuestionBinding.imgSave.setImageResource(R.drawable.ic_star);
+            CourseActivity.viewPager.setCurrentItem(position - 1, true);
         });
         multiChoiceQuestionBinding.btnSaveNext.setOnClickListener(v -> {
-            testQuestion.setSaved(true);
-            testQuestion.setMarked(false);
-            multiChoiceQuestionBinding.imgSave.setImageResource(R.drawable.ic_star_border);
+            //testQuestion.setSaved(true);
+            //testQuestion.setMarked(false);
+            //multiChoiceQuestionBinding.imgSave.setImageResource(R.drawable.ic_star_border);
             CourseActivity.viewPager.setCurrentItem(position + 1, true);
         });
         multiChoiceQuestionBinding.btnClearResponse.setOnClickListener(v -> {
@@ -416,6 +439,7 @@ public class TestFragment extends BaseFragment implements QueViewClick, QuestRep
         TestQuestion testQuestion = testQuestions.get(position);
         //testQuestion.setVisited(true);
         testQuestion.setDescriptiveAns(multiLineQuestAnsBinding.etMultiLineAnswer.getText().toString());
+        multiLineQuestAnsBinding.etMultiLineAnswer.setKeyListener(DigitsKeyListener.getInstance(" qwertyuiopasdfghjklzxcvbnm1234567890QWERTYUIOPASDFGHJKLZXCVBNM,.'?!()*&amp;%^-_+=\\/;:{}[]<>@`\""));
 
         setTimer(multiLineQuestAnsBinding.tvtimer, 0, 0);
         answerCharCounter(multiLineQuestAnsBinding.etMultiLineAnswer, multiLineQuestAnsBinding.tvCharCounter, 200);
@@ -425,22 +449,27 @@ public class TestFragment extends BaseFragment implements QueViewClick, QuestRep
         markedQuestMap.put(testQuestion.getQuestNo(), multiLineQuestAnsBinding.imgSave);
         setMarkedQuest(testQuestion, multiLineQuestAnsBinding.imgSave);
 
+        multiLineQuestAnsBinding.imgSave.setOnClickListener(v->{
+            testQuestion.setMarked(true);
+            multiLineQuestAnsBinding.imgSave.setImageResource(R.drawable.ic_star);
+        });
+
         multiLineQuestAnsBinding.btnMarkNext.setOnClickListener(v -> {
             //showToast("MultiLine");
             //setMarkedQuest(testQuestion, multiLineQuestAnsBinding.imgSave);
-            testQuestion.setMarked(true);
+            //testQuestion.setMarked(true);
             if(multiLineQuestAnsBinding.etMultiLineAnswer.getText().toString().trim().length() > 0)
             testQuestion.setAttempted(true);
             testQuestion.setVisited(false);
-            multiLineQuestAnsBinding.imgSave.setImageResource(R.drawable.ic_star);
-            CourseActivity.viewPager.setCurrentItem(position + 1, true);
+            //multiLineQuestAnsBinding.imgSave.setImageResource(R.drawable.ic_star);
+            CourseActivity.viewPager.setCurrentItem(position - 1, true);
         });
         multiLineQuestAnsBinding.btnSaveNext.setOnClickListener(v -> {
-            testQuestion.setMarked(false);
-            testQuestion.setSaved(true);
-            testQuestion.setAttempted(true);
-            testQuestion.setVisited(false);
-            multiLineQuestAnsBinding.imgSave.setImageResource(R.drawable.ic_star_border);
+            //testQuestion.setMarked(false);
+            //testQuestion.setSaved(true);
+            //testQuestion.setAttempted(true);
+            //testQuestion.setVisited(false);
+            //multiLineQuestAnsBinding.imgSave.setImageResource(R.drawable.ic_star_border);
             CourseActivity.viewPager.setCurrentItem(position + 1, true);
         });
         multiLineQuestAnsBinding.btnClearResponse.setOnClickListener(v -> {
@@ -554,7 +583,7 @@ public class TestFragment extends BaseFragment implements QueViewClick, QuestRep
                     }
                 }
 
-                if (wordCount == maxWordLength) {
+                if (wordCount > maxWordLength) {
                     etAnswer.setFilters(new InputFilter[]{new InputFilter.LengthFilter(s.length())});
                 }
 

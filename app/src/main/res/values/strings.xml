@@ -250,5 +250,7 @@
     <string name="test_desc">The ACT mathematics test is a 60-question, 60-minute test designed
         to assess the mathematical skills students
         have typically acquired in courses taken up to the beginning of grade 12.</string>
+    <string name="save_and_next">Next</string>
+    <string name="mark_and_next">Previous</string>
 
 </resources>
