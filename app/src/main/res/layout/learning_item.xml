@@ -414,8 +414,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 
-
-
                     <EditText
                         android:id="@+id/single_line"
                         android:layout_width="match_parent"
@@ -442,7 +440,6 @@
                         app:layout_constraintRight_toRightOf="parent"
                         android:textStyle="bold" />
 
-
                     <EditText
                         android:id="@+id/multi_line"
                         android:layout_width="match_parent"
@@ -468,7 +465,6 @@
                         app:layout_constraintTop_toBottomOf="@+id/multi_line"
                         app:layout_constraintRight_toRightOf="parent"
                         android:textStyle="bold" />
-
 
                     <LinearLayout
                         android:id="@+id/true_false"
@@ -926,6 +922,278 @@
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:id="@+id/scq_img_layout"
+                        android:padding="@dimen/_10sdp"
+                        android:visibility="gone"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/match_the_pairs"
+                        android:layout_height="wrap_content">
+
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:layout_width="match_parent"
+                            android:id="@+id/upper_linear"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            android:orientation="horizontal"
+                            android:weightSum="2"
+                            android:layout_height="wrap_content">
+
+
+                            <com.google.android.material.card.MaterialCardView
+                                android:layout_width="@dimen/_100sdp"
+                                android:layout_weight="1"
+                                app:cardCornerRadius="@dimen/_10sdp"
+                                android:elevation="@dimen/_10sdp"
+                                android:layout_margin="@dimen/_10sdp"
+                                android:layout_height="@dimen/_100sdp">
+
+                                <ImageView
+                                    android:id="@+id/scq_img1"
+                                    android:layout_width="match_parent"
+                                    android:src="@drawable/profile"
+                                    android:scaleType="centerCrop"
+                                    android:layout_height="match_parent"/>
+
+                                <ImageView
+                                    android:id="@+id/scqimg_chck1"
+                                    android:visibility="gone"
+                                    android:layout_margin="@dimen/_3sdp"
+                                    android:layout_gravity="right"
+                                    android:layout_width="wrap_content"
+                                    android:src="@drawable/ic_right_mtp"
+                                    android:layout_height="wrap_content"/>
+                            </com.google.android.material.card.MaterialCardView>
+
+                            <com.google.android.material.card.MaterialCardView
+                                android:layout_width="@dimen/_100sdp"
+                                android:layout_weight="1"
+                                app:cardCornerRadius="@dimen/_10sdp"
+                                android:elevation="@dimen/_10sdp"
+                                android:layout_margin="@dimen/_10sdp"
+                                android:layout_height="@dimen/_100sdp">
+
+                                <ImageView
+                                    android:id="@+id/scq_img2"
+                                    android:layout_width="match_parent"
+                                    android:src="@drawable/profile"
+                                    android:scaleType="centerCrop"
+                                    android:layout_height="match_parent"/>
+
+
+                                <ImageView
+                                    android:id="@+id/scqimg_chck2"
+                                    android:visibility="gone"
+                                    android:layout_margin="@dimen/_3sdp"
+                                    android:layout_gravity="right"
+                                    android:layout_width="wrap_content"
+                                    android:src="@drawable/ic_right_mtp"
+                                    android:layout_height="wrap_content"/>
+                            </com.google.android.material.card.MaterialCardView>
+                        </androidx.appcompat.widget.LinearLayoutCompat>
+
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:layout_width="match_parent"
+                            app:layout_constraintTop_toBottomOf="@+id/upper_linear"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            android:orientation="horizontal"
+                            android:weightSum="2"
+                            android:layout_height="wrap_content">
+
+
+                            <com.google.android.material.card.MaterialCardView
+                                android:layout_width="@dimen/_100sdp"
+                                android:layout_weight="1"
+                                app:cardCornerRadius="@dimen/_10sdp"
+                                android:elevation="@dimen/_10sdp"
+                                android:layout_margin="@dimen/_10sdp"
+                                android:layout_height="@dimen/_100sdp">
+
+                                <ImageView
+                                    android:id="@+id/scq_img3"
+                                    android:layout_width="match_parent"
+                                    android:src="@drawable/profile"
+                                    android:scaleType="centerCrop"
+                                    android:layout_height="match_parent"/>
+
+                                <ImageView
+                                    android:id="@+id/scqimg_chck3"
+                                    android:visibility="gone"
+                                    android:layout_margin="@dimen/_3sdp"
+                                    android:layout_gravity="right"
+                                    android:layout_width="wrap_content"
+                                    android:src="@drawable/ic_right_mtp"
+                                    android:layout_height="wrap_content"/>
+                            </com.google.android.material.card.MaterialCardView>
+
+                            <com.google.android.material.card.MaterialCardView
+                                android:layout_width="@dimen/_100sdp"
+                                android:layout_weight="1"
+                                app:cardCornerRadius="@dimen/_10sdp"
+                                android:elevation="@dimen/_10sdp"
+                                android:layout_margin="@dimen/_10sdp"
+                                android:layout_height="@dimen/_100sdp">
+
+                                <ImageView
+                                    android:id="@+id/scq_img4"
+                                    android:layout_width="match_parent"
+                                    android:src="@drawable/profile"
+                                    android:scaleType="centerCrop"
+                                    android:layout_height="match_parent"/>
+
+
+                                <ImageView
+                                    android:id="@+id/scqimg_chck4"
+                                    android:visibility="gone"
+                                    android:layout_margin="@dimen/_3sdp"
+                                    android:layout_gravity="right"
+                                    android:layout_width="wrap_content"
+                                    android:src="@drawable/ic_right_mtp"
+                                    android:layout_height="wrap_content"/>
+                            </com.google.android.material.card.MaterialCardView>
+                        </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:id="@+id/mcq_img_layout"
+                        android:padding="@dimen/_10sdp"
+                        android:visibility="gone"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/scq_img_layout"
+                        android:layout_height="wrap_content">
+
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:layout_width="match_parent"
+                            android:id="@+id/mcqupper_linear"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            android:orientation="horizontal"
+                            android:weightSum="2"
+                            android:layout_height="wrap_content">
+
+
+                            <com.google.android.material.card.MaterialCardView
+                                android:layout_width="@dimen/_100sdp"
+                                android:layout_weight="1"
+                                app:cardCornerRadius="@dimen/_10sdp"
+                                android:elevation="@dimen/_10sdp"
+                                android:layout_margin="@dimen/_10sdp"
+                                android:layout_height="@dimen/_100sdp">
+
+                                <ImageView
+                                    android:id="@+id/mcq_img1"
+                                    android:layout_width="match_parent"
+                                    android:src="@drawable/profile"
+                                    android:scaleType="centerCrop"
+                                    android:layout_height="match_parent"/>
+
+                                <ImageView
+                                    android:id="@+id/mcqimg_chck1"
+                                    android:visibility="gone"
+                                    android:layout_margin="@dimen/_3sdp"
+                                    android:layout_gravity="right"
+                                    android:layout_width="wrap_content"
+                                    android:src="@drawable/ic_right_mtp"
+                                    android:layout_height="wrap_content"/>
+                            </com.google.android.material.card.MaterialCardView>
+
+                            <com.google.android.material.card.MaterialCardView
+                                android:layout_width="@dimen/_100sdp"
+                                android:layout_weight="1"
+                                app:cardCornerRadius="@dimen/_10sdp"
+                                android:elevation="@dimen/_10sdp"
+                                android:layout_margin="@dimen/_10sdp"
+                                android:layout_height="@dimen/_100sdp">
+
+                                <ImageView
+                                    android:id="@+id/mcq_img2"
+                                    android:layout_width="match_parent"
+                                    android:src="@drawable/profile"
+                                    android:scaleType="centerCrop"
+                                    android:layout_height="match_parent"/>
+
+
+                                <ImageView
+                                    android:id="@+id/mcqimg_chck2"
+                                    android:visibility="gone"
+                                    android:layout_margin="@dimen/_3sdp"
+                                    android:layout_gravity="right"
+                                    android:layout_width="wrap_content"
+                                    android:src="@drawable/ic_right_mtp"
+                                    android:layout_height="wrap_content"/>
+                            </com.google.android.material.card.MaterialCardView>
+                        </androidx.appcompat.widget.LinearLayoutCompat>
+
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:layout_width="match_parent"
+                            app:layout_constraintTop_toBottomOf="@+id/mcqupper_linear"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            android:orientation="horizontal"
+                            android:weightSum="2"
+                            android:layout_height="wrap_content">
+
+
+                            <com.google.android.material.card.MaterialCardView
+                                android:layout_width="@dimen/_100sdp"
+                                android:layout_weight="1"
+                                app:cardCornerRadius="@dimen/_10sdp"
+                                android:elevation="@dimen/_10sdp"
+                                android:layout_margin="@dimen/_10sdp"
+                                android:layout_height="@dimen/_100sdp">
+
+                                <ImageView
+                                    android:id="@+id/mcq_img3"
+                                    android:layout_width="match_parent"
+                                    android:src="@drawable/profile"
+                                    android:scaleType="centerCrop"
+                                    android:layout_height="match_parent"/>
+
+                                <ImageView
+                                    android:id="@+id/mcqimg_chck3"
+                                    android:visibility="gone"
+                                    android:layout_margin="@dimen/_3sdp"
+                                    android:layout_gravity="right"
+                                    android:layout_width="wrap_content"
+                                    android:src="@drawable/ic_right_mtp"
+                                    android:layout_height="wrap_content"/>
+                            </com.google.android.material.card.MaterialCardView>
+
+                            <com.google.android.material.card.MaterialCardView
+                                android:layout_width="@dimen/_100sdp"
+                                android:layout_weight="1"
+                                app:cardCornerRadius="@dimen/_10sdp"
+                                android:elevation="@dimen/_10sdp"
+                                android:layout_margin="@dimen/_10sdp"
+                                android:layout_height="@dimen/_100sdp">
+
+                                <ImageView
+                                    android:id="@+id/mcq_img4"
+                                    android:layout_width="match_parent"
+                                    android:src="@drawable/profile"
+                                    android:scaleType="centerCrop"
+                                    android:layout_height="match_parent"/>
+
+
+                                <ImageView
+                                    android:id="@+id/mcqimg_chck4"
+                                    android:visibility="gone"
+                                    android:layout_margin="@dimen/_3sdp"
+                                    android:layout_gravity="right"
+                                    android:layout_width="wrap_content"
+                                    android:src="@drawable/ic_right_mtp"
+                                    android:layout_height="wrap_content"/>
+                            </com.google.android.material.card.MaterialCardView>
+                        </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
                     <Button
                         android:id="@+id/submit"
                         style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
@@ -938,7 +1206,7 @@
                         android:textColor="@color/colorWhite"
                         app:cornerRadius="@dimen/_50sdp"
                         app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/match_the_pairs" />
+                        app:layout_constraintTop_toBottomOf="@+id/mcq_img_layout" />
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
