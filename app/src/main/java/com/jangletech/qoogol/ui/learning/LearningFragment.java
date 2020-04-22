@@ -120,8 +120,8 @@ public class LearningFragment extends Fragment implements LearingAdapter.onIconC
         learningQuestions.setComments("30");
         learningQuestions.setShares("10");
         learningQuestions.setRecommended_time("50");
-        learningQuestions.setIs_liked(true);
-        learningQuestions.setIs_fav(true);
+        learningQuestions.setIs_liked(false);
+        learningQuestions.setIs_fav(false);
         learningQuestions.setSubject("Mathematics");
         learningQuestions.setChapter("5th Chapter");
         learningQuestions.setCategory("SCQ_img");
@@ -181,7 +181,7 @@ public class LearningFragment extends Fragment implements LearingAdapter.onIconC
         imglist.add("https://www.thoughtco.com/thmb/bORUDzdznV2AzCzV3jGumQBhmPI=/768x300/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-102635591-56acf9ec5f9b58b7d00ad548.jpg");
         learningQuestions2.setAttchment(imglist);
         learningQuestions2.setChapter("5th Chapter");
-        learningQuestions2.setCategory("SCQ");
+        learningQuestions2.setCategory("SCQ_text");
         learningQuestions2.setAttended_by(25);
         learningQuestions2.setQuestion("This one is intended to be a confidence builder. These are diamonds. Diamonds are pure:");
         learningQuestions2.setAnswer("b");
