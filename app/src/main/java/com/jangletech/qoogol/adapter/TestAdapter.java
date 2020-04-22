@@ -3,6 +3,8 @@ package com.jangletech.qoogol.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
@@ -52,9 +54,51 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.ViewHolder> {
 
         holder.itemBinding.tvPublishedDate.setText(testModel.getPublishedDate());
         holder.itemBinding.tvRatingStartCount.setText(testModel.getRatingStarCount());
-        holder.itemBinding.tvRatingCount.setText("("+testModel.getRatingCount()+")");
+        holder.itemBinding.tvRatingCount.setText("(" + testModel.getRatingCount() + ")");
+        holder.itemBinding.likeValue.setText(String.valueOf(testModel.getLikeCount()));
 
-        if(testModel.isPaused()){
+        if (testModel.isLiked()) {
+            holder.itemBinding.like.setChecked(true);
+        } else {
+            holder.itemBinding.like.setChecked(false);
+        }
+
+        if (testModel.isFavourite()) {
+            itemBinding.favorite.setChecked(true);
+        } else {
+            itemBinding.favorite.setChecked(false);
+        }
+
+        //ToggleButton toggle = (ToggleButton) findViewById(R.id.togglebutton);
+        itemBinding.favorite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    testModel.setFavourite(true);
+                } else {
+                    testModel.setFavourite(false);
+                }
+            }
+        });
+
+
+        itemBinding.like.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    testModel.setLikeCount(testModel.getLikeCount() + 1);
+                    testModel.setLiked(true);
+                    //notifyItemChanged(position);
+                    testClickListener.onLikeClick(testModel, position);
+                } else {
+                    //int likeCount = Integer.parseInt(itemBinding.likeValue.getText().toString());
+                    testModel.setLikeCount(testModel.getLikeCount() - 1);
+                    testModel.setLiked(false);
+                    //notifyItemChanged(position);
+                    testClickListener.onLikeClick(testModel, position);
+                }
+            }
+        });
+
+        if (testModel.isPaused()) {
             holder.itemBinding.btnStartTest.setText(" Resume Test ");
         }
 
@@ -70,30 +114,36 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.ViewHolder> {
             testClickListener.onStartTestClick(testModel);
         });
 
-        holder.itemBinding.likeLayout.setOnClickListener(v->{
+        /*holder.itemBinding.likeLayout.setOnClickListener(v->{
             testClickListener.onLikeClick(testModel);
-        });
+        });*/
 
-        holder.itemBinding.commentLayout.setOnClickListener(v->{
+        holder.itemBinding.commentLayout.setOnClickListener(v -> {
             testClickListener.onCommentClick(testModel);
         });
 
-        holder.itemBinding.shareLayout.setOnClickListener(v->{
+        holder.itemBinding.shareLayout.setOnClickListener(v -> {
             testClickListener.onShareClick(testModel);
         });
 
-        holder.itemBinding.favorite.setOnClickListener(v->{
-
+        holder.itemBinding.favorite.setOnClickListener(v -> {
+            //Toast.makeText(fragment.getContext(), ""+isSelected, Toast.LENGTH_SHORT).show();
+            //testClickListener.onFavouriteClick(testModel, isSelected[0]);
         });
-
     }
 
     public interface TestClickListener {
         void onTestItemClick(TestModel testModel);
+
         void onStartTestClick(TestModel testModel);
+
         void onCommentClick(TestModel testModel);
+
         void onShareClick(TestModel testModel);
-        void onLikeClick(TestModel testModel);
+
+        void onLikeClick(TestModel testModel, int pos);
+
+        void onFavouriteClick(TestModel testModel, boolean isChecked);
     }
 
     @Override

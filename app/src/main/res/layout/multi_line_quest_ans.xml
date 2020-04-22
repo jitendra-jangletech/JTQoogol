@@ -142,6 +142,7 @@
                             android:padding="@dimen/_10sdp">
 
                             <EditText
+                                android:digits="qwertyuiopasdfghjklzxcvbnm1234567890QWERTYUIOPASDFGHJKLZXCVBNM "
                                 android:id="@+id/et_multi_line_answer"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -150,7 +151,7 @@
                                 android:drawableLeft="@drawable/bg_empty"
                                 android:gravity="top|left"
                                 android:hint="Type Your Answer Here"
-                                android:inputType="textMultiLine|textNoSuggestions"
+                                android:inputType="textMultiLine|textNoSuggestions|text"
                                 android:lines="8"
                                 android:maxLines="10"
                                 android:scrollbars="vertical"

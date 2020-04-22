@@ -6,6 +6,16 @@ public class TestModel {
     private String subject;
     private String duration;
 
+    public int getLikeCount() {
+        return likeCount;
+    }
+
+    public void setLikeCount(int likeCount) {
+        this.likeCount = likeCount;
+    }
+
+    private int likeCount;
+
     public boolean isPaused() {
         return isPaused;
     }
@@ -33,6 +43,16 @@ public class TestModel {
     private String ratingCount;
     private boolean isFavourite;
     private boolean isNegativeMarks;
+
+    public boolean isLiked() {
+        return isLiked;
+    }
+
+    public void setLiked(boolean liked) {
+        isLiked = liked;
+    }
+
+    private boolean isLiked;
     private String author;
     private String authorEdu;
     private String category;
@@ -50,7 +70,7 @@ public class TestModel {
     public TestModel(String name, String subject, String duration, String totalMarks, String difficultyLevel,
                      String ranking, String attendedBy, String publishedDate, String ratingCount,
                      boolean isFavourite, boolean isNegativeMarks, String author, String authorEdu,
-                     String category,String ratingStarCount,String questionCount,boolean isPaused) {
+                     String category,String ratingStarCount,String questionCount,boolean isPaused,int likeCount,boolean isLiked) {
         this.name = name;
         this.subject = subject;
         this.duration = duration;
@@ -68,6 +88,8 @@ public class TestModel {
         this.ratingStarCount = ratingStarCount;
         this.questionCount = questionCount;
         this.isPaused = isPaused;
+        this.likeCount = likeCount;
+        this.isLiked = isLiked;
     }
 
 

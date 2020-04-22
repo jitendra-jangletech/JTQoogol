@@ -15,11 +15,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activities.PracticeTestActivity" android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".activities.PracticeTestActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity android:name=".activities.DynamicViewPagerActivity">
 
         </activity>
-        <activity android:name=".activities.StartTestActivity"></activity>
+        <activity
+            android:name=".activities.StartTestActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
         <activity
             android:name=".activities.SingleSelectionActivity"
             android:theme="@style/AppTheme.NoActionBar" />

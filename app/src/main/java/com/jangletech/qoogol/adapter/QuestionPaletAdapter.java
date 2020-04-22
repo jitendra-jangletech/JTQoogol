@@ -1,23 +1,18 @@
 package com.jangletech.qoogol.adapter;
 
-import android.content.ContentResolver;
 import android.content.Context;
-import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.ItemQuestionBinding;
 import com.jangletech.qoogol.databinding.QuestPaletItemBinding;
 import com.jangletech.qoogol.enums.QuestionSortType;
 import com.jangletech.qoogol.model.TestQuestion;
-
 import java.util.List;
 
 public class QuestionPaletAdapter extends RecyclerView.Adapter<QuestionPaletAdapter.QuestionPaletViewHolder> {
@@ -52,7 +47,7 @@ public class QuestionPaletAdapter extends RecyclerView.Adapter<QuestionPaletAdap
         this.questClickListener = questClickListener;
         this.strSortType = sortType;
         this.context = mContext;
-        printList();
+        //printList();
     }
 
     @NonNull
@@ -161,6 +156,11 @@ public class QuestionPaletAdapter extends RecyclerView.Adapter<QuestionPaletAdap
             super(itemView.getRoot());
             this.itemQuestionListBinding = itemView;
         }
+    }
+
+    public void setPaletFilterResults(List<TestQuestion> result) {
+        questions = result;
+        notifyDataSetChanged();
     }
 
     public interface QuestClickListener {

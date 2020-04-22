@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -44,6 +45,7 @@ public class PracticeTestActivity extends AppCompatActivity implements LearingAd
     private ViewPager2 practiceViewPager;
     private PracticeTestQuestPaletAdapter adapter;
     private List<PracticeQuestion> questionList;
+    int currentPos = 0;
 
 
     @Override
@@ -57,7 +59,24 @@ public class PracticeTestActivity extends AppCompatActivity implements LearingAd
         setData();
         initView();
 
+        mBinding.appBarTest.btnNext.setOnClickListener(v -> {
+            currentPos = practiceViewPager.getCurrentItem();
+            if (currentPos < learningQuestionsList.size() - 1) {
+                practiceViewPager.setCurrentItem(currentPos + 1, true);
+            } else {
+                Toast.makeText(this, "This is last page", Toast.LENGTH_SHORT).show();
+            }
+        });
 
+        mBinding.appBarTest.btnPrevious.setOnClickListener(v -> {
+            currentPos = practiceViewPager.getCurrentItem();
+            if (currentPos > 0) {
+                practiceViewPager.setCurrentItem(currentPos - 1, true);
+
+            } else {
+                Toast.makeText(this, "This is first Page", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         practiceViewPager.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -91,7 +110,7 @@ public class PracticeTestActivity extends AppCompatActivity implements LearingAd
 
     private void prepareQuestPaletList() {
         mBinding.paletQuestListRecyclerView.setNestedScrollingEnabled(false);
-        adapter = new PracticeTestQuestPaletAdapter(this,questionList,this);
+        adapter = new PracticeTestQuestPaletAdapter(this, questionList, this);
         mBinding.paletQuestListRecyclerView.setHasFixedSize(true);
         mBinding.paletQuestListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mBinding.paletQuestListRecyclerView.setAdapter(adapter);
@@ -125,7 +144,7 @@ public class PracticeTestActivity extends AppCompatActivity implements LearingAd
         learningQuestions0.setCategory("SCQ");
         learningQuestions0.setAttended_by(25);
         learningQuestions0.setQuestion("This one is intended to be a confidence builder. These are diamonds. Diamonds are pure:");
-        questionList.add(new PracticeQuestion(learningQuestions0.getQuestion(),false));
+        questionList.add(new PracticeQuestion(learningQuestions0.getQuestion(), false));
         learningQuestions0.setAnswer("b");
         learningQuestions0.setAnswerDesc("Like other elements, carbon occurs in different forms, which are called allotropes. Allotropes of carbon include transparent diamond, gray graphite (pencil \"lead\"), and black amorphous carbon (soot).");
         learningQuestions0.setMcq1("boron");
@@ -158,7 +177,7 @@ public class PracticeTestActivity extends AppCompatActivity implements LearingAd
         learningQuestions00.setCategory("SCQ");
         learningQuestions00.setAttended_by(25);
         learningQuestions00.setQuestion("Which image contain mountains");
-        questionList.add(new PracticeQuestion(learningQuestions00.getQuestion(),false));
+        questionList.add(new PracticeQuestion(learningQuestions00.getQuestion(), false));
         learningQuestions00.setAnswer("c");
         learningQuestions00.setAnswerDesc("Like other elements, carbon occurs in different forms, which are called allotropes. Allotropes of carbon include transparent diamond, gray graphite (pencil \"lead\"), and black amorphous carbon (soot).");
         learningQuestions00.setMcq1("1");
@@ -191,7 +210,7 @@ public class PracticeTestActivity extends AppCompatActivity implements LearingAd
         learningQuestions.setIs_fav(false);
         learningQuestions.setCategory("SCQ");
         learningQuestions.setQuestion("find the value of \\([(-2)^2]^3\\)");
-        questionList.add(new PracticeQuestion(learningQuestions.getQuestion(),true));
+        questionList.add(new PracticeQuestion(learningQuestions.getQuestion(), true));
         learningQuestions.setAnswer("a");
         learningQuestions.setAnswerDesc("It will multiply 2 and 3");
         learningQuestions.setRating("4.5");
@@ -219,7 +238,7 @@ public class PracticeTestActivity extends AppCompatActivity implements LearingAd
         learningQuestions1.setIs_fav(false);
         learningQuestions1.setCategory("MCQ");
         learningQuestions1.setQuestion("What are the types of current?");
-        questionList.add(new PracticeQuestion(learningQuestions1.getQuestion(),false));
+        questionList.add(new PracticeQuestion(learningQuestions1.getQuestion(), false));
         learningQuestions1.setAnswer("a,b");
         learningQuestions1.setAnswerDesc("There are two types of electric current: direct current (DC) and alternating current (AC). The electrons in direct current flow in one direction. The current produced by a battery is direct current. The electrons in alternating current flow in one direction, then in the opposite direction—over and over again.");
         learningQuestions1.setRating("4.5");
@@ -244,7 +263,7 @@ public class PracticeTestActivity extends AppCompatActivity implements LearingAd
         learningQuestions3.setCategory("TF");
         learningQuestions3.setAttended_by(25);
         learningQuestions3.setQuestion("\\(-2^3  = (-2)^3\\)");
-        questionList.add(new PracticeQuestion(learningQuestions3.getQuestion(),true));
+        questionList.add(new PracticeQuestion(learningQuestions3.getQuestion(), true));
         learningQuestions3.setAnswer("true");
         learningQuestions3.setRating("5");
         learningQuestions3.setTopic("Square");
@@ -268,7 +287,7 @@ public class PracticeTestActivity extends AppCompatActivity implements LearingAd
         learningQuestions4.setCategory("FIB");
         learningQuestions4.setAttended_by(65);
         learningQuestions4.setQuestion("A vector quantity has both magnitude and ....... while a scalar has only magnitude.");
-        questionList.add(new PracticeQuestion(learningQuestions4.getQuestion(),false));
+        questionList.add(new PracticeQuestion(learningQuestions4.getQuestion(), false));
         learningQuestions4.setAnswer("direction");
         learningQuestions4.setRating("3.5");
         learningQuestions4.setTopic("Direction");
@@ -292,7 +311,7 @@ public class PracticeTestActivity extends AppCompatActivity implements LearingAd
         learningQuestions5.setCategory("MTP");
         learningQuestions5.setAttended_by(20);
         learningQuestions5.setQuestion("Match the pairs");
-        questionList.add(new PracticeQuestion(learningQuestions5.getQuestion(),false));
+        questionList.add(new PracticeQuestion(learningQuestions5.getQuestion(), false));
         learningQuestions5.setA1("Photosynthesis");
         learningQuestions5.setA2("Water");
         learningQuestions5.setA3("Sodium chloride");
@@ -323,7 +342,7 @@ public class PracticeTestActivity extends AppCompatActivity implements LearingAd
         learningQuestions6.setCategory("AIB");
         learningQuestions6.setAttended_by(80);
         learningQuestions6.setQuestion("Explain charges in the Atom.");
-        questionList.add(new PracticeQuestion(learningQuestions6.getQuestion(),false));
+        questionList.add(new PracticeQuestion(learningQuestions6.getQuestion(), false));
         learningQuestions6.setAnswer("The charges in the atom are crucial in understanding how the atom works. An electron has a negative charge, a proton has a positive charge and a neutron has no charge. Electrons and protons have the same magnitude of charge. Like charges repel, so protons repel one another as do electrons. Opposite charges attract which causes the electrons to be attracted to the protons. As the electrons and protons grow farther apart, the forces they exert on each other decrease.");
         learningQuestions6.setRating("2.5");
         learningQuestions6.setTopic("Atom");
@@ -351,7 +370,7 @@ public class PracticeTestActivity extends AppCompatActivity implements LearingAd
         learningQuestions7.setIs_fav(false);
         learningQuestions7.setCategory("SCQ");
         learningQuestions7.setQuestion("Electric current may be expressed in which one of the following units?");
-        questionList.add(new PracticeQuestion(learningQuestions7.getQuestion(),false));
+        questionList.add(new PracticeQuestion(learningQuestions7.getQuestion(), false));
         learningQuestions7.setQuestiondesc("An electric current is the rate of flow of electric charge.");
         learningQuestions7.setAnswer("c");
         learningQuestions7.setAnswerDesc("Electric current is most commonly measured in units of amperes (A), where 1 ampere is 1 coulomb of electric charge per second. The ampere is the SI unit of electric current. Of course, metric prefixes can be added to the ampere to make units of milliamperes, microamperes, kiloamperes, etc.");
@@ -377,7 +396,7 @@ public class PracticeTestActivity extends AppCompatActivity implements LearingAd
         learningQuestions8.setCategory("TF");
         learningQuestions8.setAttended_by(25);
         learningQuestions8.setQuestion("The properties of solids can be explained by the structure of and the bonding among the metal atoms.");
-        questionList.add(new PracticeQuestion(learningQuestions8.getQuestion(),false));
+        questionList.add(new PracticeQuestion(learningQuestions8.getQuestion(), false));
         learningQuestions8.setAnswer("a");
         learningQuestions8.setRating("5");
         learningQuestions8.setTopic("Atoms");
@@ -400,7 +419,7 @@ public class PracticeTestActivity extends AppCompatActivity implements LearingAd
         learningQuestions9.setCategory("AIS");
         learningQuestions9.setAttended_by(20);
         learningQuestions9.setQuestion("State Newton's Third Law.");
-        questionList.add(new PracticeQuestion(learningQuestions9.getQuestion(),false));
+        questionList.add(new PracticeQuestion(learningQuestions9.getQuestion(), false));
         learningQuestions9.setAnswer("For every action there is an equal and opposite reaction.");
         learningQuestions9.setRating("5");
         learningQuestions9.setTopic("Newton's Law");
@@ -412,7 +431,7 @@ public class PracticeTestActivity extends AppCompatActivity implements LearingAd
 
     }
 
-    private void setupNavigationDrawer(){
+    private void setupNavigationDrawer() {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -435,7 +454,6 @@ public class PracticeTestActivity extends AppCompatActivity implements LearingAd
 
     @Override
     public void onBackPressed() {
-
         if (mBinding.drawerLayout.isDrawerOpen(GravityCompat.END)) {
             mBinding.drawerLayout.closeDrawer(GravityCompat.END);
         } else {

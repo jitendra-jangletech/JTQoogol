@@ -52,11 +52,13 @@ public class TestFavouriteFragment extends BaseFragment implements TestAdapter.T
 
         TestModel testModel = new TestModel("Shapes and Angles","Maths","40",
                 "30","Hard","88/100","219","Jan 2020","2093",
-                true,false,"Mr. Sharan","Phd. Maths","Unit Test-Final","4.3","100",true);
+                true,false,"Mr. Sharan","Phd. Maths","Unit Test-Final",
+                "4.3","100",true,2,false);
 
         TestModel testModel2 = new TestModel("When the Earth Shook!","Evs","40 Mins",
                 "60","Medium","12/100","10","Jul 2019","8353",
-                true,false,"Mr. Narayan","Phd. Evs","Unit Test-Final","2","30",false);
+                true,false,"Mr. Narayan","Phd. Evs",
+                "Unit Test-Final","2","30",false,8,true);
 
         testList.add(testModel);
         testList.add(testModel2);
@@ -88,7 +90,13 @@ public class TestFavouriteFragment extends BaseFragment implements TestAdapter.T
     }
 
     @Override
-    public void onLikeClick(TestModel testModel) {
+    public void onLikeClick(TestModel testModel, int pos) {
+
+    }
+
+
+    @Override
+    public void onFavouriteClick(TestModel testModel, boolean isChecked) {
 
     }
 
