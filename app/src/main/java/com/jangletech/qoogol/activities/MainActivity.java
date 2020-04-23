@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import androidx.navigation.NavController;
@@ -74,7 +75,9 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
             mBinding.drawerLayout.closeDrawers();
             if (navController.getCurrentDestination().getId() != R.id.nav_learning) {
                 navController.popBackStack();
-                navController.navigate(R.id.nav_learning);
+                Bundle bundle = new Bundle();
+                bundle.putString("call_from","learning");
+                navController.navigate(R.id.nav_learning,bundle);
             }
         });
 //
@@ -111,6 +114,16 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
                 navController.popBackStack();
                 //navController.navigate(R.id.nav_practice_test);
                 startActivity(new Intent(this, PracticeTestActivity.class));
+            }
+        });
+
+        findViewById(R.id.nav_saved_questions).setOnClickListener(v -> {
+            mBinding.drawerLayout.closeDrawers();
+            if (navController.getCurrentDestination().getId() != R.id.nav_saved_questions) {
+                navController.popBackStack();
+                Bundle bundle = new Bundle();
+                bundle.putString("call_from","saved_questions");
+                navController.navigate(R.id.nav_learning,bundle);
             }
         });
 
@@ -220,6 +233,15 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
                     "Logout", "Cancel", this);
             universalDialog.show();
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (navController.getCurrentDestination().getId()==R.id.nav_comments) {
+            getSupportFragmentManager().popBackStack();
+        } else {
+            super.onBackPressed();
+        }
     }
 
     private void loadProfilePic() {
