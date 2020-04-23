@@ -12,9 +12,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.jangletech.qoogol.CommentAdapter;
+import com.jangletech.qoogol.adapter.CommentAdapter;
 import com.jangletech.qoogol.R;
-import com.jangletech.qoogol.adapter.LearingAdapter;
 import com.jangletech.qoogol.databinding.CommentViewBinding;
 import com.jangletech.qoogol.model.Comments;
 

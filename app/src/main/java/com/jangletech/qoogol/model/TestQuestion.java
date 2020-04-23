@@ -1,9 +1,12 @@
 package com.jangletech.qoogol.model;
 
-import java.util.List;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
+@Entity(tableName = "TestQuestion")
 public class TestQuestion {
 
+    @PrimaryKey
     private int questId;
     private int questNo;
     private String questType;
@@ -25,6 +28,26 @@ public class TestQuestion {
     private boolean isSaved;
     private boolean isVisited;
     private boolean isAttempted;
+
+    private long timeLeft;
+
+    public long getTimeLeft() {
+        return timeLeft;
+    }
+
+    public void setTimeLeft(long timeLeft) {
+        this.timeLeft = timeLeft;
+    }
+
+    public double getTotalTime() {
+        return totalTime;
+    }
+
+    public void setTotalTime(double totalTime) {
+        this.totalTime = totalTime;
+    }
+
+    private double totalTime;
 
     public String getDescriptiveAns() {
         return descriptiveAns;
@@ -116,17 +139,6 @@ public class TestQuestion {
     public void setSaved(boolean saved) {
         isSaved = saved;
     }
-
-    public List<Answer> getAnswerList() {
-        return answerList;
-    }
-
-    public void setAnswerList(List<Answer> answerList) {
-        this.answerList = answerList;
-    }
-
-    private List<Answer> answerList;
-
 
     public TestQuestion(int questId, int questNo, String questType, String questionDesc,
                         String ans1, String ans2, String ans3, String ans4, String ans5) {

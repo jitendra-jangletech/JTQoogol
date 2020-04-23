@@ -7,7 +7,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,7 +16,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.jangletech.qoogol.MainActivity;
+import com.jangletech.qoogol.activities.MainActivity;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.LearingAdapter;
 import com.jangletech.qoogol.databinding.LearningFragmentBinding;
@@ -27,7 +26,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.jangletech.qoogol.util.Constant.learning;
-import static com.jangletech.qoogol.util.Constant.test;
 
 public class LearningFragment extends Fragment implements LearingAdapter.onIconClick {
 

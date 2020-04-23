@@ -10,7 +10,7 @@ import android.view.Window;
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 
-import com.jangletech.qoogol.CourseActivity;
+import com.jangletech.qoogol.activities.StartTestActivity;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.DialogSubmitTestBinding;
 import com.jangletech.qoogol.model.TestQuestion;
@@ -66,12 +66,12 @@ public class SubmitTestDialog extends Dialog {
     }
 
     private void setData(){
-        if(CourseActivity.testQuestionList!=null){
-            int totalQuestCount = CourseActivity.testQuestionList.size();
+        if(StartTestActivity.testQuestionList!=null){
+            int totalQuestCount = StartTestActivity.testQuestionList.size();
             int attemptedCount = 0;
             int markedQuestCount = 0;
             int unattemptedQuestCount = 0;
-            for (TestQuestion question:CourseActivity.testQuestionList) {
+            for (TestQuestion question: StartTestActivity.testQuestionList) {
                 if(question.isAttempted()){
                     attemptedCount++;
                 }

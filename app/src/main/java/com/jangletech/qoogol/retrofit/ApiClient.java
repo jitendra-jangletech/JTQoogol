@@ -2,7 +2,7 @@ package com.jangletech.qoogol.retrofit;
 
 import android.util.Log;
 
-import com.jangletech.qoogol.QoogolApp;
+import com.jangletech.qoogol.util.QoogolApp;
 
 import java.io.File;
 import java.util.concurrent.TimeUnit;

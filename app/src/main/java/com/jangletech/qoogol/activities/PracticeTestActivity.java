@@ -17,7 +17,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.jangletech.qoogol.MainActivity;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.LearingAdapter;
 import com.jangletech.qoogol.adapter.PracticeTestAdapter;

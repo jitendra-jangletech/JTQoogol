@@ -1,7 +1,32 @@
 package com.jangletech.qoogol.ui.test.my_test;
 
-import androidx.lifecycle.ViewModel;
+import android.app.Application;
 
-public class MyTestViewModel extends ViewModel {
-    // TODO: Implement the ViewModel
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
+
+import com.jangletech.qoogol.database.repo.TestRepository;
+import com.jangletech.qoogol.model.TestModel;
+
+import java.util.List;
+
+public class MyTestViewModel extends AndroidViewModel {
+
+    private TestRepository mRepository;
+    private LiveData<List<TestModel>> mAllTests;
+
+    public MyTestViewModel(@NonNull Application application) {
+        super(application);
+        mRepository = new TestRepository(application);
+        mAllTests = mRepository.getAllTests();
+    }
+
+    LiveData<List<TestModel>> getAllTests() {
+        return mAllTests;
+    }
+
+    public void insert(TestModel testModel) {
+        mRepository.insert(testModel);
+    }
 }

@@ -12,7 +12,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.jangletech.qoogol.CourseActivity;
+import com.jangletech.qoogol.activities.StartTestActivity;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.TestAdapter;
 import com.jangletech.qoogol.databinding.TestFavouriteFragmentBinding;
@@ -76,7 +76,7 @@ public class TestFavouriteFragment extends BaseFragment implements TestAdapter.T
 
     @Override
     public void onStartTestClick(TestModel testModel) {
-        startActivity(new Intent(getActivity(), CourseActivity.class));
+        startActivity(new Intent(getActivity(), StartTestActivity.class));
     }
 
     @Override

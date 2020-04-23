@@ -1,4 +1,4 @@
-package com.jangletech.qoogol;
+package com.jangletech.qoogol.adapter;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
@@ -6,9 +6,9 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.CommentItemBinding;
 import com.jangletech.qoogol.model.Comments;
 

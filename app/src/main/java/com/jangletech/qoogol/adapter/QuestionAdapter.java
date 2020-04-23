@@ -2,14 +2,13 @@ package com.jangletech.qoogol.adapter;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.jangletech.qoogol.CourseActivity;
+import com.jangletech.qoogol.activities.StartTestActivity;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.ItemQuestionBinding;
 import com.jangletech.qoogol.databinding.TestDetailQuestionItemBinding;
@@ -32,7 +31,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHo
     @NonNull
     @Override
     public QuestionAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if (activity instanceof CourseActivity) {
+        if (activity instanceof StartTestActivity) {
             itemQuestionBinding = DataBindingUtil.inflate(
                     LayoutInflater.from(parent.getContext()),
                     R.layout.item_question, parent, false);
@@ -50,7 +49,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull QuestionAdapter.ViewHolder holder, int position) {
         Question question = questionList.get(position);
-        if (activity instanceof CourseActivity) {
+        if (activity instanceof StartTestActivity) {
             holder.itemQuestionBindingForPalet.tvQuestNo.setText(String.valueOf(question.getId()));
             holder.itemQuestionBindingForPalet.tvQuestDesc.setText(question.getStrQuestion());
         } else {

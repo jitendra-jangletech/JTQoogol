@@ -1,39 +1,5 @@
 package com.jangletech.qoogol.activities;
 
-import android.content.Context;
-import android.graphics.Color;
-import android.os.CountDownTimer;
-import android.text.Editable;
-import android.text.InputFilter;
-import android.text.Spanned;
-import android.text.TextWatcher;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import androidx.databinding.DataBindingUtil;
-import androidx.viewpager.widget.PagerAdapter;
-
-import com.google.android.material.chip.Chip;
-import com.google.android.material.chip.ChipGroup;
-import com.jangletech.qoogol.CourseActivity;
-import com.jangletech.qoogol.R;
-import com.jangletech.qoogol.databinding.FillInTheBlanksLayoutBinding;
-import com.jangletech.qoogol.databinding.MultiChoiceQuestionBinding;
-import com.jangletech.qoogol.databinding.MultiLineQuestAnsBinding;
-import com.jangletech.qoogol.databinding.SingleChoiceQuestionBinding;
-import com.jangletech.qoogol.databinding.TrueFalseLayoutBinding;
-import com.jangletech.qoogol.dialog.QuestReportDialog;
-import com.jangletech.qoogol.model.Answer;
-import com.jangletech.qoogol.model.TestQuestion;
-import com.jangletech.qoogol.enums.QuestionType;
-
-import java.util.HashMap;
-import java.util.List;
-
 public class ViewPagerAdapter{
 
    /* private static final String TAG = "ViewPagerAdapter";
