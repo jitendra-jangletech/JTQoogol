@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
@@ -13,6 +14,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.jangletech.qoogol.CommentAdapter;
+import com.jangletech.qoogol.MainActivity;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.LearingAdapter;
 import com.jangletech.qoogol.databinding.CommentViewBinding;
@@ -20,6 +22,8 @@ import com.jangletech.qoogol.model.Comments;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.jangletech.qoogol.MainActivity.navController;
 
 public class CommentFragment extends Fragment {
 
@@ -99,6 +103,21 @@ public class CommentFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         commentViewBinding.commentRecycler.setLayoutManager(linearLayoutManager);
         commentViewBinding.commentRecycler.setAdapter(commentAdapter);
+
+        OnBackPressedCallback callback = new OnBackPressedCallback(
+                true // default to enabled
+        ) {
+            @Override
+            public void handleOnBackPressed() {
+                if (navController.getCurrentDestination().getId()==R.id.nav_comments) {
+                    getActivity().getSupportFragmentManager().popBackStack();
+                }
+            }
+        };
+        getActivity().getOnBackPressedDispatcher().addCallback(
+                this, // LifecycleOwner
+                callback);
+
     }
 
     @Override

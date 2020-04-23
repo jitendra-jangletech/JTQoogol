@@ -353,6 +353,26 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
                 setTimer(learningItemBinding.tvtimer,0,0);
             });
 
+            learningItemBinding.like.setOnClickListener(v -> {
+                LearningQuestions learningQuestions = learningQuestionsList.get(getAdapterPosition());
+                int likes = Integer.parseInt(learningQuestions.getLikes());
+                if (learningQuestions.isIs_liked()) {
+                    Glide.with(activity).load(activity.getResources().getDrawable(R.drawable.ic_like)).into(learningItemBinding.like);
+                    learningItemBinding.likeValue.setText(likes-1 + "");
+                } else {
+                    Glide.with(activity).load(activity.getResources().getDrawable(R.drawable.ic_thumb_up_black_24dp)).into(learningItemBinding.like);
+                    learningItemBinding.likeValue.setText(likes-1 + "");
+                }
+            });
+
+            learningItemBinding.favorite.setOnClickListener(v -> {
+                LearningQuestions learningQuestions = learningQuestionsList.get(getAdapterPosition());
+                if (learningQuestions.isIs_fav()) {
+                    Glide.with(activity).load(activity.getResources().getDrawable(R.drawable.ic_fav)).into(learningItemBinding.favorite);
+                } else {
+                    Glide.with(activity).load(activity.getResources().getDrawable(R.drawable.ic_favorite_black_24dp)).into(learningItemBinding.favorite);
+                }
+            });
 
             learningItemBinding.close.setOnClickListener(v -> {
                 countDownTimer.cancel();

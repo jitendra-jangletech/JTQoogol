@@ -107,6 +107,12 @@
                         android:drawableLeft="@drawable/ic_questions"
                         android:text="@string/questions" />
 
+                    <TextView
+                        android:id="@+id/nav_saved_questions"
+                        style="@style/menu_item_style"
+                        android:drawableLeft="@drawable/ic_questions"
+                        android:text="@string/saved_questions" />
+
                    <!-- <TextView
                         android:id="@+id/nav_quest_trending"
                         style="@style/sub_menu_item_style"

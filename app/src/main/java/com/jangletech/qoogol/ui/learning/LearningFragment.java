@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
@@ -43,8 +44,9 @@ public class LearningFragment extends Fragment implements LearingAdapter.onIconC
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        learningFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.learning_fragment, container, false);
-        setHasOptionsMenu(true);
+
+            learningFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.learning_fragment, container, false);
+            setHasOptionsMenu(true);
         return learningFragmentBinding.getRoot();
     }
 
@@ -102,11 +104,20 @@ public class LearningFragment extends Fragment implements LearingAdapter.onIconC
 
     private void initView() {
         learningQuestionsList = new ArrayList<>();
+        Bundle bundle = getArguments();
+        if (bundle.getString("call_from").equalsIgnoreCase("saved_questions")) {
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Saved Questions");
+        } else {
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Learning");
+        }
+
         learingAdapter = new LearingAdapter(getActivity(), learningQuestionsList,this,learning);
         learningFragmentBinding.learningRecycler.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         learningFragmentBinding.learningRecycler.setLayoutManager(linearLayoutManager);
         learningFragmentBinding.learningRecycler.setAdapter(learingAdapter);
+
+
     }
 
     private void setData() {
