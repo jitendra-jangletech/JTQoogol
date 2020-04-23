@@ -5,6 +5,9 @@ package com.jangletech.qoogol.util;
  */
 public class Constant {
 
+    //Question Filter Type
+    public static final String FILTER_APPLIED = "FILTER_APPLIED";
+
     //Sort Type
     public static final String SORT_LIST = "SORT_LIST";
     public static final String SORT_GRID = "SORT_GRID";

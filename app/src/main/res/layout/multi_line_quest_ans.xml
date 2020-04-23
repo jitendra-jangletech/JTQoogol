@@ -142,7 +142,6 @@
                             android:padding="@dimen/_10sdp">
 
                             <EditText
-                                android:digits="qwertyuiopasdfghjklzxcvbnm1234567890QWERTYUIOPASDFGHJKLZXCVBNM "
                                 android:id="@+id/et_multi_line_answer"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -208,7 +207,7 @@
                 android:layout_marginLeft="@dimen/_5sdp"
                 android:background="@color/colorSkyBlue"
                 android:padding="@dimen/_10sdp"
-                android:text="Mark &amp; Next"
+                android:text="@string/mark_and_next"
                 android:textAllCaps="false"
                 android:textColor="@color/colorWhite"
                 app:layout_constraintStart_toStartOf="@+id/bottomLayout" />
@@ -236,7 +235,7 @@
                 android:layout_marginRight="@dimen/_5sdp"
                 android:background="@color/colorSkyBlue"
                 android:padding="@dimen/_10sdp"
-                android:text="Save &amp; Next"
+                android:text="@string/save_and_next"
                 android:textAllCaps="false"
                 android:textColor="@color/colorWhite"
                 app:layout_constraintEnd_toEndOf="@+id/bottomLayout" />

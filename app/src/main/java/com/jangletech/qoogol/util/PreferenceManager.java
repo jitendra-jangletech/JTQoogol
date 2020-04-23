@@ -3,6 +3,8 @@ package com.jangletech.qoogol.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.jangletech.qoogol.enums.QuestionFilterType;
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -17,6 +19,17 @@ public class PreferenceManager {
 
     public PreferenceManager(Context ctx) {
         sharedPreferences = ctx.getSharedPreferences(Constant.PREF_NAME, Context.MODE_PRIVATE);
+    }
+
+    public String getString(String key) {
+            //SharedPreferences sharedPref = context.getSharedPreferences(Constant.PREF_NAME, Context.MODE_PRIVATE);
+            return sharedPreferences.getString(key, QuestionFilterType.ALL.toString());
+    }
+
+    public void saveString(String key,String value) {
+         sharedPreferences.edit()
+        .putString(key,value)
+        .apply();
     }
 
     public void resetSetting() {
