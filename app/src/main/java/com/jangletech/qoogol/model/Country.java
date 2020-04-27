@@ -1,6 +1,7 @@
 package com.jangletech.qoogol.model;
 
 import com.google.gson.annotations.SerializedName;
+import com.jangletech.qoogol.util.Constant;
 
 import static com.jangletech.qoogol.util.Constant.country_id;
 import static com.jangletech.qoogol.util.Constant.country_name;
@@ -10,11 +11,17 @@ import static com.jangletech.qoogol.util.Constant.country_name;
  */
 public class Country {
 
-    @SerializedName(country_id)
+    @SerializedName(Constant.c_id)
     private  int countryId;
 
-    @SerializedName(country_name)
+    @SerializedName(Constant.c_name)
     private String countryName;
+
+    @SerializedName(Constant.c_calling_code)
+    private String callingCode;
+
+    @SerializedName(Constant.c_abbr_2)
+    private String abbrevation;
 
     public int getCountryId() {
         return countryId;
@@ -30,5 +37,21 @@ public class Country {
 
     public void setCountryName(String countryName) {
         this.countryName = countryName;
+    }
+
+    public String getCallingCode() {
+        return callingCode;
+    }
+
+    public void setCallingCode(String callingCode) {
+        this.callingCode = callingCode;
+    }
+
+    public String getAbbrevation() {
+        return abbrevation;
+    }
+
+    public void setAbbrevation(String abbrevation) {
+        this.abbrevation = abbrevation;
     }
 }

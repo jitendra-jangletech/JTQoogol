@@ -1,10 +1,31 @@
 package com.jangletech.qoogol.model;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by Pritali on 4/6/2020.
  */
+@Entity
 public class Comments {
-    String commentId, comment, userId, userName, time;
+
+    @PrimaryKey
+    @SerializedName("commentId")
+    private String commentId;
+
+    @SerializedName("comment")
+    private String comment;
+
+    @SerializedName("userId")
+    private String userId;
+
+    @SerializedName("userName")
+    private String userName;
+
+    @SerializedName("time")
+    private String time;
 
     public String getCommentId() {
         return commentId;

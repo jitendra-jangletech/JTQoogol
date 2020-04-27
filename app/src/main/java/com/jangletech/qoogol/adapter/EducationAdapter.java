@@ -235,33 +235,33 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.View
 
 
     private void fetchCountryData() {
-        ProgressDialog.getInstance().show(activity);
-        Call<List<Country>> call = apiService.getCountries();
-        call.enqueue(new Callback<List<Country>>() {
-            @Override
-            public void onResponse(Call<List<Country>> call, retrofit2.Response<List<Country>> response) {
-                try {
-                    List<Country> list = response.body();
-                    if (list != null && list.size() > 0) {
-                        mMapCountry = new HashMap<>();
-                        for (Country country : list) {
-                            mMapCountry.put(country.getCountryId(), country.getCountryName());
-                        }
-                        ProgressDialog.getInstance().dismiss();
-                        populateCountries(mMapCountry);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    ProgressDialog.getInstance().dismiss();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Country>> call, Throwable t) {
-                t.printStackTrace();
-                ProgressDialog.getInstance().dismiss();
-            }
-        });
+//        ProgressDialog.getInstance().show(activity);
+//        Call<List<Country>> call = apiService.getCountries();
+//        call.enqueue(new Callback<List<Country>>() {
+//            @Override
+//            public void onResponse(Call<List<Country>> call, retrofit2.Response<List<Country>> response) {
+//                try {
+//                    List<Country> list = response.body();
+//                    if (list != null && list.size() > 0) {
+//                        mMapCountry = new HashMap<>();
+//                        for (Country country : list) {
+//                            mMapCountry.put(country.getCountryId(), country.getCountryName());
+//                        }
+//                        ProgressDialog.getInstance().dismiss();
+//                        populateCountries(mMapCountry);
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                    ProgressDialog.getInstance().dismiss();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<List<Country>> call, Throwable t) {
+//                t.printStackTrace();
+//                ProgressDialog.getInstance().dismiss();
+//            }
+//        });
     }
 
     public void fetchStateData(int countryId) {

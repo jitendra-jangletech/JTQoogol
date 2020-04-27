@@ -27,6 +27,7 @@ import com.jangletech.qoogol.dialog.UniversalDialog;
 import com.jangletech.qoogol.model.ClassData;
 import com.jangletech.qoogol.model.Classes;
 import com.jangletech.qoogol.model.Country;
+import com.jangletech.qoogol.model.CountryResponse;
 import com.jangletech.qoogol.model.Course;
 import com.jangletech.qoogol.model.Degree;
 import com.jangletech.qoogol.model.Institute;
@@ -305,12 +306,12 @@ public class SignUpActivity extends BaseActivity
 
     private void fetchCountryData() {
         ProgressDialog.getInstance().show(this);
-        Call<List<Country>> call = apiService.getCountries();
-        call.enqueue(new Callback<List<Country>>() {
+        Call<CountryResponse> call = apiService.getCountries();
+        call.enqueue(new Callback<CountryResponse>() {
             @Override
-            public void onResponse(Call<List<Country>> call, retrofit2.Response<List<Country>> response) {
+            public void onResponse(Call<CountryResponse> call, retrofit2.Response<CountryResponse> response) {
                 try {
-                    List<Country> list = response.body();
+                    List<Country> list = response.body().getMasterDataList();
                     mViewModel.setCountryList(list);
                     if (list != null && list.size() > 0) {
                         mViewModel.mMapCountry = new HashMap<>();
@@ -327,7 +328,7 @@ public class SignUpActivity extends BaseActivity
             }
 
             @Override
-            public void onFailure(Call<List<Country>> call, Throwable t) {
+            public void onFailure(Call<CountryResponse> call, Throwable t) {
                 t.printStackTrace();
                 ProgressDialog.getInstance().dismiss();
             }

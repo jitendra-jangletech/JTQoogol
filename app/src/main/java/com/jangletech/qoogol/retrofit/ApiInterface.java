@@ -5,6 +5,7 @@ import com.jangletech.qoogol.model.City;
 import com.jangletech.qoogol.model.Classes;
 import com.jangletech.qoogol.model.CommonResponseObject;
 import com.jangletech.qoogol.model.Country;
+import com.jangletech.qoogol.model.CountryResponse;
 import com.jangletech.qoogol.model.Course;
 import com.jangletech.qoogol.model.DashboardInfo;
 import com.jangletech.qoogol.model.Degree;
@@ -14,12 +15,15 @@ import com.jangletech.qoogol.model.FetchEducationsResponseDto;
 import com.jangletech.qoogol.model.FetchPreferableExamsResponseDto;
 import com.jangletech.qoogol.model.GetUserPersonalDetails;
 import com.jangletech.qoogol.model.Institute;
+import com.jangletech.qoogol.model.LearningQuestResponse;
+import com.jangletech.qoogol.model.LearningQuestionsNew;
 import com.jangletech.qoogol.model.MobileOtp;
 import com.jangletech.qoogol.model.SignInModel;
 import com.jangletech.qoogol.model.State;
 import com.jangletech.qoogol.model.University;
 import com.jangletech.qoogol.model.UserSelectedExams;
 import com.jangletech.qoogol.model.signup.SignUpResponseDto;
+import com.jangletech.qoogol.util.Constant;
 
 import java.util.List;
 import java.util.Map;
@@ -40,8 +44,8 @@ public interface ApiInterface {
     @POST("auth/signInNew")
     Call<SignInModel> signCall(@QueryMap Map<String, String> request);
 
-    @POST("auth/countryList")
-    Call<List<Country>> getCountries();
+    @POST(Constant.COUNTRY)
+    Call<CountryResponse> getCountries();
 
     @POST("auth/statesForCountry")
     Call<List<State>> getStates(@QueryMap Map<String, Integer> request);
@@ -101,5 +105,7 @@ public interface ApiInterface {
     Call<CommonResponseObject> saveUserSelectedExams(@Query("userId") int userId,
                                                      @Body List<Exams> selectedExamsList);
 
+    @POST(Constant.FETCH_QA)
+    Call<LearningQuestResponse> fetchQAApi(@QueryMap Map<String, Object> request);
 
 }

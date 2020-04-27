@@ -1,5 +1,6 @@
 package com.jangletech.qoogol.ui.learning;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,14 +22,26 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.jangletech.qoogol.MainActivity;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.LearingAdapter;
+import com.jangletech.qoogol.database.QoogolDatabase;
 import com.jangletech.qoogol.databinding.LearningFragmentBinding;
+import com.jangletech.qoogol.dialog.ProgressDialog;
+import com.jangletech.qoogol.model.LearningQuestResponse;
 import com.jangletech.qoogol.model.LearningQuestions;
+import com.jangletech.qoogol.model.LearningQuestionsNew;
+import com.jangletech.qoogol.retrofit.ApiClient;
+import com.jangletech.qoogol.retrofit.ApiInterface;
+import com.jangletech.qoogol.util.Constant;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 import static com.jangletech.qoogol.util.Constant.learning;
-import static com.jangletech.qoogol.util.Constant.test;
 
 public class LearningFragment extends Fragment implements LearingAdapter.onIconClick {
 
@@ -36,6 +49,8 @@ public class LearningFragment extends Fragment implements LearingAdapter.onIconC
     LearningFragmentBinding learningFragmentBinding;
     LearingAdapter learingAdapter;
     List<LearningQuestions> learningQuestionsList;
+    List<LearningQuestionsNew> questionsNewList;
+    ApiInterface apiService = ApiClient.getInstance().getApi();
 
     public static LearningFragment newInstance() {
         return new LearningFragment();
@@ -45,8 +60,8 @@ public class LearningFragment extends Fragment implements LearingAdapter.onIconC
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-            learningFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.learning_fragment, container, false);
-            setHasOptionsMenu(true);
+        learningFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.learning_fragment, container, false);
+        setHasOptionsMenu(true);
         return learningFragmentBinding.getRoot();
     }
 
@@ -55,7 +70,7 @@ public class LearningFragment extends Fragment implements LearingAdapter.onIconC
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(LearningViewModel.class);
         initView();
-        setData();
+
     }
 
     @Override
@@ -70,30 +85,12 @@ public class LearningFragment extends Fragment implements LearingAdapter.onIconC
         switch (item.getItemId()) {
             case R.id.action_filter:
                 Bundle bundle = new Bundle();
-                bundle.putString("call_from","learning");
-                MainActivity.navController.navigate(R.id.nav_test_filter,bundle);
+                bundle.putString("call_from", "learning");
+                MainActivity.navController.navigate(R.id.nav_test_filter, bundle);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
-
-
-//        switch (item.getItemId()) {
-//            case R.id.action_subject:
-//                Toast.makeText(getActivity(), "Subject Icon Click", Toast.LENGTH_SHORT).show();
-//                return true;
-//            case R.id.action_chapter:
-//                Toast.makeText(getActivity(), "Chapter Click", Toast.LENGTH_SHORT).show();
-//                return true;
-//            case R.id.action_rating:
-//                Toast.makeText(getActivity(), "Rating  Click", Toast.LENGTH_SHORT).show();
-//                return true;
-//            case R.id.action_difflevel:
-//                Toast.makeText(getActivity(), "Diff level Click", Toast.LENGTH_SHORT).show();
-//                return true;
-//            default:
-//                return super.onOptionsItemSelected(item);
-//        }
     }
 
     @Override
@@ -104,20 +101,77 @@ public class LearningFragment extends Fragment implements LearingAdapter.onIconC
 
     private void initView() {
         learningQuestionsList = new ArrayList<>();
-        Bundle bundle = getArguments();
-        if (bundle.getString("call_from").equalsIgnoreCase("saved_questions")) {
-            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Saved Questions");
-        } else {
-            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Learning");
-        }
-
-        learingAdapter = new LearingAdapter(getActivity(), learningQuestionsList,this,learning);
+        questionsNewList = new ArrayList<>();
+        learingAdapter = new LearingAdapter(getActivity(), learningQuestionsList, this, learning);
         learningFragmentBinding.learningRecycler.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         learningFragmentBinding.learningRecycler.setLayoutManager(linearLayoutManager);
         learningFragmentBinding.learningRecycler.setAdapter(learingAdapter);
 
+        Bundle bundle = getArguments();
+        if (bundle.getString("call_from").equalsIgnoreCase("saved_questions")) {
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Saved Questions");
+//            learningQuestionsList.clear();
+//            new getDataFromDb().execute();
+        } else {
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Learning");
+        }
+        getDataFromApi();
 
+
+    }
+
+    private void getDataFromApi() {
+        ProgressDialog.getInstance().show(getActivity());
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put(Constant.u_user_id,"1");
+        Call<LearningQuestResponse> call = apiService.fetchQAApi(requestBody);
+        call.enqueue(new Callback<LearningQuestResponse>() {
+            @Override
+            public void onResponse(Call<LearningQuestResponse> call, retrofit2.Response<LearningQuestResponse> response) {
+                try {
+                    ProgressDialog.getInstance().dismiss();
+                    questionsNewList.clear();
+                    if (response.body().getResponse().equalsIgnoreCase("200")){
+                        questionsNewList = response.body().getQuestion_list();
+                        learingAdapter.notifyDataSetChanged();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    ProgressDialog.getInstance().dismiss();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<LearningQuestResponse> call, Throwable t) {
+                t.printStackTrace();
+                ProgressDialog.getInstance().dismiss();
+            }
+        });
+    }
+
+
+    class getDataFromDb extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            //adding to database
+            try {
+                learningQuestionsList = QoogolDatabase.getDatabase(getApplicationContext())
+                        .learningQuestionDao()
+                        .getAll();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            learingAdapter.notifyDataSetChanged();
+        }
     }
 
     private void setData() {
@@ -320,8 +374,6 @@ public class LearningFragment extends Fragment implements LearingAdapter.onIconC
         learningQuestionsList.add(learningQuestions6);
 
 
-
-
         LearningQuestions learningQuestions7 = new LearningQuestions();
         learningQuestions7.setQuestion_id("Q1008");
         learningQuestions7.setRecommended_time("40");
@@ -375,7 +427,6 @@ public class LearningFragment extends Fragment implements LearingAdapter.onIconC
         learningQuestionsList.add(learningQuestions8);
 
 
-
         LearningQuestions learningQuestions9 = new LearningQuestions();
         learningQuestions9.setQuestion_id("Q1010");
         learningQuestions9.setRecommended_time("40");
@@ -399,8 +450,7 @@ public class LearningFragment extends Fragment implements LearingAdapter.onIconC
         learningQuestionsList.add(learningQuestions9);
 
 
-
-        LearningQuestions learningQuestions10= new LearningQuestions();
+        LearningQuestions learningQuestions10 = new LearningQuestions();
         learningQuestions10.setQuestion_id("Q1011");
         learningQuestions10.setLikes("102");
         learningQuestions10.setComments("30");
@@ -472,6 +522,8 @@ public class LearningFragment extends Fragment implements LearingAdapter.onIconC
         learningQuestions12.setDifficulty_level("Medium");
         learningQuestions12.setMarks("3");
         learningQuestionsList.add(learningQuestions12);
+
+        learingAdapter.notifyDataSetChanged();
     }
 
 

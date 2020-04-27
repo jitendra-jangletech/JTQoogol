@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.ClipData;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.Editable;
@@ -32,6 +33,7 @@ import com.google.android.material.card.MaterialCardView;
 import com.jangletech.qoogol.MainActivity;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.activities.PracticeTestActivity;
+import com.jangletech.qoogol.database.QoogolDatabase;
 import com.jangletech.qoogol.databinding.LearningItemBinding;
 import com.jangletech.qoogol.model.LearningQuestions;
 import com.jangletech.qoogol.ui.learning.SlideshowDialogFragment;
@@ -44,6 +46,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import static com.facebook.FacebookSdk.getApplicationContext;
 import static com.jangletech.qoogol.util.Constant.learning;
 import static com.jangletech.qoogol.util.Constant.test;
 
@@ -72,10 +75,10 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
         learningItemBinding = DataBindingUtil.inflate(
                 LayoutInflater.from(parent.getContext()),
                 R.layout.learning_item, parent, false);
-        if (call_from==learning) {
+        if (call_from == learning) {
             params = new MaterialCardView.LayoutParams(MaterialCardView.LayoutParams.MATCH_PARENT, MaterialCardView.LayoutParams.WRAP_CONTENT);
             int margin = activity.getResources().getDimensionPixelSize(R.dimen._10sdp);
-            params.setMargins(0,margin,0,margin);
+            params.setMargins(0, margin, 0, margin);
             learningItemBinding.container.setLayoutParams(params);
         }
         return new ViewHolder(learningItemBinding);
@@ -130,7 +133,7 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
             learningItemBinding.scq2.setText(learningQuestions.getMcq2());
             learningItemBinding.scq3.setText(learningQuestions.getMcq3());
             learningItemBinding.scq4.setText(learningQuestions.getMcq4());
-        } else  if (learningQuestions.getCategory().equalsIgnoreCase("SCQ_img")) {
+        } else if (learningQuestions.getCategory().equalsIgnoreCase("SCQ_img")) {
             learningItemBinding.categoryTextview.setText("SCQ");
             learningItemBinding.scqImgLayout.setVisibility(View.VISIBLE);
             try {
@@ -141,7 +144,7 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }else  if (learningQuestions.getCategory().equalsIgnoreCase("MCQ_img")) {
+        } else if (learningQuestions.getCategory().equalsIgnoreCase("MCQ_img")) {
             learningItemBinding.categoryTextview.setText("MCQ");
             learningItemBinding.mcqImgLayout.setVisibility(View.VISIBLE);
             try {
@@ -152,7 +155,7 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }else if (learningQuestions.getCategory().equalsIgnoreCase("MCQ_text")) {
+        } else if (learningQuestions.getCategory().equalsIgnoreCase("MCQ_text")) {
             learningItemBinding.categoryTextview.setText("MCQ");
             learningItemBinding.multiChoice.setVisibility(View.VISIBLE);
             learningItemBinding.mcq1.setText(learningQuestions.getMcq1());
@@ -169,11 +172,11 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
             learningItemBinding.singleLine.setVisibility(View.VISIBLE);
             learningItemBinding.singleLineCounter.setVisibility(View.VISIBLE);
             learningItemBinding.categoryTextview.setText("Answer in Short");
-            answerCharCounter(learningItemBinding.singleLine,learningItemBinding.singleLineCounter,200);
+            answerCharCounter(learningItemBinding.singleLine, learningItemBinding.singleLineCounter, 200);
         } else if (learningQuestions.getCategory().equalsIgnoreCase("AIB")) {
             learningItemBinding.multiLine.setVisibility(View.VISIBLE);
             learningItemBinding.multiLineCounter.setVisibility(View.VISIBLE);
-            answerCharCounter(learningItemBinding.multiLine,learningItemBinding.multiLineCounter,400);
+            answerCharCounter(learningItemBinding.multiLine, learningItemBinding.multiLineCounter, 400);
             learningItemBinding.categoryTextview.setText("Answer in Brief");
         } else if (learningQuestions.getCategory().equalsIgnoreCase("MTP")) {
             learningItemBinding.matchThePairs.setVisibility(View.VISIBLE);
@@ -203,12 +206,12 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
                         bundle.putSerializable("images", (Serializable) finalTempimgList);
                         bundle.putInt("position", 0);
                         FragmentTransaction fragmentTransaction = null;
-                        if(activity instanceof MainActivity){
-                            fragmentTransaction =((MainActivity) activity).getSupportFragmentManager().beginTransaction();
+                        if (activity instanceof MainActivity) {
+                            fragmentTransaction = ((MainActivity) activity).getSupportFragmentManager().beginTransaction();
                         }
 
-                        if(activity instanceof PracticeTestActivity){
-                            fragmentTransaction =((PracticeTestActivity) activity).getSupportFragmentManager().beginTransaction();
+                        if (activity instanceof PracticeTestActivity) {
+                            fragmentTransaction = ((PracticeTestActivity) activity).getSupportFragmentManager().beginTransaction();
                         }
 
                         SlideshowDialogFragment newFragment = SlideshowDialogFragment.newInstance();
@@ -255,8 +258,8 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
                 int wordCount = 0;
                 if (s.toString().contains(" ")) {
                     String[] words = s.toString().split(" ", -1);
-                    for (int i = 0; i <words.length ; i++) {
-                        if(!words[i].isEmpty()){
+                    for (int i = 0; i < words.length; i++) {
+                        if (!words[i].isEmpty()) {
                             wordCount++;
                         }
                     }
@@ -272,7 +275,7 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
     }
 
     public void hideLayouts() {
-        if (call_from==test) {
+        if (call_from == test) {
             learningItemBinding.expandableLayout.setVisibility(View.VISIBLE);
             learningItemBinding.expand.setVisibility(View.GONE);
             learningItemBinding.close.setVisibility(View.GONE);
@@ -306,7 +309,7 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
         LearningItemBinding learningItemBinding;
         CountDownTimer countDownTimer;
         Long milliLeft, min, sec;
-        String scq_ans = "", mcq_ans = "", tfAns = "", scqimg_ans="", mcqimg_ans="";
+        String scq_ans = "", mcq_ans = "", tfAns = "", scqimg_ans = "", mcqimg_ans = "";
         HashMap<String, String> paired = new HashMap<String, String>();
         HashMap<String, String> MTP_ans = new HashMap<String, String>();
         boolean isB1Selected = false, isB2Selected = false, isB3Selected = false, isB4Selected = false, isMCQImgSubmited = false;
@@ -350,18 +353,20 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
                 learningItemBinding.timerLayout.setVisibility(View.VISIBLE);
                 learningItemBinding.close.setVisibility(View.VISIBLE);
                 learningItemBinding.expand.setVisibility(View.GONE);
-                setTimer(learningItemBinding.tvtimer,0,0);
+                setTimer(learningItemBinding.tvtimer, 0, 0);
             });
+
+            learningItemBinding.saveQue.setOnClickListener(v -> saveToDb(learningQuestionsList.get(getAdapterPosition())));
 
             learningItemBinding.like.setOnClickListener(v -> {
                 LearningQuestions learningQuestions = learningQuestionsList.get(getAdapterPosition());
                 int likes = Integer.parseInt(learningQuestions.getLikes());
                 if (learningQuestions.isIs_liked()) {
                     Glide.with(activity).load(activity.getResources().getDrawable(R.drawable.ic_like)).into(learningItemBinding.like);
-                    learningItemBinding.likeValue.setText(likes-1 + "");
+                    learningItemBinding.likeValue.setText(likes - 1 + "");
                 } else {
                     Glide.with(activity).load(activity.getResources().getDrawable(R.drawable.ic_thumb_up_black_24dp)).into(learningItemBinding.like);
-                    learningItemBinding.likeValue.setText(likes-1 + "");
+                    learningItemBinding.likeValue.setText(likes - 1 + "");
                 }
             });
 
@@ -624,7 +629,7 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
                     } else {
                         Toast.makeText(activity, "Please select atleast one option.", Toast.LENGTH_SHORT).show();
                     }
-                }else if (learningQuestions.getCategory().equalsIgnoreCase("MCQ_img")) {
+                } else if (learningQuestions.getCategory().equalsIgnoreCase("MCQ_img")) {
                     if (!mcqimg_ans.trim().equalsIgnoreCase("")) {
                         isMCQImgSubmited = true;
                         String[] selected_mcq = mcqimg_ans.split("\\s+");
@@ -719,10 +724,42 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
             });
         }
 
+        private void saveToDb(LearningQuestions learningQuestions) {
+            class SaveTask extends AsyncTask<Void, Void, Void> {
+
+                @Override
+                protected Void doInBackground(Void... voids) {
+                    //adding to database
+                    try {
+                        QoogolDatabase.getDatabase(getApplicationContext())
+                                .learningQuestionDao()
+                                .insert(learningQuestions);
+
+                        List<LearningQuestions> learningQuestions1 = QoogolDatabase.getDatabase(getApplicationContext())
+                                .learningQuestionDao()
+                                .getAll();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                }
+
+                @Override
+                protected void onPostExecute(Void aVoid) {
+                    super.onPostExecute(aVoid);
+                    Toast.makeText(getApplicationContext(), "Saved", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            SaveTask st = new SaveTask();
+            st.execute();
+        }
+
         private void setTimer(TextView timer, int seconds, int minutes) {
-            countDownTimer=  new CountDownTimer(60 * 1000 * 60, 1000) {
+            countDownTimer = new CountDownTimer(60 * 1000 * 60, 1000) {
                 int timerCountSeconds = seconds;
                 int timerCountMinutes = minutes;
+
                 public void onTick(long millisUntilFinished) {
                     // timer.setText(new SimpleDateFormat("mm:ss").format(new Date( millisUntilFinished)));
                     if (timerCountSeconds < 59) {
@@ -745,6 +782,7 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
                         }
                     }
                 }
+
                 public void onFinish() {
                     timer.setText("00:00");
                 }
@@ -761,7 +799,7 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
 
         private void setMCQImgAnsIndicator() {
             isMCQImgSubmited = false;
-            mcqimg_ans ="";
+            mcqimg_ans = "";
             learningItemBinding.mcqimgChck1.setVisibility(View.GONE);
             learningItemBinding.mcqimgChck2.setVisibility(View.GONE);
             learningItemBinding.mcqimgChck3.setVisibility(View.GONE);
@@ -771,6 +809,7 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
             learningItemBinding.mcqImg3.setAlpha(250);
             learningItemBinding.mcqImg4.setAlpha(250);
         }
+
         private void setSCQAnsIndicator() {
             learningItemBinding.scq1Img.setVisibility(View.GONE);
             learningItemBinding.scq2Img.setVisibility(View.GONE);
@@ -785,7 +824,7 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
             learningItemBinding.mcq4Img.setVisibility(View.GONE);
         }
 
-        private void  setSCQImgLayout() {
+        private void setSCQImgLayout() {
             learningItemBinding.scqImg1.setAlpha(255);
             learningItemBinding.scqImg2.setAlpha(255);
             learningItemBinding.scqImg3.setAlpha(255);
@@ -1039,9 +1078,9 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
                                 checkAvailability(getNameFromId(dropped.getId()), "b1");
                                 paired.put(getNameFromId(dropped.getId()), "b1");
                                 isB1Selected = true;
-                                setmatchedPair(getNameFromId(dropped.getId()),activity.getResources().getDrawable(R.drawable.ic_mtp1));
+                                setmatchedPair(getNameFromId(dropped.getId()), activity.getResources().getDrawable(R.drawable.ic_mtp1));
                                 learningItemBinding.b1Img.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_mtp1));
-                                if (paired.size()==MTP_ans.size()-1) {
+                                if (paired.size() == MTP_ans.size() - 1) {
                                     setLastPair();
                                 }
                                 break;
@@ -1050,9 +1089,9 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
                                 checkAvailability(getNameFromId(dropped.getId()), "b2");
                                 paired.put(getNameFromId(dropped.getId()), "b2");
                                 isB2Selected = true;
-                                setmatchedPair(getNameFromId(dropped.getId()),activity.getResources().getDrawable(R.drawable.ic_mtp2));
+                                setmatchedPair(getNameFromId(dropped.getId()), activity.getResources().getDrawable(R.drawable.ic_mtp2));
                                 learningItemBinding.b2Img.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_mtp2));
-                                if (paired.size()==MTP_ans.size()-1) {
+                                if (paired.size() == MTP_ans.size() - 1) {
                                     setLastPair();
                                 }
                                 break;
@@ -1061,9 +1100,9 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
                                 checkAvailability(getNameFromId(dropped.getId()), "b3");
                                 paired.put(getNameFromId(dropped.getId()), "b3");
                                 isB3Selected = true;
-                                setmatchedPair(getNameFromId(dropped.getId()),activity.getResources().getDrawable(R.drawable.ic_mtp3));
+                                setmatchedPair(getNameFromId(dropped.getId()), activity.getResources().getDrawable(R.drawable.ic_mtp3));
                                 learningItemBinding.b3Img.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_mtp3));
-                                if (paired.size()==MTP_ans.size()-1) {
+                                if (paired.size() == MTP_ans.size() - 1) {
                                     setLastPair();
                                 }
                                 break;
@@ -1072,9 +1111,9 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
                                 checkAvailability(getNameFromId(dropped.getId()), "b4");
                                 paired.put(getNameFromId(dropped.getId()), "b4");
                                 isB4Selected = true;
-                                setmatchedPair(getNameFromId(dropped.getId()),activity.getResources().getDrawable(R.drawable.ic_mtp4));
+                                setmatchedPair(getNameFromId(dropped.getId()), activity.getResources().getDrawable(R.drawable.ic_mtp4));
                                 learningItemBinding.b4Img.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_mtp4));
-                                if (paired.size()==MTP_ans.size()-1) {
+                                if (paired.size() == MTP_ans.size() - 1) {
                                     setLastPair();
                                 }
                                 break;
@@ -1093,46 +1132,46 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
         }
 
         private void setLastPair() {
-            String a_group = "", b_group="";
+            String a_group = "", b_group = "";
             if (!paired.containsKey("a1")) {
-                a_group="a1";
-            } else  if (!paired.containsKey("a2")) {
-                a_group="a2";
-            } else  if (!paired.containsKey("a3")) {
-                a_group="a3";
-            } else  if (!paired.containsKey("a4")) {
-                a_group="a4";
+                a_group = "a1";
+            } else if (!paired.containsKey("a2")) {
+                a_group = "a2";
+            } else if (!paired.containsKey("a3")) {
+                a_group = "a3";
+            } else if (!paired.containsKey("a4")) {
+                a_group = "a4";
             }
 
             if (!paired.containsValue("b1")) {
-                b_group="b1";
-            } else  if (!paired.containsValue("b2")) {
-                b_group="b2";
-            } else  if (!paired.containsValue("b3")) {
-                b_group="b3";
-            } else  if (!paired.containsValue("b4")) {
-                b_group="b4";
+                b_group = "b1";
+            } else if (!paired.containsValue("b2")) {
+                b_group = "b2";
+            } else if (!paired.containsValue("b3")) {
+                b_group = "b3";
+            } else if (!paired.containsValue("b4")) {
+                b_group = "b4";
             }
 
             if (!a_group.equalsIgnoreCase("") && !b_group.equalsIgnoreCase("")) {
-                paired.put(a_group,b_group);
-                setmatchedPair(a_group,getPairColor(b_group));
-                setmatchedPair(b_group,getPairColor(b_group));
+                paired.put(a_group, b_group);
+                setmatchedPair(a_group, getPairColor(b_group));
+                setmatchedPair(b_group, getPairColor(b_group));
             }
         }
 
         private Drawable getPairColor(String option) {
             switch (option) {
-                    case "b1":
-                        return activity.getResources().getDrawable(R.drawable.ic_mtp1);
-                    case "b2":
-                        return activity.getResources().getDrawable(R.drawable.ic_mtp2);
-                    case "b3":
-                        return activity.getResources().getDrawable(R.drawable.ic_mtp3);
-                    case "b4":
-                        return activity.getResources().getDrawable(R.drawable.ic_mtp4);
-                     default:
-                         return activity.getResources().getDrawable(R.drawable.ic_mtp_grey);
+                case "b1":
+                    return activity.getResources().getDrawable(R.drawable.ic_mtp1);
+                case "b2":
+                    return activity.getResources().getDrawable(R.drawable.ic_mtp2);
+                case "b3":
+                    return activity.getResources().getDrawable(R.drawable.ic_mtp3);
+                case "b4":
+                    return activity.getResources().getDrawable(R.drawable.ic_mtp4);
+                default:
+                    return activity.getResources().getDrawable(R.drawable.ic_mtp_grey);
             }
         }
 

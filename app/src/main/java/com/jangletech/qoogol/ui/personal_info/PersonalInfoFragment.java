@@ -351,34 +351,34 @@ public class PersonalInfoFragment extends BaseFragment implements ChangePassword
     }
 
     private void fetchCountryData() {
-        ProgressDialog.getInstance().show(getActivity());
-        Call<List<Country>> call = apiService.getCountries();
-        call.enqueue(new Callback<List<Country>>() {
-            @Override
-            public void onResponse(Call<List<Country>> call, retrofit2.Response<List<Country>> response) {
-                try {
-                    ProgressDialog.getInstance().dismiss();
-                    List<Country> list = response.body();
-                    mViewModel.setCountryList(list);
-                    if (list != null && list.size() > 0) {
-                        mViewModel.mMapCountry = new HashMap<>();
-                        for (Country country : list) {
-                            mViewModel.mMapCountry.put(country.getCountryId(), country.getCountryName());
-                        }
-                        populateCountries(mViewModel.mMapCountry);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    ProgressDialog.getInstance().dismiss();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Country>> call, Throwable t) {
-                t.printStackTrace();
-                ProgressDialog.getInstance().dismiss();
-            }
-        });
+//        ProgressDialog.getInstance().show(getActivity());
+//        Call<List<Country>> call = apiService.getCountries();
+//        call.enqueue(new Callback<List<Country>>() {
+//            @Override
+//            public void onResponse(Call<List<Country>> call, retrofit2.Response<List<Country>> response) {
+//                try {
+//                    ProgressDialog.getInstance().dismiss();
+//                    List<Country> list = response.body();
+//                    mViewModel.setCountryList(list);
+//                    if (list != null && list.size() > 0) {
+//                        mViewModel.mMapCountry = new HashMap<>();
+//                        for (Country country : list) {
+//                            mViewModel.mMapCountry.put(country.getCountryId(), country.getCountryName());
+//                        }
+//                        populateCountries(mViewModel.mMapCountry);
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                    ProgressDialog.getInstance().dismiss();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<List<Country>> call, Throwable t) {
+//                t.printStackTrace();
+//                ProgressDialog.getInstance().dismiss();
+//            }
+//        });
     }
 
     public void fetchStateData(int countryId) {
