@@ -50,12 +50,12 @@ public class TestFavouriteFragment extends BaseFragment implements TestAdapter.T
         List<TestModel> testList = new ArrayList<>();
         testList.clear();
 
-        TestModel testModel = new TestModel("Shapes and Angles","Maths","40",
+        TestModel testModel = new TestModel(1,"Shapes and Angles","Maths","40",
                 "30","Hard","88/100","219","Jan 2020","2093",
                 true,false,"Mr. Sharan","Phd. Maths","Unit Test-Final",
                 "4.3","100",true,2,false);
 
-        TestModel testModel2 = new TestModel("When the Earth Shook!","Evs","40 Mins",
+        TestModel testModel2 = new TestModel(2,"When the Earth Shook!","Evs","40 Mins",
                 "60","Medium","12/100","10","Jul 2019","8353",
                 true,false,"Mr. Narayan","Phd. Evs",
                 "Unit Test-Final","2","30",false,8,true);

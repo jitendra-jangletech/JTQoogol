@@ -71,6 +71,15 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
             }
         });
 
+        mBinding.navFav.setOnClickListener(v -> {
+            mBinding.drawerLayout.closeDrawers();
+            if (navController.getCurrentDestination().getId() != R.id.nav_fav) {
+                navController.popBackStack();
+                navController.navigate(R.id.nav_fav);
+            }
+        });
+
+
         findViewById(R.id.nav_learning).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
             if (navController.getCurrentDestination().getId() != R.id.nav_learning) {
@@ -178,13 +187,13 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
         });
 
 
-        findViewById(R.id.nav_questions).setOnClickListener(v -> {
+       /* findViewById(R.id.nav_questions).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
             if (navController.getCurrentDestination().getId() != R.id.nav_questions) {
                 navController.popBackStack();
                 navController.navigate(R.id.nav_questions);
             }
-        });
+        });*/
 
         findViewById(R.id.nav_reviews).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();

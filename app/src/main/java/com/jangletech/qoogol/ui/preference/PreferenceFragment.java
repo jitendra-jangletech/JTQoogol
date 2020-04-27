@@ -81,7 +81,7 @@ public class PreferenceFragment extends Fragment {
             }
         }
         Log.d(TAG, "getSelectedChips: "+examsList.size());
-        saveUserSelectedExams(examsList);
+        //saveUserSelectedExams(examsList);
     }
 
     private void saveSelectedChips(List<Exams> chipTextList) {
@@ -192,6 +192,7 @@ public class PreferenceFragment extends Fragment {
                     FetchPreferableExamsResponseDto fetchPreferableExamsResponseDto = (FetchPreferableExamsResponseDto) response.body();
                     fetchUserSelectedExams(fetchPreferableExamsResponseDto.getObject());
                 } else {
+                    if(response.body()!=null)
                     Toast.makeText(getActivity(), "" + response.body().getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }

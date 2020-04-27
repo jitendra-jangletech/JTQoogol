@@ -5,14 +5,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
-
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.AddEducationBinding;
 import com.jangletech.qoogol.databinding.FragmentEditProfileBinding;
@@ -21,10 +20,8 @@ import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.educational_info.EducationInfoFragment;
 import com.jangletech.qoogol.ui.personal_info.PersonalInfoFragment;
 import com.jangletech.qoogol.ui.preference.PreferenceFragment;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import static com.jangletech.qoogol.util.Constant.add_edu;
 
 
@@ -43,12 +40,15 @@ public class EditProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         fragmentEditProfileBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_edit_profile, container, false);
-        setupViewPager(fragmentEditProfileBinding.viewpager);
-        fragmentEditProfileBinding.resultTabs.setupWithViewPager(fragmentEditProfileBinding.viewpager);
-
         return fragmentEditProfileBinding.getRoot();
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        setupViewPager(fragmentEditProfileBinding.viewpager);
+        fragmentEditProfileBinding.resultTabs.setupWithViewPager(fragmentEditProfileBinding.viewpager);
+    }
 
     private void addEducation(final int called_from) {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
@@ -107,5 +107,4 @@ public class EditProfileFragment extends Fragment {
             return mFragmentTitleList.get(position);
         }
     }
-
 }

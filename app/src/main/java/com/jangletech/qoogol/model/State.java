@@ -2,57 +2,50 @@ package com.jangletech.qoogol.model;
 
 import com.google.gson.annotations.SerializedName;
 
-import static com.jangletech.qoogol.util.Constant.country_id;
-import static com.jangletech.qoogol.util.Constant.state_abbr;
-import static com.jangletech.qoogol.util.Constant.state_id;
-import static com.jangletech.qoogol.util.Constant.state_name;
-
-/**
- * Created by Pritali on 1/30/2020.
- */
 public class State {
 
-    @SerializedName(state_id)
-    private  int stateId;
+    @SerializedName("225")
+    private String s_id;
 
-    @SerializedName(state_name)
-    private  String stateName;
+    @SerializedName("226")
+    private String s_c_id;
 
-    @SerializedName(state_abbr)
-    private  String stateAbbr;
+    @SerializedName("227")
+    private String s_name;
 
-    @SerializedName(country_id)
-    private  int countryId;
+    @SerializedName("228")
+    private String s_state_abbr;
 
-    public int getStateId() {
-        return stateId;
+    public String getS_id() {
+        return s_id;
     }
 
-    public void setStateId(int stateId) {
-        this.stateId = stateId;
+    public void setS_id(String s_id) {
+        this.s_id = s_id;
     }
 
-    public String getStateName() {
-        return stateName;
+    public String getS_c_id() {
+        return s_c_id;
     }
 
-    public void setStateName(String stateName) {
-        this.stateName = stateName;
+    public void setS_c_id(String s_c_id) {
+        this.s_c_id = s_c_id;
     }
 
-    public String getStateAbbr() {
-        return stateAbbr;
+    public String getS_name() {
+        return s_name;
     }
 
-    public void setStateAbbr(String stateAbbr) {
-        this.stateAbbr = stateAbbr;
+    public void setS_name(String s_name) {
+        this.s_name = s_name;
     }
 
-    public int getCountryId() {
-        return countryId;
+    public String getS_state_abbr() {
+        return s_state_abbr;
     }
 
-    public void setCountryId(int countryId) {
-        this.countryId = countryId;
+    public void setS_state_abbr(String s_state_abbr) {
+        this.s_state_abbr = s_state_abbr;
     }
+
 }

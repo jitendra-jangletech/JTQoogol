@@ -17,15 +17,20 @@ import com.jangletech.qoogol.model.Institute;
 import com.jangletech.qoogol.model.MobileOtp;
 import com.jangletech.qoogol.model.SignInModel;
 import com.jangletech.qoogol.model.State;
+import com.jangletech.qoogol.model.TestingQuestionNew;
+import com.jangletech.qoogol.model.TestingRequestDto;
 import com.jangletech.qoogol.model.University;
 import com.jangletech.qoogol.model.UserSelectedExams;
 import com.jangletech.qoogol.model.signup.SignUpResponseDto;
+import com.jangletech.qoogol.util.Constant;
 
 import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
@@ -100,6 +105,11 @@ public interface ApiInterface {
     @POST("user/saveUserSelectedExams")
     Call<CommonResponseObject> saveUserSelectedExams(@Query("userId") int userId,
                                                      @Body List<Exams> selectedExamsList);
+    @FormUrlEncoded
+    @POST("q031StartResumeTest")
+    Call<TestingQuestionNew> fetchTestQuestionAnswers(@Field(Constant.u_user_id) int userId,
+                                                      @Field(Constant.tt_id) int testTakenId,
+                                                      @Field(Constant.tt_tm_id) int testTakentmId);
 
 
 }

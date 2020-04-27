@@ -52,17 +52,17 @@ public class TestSharedByYouFragment extends BaseFragment implements TestAdapter
         List<TestModel> testList = new ArrayList<>();
         testList.clear();
 
-        TestModel testModel = new TestModel("Shapes and Angles","Maths","40",
+        TestModel testModel = new TestModel(1,"Shapes and Angles","Maths","40",
                 "30","Hard","88/100","219","Jan 2020","2093",
                 true,false,"Mr. Sharan","Phd. Maths",
                 "Unit Test-Final","4.3","100",true,7,false);
 
-        TestModel testModel1 = new TestModel("Reading Comprehension","English","120 Mins",
+        TestModel testModel1 = new TestModel(2,"Reading Comprehension","English","120 Mins",
                 "40","Easy","53/100","102","Mar 2019","1633",
                 false,true,"Mr. Goswami","Phd. English",
                 "Unit Test-Final","2.7","60",false,3,false);
 
-        TestModel testModel2 = new TestModel("When the Earth Shook!","Evs","40 Mins",
+        TestModel testModel2 = new TestModel(3,"When the Earth Shook!","Evs","40 Mins",
                 "60","Medium","12/100","10","Jul 2019","8353",
                 true,false,"Mr. Narayan","Phd. Evs",
                 "Unit Test-Final","2","30",false,43,false);

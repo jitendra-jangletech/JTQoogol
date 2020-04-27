@@ -22,6 +22,8 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.activities.SignInActivity;
 import com.jangletech.qoogol.databinding.FragmentPersonalInfoBinding;
@@ -80,8 +82,8 @@ public class PersonalInfoFragment extends BaseFragment implements ChangePassword
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Log.d(TAG, "onActivityCreated PersonalInfoFragment : ");
-
-        fetchCountryData();
+        loadProfilePic();
+        //fetchCountryData();
         setClickListeners();
 
         mBinding.tvMobileVerify.setOnClickListener(v -> {
@@ -350,7 +352,7 @@ public class PersonalInfoFragment extends BaseFragment implements ChangePassword
 
     }
 
-    private void fetchCountryData() {
+   /* private void fetchCountryData() {
         ProgressDialog.getInstance().show(getActivity());
         Call<List<Country>> call = apiService.getCountries();
         call.enqueue(new Callback<List<Country>>() {
@@ -379,7 +381,7 @@ public class PersonalInfoFragment extends BaseFragment implements ChangePassword
                 ProgressDialog.getInstance().dismiss();
             }
         });
-    }
+    }*/
 
     public void fetchStateData(int countryId) {
         ProgressDialog.getInstance().show(getActivity());
@@ -396,7 +398,7 @@ public class PersonalInfoFragment extends BaseFragment implements ChangePassword
                     if (list != null && list.size() > 0) {
                         mViewModel.mMapState = new HashMap<>();
                         for (State state : list) {
-                            mViewModel.mMapState.put(Integer.valueOf(state.getStateId()), state.getStateName());
+                            mViewModel.mMapState.put(Integer.valueOf(state.getS_id()), state.getS_name());
                         }
 
                         populateStates(mViewModel.mMapState);
@@ -552,6 +554,13 @@ public class PersonalInfoFragment extends BaseFragment implements ChangePassword
         }
 
         updatePersonalDetails();
+    }
+
+    private void loadProfilePic() {
+        Glide.with(this)
+                .load(R.drawable.profile_img)
+                .apply(RequestOptions.circleCropTransform())
+                .into(mBinding.profilePic);
     }
 
 }

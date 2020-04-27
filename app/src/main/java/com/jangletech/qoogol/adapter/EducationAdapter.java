@@ -114,7 +114,7 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.View
         addEditEduDialog.setContentView(addEditEducationBinding.getRoot());
         addEditEduDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation_2;
         addEditEduDialog.show();
-        fetchCountryData();
+        //fetchCountryData();
         setListeners();
 
         addEditEducationBinding.btnClose.setOnClickListener(v ->
@@ -234,7 +234,7 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.View
 
 
 
-    private void fetchCountryData() {
+   /* private void fetchCountryData() {
         ProgressDialog.getInstance().show(activity);
         Call<List<Country>> call = apiService.getCountries();
         call.enqueue(new Callback<List<Country>>() {
@@ -263,7 +263,7 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.View
             }
         });
     }
-
+*/
     public void fetchStateData(int countryId) {
         ProgressDialog.getInstance().show(activity);
         Map<String, Integer> requestBody = new HashMap<>();
@@ -277,7 +277,7 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.View
                     if (list != null && list.size() > 0) {
                         mMapState = new HashMap<>();
                         for (State state : list) {
-                            mMapState.put(Integer.valueOf(state.getStateId()), state.getStateName());
+                            mMapState.put(Integer.valueOf(state.getS_id()), state.getS_name());
                         }
                         ProgressDialog.getInstance().dismiss();
                         populateStates(mMapState);

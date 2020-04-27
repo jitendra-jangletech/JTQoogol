@@ -1,7 +1,6 @@
 package com.jangletech.qoogol.database.repo;
 
 import android.app.Application;
-import android.os.Environment;
 
 import androidx.lifecycle.LiveData;
 
@@ -9,11 +8,6 @@ import com.jangletech.qoogol.database.QoogolDatabase;
 import com.jangletech.qoogol.database.dao.TestQuestionDao;
 import com.jangletech.qoogol.model.TestQuestion;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.channels.FileChannel;
 import java.util.List;
 
 public class TestQuestionRepository {
@@ -31,7 +25,6 @@ public class TestQuestionRepository {
     // Room executes all queries on a separate thread.
     // Observed LiveData will notify the observer when the data has changed.
     public LiveData<List<TestQuestion>> getAllTestQuestions() {
-
         return testQuestions;
     }
 

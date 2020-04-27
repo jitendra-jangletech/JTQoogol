@@ -97,7 +97,7 @@ public class SignUpActivity extends BaseActivity
         confirmPasswordCheck();
         setTextWatcher();
         setListeners();
-        fetchCountryData();
+        //fetchCountryData();
         fetchDegreeData();
 
         mBinding.selectAutocompleteView.setOnItemClickListener((parent, view, position, id) -> {
@@ -303,7 +303,7 @@ public class SignUpActivity extends BaseActivity
         populateSelect();
     }
 
-    private void fetchCountryData() {
+    /*private void fetchCountryData() {
         ProgressDialog.getInstance().show(this);
         Call<List<Country>> call = apiService.getCountries();
         call.enqueue(new Callback<List<Country>>() {
@@ -332,7 +332,7 @@ public class SignUpActivity extends BaseActivity
                 ProgressDialog.getInstance().dismiss();
             }
         });
-    }
+    }*/
 
     public void fetchStateData(int countryId) {
         ProgressDialog.getInstance().show(this);
@@ -349,7 +349,7 @@ public class SignUpActivity extends BaseActivity
                     if (list != null && list.size() > 0) {
                         mViewModel.mMapState = new HashMap<>();
                         for (State state : list) {
-                            mViewModel.mMapState.put(Integer.valueOf(state.getStateId()), state.getStateName());
+                            mViewModel.mMapState.put(Integer.valueOf(state.getS_id()), state.getS_name());
                         }
                         ProgressDialog.getInstance().dismiss();
                         populateStates(mViewModel.mMapState);
