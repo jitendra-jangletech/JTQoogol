@@ -87,7 +87,6 @@ public class Constant {
     public static final String UNIVERSITY = "sm12UBMData";
     public static final String COURSE = "sm15CourseData";
     public static final String INSTITUTE = "sm13InstOrgData";
-    public static final String UNIVERSITY = "sm12UBMData";
     public static final String DEGREE = "sm14DegreeData";
     public static final String masterDataList = "61";
 
