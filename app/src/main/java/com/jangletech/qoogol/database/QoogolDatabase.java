@@ -7,10 +7,15 @@ import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
+
+import com.jangletech.qoogol.database.converter.Converters;
+import com.jangletech.qoogol.database.dao.LearningQuestionDao;
 import com.jangletech.qoogol.database.dao.TestDao;
 import com.jangletech.qoogol.database.dao.TestQuestionDao;
 import com.jangletech.qoogol.enums.QuestionType;
+import com.jangletech.qoogol.model.LearningQuestions;
 import com.jangletech.qoogol.model.TestModel;
 import com.jangletech.qoogol.model.TestQuestion;
 import java.util.ArrayList;
@@ -18,11 +23,13 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {TestModel.class, TestQuestion.class},version = 1)
+@Database(entities = {LearningQuestions.class, TestModel.class, TestQuestion.class},version = 1)
+@TypeConverters(Converters.class)
 public abstract  class QoogolDatabase extends RoomDatabase {
 
     public abstract TestDao testDao();
     public abstract TestQuestionDao testQuestionDao();
+    public abstract LearningQuestionDao learningQuestionDao();
 
     private static volatile QoogolDatabase INSTANCE;
     private static final int NUMBER_OF_THREADS = 4;
@@ -77,44 +84,44 @@ public abstract  class QoogolDatabase extends RoomDatabase {
     public static List<TestModel> setMyTestList() {
         List<TestModel> testList = new ArrayList<>();
 
-        TestModel testModel = new TestModel(0,"Shapes and Angles", "Mathematics", "40",
-                "30", "Hard", "88/100", "219", "Jan 2020", "2093",
-                true, true, "Mr. Sharan",
-                "Phd. Mathematics", "Unit Test-Final", "4.3",
-                "100", true, 1, false);
-
-        TestModel testModel1 = new TestModel(1,"Reading Comprehension", "English", "120",
-                "40", "Easy", "53/100", "102", "Mar 2019", "1633",
-                false, true,
-                "Mr. Goswami", "Phd. English", "Unit Test-Final", "2.7",
-                "60", false, 9, false);
-
-        TestModel testModel2 = new TestModel(2,"When the Earth Shook!", "Physics", "40",
-                "60", "Medium", "12/100", "10", "Jul 2019", "8353",
-                true, false, "Mr. Narayan", "Phd. Physics",
-                "Unit Test-Final", "2", "30", false, 0, false);
-
-        TestModel testModel3 = new TestModel(3,"Shapes and Angles", "Mathematics", "40",
-                "30", "Hard", "88/100", "219", "Jan 2020", "2093",
-                true, true, "Mr. Sharan", "Phd. Mathematics",
-                "Unit Test-Final", "4.3", "100", false, 25, false);
-
-        TestModel testModel4 = new TestModel(4,"Reading Comprehension", "English", "120",
-                "40", "Easy", "53/100", "102", "Mar 2019", "1633",
-                false, true, "Mr. Goswami", "Phd. English",
-                "Unit Test-Final", "2.7", "60", true, 3, false);
-
-        TestModel testModel5 = new TestModel(5,"When the Earth Shook!", "Evs", "40",
-                "60", "Medium", "12/100", "10", "Jul 2019", "8353",
-                true, false, "Mr. Narayan", "Phd. Evs",
-                "Unit Test-Final", "2", "30", true, 4, true);
-
-        testList.add(testModel);
-        testList.add(testModel1);
-        testList.add(testModel2);
-        testList.add(testModel3);
-        testList.add(testModel4);
-        testList.add(testModel5);
+//        TestModel testModel = new TestModel(0,"Shapes and Angles", "Mathematics", "40",
+//                "30", "Hard", "88/100", "219", "Jan 2020", "2093",
+//                true, true, "Mr. Sharan",
+//                "Phd. Mathematics", "Unit Test-Final", "4.3",
+//                "100", true, 1, false);
+//
+//        TestModel testModel1 = new TestModel(1,"Reading Comprehension", "English", "120",
+//                "40", "Easy", "53/100", "102", "Mar 2019", "1633",
+//                false, true,
+//                "Mr. Goswami", "Phd. English", "Unit Test-Final", "2.7",
+//                "60", false, 9, false);
+//
+//        TestModel testModel2 = new TestModel(2,"When the Earth Shook!", "Physics", "40",
+//                "60", "Medium", "12/100", "10", "Jul 2019", "8353",
+//                true, false, "Mr. Narayan", "Phd. Physics",
+//                "Unit Test-Final", "2", "30", false, 0, false);
+//
+//        TestModel testModel3 = new TestModel(3,"Shapes and Angles", "Mathematics", "40",
+//                "30", "Hard", "88/100", "219", "Jan 2020", "2093",
+//                true, true, "Mr. Sharan", "Phd. Mathematics",
+//                "Unit Test-Final", "4.3", "100", false, 25, false);
+//
+//        TestModel testModel4 = new TestModel(4,"Reading Comprehension", "English", "120",
+//                "40", "Easy", "53/100", "102", "Mar 2019", "1633",
+//                false, true, "Mr. Goswami", "Phd. English",
+//                "Unit Test-Final", "2.7", "60", true, 3, false);
+//
+//        TestModel testModel5 = new TestModel(5,"When the Earth Shook!", "Evs", "40",
+//                "60", "Medium", "12/100", "10", "Jul 2019", "8353",
+//                true, false, "Mr. Narayan", "Phd. Evs",
+//                "Unit Test-Final", "2", "30", true, 4, true);
+//
+//        testList.add(testModel);
+//        testList.add(testModel1);
+//        testList.add(testModel2);
+//        testList.add(testModel3);
+//        testList.add(testModel4);
+//        testList.add(testModel5);
 
         return testList;
     }

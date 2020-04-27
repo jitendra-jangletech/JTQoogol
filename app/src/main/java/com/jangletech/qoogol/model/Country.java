@@ -1,51 +1,57 @@
 package com.jangletech.qoogol.model;
 
 import com.google.gson.annotations.SerializedName;
+import com.jangletech.qoogol.util.Constant;
 
+import static com.jangletech.qoogol.util.Constant.country_id;
+import static com.jangletech.qoogol.util.Constant.country_name;
+
+/**
+ * Created by Pritali on 1/29/2020.
+ */
 public class Country {
 
-    @SerializedName("235")
-    private String ct_id = "235";
+    @SerializedName(Constant.c_id)
+    private  int countryId;
 
-    @SerializedName("236")
-    private String ct_sd_id = "236";
+    @SerializedName(Constant.c_name)
+    private String countryName;
 
-    @SerializedName("237")
-    private String ct_dt_id = "237";
+    @SerializedName(Constant.c_calling_code)
+    private String callingCode;
 
-    @SerializedName("238")
-    private String ct_name = "238";
+    @SerializedName(Constant.c_abbr_2)
+    private String abbrevation;
 
-    public String getCt_id() {
-        return ct_id;
+    public int getCountryId() {
+        return countryId;
     }
 
-    public void setCt_id(String ct_id) {
-        this.ct_id = ct_id;
+    public void setCountryId(int countryId) {
+        this.countryId = countryId;
     }
 
-    public String getCt_sd_id() {
-        return ct_sd_id;
+    public String getCountryName() {
+        return countryName;
     }
 
-    public void setCt_sd_id(String ct_sd_id) {
-        this.ct_sd_id = ct_sd_id;
+    public void setCountryName(String countryName) {
+        this.countryName = countryName;
     }
 
-    public String getCt_dt_id() {
-        return ct_dt_id;
+    public String getCallingCode() {
+        return callingCode;
     }
 
-    public void setCt_dt_id(String ct_dt_id) {
-        this.ct_dt_id = ct_dt_id;
+    public void setCallingCode(String callingCode) {
+        this.callingCode = callingCode;
     }
 
-    public String getCt_name() {
-        return ct_name;
+    public String getAbbrevation() {
+        return abbrevation;
     }
 
-    public void setCt_name(String ct_name) {
-        this.ct_name = ct_name;
+    public void setAbbrevation(String abbrevation) {
+        this.abbrevation = abbrevation;
     }
-
 }

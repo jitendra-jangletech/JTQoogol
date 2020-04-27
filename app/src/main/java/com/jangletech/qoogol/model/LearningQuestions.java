@@ -1,17 +1,124 @@
 package com.jangletech.qoogol.model;
 
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by Pritali on 3/18/2020.
  */
-public class LearningQuestions {
-    String question_id, question, questiondesc, answer, category, subject, chapter, rating, difficulty_level,
-    topic, posted_on, lastused_on, likes, comments, shares,  recommended_time,  marks, answerDesc,
-    mcq1, mcq2, mcq3, mcq4, a1, a2, a3, a4, b1, b2, b3, b4;
-    int attended_by, solve_right;
-    boolean is_liked, is_fav;
+@Entity
+public class LearningQuestions implements Serializable {
+    @PrimaryKey
+    @NonNull
+    @ColumnInfo(name = "question_id")
+    private String question_id;
 
+    @ColumnInfo(name = "question")
+    private String question;
+
+    @ColumnInfo(name = "questiondesc")
+    private String questiondesc;
+
+    @ColumnInfo(name = "answer")
+    private String answer;
+
+    @ColumnInfo(name = "category")
+    private String category;
+
+    @ColumnInfo(name = "subject")
+    private String subject;
+
+    @ColumnInfo(name = "chapter")
+    private String chapter;
+
+    @ColumnInfo(name = "rating")
+    private String rating;
+
+    @ColumnInfo(name = "difficulty_level")
+    private String difficulty_level;
+
+    @ColumnInfo(name = "topic")
+    private String topic;
+
+    @ColumnInfo(name = "posted_on")
+    private String posted_on;
+
+    @ColumnInfo(name = "lastused_on")
+    private String lastused_on;
+
+    @ColumnInfo(name = "likes")
+    private String likes;
+
+    @ColumnInfo(name = "comments")
+    private String comments;
+
+    @ColumnInfo(name = "shares")
+    private String shares;
+
+    @ColumnInfo(name = "recommended_time")
+    private String recommended_time;
+
+    @ColumnInfo(name = "answerDesc")
+    private String answerDesc;
+
+    @ColumnInfo(name = "marks")
+    private String marks;
+
+    @ColumnInfo(name = "mcq1")
+    private String mcq1;
+
+    @ColumnInfo(name = "mcq2")
+    private String mcq2;
+
+    @ColumnInfo(name = "mcq3")
+    private String mcq3;
+
+    @ColumnInfo(name = "mcq4")
+    private String mcq4;
+
+    @ColumnInfo(name = "a1")
+    private String a1;
+
+    @ColumnInfo(name = "a2")
+    private String a2;
+
+    @ColumnInfo(name = "a3")
+    private String a3;
+
+    @ColumnInfo(name = "a4")
+    private String a4;
+
+    @ColumnInfo(name = "b1")
+    private String b1;
+
+    @ColumnInfo(name = "b2")
+    private String b2;
+
+    @ColumnInfo(name = "b3")
+    private String b3;
+
+    @ColumnInfo(name = "b4")
+    private String b4;
+
+    @ColumnInfo(name = "attended_by")
+    private int attended_by;
+
+    @ColumnInfo(name = "solve_right")
+    private int solve_right;
+
+    @ColumnInfo(name = "is_liked")
+    private boolean is_liked;
+
+    @ColumnInfo(name = "is_fav")
+    private boolean is_fav;
+
+
+    @ColumnInfo(name = "attchment")
     ArrayList<String> attchment;
 
     public String getA1() {

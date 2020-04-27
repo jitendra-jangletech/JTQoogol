@@ -114,7 +114,7 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.View
         addEditEduDialog.setContentView(addEditEducationBinding.getRoot());
         addEditEduDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation_2;
         addEditEduDialog.show();
-        //fetchCountryData();
+        fetchCountryData();
         setListeners();
 
         addEditEducationBinding.btnClose.setOnClickListener(v ->
@@ -234,7 +234,7 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.View
 
 
 
-   /* private void fetchCountryData() {
+    private void fetchCountryData() {
         ProgressDialog.getInstance().show(activity);
         Call<List<Country>> call = apiService.getCountries();
         call.enqueue(new Callback<List<Country>>() {

@@ -83,7 +83,7 @@ public class AddEduDialog extends Dialog {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         addEditEducationBinding = DataBindingUtil.inflate(LayoutInflater.from(getContext()), R.layout.add_edit_education, null, false);
         setContentView(addEditEducationBinding.getRoot());
-        //fetchCountryData();
+        fetchCountryData();
         fetchDegreeData();
         setListeners();
     }
@@ -322,7 +322,7 @@ public class AddEduDialog extends Dialog {
 
 
 
-    /*private void fetchCountryData() {
+    private void fetchCountryData() {
         ProgressDialog.getInstance().show(context);
         Call<List<Country>> call = apiService.getCountries();
         call.enqueue(new Callback<List<Country>>() {
@@ -350,7 +350,7 @@ public class AddEduDialog extends Dialog {
                 ProgressDialog.getInstance().dismiss();
             }
         });
-    }*/
+    }
 
     public void fetchStateData(int countryId) {
         ProgressDialog.getInstance().show(context);
