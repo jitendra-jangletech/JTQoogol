@@ -15,10 +15,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
-
 import com.jangletech.qoogol.activities.BaseActivity;
 import com.jangletech.qoogol.activities.SignInActivity;
 import com.jangletech.qoogol.databinding.ActivitySignupBinding;
@@ -26,8 +24,6 @@ import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.dialog.UniversalDialog;
 import com.jangletech.qoogol.model.ClassData;
 import com.jangletech.qoogol.model.Classes;
-import com.jangletech.qoogol.model.Country;
-import com.jangletech.qoogol.model.CountryResponse;
 import com.jangletech.qoogol.model.Course;
 import com.jangletech.qoogol.model.CourseResponse;
 import com.jangletech.qoogol.model.Degree;
@@ -36,6 +32,7 @@ import com.jangletech.qoogol.model.Institute;
 import com.jangletech.qoogol.model.InstituteResponse;
 import com.jangletech.qoogol.model.MobileOtp;
 import com.jangletech.qoogol.model.State;
+import com.jangletech.qoogol.model.StateResponse;
 import com.jangletech.qoogol.model.University;
 import com.jangletech.qoogol.model.UniversityResponse;
 import com.jangletech.qoogol.model.signup.SignUpRequestDto;
@@ -46,13 +43,11 @@ import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.GenericTextWatcher;
 import com.jangletech.qoogol.util.UtilHelper;
 import com.mukesh.OtpView;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -103,7 +98,7 @@ public class SignUpActivity extends BaseActivity
         confirmPasswordCheck();
         setTextWatcher();
         setListeners();
-        fetchCountryData();
+        //fetchCountryData();
         fetchDegreeData();
         fetchUniversityData(0,0);
         fetchInstituteData(0);
@@ -312,7 +307,7 @@ public class SignUpActivity extends BaseActivity
         populateSelect();
     }
 
-    private void fetchCountryData() {
+    /*private void fetchCountryData() {
         ProgressDialog.getInstance().show(this);
         Call<CountryResponse> call = apiService.getCountries();
         call.enqueue(new Callback<CountryResponse>() {
@@ -341,24 +336,24 @@ public class SignUpActivity extends BaseActivity
                 ProgressDialog.getInstance().dismiss();
             }
         });
-    }
+    }*/
 
     public void fetchStateData(int countryId) {
         ProgressDialog.getInstance().show(this);
         Map<String, Integer> requestBody = new HashMap<>();
         requestBody.put("countryId", countryId);
-        Call<List<State>> call = apiService.getStates(requestBody);
-        call.enqueue(new Callback<List<State>>() {
+        Call<StateResponse> call = apiService.getStates();
+        call.enqueue(new Callback<StateResponse>() {
             @Override
-            public void onResponse(Call<List<State>> call, retrofit2.Response<List<State>> response) {
+            public void onResponse(Call<StateResponse> call, retrofit2.Response<StateResponse> response) {
                 ProgressDialog.getInstance().dismiss();
                 try {
-                    List<State> list = response.body();
+                    List<State> list = response.body().getStateList();
                     mViewModel.setStateList(list);
                     if (list != null && list.size() > 0) {
                         mViewModel.mMapState = new HashMap<>();
                         for (State state : list) {
-                            mViewModel.mMapState.put(Integer.valueOf(state.getStateId()), state.getStateName());
+                            mViewModel.mMapState.put(Integer.valueOf(state.getS_id()), state.getS_name());
                         }
                         ProgressDialog.getInstance().dismiss();
                         populateStates(mViewModel.mMapState);
@@ -370,7 +365,7 @@ public class SignUpActivity extends BaseActivity
             }
 
             @Override
-            public void onFailure(Call<List<State>> call, Throwable t) {
+            public void onFailure(Call<StateResponse> call, Throwable t) {
                 t.printStackTrace();
                 ProgressDialog.getInstance().dismiss();
             }

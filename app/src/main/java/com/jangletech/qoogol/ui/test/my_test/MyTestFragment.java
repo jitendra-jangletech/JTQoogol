@@ -27,11 +27,20 @@ import com.jangletech.qoogol.activities.MainActivity;
 import com.jangletech.qoogol.activities.StartTestActivity;
 import com.jangletech.qoogol.adapter.TestAdapter;
 import com.jangletech.qoogol.databinding.FragmentTestMyBinding;
+import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.model.TestModel;
+import com.jangletech.qoogol.model.TestingQuestionNew;
+import com.jangletech.qoogol.model.TestingRequestDto;
+import com.jangletech.qoogol.retrofit.ApiClient;
+import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MyTestFragment extends BaseFragment implements TestAdapter.TestClickListener, SearchView.OnQueryTextListener {
 
@@ -41,6 +50,7 @@ public class MyTestFragment extends BaseFragment implements TestAdapter.TestClic
     private TestAdapter testAdapter;
     private List<TestModel> testList;
     public static String testName = "";
+    ApiInterface apiService = ApiClient.getInstance().getApi();
 
     public static MyTestFragment newInstance() {
         return new MyTestFragment();
@@ -98,7 +108,7 @@ public class MyTestFragment extends BaseFragment implements TestAdapter.TestClic
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(MyTestViewModel.class);
-
+        startResumeTest();
         mViewModel.getAllTests().observe(getActivity(), new Observer<List<TestModel>>() {
             @Override
             public void onChanged(@Nullable final List<TestModel> tests) {
@@ -106,9 +116,10 @@ public class MyTestFragment extends BaseFragment implements TestAdapter.TestClic
                 for (int i = 0; i < tests.size(); i++) {
                     Log.d(TAG, "onChanged: "+tests.get(i).getName());
                 }
+                setMyTestList(tests);
             }
         });
-        setMyTestList();
+
         prepareSubjectChips();
 
         mBinding.subjectsChipGrp.setOnCheckedChangeListener((chipGroup, id) -> {
@@ -132,8 +143,29 @@ public class MyTestFragment extends BaseFragment implements TestAdapter.TestClic
         });
     }
 
-    public void setMyTestList() {
-        testList = new ArrayList<>();
+    public void startResumeTest() {
+        ProgressDialog.getInstance().show(getActivity());
+        Call<TestingQuestionNew> call = apiService.fetchTestQuestionAnswers(1,10,3);
+        call.enqueue(new Callback<TestingQuestionNew>() {
+            @Override
+            public void onResponse(Call<TestingQuestionNew> call, Response<TestingQuestionNew> response) {
+                ProgressDialog.getInstance().dismiss();
+                Log.d(TAG, "onResponse: "+response.body());
+                TestingQuestionNew  testingQuestionNew = response.body();
+                Log.d(TAG, "onResponse Data : "+testingQuestionNew.getTestQuestAnswerList().size());
+
+            }
+
+            @Override
+            public void onFailure(Call<TestingQuestionNew> call, Throwable t) {
+                ProgressDialog.getInstance().dismiss();
+                t.printStackTrace();
+            }
+        });
+    }
+
+    public void setMyTestList(List<TestModel> testList) {
+       /* testList = new ArrayList<>();
         testList.clear();
 
         TestModel testModel = new TestModel("Shapes and Angles", "Mathematics", "40",
@@ -175,11 +207,9 @@ public class MyTestFragment extends BaseFragment implements TestAdapter.TestClic
         testList.add(testModel4);
         testList.add(testModel5);
 
-      /*  for (int i = 0; i < testList.size(); i++) {
+        for (int i = 0; i < testList.size(); i++) {
             mViewModel.insert(testList.get(i));
         }*/
-
-
 
         testAdapter = new TestAdapter(new MyTestFragment(), testList, this);
         mBinding.testListRecyclerView.setHasFixedSize(true);
@@ -197,7 +227,6 @@ public class MyTestFragment extends BaseFragment implements TestAdapter.TestClic
         subjectList.add("Networking");
         subjectList.add("DBMS");
         subjectList.add("Engineering Drawing");
-
 
         mBinding.subjectsChipGrp.removeAllViews();
         for (int i = 0; i < subjectList.size(); i++) {

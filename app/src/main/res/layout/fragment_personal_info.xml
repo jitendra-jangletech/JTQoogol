@@ -44,6 +44,7 @@
                         android:weightSum="2">
 
                         <com.google.android.material.textfield.TextInputLayout
+                            android:layout_marginRight="@dimen/_1sdp"
                             android:id="@+id/til_first_name"
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                             android:layout_width="0dp"
@@ -60,6 +61,7 @@
                         </com.google.android.material.textfield.TextInputLayout>
 
                         <com.google.android.material.textfield.TextInputLayout
+                            android:layout_marginLeft="@dimen/_1sdp"
                             android:id="@+id/til_last_name"
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                             android:layout_width="0dp"

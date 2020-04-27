@@ -101,11 +101,17 @@
                         style="@style/sub_menu_item_style"
                         android:text="@string/favourite_test" />
 
-                    <TextView
+                   <!-- <TextView
                         android:id="@+id/nav_questions"
                         style="@style/menu_item_style"
                         android:drawableLeft="@drawable/ic_questions"
-                        android:text="@string/questions" />
+                        android:text="@string/questions" />-->
+
+                    <TextView
+                        android:id="@+id/nav_fav"
+                        style="@style/menu_item_style"
+                        android:drawableLeft="@drawable/ic_learning"
+                        android:text="@string/menu_fav" />
 
                     <TextView
                         android:id="@+id/nav_saved_questions"

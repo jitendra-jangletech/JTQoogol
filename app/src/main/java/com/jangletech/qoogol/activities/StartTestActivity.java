@@ -21,6 +21,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -28,20 +29,32 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
 import com.jangletech.qoogol.R;
-import com.jangletech.qoogol.activities.ViewPagerAdapterNew;
 import com.jangletech.qoogol.adapter.QuestionPaletAdapter;
 import com.jangletech.qoogol.databinding.ActivityCourseBinding;
+import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.dialog.SubmitTestDialog;
 import com.jangletech.qoogol.enums.QuestionFilterType;
 import com.jangletech.qoogol.enums.QuestionSortType;
 import com.jangletech.qoogol.enums.QuestionType;
 import com.jangletech.qoogol.listener.QueViewClick;
+import com.jangletech.qoogol.model.CommonResponseObject;
+import com.jangletech.qoogol.model.Exams;
+import com.jangletech.qoogol.model.TestModel;
 import com.jangletech.qoogol.model.TestQuestion;
+import com.jangletech.qoogol.model.TestingQuestionNew;
+import com.jangletech.qoogol.model.TestingRequestDto;
+import com.jangletech.qoogol.retrofit.ApiClient;
+import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class StartTestActivity extends AppCompatActivity implements QuestionPaletAdapter.QuestClickListener,
         SubmitTestDialog.SubmitDialogClickListener, QueViewClick {
@@ -59,9 +72,9 @@ public class StartTestActivity extends AppCompatActivity implements QuestionPale
     QuestionPaletAdapter questionPaletAdapter;
     public static List<TestQuestion> testQuestionList = new ArrayList<>();
     CountDownTimer timer;
-    private HashMap<Integer, TestQuestion> mapQuestAnswer = new HashMap<>();
     Long milliLeft, min, sec;
     SubmitTestDialog submitTestDialog;
+    ApiInterface apiService = ApiClient.getInstance().getApi();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +83,18 @@ public class StartTestActivity extends AppCompatActivity implements QuestionPale
         viewPager = (ViewPager2) findViewById(R.id.course_viewpager);
         resulttabs = findViewById(R.id.result_tabs);
         btnSubmitTest = findViewById(R.id.btnSubmitTest);
-        startTestViewModel = new ViewModelProvider(this).get(StartTestViewModel.class);
+        //startTestViewModel = new ViewModelProvider(this).get(StartTestViewModel.class);
+        //setQuestionList();
+        /*startTestViewModel.getAllQuestions().observe(this, new Observer<List<TestQuestion>>() {
+            @Override
+            public void onChanged(@Nullable final List<TestQuestion> tests) {
+                Log.d(TAG, "onChanged Size : "+tests.size());
+                for (int i = 0; i < tests.size(); i++) {
+                    Log.d(TAG, "onChanged: "+tests.get(i).getQuestionDesc());
+                }
+                //setMyTestList(tests);
+            }
+        });*/
 
         setQuestionList();
         viewPager.setAdapter(createCardAdapter());
@@ -301,7 +325,6 @@ public class StartTestActivity extends AppCompatActivity implements QuestionPale
                 "Who is appointed as the brand ambassador of VISA recently?",
                 "Ram Sing Yadav", "Arpinder Singh", "PV Sindhu", "Sania Mirza", "Sachin Tendulkar");
 
-
         TestQuestion testQuestion3 = new TestQuestion(3, 4, "MCQ",
                 "Who built Jama Masjid at Delhi?",
                 "Jahangir", "Qutub-ud-din-Albak", "Akbar", "Birbal", "Aurangjeb");
@@ -312,7 +335,6 @@ public class StartTestActivity extends AppCompatActivity implements QuestionPale
         TestQuestion testQuestion5 = new TestQuestion(5, 6, QuestionType.TRUE_FALSE.toString(),
                 "Narendra Modi is Prime Minister of india?",
                 "", "", "", "", "");
-
 
         TestQuestion testQuestion6 = new TestQuestion(6, 7, QuestionType.FILL_THE_BLANKS.toString(),
                 "____ is origin of COVID-19 outbreak?",
@@ -330,16 +352,6 @@ public class StartTestActivity extends AppCompatActivity implements QuestionPale
         testQuestionList.add(testQuestion5);
         testQuestionList.add(testQuestion6);
         testQuestionList.add(testQuestion7);
-
-        mapQuestAnswer.put(0, testQuestion);
-        mapQuestAnswer.put(1, testQuestion1);
-        mapQuestAnswer.put(2, testQuestion2);
-        mapQuestAnswer.put(3, testQuestion3);
-        mapQuestAnswer.put(4, testQuestion4);
-        mapQuestAnswer.put(5, testQuestion5);
-        mapQuestAnswer.put(6, testQuestion6);
-        mapQuestAnswer.put(7, testQuestion7);
-
         return testQuestionList;
     }
 
@@ -495,6 +507,8 @@ public class StartTestActivity extends AppCompatActivity implements QuestionPale
 
         return questFilterList;
     }
+
+
 
      /*
 

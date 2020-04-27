@@ -13,15 +13,20 @@ public class ViewPagerAdapterNew extends FragmentStateAdapter {
 
     private static final String TAG = "ViewPagerAdapterNew";
     private static final int CARD_ITEM_SIZE = 8;
+
     public ViewPagerAdapterNew(@NonNull FragmentActivity fragmentActivity) {
         super(fragmentActivity);
     }
-    @NonNull @Override public Fragment createFragment(int position) {
+
+    @NonNull
+    @Override
+    public Fragment createFragment(int position) {
         Log.d(TAG, "createFragment: ");
         return TestFragment.newInstance(position);
     }
-    @Override public int getItemCount() {
+
+    @Override
+    public int getItemCount() {
         return CARD_ITEM_SIZE;
     }
-
 }

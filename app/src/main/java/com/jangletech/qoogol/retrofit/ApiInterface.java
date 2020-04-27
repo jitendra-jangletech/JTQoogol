@@ -2,6 +2,7 @@ package com.jangletech.qoogol.retrofit;
 
 import com.jangletech.qoogol.model.ChangePassword;
 import com.jangletech.qoogol.model.City;
+import com.jangletech.qoogol.model.CityResponse;
 import com.jangletech.qoogol.model.Classes;
 import com.jangletech.qoogol.model.CommonResponseObject;
 import com.jangletech.qoogol.model.Country;
@@ -23,6 +24,9 @@ import com.jangletech.qoogol.model.LearningQuestionsNew;
 import com.jangletech.qoogol.model.MobileOtp;
 import com.jangletech.qoogol.model.SignInModel;
 import com.jangletech.qoogol.model.State;
+import com.jangletech.qoogol.model.StateResponse;
+import com.jangletech.qoogol.model.TestingQuestionNew;
+import com.jangletech.qoogol.model.TestingRequestDto;
 import com.jangletech.qoogol.model.University;
 import com.jangletech.qoogol.model.UniversityResponse;
 import com.jangletech.qoogol.model.UserSelectedExams;
@@ -34,6 +38,8 @@ import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
@@ -51,11 +57,11 @@ public interface ApiInterface {
     @POST(Constant.COUNTRY)
     Call<CountryResponse> getCountries();
 
-    @POST("auth/statesForCountry")
-    Call<List<State>> getStates(@QueryMap Map<String, Integer> request);
+    @POST(Constant.STATE)
+    Call<StateResponse> getStates();
 
-    @POST("masterData/citiesForState")
-    Call<City> getCities(@QueryMap Map<String, Integer> request);
+    @POST(Constant.CITY)
+    Call<CityResponse> getCities();
 
     @POST(Constant.UNIVERSITY)
     Call<UniversityResponse> getUniversity();
@@ -108,6 +114,11 @@ public interface ApiInterface {
     @POST("user/saveUserSelectedExams")
     Call<CommonResponseObject> saveUserSelectedExams(@Query("userId") int userId,
                                                      @Body List<Exams> selectedExamsList);
+    @FormUrlEncoded
+    @POST("q031StartResumeTest")
+    Call<TestingQuestionNew> fetchTestQuestionAnswers(@Field(Constant.u_user_id) int userId,
+                                                      @Field(Constant.tt_id) int testTakenId,
+                                                      @Field(Constant.tt_tm_id) int testTakentmId);
 
     @POST(Constant.FETCH_QA)
     Call<LearningQuestResponse> fetchQAApi(@QueryMap Map<String, Object> request);

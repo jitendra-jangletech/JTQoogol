@@ -7,6 +7,9 @@
 
     <string name="menu_home">Home</string>
 
+    <string name="menu_fav">Favourite</string>
+
+
     //Learning Menu
     <string name="menu_course">Course</string>
     <string name="menu_exam">Exam</string>

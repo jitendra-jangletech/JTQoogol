@@ -22,7 +22,10 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.jangletech.qoogol.R;
+import com.jangletech.qoogol.SignUpViewModel;
 import com.jangletech.qoogol.activities.SignInActivity;
 import com.jangletech.qoogol.databinding.FragmentPersonalInfoBinding;
 import com.jangletech.qoogol.databinding.LayoutChangePasswordBinding;
@@ -30,10 +33,12 @@ import com.jangletech.qoogol.dialog.ChangePasswordDialog;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.model.ChangePassword;
 import com.jangletech.qoogol.model.City;
-import com.jangletech.qoogol.model.CityObject;
+import com.jangletech.qoogol.model.CityResponse;
 import com.jangletech.qoogol.model.Country;
+import com.jangletech.qoogol.model.CountryResponse;
 import com.jangletech.qoogol.model.GetUserPersonalDetails;
 import com.jangletech.qoogol.model.State;
+import com.jangletech.qoogol.model.StateResponse;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
@@ -69,8 +74,6 @@ public class PersonalInfoFragment extends BaseFragment implements ChangePassword
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        mViewModel =
-                ViewModelProviders.of(this).get(PersonalInfoViewModel.class);
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_personal_info, container, false);
         fetchPersonalDetails();
         return mBinding.getRoot();
@@ -79,9 +82,11 @@ public class PersonalInfoFragment extends BaseFragment implements ChangePassword
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Log.d(TAG, "onActivityCreated PersonalInfoFragment : ");
-
+        mViewModel = ViewModelProviders.of(this).get(PersonalInfoViewModel.class);
+        loadProfilePic();
         fetchCountryData();
+        fetchStateData(1);
+        fetchCityData(1);
         setClickListeners();
 
         mBinding.tvMobileVerify.setOnClickListener(v -> {
@@ -351,54 +356,53 @@ public class PersonalInfoFragment extends BaseFragment implements ChangePassword
     }
 
     private void fetchCountryData() {
-//        ProgressDialog.getInstance().show(getActivity());
-//        Call<List<Country>> call = apiService.getCountries();
-//        call.enqueue(new Callback<List<Country>>() {
-//            @Override
-//            public void onResponse(Call<List<Country>> call, retrofit2.Response<List<Country>> response) {
-//                try {
-//                    ProgressDialog.getInstance().dismiss();
-//                    List<Country> list = response.body();
-//                    mViewModel.setCountryList(list);
-//                    if (list != null && list.size() > 0) {
-//                        mViewModel.mMapCountry = new HashMap<>();
-//                        for (Country country : list) {
-//                            mViewModel.mMapCountry.put(country.getCountryId(), country.getCountryName());
-//                        }
-//                        populateCountries(mViewModel.mMapCountry);
-//                    }
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                    ProgressDialog.getInstance().dismiss();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<List<Country>> call, Throwable t) {
-//                t.printStackTrace();
-//                ProgressDialog.getInstance().dismiss();
-//            }
-//        });
+        ProgressDialog.getInstance().show(getActivity());
+        Call<CountryResponse> call = apiService.getCountries();
+        call.enqueue(new Callback<CountryResponse>() {
+            @Override
+            public void onResponse(Call<CountryResponse> call, retrofit2.Response<CountryResponse> response) {
+                try {
+                    ProgressDialog.getInstance().dismiss();
+                    List<Country> list = response.body().getMasterDataList();
+                    mViewModel.setCountryList(list);
+                    if (list != null && list.size() > 0) {
+                        mViewModel.mMapCountry = new HashMap<>();
+                        for (Country country : list) {
+                            mViewModel.mMapCountry.put(country.getCountryId(), country.getCountryName());
+                        }
+                        populateCountries(mViewModel.mMapCountry);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    ProgressDialog.getInstance().dismiss();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CountryResponse> call, Throwable t) {
+                t.printStackTrace();
+                ProgressDialog.getInstance().dismiss();
+            }
+        });
     }
 
     public void fetchStateData(int countryId) {
         ProgressDialog.getInstance().show(getActivity());
         Map<String, Integer> requestBody = new HashMap<>();
         requestBody.put("countryId", countryId);
-        Call<List<State>> call = apiService.getStates(requestBody);
-        call.enqueue(new Callback<List<State>>() {
+        Call<StateResponse> call = apiService.getStates();
+        call.enqueue(new Callback<StateResponse>() {
             @Override
-            public void onResponse(Call<List<State>> call, retrofit2.Response<List<State>> response) {
+            public void onResponse(Call<StateResponse> call, retrofit2.Response<StateResponse> response) {
                 try {
                     ProgressDialog.getInstance().dismiss();
-                    List<State> list = response.body();
+                    List<State> list = response.body().getStateList();
                     mViewModel.setStateList(list);
                     if (list != null && list.size() > 0) {
                         mViewModel.mMapState = new HashMap<>();
                         for (State state : list) {
-                            mViewModel.mMapState.put(Integer.valueOf(state.getStateId()), state.getStateName());
+                            mViewModel.mMapState.put(Integer.valueOf(state.getS_id()), state.getS_name());
                         }
-
                         populateStates(mViewModel.mMapState);
                     }
                 } catch (Exception e) {
@@ -408,7 +412,7 @@ public class PersonalInfoFragment extends BaseFragment implements ChangePassword
             }
 
             @Override
-            public void onFailure(Call<List<State>> call, Throwable t) {
+            public void onFailure(Call<StateResponse> call, Throwable t) {
                 t.printStackTrace();
                 ProgressDialog.getInstance().dismiss();
             }
@@ -437,7 +441,7 @@ public class PersonalInfoFragment extends BaseFragment implements ChangePassword
             int key = UtilHelper.getKeyFromValue(mViewModel.mMapCountry, name);
             if (key != -1) {
                 mBinding.countryAutocompleteView.setTag(key);
-                fetchStateData(key);
+                //fetchStateData(key);
             }
         });
 
@@ -446,7 +450,7 @@ public class PersonalInfoFragment extends BaseFragment implements ChangePassword
             int key = UtilHelper.getKeyFromValue(mViewModel.mMapState, name);
             if (key != -1) {
                 mBinding.stateAutocompleteView.setTag(key);
-                fetchCityData(key);
+                //fetchCityData(key);
             }
         });
 
@@ -464,20 +468,19 @@ public class PersonalInfoFragment extends BaseFragment implements ChangePassword
         ProgressDialog.getInstance().show(getActivity());
         Map<String, Integer> requestBody = new HashMap<>();
         requestBody.put("stateId", key);
-        Call<City> call = apiService.getCities(requestBody);
-        call.enqueue(new Callback<City>() {
+        Call<CityResponse> call = apiService.getCities();
+        call.enqueue(new Callback<CityResponse>() {
             @Override
-            public void onResponse(Call<City> call, retrofit2.Response<City> response) {
+            public void onResponse(Call<CityResponse> call, retrofit2.Response<CityResponse> response) {
                 try {
-                    ProgressDialog.getInstance().dismiss();
-                    List<CityObject> list = response.body().getObject();
+                    List<City> list = response.body().getCityList();
                     mViewModel.setCityList(list);
                     if (list != null && list.size() > 0) {
                         mViewModel.mMapCity = new HashMap<>();
-                        for (CityObject cityObject : list) {
-                            mViewModel.mMapCity.put(Integer.valueOf(cityObject.getCityId()), cityObject.getCityName());
+                        for (City city : list) {
+                            mViewModel.mMapCity.put(Integer.valueOf(city.getCt_id()), city.getCt_name());
                         }
-
+                        ProgressDialog.getInstance().dismiss();
                         populateCities(mViewModel.mMapCity);
                     }
                 } catch (Exception e) {
@@ -487,7 +490,7 @@ public class PersonalInfoFragment extends BaseFragment implements ChangePassword
             }
 
             @Override
-            public void onFailure(Call<City> call, Throwable t) {
+            public void onFailure(Call<CityResponse> call, Throwable t) {
                 t.printStackTrace();
                 ProgressDialog.getInstance().dismiss();
             }
@@ -552,6 +555,13 @@ public class PersonalInfoFragment extends BaseFragment implements ChangePassword
         }
 
         updatePersonalDetails();
+    }
+
+    private void loadProfilePic() {
+        Glide.with(this)
+                .load(R.drawable.profile_img)
+                .apply(RequestOptions.circleCropTransform())
+                .into(mBinding.profilePic);
     }
 
 }

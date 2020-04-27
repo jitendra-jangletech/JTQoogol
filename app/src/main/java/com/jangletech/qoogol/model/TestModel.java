@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "tests")
 public class TestModel {
 
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     private int testId;
     private int shareCount;
     private int commentCount;
@@ -97,11 +97,12 @@ public class TestModel {
     }
 
 
-    public TestModel(String name, String subject, String duration, String totalMarks, String difficultyLevel,
+    public TestModel(int testId,String name, String subject, String duration, String totalMarks, String difficultyLevel,
                      String ranking, String attendedBy, String publishedDate, String ratingCount,
                      boolean isFavourite, boolean isNegativeMarks, String author, String authorEdu,
                      String category,String ratingStarCount,String questionCount,boolean isPaused,int likeCount,boolean isLiked) {
 
+        this.testId = testId;
         this.name = name;
         this.subject = subject;
         this.duration = duration;
@@ -122,7 +123,6 @@ public class TestModel {
         this.likeCount = likeCount;
         this.isLiked = isLiked;
     }
-
 
     public String getName() {
         return name;
