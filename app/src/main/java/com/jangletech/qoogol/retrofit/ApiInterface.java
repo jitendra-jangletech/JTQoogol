@@ -73,7 +73,7 @@ public interface ApiInterface {
     Call<DegreeResponse> getDegrees();
 
     @POST(Constant.COURSE)
-    Call<CourseResponse> getCourses(@QueryMap Map<String, Integer> request);
+    Call<CourseResponse> getCourses();
 
     @POST("masterData/classesForDegreeNew")
     Call<Classes> getClasses(@QueryMap Map<String, Object> request);

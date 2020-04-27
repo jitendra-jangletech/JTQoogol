@@ -24,6 +24,8 @@ import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.dialog.UniversalDialog;
 import com.jangletech.qoogol.model.ClassData;
 import com.jangletech.qoogol.model.Classes;
+import com.jangletech.qoogol.model.Country;
+import com.jangletech.qoogol.model.CountryResponse;
 import com.jangletech.qoogol.model.Course;
 import com.jangletech.qoogol.model.CourseResponse;
 import com.jangletech.qoogol.model.Degree;
@@ -98,7 +100,7 @@ public class SignUpActivity extends BaseActivity
         confirmPasswordCheck();
         setTextWatcher();
         setListeners();
-        //fetchCountryData();
+        fetchCountryData();
         fetchDegreeData();
         fetchUniversityData(0,0);
         fetchInstituteData(0);
@@ -307,7 +309,7 @@ public class SignUpActivity extends BaseActivity
         populateSelect();
     }
 
-    /*private void fetchCountryData() {
+    private void fetchCountryData() {
         ProgressDialog.getInstance().show(this);
         Call<CountryResponse> call = apiService.getCountries();
         call.enqueue(new Callback<CountryResponse>() {
@@ -336,7 +338,7 @@ public class SignUpActivity extends BaseActivity
                 ProgressDialog.getInstance().dismiss();
             }
         });
-    }*/
+    }
 
     public void fetchStateData(int countryId) {
         ProgressDialog.getInstance().show(this);
@@ -471,7 +473,7 @@ public class SignUpActivity extends BaseActivity
         ProgressDialog.getInstance().show(this);
         Map<String, Integer> requestBody = new HashMap<>();
         requestBody.put(Constant.co_dm_id, degree);
-        Call<CourseResponse> call = apiService.getCourses(null);
+        Call<CourseResponse> call = apiService.getCourses();
         call.enqueue(new Callback<CourseResponse>() {
             @Override
             public void onResponse(Call<CourseResponse> call, Response<CourseResponse> response) {
@@ -501,7 +503,7 @@ public class SignUpActivity extends BaseActivity
     }
 
     private void fetchClassData(String course_name) {
-        ProgressDialog.getInstance().show(this);
+//        ProgressDialog.getInstance().show(this);
         Map<String, Object> requestBody = new HashMap<>();
 
         requestBody.put(degree_name, course_name);
