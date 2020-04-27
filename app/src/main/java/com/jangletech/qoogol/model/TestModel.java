@@ -1,39 +1,18 @@
 package com.jangletech.qoogol.model;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "tests")
 public class TestModel {
 
+    @PrimaryKey(autoGenerate = true)
+    private int testId;
+    private int shareCount;
+    private int commentCount;
     private String name;
     private String subject;
     private String duration;
-
-    public int getLikeCount() {
-        return likeCount;
-    }
-
-    public void setLikeCount(int likeCount) {
-        this.likeCount = likeCount;
-    }
-
-    private int likeCount;
-
-    public boolean isPaused() {
-        return isPaused;
-    }
-
-    public void setPaused(boolean paused) {
-        isPaused = paused;
-    }
-
-    private boolean isPaused;
-
-    public String getQuestionCount() {
-        return questionCount;
-    }
-
-    public void setQuestionCount(String questionCount) {
-        this.questionCount = questionCount;
-    }
-
     private String questionCount;
     private String totalMarks;
     private String difficultyLevel;
@@ -43,6 +22,63 @@ public class TestModel {
     private String ratingCount;
     private boolean isFavourite;
     private boolean isNegativeMarks;
+    private boolean isPaused;
+    private boolean isLiked;
+    private int likeCount;
+    private String author;
+    private String authorEdu;
+    private String category;
+    private String ratingStarCount;
+
+    public int getTestId() {
+        return testId;
+    }
+
+    public void setTestId(int testId) {
+        this.testId = testId;
+    }
+
+    public int getShareCount() {
+        return shareCount;
+    }
+
+    public void setShareCount(int shareCount) {
+        this.shareCount = shareCount;
+    }
+
+    public int getCommentCount() {
+        return commentCount;
+    }
+
+    public void setCommentCount(int commentCount) {
+        this.commentCount = commentCount;
+    }
+
+
+
+    public int getLikeCount() {
+        return likeCount;
+    }
+
+    public void setLikeCount(int likeCount) {
+        this.likeCount = likeCount;
+    }
+
+    public boolean isPaused() {
+        return isPaused;
+    }
+
+    public void setPaused(boolean paused) {
+        isPaused = paused;
+    }
+
+    public String getQuestionCount() {
+        return questionCount;
+    }
+
+    public void setQuestionCount(String questionCount) {
+        this.questionCount = questionCount;
+    }
 
     public boolean isLiked() {
         return isLiked;
@@ -52,11 +88,6 @@ public class TestModel {
         isLiked = liked;
     }
 
-    private boolean isLiked;
-    private String author;
-    private String authorEdu;
-    private String category;
-
     public String getRatingStarCount() {
         return ratingStarCount;
     }
@@ -65,12 +96,12 @@ public class TestModel {
         this.ratingStarCount = ratingStarCount;
     }
 
-    private String ratingStarCount;
 
     public TestModel(String name, String subject, String duration, String totalMarks, String difficultyLevel,
                      String ranking, String attendedBy, String publishedDate, String ratingCount,
                      boolean isFavourite, boolean isNegativeMarks, String author, String authorEdu,
                      String category,String ratingStarCount,String questionCount,boolean isPaused,int likeCount,boolean isLiked) {
+
         this.name = name;
         this.subject = subject;
         this.duration = duration;
@@ -91,7 +122,6 @@ public class TestModel {
         this.likeCount = likeCount;
         this.isLiked = isLiked;
     }
-
 
 
     public String getName() {

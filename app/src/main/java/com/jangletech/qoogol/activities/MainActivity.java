@@ -1,4 +1,4 @@
-package com.jangletech.qoogol;
+package com.jangletech.qoogol.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,6 +17,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.activities.BaseActivity;
 import com.jangletech.qoogol.activities.PracticeTestActivity;
 import com.jangletech.qoogol.activities.SignInActivity;

@@ -22,7 +22,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.jangletech.qoogol.MainActivity;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.SignUpActivity;
 import com.jangletech.qoogol.databinding.ActivityLaunchBinding;

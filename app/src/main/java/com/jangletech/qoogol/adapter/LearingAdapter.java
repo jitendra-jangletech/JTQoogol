@@ -30,7 +30,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.card.MaterialCardView;
-import com.jangletech.qoogol.MainActivity;
+import com.jangletech.qoogol.activities.MainActivity;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.activities.PracticeTestActivity;
 import com.jangletech.qoogol.database.QoogolDatabase;

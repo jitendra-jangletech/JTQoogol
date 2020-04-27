@@ -13,17 +13,16 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.jangletech.qoogol.CommentAdapter;
-import com.jangletech.qoogol.MainActivity;
 import com.jangletech.qoogol.R;
-import com.jangletech.qoogol.adapter.LearingAdapter;
+import com.jangletech.qoogol.adapter.CommentAdapter;
 import com.jangletech.qoogol.databinding.CommentViewBinding;
 import com.jangletech.qoogol.model.Comments;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.jangletech.qoogol.MainActivity.navController;
+import static com.jangletech.qoogol.activities.MainActivity.navController;
+
 
 public class CommentFragment extends Fragment {
 

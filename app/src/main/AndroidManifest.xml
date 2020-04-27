@@ -5,9 +5,11 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <application
-        android:name=".QoogolApp"
+        android:name=".util.QoogolApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -22,14 +24,9 @@
 
         </activity>
         <activity
-            android:name=".activities.StartTestActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
-        <activity
             android:name=".activities.SingleSelectionActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".CourseActivity"></activity>
+        <activity android:name=".activities.StartTestActivity"></activity>
         <activity android:name=".activities.SignInActivity" />
         <activity
             android:name=".activities.LaunchActivity"
@@ -42,7 +39,7 @@
         </activity>
         <activity android:name=".activities.BaseActivity" />
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
 

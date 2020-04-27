@@ -12,7 +12,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.jangletech.qoogol.MainActivity;
+import com.jangletech.qoogol.activities.MainActivity;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.TestAdapter;
 import com.jangletech.qoogol.databinding.FragmentTestSharedWithYouBinding;

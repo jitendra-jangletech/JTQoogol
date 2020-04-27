@@ -14,7 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.jangletech.qoogol.MainActivity;
+import com.jangletech.qoogol.activities.MainActivity;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.TestAdapter;
 import com.jangletech.qoogol.databinding.FragmentTestPopularBinding;

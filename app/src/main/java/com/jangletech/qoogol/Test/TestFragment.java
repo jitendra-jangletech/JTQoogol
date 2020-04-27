@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,7 +24,7 @@ import androidx.lifecycle.ViewModelProviders;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.tabs.TabLayout;
-import com.jangletech.qoogol.CourseActivity;
+import com.jangletech.qoogol.activities.StartTestActivity;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.FillInTheBlanksLayoutBinding;
 import com.jangletech.qoogol.databinding.MultiChoiceQuestionBinding;
@@ -36,7 +35,6 @@ import com.jangletech.qoogol.databinding.TrueFalseLayoutBinding;
 import com.jangletech.qoogol.dialog.QuestReportDialog;
 import com.jangletech.qoogol.enums.QuestionType;
 import com.jangletech.qoogol.listener.QueViewClick;
-import com.jangletech.qoogol.model.Course;
 import com.jangletech.qoogol.model.TestQuestion;
 import com.jangletech.qoogol.ui.BaseFragment;
 
@@ -69,7 +67,7 @@ public class TestFragment extends BaseFragment implements QueViewClick, QuestRep
     }*/
 
     public TestFragment() {
-        this.testQuestions = CourseActivity.testQuestionList;
+        this.testQuestions = StartTestActivity.testQuestionList;
     }
 
     public static TestFragment newInstance(Integer counter) {
@@ -166,14 +164,14 @@ public class TestFragment extends BaseFragment implements QueViewClick, QuestRep
             //question.setMarked(true);
             question.setVisited(true);
             //fillInTheBlanksBinding.imgSave.setImageResource(R.drawable.ic_star);
-            CourseActivity.viewPager.setCurrentItem(position - 1, true);
+            StartTestActivity.viewPager.setCurrentItem(position - 1, true);
         });
         fillInTheBlanksBinding.btnSaveNext.setOnClickListener(v -> {
             //question.setMarked(false);
             //question.setSaved(true);
             question.setVisited(true);
             //fillInTheBlanksBinding.imgSave.setImageResource(R.drawable.ic_star_border);
-            CourseActivity.viewPager.setCurrentItem(position + 1, true);
+            StartTestActivity.viewPager.setCurrentItem(position + 1, true);
         });
         fillInTheBlanksBinding.btnClearResponse.setOnClickListener(v -> {
             fillInTheBlanksBinding.imgSave.setImageResource(R.drawable.ic_star_border);
@@ -231,13 +229,13 @@ public class TestFragment extends BaseFragment implements QueViewClick, QuestRep
             //setMarkedQuest(testQuestion, trueFalseLayoutBinding.imgSave);
             //testQuestion.setMarked(true);
             //trueFalseLayoutBinding.imgSave.setImageResource(R.drawable.ic_star);
-            CourseActivity.viewPager.setCurrentItem(position - 1, true);
+            StartTestActivity.viewPager.setCurrentItem(position - 1, true);
         });
         trueFalseLayoutBinding.btnSaveNext.setOnClickListener(v -> {
             //testQuestion.setMarked(false);
             //testQuestion.setSaved(true);
             //trueFalseLayoutBinding.imgSave.setImageResource(R.drawable.ic_star_border);
-            CourseActivity.viewPager.setCurrentItem(position + 1, true);
+            StartTestActivity.viewPager.setCurrentItem(position + 1, true);
         });
         trueFalseLayoutBinding.btnClearResponse.setOnClickListener(v -> {
             trueFalseLayoutBinding.imgSave.setImageResource(R.drawable.ic_star_border);
@@ -321,14 +319,14 @@ public class TestFragment extends BaseFragment implements QueViewClick, QuestRep
         mBinding.btnMarkNext.setOnClickListener(v -> {
             //testQuestion.setMarked(true);
             //mBinding.imgSave.setImageResource(R.drawable.ic_star);
-            CourseActivity.viewPager.setCurrentItem(position - 1, true);
+            StartTestActivity.viewPager.setCurrentItem(position - 1, true);
         });
         mBinding.btnSaveNext.setOnClickListener(v -> {
             //testQuestion.setSaved(true);
             //testQuestion.setMarked(false);
             testQuestion.setVisited(true);
             //mBinding.imgSave.setImageResource(R.drawable.ic_star_border);
-            CourseActivity.viewPager.setCurrentItem(position + 1, true);
+            StartTestActivity.viewPager.setCurrentItem(position + 1, true);
         });
         mBinding.btnClearResponse.setOnClickListener(v -> {
             mBinding.imgSave.setImageResource(R.drawable.ic_star_border);
@@ -414,13 +412,13 @@ public class TestFragment extends BaseFragment implements QueViewClick, QuestRep
             //setMarkedQuest(testQuestion, multiChoiceQuestionBinding.imgSave);
             //testQuestion.setMarked(true);
             //multiChoiceQuestionBinding.imgSave.setImageResource(R.drawable.ic_star);
-            CourseActivity.viewPager.setCurrentItem(position - 1, true);
+            StartTestActivity.viewPager.setCurrentItem(position - 1, true);
         });
         multiChoiceQuestionBinding.btnSaveNext.setOnClickListener(v -> {
             //testQuestion.setSaved(true);
             //testQuestion.setMarked(false);
             //multiChoiceQuestionBinding.imgSave.setImageResource(R.drawable.ic_star_border);
-            CourseActivity.viewPager.setCurrentItem(position + 1, true);
+            StartTestActivity.viewPager.setCurrentItem(position + 1, true);
         });
         multiChoiceQuestionBinding.btnClearResponse.setOnClickListener(v -> {
             multiChoiceQuestionBinding.imgSave.setImageResource(R.drawable.ic_star_border);
@@ -462,7 +460,7 @@ public class TestFragment extends BaseFragment implements QueViewClick, QuestRep
             testQuestion.setAttempted(true);
             testQuestion.setVisited(false);
             //multiLineQuestAnsBinding.imgSave.setImageResource(R.drawable.ic_star);
-            CourseActivity.viewPager.setCurrentItem(position - 1, true);
+            StartTestActivity.viewPager.setCurrentItem(position - 1, true);
         });
         multiLineQuestAnsBinding.btnSaveNext.setOnClickListener(v -> {
             //testQuestion.setMarked(false);
@@ -470,7 +468,7 @@ public class TestFragment extends BaseFragment implements QueViewClick, QuestRep
             //testQuestion.setAttempted(true);
             //testQuestion.setVisited(false);
             //multiLineQuestAnsBinding.imgSave.setImageResource(R.drawable.ic_star_border);
-            CourseActivity.viewPager.setCurrentItem(position + 1, true);
+            StartTestActivity.viewPager.setCurrentItem(position + 1, true);
         });
         multiLineQuestAnsBinding.btnClearResponse.setOnClickListener(v -> {
             testQuestion.setAttempted(false);

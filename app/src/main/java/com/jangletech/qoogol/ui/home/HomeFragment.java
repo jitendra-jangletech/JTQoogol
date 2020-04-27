@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.azoft.carousellayoutmanager.CenterScrollListener;
-import com.jangletech.qoogol.CenterZoomLayoutManager;
+import com.jangletech.qoogol.util.CenterZoomLayoutManager;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.HomeAdapter;
 import com.jangletech.qoogol.databinding.FragmentHomeBinding;

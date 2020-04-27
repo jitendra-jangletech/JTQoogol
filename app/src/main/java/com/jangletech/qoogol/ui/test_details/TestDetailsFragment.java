@@ -12,7 +12,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.jangletech.qoogol.CourseActivity;
+import com.jangletech.qoogol.activities.StartTestActivity;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.QuestionAdapter;
 import com.jangletech.qoogol.databinding.TestDetailsFragmentBinding;
@@ -49,7 +49,7 @@ public class TestDetailsFragment extends BaseFragment {
         recentlyAddedQuestionList();
 
         mBinding.btnStartTest.setOnClickListener(v->{
-            startActivity(new Intent(getActivity(), CourseActivity.class));
+            startActivity(new Intent(getActivity(), StartTestActivity.class));
         });
     }
 
