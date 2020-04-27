@@ -2,6 +2,7 @@ package com.jangletech.qoogol.retrofit;
 
 import com.jangletech.qoogol.model.ChangePassword;
 import com.jangletech.qoogol.model.City;
+import com.jangletech.qoogol.model.CityResponse;
 import com.jangletech.qoogol.model.Classes;
 import com.jangletech.qoogol.model.CommonResponseObject;
 import com.jangletech.qoogol.model.Country;
@@ -20,6 +21,7 @@ import com.jangletech.qoogol.model.LearningQuestionsNew;
 import com.jangletech.qoogol.model.MobileOtp;
 import com.jangletech.qoogol.model.SignInModel;
 import com.jangletech.qoogol.model.State;
+import com.jangletech.qoogol.model.StateResponse;
 import com.jangletech.qoogol.model.TestingQuestionNew;
 import com.jangletech.qoogol.model.TestingRequestDto;
 import com.jangletech.qoogol.model.University;
@@ -51,11 +53,11 @@ public interface ApiInterface {
     @POST(Constant.COUNTRY)
     Call<CountryResponse> getCountries();
 
-    @POST("auth/statesForCountry")
-    Call<List<State>> getStates(@QueryMap Map<String, Integer> request);
+    @POST(Constant.STATE)
+    Call<StateResponse> getStates();
 
-    @POST("masterData/citiesForState")
-    Call<City> getCities(@QueryMap Map<String, Integer> request);
+    @POST(Constant.CITY)
+    Call<CityResponse> getCities();
 
     @POST("auth/getUnivBoard")
     Call<List<University>> getUniversity(@QueryMap Map<String, Integer> request);

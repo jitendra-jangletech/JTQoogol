@@ -3,13 +3,10 @@ package com.jangletech.qoogol.ui.educational_info;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
-import android.view.View;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
@@ -22,14 +19,14 @@ import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.AddEditEducationBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.model.City;
-import com.jangletech.qoogol.model.CityObject;
+import com.jangletech.qoogol.model.CityResponse;
 import com.jangletech.qoogol.model.ClassData;
 import com.jangletech.qoogol.model.Classes;
-import com.jangletech.qoogol.model.Country;
 import com.jangletech.qoogol.model.Course;
 import com.jangletech.qoogol.model.Degree;
 import com.jangletech.qoogol.model.Institute;
 import com.jangletech.qoogol.model.State;
+import com.jangletech.qoogol.model.StateResponse;
 import com.jangletech.qoogol.model.University;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
@@ -83,7 +80,7 @@ public class AddEduDialog extends Dialog {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         addEditEducationBinding = DataBindingUtil.inflate(LayoutInflater.from(getContext()), R.layout.add_edit_education, null, false);
         setContentView(addEditEducationBinding.getRoot());
-        fetchCountryData();
+        //fetchCountryData();
         fetchDegreeData();
         setListeners();
     }
@@ -322,46 +319,46 @@ public class AddEduDialog extends Dialog {
 
 
 
-    private void fetchCountryData() {
-        ProgressDialog.getInstance().show(context);
-        Call<List<Country>> call = apiService.getCountries();
-        call.enqueue(new Callback<List<Country>>() {
+    /*private void fetchCountryData() {
+        ProgressDialog.getInstance().show(getOwnerActivity());
+        Call<CountryResponse> call = apiService.getCountries();
+        call.enqueue(new Callback<CountryResponse>() {
             @Override
-            public void onResponse(Call<List<Country>> call, retrofit2.Response<List<Country>> response) {
+            public void onResponse(Call<CountryResponse> call, retrofit2.Response<CountryResponse> response) {
                 try {
-                    List<Country> list = response.body();
+                    List<Country> list = response.body().getMasterDataList();
+                    mViewModel.setCountryList(list);
                     if (list != null && list.size() > 0) {
-                        mMapCountry = new HashMap<>();
+                        mViewModel.mMapCountry = new HashMap<>();
                         for (Country country : list) {
-                            mMapCountry.put(country.getCountryId(), country.getCountryName());
+                            mViewModel.mMapCountry.put(country.getCountryId(), country.getCountryName());
                         }
                         ProgressDialog.getInstance().dismiss();
-                        populateCountries(mMapCountry);
+                        populateCountries(mViewModel.mMapCountry);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                     ProgressDialog.getInstance().dismiss();
                 }
             }
-
             @Override
-            public void onFailure(Call<List<Country>> call, Throwable t) {
+            public void onFailure(Call<CountryResponse> call, Throwable t) {
                 t.printStackTrace();
                 ProgressDialog.getInstance().dismiss();
             }
         });
     }
-
+*/
     public void fetchStateData(int countryId) {
         ProgressDialog.getInstance().show(context);
         Map<String, Integer> requestBody = new HashMap<>();
         requestBody.put("countryId", countryId);
-        Call<List<State>> call = apiService.getStates(requestBody);
-        call.enqueue(new Callback<List<State>>() {
+        Call<StateResponse> call = apiService.getStates();
+        call.enqueue(new Callback<StateResponse>() {
             @Override
-            public void onResponse(Call<List<State>> call, retrofit2.Response<List<State>> response) {
+            public void onResponse(Call<StateResponse> call, retrofit2.Response<StateResponse> response) {
                 try {
-                    List<State> list = response.body();
+                    List<State> list = response.body().getStateList();
                     if (list != null && list.size() > 0) {
                         mMapState = new HashMap<>();
                         for (State state : list) {
@@ -377,7 +374,7 @@ public class AddEduDialog extends Dialog {
             }
 
             @Override
-            public void onFailure(Call<List<State>> call, Throwable t) {
+            public void onFailure(Call<StateResponse> call, Throwable t) {
                 t.printStackTrace();
                 ProgressDialog.getInstance().dismiss();
             }
@@ -388,16 +385,16 @@ public class AddEduDialog extends Dialog {
         ProgressDialog.getInstance().show(context);
         Map<String, Integer> requestBody = new HashMap<>();
         requestBody.put("stateId", key);
-        Call<City> call = apiService.getCities(requestBody);
-        call.enqueue(new Callback<City>() {
+        Call<CityResponse> call = apiService.getCities();
+        call.enqueue(new Callback<CityResponse>() {
             @Override
-            public void onResponse(Call<City> call, retrofit2.Response<City> response) {
+            public void onResponse(Call<CityResponse> call, retrofit2.Response<CityResponse> response) {
                 try {
-                    List<CityObject> list = response.body().getObject();
+                    List<City> list = response.body().getCityList();
                     if (list != null && list.size() > 0) {
                         mMapCity = new HashMap<>();
-                        for (CityObject cityObject : list) {
-                            mMapCity.put(Integer.valueOf(cityObject.getCityId()), cityObject.getCityName());
+                        for (City city : list) {
+                            mMapCity.put(Integer.valueOf(city.getCt_id()), city.getCt_name());
                         }
                         ProgressDialog.getInstance().dismiss();
                         populateCities(mMapCity);
@@ -409,7 +406,7 @@ public class AddEduDialog extends Dialog {
             }
 
             @Override
-            public void onFailure(Call<City> call, Throwable t) {
+            public void onFailure(Call<CityResponse> call, Throwable t) {
                 t.printStackTrace();
                 ProgressDialog.getInstance().dismiss();
             }

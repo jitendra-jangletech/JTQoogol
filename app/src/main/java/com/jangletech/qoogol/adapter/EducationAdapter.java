@@ -25,6 +25,7 @@ import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.model.Country;
 import com.jangletech.qoogol.model.FetchEducationsObject;
 import com.jangletech.qoogol.model.State;
+import com.jangletech.qoogol.model.StateResponse;
 import com.jangletech.qoogol.model.University;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
@@ -114,7 +115,7 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.View
         addEditEduDialog.setContentView(addEditEducationBinding.getRoot());
         addEditEduDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation_2;
         addEditEduDialog.show();
-        fetchCountryData();
+        //fetchCountryData();
         setListeners();
 
         addEditEducationBinding.btnClose.setOnClickListener(v ->
@@ -234,7 +235,7 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.View
 
 
 
-    private void fetchCountryData() {
+    /*private void fetchCountryData() {
         ProgressDialog.getInstance().show(activity);
         Call<List<Country>> call = apiService.getCountries();
         call.enqueue(new Callback<List<Country>>() {
@@ -262,18 +263,18 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.View
                 ProgressDialog.getInstance().dismiss();
             }
         });
-    }
-*/
+    }*/
+
     public void fetchStateData(int countryId) {
         ProgressDialog.getInstance().show(activity);
         Map<String, Integer> requestBody = new HashMap<>();
         requestBody.put("countryId", countryId);
-        Call<List<State>> call = apiService.getStates(requestBody);
-        call.enqueue(new Callback<List<State>>() {
+        Call<StateResponse> call = apiService.getStates();
+        call.enqueue(new Callback<StateResponse>() {
             @Override
-            public void onResponse(Call<List<State>> call, retrofit2.Response<List<State>> response) {
+            public void onResponse(Call<StateResponse> call, retrofit2.Response<StateResponse> response) {
                 try {
-                    List<State> list = response.body();
+                    List<State> list = response.body().getStateList();
                     if (list != null && list.size() > 0) {
                         mMapState = new HashMap<>();
                         for (State state : list) {
@@ -289,7 +290,7 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.View
             }
 
             @Override
-            public void onFailure(Call<List<State>> call, Throwable t) {
+            public void onFailure(Call<StateResponse> call, Throwable t) {
                 t.printStackTrace();
                 ProgressDialog.getInstance().dismiss();
             }

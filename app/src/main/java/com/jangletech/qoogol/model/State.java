@@ -1,19 +1,20 @@
 package com.jangletech.qoogol.model;
 
 import com.google.gson.annotations.SerializedName;
+import com.jangletech.qoogol.util.Constant;
 
 public class State {
 
-    @SerializedName("225")
+    @SerializedName(Constant.s_id)
     private String s_id;
 
-    @SerializedName("226")
+    @SerializedName(Constant.s_c_id)
     private String s_c_id;
 
-    @SerializedName("227")
+    @SerializedName(Constant.s_name)
     private String s_name;
 
-    @SerializedName("228")
+    @SerializedName(Constant.s_state_abbr)
     private String s_state_abbr;
 
     public String getS_id() {
