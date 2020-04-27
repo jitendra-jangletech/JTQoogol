@@ -1,73 +1,35 @@
 package com.jangletech.qoogol.model;
 
+import com.google.gson.annotations.SerializedName;
+import com.jangletech.qoogol.util.Constant;
+
 /**
  * Created by Pritali on 2/1/2020.
  */
 
 public class University
 {
-    private String stateId;
 
+    @SerializedName(Constant.ubm_board_name)
     private String name;
 
+    @SerializedName(Constant.ubm_id)
     private String univBoardId;
 
-    private int cityId;
-
-    private String countryId;
-
-    public String getStateId ()
-    {
-        return stateId;
-    }
-
-    public void setStateId (String stateId)
-    {
-        this.stateId = stateId;
-    }
-
-    public String getName ()
-    {
+    public String getName() {
         return name;
     }
 
-    public void setName (String name)
-    {
+    public void setName(String name) {
         this.name = name;
     }
 
-    public String getUnivBoardId ()
-    {
+    public String getUnivBoardId() {
         return univBoardId;
     }
 
-    public void setUnivBoardId (String univBoardId)
-    {
+    public void setUnivBoardId(String univBoardId) {
         this.univBoardId = univBoardId;
-    }
-
-    public int getCityId() {
-        return cityId;
-    }
-
-    public void setCityId(int cityId) {
-        this.cityId = cityId;
-    }
-
-    public String getCountryId ()
-    {
-        return countryId;
-    }
-
-    public void setCountryId (String countryId)
-    {
-        this.countryId = countryId;
-    }
-
-    @Override
-    public String toString()
-    {
-        return "ClassPojo [stateId = "+stateId+", name = "+name+", univBoardId = "+univBoardId+", cityId = "+cityId+", countryId = "+countryId+"]";
     }
 }
 

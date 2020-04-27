@@ -1,63 +1,35 @@
 package com.jangletech.qoogol.model;
 
+import com.google.gson.annotations.SerializedName;
+import com.jangletech.qoogol.util.Constant;
+
 /**
  * Created by Pritali on 2/1/2020.
  */
 
 public class Degree
 {
+    @SerializedName(Constant.dm_id)
     private int degreeId;
 
-    private String stream;
 
-    private String level;
-
+    @SerializedName(Constant.dm_degree_name)
     private String name;
 
-    public int getDegreeId ()
-    {
+    public int getDegreeId() {
         return degreeId;
     }
 
-    public void setDegreeId (int degreeId)
-    {
+    public void setDegreeId(int degreeId) {
         this.degreeId = degreeId;
     }
 
-    public String getStream ()
-    {
-        return stream;
-    }
-
-    public void setStream (String stream)
-    {
-        this.stream = stream;
-    }
-
-    public String getLevel ()
-    {
-        return level;
-    }
-
-    public void setLevel (String level)
-    {
-        this.level = level;
-    }
-
-    public String getName ()
-    {
+    public String getName() {
         return name;
     }
 
-    public void setName (String name)
-    {
+    public void setName(String name) {
         this.name = name;
-    }
-
-    @Override
-    public String toString()
-    {
-        return "ClassPojo [degreeId = "+degreeId+", stream = "+stream+", level = "+level+", name = "+name+"]";
     }
 }
 

@@ -299,36 +299,36 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.View
     }
 
     private void fetchUniversityData(int country, int state) {
-        ProgressDialog.getInstance().show(activity);
-        Map<String, Integer> requestBody = new HashMap<>();
-        requestBody.put(country_id, country);
-        requestBody.put(state_id, state);
-        Call<List<University>> call = apiService.getUniversity(requestBody);
-        call.enqueue(new Callback<List<University>>() {
-            @Override
-            public void onResponse(Call<List<University>> call, Response<List<University>> response) {
-                try {
-                    List<University> list = response.body();
-                    if (list != null && list.size() > 0) {
-                        mMapUniversity = new HashMap<>();
-                        for (University university : list) {
-                            mMapUniversity.put(Integer.valueOf(university.getUnivBoardId()), university.getName());
-                        }
-                        ProgressDialog.getInstance().dismiss();
-                        populateUniversityBoard(mMapUniversity);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    ProgressDialog.getInstance().dismiss();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<University>> call, Throwable t) {
-                t.printStackTrace();
-                ProgressDialog.getInstance().dismiss();
-            }
-        });
+//        ProgressDialog.getInstance().show(activity);
+//        Map<String, Integer> requestBody = new HashMap<>();
+//        requestBody.put(country_id, country);
+//        requestBody.put(state_id, state);
+//        Call<List<University>> call = apiService.getUniversity(requestBody);
+//        call.enqueue(new Callback<List<University>>() {
+//            @Override
+//            public void onResponse(Call<List<University>> call, Response<List<University>> response) {
+//                try {
+//                    List<University> list = response.body();
+//                    if (list != null && list.size() > 0) {
+//                        mMapUniversity = new HashMap<>();
+//                        for (University university : list) {
+//                            mMapUniversity.put(Integer.valueOf(university.getUnivBoardId()), university.getName());
+//                        }
+//                        ProgressDialog.getInstance().dismiss();
+//                        populateUniversityBoard(mMapUniversity);
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                    ProgressDialog.getInstance().dismiss();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<List<University>> call, Throwable t) {
+//                t.printStackTrace();
+//                ProgressDialog.getInstance().dismiss();
+//            }
+//        });
     }
 
 

@@ -1,61 +1,46 @@
 package com.jangletech.qoogol.model;
 
+import com.google.gson.annotations.SerializedName;
+import com.jangletech.qoogol.util.Constant;
+
 /**
  * Created by Pritali on 2/1/2020.
  */
 
 public class Course
 {
-    private int duration;
 
+    @SerializedName(Constant.co_dm_id)
     private String degreeId;
 
+    @SerializedName(Constant.co_name)
     private String name;
 
+    @SerializedName(Constant.co_id)
     private String courseId;
 
-    public int getDuration() {
-        return duration;
-    }
-
-    public void setDuration(int duration) {
-        this.duration = duration;
-    }
-
-    public String getDegreeId ()
-    {
+    public String getDegreeId() {
         return degreeId;
     }
 
-    public void setDegreeId (String degreeId)
-    {
+    public void setDegreeId(String degreeId) {
         this.degreeId = degreeId;
     }
 
-    public String getName ()
-    {
+    public String getName() {
         return name;
     }
 
-    public void setName (String name)
-    {
+    public void setName(String name) {
         this.name = name;
     }
 
-    public String getCourseId ()
-    {
+    public String getCourseId() {
         return courseId;
     }
 
-    public void setCourseId (String courseId)
-    {
+    public void setCourseId(String courseId) {
         this.courseId = courseId;
-    }
-
-    @Override
-    public String toString()
-    {
-        return "ClassPojo [duration = "+duration+", degreeId = "+degreeId+", name = "+name+", courseId = "+courseId+"]";
     }
 }
 
