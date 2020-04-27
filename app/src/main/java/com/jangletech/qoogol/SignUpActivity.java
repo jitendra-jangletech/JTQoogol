@@ -29,15 +29,20 @@ import com.jangletech.qoogol.model.Classes;
 import com.jangletech.qoogol.model.Country;
 import com.jangletech.qoogol.model.CountryResponse;
 import com.jangletech.qoogol.model.Course;
+import com.jangletech.qoogol.model.CourseResponse;
 import com.jangletech.qoogol.model.Degree;
+import com.jangletech.qoogol.model.DegreeResponse;
 import com.jangletech.qoogol.model.Institute;
+import com.jangletech.qoogol.model.InstituteResponse;
 import com.jangletech.qoogol.model.MobileOtp;
 import com.jangletech.qoogol.model.State;
 import com.jangletech.qoogol.model.University;
+import com.jangletech.qoogol.model.UniversityResponse;
 import com.jangletech.qoogol.model.signup.SignUpRequestDto;
 import com.jangletech.qoogol.model.signup.SignUpResponseDto;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
+import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.GenericTextWatcher;
 import com.jangletech.qoogol.util.UtilHelper;
 import com.mukesh.OtpView;
@@ -100,6 +105,9 @@ public class SignUpActivity extends BaseActivity
         setListeners();
         fetchCountryData();
         fetchDegreeData();
+        fetchUniversityData(0,0);
+        fetchInstituteData(0);
+
 
         mBinding.selectAutocompleteView.setOnItemClickListener((parent, view, position, id) -> {
 
@@ -166,7 +174,7 @@ public class SignUpActivity extends BaseActivity
                 //signUpData.setCourse(key);
                 Log.d(TAG, "courseAutocompleteView value : " + key);
                 mBinding.courseAutocompleteView.setTag(key);
-                fetchClassData(name, mViewModel.getCourseList().getValue().get(position).getDuration());
+                fetchClassData(name);
             }
         });
 
@@ -371,16 +379,13 @@ public class SignUpActivity extends BaseActivity
 
     private void fetchUniversityData(int country, int state) {
         ProgressDialog.getInstance().show(this);
-        Map<String, Integer> requestBody = new HashMap<>();
-        requestBody.put(country_id, country);
-        requestBody.put(state_id, state);
-        Call<List<University>> call = apiService.getUniversity(requestBody);
-        call.enqueue(new Callback<List<University>>() {
+        Call<UniversityResponse> call = apiService.getUniversity();
+        call.enqueue(new Callback<UniversityResponse>() {
             @Override
-            public void onResponse(Call<List<University>> call, Response<List<University>> response) {
+            public void onResponse(Call<UniversityResponse> call, Response<UniversityResponse> response) {
                 ProgressDialog.getInstance().dismiss();
                 try {
-                    List<University> list = response.body();
+                    List<University> list = response.body().getMasterDataList();
                     mViewModel.setUniversityList(list);
                     if (list != null && list.size() > 0) {
                         mViewModel.mMapUniversity = new HashMap<>();
@@ -396,7 +401,7 @@ public class SignUpActivity extends BaseActivity
             }
 
             @Override
-            public void onFailure(Call<List<University>> call, Throwable t) {
+            public void onFailure(Call<UniversityResponse> call, Throwable t) {
                 t.printStackTrace();
                 ProgressDialog.getInstance().dismiss();
             }
@@ -405,14 +410,12 @@ public class SignUpActivity extends BaseActivity
 
     private void fetchInstituteData(int university) {
         ProgressDialog.getInstance().show(this);
-        Map<String, Integer> requestBody = new HashMap<>();
-        requestBody.put(board_id, university);
-        Call<List<Institute>> call = apiService.getInstitute(requestBody);
-        call.enqueue(new Callback<List<Institute>>() {
+        Call<InstituteResponse> call = apiService.getInstitute();
+        call.enqueue(new Callback<InstituteResponse>() {
             @Override
-            public void onResponse(Call<List<Institute>> call, Response<List<Institute>> response) {
+            public void onResponse(Call<InstituteResponse> call, Response<InstituteResponse> response) {
                 try {
-                    List<Institute> list = response.body();
+                    List<Institute> list = response.body().getMasterDataList();
                     mViewModel.setInstituteList(list);
                     if (list != null && list.size() > 0) {
                         mViewModel.mMapInstitute = new HashMap<>();
@@ -430,7 +433,7 @@ public class SignUpActivity extends BaseActivity
             }
 
             @Override
-            public void onFailure(Call<List<Institute>> call, Throwable t) {
+            public void onFailure(Call<InstituteResponse> call, Throwable t) {
                 t.printStackTrace();
                 ProgressDialog.getInstance().dismiss();
             }
@@ -439,12 +442,12 @@ public class SignUpActivity extends BaseActivity
 
     private void fetchDegreeData() {
         ProgressDialog.getInstance().show(this);
-        Call<List<Degree>> call = apiService.getDegrees();
-        call.enqueue(new Callback<List<Degree>>() {
+        Call<DegreeResponse> call = apiService.getDegrees();
+        call.enqueue(new Callback<DegreeResponse>() {
             @Override
-            public void onResponse(Call<List<Degree>> call, retrofit2.Response<List<Degree>> response) {
+            public void onResponse(Call<DegreeResponse> call, retrofit2.Response<DegreeResponse> response) {
                 try {
-                    List<Degree> list = response.body();
+                    List<Degree> list = response.body().getMasterDataList() ;
                     mViewModel.setDegreeList(list);
                     if (list != null && list.size() > 0) {
                         mViewModel.mMapDegree = new HashMap<>();
@@ -461,7 +464,7 @@ public class SignUpActivity extends BaseActivity
             }
 
             @Override
-            public void onFailure(Call<List<Degree>> call, Throwable t) {
+            public void onFailure(Call<DegreeResponse> call, Throwable t) {
                 t.printStackTrace();
                 ProgressDialog.getInstance().dismiss();
             }
@@ -472,13 +475,13 @@ public class SignUpActivity extends BaseActivity
     private void fetchCourseData(int degree) {
         ProgressDialog.getInstance().show(this);
         Map<String, Integer> requestBody = new HashMap<>();
-        requestBody.put(degree_id, degree);
-        Call<List<Course>> call = apiService.getCourses(requestBody);
-        call.enqueue(new Callback<List<Course>>() {
+        requestBody.put(Constant.co_dm_id, degree);
+        Call<CourseResponse> call = apiService.getCourses(null);
+        call.enqueue(new Callback<CourseResponse>() {
             @Override
-            public void onResponse(Call<List<Course>> call, Response<List<Course>> response) {
+            public void onResponse(Call<CourseResponse> call, Response<CourseResponse> response) {
                 try {
-                    List<Course> list = response.body();
+                    List<Course> list = response.body().getMasterDataList();
                     mViewModel.setCourseList(list);
                     if (list != null && list.size() > 0) {
                         mViewModel.mMapCourse = new HashMap<>();
@@ -495,26 +498,19 @@ public class SignUpActivity extends BaseActivity
             }
 
             @Override
-            public void onFailure(Call<List<Course>> call, Throwable t) {
+            public void onFailure(Call<CourseResponse> call, Throwable t) {
                 t.printStackTrace();
                 ProgressDialog.getInstance().dismiss();
             }
         });
     }
 
-    private void fetchClassData(String course_name, int course_duration) {
+    private void fetchClassData(String course_name) {
         ProgressDialog.getInstance().show(this);
         Map<String, Object> requestBody = new HashMap<>();
-        Course course = new Course();
-        course.setDuration(course_duration);
-        course.setName(course_name);
 
-        Log.d(TAG, "degree_name : " + course.getName());
-        Log.d(TAG, "duration : " + course.getDuration());
-
-        requestBody.put(degree_name, course.getName());
-        requestBody.put(duration, course.getDuration());
-        Call<Classes> call = apiService.getClasses(requestBody);
+        requestBody.put(degree_name, course_name);
+        Call<Classes> call = apiService.getClasses(null);
         call.enqueue(new Callback<Classes>() {
             @Override
             public void onResponse(Call<Classes> call, Response<Classes> response) {

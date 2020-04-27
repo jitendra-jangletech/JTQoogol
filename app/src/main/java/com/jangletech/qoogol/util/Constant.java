@@ -86,6 +86,8 @@ public class Constant {
     public static final String CITY = "sm09CityData";
     public static final String COURSE = "sm15CourseData";
     public static final String INSTITUTE = "sm13InstOrgData";
+    public static final String UNIVERSITY = "sm12UBMData";
+    public static final String DEGREE = "sm14DegreeData";
     public static final String masterDataList = "61";
 
     //comman
@@ -100,6 +102,23 @@ public class Constant {
     public static final String c_name = "201";
     public static final String c_calling_code = "202";
     public static final String c_abbr_2 = "207";
+
+    //university
+    public static final String ubm_id = "242";
+    public static final String ubm_board_name = "244";
+
+    //InstOrgMaster
+    public static final String iom_id = "248";
+    public static final String iom_name = "249";
+
+    //DegreeMaster
+    public  static final String dm_id = "255";
+    public  static final String dm_degree_name = "256";
+
+    //Course
+    public  static final String co_id = "261";
+    public  static final String co_dm_id = "262";
+    public  static final String co_name = "263";
 
     // Questions
     public static final String q_id = "325";
