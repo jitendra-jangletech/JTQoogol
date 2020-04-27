@@ -58,6 +58,7 @@
                                 <com.google.android.material.textfield.TextInputLayout
                                     android:id="@+id/til_first_name"
                                     android:layout_width="0dp"
+                                    android:layout_marginRight="@dimen/_1sdp"
                                     android:layout_height="wrap_content"
                                     android:layout_marginBottom="@dimen/_5sdp"
                                     android:layout_weight="1"
@@ -72,6 +73,7 @@
 
                                 <com.google.android.material.textfield.TextInputLayout
                                     android:id="@+id/til_last_name"
+                                    android:layout_marginLeft="@dimen/_1sdp"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_marginBottom="@dimen/_5sdp"
@@ -136,7 +138,7 @@
                                     android:layout_height="match_parent"
                                     android:layout_weight="0.4"
                                     android:gravity="center"
-                                    android:text="Verify"
+                                    android:text="@string/verify_text"
                                     android:textColor="@color/color_red"
                                     android:textStyle="bold" />
 
@@ -236,6 +238,7 @@
                                 android:weightSum="2">
 
                                 <com.google.android.material.textfield.TextInputLayout
+                                    android:layout_marginRight="@dimen/_1sdp"
                                     android:id="@+id/til_create_password"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
@@ -251,6 +254,7 @@
                                 </com.google.android.material.textfield.TextInputLayout>
 
                                 <com.google.android.material.textfield.TextInputLayout
+                                    android:layout_marginLeft="@dimen/_1sdp"
                                     android:id="@+id/til_confirm_password"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"

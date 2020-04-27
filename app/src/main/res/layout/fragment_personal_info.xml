@@ -126,7 +126,7 @@
                                 android:layout_height="match_parent"
                                 android:layout_weight="0.4"
                                 android:gravity="center"
-                                android:text="Verify"
+                                android:text="@string/verify_text"
                                 android:textColor="@color/color_red"
                                 android:textStyle="bold" />
 

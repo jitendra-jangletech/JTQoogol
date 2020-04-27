@@ -84,6 +84,7 @@ public class Constant {
     public static final String COUNTRY = "sm05CountryData";
     public static final String STATE = "sm06StateData";
     public static final String CITY = "sm09CityData";
+    public static final String UNIVERSITY = "sm12UBMData";
     public static final String COURSE = "sm15CourseData";
     public static final String INSTITUTE = "sm13InstOrgData";
     public static final String masterDataList = "61";

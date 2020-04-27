@@ -23,6 +23,7 @@ import com.jangletech.qoogol.databinding.ItemEducationBinding;
 import com.jangletech.qoogol.databinding.LayoutChangePasswordBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.model.Country;
+import com.jangletech.qoogol.model.CountryResponse;
 import com.jangletech.qoogol.model.FetchEducationsObject;
 import com.jangletech.qoogol.model.State;
 import com.jangletech.qoogol.model.StateResponse;
@@ -115,7 +116,7 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.View
         addEditEduDialog.setContentView(addEditEducationBinding.getRoot());
         addEditEduDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation_2;
         addEditEduDialog.show();
-        //fetchCountryData();
+        fetchCountryData();
         setListeners();
 
         addEditEducationBinding.btnClose.setOnClickListener(v ->
@@ -235,14 +236,14 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.View
 
 
 
-    /*private void fetchCountryData() {
+    private void fetchCountryData() {
         ProgressDialog.getInstance().show(activity);
-        Call<List<Country>> call = apiService.getCountries();
-        call.enqueue(new Callback<List<Country>>() {
+        Call<CountryResponse> call = apiService.getCountries();
+        call.enqueue(new Callback<CountryResponse>() {
             @Override
-            public void onResponse(Call<List<Country>> call, retrofit2.Response<List<Country>> response) {
+            public void onResponse(Call<CountryResponse> call, retrofit2.Response<CountryResponse> response) {
                 try {
-                    List<Country> list = response.body();
+                    List<Country> list = response.body().getMasterDataList();
                     if (list != null && list.size() > 0) {
                         mMapCountry = new HashMap<>();
                         for (Country country : list) {
@@ -258,12 +259,12 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.View
             }
 
             @Override
-            public void onFailure(Call<List<Country>> call, Throwable t) {
+            public void onFailure(Call<CountryResponse> call, Throwable t) {
                 t.printStackTrace();
                 ProgressDialog.getInstance().dismiss();
             }
         });
-    }*/
+    }
 
     public void fetchStateData(int countryId) {
         ProgressDialog.getInstance().show(activity);

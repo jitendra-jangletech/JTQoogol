@@ -22,6 +22,8 @@ import com.jangletech.qoogol.model.City;
 import com.jangletech.qoogol.model.CityResponse;
 import com.jangletech.qoogol.model.ClassData;
 import com.jangletech.qoogol.model.Classes;
+import com.jangletech.qoogol.model.Country;
+import com.jangletech.qoogol.model.CountryResponse;
 import com.jangletech.qoogol.model.Course;
 import com.jangletech.qoogol.model.Degree;
 import com.jangletech.qoogol.model.Institute;
@@ -66,7 +68,7 @@ public class AddEduDialog extends Dialog {
     Map<Integer, String> mMapClass;
     Map<Integer, String> mMapCity;
     ApiInterface apiService = ApiClient.getInstance().getApi();
-    List<Course> courseList;;
+    List<Course> courseList;
 
     public AddEduDialog(@NonNull Activity context) {
         super(context,android.R.style.Theme_Light);
@@ -347,8 +349,7 @@ public class AddEduDialog extends Dialog {
                 ProgressDialog.getInstance().dismiss();
             }
         });
-    }
-*/
+    }*/
     public void fetchStateData(int countryId) {
         ProgressDialog.getInstance().show(context);
         Map<String, Integer> requestBody = new HashMap<>();

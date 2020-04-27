@@ -24,6 +24,8 @@ import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.dialog.UniversalDialog;
 import com.jangletech.qoogol.model.ClassData;
 import com.jangletech.qoogol.model.Classes;
+import com.jangletech.qoogol.model.Country;
+import com.jangletech.qoogol.model.CountryResponse;
 import com.jangletech.qoogol.model.Course;
 import com.jangletech.qoogol.model.Degree;
 import com.jangletech.qoogol.model.Institute;
@@ -78,7 +80,6 @@ public class SignUpActivity extends BaseActivity
     SignUpRequestDto signUpRequestDto;
     ApiInterface apiService = ApiClient.getInstance().getApi();
     private static final String TAG = "SignUpActivity";
-
     boolean isValid = true;
 
     @Override
@@ -93,7 +94,7 @@ public class SignUpActivity extends BaseActivity
         confirmPasswordCheck();
         setTextWatcher();
         setListeners();
-        //fetchCountryData();
+        fetchCountryData();
         fetchDegreeData();
 
         mBinding.selectAutocompleteView.setOnItemClickListener((parent, view, position, id) -> {
@@ -299,7 +300,7 @@ public class SignUpActivity extends BaseActivity
         populateSelect();
     }
 
-    /*private void fetchCountryData() {
+    private void fetchCountryData() {
         ProgressDialog.getInstance().show(this);
         Call<CountryResponse> call = apiService.getCountries();
         call.enqueue(new Callback<CountryResponse>() {
@@ -328,7 +329,7 @@ public class SignUpActivity extends BaseActivity
                 ProgressDialog.getInstance().dismiss();
             }
         });
-    }*/
+    }
 
     public void fetchStateData(int countryId) {
         ProgressDialog.getInstance().show(this);
@@ -438,6 +439,7 @@ public class SignUpActivity extends BaseActivity
         call.enqueue(new Callback<List<Degree>>() {
             @Override
             public void onResponse(Call<List<Degree>> call, retrofit2.Response<List<Degree>> response) {
+                ProgressDialog.getInstance().dismiss();
                 try {
                     List<Degree> list = response.body();
                     mViewModel.setDegreeList(list);

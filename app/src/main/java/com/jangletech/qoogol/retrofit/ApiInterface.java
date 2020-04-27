@@ -59,7 +59,7 @@ public interface ApiInterface {
     @POST(Constant.CITY)
     Call<CityResponse> getCities();
 
-    @POST("auth/getUnivBoard")
+    @POST(Constant.UNIVERSITY)
     Call<List<University>> getUniversity(@QueryMap Map<String, Integer> request);
 
     @POST("auth/getInstOrg")
