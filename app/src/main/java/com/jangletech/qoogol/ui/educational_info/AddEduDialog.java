@@ -22,12 +22,18 @@ import com.jangletech.qoogol.model.City;
 import com.jangletech.qoogol.model.CityResponse;
 import com.jangletech.qoogol.model.ClassData;
 import com.jangletech.qoogol.model.Classes;
+import com.jangletech.qoogol.model.Country;
+import com.jangletech.qoogol.model.CountryResponse;
 import com.jangletech.qoogol.model.Course;
+import com.jangletech.qoogol.model.CourseResponse;
 import com.jangletech.qoogol.model.Degree;
+import com.jangletech.qoogol.model.DegreeResponse;
 import com.jangletech.qoogol.model.Institute;
+import com.jangletech.qoogol.model.InstituteResponse;
 import com.jangletech.qoogol.model.State;
 import com.jangletech.qoogol.model.StateResponse;
 import com.jangletech.qoogol.model.University;
+import com.jangletech.qoogol.model.UniversityResponse;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.util.UtilHelper;
@@ -80,7 +86,7 @@ public class AddEduDialog extends Dialog {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         addEditEducationBinding = DataBindingUtil.inflate(LayoutInflater.from(getContext()), R.layout.add_edit_education, null, false);
         setContentView(addEditEducationBinding.getRoot());
-        //fetchCountryData();
+        fetchCountryData();
         fetchDegreeData();
         setListeners();
     }
@@ -88,7 +94,7 @@ public class AddEduDialog extends Dialog {
     private boolean validate() {
         boolean isValid = true;
         if (addEditEducationBinding.countryAutocompleteView.getText().toString().trim().isEmpty()){
-            addEditEducationBinding.countryLayout.setError("Please select country.");
+            addEditEducationBinding.countryAutocompleteView.setError("Please select country.");
             isValid = false;
         }
 
@@ -319,22 +325,21 @@ public class AddEduDialog extends Dialog {
 
 
 
-    /*private void fetchCountryData() {
-        ProgressDialog.getInstance().show(getOwnerActivity());
+    private void fetchCountryData() {
+        ProgressDialog.getInstance().show(context);
         Call<CountryResponse> call = apiService.getCountries();
         call.enqueue(new Callback<CountryResponse>() {
             @Override
             public void onResponse(Call<CountryResponse> call, retrofit2.Response<CountryResponse> response) {
                 try {
                     List<Country> list = response.body().getMasterDataList();
-                    mViewModel.setCountryList(list);
                     if (list != null && list.size() > 0) {
-                        mViewModel.mMapCountry = new HashMap<>();
+                        mMapCountry = new HashMap<>();
                         for (Country country : list) {
-                            mViewModel.mMapCountry.put(country.getCountryId(), country.getCountryName());
+                            mMapCountry.put(country.getCountryId(), country.getCountryName());
                         }
                         ProgressDialog.getInstance().dismiss();
-                        populateCountries(mViewModel.mMapCountry);
+                        populateCountries(mMapCountry);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -348,7 +353,7 @@ public class AddEduDialog extends Dialog {
             }
         });
     }
-*/
+
     public void fetchStateData(int countryId) {
         ProgressDialog.getInstance().show(context);
         Map<String, Integer> requestBody = new HashMap<>();
@@ -414,135 +419,135 @@ public class AddEduDialog extends Dialog {
     }
 
     private void fetchUniversityData(int country, int state) {
-//        ProgressDialog.getInstance().show(context);
-//        Map<String, Integer> requestBody = new HashMap<>();
-//        requestBody.put(country_id, country);
-//        requestBody.put(state_id, state);
-//        Call<List<University>> call = apiService.getUniversity(requestBody);
-//        call.enqueue(new Callback<List<University>>() {
-//            @Override
-//            public void onResponse(Call<List<University>> call, Response<List<University>> response) {
-//                try {
-//                    List<University> list = response.body();
-//                    if (list != null && list.size() > 0) {
-//                        mMapUniversity = new HashMap<>();
-//                        for (University university : list) {
-//                            mMapUniversity.put(Integer.valueOf(university.getUnivBoardId()), university.getName());
-//                        }
-//                        ProgressDialog.getInstance().dismiss();
-//                        populateUniversityBoard(mMapUniversity);
-//                    }
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                    ProgressDialog.getInstance().dismiss();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<List<University>> call, Throwable t) {
-//                t.printStackTrace();
-//                ProgressDialog.getInstance().dismiss();
-//            }
-//        });
+        ProgressDialog.getInstance().show(context);
+        Map<String, Integer> requestBody = new HashMap<>();
+        requestBody.put(country_id, country);
+        requestBody.put(state_id, state);
+        Call<UniversityResponse> call = apiService.getUniversity();
+        call.enqueue(new Callback<UniversityResponse>() {
+            @Override
+            public void onResponse(Call<UniversityResponse> call, Response<UniversityResponse> response) {
+                try {
+                    List<University> list = response.body().getMasterDataList();
+                    if (list != null && list.size() > 0) {
+                        mMapUniversity = new HashMap<>();
+                        for (University university : list) {
+                            mMapUniversity.put(Integer.valueOf(university.getUnivBoardId()), university.getName());
+                        }
+                        ProgressDialog.getInstance().dismiss();
+                        populateUniversityBoard(mMapUniversity);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    ProgressDialog.getInstance().dismiss();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UniversityResponse> call, Throwable t) {
+                t.printStackTrace();
+                ProgressDialog.getInstance().dismiss();
+            }
+        });
     }
 
 
     private void fetchInstituteData(int university) {
-//        ProgressDialog.getInstance().show(context);
-//        Map<String, Integer> requestBody = new HashMap<>();
-//        requestBody.put(board_id, university);
-//        Call<List<Institute>> call = apiService.getInstitute(requestBody);
-//        call.enqueue(new Callback<List<Institute>>() {
-//            @Override
-//            public void onResponse(Call<List<Institute>> call, Response<List<Institute>> response) {
-//                try {
-//                    List<Institute> list = response.body();
-//                    if (list != null && list.size() > 0) {
-//                        mMapInstitute = new HashMap<>();
-//                        for (Institute institute : list) {
-//                            mMapInstitute.put(Integer.valueOf(institute.getInstOrgId()), institute.getName());
-//                        }
-//                        ProgressDialog.getInstance().dismiss();
-//                        populateInstitutre(mMapInstitute);
-//                    }
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                    ProgressDialog.getInstance().dismiss();
-//
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<List<Institute>> call, Throwable t) {
-//                t.printStackTrace();
-//                ProgressDialog.getInstance().dismiss();
-//            }
-//        });
+        ProgressDialog.getInstance().show(context);
+        Map<String, Integer> requestBody = new HashMap<>();
+        requestBody.put(board_id, university);
+        Call<InstituteResponse> call = apiService.getInstitute();
+        call.enqueue(new Callback<InstituteResponse>() {
+            @Override
+            public void onResponse(Call<InstituteResponse> call, Response<InstituteResponse> response) {
+                try {
+                    List<Institute> list = response.body().getMasterDataList();
+                    if (list != null && list.size() > 0) {
+                        mMapInstitute = new HashMap<>();
+                        for (Institute institute : list) {
+                            mMapInstitute.put(Integer.valueOf(institute.getInstOrgId()), institute.getName());
+                        }
+                        ProgressDialog.getInstance().dismiss();
+                        populateInstitutre(mMapInstitute);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    ProgressDialog.getInstance().dismiss();
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<InstituteResponse> call, Throwable t) {
+                t.printStackTrace();
+                ProgressDialog.getInstance().dismiss();
+            }
+        });
     }
 
     private void fetchDegreeData() {
-//        ProgressDialog.getInstance().show(context);
-//        Call<List<Degree>> call = apiService.getDegrees();
-//        call.enqueue(new Callback<List<Degree>>() {
-//            @Override
-//            public void onResponse(Call<List<Degree>> call, retrofit2.Response<List<Degree>> response) {
-//                try {
-//                    List<Degree> list = response.body();
-//                    if (list != null && list.size() > 0) {
-//                        mMapDegree = new HashMap<>();
-//                        for (Degree degree : list) {
-//                            mMapDegree.put(degree.getDegreeId(), degree.getName());
-//                        }
-//                        ProgressDialog.getInstance().dismiss();
-//                        populateDegrees(mMapDegree);
-//                    }
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                    ProgressDialog.getInstance().dismiss();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<List<Degree>> call, Throwable t) {
-//                t.printStackTrace();
-//                ProgressDialog.getInstance().dismiss();
-//            }
-//        });
+        ProgressDialog.getInstance().show(context);
+        Call<DegreeResponse> call = apiService.getDegrees();
+        call.enqueue(new Callback<DegreeResponse>() {
+            @Override
+            public void onResponse(Call<DegreeResponse> call, retrofit2.Response<DegreeResponse> response) {
+                try {
+                    List<Degree> list = response.body().getMasterDataList();
+                    if (list != null && list.size() > 0) {
+                        mMapDegree = new HashMap<>();
+                        for (Degree degree : list) {
+                            mMapDegree.put(degree.getDegreeId(), degree.getName());
+                        }
+                        ProgressDialog.getInstance().dismiss();
+                        populateDegrees(mMapDegree);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    ProgressDialog.getInstance().dismiss();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DegreeResponse> call, Throwable t) {
+                t.printStackTrace();
+                ProgressDialog.getInstance().dismiss();
+            }
+        });
     }
 
 
     private void fetchCourseData(int degree) {
-//        ProgressDialog.getInstance().show(context);
-//        Map<String, Integer> requestBody = new HashMap<>();
-//        requestBody.put(degree_id, degree);
-//        Call<List<Course>> call = apiService.getCourses(requestBody);
-//        call.enqueue(new Callback<List<Course>>() {
-//            @Override
-//            public void onResponse(Call<List<Course>> call, Response<List<Course>> response) {
-//                try {
-//                    List<Course> list = response.body();
-//                    courseList = new ArrayList<>();
-//                    courseList.addAll(list);
-//                    if (list != null && list.size() > 0) {
-//                        mMapCourse = new HashMap<>();
-//                        for (Course course : list) {
-//                            mMapCourse.put(Integer.valueOf(course.getCourseId()), course.getName());
-//                        }
-//                        ProgressDialog.getInstance().dismiss();
-//                        populateCourse(mMapCourse);
-//                    }
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                    ProgressDialog.getInstance().dismiss();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<List<Course>> call, Throwable t) {
-//                t.printStackTrace();
-//                ProgressDialog.getInstance().dismiss();
-//            }
-//        });
+        ProgressDialog.getInstance().show(context);
+        Map<String, Integer> requestBody = new HashMap<>();
+        requestBody.put(degree_id, degree);
+        Call<CourseResponse> call = apiService.getCourses();
+        call.enqueue(new Callback<CourseResponse>() {
+            @Override
+            public void onResponse(Call<CourseResponse> call, Response<CourseResponse> response) {
+                try {
+                    List<Course> list = response.body().getMasterDataList();
+                    courseList = new ArrayList<>();
+                    courseList.addAll(list);
+                    if (list != null && list.size() > 0) {
+                        mMapCourse = new HashMap<>();
+                        for (Course course : list) {
+                            mMapCourse.put(Integer.valueOf(course.getCourseId()), course.getName());
+                        }
+                        ProgressDialog.getInstance().dismiss();
+                        populateCourse(mMapCourse);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    ProgressDialog.getInstance().dismiss();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CourseResponse> call, Throwable t) {
+                t.printStackTrace();
+                ProgressDialog.getInstance().dismiss();
+            }
+        });
     }
 
     private void fetchClassData(String course_name, int course_duration) {
