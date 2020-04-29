@@ -4,7 +4,12 @@ import android.text.TextUtils;
 
 import com.jangletech.qoogol.BuildConfig;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Map;
+
+import kotlin.random.Random;
 
 
 /**
@@ -60,5 +65,44 @@ public class UtilHelper {
             }
         }
         return selectedKey;
+    }
+
+
+
+    public static String formatMarks(Float marks) {
+        if (marks %1 ==0)
+           return String.valueOf(Math.round(marks));
+        else
+            return String.valueOf(marks);
+    }
+
+
+
+    public static String parseDate(String dtStart) {
+        SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
+        String date = "";
+        try {
+            date = format.parse(dtStart).toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return date;
+    }
+
+    public static String getAPIError(String response) {
+        switch (response) {
+            case "408":
+                return Constant.DB_TIMEOUT_ERROR;
+            case "500":
+                return Constant.DB_NETWORK_ERROR;
+            case "302":
+                return Constant.GENERAL_ERROR;
+            case "301":
+                return Constant.App_ERROR;
+            case "501":
+                return Constant.MULTILOGIN_ERROR;
+            default:
+                return Constant.ERROR;
+        }
     }
 }

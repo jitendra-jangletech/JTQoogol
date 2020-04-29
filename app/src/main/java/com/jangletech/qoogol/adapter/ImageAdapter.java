@@ -20,6 +20,7 @@ import com.jangletech.qoogol.ui.learning.SlideshowDialogFragment;
 import java.io.Serializable;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Pritali on 4/14/2020.
@@ -27,10 +28,10 @@ import java.util.ArrayList;
 public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder>  {
 
     ImageItemBinding imageItemBinding;
-    ArrayList<String> imgList;
+    List<String> imgList;
     Activity activity;
 
-    public ImageAdapter(Activity activity,ArrayList<String> imgList) {
+    public ImageAdapter(Activity activity,List<String> imgList) {
         this.activity = activity;
         this.imgList = imgList;
     }

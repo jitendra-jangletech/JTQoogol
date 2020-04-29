@@ -16,6 +16,8 @@ import com.jangletech.qoogol.model.GetUserPersonalDetails;
 import com.jangletech.qoogol.model.InstituteResponse;
 import com.jangletech.qoogol.model.LearningQuestResponse;
 import com.jangletech.qoogol.model.MobileOtp;
+import com.jangletech.qoogol.model.ProcessQuestion;
+import com.jangletech.qoogol.model.ResponseObj;
 import com.jangletech.qoogol.model.SignInModel;
 import com.jangletech.qoogol.model.StateResponse;
 import com.jangletech.qoogol.model.TestingQuestionNew;
@@ -113,5 +115,8 @@ public interface ApiInterface {
 
     @POST(Constant.FETCH_QA)
     Call<LearningQuestResponse> fetchQAApi(@QueryMap Map<String, Object> request);
+
+    @POST(Constant.PROCESS_QUESTION)
+    Call<ProcessQuestion> processQuestion(@QueryMap Map<String, Object> request);
 
 }
