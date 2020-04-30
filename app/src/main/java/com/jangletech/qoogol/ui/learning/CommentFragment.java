@@ -37,7 +37,7 @@ import retrofit2.Callback;
 import static com.jangletech.qoogol.activities.MainActivity.navController;
 
 
-public class CommentFragment extends Fragment {
+public class CommentFragment extends Fragment implements View.OnClickListener {
 
     private CommentViewModel mViewModel;
 
@@ -57,13 +57,24 @@ public class CommentFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         commentViewBinding = DataBindingUtil.inflate(inflater, R.layout.comment_view, container, false);
         initView();
+        setListeners();
         return commentViewBinding.getRoot();
     }
 
+    private void setListeners() {
+        commentViewBinding.btnSend.setOnClickListener(this);
+    }
 
-    private void ProcessQuestionAPI(Map<String, Object> requestBody) {
+
+    private void fetchCommentsAPI(String user_id, String que_id, String api_case, String comment_text) {
         ProgressDialog.getInstance().show(getActivity());
-        Call<ProcessQuestion> call = apiService.processQuestion(requestBody);
+        Call<ProcessQuestion> call;
+
+        if (api_case.equalsIgnoreCase("L"))
+         call = apiService.fetchComments(user_id, que_id, api_case);
+        else
+            call = apiService.addCommentApi(user_id, que_id, api_case, comment_text);
+
         call.enqueue(new Callback<ProcessQuestion>() {
             @Override
             public void onResponse(Call<ProcessQuestion> call, retrofit2.Response<ProcessQuestion> response) {
@@ -72,7 +83,8 @@ public class CommentFragment extends Fragment {
                     commentList.clear();
                     if (response.body()!=null && response.body().getResponse().equalsIgnoreCase("200")){
                         commentList = response.body().getCommentList();
-                        commentAdapter.notifyDataSetChanged();
+                        commentAdapter.updateList(commentList);
+                        emptyView();
                     } else {
                         Toast.makeText(getActivity(), UtilHelper.getAPIError(String.valueOf(response.body())),Toast.LENGTH_SHORT).show();
                     }
@@ -90,50 +102,6 @@ public class CommentFragment extends Fragment {
         });
     }
 
-//    private void setData() {
-//        commentList.clear();
-//
-//        Comments comments = new Comments();
-//        comments.setCommentId("110");
-//        comments.setComment("Useful question..");
-//        comments.setTime("4/6/2020");
-//        comments.setUserId("34");
-//        comments.setUserName("Neha K.");
-//        commentList.add(comments);
-//
-//        Comments comments1 = new Comments();
-//        comments1.setCommentId("110");
-//        comments1.setComment("Most asked question..");
-//        comments1.setTime("1/6/2020");
-//        comments1.setUserId("23");
-//        comments1.setUserName("Ankit L.");
-//        commentList.add(comments1);
-//
-//        Comments comments2 = new Comments();
-//        comments2.setCommentId("110");
-//        comments2.setComment("Popular question..");
-//        comments2.setTime("4/3/2020");
-//        comments2.setUserId("11");
-//        comments2.setUserName("Swara K.");
-//        commentList.add(comments2);
-//
-//        Comments comments3 = new Comments();
-//        comments3.setCommentId("110");
-//        comments3.setComment("Useful question..");
-//        comments3.setTime("4/2/2020");
-//        comments3.setUserId("67");
-//        comments3.setUserName("Anushri P.");
-//        commentList.add(comments3);
-//
-//
-//        commentAdapter.notifyDataSetChanged();
-//
-//        if (commentList.size()==0)
-//            commentViewBinding.emptytv.setVisibility(View.VISIBLE);
-//        else
-//            commentViewBinding.emptytv.setVisibility(View.GONE);
-//    }
-
     private void initView() {
         bundle = getArguments();
         commentList = new ArrayList<>();
@@ -145,23 +113,16 @@ public class CommentFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         commentViewBinding.commentRecycler.setLayoutManager(linearLayoutManager);
         commentViewBinding.commentRecycler.setAdapter(commentAdapter);
+        emptyView();
 
+        fetchCommentsAPI("1069",questionId,"L" ,"");
+    }
 
-        Map<String, Object> requestBody = new HashMap<>();
-        requestBody.put(Constant.u_user_id,1069);
-//        requestBody.put(Constant.q_id,questionId);
-        requestBody.put(Constant.q_id,1);
-        requestBody.put("Case","L");
-
-        ProcessQuestionAPI(requestBody);
-
-
-
+    private void emptyView() {
         if (commentList.size()==0)
             commentViewBinding.emptytv.setVisibility(View.VISIBLE);
         else
             commentViewBinding.emptytv.setVisibility(View.GONE);
-
     }
 
     @Override
@@ -170,4 +131,13 @@ public class CommentFragment extends Fragment {
         mViewModel = ViewModelProviders.of(this).get(CommentViewModel.class);
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btnSend:
+                fetchCommentsAPI("1069", questionId,"I",commentViewBinding.etComment.getText().toString().trim());
+                commentViewBinding.etComment.setText("");
+                break;
+        }
+    }
 }

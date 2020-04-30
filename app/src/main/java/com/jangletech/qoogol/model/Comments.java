@@ -11,7 +11,6 @@ import com.jangletech.qoogol.util.Constant;
  */
 @Entity
 public class Comments {
-
     @PrimaryKey
     @SerializedName(Constant.qlc_id)
     private String commentId;

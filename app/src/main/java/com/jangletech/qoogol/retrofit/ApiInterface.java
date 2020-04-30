@@ -112,11 +112,28 @@ public interface ApiInterface {
     Call<TestingQuestionNew> fetchTestQuestionAnswers(@Field(Constant.u_user_id) int userId,
                                                       @Field(Constant.tt_id) int testTakenId,
                                                       @Field(Constant.tt_tm_id) int testTakentmId);
-
+    @FormUrlEncoded
     @POST(Constant.FETCH_QA)
-    Call<LearningQuestResponse> fetchQAApi(@QueryMap Map<String, Object> request);
+    Call<LearningQuestResponse> fetchQAApi(@Field(Constant.u_user_id) String userid);
 
+    @FormUrlEncoded
     @POST(Constant.PROCESS_QUESTION)
-    Call<ProcessQuestion> processQuestion(@QueryMap Map<String, Object> request);
+    Call<ProcessQuestion> fetchComments(@Field(Constant.u_user_id) String userid, @Field(Constant.q_id) String queId, @Field("Case") String caseL);
+
+    @FormUrlEncoded
+    @POST(Constant.PROCESS_QUESTION)
+    Call<ProcessQuestion> likeApi(@Field(Constant.u_user_id) String userid, @Field(Constant.q_id) String queId, @Field("Case") String caseL, @Field(Constant.qlc_like_flag) int like);
+
+
+    @FormUrlEncoded
+    @POST(Constant.PROCESS_QUESTION)
+    Call<ProcessQuestion> favApi(@Field(Constant.u_user_id) String userid, @Field(Constant.q_id) String queId, @Field("Case") String caseL, @Field(Constant.qlc_fav_flag) int like);
+
+
+    @FormUrlEncoded
+    @POST(Constant.PROCESS_QUESTION)
+    Call<ProcessQuestion> addCommentApi(@Field(Constant.u_user_id) String userid, @Field(Constant.q_id) String queId, @Field("Case") String caseL, @Field(Constant.qlc_comment_text) String comment);
+
+
 
 }

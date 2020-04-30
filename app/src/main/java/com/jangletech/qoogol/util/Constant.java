@@ -92,7 +92,13 @@ public class Constant {
     public static String AUDIO = "4";
 
 
-    //Categories
+    //Question type
+    public static String Fill_THE_BLANKS  = "3";
+    public static String ONE_LINE_ANSWER = "4";
+    public static String SHORT_ANSWER = "5";
+    public static String LONG_ANSWER = "6";
+
+    //Options type
     public static String SCQ = "1";
     public static String SCQ_IMAGE  = "2";
     public static String SCQ_IMAGE_WITH_TEXT  = "3";
@@ -105,8 +111,10 @@ public class Constant {
     public static String MULTI_LINE_ANSWER = "10";
     public static String MATCH_PAIR = "11";
     public static String MATCH_PAIR_IMAGE = "12";
-    //learning
 
+
+    //learning
+    public static final String QUESTION_IMAGES_API = "https://jtmobileappstorage.blob.core.windows.net/spotmeets/media/qoogol/questions/";
     public static final String FETCH_QA = "q151FetchQA";
     public static final String PROCESS_QUESTION = "q141ProcessQuestion";
     public static final String COUNTRY = "sm05CountryData";
