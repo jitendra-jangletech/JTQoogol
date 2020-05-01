@@ -76,26 +76,34 @@
                     android:orientation="horizontal"
                     android:weightSum="2">
 
-                    <com.google.android.material.button.MaterialButton
+                    <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/signUpBtn"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="@dimen/_5sdp"
                         android:layout_marginBottom="@dimen/_10sdp"
                         android:layout_weight="1"
+                        android:background="@drawable/sign_up_button_bg"
                         android:text="@string/sign_up_title"
                         android:textAllCaps="false"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textColor="@color/colorWhite"
+                        android:textStyle="bold"
                         app:cornerRadius="@dimen/_12sdp" />
 
-                    <com.google.android.material.button.MaterialButton
+                    <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/signInBtn"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/_5sdp"
                         android:layout_marginBottom="@dimen/_10sdp"
                         android:layout_weight="1"
+                        android:background="@drawable/sign_in_button_bg"
                         android:text="@string/sign_in_title"
                         android:textAllCaps="false"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textColor="@color/colorWhite"
+                        android:textStyle="bold"
                         app:cornerRadius="@dimen/_12sdp" />
 
                 </LinearLayout>
@@ -146,30 +154,30 @@
 
 
                 <LinearLayout
-                    android:visibility="gone"
-                    android:clickable="false"
                     android:id="@+id/social_account"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/useSocialLayout"
                     android:layout_centerInParent="true"
                     android:layout_marginBottom="@dimen/_15sdp"
-                    android:orientation="horizontal">
+                    android:clickable="false"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
 
                     <ImageView
-                        android:clickable="false"
                         android:id="@+id/googleSignIn"
                         android:layout_width="@dimen/_50sdp"
                         android:layout_height="@dimen/_50sdp"
+                        android:clickable="false"
                         android:src="@drawable/ic_google" />
 
                     <ImageView
-                        android:clickable="false"
                         android:id="@+id/linkedInSignIn"
                         android:layout_width="@dimen/_50sdp"
                         android:layout_height="@dimen/_50sdp"
                         android:layout_marginLeft="@dimen/_10sdp"
                         android:layout_marginRight="@dimen/_10sdp"
+                        android:clickable="false"
                         android:src="@drawable/ic_linkedin" />
 
 
@@ -186,10 +194,10 @@
                             android:visibility="gone" />
 
                         <ImageView
-                            android:clickable="false"
                             android:id="@+id/facebookSignIn"
                             android:layout_width="@dimen/_50sdp"
                             android:layout_height="@dimen/_50sdp"
+                            android:clickable="false"
                             android:src="@drawable/ic_facebook" />
                     </FrameLayout>
 
@@ -208,8 +216,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_below="@+id/terms_privacy"
-                    app:layout_anchorGravity="bottom"
-                    android:src="@drawable/launch">
+                    android:src="@drawable/launch"
+                    app:layout_anchorGravity="bottom">
 
                 </ImageView>
             </RelativeLayout>

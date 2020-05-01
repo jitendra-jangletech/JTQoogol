@@ -117,7 +117,6 @@ dependencies {
 
     //show more text
     implementation 'com.github.mahimrocky:ShowMoreText:1.0.2'
-
     implementation 'com.azoft.carousellayoutmanager:carousel:1.2.4'
 
 }

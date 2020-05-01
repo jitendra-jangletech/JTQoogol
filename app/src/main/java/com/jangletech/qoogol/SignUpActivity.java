@@ -15,13 +15,17 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
+
 import com.jangletech.qoogol.activities.BaseActivity;
 import com.jangletech.qoogol.activities.SignInActivity;
 import com.jangletech.qoogol.databinding.ActivitySignupBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.dialog.UniversalDialog;
+import com.jangletech.qoogol.model.City;
+import com.jangletech.qoogol.model.CityResponse;
 import com.jangletech.qoogol.model.ClassData;
 import com.jangletech.qoogol.model.Classes;
 import com.jangletech.qoogol.model.Country;
@@ -45,25 +49,23 @@ import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.GenericTextWatcher;
 import com.jangletech.qoogol.util.UtilHelper;
 import com.mukesh.OtpView;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.jangletech.qoogol.util.Constant.board;
-import static com.jangletech.qoogol.util.Constant.board_id;
 import static com.jangletech.qoogol.util.Constant.country;
-import static com.jangletech.qoogol.util.Constant.country_id;
 import static com.jangletech.qoogol.util.Constant.course;
 import static com.jangletech.qoogol.util.Constant.cyNum;
 import static com.jangletech.qoogol.util.Constant.degree;
-import static com.jangletech.qoogol.util.Constant.degree_id;
 import static com.jangletech.qoogol.util.Constant.degree_name;
-import static com.jangletech.qoogol.util.Constant.duration;
 import static com.jangletech.qoogol.util.Constant.email;
 import static com.jangletech.qoogol.util.Constant.first_name;
 import static com.jangletech.qoogol.util.Constant.institute;
@@ -74,7 +76,6 @@ import static com.jangletech.qoogol.util.Constant.mobile_no;
 import static com.jangletech.qoogol.util.Constant.mobile_number;
 import static com.jangletech.qoogol.util.Constant.password;
 import static com.jangletech.qoogol.util.Constant.state;
-import static com.jangletech.qoogol.util.Constant.state_id;
 
 public class SignUpActivity extends BaseActivity
         implements View.OnClickListener, UniversalDialog.DialogButtonClickListener {
@@ -132,6 +133,18 @@ public class SignUpActivity extends BaseActivity
             int country_id = UtilHelper.getKeyFromValue(mViewModel.mMapCountry, country);
             if (state_id != -1 && country_id != -1) {
                 mBinding.stateAutocompleteView.setTag(state_id);
+                //fetchUniversityData(country_id, state_id);
+                fetchCityData(1);
+            }
+        });
+
+        mBinding.cityAutocompleteView.setOnItemClickListener((parent, view, position, id) -> {
+            final String state = ((TextView) view).getText().toString();
+            final String country = mBinding.countryAutocompleteView.getText().toString();
+            int state_id = UtilHelper.getKeyFromValue(mViewModel.mMapState, state);
+            int country_id = UtilHelper.getKeyFromValue(mViewModel.mMapCountry, country);
+            if (state_id != -1 && country_id != -1) {
+                mBinding.cityAutocompleteView.setTag(state_id);
                 fetchUniversityData(country_id, state_id);
             }
         });
@@ -271,6 +284,15 @@ public class SignUpActivity extends BaseActivity
         mBinding.universityBoardAutocompleteView.setAdapter(universityAdapter);
     }
 
+    //City
+    private void populateCity(Map<Integer, String> mMapCity) {
+        List<String> list = new ArrayList<>(mMapCity.values());
+        Collections.sort(list);
+        ArrayAdapter<String> cityAdapter = new ArrayAdapter<String>(this,
+                R.layout.autocomplete_list_item, list);
+        mBinding.cityAutocompleteView.setAdapter(cityAdapter);
+    }
+
     private void populateInstitutre(Map<Integer, String> mMapInstitute) {
         List<String> list = new ArrayList<>(mMapInstitute.values());
         Collections.sort(list);
@@ -368,6 +390,39 @@ public class SignUpActivity extends BaseActivity
 
             @Override
             public void onFailure(Call<StateResponse> call, Throwable t) {
+                t.printStackTrace();
+                ProgressDialog.getInstance().dismiss();
+            }
+        });
+    }
+
+    private void fetchCityData(int key) {
+        ProgressDialog.getInstance().show(this);
+        Map<String, Integer> requestBody = new HashMap<>();
+        requestBody.put("stateId", key);
+        Call<CityResponse> call = apiService.getCities();
+        call.enqueue(new Callback<CityResponse>() {
+            @Override
+            public void onResponse(Call<CityResponse> call, retrofit2.Response<CityResponse> response) {
+                try {
+                    List<City> list = response.body().getCityList();
+                    mViewModel.setCityList(list);
+                    if (list != null && list.size() > 0) {
+                        mViewModel.mMapCity = new HashMap<>();
+                        for (City city : list) {
+                            mViewModel.mMapCity.put(Integer.valueOf(city.getCt_id()), city.getCt_name());
+                        }
+                        ProgressDialog.getInstance().dismiss();
+                        populateCity(mViewModel.mMapCity);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    ProgressDialog.getInstance().dismiss();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CityResponse> call, Throwable t) {
                 t.printStackTrace();
                 ProgressDialog.getInstance().dismiss();
             }

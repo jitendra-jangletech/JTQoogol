@@ -46,7 +46,6 @@ public class PracticeTestActivity extends AppCompatActivity implements LearingAd
     private List<PracticeQuestion> questionList;
     int currentPos = 0;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,7 +70,6 @@ public class PracticeTestActivity extends AppCompatActivity implements LearingAd
             currentPos = practiceViewPager.getCurrentItem();
             if (currentPos > 0) {
                 practiceViewPager.setCurrentItem(currentPos - 1, true);
-
             } else {
                 Toast.makeText(this, "This is first Page", Toast.LENGTH_SHORT).show();
             }
@@ -97,7 +95,8 @@ public class PracticeTestActivity extends AppCompatActivity implements LearingAd
 
             @Override
             public void onDrawerClosed(@NonNull View drawerView) {
-                //Toast.makeText(CourseActivity.this, "Drawer is Closed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(PracticeTestActivity.this, "Current Page Position : "+currentPos, Toast.LENGTH_SHORT).show();
+                practiceViewPager.setCurrentItem(currentPos,true);
             }
 
             @Override
@@ -465,6 +464,6 @@ public class PracticeTestActivity extends AppCompatActivity implements LearingAd
     @Override
     public void onQuestionSelected(int position) {
         mBinding.drawerLayout.closeDrawer(Gravity.RIGHT);
-        practiceViewPager.setCurrentItem(position);
+        currentPos = position;
     }
 }

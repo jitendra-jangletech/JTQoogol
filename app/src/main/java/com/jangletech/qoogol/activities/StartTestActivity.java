@@ -35,21 +35,16 @@ import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.dialog.SubmitTestDialog;
 import com.jangletech.qoogol.enums.QuestionFilterType;
 import com.jangletech.qoogol.enums.QuestionSortType;
-import com.jangletech.qoogol.enums.QuestionType;
 import com.jangletech.qoogol.listener.QueViewClick;
-import com.jangletech.qoogol.model.CommonResponseObject;
-import com.jangletech.qoogol.model.Exams;
-import com.jangletech.qoogol.model.TestModel;
+import com.jangletech.qoogol.model.StartResumeTestResponse;
 import com.jangletech.qoogol.model.TestQuestion;
-import com.jangletech.qoogol.model.TestingQuestionNew;
-import com.jangletech.qoogol.model.TestingRequestDto;
+import com.jangletech.qoogol.model.TestQuestionNew;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -60,22 +55,24 @@ public class StartTestActivity extends AppCompatActivity implements QuestionPale
         SubmitTestDialog.SubmitDialogClickListener, QueViewClick {
 
     private static final String TAG = "CourseActivity";
-    private StartTestViewModel startTestViewModel;
+    private StartTestViewModel mViewModel;
+    private boolean isDrawerItemClicked = false;
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle actionBarDrawerToggle;
     ActivityCourseBinding mBinding;
     public static ViewPager2 viewPager;
     TabLayout resulttabs;
-    public static int pos;
+    public int pos;
     Button btnSubmitTest;
     TextView tvTimer, tvPause, tvTitle;
     QuestionPaletAdapter questionPaletAdapter;
-    public static List<TestQuestion> testQuestionList = new ArrayList<>();
+    public static List<TestQuestionNew> testQuestionList = new ArrayList<>();
     CountDownTimer timer;
     Long milliLeft, min, sec;
     SubmitTestDialog submitTestDialog;
     ApiInterface apiService = ApiClient.getInstance().getApi();
 
+    //private List<TestQuestionNew> testQuestAnsList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,23 +80,20 @@ public class StartTestActivity extends AppCompatActivity implements QuestionPale
         viewPager = (ViewPager2) findViewById(R.id.course_viewpager);
         resulttabs = findViewById(R.id.result_tabs);
         btnSubmitTest = findViewById(R.id.btnSubmitTest);
-        //startTestViewModel = new ViewModelProvider(this).get(StartTestViewModel.class);
-        //setQuestionList();
-        /*startTestViewModel.getAllQuestions().observe(this, new Observer<List<TestQuestion>>() {
+        mViewModel = new ViewModelProvider(this).get(StartTestViewModel.class);
+        fetchTestQA();
+        mViewModel.getTestQuestAnsList().observe(this, new Observer<List<TestQuestionNew>>() {
             @Override
-            public void onChanged(@Nullable final List<TestQuestion> tests) {
-                Log.d(TAG, "onChanged Size : "+tests.size());
-                for (int i = 0; i < tests.size(); i++) {
-                    Log.d(TAG, "onChanged: "+tests.get(i).getQuestionDesc());
-                }
-                //setMyTestList(tests);
+            public void onChanged(@Nullable final List<TestQuestionNew> tests) {
+                Log.d(TAG, "onChanged Size : " + tests.size());
+                testQuestionList = tests;
+                viewPager.setAdapter(createCardAdapter(tests));
             }
-        });*/
+        });
 
-        setQuestionList();
-        viewPager.setAdapter(createCardAdapter());
+        //setQuestionList();
         configureActionBar();
-        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+        /*viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 super.onPageScrolled(position, positionOffset, positionOffsetPixels);
@@ -108,8 +102,8 @@ public class StartTestActivity extends AppCompatActivity implements QuestionPale
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
-                TestQuestion testQuestion = testQuestionList.get(position);
-                testQuestion.setVisited(true);
+                TestQuestionNew testQuestion = testQuestionList.get(position);
+                //testQuestion.setVisited(true);
                 //Toast.makeText(CourseActivity.this, "Selected Page : " + position, Toast.LENGTH_SHORT).show();
                 Log.e("Selected_Page", String.valueOf(position));
             }
@@ -118,13 +112,13 @@ public class StartTestActivity extends AppCompatActivity implements QuestionPale
             public void onPageScrollStateChanged(int state) {
                 super.onPageScrollStateChanged(state);
             }
-        });
+        });*/
 
         mBinding.radioAll.setOnClickListener(v -> {
             if (mBinding.questionsPaletGridRecyclerView.getVisibility() == View.VISIBLE) {
-                prepareQuestPaletGridList(QuestionFilterType.ALL.toString());
+                //prepareQuestPaletGridList(QuestionFilterType.ALL.toString());
             } else {
-                prepareQuestPaletList(QuestionFilterType.ALL.toString());
+                //prepareQuestPaletList(QuestionFilterType.ALL.toString());
             }
             mBinding.radioAttempted.setChecked(false);
             mBinding.radioUnseen.setChecked(false);
@@ -196,12 +190,15 @@ public class StartTestActivity extends AppCompatActivity implements QuestionPale
             @Override
             public void onDrawerOpened(@NonNull View drawerView) {
                 //PreferenceManager preferenceManager = new PreferenceManager(CourseActivity.this);
-                prepareQuestPaletGridList(new PreferenceManager(getApplicationContext()).getString(Constant.FILTER_APPLIED));
+                prepareQuestPaletList(new PreferenceManager(getApplicationContext()).getString(Constant.FILTER_APPLIED));
             }
 
             @Override
             public void onDrawerClosed(@NonNull View drawerView) {
-                //Toast.makeText(CourseActivity.this, "Drawer is Closed", Toast.LENGTH_SHORT).show();
+                if (isDrawerItemClicked) {
+                    isDrawerItemClicked = false;
+                    viewPager.setCurrentItem(pos);
+                }
             }
 
             @Override
@@ -242,6 +239,13 @@ public class StartTestActivity extends AppCompatActivity implements QuestionPale
         });
     }
 
+   /* private void setTestQuestAnsList(List<TestQuestionNew> tests) {
+        testAdapter = new TestListAdapter(new MyTestFragment(), testList, this);
+        mBinding.testListRecyclerView.setHasFixedSize(true);
+        mBinding.testListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mBinding.testListRecyclerView.setAdapter(testAdapter);
+    }*/
+
     public void startTimer(long timeLengthMilli) {
         timer = new CountDownTimer(timeLengthMilli, 1000) {
 
@@ -278,18 +282,18 @@ public class StartTestActivity extends AppCompatActivity implements QuestionPale
     }
 
 
-
-    private ViewPagerAdapterNew createCardAdapter() {
-        ViewPagerAdapterNew adapter = new ViewPagerAdapterNew(this);
+    private ViewPagerAdapterNew createCardAdapter(List<TestQuestionNew> testQuestionNewList) {
+        ViewPagerAdapterNew adapter = new ViewPagerAdapterNew(this, testQuestionNewList);
         return adapter;
     }
 
     @Override
     public void onQuestionSelected(int questId) {
+        isDrawerItemClicked = true;
         drawerLayout.closeDrawer(Gravity.LEFT);
-        viewPager.setCurrentItem(questId, true);
+        //Toast.makeText(this, "" + questId, Toast.LENGTH_SHORT).show();
+        pos = questId;
     }
-
 
 
     @Override
@@ -311,7 +315,7 @@ public class StartTestActivity extends AppCompatActivity implements QuestionPale
         return super.onOptionsItemSelected(item);
     }
 
-    private List<TestQuestion> setQuestionList() {
+    /*private List<TestQuestion> setQuestionList() {
         testQuestionList.clear();
         TestQuestion testQuestion = new TestQuestion(0, 1, "MCQ",
                 "Web Pages are saved in which of the following format?", "http://", "HTML", "DOC", "URL", "BMP");
@@ -353,7 +357,7 @@ public class StartTestActivity extends AppCompatActivity implements QuestionPale
         testQuestionList.add(testQuestion6);
         testQuestionList.add(testQuestion7);
         return testQuestionList;
-    }
+    }*/
 
 
     private void configureActionBar() {
@@ -376,35 +380,35 @@ public class StartTestActivity extends AppCompatActivity implements QuestionPale
     }
 
     private void prepareQuestPaletGridList(String filterType) {
-        new PreferenceManager(getApplicationContext()).saveString(Constant.FILTER_APPLIED,filterType);
+       /* new PreferenceManager(getApplicationContext()).saveString(Constant.FILTER_APPLIED,filterType);
         List<TestQuestion> QuestionList = sortQuestListByFilter(testQuestionList, filterType);
         if(QuestionList.size() > 0){
             mBinding.tvNoQuestions.setVisibility(View.GONE);
         }else{
             mBinding.tvNoQuestions.setVisibility(View.VISIBLE);
-        }
+        }*/
         mBinding.questionsPaletListRecyclerView.setVisibility(View.GONE);
         mBinding.questionsPaletGridRecyclerView.setVisibility(View.VISIBLE);
         mBinding.questionsPaletGridRecyclerView.setNestedScrollingEnabled(false);
         mBinding.questionsPaletGridRecyclerView.setLayoutManager(new GridLayoutManager(this, 5));
-        questionPaletAdapter = new QuestionPaletAdapter(QuestionList, this, QuestionSortType.GRID.toString(), this);
+        questionPaletAdapter = new QuestionPaletAdapter(testQuestionList, this, QuestionSortType.GRID.toString(), this);
         mBinding.questionsPaletGridRecyclerView.setAdapter(questionPaletAdapter);
         questionPaletAdapter.notifyDataSetChanged();
     }
 
     private void prepareQuestPaletList(String filterType) {
-       // PreferenceManager preferenceManager = new PreferenceManager(this);
-        new PreferenceManager(getApplicationContext()).saveString(Constant.FILTER_APPLIED,filterType);
-        List<TestQuestion> QuestionList = sortQuestListByFilter(testQuestionList, filterType);
+        // PreferenceManager preferenceManager = new PreferenceManager(this);
+        /*new PreferenceManager(getApplicationContext()).saveString(Constant.FILTER_APPLIED,filterType);
+        List<TestQuestionNew> QuestionList = sortQuestListByFilter(testQuestionList, filterType);
         if(QuestionList.size() > 0){
             mBinding.tvNoQuestions.setVisibility(View.GONE);
         }else{
             mBinding.tvNoQuestions.setVisibility(View.VISIBLE);
-        }
+        }*/
         mBinding.questionsPaletGridRecyclerView.setVisibility(View.GONE);
         mBinding.questionsPaletListRecyclerView.setVisibility(View.VISIBLE);
         mBinding.questionsPaletListRecyclerView.setNestedScrollingEnabled(false);
-        questionPaletAdapter = new QuestionPaletAdapter(QuestionList, this, QuestionSortType.LIST.toString(), this);
+        questionPaletAdapter = new QuestionPaletAdapter(testQuestionList, this, QuestionSortType.LIST.toString(), this);
         mBinding.questionsPaletListRecyclerView.setHasFixedSize(true);
         mBinding.questionsPaletListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mBinding.questionsPaletListRecyclerView.setAdapter(questionPaletAdapter);
@@ -481,12 +485,11 @@ public class StartTestActivity extends AppCompatActivity implements QuestionPale
     }*/
 
 
-
-    private List<TestQuestion> sortQuestListByFilter(List<TestQuestion> questions, String questFilterType) {
+    private List<TestQuestion> sortQuestListByFilter(List<TestQuestionNew> questions, String questFilterType) {
         List<TestQuestion> questFilterList = new ArrayList<>();
-        for (TestQuestion question : questions) {
+        for (TestQuestionNew question : questions) {
 
-            if (questFilterType.equals(QuestionFilterType.ATTEMPTED.toString()) && question.isAttempted()) {
+           /* if (questFilterType.equals(QuestionFilterType.ATTEMPTED.toString()) && question.isAttempted()) {
                 questFilterList.add(question);
             }
             if (questFilterType.equals(QuestionFilterType.UNATTEMPTED.toString())
@@ -502,10 +505,29 @@ public class StartTestActivity extends AppCompatActivity implements QuestionPale
             }
             if (questFilterType.equals(QuestionFilterType.ALL.toString())) {
                 questFilterList = questions;
-            }
+            }*/
         }
 
         return questFilterList;
+    }
+
+    private void fetchTestQA() {
+        ProgressDialog.getInstance().show(this);
+        Call<StartResumeTestResponse> call = apiService.fetchTestQuestionAnswers(1002, 1);
+        call.enqueue(new Callback<StartResumeTestResponse>() {
+            @Override
+            public void onResponse(Call<StartResumeTestResponse> call, Response<StartResumeTestResponse> response) {
+                ProgressDialog.getInstance().dismiss();
+                Log.d(TAG, "onResponse List : " + response.body().getTestQuestionNewList());
+                mViewModel.setTestQuestAnsList(response.body().getTestQuestionNewList());
+            }
+
+            @Override
+            public void onFailure(Call<StartResumeTestResponse> call, Throwable t) {
+                ProgressDialog.getInstance().dismiss();
+                t.printStackTrace();
+            }
+        });
     }
 
 

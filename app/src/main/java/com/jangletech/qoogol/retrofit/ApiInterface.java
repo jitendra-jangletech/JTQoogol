@@ -17,8 +17,10 @@ import com.jangletech.qoogol.model.InstituteResponse;
 import com.jangletech.qoogol.model.LearningQuestResponse;
 import com.jangletech.qoogol.model.MobileOtp;
 import com.jangletech.qoogol.model.SignInModel;
+import com.jangletech.qoogol.model.StartResumeTestResponse;
 import com.jangletech.qoogol.model.StateResponse;
-import com.jangletech.qoogol.model.TestingQuestionNew;
+import com.jangletech.qoogol.model.TestDetailsResponse;
+import com.jangletech.qoogol.model.TestListResponse;
 import com.jangletech.qoogol.model.UniversityResponse;
 import com.jangletech.qoogol.model.UserSelectedExams;
 import com.jangletech.qoogol.model.signup.SignUpResponseDto;
@@ -106,10 +108,18 @@ public interface ApiInterface {
     Call<CommonResponseObject> saveUserSelectedExams(@Query("userId") int userId,
                                                      @Body List<Exams> selectedExamsList);
     @FormUrlEncoded
-    @POST("q031StartResumeTest")
-    Call<TestingQuestionNew> fetchTestQuestionAnswers(@Field(Constant.u_user_id) int userId,
-                                                      @Field(Constant.tt_id) int testTakenId,
-                                                      @Field(Constant.tt_tm_id) int testTakentmId);
+    @POST("q152fetchtest")
+    Call<TestListResponse> fetchTestList(@Field(Constant.u_user_id) int userId);
+
+    @FormUrlEncoded
+    @POST("q132FetchTestDetails")
+    Call<TestDetailsResponse> fetchTestDetails(@Field(Constant.u_user_id) int userId,
+                                               @Field(Constant.tm_id) int tmId);
+
+    @FormUrlEncoded
+    @POST("q131StartResumeTest")
+    Call<StartResumeTestResponse> fetchTestQuestionAnswers(@Field(Constant.u_user_id) int userId,
+                                                           @Field(Constant.tm_id) int testMasterId);
 
     @POST(Constant.FETCH_QA)
     Call<LearningQuestResponse> fetchQAApi(@QueryMap Map<String, Object> request);

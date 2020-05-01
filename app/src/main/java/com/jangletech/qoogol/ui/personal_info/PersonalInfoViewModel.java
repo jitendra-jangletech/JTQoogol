@@ -31,7 +31,6 @@ public class PersonalInfoViewModel extends AndroidViewModel {
         citylist = new MutableLiveData<>();
     }
 
-
     public void setCountryList(List<Country> countryList) {
         countrylist.setValue(countryList);
     }

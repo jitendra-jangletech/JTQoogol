@@ -30,10 +30,10 @@ public class DynamicViewPagerActivity extends AppCompatActivity {
 
     }
 
-    private ViewPagerAdapterNew createCardAdapter() {
+   /* private ViewPagerAdapterNew createCardAdapter() {
         ViewPagerAdapterNew adapter = new ViewPagerAdapterNew(this);
         return adapter;
-    }
+    }*/
 /*
     private List<TestQuestion> setQuestionList() {
 

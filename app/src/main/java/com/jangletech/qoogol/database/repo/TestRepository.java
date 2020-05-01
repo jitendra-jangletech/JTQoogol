@@ -1,13 +1,10 @@
 package com.jangletech.qoogol.database.repo;
 
 import android.app.Application;
-
 import androidx.lifecycle.LiveData;
-
 import com.jangletech.qoogol.database.QoogolDatabase;
 import com.jangletech.qoogol.database.dao.TestDao;
 import com.jangletech.qoogol.model.TestModel;
-
 import java.util.List;
 
 public class TestRepository {

@@ -206,6 +206,11 @@
                                 android:hint="@string/state" />
 
                             <com.jangletech.qoogol.view.CustomAutoCompleteTextView
+                                android:id="@+id/cityAutocompleteView"
+                                style="@style/AutoCompleteTextViewStyle"
+                                android:hint="@string/city" />
+
+                            <com.jangletech.qoogol.view.CustomAutoCompleteTextView
                                 android:id="@+id/universityBoardAutocompleteView"
                                 style="@style/AutoCompleteTextViewStyle"
                                 android:hint="@string/university" />

@@ -27,6 +27,7 @@
                     android:background="@color/icon_color">
 
                     <TextView
+                        android:textAppearance="@style/TextAppearance.AppCompat.Small"
                         android:padding="@dimen/_5sdp"
                         android:id="@+id/tvTestNameSubject"
                         android:layout_width="wrap_content"
@@ -34,9 +35,8 @@
                         android:layout_alignParentLeft="true"
                         android:layout_centerInParent="true"
                         android:layout_margin="@dimen/_5sdp"
-                        android:text="Shapes and Angles(Maths)"
+                        android:text="Test Name(Subject)"
                         android:textColor="@color/colorWhite"
-                        android:textSize="@dimen/_12ssp"
                         android:textStyle="bold" />
 
                     <LinearLayout
@@ -130,10 +130,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="100"
-                        android:textColor="@color/colorBlack"
-                        android:textStyle="bold" />
-
+                        android:text=""
+                        android:textColor="@color/colorBlack" />
 
                     <TextView
                         android:id="@+id/tvDuration"
@@ -141,9 +139,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="40 min."
-                        android:textColor="@color/colorBlack"
-                        android:textStyle="bold" />
+                        android:text=""
+                        android:textColor="@color/colorBlack" />
 
                     <TextView
                         android:id="@+id/tvTotalMarks"
@@ -151,9 +148,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="60"
-                        android:textColor="@color/colorBlack"
-                        android:textStyle="bold" />
+                        android:text=""
+                        android:textColor="@color/colorBlack" />
 
 
                 </LinearLayout>
@@ -216,9 +212,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="Easy"
-                        android:textColor="@color/colorBlack"
-                        android:textStyle="bold" />
+                        android:text=""
+                        android:textColor="@color/colorBlack" />
 
 
                     <TextView
@@ -227,9 +222,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="80/100"
-                        android:textColor="@color/colorBlack"
-                        android:textStyle="bold" />
+                        android:text=""
+                        android:textColor="@color/colorBlack" />
 
                     <TextView
                         android:id="@+id/tvAttendedBy"
@@ -237,9 +231,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="220"
-                        android:textColor="@color/colorBlack"
-                        android:textStyle="bold" />
+                        android:text=""
+                        android:textColor="@color/colorBlack"/>
 
                 </LinearLayout>
 
@@ -299,9 +292,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="Feb 2020"
-                        android:textColor="@color/colorBlack"
-                        android:textStyle="bold" />
+                        android:text=""
+                        android:textColor="@color/colorBlack" />
 
 
                     <TextView
@@ -310,9 +302,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="Mr.Sharan"
-                        android:textColor="@color/colorBlack"
-                        android:textStyle="bold" />
+                        android:text=""
+                        android:textColor="@color/colorBlack" />
 
                     <TextView
                         android:id="@+id/tvCategory"
@@ -320,9 +311,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="Unit-Test Final"
-                        android:textColor="@color/colorBlack"
-                        android:textStyle="bold" />
+                        android:text=""
+                        android:textColor="@color/colorBlack" />
 
 
                 </LinearLayout>
@@ -425,7 +415,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/_5sdp"
-                            android:text="55"
+                            android:text="0"
                             android:textAlignment="textStart"
                             android:textColor="@color/colorBlack"
                             app:layout_constraintBottom_toBottomOf="@+id/que_rating"
@@ -471,7 +461,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/_5sdp"
-                            android:text="5"
+                            android:text="0"
                             android:textAlignment="textStart"
                             android:textColor="@color/colorBlack"
                             app:layout_constraintBottom_toBottomOf="@+id/like"
@@ -503,7 +493,7 @@
                             android:id="@+id/comment_value"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="5"
+                            android:text="0"
                             android:layout_marginStart="@dimen/_5sdp"
                             android:textAlignment="textStart"
                             android:textColor="@color/colorBlack"
@@ -537,7 +527,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/_5sdp"
-                            android:text="5"
+                            android:text="0"
                             android:textAlignment="textStart"
                             android:textColor="@color/colorBlack"
                             app:layout_constraintBottom_toBottomOf="@+id/share"

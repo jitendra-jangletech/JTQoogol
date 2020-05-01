@@ -1,24 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+<layout>
 
-    <RelativeLayout
-        android:id="@+id/multiLineQuestionRootLayout"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorLightGray"
-        tools:context=".Test.TestFragment">
+        tools:context=".ui.TestQuestionFragment">
 
-        <ScrollView
-            android:layout_margin="@dimen/_5sdp"
-            android:layout_below="@+id/header_layout"
-            android:id="@+id/contentView"
+        <include
+            android:visibility="gone"
+            android:id="@+id/singleChoiceQuestion"
+            layout="@layout/single_choice_question"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fillViewport="true">
+            android:layout_height="match_parent"
+            android:layout_above="@+id/bottom_layout"
+            android:layout_below="@+id/header_layout"
+            android:layout_marginTop="@dimen/_40sdp" />
 
-       <!-- <RelativeLayout
+        <include
+            android:visibility="gone"
+            android:id="@+id/multiChoiceQuestion"
+            layout="@layout/multi_choice_question"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/bottom_layout"
+            android:layout_below="@+id/header_layout"
+            android:layout_marginTop="@dimen/_40sdp" />
+
+        <include
+            android:visibility="gone"
+            android:id="@+id/fillInTheBlanks"
+            layout="@layout/fill_in_the_blanks_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/bottom_layout"
+            android:layout_below="@+id/header_layout"
+            android:layout_marginTop="@dimen/_40sdp" />
+
+        <include
+            android:visibility="gone"
+            android:id="@+id/oneLineQuestionAns"
+            layout="@layout/fill_in_the_blanks_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/bottom_layout"
+            android:layout_below="@+id/header_layout"
+            android:layout_marginTop="@dimen/_40sdp" />
+
+        <include
+            android:visibility="gone"
+            android:id="@+id/shortAnswer"
+            layout="@layout/multi_line_quest_ans"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/bottom_layout"
+            android:layout_below="@+id/header_layout"
+            android:layout_marginTop="@dimen/_40sdp" />
+
+
+        <include
+            android:visibility="gone"
+            android:id="@+id/longAnswer"
+            layout="@layout/multi_line_quest_ans"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/bottom_layout"
+            android:layout_below="@+id/header_layout"
+            android:layout_marginTop="@dimen/_40sdp" />
+
+
+        <RelativeLayout
             android:id="@+id/header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -95,115 +147,23 @@
                     app:layout_constraintRight_toLeftOf="@+id/img_save"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                &lt;!&ndash;<ImageView
-                    android:id="@+id/img_save"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/_10sdp"
-                    android:src="@drawable/ic_star_border"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />&ndash;&gt;
-
                 <ToggleButton
                     android:id="@+id/img_save"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
                     android:layout_width="@dimen/_20sdp"
                     android:layout_height="@dimen/_20sdp"
                     android:background="@drawable/button_marked"
                     android:checked="false"
                     android:text=""
                     android:textOff=""
-                    android:textOn="" />
+                    android:textOn=""
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+        </RelativeLayout>
 
-        </RelativeLayout>-->
-
-
-       <!-- <ScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_above="@+id/bottom_layout"
-        android:layout_below="@+id/header"
-        android:layout_marginBottom="@dimen/_40sdp"
-        android:background="@color/colorWhite"
-        android:fillViewport="true">-->
-
-        <LinearLayout
-            android:id="@+id/QuestLinearLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/colorWhite"
-                app:cardMaxElevation="@dimen/_40sdp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/_10sdp"
-                    android:background="@color/colorWhite"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/tvQuestion"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="@dimen/_10sdp"
-                        android:text="@string/question"
-                        android:textColor="@color/colorBlack"
-                        android:textSize="@dimen/_12ssp" />
-
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <LinearLayout
-                android:layout_marginBottom="@dimen/_50sdp"
-                android:id="@+id/single_choice_quest_root"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:background="@color/colorLightGray"
-                android:orientation="vertical"
-                android:padding="@dimen/_10sdp">
-
-                <EditText
-                    android:id="@+id/et_multi_line_answer"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/_4sdp"
-                    android:background="@color/colorWhite"
-                    android:drawableLeft="@drawable/bg_empty"
-                    android:gravity="top|left"
-                    android:hint="Type Your Answer Here"
-                    android:inputType="textMultiLine|textNoSuggestions|text"
-                    android:lines="8"
-                    android:maxLines="10"
-                    android:scrollbars="vertical"
-                    android:textColor="@color/colorSkyBlue"
-                    android:textColorHint="@color/colorSkyBlue" />
-
-                <TextView
-                    android:id="@+id/tvCharCounter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/_5sdp"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:text="Words Remaining : 0/200"
-                    android:textColor="@color/colorSkyBlue"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-   <!-- </ScrollView>-->
-
-        <!--<androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/bottomLayout"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_36sdp"
@@ -213,7 +173,7 @@
             android:padding="@dimen/_2sdp">
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btnMarkNext"
+                android:id="@+id/btnPrevious"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="@dimen/_5sdp"
@@ -225,7 +185,7 @@
                 app:layout_constraintStart_toStartOf="@+id/bottomLayout" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btnClearResponse"
+                android:id="@+id/btnReset"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_centerInParent="true"
@@ -241,7 +201,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btnSaveNext"
+                android:id="@+id/btnNext"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginRight="@dimen/_5sdp"
@@ -251,7 +211,9 @@
                 android:textAllCaps="false"
                 android:textColor="@color/colorWhite"
                 app:layout_constraintEnd_toEndOf="@+id/bottomLayout" />
-        </androidx.constraintlayout.widget.ConstraintLayout>-->
-        </ScrollView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
     </RelativeLayout>
 </layout>
+
+

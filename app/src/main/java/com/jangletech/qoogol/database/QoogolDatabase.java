@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {LearningQuestions.class, TestModel.class, TestQuestion.class},version = 1)
+@Database(entities = {LearningQuestions.class, TestModel.class, TestQuestion.class},version = 1,exportSchema = false)
 @TypeConverters(Converters.class)
 public abstract  class QoogolDatabase extends RoomDatabase {
 
@@ -68,7 +68,7 @@ public abstract  class QoogolDatabase extends RoomDatabase {
                 TestDao dao = INSTANCE.testDao();
                 TestQuestionDao testQuestionDao = INSTANCE.testQuestionDao();
 
-                List<TestModel> list  = setMyTestList();
+                /*List<TestModel> list  = setMyTestList();
                 for (int i = 0; i <list.size() ; i++) {
                     dao.insert(list.get(i));
                 }
@@ -76,52 +76,52 @@ public abstract  class QoogolDatabase extends RoomDatabase {
                 List<TestQuestion> testQList  = setQuestionList();
                 for (int i = 0; i <testQList.size() ; i++) {
                     testQuestionDao.insert(testQList.get(i));
-                }
+                }*/
             });
         }
     };
 
-    public static List<TestModel> setMyTestList() {
+   /* public static List<TestModel> setMyTestList() {
         List<TestModel> testList = new ArrayList<>();
 
-//        TestModel testModel = new TestModel(0,"Shapes and Angles", "Mathematics", "40",
-//                "30", "Hard", "88/100", "219", "Jan 2020", "2093",
-//                true, true, "Mr. Sharan",
-//                "Phd. Mathematics", "Unit Test-Final", "4.3",
-//                "100", true, 1, false);
-//
-//        TestModel testModel1 = new TestModel(1,"Reading Comprehension", "English", "120",
-//                "40", "Easy", "53/100", "102", "Mar 2019", "1633",
-//                false, true,
-//                "Mr. Goswami", "Phd. English", "Unit Test-Final", "2.7",
-//                "60", false, 9, false);
-//
-//        TestModel testModel2 = new TestModel(2,"When the Earth Shook!", "Physics", "40",
-//                "60", "Medium", "12/100", "10", "Jul 2019", "8353",
-//                true, false, "Mr. Narayan", "Phd. Physics",
-//                "Unit Test-Final", "2", "30", false, 0, false);
-//
-//        TestModel testModel3 = new TestModel(3,"Shapes and Angles", "Mathematics", "40",
-//                "30", "Hard", "88/100", "219", "Jan 2020", "2093",
-//                true, true, "Mr. Sharan", "Phd. Mathematics",
-//                "Unit Test-Final", "4.3", "100", false, 25, false);
-//
-//        TestModel testModel4 = new TestModel(4,"Reading Comprehension", "English", "120",
-//                "40", "Easy", "53/100", "102", "Mar 2019", "1633",
-//                false, true, "Mr. Goswami", "Phd. English",
-//                "Unit Test-Final", "2.7", "60", true, 3, false);
-//
-//        TestModel testModel5 = new TestModel(5,"When the Earth Shook!", "Evs", "40",
-//                "60", "Medium", "12/100", "10", "Jul 2019", "8353",
-//                true, false, "Mr. Narayan", "Phd. Evs",
-//                "Unit Test-Final", "2", "30", true, 4, true);
-//
-//        testList.add(testModel);
-//        testList.add(testModel1);
-//        testList.add(testModel2);
-//        testList.add(testModel3);
-//        testList.add(testModel4);
-//        testList.add(testModel5);
+        TestModel testModel = new TestModel(0,"Shapes and Angles", "Mathematics", "40",
+                "30", "Hard", "88/100", "219", "Jan 2020", "2093",
+                true, true, "Mr. Sharan",
+                "Phd. Mathematics", "Unit Test-Final", "4.3",
+                "100", true, 1, false);
+
+        TestModel testModel1 = new TestModel(1,"Reading Comprehension", "English", "120",
+                "40", "Easy", "53/100", "102", "Mar 2019", "1633",
+                false, true,
+                "Mr. Goswami", "Phd. English", "Unit Test-Final", "2.7",
+                "60", false, 9, false);
+
+        TestModel testModel2 = new TestModel(2,"When the Earth Shook!", "Physics", "40",
+                "60", "Medium", "12/100", "10", "Jul 2019", "8353",
+                true, false, "Mr. Narayan", "Phd. Physics",
+                "Unit Test-Final", "2", "30", false, 0, false);
+
+        TestModel testModel3 = new TestModel(3,"Shapes and Angles", "Mathematics", "40",
+                "30", "Hard", "88/100", "219", "Jan 2020", "2093",
+                true, true, "Mr. Sharan", "Phd. Mathematics",
+                "Unit Test-Final", "4.3", "100", false, 25, false);
+
+        TestModel testModel4 = new TestModel(4,"Reading Comprehension", "English", "120",
+                "40", "Easy", "53/100", "102", "Mar 2019", "1633",
+                false, true, "Mr. Goswami", "Phd. English",
+                "Unit Test-Final", "2.7", "60", true, 3, false);
+
+        TestModel testModel5 = new TestModel(5,"When the Earth Shook!", "Evs", "40",
+                "60", "Medium", "12/100", "10", "Jul 2019", "8353",
+                true, false, "Mr. Narayan", "Phd. Evs",
+                "Unit Test-Final", "2", "30", true, 4, true);
+
+        testList.add(testModel);
+        testList.add(testModel1);
+        testList.add(testModel2);
+        testList.add(testModel3);
+        testList.add(testModel4);
+        testList.add(testModel5);
 
         return testList;
     }
@@ -169,7 +169,7 @@ public abstract  class QoogolDatabase extends RoomDatabase {
         testQuestionList.add(testQuestion6);
         testQuestionList.add(testQuestion7);
         return testQuestionList;
-    }
+    }*/
 
 
 }

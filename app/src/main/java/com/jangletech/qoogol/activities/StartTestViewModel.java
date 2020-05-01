@@ -5,28 +5,28 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
-import com.jangletech.qoogol.database.repo.TestQuestionRepository;
-import com.jangletech.qoogol.model.TestQuestion;
+import com.jangletech.qoogol.model.TestQuestionNew;
 
 import java.util.List;
 
 public class StartTestViewModel extends AndroidViewModel {
 
-    private TestQuestionRepository mRepository;
-    private LiveData<List<TestQuestion>> mAllQuestions;
+    public MutableLiveData<List<TestQuestionNew>> getTestQuestAnsList() {
+        return testQuestAnsList;
+    }
+
+    public void setTestQuestAnsList(List<TestQuestionNew> testQuestAnsList) {
+        this.testQuestAnsList.setValue(testQuestAnsList);
+    }
+
+    //private TestQuestionRepository mRepository;
+    private MutableLiveData<List<TestQuestionNew>> testQuestAnsList;
 
     public StartTestViewModel(@NonNull Application application) {
         super(application);
-        mRepository = new TestQuestionRepository(application);
-        mAllQuestions = mRepository.getAllTestQuestions();
-    }
-
-    LiveData<List<TestQuestion>> getAllQuestions() {
-        return mAllQuestions;
-    }
-
-    public void insert(TestQuestion testQuestion) {
-        mRepository.insert(testQuestion);
+        //mRepository = new TestQuestionRepository(application);
+        testQuestAnsList = new MutableLiveData<>();
     }
 }

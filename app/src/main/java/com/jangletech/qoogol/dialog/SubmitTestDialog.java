@@ -35,7 +35,7 @@ public class SubmitTestDialog extends Dialog {
         mBinding = DataBindingUtil.inflate(LayoutInflater.from(getContext()), R.layout.dialog_submit_test, null, false);
         setContentView(mBinding.getRoot());
         startTimer(milliLeft);
-        setData();
+        //setData();
 
         mBinding.tvYes.setOnClickListener(v->{
             submitDialogClickListener.onYesClick();
@@ -65,7 +65,7 @@ public class SubmitTestDialog extends Dialog {
         }.start();
     }
 
-    private void setData(){
+    /*private void setData(){
         if(StartTestActivity.testQuestionList!=null){
             int totalQuestCount = StartTestActivity.testQuestionList.size();
             int attemptedCount = 0;
@@ -84,7 +84,7 @@ public class SubmitTestDialog extends Dialog {
             mBinding.tvUnAttemptedCount.setText(String.valueOf(unattemptedQuestCount));
             mBinding.tvMarkedCount.setText(String.valueOf(markedQuestCount));
         }
-    }
+    }*/
 
     public interface SubmitDialogClickListener{
         void onYesClick();

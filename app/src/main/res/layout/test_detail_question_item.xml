@@ -48,6 +48,7 @@
             </LinearLayout>
 
             <TextView
+                android:visibility="gone"
                 android:id="@+id/tvQuestInfo"
                 android:textStyle="bold"
                 android:textColor="@color/icon_color"
