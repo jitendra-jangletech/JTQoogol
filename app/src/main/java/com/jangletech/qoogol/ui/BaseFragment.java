@@ -1,5 +1,6 @@
 package com.jangletech.qoogol.ui;
 
+import android.provider.Settings;
 import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -11,6 +12,8 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.FragmentClassBinding;
 import com.jangletech.qoogol.ui.syllabus.ClassFragment;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class BaseFragment extends Fragment {
 
@@ -48,5 +51,10 @@ public class BaseFragment extends Fragment {
 
     public void showToast(String msg) {
         Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
+    }
+
+    //To Device get Android Id
+    public static String getDeviceId(){
+        return Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
     }
 }

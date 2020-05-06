@@ -170,7 +170,7 @@
                 android:layout_marginTop="@dimen/_5sdp"
                 android:background="@color/colorLightGray"
                 android:orientation="vertical"
-                android:padding="@dimen/_10sdp">
+                android:padding="@dimen/_5sdp">
 
                 <EditText
                     android:id="@+id/et_multi_line_answer"

@@ -3,6 +3,7 @@ package com.jangletech.qoogol.ui.test.my_test;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -28,7 +29,8 @@ import com.jangletech.qoogol.activities.StartTestActivity;
 import com.jangletech.qoogol.adapter.TestListAdapter;
 import com.jangletech.qoogol.databinding.FragmentTestMyBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
-import com.jangletech.qoogol.model.StartResumeTestResponse;
+import com.jangletech.qoogol.model.FetchSubjectResponse;
+import com.jangletech.qoogol.model.FetchSubjectResponseList;
 import com.jangletech.qoogol.model.TestListResponse;
 import com.jangletech.qoogol.model.TestModelNew;
 import com.jangletech.qoogol.retrofit.ApiClient;
@@ -43,6 +45,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.facebook.FacebookSdk.getApplicationContext;
+
 public class MyTestFragment extends BaseFragment implements TestListAdapter.TestClickListener, SearchView.OnQueryTextListener {
 
     private static final String TAG = "MyTestFragment";
@@ -50,7 +54,6 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
     private FragmentTestMyBinding mBinding;
     private TestListAdapter testAdapter;
     private List<TestModelNew> testList;
-    public static String testName = "";
     ApiInterface apiService = ApiClient.getInstance().getApi();
 
     public static MyTestFragment newInstance() {
@@ -61,6 +64,7 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        Log.d(TAG, "Android Id : "+getDeviceId());
     }
 
     @Override
@@ -120,7 +124,15 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
             }
         });
 
-        prepareSubjectChips();
+        fetchSubjectList();
+        mViewModel.getAllSubjects().observe(getActivity(), new Observer<List<FetchSubjectResponse>>() {
+            @Override
+            public void onChanged(@Nullable final List<FetchSubjectResponse> subjects) {
+                Log.d(TAG, "onChanged Subjects Size : " + subjects.size());
+                prepareSubjectChips(subjects);
+            }
+        });
+
         mBinding.subjectsChipGrp.setOnCheckedChangeListener((chipGroup, id) -> {
             Chip chip = ((Chip) chipGroup.getChildAt(chipGroup.getCheckedChipId()));
             if (chip != null) {
@@ -214,8 +226,8 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
         mBinding.testListRecyclerView.setAdapter(testAdapter);
     }
 
-    private void prepareSubjectChips() {
-        List subjectList = new ArrayList();
+    private void prepareSubjectChips(List<FetchSubjectResponse> subjectResponseList) {
+       /* List subjectList = new ArrayList();
         subjectList.add("All");
         subjectList.add("Physics");
         subjectList.add("Science");
@@ -224,12 +236,12 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
         subjectList.add("English");
         subjectList.add("Networking");
         subjectList.add("DBMS");
-        subjectList.add("Engineering Drawing");
+        subjectList.add("Engineering Drawing");*/
 
         mBinding.subjectsChipGrp.removeAllViews();
-        for (int i = 0; i < subjectList.size(); i++) {
+        for (int i = 0; i < subjectResponseList.size(); i++) {
             Chip chip = (Chip) LayoutInflater.from(mBinding.subjectsChipGrp.getContext()).inflate(R.layout.chip_layout, mBinding.subjectsChipGrp, false);
-            chip.setText(subjectList.get(i).toString());
+            chip.setText(subjectResponseList.get(i).getSm_sub_name());
             chip.setTag("Subjects");
             chip.setId(i);
             if (i == 0) {
@@ -326,7 +338,7 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
         List<TestModelNew> filteredModelList = new ArrayList<>();
         if (!subject.equalsIgnoreCase("All")) {
             for (TestModelNew model : models) {
-                String testSubject = model.getSubject();
+                String testSubject = model.getSm_sub_name();
                 if (testSubject.contains(subject)) {
                     filteredModelList.add(model);
                 }
@@ -335,6 +347,24 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
             filteredModelList = models;
         }
         return filteredModelList;
+    }
+
+    private void fetchSubjectList() {
+        ProgressDialog.getInstance().show(getActivity());
+        Call<FetchSubjectResponseList> call = apiService.fetchSubjectList(1002);//todo change userId
+        call.enqueue(new Callback<FetchSubjectResponseList>() {
+            @Override
+            public void onResponse(Call<FetchSubjectResponseList> call, Response<FetchSubjectResponseList> response) {
+                ProgressDialog.getInstance().dismiss();
+                mViewModel.setAllSubjectList(response.body().getFetchSubjectResponseList());
+            }
+
+            @Override
+            public void onFailure(Call<FetchSubjectResponseList> call, Throwable t) {
+                ProgressDialog.getInstance().dismiss();
+                t.printStackTrace();
+            }
+        });
     }
 
     private void fetchTestList() {

@@ -40,17 +40,17 @@ public class PracticeTestQuestPaletAdapter extends RecyclerView.Adapter<Practice
     public void onBindViewHolder(@NonNull PracticeTestQuestPaletAdapter.PracticeQuestionViewHolder holder, int position) {
         PracticeQuestion practiceQuestion = questionList.get(position);
         int questNo = position + 1;
-        itemBinding.tvQuestNo.setText(String.valueOf(questNo));
+        holder.itemBinding.tvQuestNo.setText(String.valueOf(questNo));
 
         if(practiceQuestion.isContainsMath()){
-            itemBinding.tvQuestMath.setVisibility(View.VISIBLE);
-            itemBinding.tvQuestMath.setText(practiceQuestion.getQuestion());
-            itemBinding.tvQuest.setVisibility(View.GONE);
+            holder.itemBinding.tvQuestMath.setVisibility(View.VISIBLE);
+            holder.itemBinding.tvQuestMath.setText(practiceQuestion.getQuestion());
+            holder.itemBinding.tvQuest.setVisibility(View.GONE);
         }else{
-            itemBinding.tvQuest.setText(practiceQuestion.getQuestion());
+            holder.itemBinding.tvQuest.setText(practiceQuestion.getQuestion());
         }
 
-        itemBinding.questLayout.setOnClickListener(v->{
+        holder.itemBinding.questLayout.setOnClickListener(v->{
             questClickListener.onQuestionSelected(position);
         });
     }
@@ -61,9 +61,10 @@ public class PracticeTestQuestPaletAdapter extends RecyclerView.Adapter<Practice
     }
 
     public class PracticeQuestionViewHolder extends RecyclerView.ViewHolder {
-
+        ItemQuestPracticeBinding itemBinding;
         public PracticeQuestionViewHolder(@NonNull ItemQuestPracticeBinding itemView) {
             super(itemView.getRoot());
+            this.itemBinding = itemView;
         }
     }
 

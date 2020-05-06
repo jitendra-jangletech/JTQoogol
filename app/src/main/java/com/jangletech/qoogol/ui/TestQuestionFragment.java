@@ -139,11 +139,18 @@ public class TestQuestionFragment extends BaseFragment implements QueViewClick, 
         if (questionNew.getQ_type().equals(Constant.SCQ)) {
             testQuestionFragmentBinding.singleChoiceQuestion.singleChoiceQuestRootLayout.setVisibility(View.VISIBLE);
             testQuestionFragmentBinding.singleChoiceQuestion.tvQuestion.setText(questionNew.getQ_quest());
+
+            testQuestionFragmentBinding.singleChoiceQuestion.ans1.setText(questionNew.getQ_mcq_op_1());
+            testQuestionFragmentBinding.singleChoiceQuestion.ans2.setText(questionNew.getQ_mcq_op_2());
+            testQuestionFragmentBinding.singleChoiceQuestion.ans3.setText(questionNew.getQ_mcq_op_3());
+            testQuestionFragmentBinding.singleChoiceQuestion.ans4.setText(questionNew.getQ_mcq_op_4());
+            testQuestionFragmentBinding.singleChoiceQuestion.ans5.setText(questionNew.getQ_mcq_op_5());
+
             setTimer(testQuestionFragmentBinding.tvQuestTimer, 0, 0);
         }
 
         if (questionNew.getQ_type().equals(Constant.SHORT_ANSWER)) {
-            testQuestionFragmentBinding.shortAnswer.multiLineQuestionRootLayout.setVisibility(View.VISIBLE);
+            testQuestionFragmentBinding.shortAnswer.shortAnswerRootLayout.setVisibility(View.VISIBLE);
             testQuestionFragmentBinding.shortAnswer.tvQuestion.setText(questionNew.getQ_quest());
             setTimer(testQuestionFragmentBinding.tvQuestTimer, 0, 0);
             testQuestionFragmentBinding.shortAnswer.etMultiLineAnswer.setKeyListener(DigitsKeyListener
@@ -165,11 +172,18 @@ public class TestQuestionFragment extends BaseFragment implements QueViewClick, 
         if (questionNew.getQ_type().equals(Constant.MCQ)) {
             testQuestionFragmentBinding.multiChoiceQuestion.multiChoiceRootLayout.setVisibility(View.VISIBLE);
             testQuestionFragmentBinding.multiChoiceQuestion.tvQuestion.setText(questionNew.getQ_quest());
+
+            testQuestionFragmentBinding.multiChoiceQuestion.ans1.setText(questionNew.getQ_mcq_op_1());
+            testQuestionFragmentBinding.multiChoiceQuestion.ans2.setText(questionNew.getQ_mcq_op_2());
+            testQuestionFragmentBinding.multiChoiceQuestion.ans3.setText(questionNew.getQ_mcq_op_3());
+            testQuestionFragmentBinding.multiChoiceQuestion.ans4.setText(questionNew.getQ_mcq_op_4());
+            testQuestionFragmentBinding.multiChoiceQuestion.ans5.setText(questionNew.getQ_mcq_op_5());
+
             setTimer(testQuestionFragmentBinding.tvQuestTimer, 0, 0);
         }
 
         if (questionNew.getQ_type().equals(Constant.ONE_LINE_ANSWER)) {
-            testQuestionFragmentBinding.oneLineQuestionAns.fillInTheBlanksRootLayout.setVisibility(View.VISIBLE);
+            testQuestionFragmentBinding.oneLineQuestionAns.oneLineAnsRootLayout.setVisibility(View.VISIBLE);
             testQuestionFragmentBinding.oneLineQuestionAns.tvQuestion.setText(questionNew.getQ_quest());
             setTimer(testQuestionFragmentBinding.tvQuestTimer, 0, 0);
             testQuestionFragmentBinding.oneLineQuestionAns.etAnswer.setKeyListener(DigitsKeyListener
@@ -203,14 +217,17 @@ public class TestQuestionFragment extends BaseFragment implements QueViewClick, 
         });
 
         testQuestionFragmentBinding.btnNext.setOnClickListener(v -> {
+            testQuestions.get(position).setTtqa_visited(true);
             StartTestActivity.viewPager.setCurrentItem(position + 1, true);
         });
 
         testQuestionFragmentBinding.btnPrevious.setOnClickListener(v -> {
+            testQuestions.get(position).setTtqa_visited(true);
             StartTestActivity.viewPager.setCurrentItem(position - 1, true);
         });
 
         testQuestionFragmentBinding.btnReset.setOnClickListener(v -> {
+            testQuestions.get(position).setTtqa_visited(true);
             resetAnswer();
         });
 
@@ -223,6 +240,90 @@ public class TestQuestionFragment extends BaseFragment implements QueViewClick, 
                 showToast("UnChecked");
                 testQuestions.get(position).setTtqa_marked(false);
                 testQuestions.get(position).setTtqa_visited(true);
+            }
+        });
+
+        //Single Choice Chip Selection
+        testQuestionFragmentBinding.singleChoiceQuestion.ans1.setOnClickListener(v -> {
+            attemptedOrNot(testQuestionFragmentBinding.singleChoiceQuestion.singleChoiceAnswerGrp);
+            if (testQuestionFragmentBinding.singleChoiceQuestion.ans1.isChecked()) {
+                testQuestions.get(position).setTtqa_mcq_ans_1(true);
+            } else {
+                testQuestions.get(position).setTtqa_mcq_ans_1(false);
+            }
+        });
+        testQuestionFragmentBinding.singleChoiceQuestion.ans2.setOnClickListener(v -> {
+            attemptedOrNot(testQuestionFragmentBinding.singleChoiceQuestion.singleChoiceAnswerGrp);
+            if (testQuestionFragmentBinding.singleChoiceQuestion.ans2.isChecked()) {
+                testQuestions.get(position).setTtqa_mcq_ans_2(true);
+            } else {
+                testQuestions.get(position).setTtqa_mcq_ans_2(false);
+            }
+        });
+        testQuestionFragmentBinding.singleChoiceQuestion.ans3.setOnClickListener(v -> {
+            attemptedOrNot(testQuestionFragmentBinding.singleChoiceQuestion.singleChoiceAnswerGrp);
+            if (testQuestionFragmentBinding.singleChoiceQuestion.ans3.isChecked()) {
+                testQuestions.get(position).setTtqa_mcq_ans_3(true);
+            } else {
+                testQuestions.get(position).setTtqa_mcq_ans_3(false);
+            }
+        });
+        testQuestionFragmentBinding.singleChoiceQuestion.ans4.setOnClickListener(v -> {
+            attemptedOrNot(testQuestionFragmentBinding.singleChoiceQuestion.singleChoiceAnswerGrp);
+            if (testQuestionFragmentBinding.singleChoiceQuestion.ans4.isChecked()) {
+                testQuestions.get(position).setTtqa_mcq_ans_4(true);
+            } else {
+                testQuestions.get(position).setTtqa_mcq_ans_4(false);
+            }
+        });
+        testQuestionFragmentBinding.singleChoiceQuestion.ans5.setOnClickListener(v -> {
+            attemptedOrNot(testQuestionFragmentBinding.singleChoiceQuestion.singleChoiceAnswerGrp);
+            if (testQuestionFragmentBinding.singleChoiceQuestion.ans5.isChecked()) {
+                testQuestions.get(position).setTtqa_mcq_ans_5(true);
+            } else {
+                testQuestions.get(position).setTtqa_mcq_ans_5(false);
+            }
+        });
+
+        //Multiple Choice Chip selection
+        testQuestionFragmentBinding.multiChoiceQuestion.ans1.setOnClickListener(v -> {
+            attemptedOrNot(testQuestionFragmentBinding.multiChoiceQuestion.multiChoiceAnswerGrp);
+            if (testQuestionFragmentBinding.multiChoiceQuestion.ans1.isChecked()) {
+                testQuestions.get(position).setTtqa_mcq_ans_1(true);
+            } else {
+                testQuestions.get(position).setTtqa_mcq_ans_1(false);
+            }
+        });
+        testQuestionFragmentBinding.multiChoiceQuestion.ans2.setOnClickListener(v -> {
+            attemptedOrNot(testQuestionFragmentBinding.multiChoiceQuestion.multiChoiceAnswerGrp);
+            if (testQuestionFragmentBinding.multiChoiceQuestion.ans2.isChecked()) {
+                testQuestions.get(position).setTtqa_mcq_ans_2(true);
+            } else {
+                testQuestions.get(position).setTtqa_mcq_ans_2(false);
+            }
+        });
+        testQuestionFragmentBinding.multiChoiceQuestion.ans3.setOnClickListener(v -> {
+            attemptedOrNot(testQuestionFragmentBinding.multiChoiceQuestion.multiChoiceAnswerGrp);
+            if (testQuestionFragmentBinding.multiChoiceQuestion.ans3.isChecked()) {
+                testQuestions.get(position).setTtqa_mcq_ans_3(true);
+            } else {
+                testQuestions.get(position).setTtqa_mcq_ans_3(false);
+            }
+        });
+        testQuestionFragmentBinding.multiChoiceQuestion.ans4.setOnClickListener(v -> {
+            attemptedOrNot(testQuestionFragmentBinding.multiChoiceQuestion.multiChoiceAnswerGrp);
+            if (testQuestionFragmentBinding.multiChoiceQuestion.ans4.isChecked()) {
+                testQuestions.get(position).setTtqa_mcq_ans_4(true);
+            } else {
+                testQuestions.get(position).setTtqa_mcq_ans_4(false);
+            }
+        });
+        testQuestionFragmentBinding.multiChoiceQuestion.ans5.setOnClickListener(v -> {
+            attemptedOrNot(testQuestionFragmentBinding.multiChoiceQuestion.multiChoiceAnswerGrp);
+            if (testQuestionFragmentBinding.multiChoiceQuestion.ans5.isChecked()) {
+                testQuestions.get(position).setTtqa_mcq_ans_5(true);
+            } else {
+                testQuestions.get(position).setTtqa_mcq_ans_5(false);
             }
         });
     }
@@ -680,7 +781,6 @@ public class TestQuestionFragment extends BaseFragment implements QueViewClick, 
                 if (wordCount > maxWordLength) {
                     etAnswer.setFilters(new InputFilter[]{new InputFilter.LengthFilter(s.length())});
                 }
-
                 tvCounter.setText("Words Remaining : " + (maxWordLength - wordCount + "/" + String.valueOf(maxWordLength)));
             }
         });

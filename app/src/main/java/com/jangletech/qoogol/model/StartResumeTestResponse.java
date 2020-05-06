@@ -70,8 +70,8 @@ public class StartResumeTestResponse {
     @SerializedName(Constant.cm_chapter_name)
     private String cm_chapter_name;
 
-    @SerializedName(Constant.subject)
-    private String subject;
+    @SerializedName(Constant.sm_sub_name)
+    private String sm_sub_name;
 
     @SerializedName("List1")
     private List<TestQuestionNew> testQuestionNewList;
@@ -247,12 +247,12 @@ public class StartResumeTestResponse {
         this.cm_chapter_name = cm_chapter_name;
     }
 
-    public String getSubject() {
-        return subject;
+    public String getSm_sub_name() {
+        return sm_sub_name;
     }
 
-    public void setSubject(String subject) {
-        this.subject = subject;
+    public void setSm_sub_name(String sm_sub_name) {
+        this.sm_sub_name = sm_sub_name;
     }
 
     public List<TestQuestionNew> getTestQuestionNewList() {

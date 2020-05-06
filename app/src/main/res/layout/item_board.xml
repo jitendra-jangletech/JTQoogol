@@ -4,6 +4,7 @@
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/rootLayout"
         android:layout_marginBottom="@dimen/_10sdp"
         android:background="@drawable/item_board_bg"
         android:gravity="center"
@@ -18,13 +19,14 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/_50sdp"
             android:layout_toRightOf="@+id/logo"
             android:layout_weight="1"
             android:orientation="vertical"
             android:padding="@dimen/_10sdp">
 
             <TextView
+                android:visibility="gone"
                 android:id="@+id/tvBoardName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -33,10 +35,10 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:ellipsize="end"
+                android:gravity="center"
                 android:id="@+id/tvBoard"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:text="Central Board of Secondary Education" />
 
         </LinearLayout>

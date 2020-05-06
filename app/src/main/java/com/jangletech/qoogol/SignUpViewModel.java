@@ -38,9 +38,9 @@ public class SignUpViewModel extends ViewModel {
     }
 
 
-    Map<Integer, String> mMapCountry;
+    public Map<Integer, String> mMapCountry;
     Map<Integer, String> mMapState;
-    Map<Integer, String> mMapUniversity;
+    public Map<Integer, String> mMapUniversity;
     Map<Integer, String> mMapInstitute;
     Map<Integer, String> mMapDegree;
     Map<Integer, String> mMapCourse;

@@ -5,30 +5,31 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.jangletech.qoogol.R;
-import com.jangletech.qoogol.model.BoardItem;
-
-import java.util.ArrayList;
+import com.jangletech.qoogol.model.University;
+import java.util.List;
 
 public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.BoardViewHolder> {
 
     private Context context;
-    private ArrayList<BoardItem> boardItems;
+    private List<University> boardItems;
     private int checkedPosition = 0;
+    BoardItemClickListener boardItemClickListener;
 
 
-    public BoardAdapter(Context context, ArrayList<BoardItem> boardItems) {
+    public BoardAdapter(Context context, List<University> boardItems,BoardItemClickListener boardItemClickListener) {
         this.context = context;
         this.boardItems = boardItems;
+        this.boardItemClickListener = boardItemClickListener;
     }
 
-    public void setBoardItems(ArrayList<BoardItem> boardItems) {
-        this.boardItems = new ArrayList<>();
+    public void setBoardItems(List<University> boardItems) {
         this.boardItems = boardItems;
         notifyDataSetChanged();
     }
@@ -55,15 +56,17 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.BoardViewHol
         private TextView tvBoardName;
         private TextView tvBoard;
         private ImageView imageView;
+        private RelativeLayout rootLayout;
 
         BoardViewHolder(@NonNull View itemView) {
             super(itemView);
             tvBoardName = itemView.findViewById(R.id.tvBoardName);
             tvBoard = itemView.findViewById(R.id.tvBoard);
             imageView = itemView.findViewById(R.id.imageView);
+            rootLayout = itemView.findViewById(R.id.rootLayout);
         }
 
-        void bind(final BoardItem boardItem) {
+        void bind(final University boardItem) {
             if (checkedPosition == -1) {
                 imageView.setVisibility(View.GONE);
             } else {
@@ -73,8 +76,12 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.BoardViewHol
                     imageView.setVisibility(View.GONE);
                 }
             }
-            tvBoardName.setText(boardItem.getBoardName());
-            tvBoard.setText(boardItem.getBoard());
+            //tvBoardName.setText(boardItem.getName());
+            tvBoard.setText(boardItem.getName());
+
+            rootLayout.setOnClickListener(v->{
+                boardItemClickListener.onBoardSelected(boardItems.get(getAdapterPosition()));
+            });
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -89,7 +96,11 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.BoardViewHol
         }
     }
 
-    public BoardItem getSelected() {
+    public interface BoardItemClickListener{
+        void onBoardSelected(University university);
+    }
+
+    public University getSelected() {
         if (checkedPosition != -1) {
             return boardItems.get(checkedPosition);
         }

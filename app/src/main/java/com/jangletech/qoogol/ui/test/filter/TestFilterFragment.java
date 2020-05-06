@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.androidbuts.multispinnerfilter.KeyPairBoolData;
@@ -19,20 +20,34 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.TestFilterFragmentBinding;
+import com.jangletech.qoogol.dialog.ProgressDialog;
+import com.jangletech.qoogol.model.FetchEducationsObject;
+import com.jangletech.qoogol.model.FetchSubjectResponse;
+import com.jangletech.qoogol.model.FetchSubjectResponseList;
+import com.jangletech.qoogol.model.TestModelNew;
+import com.jangletech.qoogol.retrofit.ApiClient;
+import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
+import com.jangletech.qoogol.ui.test.my_test.MyTestViewModel;
+import com.linkedin.platform.LISession;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class TestFilterFragment extends BaseFragment implements View.OnClickListener {
     private static final String TAG = "TestFilterFragment";
-    private TestFilterViewModel mViewModel;
+    private MyTestViewModel mViewModel;
     private TestFilterFragmentBinding mBinding;
     private HashMap<Integer, Chip> mapSubjectChips = new HashMap();
     private HashMap<Integer, Chip> mapChapterChips = new HashMap();
     private HashMap<Integer, Chip> mapRatingsChips = new HashMap();
+    ApiInterface apiService = ApiClient.getInstance().getApi();
 
     public static TestFilterFragment newInstance() {
         return new TestFilterFragment();
@@ -66,15 +81,39 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
                 mBinding.totalMarksLayout.setVisibility(View.VISIBLE);
             }
         }
+    }
 
+    private void fetchSubjectList() {
+        ProgressDialog.getInstance().show(getActivity());
+        Call<FetchSubjectResponseList> call = apiService.fetchSubjectList(1002);//todo change userId
+        call.enqueue(new Callback<FetchSubjectResponseList>() {
+            @Override
+            public void onResponse(Call<FetchSubjectResponseList> call, Response<FetchSubjectResponseList> response) {
+                ProgressDialog.getInstance().dismiss();
+                mViewModel.setAllSubjectList(response.body().getFetchSubjectResponseList());
+            }
+
+            @Override
+            public void onFailure(Call<FetchSubjectResponseList> call, Throwable t) {
+                ProgressDialog.getInstance().dismiss();
+                t.printStackTrace();
+            }
+        });
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(TestFilterViewModel.class);
+        mViewModel = ViewModelProviders.of(this).get(MyTestViewModel.class);
+        fetchSubjectList();
+        mViewModel.getAllSubjects().observe(getActivity(), new Observer<List<FetchSubjectResponse>>() {
+            @Override
+            public void onChanged(@Nullable final List<FetchSubjectResponse> subjects) {
+                Log.d(TAG, "onChanged Subjects Size : " + subjects.size());
+                prepareSubjectChips(subjects);
+            }
+        });
 
-        prepareSubjectChips();
         prepareChapterChips();
         prepareRatingChips();
         prepareTestCategoryChips();
@@ -228,8 +267,8 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
         }
     }
 
-    private void prepareSubjectChips() {
-        List subjectList = new ArrayList();
+    private void prepareSubjectChips(List<FetchSubjectResponse> subjects) {
+        /*List subjectList = new ArrayList();
         subjectList.add("All");
         subjectList.add("Physics");
         subjectList.add("Mathematics");
@@ -237,12 +276,12 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
         subjectList.add("English");
         subjectList.add("Networking");
         subjectList.add("DBMS");
-        subjectList.add("Engineering Drawing");
+        subjectList.add("Engineering Drawing");*/
 
         mBinding.subjectsChipGrp.removeAllViews();
-        for (int i = 0; i < subjectList.size(); i++) {
+        for (int i = 0; i < subjects.size(); i++) {
             Chip chip = (Chip) LayoutInflater.from(mBinding.subjectsChipGrp.getContext()).inflate(R.layout.chip_layout, mBinding.subjectsChipGrp, false);
-            chip.setText(subjectList.get(i).toString());
+            chip.setText(subjects.get(i).getSm_sub_name());
             chip.setTag("Subjects");
             chip.setId(i);
             if (i == 0)

@@ -14,6 +14,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.NotificationItemBinding;
 import com.jangletech.qoogol.model.Notification;
+import com.jangletech.qoogol.util.Constant;
 
 import java.util.List;
 
@@ -39,9 +40,10 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     @Override
     public void onBindViewHolder(@NonNull NotificationAdapter.ViewHolder holder, int position) {
         Notification notification = notifications.get(position);
-        holder.itemBinding.notificationText.setText(notification.getText());
+        holder.itemBinding.notificationText.setText(notification.getW_notification_desc());
+        holder.itemBinding.tvDate.setText(notification.getN_cdatetime());
         Glide.with(mContext)
-                .load(notification.getResId())
+                .load(getImageUrl(notification))
                 .apply(RequestOptions.circleCropTransform())
                 .into(holder.itemBinding.profilePic);
     }
@@ -57,5 +59,11 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             super(itemView.getRoot());
             this.itemBinding = itemView;
         }
+    }
+
+    public String getImageUrl(Notification notification){
+        String paddedString = Constant.PRODUCTION_BASE_FILE_API+"000000"+notification.getN_sent_by_u_id()+"/"
+                +notification.getW_user_profile_image_name();
+        return paddedString;
     }
 }

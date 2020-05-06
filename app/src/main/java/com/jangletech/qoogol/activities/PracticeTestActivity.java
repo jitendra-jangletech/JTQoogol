@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -16,7 +18,6 @@ import androidx.databinding.DataBindingUtil;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.viewpager2.widget.ViewPager2;
-
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.LearingAdapter;
 import com.jangletech.qoogol.adapter.PracticeTestAdapter;
@@ -37,13 +38,15 @@ public class PracticeTestActivity extends AppCompatActivity implements LearingAd
     PracticeTestAdapter practiceTestAdapter;
     LearingAdapter learingAdapter;
     List<LearningQuestions> learningQuestionsList;
-    private DrawerLayout drawerLayout;
+    //private DrawerLayout drawerLayout;
     private EndDrawerToggle endDrawerToggle;
-    private ActionBarDrawerToggle actionBarDrawerToggle;
+    //private ActionBarDrawerToggle actionBarDrawerToggle;
     private Toolbar toolbar;
     private ViewPager2 practiceViewPager;
     private PracticeTestQuestPaletAdapter adapter;
     private List<PracticeQuestion> questionList;
+//    private TextView tvTitle;
+//    private ImageView imgNavIcon;
     int currentPos = 0;
 
     @Override
@@ -51,11 +54,21 @@ public class PracticeTestActivity extends AppCompatActivity implements LearingAd
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_practice_test);
         toolbar = findViewById(R.id.toolbar);
+//        imgNavIcon = findViewById(R.id.imgNavIcon);
+//        tvTitle = findViewById(R.id.tvTitle);
         practiceViewPager = findViewById(R.id.practice_viewpager);
         setupNavigationDrawer();
         setTitle("Practice Test");
         setData();
         initView();
+
+//        imgNavIcon.setOnClickListener(v->{
+//            if(mBinding.drawerLayout.isDrawerOpen(GravityCompat.END)){
+//                mBinding.drawerLayout.closeDrawer(GravityCompat.END);
+//            }else{
+//                mBinding.drawerLayout.openDrawer(GravityCompat.END);
+//            }
+//        });
 
         mBinding.appBarTest.btnNext.setOnClickListener(v -> {
             currentPos = practiceViewPager.getCurrentItem();

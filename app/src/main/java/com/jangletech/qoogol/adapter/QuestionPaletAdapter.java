@@ -51,7 +51,6 @@ public class QuestionPaletAdapter extends RecyclerView.Adapter<QuestionPaletAdap
         this.questClickListener = questClickListener;
         this.strSortType = sortType;
         this.context = mContext;
-        //printList();
     }
 
     @NonNull

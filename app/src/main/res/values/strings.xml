@@ -126,6 +126,7 @@
     <string name="saved_questions">Saved Questions</string>
     <string name="test_filter">Test Filters</string>
     <string name="filters">Filters</string>
+    <string name="select_board">Board</string>
     <string name="trending_questions">Trending Questions</string>
     <string name="popular_questions">Popular Questions</string>
     <string name="recent_questions">Recent Questions</string>
@@ -226,19 +227,7 @@
     A pie chart with one or more slices offset is called a(n)_____________ple chart. \n
     A pie chart with one or more slices offset is called a(n)_____________ple chart. \n
     A pie chart with one or more slices offset is called a(n)_____________ple chart. \n
-    A pie chart with one or more slices offset is called a(n)_____________ple chart. \n
-    A pie chart with one or more slices offset is called a(n)_____________ple chart. \n
-    A pie chart with one or more slices offset is called a(n)_____________ple chart. \n
-    A pie chart with one or more slices offset is called a(n)_____________ple chart. \n
-    A pie chart with one or more slices offset is called a(n)_____________ple chart. \n
-    A pie chart with one or more slices offset is called a(n)_____________ple chart. \n
-    A pie chart with one or more slices offset is called a(n)_____________ple chart. \n
-    A pie chart with one or more slices offset is called a(n)_____________ple chart. \n
-    A pie chart with one or more slices offset is called a(n)_____________ple chart. \n
-    A pie chart with one or more slices offset is called a(n)_____________ple chart. \n
-    A pie chart with one or more slices offset is called a(n)_____________ple chart. \n
-    A pie chart with one or more slices offset is called a(n)_____________ple chart. \n
-    A pie chart with one or more slices offset is called a(n)_____________ple chart. \n</string>
+    A pie chart with one or more slices offset is called a(n)_____________ple chart.</string>
     <string name="previous"> <![CDATA[<]]> Previous</string>
     <string name="next"> Next <![CDATA[>]]> </string>
     <string name="title_activity_practise_questions">PractiseQuestionsActivity</string>

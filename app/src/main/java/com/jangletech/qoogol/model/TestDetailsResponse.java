@@ -17,8 +17,16 @@ public class TestDetailsResponse implements Serializable {
     @SerializedName(Constant.test_description)
     private String test_description;
 
-    @SerializedName(Constant.subject)
-    private String subject;
+    public String getSm_sub_name() {
+        return sm_sub_name;
+    }
+
+    public void setSm_sub_name(String sm_sub_name) {
+        this.sm_sub_name = sm_sub_name;
+    }
+
+    @SerializedName(Constant.sm_sub_name)
+    private String sm_sub_name;
 
     @SerializedName(Constant.cm_chapter_name)
     private String cm_chapter_name;
@@ -53,13 +61,6 @@ public class TestDetailsResponse implements Serializable {
         this.test_description = test_description;
     }
 
-    public String getSubject() {
-        return subject;
-    }
-
-    public void setSubject(String subject) {
-        this.subject = subject;
-    }
 
     public String getCm_chapter_name() {
         return cm_chapter_name;

@@ -2,6 +2,7 @@ package com.jangletech.qoogol.ui.settings;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,25 +10,41 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.jangletech.qoogol.R;
+import com.jangletech.qoogol.activities.MainActivity;
 import com.jangletech.qoogol.databinding.FragmentSettingsBinding;
+import com.jangletech.qoogol.dialog.ProgressDialog;
+import com.jangletech.qoogol.model.FetchSubjectResponse;
+import com.jangletech.qoogol.model.FetchSubjectResponseList;
+import com.jangletech.qoogol.retrofit.ApiClient;
+import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
+import com.jangletech.qoogol.ui.test.my_test.MyTestViewModel;
+import com.jangletech.qoogol.util.Constant;
+import com.jangletech.qoogol.util.PreferenceManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class SettingsFragment extends BaseFragment implements View.OnClickListener {
 
     private static final String TAG = "SettingsFragment";
-    private SettingsViewModel mViewModel;
+    private MyTestViewModel mViewModel;
     private FragmentSettingsBinding mBinding;
     private HashMap<Integer,Chip> mapExamChips = new HashMap();
     private HashMap<Integer, Chip> mapSubjectChips = new HashMap();
+    ApiInterface apiService = ApiClient.getInstance().getApi();
+    public static String strBoardName;
 
     public static SettingsFragment newInstance() {
         return new SettingsFragment();
@@ -40,11 +57,51 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
         return mBinding.getRoot();
     }
 
+    private void fetchSubjectList() {
+        ProgressDialog.getInstance().show(getActivity());
+        Call<FetchSubjectResponseList> call = apiService.fetchSubjectList(1002);//todo change userId
+        call.enqueue(new Callback<FetchSubjectResponseList>() {
+            @Override
+            public void onResponse(Call<FetchSubjectResponseList> call, Response<FetchSubjectResponseList> response) {
+                ProgressDialog.getInstance().dismiss();
+                mViewModel.setAllSubjectList(response.body().getFetchSubjectResponseList());
+            }
+
+            @Override
+            public void onFailure(Call<FetchSubjectResponseList> call, Throwable t) {
+                ProgressDialog.getInstance().dismiss();
+                t.printStackTrace();
+            }
+        });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mBinding.boardChip.setText(new PreferenceManager(getActivity()).getString(Constant.BOARD));
+    }
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(SettingsViewModel.class);
+        mViewModel = ViewModelProviders.of(this).get(MyTestViewModel.class);
 
+        fetchSubjectList();
+        mViewModel.getAllSubjects().observe(getActivity(), new Observer<List<FetchSubjectResponse>>() {
+            @Override
+            public void onChanged(@Nullable final List<FetchSubjectResponse> subjects) {
+                Log.d(TAG, "onChanged Subjects Size : " + subjects.size());
+                prepareSubjectChips(subjects);
+            }
+        });
+
+        mBinding.tvBoardEdit.setOnClickListener(v->{
+            MainActivity.navController.navigate(R.id.nav_board_fragment, Bundle.EMPTY);
+        });
+
+        mBinding.boardChip.setOnClickListener(v->{
+            MainActivity.navController.navigate(R.id.nav_board_fragment, Bundle.EMPTY);
+        });
 
         mBinding.boardChipGrp.setOnCheckedChangeListener((chipGroup, id) -> {
             Chip chip = ((Chip) chipGroup.getChildAt(chipGroup.getCheckedChipId()));
@@ -79,7 +136,6 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
 
                     } else {
                         mBinding.layoutDegree.setVisibility(View.GONE);
-
                         mBinding.layoutDegreeStream.setVisibility(View.GONE);
                         mBinding.layoutCourseYear.setVisibility(View.GONE);
                         mBinding.layoutSubjects.setVisibility(View.VISIBLE);
@@ -142,13 +198,11 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
         });
 
 
-
-
         List boardList = new ArrayList();
         boardList.add("Maharashtra State Board");
         boardList.add("ICSE");
         boardList.add("CBSE");
-        prepareBoardChips(boardList);
+        //prepareBoardChips(boardList);
 
         List classList = new ArrayList();
         classList.add("5th Std.");
@@ -206,13 +260,13 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
         subjectList.add("Networking");
         subjectList.add("Database Management Systems");
         subjectList.add("All");
-        prepareSubjectChips(subjectList);
+        //prepareSubjectChips(subjectList);
 
     }
 
     private void prepareBoardChips(List boardList) {
         mBinding.boardChipGrp.removeAllViews();
-        for (int i = 0; i < boardList.size(); i++) {
+       /* for (int i = 0; i < boardList.size(); i++) {
             Chip chip = (Chip) LayoutInflater.from(mBinding.classChipGrp.getContext()).inflate(R.layout.chip_layout, mBinding.boardChipGrp, false);
             chip.setText(boardList.get(i).toString());
             chip.setTag(boardList.get(i).toString());
@@ -220,7 +274,7 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
             chip.setClickable(true);
             chip.setCheckable(true);
             mBinding.boardChipGrp.addView(chip);
-        }
+        }*/
     }
 
     private void prepareClassesChips(List classList) {
@@ -305,11 +359,11 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
         }
     }
 
-    private void prepareSubjectChips(List subjectList) {
+    private void prepareSubjectChips(List<FetchSubjectResponse> subjectList) {
         mBinding.subjectsChipGrp.removeAllViews();
         for (int i = 0; i < subjectList.size(); i++) {
             Chip chip = (Chip) LayoutInflater.from(mBinding.subjectsChipGrp.getContext()).inflate(R.layout.chip_layout, mBinding.subjectsChipGrp, false);
-            chip.setText(subjectList.get(i).toString());
+            chip.setText(subjectList.get(i).getSm_sub_name());
             chip.setTag("Subjects");
             chip.setId(i);
             mapSubjectChips.put(i, chip);

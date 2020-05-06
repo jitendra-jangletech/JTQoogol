@@ -12,10 +12,13 @@ import com.jangletech.qoogol.model.EmptyObject;
 import com.jangletech.qoogol.model.Exams;
 import com.jangletech.qoogol.model.FetchEducationsResponseDto;
 import com.jangletech.qoogol.model.FetchPreferableExamsResponseDto;
+import com.jangletech.qoogol.model.FetchSubjectResponse;
+import com.jangletech.qoogol.model.FetchSubjectResponseList;
 import com.jangletech.qoogol.model.GetUserPersonalDetails;
 import com.jangletech.qoogol.model.InstituteResponse;
 import com.jangletech.qoogol.model.LearningQuestResponse;
 import com.jangletech.qoogol.model.MobileOtp;
+import com.jangletech.qoogol.model.NotificationResponse;
 import com.jangletech.qoogol.model.SignInModel;
 import com.jangletech.qoogol.model.StartResumeTestResponse;
 import com.jangletech.qoogol.model.StateResponse;
@@ -110,6 +113,16 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("q152fetchtest")
     Call<TestListResponse> fetchTestList(@Field(Constant.u_user_id) int userId);
+
+    @FormUrlEncoded
+    @POST("sm28FetchNotifications")
+    Call<NotificationResponse> fetchNotifications(@Field(Constant.u_user_id) int userId,
+                                                  @Field("126") String deviceId);
+
+
+    @FormUrlEncoded
+    @POST("q111FetchSubjectMaster")
+    Call<FetchSubjectResponseList> fetchSubjectList(@Field(Constant.u_user_id) int userId);
 
     @FormUrlEncoded
     @POST("q132FetchTestDetails")

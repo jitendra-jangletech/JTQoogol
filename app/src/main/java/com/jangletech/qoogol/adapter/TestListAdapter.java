@@ -47,7 +47,7 @@ public class TestListAdapter extends RecyclerView.Adapter<TestListAdapter.ViewHo
 
         TestModelNew testModel = testModelList.get(position);
 
-        itemBinding.tvTestNameSubject.setText(testModel.getTm_name()+"("+testModel.getSubject()+")");
+        itemBinding.tvTestNameSubject.setText(testModel.getTm_name()+"("+testModel.getSm_sub_name()+")");
         itemBinding.tvCategory.setText(testModel.getTm_catg());
         itemBinding.tvDuration.setText(testModel.getTm_duration() + " Min.");
         itemBinding.tvTotalMarks.setText(testModel.getTm_tot_marks());

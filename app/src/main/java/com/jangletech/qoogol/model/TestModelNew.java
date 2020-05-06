@@ -178,8 +178,16 @@ public class TestModelNew implements Serializable {
     @SerializedName(Constant.u_user_id)
     private String u_user_id;
 
-    @SerializedName(Constant.subject)
-    private String subject;
+    @SerializedName(Constant.sm_sub_name)
+    private String sm_sub_name;
+
+    public String getSm_sub_name() {
+        return sm_sub_name;
+    }
+
+    public void setSm_sub_name(String sm_sub_name) {
+        this.sm_sub_name = sm_sub_name;
+    }
 
     //Newly Added Parameters
     @SerializedName(Constant.author)
@@ -215,14 +223,6 @@ public class TestModelNew implements Serializable {
 
     public void setTest_description(String test_description) {
         this.test_description = test_description;
-    }
-
-    public String getSubject() {
-        return subject;
-    }
-
-    public void setSubject(String subject) {
-        this.subject = subject;
     }
 
     public String getAuthor() {

@@ -5,7 +5,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         tools:context=".ui.TestQuestionFragment">
 
         <include
@@ -41,7 +41,7 @@
         <include
             android:visibility="gone"
             android:id="@+id/oneLineQuestionAns"
-            layout="@layout/fill_in_the_blanks_layout"
+            layout="@layout/one_line_ans_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/bottom_layout"
@@ -51,7 +51,7 @@
         <include
             android:visibility="gone"
             android:id="@+id/shortAnswer"
-            layout="@layout/multi_line_quest_ans"
+            layout="@layout/short_ans_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/bottom_layout"

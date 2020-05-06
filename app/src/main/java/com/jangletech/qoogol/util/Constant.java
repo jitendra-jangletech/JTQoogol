@@ -7,6 +7,9 @@ import com.jangletech.qoogol.ui.syllabus.stream.StreamFragment;
  */
 public class Constant {
 
+    //Selected Board
+    public static final String BOARD = "BOARD";
+
     //Question Filter Type
     public static final String FILTER_APPLIED = "FILTER_APPLIED";
     public static final String TEST_NAME = "TEST_NAME";
@@ -120,6 +123,10 @@ public class Constant {
     public  static final String co_dm_id = "262";
     public  static final String co_name = "263";
 
+    // ChapterMaster
+    public static final String ex_id = "1435";
+    public static final String ex_exam_name = "1436";
+
     // Questions
     public static final String q_id = "1325";
     public static final String q_cm_id = "326";
@@ -193,6 +200,14 @@ public class Constant {
     // ChapterMaster
     public static final String cm_id = "1315";
     public static final String cm_chapter_name = "1316";
+
+    // Q_SubjectCourseR
+    public static final String scr_id = "1425";
+    public static final String scr_sm_id = "1426";
+    public static final String scr_co_id = "1427";
+    public static final String scr_ex_id = "1428";
+    public static final String scr_sem_id = "1429";
+    public static final String scr_cy_num = "1430";
 
 
     //TestQuestion Api Start/Resume Test Constants
@@ -281,8 +296,28 @@ public class Constant {
     public static final String isLike = "1403";
     public static final String isFavourite = "1410";
 
+    //Notification Fields
+    public static final String cn_connected = "309";
+    public static final String cn_request_active = "313";
+    public static final String cn_initiated_by_u1 = "311";
+    public static final String cn_initiated_by_u2 = "312";
+    public static final String n_id = "297";
+    public static final String n_sent_by_u_id = "298";
+    public static final String n_sent_to_u_id = "299";
+    public static final String n_type = "300";
+    public static final String n_read_by_user = "301";
+    public static final String w_notification_desc = "515";
+    public static final String n_ref_id = "302";
+    public static final String n_ref_type = "303";
+    public static final String n_cdatetime = "305";
+    public static final String w_user_profile_image_name = "507";
+
+
+
+
+
     //Start Resume missing Parameter
-    public static final String subject ="1301";
+    public static final String sm_sub_name = "1301";
 
     /***
      *  SCQ("1"),
@@ -299,5 +334,8 @@ public class Constant {
     public static final String ONE_LINE_ANSWER = "4";
     public static final String SHORT_ANSWER = "5";
     public static final String LONG_ANSWER = "6";
+
+    public static final String PRODUCTION_BASE_FILE_API = "https://jtmobileappstorage.blob.core.windows.net/spotmeets/media/images/";
+
 
 }
