@@ -128,8 +128,8 @@ public class PracticeTestActivity extends AppCompatActivity implements LearingAd
     }
 
     private void initView() {
-        learingAdapter = new LearingAdapter(PracticeTestActivity.this, learningQuestionsList, this, Constant.test);
-        practiceViewPager.setAdapter(learingAdapter);
+//        learingAdapter = new LearingAdapter(PracticeTestActivity.this, learningQuestionsList, this, Constant.test);
+//        practiceViewPager.setAdapter(learingAdapter);
     }
 
     private void setData() {
@@ -460,6 +460,21 @@ public class PracticeTestActivity extends AppCompatActivity implements LearingAd
 
     @Override
     public void onCommentClick(String questionId) {
+
+    }
+
+    @Override
+    public void onLikeClick(String questionId, int b) {
+
+    }
+
+    @Override
+    public void onShareClick(String questionId) {
+
+    }
+
+    @Override
+    public void onFavouriteClick(String questionId, int b) {
 
     }
 

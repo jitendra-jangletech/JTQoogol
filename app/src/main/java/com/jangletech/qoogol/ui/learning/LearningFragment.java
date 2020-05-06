@@ -8,6 +8,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,9 +28,12 @@ import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.model.LearningQuestResponse;
 import com.jangletech.qoogol.model.LearningQuestions;
 import com.jangletech.qoogol.model.LearningQuestionsNew;
+import com.jangletech.qoogol.model.ProcessQuestion;
+import com.jangletech.qoogol.model.ResponseObj;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.util.Constant;
+import com.jangletech.qoogol.util.UtilHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -101,7 +105,7 @@ public class LearningFragment extends Fragment implements LearingAdapter.onIconC
     private void initView() {
         learningQuestionsList = new ArrayList<>();
         questionsNewList = new ArrayList<>();
-        learingAdapter = new LearingAdapter(getActivity(), learningQuestionsList, this, learning);
+        learingAdapter = new LearingAdapter(getActivity(), questionsNewList, this, learning);
         learningFragmentBinding.learningRecycler.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         learningFragmentBinding.learningRecycler.setLayoutManager(linearLayoutManager);
@@ -116,24 +120,24 @@ public class LearningFragment extends Fragment implements LearingAdapter.onIconC
             ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Learning");
         }
         getDataFromApi();
-
-
     }
 
     private void getDataFromApi() {
         ProgressDialog.getInstance().show(getActivity());
         Map<String, Object> requestBody = new HashMap<>();
-        requestBody.put(Constant.u_user_id,"1");
-        Call<LearningQuestResponse> call = apiService.fetchQAApi(requestBody);
+        requestBody.put(Constant.u_user_id,"1069");
+        Call<LearningQuestResponse> call = apiService.fetchQAApi("1069");
         call.enqueue(new Callback<LearningQuestResponse>() {
             @Override
             public void onResponse(Call<LearningQuestResponse> call, retrofit2.Response<LearningQuestResponse> response) {
                 try {
                     ProgressDialog.getInstance().dismiss();
                     questionsNewList.clear();
-                    if (response.body().getResponse().equalsIgnoreCase("200")){
+                    if (response.body()!=null && response.body().getResponse().equalsIgnoreCase("200")){
                         questionsNewList = response.body().getQuestion_list();
-                        learingAdapter.notifyDataSetChanged();
+                        learingAdapter.updateList(questionsNewList);
+                    } else {
+                        Toast.makeText(getActivity(), UtilHelper.getAPIError(String.valueOf(response.body())),Toast.LENGTH_SHORT).show();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -143,6 +147,48 @@ public class LearningFragment extends Fragment implements LearingAdapter.onIconC
 
             @Override
             public void onFailure(Call<LearningQuestResponse> call, Throwable t) {
+                t.printStackTrace();
+                ProgressDialog.getInstance().dismiss();
+            }
+        });
+    }
+
+    private void setAdapter() {
+        learingAdapter = new LearingAdapter(getActivity(), questionsNewList, this, learning);
+        learningFragmentBinding.learningRecycler.setHasFixedSize(true);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        learningFragmentBinding.learningRecycler.setLayoutManager(linearLayoutManager);
+        learningFragmentBinding.learningRecycler.setAdapter(learingAdapter);
+    }
+
+    private void ProcessQuestionAPI(String user_id, String que_id, String api_case, int flag, String call_from) {
+        ProgressDialog.getInstance().show(getActivity());
+        Call<ProcessQuestion> call;
+
+        if (call_from.equalsIgnoreCase("like"))
+         call = apiService.likeApi(user_id, que_id, api_case, flag);
+        else
+            call = apiService.favApi(user_id, que_id, api_case, flag);
+
+        call.enqueue(new Callback<ProcessQuestion>() {
+            @Override
+            public void onResponse(Call<ProcessQuestion> call, retrofit2.Response<ProcessQuestion> response) {
+                try {
+                    questionsNewList.clear();
+                    if (response.body()!=null && response.body().getResponse().equalsIgnoreCase("200")){
+                        getDataFromApi();
+                    } else {
+                        Toast.makeText(getActivity(), UtilHelper.getAPIError(String.valueOf(response.body())),Toast.LENGTH_SHORT).show();
+                    }
+                    ProgressDialog.getInstance().dismiss();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    ProgressDialog.getInstance().dismiss();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ProcessQuestion> call, Throwable t) {
                 t.printStackTrace();
                 ProgressDialog.getInstance().dismiss();
             }
@@ -530,6 +576,21 @@ public class LearningFragment extends Fragment implements LearingAdapter.onIconC
     public void onCommentClick(String questionId) {
         Bundle bundle = new Bundle();
         bundle.putString("QuestionId", questionId);
-        NavHostFragment.findNavController(this).navigate(R.id.action_nav_learning_to_nav_comments, bundle);
+        NavHostFragment.findNavController(this).navigate(R.id.nav_comments, bundle);
+    }
+
+    @Override
+    public void onLikeClick(String questionId, int isLiked) {
+        ProcessQuestionAPI("1069", questionId,"I",isLiked, "like");
+    }
+
+    @Override
+    public void onShareClick(String questionId) {
+
+    }
+
+    @Override
+    public void onFavouriteClick(String questionId, int isFav) {
+        ProcessQuestionAPI("1069", questionId,"I", isFav, "fav");
     }
 }

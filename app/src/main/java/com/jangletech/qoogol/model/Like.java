@@ -1,22 +1,17 @@
 package com.jangletech.qoogol.model;
 
-import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
 import com.jangletech.qoogol.util.Constant;
 
 /**
- * Created by Pritali on 4/6/2020.
+ * Created by Pritali on 4/29/2020.
  */
-@Entity
-public class Comments {
+public class Like {
     @PrimaryKey
     @SerializedName(Constant.qlc_id)
-    private String commentId;
-
-    @SerializedName(Constant.qlc_comment_text)
-    private String comment;
+    private String likeId;
 
     @SerializedName(Constant.qlc_user_id)
     private String userId;
@@ -33,27 +28,18 @@ public class Comments {
     @SerializedName(Constant.qlc_q_id)
     private String question_id;
 
-    @SerializedName(Constant.qlc_comment_flag)
-    private String isCommented;
+    @SerializedName(Constant.qlc_like_flag)
+    private String isLiked;
 
     @SerializedName(Constant.w_user_profile_image_name)
     private String profile_image;
 
-
-    public String getCommentId() {
-        return commentId;
+    public String getLikeId() {
+        return likeId;
     }
 
-    public void setCommentId(String commentId) {
-        this.commentId = commentId;
-    }
-
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
+    public void setLikeId(String likeId) {
+        this.likeId = likeId;
     }
 
     public String getUserId() {
@@ -62,14 +48,6 @@ public class Comments {
 
     public void setUserId(String userId) {
         this.userId = userId;
-    }
-
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
     }
 
     public String getUserFirstName() {
@@ -88,6 +66,14 @@ public class Comments {
         this.userLastName = userLastName;
     }
 
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
     public String getQuestion_id() {
         return question_id;
     }
@@ -96,12 +82,12 @@ public class Comments {
         this.question_id = question_id;
     }
 
-    public String getIsCommented() {
-        return isCommented;
+    public String getIsLiked() {
+        return isLiked;
     }
 
-    public void setIsCommented(String isCommented) {
-        this.isCommented = isCommented;
+    public void setIsLiked(String isLiked) {
+        this.isLiked = isLiked;
     }
 
     public String getProfile_image() {

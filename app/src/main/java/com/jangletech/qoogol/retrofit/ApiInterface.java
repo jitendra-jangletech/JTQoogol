@@ -19,6 +19,8 @@ import com.jangletech.qoogol.model.InstituteResponse;
 import com.jangletech.qoogol.model.LearningQuestResponse;
 import com.jangletech.qoogol.model.MobileOtp;
 import com.jangletech.qoogol.model.NotificationResponse;
+import com.jangletech.qoogol.model.ProcessQuestion;
+import com.jangletech.qoogol.model.ResponseObj;
 import com.jangletech.qoogol.model.SignInModel;
 import com.jangletech.qoogol.model.StartResumeTestResponse;
 import com.jangletech.qoogol.model.StateResponse;
@@ -135,6 +137,26 @@ public interface ApiInterface {
                                                            @Field(Constant.tm_id) int testMasterId);
 
     @POST(Constant.FETCH_QA)
-    Call<LearningQuestResponse> fetchQAApi(@QueryMap Map<String, Object> request);
+    Call<LearningQuestResponse> fetchQAApi(@Field(Constant.u_user_id) String userid);
+
+    @FormUrlEncoded
+    @POST(Constant.PROCESS_QUESTION)
+    Call<ProcessQuestion> fetchComments(@Field(Constant.u_user_id) String userid, @Field(Constant.q_id) String queId, @Field("Case") String caseL);
+
+    @FormUrlEncoded
+    @POST(Constant.PROCESS_QUESTION)
+    Call<ProcessQuestion> likeApi(@Field(Constant.u_user_id) String userid, @Field(Constant.q_id) String queId, @Field("Case") String caseL, @Field(Constant.qlc_like_flag) int like);
+
+
+    @FormUrlEncoded
+    @POST(Constant.PROCESS_QUESTION)
+    Call<ProcessQuestion> favApi(@Field(Constant.u_user_id) String userid, @Field(Constant.q_id) String queId, @Field("Case") String caseL, @Field(Constant.qlc_fav_flag) int like);
+
+
+    @FormUrlEncoded
+    @POST(Constant.PROCESS_QUESTION)
+    Call<ProcessQuestion> addCommentApi(@Field(Constant.u_user_id) String userid, @Field(Constant.q_id) String queId, @Field("Case") String caseL, @Field(Constant.qlc_comment_text) String comment);
+
+
 
 }

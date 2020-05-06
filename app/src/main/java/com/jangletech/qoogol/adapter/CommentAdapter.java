@@ -40,10 +40,17 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull CommentAdapter.ViewHolder holder, int position) {
         Comments comments = commentList.get(position);
-        commentItemBinding.tvSenderName.setText(comments.getUserName());
+        commentItemBinding.tvSenderName.setText(comments.getUserFirstName() + " " + comments.getUserLastName());
         commentItemBinding.textCommentBody.setText(comments.getComment());
-        commentItemBinding.textCommentTime.setText(comments.getTime());
+        commentItemBinding.textCommentTime.setText(comments.getTime().substring(0,10));
     }
+
+    public void updateList (List<Comments> commentList) {
+        this.commentList.clear();
+        this.commentList = commentList;
+        notifyDataSetChanged();
+    }
+
 
     @Override
     public int getItemCount() {
