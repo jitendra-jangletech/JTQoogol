@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.ConnectionAdapter;
@@ -53,8 +54,18 @@ public class FollowersFragment extends BaseFragment implements ConnectionAdapter
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_friends, container, false);
-        userId = String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));
+        init();
         return mBinding.getRoot();
+    }
+
+    private void init() {
+        userId = String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));
+        mBinding.connectionSwiperefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getData(0);
+            }
+        });
     }
 
     @Override
@@ -77,6 +88,11 @@ public class FollowersFragment extends BaseFragment implements ConnectionAdapter
             getData(0);
     }
 
+    public void checkRefresh() {
+        if ( mBinding.connectionSwiperefresh.isRefreshing()) {
+            mBinding.connectionSwiperefresh.setRefreshing(false);
+        }
+    }
 
     private void getData(int pagestart) {
         ProgressDialog.getInstance().show(getActivity());
@@ -90,10 +106,13 @@ public class FollowersFragment extends BaseFragment implements ConnectionAdapter
                     if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
                         connectionsList = response.body().getConnection_list();
                         initView();
+                        checkRefresh();
                     } else {
+                        checkRefresh();
                         Toast.makeText(getActivity(), UtilHelper.getAPIError(String.valueOf(response.body())), Toast.LENGTH_SHORT).show();
                     }
                 } catch (Exception e) {
+                    checkRefresh();
                     e.printStackTrace();
                     ProgressDialog.getInstance().dismiss();
                 }
@@ -102,6 +121,7 @@ public class FollowersFragment extends BaseFragment implements ConnectionAdapter
             @Override
             public void onFailure(Call<ConnectionResponse> call, Throwable t) {
                 t.printStackTrace();
+                checkRefresh();
                 ProgressDialog.getInstance().dismiss();
             }
         });

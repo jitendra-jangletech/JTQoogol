@@ -16,6 +16,7 @@ import androidx.appcompat.widget.SearchView;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.ConnectionAdapter;
@@ -57,8 +58,19 @@ public class FriendRequestFragment extends BaseFragment implements ConnectionAda
                              Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_friend_request, container, false);
         setHasOptionsMenu(true);
-        userId = String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));
+        init();
         return  mBinding.getRoot();
+    }
+
+    private void init() {
+        userId = String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));
+        mBinding.requestsSwiperefresh.setOnRefreshListener(() -> getData(0));
+    }
+
+    public void checkRefresh() {
+        if ( mBinding.requestsSwiperefresh.isRefreshing()) {
+            mBinding.requestsSwiperefresh.setRefreshing(false);
+        }
     }
 
     @Override
@@ -124,8 +136,10 @@ public class FriendRequestFragment extends BaseFragment implements ConnectionAda
                     } else {
                         Toast.makeText(getActivity(), UtilHelper.getAPIError(String.valueOf(response.body())),Toast.LENGTH_SHORT).show();
                     }
+                    checkRefresh();
                 } catch (Exception e) {
                     e.printStackTrace();
+                    checkRefresh();
                     ProgressDialog.getInstance().dismiss();
                 }
             }
@@ -133,6 +147,7 @@ public class FriendRequestFragment extends BaseFragment implements ConnectionAda
             @Override
             public void onFailure(Call<ConnectionResponse> call, Throwable t) {
                 t.printStackTrace();
+                checkRefresh();
                 ProgressDialog.getInstance().dismiss();
             }
         });

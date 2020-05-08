@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,8 +53,13 @@ public class FriendsFragment extends BaseFragment implements ConnectionAdapter.u
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_friends, container, false);
-        userId = String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));
+        init();
         return  mBinding.getRoot();
+    }
+
+    private void init() {
+        userId = String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));
+        mBinding.connectionSwiperefresh.setOnRefreshListener(() -> getData(0));
     }
 
     @Override
@@ -69,6 +75,12 @@ public class FriendsFragment extends BaseFragment implements ConnectionAdapter.u
 
     }
 
+    public void checkRefresh() {
+        if ( mBinding.connectionSwiperefresh.isRefreshing()) {
+            mBinding.connectionSwiperefresh.setRefreshing(false);
+        }
+    }
+
     private void getData(int pagestart) {
         ProgressDialog.getInstance().show(getActivity());
         Call<ConnectionResponse> call = apiService.fetchConnections(userId,friends, getDeviceId(), qoogol,pagestart);
@@ -81,10 +93,13 @@ public class FriendsFragment extends BaseFragment implements ConnectionAdapter.u
                     if (response.body()!=null && response.body().getResponse().equalsIgnoreCase("200")){
                         connectionsList = response.body().getConnection_list();
                         initView();
+                        checkRefresh();
                     } else {
+                        checkRefresh();
                         Toast.makeText(getActivity(), UtilHelper.getAPIError(String.valueOf(response.body())),Toast.LENGTH_SHORT).show();
                     }
                 } catch (Exception e) {
+                    checkRefresh();
                     e.printStackTrace();
                     ProgressDialog.getInstance().dismiss();
                 }
@@ -93,6 +108,7 @@ public class FriendsFragment extends BaseFragment implements ConnectionAdapter.u
             @Override
             public void onFailure(Call<ConnectionResponse> call, Throwable t) {
                 t.printStackTrace();
+                checkRefresh();
                 ProgressDialog.getInstance().dismiss();
             }
         });
