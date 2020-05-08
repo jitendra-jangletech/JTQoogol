@@ -120,6 +120,7 @@
     <string name="attended_by_friends">Attended By Friends</string>
     <string name="shared_with_you">Shared with you</string>
     <string name="shared_by_you">Shared by you</string>
+    <string name="share">Share</string>
     <string name="create_test">Create Test</string>
     <string name="favourite_test">Favourite Test</string>
     <string name="questions">Questions</string>
@@ -249,7 +250,6 @@
 
     <string name="sin">Math.sin(angleInRadians)</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_test">TestActivity</string>
     <string name="test_desc">The ACT mathematics test is a 60-question, 60-minute test designed
@@ -257,5 +257,27 @@
         have typically acquired in courses taken up to the beginning of grade 12.</string>
     <string name="save_and_next">Next</string>
     <string name="mark_and_next">Previous</string>
+
+    <!--Connections-->
+    <string name="friends">Friends</string>
+    <string name="followers">Followers</string>
+    <string name="following">Following</string>
+    <string name="connections">Connections</string>
+    <string name="remove">Remove</string>
+    <string name="block">Block</string>
+    <string name="add_friend">Add Friend</string>
+    <string name="unblock">Unblock</string>
+    <string name="accept">Accept</string>
+    <string name="cancel">Cancel</string>
+    <string name="reject">Reject</string>
+    <string name="follow">Follow</string>
+    <string name="unfollow">Unfollow</string>
+    <string name="friend_req">Friend Requests</string>
+    <string name="follow_req">Follow Requests</string>
+    <string name="pending_req">Pending Requests</string>
+    <string name="view_prof">View Profile</string>
+    <string name="blockedconnection">Blocked Connections</string>
+    <string name="blockedlist">Block List</string>
+
 
 </resources>

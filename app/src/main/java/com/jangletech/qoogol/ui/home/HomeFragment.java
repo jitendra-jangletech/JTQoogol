@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -37,7 +38,7 @@ import retrofit2.Response;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements View.OnClickListener {
 
     private HomeViewModel homeViewModel;
     FragmentHomeBinding fragmentHomeBinding;
@@ -45,7 +46,6 @@ public class HomeFragment extends Fragment {
     List<DashboardData> itemlist = new ArrayList();
     ApiInterface apiService = ApiClient.getInstance().getApi();
     HomeAdapter homeAdapter;
-
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         homeViewModel =
@@ -54,6 +54,7 @@ public class HomeFragment extends Fragment {
 
 //        getStatisticsData();
         homeAdapter = new HomeAdapter(getActivity(), itemlist);
+        setListeners();
 //        final CarouselLayoutManager layoutManager = new CarouselLayoutManager(CarouselLayoutManager.HORIZONTAL, true);
 //        layoutManager.setPostLayoutListener(new CarouselZoomPostLayoutListener());
 //
@@ -94,6 +95,12 @@ public class HomeFragment extends Fragment {
 
         setDummyData();
         return fragmentHomeBinding.getRoot();
+    }
+
+    private void setListeners() {
+        fragmentHomeBinding.friendsLayout.setOnClickListener(this);
+        fragmentHomeBinding.followersLayout.setOnClickListener(this);
+        fragmentHomeBinding.followingLayout.setOnClickListener(this);
     }
 
     private void setDummyData() {
@@ -184,5 +191,28 @@ public class HomeFragment extends Fragment {
         dashboardData3.setAvgRating(dashboardData.getAvgRating());
         itemlist.add(dashboardData3);
         homeAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.friends_layout:
+                openConnections(0);
+                break;
+            case R.id.followers_layout:
+                openConnections(1);
+                break;
+            case R.id.following_layout:
+                openConnections(2);
+                break;
+             default:
+                    break;
+        }
+    }
+
+    private void openConnections(int position) {
+        Bundle bundle = new Bundle();
+        bundle.putInt("position", position);
+        NavHostFragment.findNavController(this).navigate(R.id.nav_connections, bundle);
     }
 }

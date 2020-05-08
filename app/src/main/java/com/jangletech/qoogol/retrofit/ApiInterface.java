@@ -4,6 +4,7 @@ import com.jangletech.qoogol.model.ChangePassword;
 import com.jangletech.qoogol.model.CityResponse;
 import com.jangletech.qoogol.model.Classes;
 import com.jangletech.qoogol.model.CommonResponseObject;
+import com.jangletech.qoogol.model.ConnectionResponse;
 import com.jangletech.qoogol.model.CountryResponse;
 import com.jangletech.qoogol.model.CourseResponse;
 import com.jangletech.qoogol.model.DashboardInfo;
@@ -107,11 +108,13 @@ public interface ApiInterface {
     @POST("user/saveUserSelectedExams")
     Call<CommonResponseObject> saveUserSelectedExams(@Query("userId") int userId,
                                                      @Body List<Exams> selectedExamsList);
+
     @FormUrlEncoded
     @POST("q031StartResumeTest")
     Call<TestingQuestionNew> fetchTestQuestionAnswers(@Field(Constant.u_user_id) int userId,
                                                       @Field(Constant.tt_id) int testTakenId,
                                                       @Field(Constant.tt_tm_id) int testTakentmId);
+
     @FormUrlEncoded
     @POST(Constant.FETCH_QA)
     Call<LearningQuestResponse> fetchQAApi(@Field(Constant.u_user_id) String userid);
@@ -134,6 +137,15 @@ public interface ApiInterface {
     @POST(Constant.PROCESS_QUESTION)
     Call<ProcessQuestion> addCommentApi(@Field(Constant.u_user_id) String userid, @Field(Constant.q_id) String queId, @Field("Case") String caseL, @Field(Constant.qlc_comment_text) String comment);
 
+
+    @FormUrlEncoded
+    @POST(Constant.FETCH_CONNECTIONS)
+    Call<ConnectionResponse> fetchConnections(@Field(Constant.u_user_id) String userid, @Field("Case") String connectionCase, @Field(Constant.device_id) String device_id, @Field("200Q") String app, @Field(Constant.pagestart) int pagestart);
+
+
+    @FormUrlEncoded
+    @POST(Constant.UPDATE_CONNECTIONS)
+    Call<ResponseObj> updateConnections(@Field(Constant.u_user_id) String userid, @Field("Case") String connectionCase, @Field(Constant.device_id) String device_id, @Field("200Q") String app, @Field(Constant.other_user) String other_user);
 
 
 }

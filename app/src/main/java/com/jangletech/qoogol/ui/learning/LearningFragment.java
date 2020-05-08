@@ -586,7 +586,9 @@ public class LearningFragment extends Fragment implements LearingAdapter.onIconC
 
     @Override
     public void onShareClick(String questionId) {
-
+        Bundle bundle = new Bundle();
+        bundle.putString("QuestionId", questionId);
+        NavHostFragment.findNavController(this).navigate(R.id.nav_share, bundle);
     }
 
     @Override

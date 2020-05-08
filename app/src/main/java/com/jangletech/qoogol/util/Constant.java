@@ -5,6 +5,8 @@ package com.jangletech.qoogol.util;
  */
 public class Constant {
 
+    public static final String PRODUCTION_BASE_FILE_API = "https://jtmobileappstorage.blob.core.windows.net/spotmeets/media/images/";
+
     //Question Filter Type
     public static final String FILTER_APPLIED = "FILTER_APPLIED";
 
@@ -23,6 +25,7 @@ public class Constant {
 
 
     //User table
+    public static final String qoogol = "Q";
     public static final String u_first_name = "104";
     public static final String u_last_name = "105";
     public static final String w_user_profile_image_name = "507";
@@ -124,10 +127,56 @@ public class Constant {
     public static final String COURSE = "sm15CourseData";
     public static final String INSTITUTE = "sm13InstOrgData";
     public static final String DEGREE = "sm14DegreeData";
+    public static final String FETCH_CONNECTIONS = "sm25FetchConnections";
+    public static final String UPDATE_CONNECTIONS = "sm24UpdateConnections";
     public static final String masterDataList = "61";
     public static final String likesList = "60";
     public static final String commentsList = "62";
 
+    //Connections
+    public static final String row_count = "548";
+    public static final String connection_list = "68";
+    public static final String cn_id = "306";
+    public static final String cn_u1_follows_u2 = "316H";
+    public static final String cn_u2_follows_u1 = "316I";
+    public static final String cn_blocked_by_u1 = "315";
+    public static final String cn_user_id_2 = "308";
+    public static final String cn_connected = "309";
+    public static final String u_gender = "110";
+    public static final String u_app_live = "172";
+    public static final String u_status_text = "187";
+    public static final String u_online_status = "116";
+    public static final String u_birth_date = "107";
+    public static final String w_datetime = "543";
+    public static final String u_latest_lat = "122";
+    public static final String u_latest_long = "123";
+    public static final String u_conn_count = "199B";
+    public static final String u_followers = "200M";
+    public static final String u_followings = "201M";
+    public static final String ucn_count = "71";
+    public static final String w_u_ms_count = "522";
+    public static final String w_distance = "549";
+    public static final String other_user = "516";
+
+
+    //Fetch connections cases
+    public static final String friends = "C";
+    public static final String followers = "FL";
+    public static final String following = "FG";
+    public static final String blocked_users = "B";
+    public static final String requests = "R";
+    public static final String friendrequests = "FRR";
+    public static final String followrequests = "FLr";
+
+    public static final String remove_connection = "X";
+    public static final String accept_follow_requests = "AF";
+    public static final String reject_follow_requests = "RF";
+    public static final String accept_friend_requests = "A";
+    public static final String reject_friend_requests = "R";
+    public static final String block = "B";
+    public static final String unblock = "U";
+    public static final String follow = "F";
+    public static final String unfollow = "UF";
 
     //Status code
     public static final String DB_TIMEOUT_ERROR = "Database Timeout error. Close app and try again.";
@@ -143,6 +192,8 @@ public class Constant {
     public static final String prev_q_id = "prev_q_id";
     public static final String question_list = "List1";
     public static final String u_user_id = "101";
+    public static final String device_id = "126Q";
+    public static final String pagestart = "PageStart";
 
 
     //Country
@@ -207,6 +258,10 @@ public class Constant {
     public static final String q_solved_by = "1360";
     public static final String q_media_type = "1361";
     public static final String q_option_type = "1362";
+    public static final String friend_req_sent = "311";
+    public static final String friend_req_received = "312";
+    public static final String follow_req_sent = "316E";
+    public static final String follow_req_received = "316F";
 
     //Answers
     public static final String a_id = "1363";
