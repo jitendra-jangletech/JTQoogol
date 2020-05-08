@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.jangletech.qoogol.activities.MainActivity;
 import com.jangletech.qoogol.R;
@@ -124,6 +125,8 @@ public class LearningFragment extends Fragment implements LearingAdapter.onIconC
             ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Learning");
         }
         getDataFromApi();
+
+        learningFragmentBinding.learningSwiperefresh.setOnRefreshListener(() -> getDataFromApi());
     }
 
     private void getDataFromApi() {
