@@ -21,6 +21,8 @@ import com.jangletech.qoogol.model.Connections;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
+import com.jangletech.qoogol.util.Constant;
+import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
 
 import java.util.ArrayList;
@@ -44,12 +46,14 @@ public class FollowersFragment extends BaseFragment implements ConnectionAdapter
     ApiInterface apiService = ApiClient.getInstance().getApi();
     ConnectionAdapter mAdapter;
     Boolean isVisible = false;
+    String userId="";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_friends, container, false);
+        userId = String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));
         return mBinding.getRoot();
     }
 
@@ -76,7 +80,7 @@ public class FollowersFragment extends BaseFragment implements ConnectionAdapter
 
     private void getData(int pagestart) {
         ProgressDialog.getInstance().show(getActivity());
-        Call<ConnectionResponse> call = apiService.fetchConnections("1069", followers, getDeviceId(), qoogol, pagestart);
+        Call<ConnectionResponse> call = apiService.fetchConnections(userId, followers, getDeviceId(), qoogol, pagestart);
         call.enqueue(new Callback<ConnectionResponse>() {
             @Override
             public void onResponse(Call<ConnectionResponse> call, retrofit2.Response<ConnectionResponse> response) {

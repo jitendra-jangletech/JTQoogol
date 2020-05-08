@@ -31,6 +31,7 @@ import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.util.Constant;
+import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
 
 import java.util.ArrayList;
@@ -56,6 +57,7 @@ public class ShareFragment extends BaseFragment {
     List<Connections> connectionsList;
     private static final String TAG = "ShareFragment";
     ApiInterface apiService = ApiClient.getInstance().getApi();
+    String userId="";
 
 
     @Override
@@ -71,7 +73,7 @@ public class ShareFragment extends BaseFragment {
 
     private void getData(int pagestart) {
         ProgressDialog.getInstance().show(getActivity());
-        Call<ConnectionResponse> call = apiService.fetchConnections("1069",friends,getDeviceId(), qoogol,pagestart);
+        Call<ConnectionResponse> call = apiService.fetchConnections(userId,friends,getDeviceId(), qoogol,pagestart);
         call.enqueue(new Callback<ConnectionResponse>() {
             @Override
             public void onResponse(Call<ConnectionResponse> call, retrofit2.Response<ConnectionResponse> response) {
@@ -101,6 +103,7 @@ public class ShareFragment extends BaseFragment {
 
     private void initView() {
         connectionsList = new ArrayList<>();
+        userId = String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));
         mAdapter = new ShareAdapter(getActivity(), connectionsList);
         shareBinding.shareRecycler.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());

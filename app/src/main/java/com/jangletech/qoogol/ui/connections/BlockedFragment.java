@@ -28,6 +28,8 @@ import com.jangletech.qoogol.model.ResponseObj;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
+import com.jangletech.qoogol.util.Constant;
+import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
 
 import java.util.ArrayList;
@@ -50,6 +52,7 @@ public class BlockedFragment extends BaseFragment implements BlockedConnectionAd
     private static final String TAG = "FriendsFragment";
     ApiInterface apiService = ApiClient.getInstance().getApi();
     BlockedConnectionAdapter mAdapter;
+    String userId = "";
 
 
     @Override
@@ -58,6 +61,7 @@ public class BlockedFragment extends BaseFragment implements BlockedConnectionAd
         // Inflate the layout for this fragment
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_blocked, container, false);
         setHasOptionsMenu(true);
+        userId = String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));
         return  mBinding.getRoot();
     }
 
@@ -70,7 +74,7 @@ public class BlockedFragment extends BaseFragment implements BlockedConnectionAd
 
     private void getData(int pagestart) {
         ProgressDialog.getInstance().show(getActivity());
-        Call<ConnectionResponse> call = apiService.fetchConnections("1069",block, getDeviceId(), qoogol,pagestart);
+        Call<ConnectionResponse> call = apiService.fetchConnections(userId,block, getDeviceId(), qoogol,pagestart);
         call.enqueue(new Callback<ConnectionResponse>() {
             @Override
             public void onResponse(Call<ConnectionResponse> call, retrofit2.Response<ConnectionResponse> response) {
@@ -140,7 +144,7 @@ public class BlockedFragment extends BaseFragment implements BlockedConnectionAd
     private void updateConnection(String user, String Processcase) {
         ApiInterface apiService = ApiClient.getInstance().getApi();
         ProgressDialog.getInstance().show(getActivity());
-        Call<ResponseObj> call = apiService.updateConnections("1069",Processcase, getDeviceId(), qoogol,user);
+        Call<ResponseObj> call = apiService.updateConnections(userId,Processcase, getDeviceId(), qoogol,user);
         call.enqueue(new Callback<ResponseObj>() {
             @Override
             public void onResponse(Call<ResponseObj> call, retrofit2.Response<ResponseObj> response) {

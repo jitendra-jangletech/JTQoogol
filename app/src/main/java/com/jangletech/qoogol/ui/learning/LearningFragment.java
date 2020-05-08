@@ -34,6 +34,7 @@ import com.jangletech.qoogol.model.ResponseObj;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.util.Constant;
+import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
 
 import java.util.ArrayList;
@@ -55,6 +56,7 @@ public class LearningFragment extends Fragment implements LearingAdapter.onIconC
     List<LearningQuestions> learningQuestionsList;
     List<LearningQuestionsNew> questionsNewList;
     ApiInterface apiService = ApiClient.getInstance().getApi();
+    String userId = "";
 
     public static LearningFragment newInstance() {
         return new LearningFragment();
@@ -111,6 +113,7 @@ public class LearningFragment extends Fragment implements LearingAdapter.onIconC
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         learningFragmentBinding.learningRecycler.setLayoutManager(linearLayoutManager);
         learningFragmentBinding.learningRecycler.setAdapter(learingAdapter);
+        userId = String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));
 
         Bundle bundle = getArguments();
         if (bundle.getString("call_from").equalsIgnoreCase("saved_questions")) {
@@ -125,9 +128,7 @@ public class LearningFragment extends Fragment implements LearingAdapter.onIconC
 
     private void getDataFromApi() {
         ProgressDialog.getInstance().show(getActivity());
-        Map<String, Object> requestBody = new HashMap<>();
-        requestBody.put(Constant.u_user_id,"1069");
-        Call<LearningQuestResponse> call = apiService.fetchQAApi("1069");
+        Call<LearningQuestResponse> call = apiService.fetchQAApi(userId);
         call.enqueue(new Callback<LearningQuestResponse>() {
             @Override
             public void onResponse(Call<LearningQuestResponse> call, retrofit2.Response<LearningQuestResponse> response) {
@@ -583,7 +584,7 @@ public class LearningFragment extends Fragment implements LearingAdapter.onIconC
 
     @Override
     public void onLikeClick(String questionId, int isLiked) {
-        ProcessQuestionAPI("1069", questionId,"I",isLiked, "like");
+        ProcessQuestionAPI(userId, questionId,"I",isLiked, "like");
     }
 
     @Override
@@ -595,6 +596,6 @@ public class LearningFragment extends Fragment implements LearingAdapter.onIconC
 
     @Override
     public void onFavouriteClick(String questionId, int isFav) {
-        ProcessQuestionAPI("1069", questionId,"I", isFav, "fav");
+        ProcessQuestionAPI(userId, questionId,"I", isFav, "fav");
     }
 }
