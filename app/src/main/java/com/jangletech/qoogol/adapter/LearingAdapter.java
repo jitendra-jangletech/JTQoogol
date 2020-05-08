@@ -31,8 +31,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.card.MaterialCardView;
-import com.jangletech.qoogol.activities.MainActivity;
 import com.jangletech.qoogol.R;
+import com.jangletech.qoogol.activities.MainActivity;
 import com.jangletech.qoogol.activities.PracticeTestActivity;
 import com.jangletech.qoogol.databinding.LearningItemBinding;
 import com.jangletech.qoogol.model.LearningQuestionsNew;
@@ -58,13 +58,11 @@ import static com.jangletech.qoogol.util.Constant.MATCH_PAIR_IMAGE;
 import static com.jangletech.qoogol.util.Constant.MCQ;
 import static com.jangletech.qoogol.util.Constant.MCQ_IMAGE;
 import static com.jangletech.qoogol.util.Constant.MCQ_IMAGE_WITH_TEXT;
-import static com.jangletech.qoogol.util.Constant.MULTI_LINE_ANSWER;
 import static com.jangletech.qoogol.util.Constant.ONE_LINE_ANSWER;
 import static com.jangletech.qoogol.util.Constant.SCQ;
 import static com.jangletech.qoogol.util.Constant.SCQ_IMAGE;
 import static com.jangletech.qoogol.util.Constant.SCQ_IMAGE_WITH_TEXT;
 import static com.jangletech.qoogol.util.Constant.SHORT_ANSWER;
-import static com.jangletech.qoogol.util.Constant.SINGLE_LINE_ANSWER;
 import static com.jangletech.qoogol.util.Constant.TRUE_FALSE;
 import static com.jangletech.qoogol.util.Constant.learning;
 import static com.jangletech.qoogol.util.Constant.test;
@@ -299,10 +297,7 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
                 }
             }
         }
-
-
     }
-
 
     private void answerCharCounter(EditText etAnswer, TextView tvCounter, int maxWordLength) {
 
