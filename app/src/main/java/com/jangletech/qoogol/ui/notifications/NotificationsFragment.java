@@ -5,33 +5,29 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
-
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.NotificationAdapter;
 import com.jangletech.qoogol.databinding.FragmentNotificationsBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
-import com.jangletech.qoogol.model.FetchSubjectResponseList;
 import com.jangletech.qoogol.model.Notification;
 import com.jangletech.qoogol.model.NotificationResponse;
-import com.jangletech.qoogol.model.TestModelNew;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
-
+import com.jangletech.qoogol.ui.BaseFragment;
+import com.jangletech.qoogol.util.Constant;
+import com.jangletech.qoogol.util.PreferenceManager;
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class NotificationsFragment extends Fragment {
+public class NotificationsFragment extends BaseFragment {
 
     private static final String TAG = "NotificationsFragment";
     private NotificationsViewModel mViewModel;
@@ -65,12 +61,11 @@ public class NotificationsFragment extends Fragment {
                 mBinding.notificationRecyclerView.setAdapter(notificationAdapter);
             }
         });
-
     }
 
     private void fetchNotifications() {
         ProgressDialog.getInstance().show(getActivity());
-        Call<NotificationResponse> call = apiService.fetchNotifications(1002,"49d48c300948655f");//todo change userId
+        Call<NotificationResponse> call = apiService.fetchNotifications(new PreferenceManager(getActivity()).getInt(Constant.USER_ID),getDeviceId());//todo change userId
         call.enqueue(new Callback<NotificationResponse>() {
             @Override
             public void onResponse(Call<NotificationResponse> call, Response<NotificationResponse> response) {
@@ -85,5 +80,4 @@ public class NotificationsFragment extends Fragment {
             }
         });
     }
-
 }

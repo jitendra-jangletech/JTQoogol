@@ -3,12 +3,9 @@ package com.jangletech.qoogol.ui.syllabus.board;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Filter;
-import android.widget.Filterable;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,17 +16,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.SignUpViewModel;
-import com.jangletech.qoogol.adapter.BoardAdapter;
+import com.jangletech.qoogol.activities.MainActivity;
 import com.jangletech.qoogol.adapter.BoardAdapterNew;
 import com.jangletech.qoogol.databinding.BoardFragmentBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
-import com.jangletech.qoogol.model.BoardItem;
 import com.jangletech.qoogol.model.University;
 import com.jangletech.qoogol.model.UniversityResponse;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
-import com.jangletech.qoogol.ui.preference.PreferenceFragment;
 import com.jangletech.qoogol.ui.settings.SettingsFragment;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
@@ -66,7 +61,7 @@ public class BoardFragment extends BaseFragment implements BoardAdapterNew.Board
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(SignUpViewModel.class);
-        fetchUniversityData(1, 2);
+        fetchUniversityData();
         mViewModel.getUniversityList().observe(getActivity(), new Observer<List<University>>() {
             @Override
             public void onChanged(@Nullable final List<University> universities) {
@@ -96,7 +91,7 @@ public class BoardFragment extends BaseFragment implements BoardAdapterNew.Board
         });
     }
 
-    private void fetchUniversityData(int country, int state) {
+    private void fetchUniversityData() {
         ProgressDialog.getInstance().show(getActivity());
         Call<UniversityResponse> call = apiService.getUniversity();
         call.enqueue(new Callback<UniversityResponse>() {
@@ -149,7 +144,6 @@ public class BoardFragment extends BaseFragment implements BoardAdapterNew.Board
     public void onBoardSelected(University university) {
         showToast(university.getName());
         new PreferenceManager(getActivity()).saveString(Constant.BOARD,university.getName());
-        SettingsFragment.strBoardName = university.getName();
-        getActivity().onBackPressed();
+        MainActivity.navController.navigate(R.id.nav_settings, Bundle.EMPTY);
     }
 }

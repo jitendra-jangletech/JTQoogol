@@ -3,7 +3,6 @@ package com.jangletech.qoogol.ui.test.my_test;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,6 +18,7 @@ import androidx.core.view.MenuItemCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.material.chip.Chip;
@@ -29,14 +29,17 @@ import com.jangletech.qoogol.activities.StartTestActivity;
 import com.jangletech.qoogol.adapter.TestListAdapter;
 import com.jangletech.qoogol.databinding.FragmentTestMyBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
+import com.jangletech.qoogol.enums.Module;
 import com.jangletech.qoogol.model.FetchSubjectResponse;
 import com.jangletech.qoogol.model.FetchSubjectResponseList;
+import com.jangletech.qoogol.model.ProcessQuestion;
 import com.jangletech.qoogol.model.TestListResponse;
 import com.jangletech.qoogol.model.TestModelNew;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.util.Constant;
+import com.jangletech.qoogol.util.PreferenceManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,8 +48,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.facebook.FacebookSdk.getApplicationContext;
-
 public class MyTestFragment extends BaseFragment implements TestListAdapter.TestClickListener, SearchView.OnQueryTextListener {
 
     private static final String TAG = "MyTestFragment";
@@ -54,6 +55,7 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
     private FragmentTestMyBinding mBinding;
     private TestListAdapter testAdapter;
     private List<TestModelNew> testList;
+    private int tmId;
     ApiInterface apiService = ApiClient.getInstance().getApi();
 
     public static MyTestFragment newInstance() {
@@ -64,13 +66,15 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        Log.d(TAG, "Android Id : "+getDeviceId());
+        Log.d(TAG, "Android Id : " + getDeviceId());
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_test_my, container, false);
+        mViewModel = new ViewModelProvider(this).get(MyTestViewModel.class);
+        initViews(mBinding);
         return mBinding.getRoot();
     }
 
@@ -109,11 +113,7 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
         }
     }
 
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(MyTestViewModel.class);
+    private void initViews(FragmentTestMyBinding mBinding) {
         fetchTestList();
         mViewModel.getAllTestList().observe(getActivity(), new Observer<List<TestModelNew>>() {
             @Override
@@ -154,72 +154,7 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
         });
     }
 
-    /*public void startResumeTest() {
-        ProgressDialog.getInstance().show(getActivity());
-        Call<TestingQuestionNew> call = apiService.fetchTestQuestionAnswers(1,10,3);
-        call.enqueue(new Callback<TestingQuestionNew>() {
-            @Override
-            public void onResponse(Call<TestingQuestionNew> call, Response<TestingQuestionNew> response) {
-                ProgressDialog.getInstance().dismiss();
-                Log.d(TAG, "onResponse: "+response.body());
-                TestingQuestionNew  testingQuestionNew = response.body();
-                Log.d(TAG, "onResponse Data : "+testingQuestionNew.getTestQuestAnswerList().size());
-
-            }
-
-            @Override
-            public void onFailure(Call<TestingQuestionNew> call, Throwable t) {
-                ProgressDialog.getInstance().dismiss();
-                t.printStackTrace();
-            }
-        });
-    }*/
-
     public void setMyTestList(List<TestModelNew> testList) {
-
-       /* TestModel testModel = new TestModel(1, "Shapes and Angles", "Mathematics", "40",
-                "30", "Hard", "88/100", "219", "Jan 2020", "2093",
-                true, true, "Mr. Sharan",
-                "Phd. Mathematics", "Unit Test-Final", "4.3",
-                "100", true, 1, false);
-
-        TestModel testModel1 = new TestModel(2, "Reading Comprehension", "English", "120",
-                "40", "Easy", "53/100", "102", "Mar 2019", "1633",
-                false, true,
-                "Mr. Goswami", "Phd. English", "Unit Test-Final", "2.7",
-                "60", false, 9, false);
-
-        TestModel testModel2 = new TestModel(3, "When the Earth Shook!", "Physics", "40",
-                "60", "Medium", "12/100", "10", "Jul 2019", "8353",
-                true, false, "Mr. Narayan", "Phd. Physics",
-                "Unit Test-Final", "2", "30", false, 0, false);
-
-        TestModel testModel3 = new TestModel(4, "Shapes and Angles", "Mathematics", "40",
-                "30", "Hard", "88/100", "219", "Jan 2020", "2093",
-                true, true, "Mr. Sharan", "Phd. Mathematics",
-                "Unit Test-Final", "4.3", "100", false, 25, false);
-
-        TestModel testModel4 = new TestModel(5, "Reading Comprehension", "English", "120",
-                "40", "Easy", "53/100", "102", "Mar 2019", "1633",
-                false, true, "Mr. Goswami", "Phd. English",
-                "Unit Test-Final", "2.7", "60", true, 3, false);
-
-        TestModel testModel5 = new TestModel(6, "When the Earth Shook!", "Evs", "40",
-                "60", "Medium", "12/100", "10", "Jul 2019", "8353",
-                true, false, "Mr. Narayan", "Phd. Evs",
-                "Unit Test-Final", "2", "30", true, 4, true);
-
-        testList.add(testModel);
-        testList.add(testModel1);
-        testList.add(testModel2);
-        testList.add(testModel3);
-        testList.add(testModel4);
-        testList.add(testModel5);
-*/
-       /* for (int i = 0; i < testList.size(); i++) {
-            mViewModel.insert(testList.get(i));
-        }*/
-
         testAdapter = new TestListAdapter(new MyTestFragment(), testList, this);
         mBinding.testListRecyclerView.setHasFixedSize(true);
         mBinding.testListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -227,16 +162,6 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
     }
 
     private void prepareSubjectChips(List<FetchSubjectResponse> subjectResponseList) {
-       /* List subjectList = new ArrayList();
-        subjectList.add("All");
-        subjectList.add("Physics");
-        subjectList.add("Science");
-        subjectList.add("Mathematics");
-        subjectList.add("Chemistry");
-        subjectList.add("English");
-        subjectList.add("Networking");
-        subjectList.add("DBMS");
-        subjectList.add("Engineering Drawing");*/
 
         mBinding.subjectsChipGrp.removeAllViews();
         for (int i = 0; i < subjectResponseList.size(); i++) {
@@ -264,51 +189,6 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
         }
     }
 
-   /* @Override
-    public void onTestItemClick(TestModel testModel) {
-        Toast.makeText(getActivity(), "" + testModel.getName(), Toast.LENGTH_SHORT).show();
-        testName = testModel.getName();
-        Log.d(TAG, "onTestItemClick: " + testName);
-        MainActivity.navController.navigate(R.id.nav_test_details);
-    }
-
-    @Override
-    public void onStartTestClick(TestModel testModel) {
-        startActivity(new Intent(getActivity(), StartTestActivity.class));
-    }
-
-    @Override
-    public void onCommentClick(TestModel testModel) {
-        showToast("Comment Clicked");
-        NavHostFragment.findNavController(this).navigate(R.id.action_nav_test_my_to_nav_comments);
-    }
-
-    @Override
-    public void onShareClick(TestModel testModel) {
-        Toast.makeText(getActivity(), "Test shared", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onLikeClick(TestModel testModel, int pos) {
-        showToast("Like Clicked");
-        mBinding.testListRecyclerView.post(new Runnable() {
-            @Override
-            public void run() {
-                testAdapter.notifyItemChanged(pos);
-            }
-        });
-    }
-
-    @Override
-    public void onFavouriteClick(TestModel testModel, boolean isChecked) {
-        if (isChecked) {
-            showToast("Added To Favourite.");
-        } else {
-            showToast("Removed From Favourite.");
-        }
-    }*/
-
-
     @Override
     public boolean onQueryTextSubmit(String query) {
         return false;
@@ -334,7 +214,6 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
     }
 
     private List<TestModelNew> filterBySubject(List<TestModelNew> models, String subject) {
-        //subject = subject.toLowerCase();
         List<TestModelNew> filteredModelList = new ArrayList<>();
         if (!subject.equalsIgnoreCase("All")) {
             for (TestModelNew model : models) {
@@ -351,17 +230,22 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
 
     private void fetchSubjectList() {
         ProgressDialog.getInstance().show(getActivity());
-        Call<FetchSubjectResponseList> call = apiService.fetchSubjectList(1002);//todo change userId
+        Call<FetchSubjectResponseList> call = apiService.fetchSubjectList(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));//todo change userId
         call.enqueue(new Callback<FetchSubjectResponseList>() {
             @Override
             public void onResponse(Call<FetchSubjectResponseList> call, Response<FetchSubjectResponseList> response) {
                 ProgressDialog.getInstance().dismiss();
-                mViewModel.setAllSubjectList(response.body().getFetchSubjectResponseList());
+                if (response.body() != null && response.body().getResponse().equals("200")) {
+                    mViewModel.setAllSubjectList(response.body().getFetchSubjectResponseList());
+                } else {
+                    showErrorDialog(getActivity(), response.body().getResponse(), response.body().getMessage());
+                }
             }
 
             @Override
             public void onFailure(Call<FetchSubjectResponseList> call, Throwable t) {
                 ProgressDialog.getInstance().dismiss();
+                showToast("Something went wrong!!");
                 t.printStackTrace();
             }
         });
@@ -369,19 +253,24 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
 
     private void fetchTestList() {
         ProgressDialog.getInstance().show(getActivity());
-        Call<TestListResponse> call = apiService.fetchTestList(1003);//todo change userId
+        Call<TestListResponse> call = apiService.fetchTestList(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));//todo change userId
         call.enqueue(new Callback<TestListResponse>() {
             @Override
             public void onResponse(Call<TestListResponse> call, Response<TestListResponse> response) {
                 ProgressDialog.getInstance().dismiss();
-                mViewModel.setAllTestList(response.body().getTestList());
-                Log.d(TAG, "onResponse: " + response.body().getTestList());
-                Log.d(TAG, "onResponse: " + response.body().getTestList().size());
+                if (response.body() != null && response.body().getResponse().equals("200")) {
+                    mViewModel.setAllTestList(response.body().getTestList());
+                    Log.d(TAG, "onResponse: " + response.body().getTestList());
+                    Log.d(TAG, "onResponse: " + response.body().getTestList().size());
+                } else {
+                    //showErrorDialog(getActivity(),response.body().getResponse(),response.body().getMessage());
+                }
             }
 
             @Override
             public void onFailure(Call<TestListResponse> call, Throwable t) {
                 ProgressDialog.getInstance().dismiss();
+                showToast("Something went wrong!!");
                 t.printStackTrace();
             }
         });
@@ -396,12 +285,18 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
 
     @Override
     public void onStartTestClick(TestModelNew testModel) {
-        startActivity(new Intent(getActivity(), StartTestActivity.class));
+        Intent intent = new Intent(getActivity(), StartTestActivity.class);
+        intent.putExtra(Constant.TM_ID, testModel.getTm_id());
+        startActivity(intent);
     }
 
     @Override
     public void onCommentClick(TestModelNew testModel) {
-
+        Bundle bundle = new Bundle();
+        tmId = testModel.getTm_id();
+        bundle.putInt("tmId", tmId);
+        bundle.putString(Constant.CALL_FROM, Module.Test.toString());
+        NavHostFragment.findNavController(this).navigate(R.id.nav_comments, bundle);
     }
 
     @Override
@@ -410,12 +305,44 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
     }
 
     @Override
-    public void onLikeClick(TestModelNew testModel, int pos) {
-
+    public void onLikeClick(TestModelNew testModel, int pos, boolean isChecked) {
+        doLikeTest(pos, isChecked);
     }
 
     @Override
     public void onFavouriteClick(TestModelNew testModel, boolean isChecked) {
 
+    }
+
+    private void doLikeTest(int pos, boolean isChecked) {
+        ProgressDialog.getInstance().show(getActivity());
+        Call<ProcessQuestion> call = apiService.addTestLike(new PreferenceManager(getActivity()).getInt(Constant.USER_ID), tmId, "I", 1);
+        call.enqueue(new Callback<ProcessQuestion>() {
+            @Override
+            public void onResponse(Call<ProcessQuestion> call, Response<ProcessQuestion> response) {
+                ProgressDialog.getInstance().dismiss();
+                if (response.body() != null && response.body().getResponse().equals("200")) {
+                    Log.d(TAG, "onResponse Like : " + response.body().getResponse());
+                    if (isChecked) {
+                        testList.get(pos).setLikeCount("0");
+                        testList.get(pos).setLike(false);
+                        testAdapter.updateList(testList, pos);
+                    } else {
+                        testList.get(pos).setLikeCount("1");//todo change hardcoded value
+                        testList.get(pos).setLike(true);
+                        testAdapter.updateList(testList, pos);
+                    }
+                } else {
+                    showErrorDialog(getActivity(), response.body().getResponse(), response.body().getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ProcessQuestion> call, Throwable t) {
+                ProgressDialog.getInstance().dismiss();
+                showToast("Something went wrong!!");
+                t.printStackTrace();
+            }
+        });
     }
 }

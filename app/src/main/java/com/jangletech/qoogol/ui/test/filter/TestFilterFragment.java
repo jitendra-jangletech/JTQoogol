@@ -19,23 +19,22 @@ import com.androidbuts.multispinnerfilter.SpinnerListener;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.jangletech.qoogol.R;
+import com.jangletech.qoogol.activities.MainActivity;
 import com.jangletech.qoogol.databinding.TestFilterFragmentBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
-import com.jangletech.qoogol.model.FetchEducationsObject;
 import com.jangletech.qoogol.model.FetchSubjectResponse;
 import com.jangletech.qoogol.model.FetchSubjectResponseList;
-import com.jangletech.qoogol.model.TestModelNew;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.ui.test.my_test.MyTestViewModel;
-import com.linkedin.platform.LISession;
+import com.jangletech.qoogol.util.Constant;
+import com.jangletech.qoogol.util.PreferenceManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -85,7 +84,7 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
 
     private void fetchSubjectList() {
         ProgressDialog.getInstance().show(getActivity());
-        Call<FetchSubjectResponseList> call = apiService.fetchSubjectList(1002);//todo change userId
+        Call<FetchSubjectResponseList> call = apiService.fetchSubjectList(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));//todo change userId
         call.enqueue(new Callback<FetchSubjectResponseList>() {
             @Override
             public void onResponse(Call<FetchSubjectResponseList> call, Response<FetchSubjectResponseList> response) {
@@ -121,7 +120,7 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
 
         mBinding.btnApply.setOnClickListener(v -> {
             Toast.makeText(getActivity(), "Filters Applied", Toast.LENGTH_SHORT).show();
-            getActivity().onBackPressed();
+            MainActivity.navController.navigate(R.id.nav_test_my);
         });
 
         List<String> list = Arrays.asList(getResources().getStringArray(R.array.author));
@@ -268,15 +267,6 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
     }
 
     private void prepareSubjectChips(List<FetchSubjectResponse> subjects) {
-        /*List subjectList = new ArrayList();
-        subjectList.add("All");
-        subjectList.add("Physics");
-        subjectList.add("Mathematics");
-        subjectList.add("Chemistry");
-        subjectList.add("English");
-        subjectList.add("Networking");
-        subjectList.add("DBMS");
-        subjectList.add("Engineering Drawing");*/
 
         mBinding.subjectsChipGrp.removeAllViews();
         for (int i = 0; i < subjects.size(); i++) {

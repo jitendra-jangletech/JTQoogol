@@ -25,6 +25,7 @@ import com.jangletech.qoogol.adapter.LearingAdapter;
 import com.jangletech.qoogol.database.QoogolDatabase;
 import com.jangletech.qoogol.databinding.LearningFragmentBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
+import com.jangletech.qoogol.enums.Module;
 import com.jangletech.qoogol.model.LearningQuestResponse;
 import com.jangletech.qoogol.model.LearningQuestions;
 import com.jangletech.qoogol.model.LearningQuestionsNew;
@@ -575,6 +576,7 @@ public class LearningFragment extends Fragment implements LearingAdapter.onIconC
     @Override
     public void onCommentClick(String questionId) {
         Bundle bundle = new Bundle();
+        bundle.putString(Constant.CALL_FROM, Module.Learning.toString());
         bundle.putString("QuestionId", questionId);
         NavHostFragment.findNavController(this).navigate(R.id.nav_comments, bundle);
     }

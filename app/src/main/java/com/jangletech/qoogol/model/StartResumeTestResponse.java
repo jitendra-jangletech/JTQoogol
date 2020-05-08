@@ -7,6 +7,9 @@ import java.util.List;
 
 public class StartResumeTestResponse {
 
+    @SerializedName("Message")
+    private String message;
+
     @SerializedName(Constant.tm_id)
     private String tm_id;
 
@@ -261,6 +264,14 @@ public class StartResumeTestResponse {
 
     public void setTestQuestionNewList(List<TestQuestionNew> testQuestionNewList) {
         this.testQuestionNewList = testQuestionNewList;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public String getResponseCode() {

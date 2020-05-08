@@ -1,6 +1,5 @@
 package com.jangletech.qoogol.util;
 
-import com.jangletech.qoogol.ui.syllabus.stream.StreamFragment;
 
 /**
  * Created by Pritali on 1/28/2020.
@@ -9,6 +8,9 @@ public class Constant {
 
     //Selected Board
     public static final String BOARD = "BOARD";
+    public static final String MOBILE = "MOBILE";
+    public static final String USER_ID = "USER_ID";
+    public static final String TM_ID = "TM_ID";
 
     //Question Filter Type
     public static final String FILTER_APPLIED = "FILTER_APPLIED";
@@ -99,15 +101,15 @@ public class Constant {
 
 
     //Question type
-    public static String Fill_THE_BLANKS  = "3";
+    public static String Fill_THE_BLANKS = "3";
     public static String ONE_LINE_ANSWER = "4";
     public static String SHORT_ANSWER = "5";
     public static String LONG_ANSWER = "6";
 
     //Options type
     public static String SCQ = "1";
-    public static String SCQ_IMAGE  = "2";
-    public static String SCQ_IMAGE_WITH_TEXT  = "3";
+    public static String SCQ_IMAGE = "2";
+    public static String SCQ_IMAGE_WITH_TEXT = "3";
     public static String MCQ = "4";
     public static String MCQ_IMAGE = "5";
     public static String MCQ_IMAGE_WITH_TEXT = "6";
@@ -118,16 +120,48 @@ public class Constant {
     public static String MATCH_PAIR = "11";
     public static String MATCH_PAIR_IMAGE = "12";
 
+    //Register & Login Fields
+    public static final String w_user_name = "539";
+    public static final String u_mob_1 = "108";
+    public static final String u_calling_code = "177";
+    public static final String u_Password = "199M";
+    public static final String deviceId = "126Q";
+    public static final String appName = "200Q";
+    public static final String u_app_version = "165";
+    public static final String u_user_type = "106";
+    public static final String u_app_type = "199";
+    public static final String u_t_and_c = "114";
+    public static final String u_referred_by = "143";
+
+
+    // QLikesComments
+    public static final String tlc_id = "1401";
+    public static final String tlc_tm_id = "1402";
+    public static final String tlc_like_flag = "1403";
+    public static final String tlc_comment_flag = "1404";
+    public static final String tlc_comment_text = "1405";
+    public static final String tlc_user_id = "1406";
+    public static final String tlc_share_flag = "1407";
+    public static final String tlc_cdatetime = "1408";
+    public static final String tlc_deleted = "1409";
+    public static final String tlc_fav_flag = "1410";
+
 
     //learning
-    public static final String FETCH_QA = "q051FetchQA";
     public static final String QUESTION_IMAGES_API = "https://jtmobileappstorage.blob.core.windows.net/spotmeets/media/qoogol/questions/";
     public static final String FETCH_QA = "q151FetchQA";
     public static final String PROCESS_QUESTION = "q141ProcessQuestion";
+    public static final String PROCESS_TEST = "q133ProcessTest";
+    public static final String START_RESUME_TEST = "q131StartResumeTest";
+    public static final String TEST_DETAILS = "q132FetchTestDetails";
+    public static final String FETCH_TEST_LIST = "q152fetchtest";
+    public static final String FETCH_SUBJECTS = "q111FetchSubjectMaster";
+    public static final String FETCH_NOTIFICATIONS = "sm28FetchNotifications";
     public static final String COUNTRY = "sm05CountryData";
     public static final String STATE = "sm06StateData";
     public static final String CITY = "sm09CityData";
     public static final String UNIVERSITY = "sm12UBMData";
+    public static final String REGISTER_LOGIN = "sm01Signup";
     public static final String COURSE = "sm15CourseData";
     public static final String INSTITUTE = "sm13InstOrgData";
     public static final String DEGREE = "sm14DegreeData";
@@ -143,7 +177,6 @@ public class Constant {
     public static final String App_ERROR = "Application issue. Contact support.";
     public static final String MULTILOGIN_ERROR = "You have logged in from another device. Continue?";
     public static final String ERROR = "Something went wrong. Try again later.";
-
 
     //comman
     public static final String Response = "Response";
@@ -167,13 +200,13 @@ public class Constant {
     public static final String iom_name = "249";
 
     //DegreeMaster
-    public  static final String dm_id = "255";
-    public  static final String dm_degree_name = "256";
+    public static final String dm_id = "255";
+    public static final String dm_degree_name = "256";
 
     //Course
-    public  static final String co_id = "261";
-    public  static final String co_dm_id = "262";
-    public  static final String co_name = "263";
+    public static final String co_id = "261";
+    public static final String co_dm_id = "262";
+    public static final String co_name = "263";
 
     // ChapterMaster
     public static final String ex_id = "1435";
@@ -218,43 +251,44 @@ public class Constant {
     public static final String q_solved_by = "1360";
     public static final String q_media_type = "1361";
     public static final String q_option_type = "1362";
-    public static final String q_id = "1325";
-    public static final String q_cm_id = "326";
-    public static final String q_md_id = "327";
-    public static final String q_sm_id = "328";
-    public static final String q_up_u_id = "329";
-    public static final String q_credit = "330";
-    public static final String q_mcq_op_1 = "1331";
-    public static final String q_mcq_op_2 = "1332";
-    public static final String q_mcq_op_3 = "1333";
-    public static final String q_mcq_op_4 = "1334";
-    public static final String q_mcq_op_5 = "1335";
-    public static final String q_marks = "1336";
-    public static final String q_diff_level = "1337";
-    public static final String q_trending = "338";
-    public static final String q_popular = "339";
-    public static final String q_recent = "340";
-    public static final String q_avg_ratings = "341";
-    public static final String q_no_of_ratings = "342";
-    public static final String q_status = "343";
-    public static final String q_cdatetime = "344";
-    public static final String q_udatetime = "345";
-    public static final String q_type = "1346";
-    public static final String q_source = "347";
-    public static final String q_quest = "1348";
-    public static final String q_view_count = "349";
-    public static final String q_category = "1350";
-    public static final String q_duration = "351";
-    public static final String q_likes = "352";
-    public static final String q_comments = "353";
-    public static final String q_views = "354";
-    public static final String q_shares = "355";
-    public static final String q_last_used = "356";
-    public static final String q_topic_id = "357";
-    public static final String q_quest_desc = "1358";
-    public static final String q_attempted_by = "359";
-    public static final String q_solved_by = "360";
-    public static final String q_media_type = "1361";
+//    public static final String q_id = "1325";
+//    public static final String q_cm_id = "326";
+//    public static final String q_md_id = "327";
+//    public static final String q_sm_id = "328";
+//    public static final String q_up_u_id = "329";
+//    public static final String q_credit = "330";
+//    public static final String q_mcq_op_1 = "1331";
+//    public static final String q_mcq_op_2 = "1332";
+//    public static final String q_mcq_op_3 = "1333";
+//    public static final String q_mcq_op_4 = "1334";
+//    public static final String q_mcq_op_5 = "1335";
+//    public static final String q_marks = "1336";
+//    public static final String q_diff_level = "1337";
+//    public static final String q_trending = "338";
+//    public static final String q_popular = "339";
+//    public static final String q_recent = "340";
+//    public static final String q_avg_ratings = "341";
+//    public static final String q_no_of_ratings = "342";
+//    public static final String q_status = "343";
+//    public static final String q_cdatetime = "344";
+//    public static final String q_udatetime = "345";
+//    public static final String q_type = "1346";
+//    public static final String q_source = "347";
+//    public static final String q_quest = "1348";
+//    public static final String q_view_count = "349";
+//    public static final String q_category = "1350";
+//    public static final String q_duration = "351";
+//    public static final String q_likes = "352";
+//    public static final String q_comments = "353";
+//    public static final String q_views = "354";
+//    public static final String q_shares = "355";
+//    public static final String q_last_used = "356";
+//    public static final String q_topic_id = "357";
+//    public static final String q_quest_desc = "1358";
+//    public static final String q_attempted_by = "359";
+//    public static final String q_solved_by = "360";
+//    public static final String q_media_type = "1361";
+
     public static final String q_options_type = "1362";
 
     //Answers
@@ -286,16 +320,18 @@ public class Constant {
     public static final String qlc_cdatetime = "1388";
     public static final String qlc_deleted = "1389";
     public static final String qlc_fav_flag = "1390";
-    public static final String qlc_id = "1381";
-    public static final String qlc_q_id = "1382";
-    public static final String qlc_like_flag = "1383";
-    public static final String qlc_comment_flag = "1384";
-    public static final String qlc_comment_text = "1385";
-    public static final String qlc_user_id = "1386";
-    public static final String qlc_share_flag = "1387";
-    public static final String qlc_cdatetime = "1388";
-    public static final String qlc_deleted = "1389";
-    public static final String qlc_fav_flag = "1390";
+
+
+//    public static final String qlc_id = "1381";
+//    public static final String qlc_q_id = "1382";
+//    public static final String qlc_like_flag = "1383";
+//    public static final String qlc_comment_flag = "1384";
+//    public static final String qlc_comment_text = "1385";
+//    public static final String qlc_user_id = "1386";
+//    public static final String qlc_share_flag = "1387";
+//    public static final String qlc_cdatetime = "1388";
+//    public static final String qlc_deleted = "1389";
+//    public static final String qlc_fav_flag = "1390";
 
     // SubjectMaster
     public static final String sm_id = "1300";
@@ -312,8 +348,8 @@ public class Constant {
     public static final String scr_ex_id = "1428";
     public static final String scr_sem_id = "1429";
     public static final String scr_cy_num = "1430";
-    public static final String cm_id = "1315";
-    public static final String cm_chapter_name = "1316";
+//    public static final String cm_id = "1315";
+//    public static final String cm_chapter_name = "1316";
 
 
     //TestQuestion Api Start/Resume Test Constants
@@ -416,14 +452,14 @@ public class Constant {
     public static final String n_ref_id = "302";
     public static final String n_ref_type = "303";
     public static final String n_cdatetime = "305";
-    public static final String w_user_profile_image_name = "507";
+    //public static final String w_user_profile_image_name = "507";
 
 
+    public static final String CALL_FROM = "CALL_FROM";
 
 
-
-    //Start Resume missing Parameter
-    public static final String sm_sub_name = "1301";
+//    //Start Resume missing Parameter
+//    public static final String sm_sub_name = "1301";
 
     /***
      *  SCQ("1"),
@@ -434,16 +470,14 @@ public class Constant {
      *     LONG_ANSWER("6");
      */
 
-    public static final String SCQ = "1";
+   /* public static final String SCQ = "1";
     public static final String MCQ = "2";
     public static final String Fill_THE_BLANKS = "3";
     public static final String ONE_LINE_ANSWER = "4";
     public static final String SHORT_ANSWER = "5";
-    public static final String LONG_ANSWER = "6";
+    public static final String LONG_ANSWER = "6";*/
 
     public static final String PRODUCTION_BASE_FILE_API = "https://jtmobileappstorage.blob.core.windows.net/spotmeets/media/images/";
-
-
 
     //Media
     public static final String w_ans_text = "1701";

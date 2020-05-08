@@ -27,6 +27,7 @@ import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.util.Constant;
+import com.jangletech.qoogol.util.PreferenceManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,38 +74,11 @@ public class TestDetailsFragment extends BaseFragment {
         });
 
         mBinding.btnStartTest.setOnClickListener(v -> {
-            startActivity(new Intent(getActivity(), StartTestActivity.class));
+            Intent intent = new Intent(getActivity(),StartTestActivity.class);
+            intent.putExtra(Constant.TM_ID,testModelNew.getTm_id());
+            startActivity(intent);
         });
     }
-
-   /* public void setLeastScoredQuestionList() {
-        List<Question> questionList = new ArrayList<>();
-        questionList.clear();
-        Question question = new Question(1, "which country owns Alaska Region?", "Scored (5/40)");
-        Question question1 = new Question(2, "which country is exporter of titanium?", "Scored (10/60)");
-        questionList.add(question);
-        questionList.add(question1);
-        QuestionAdapter testAdapter = new QuestionAdapter(getActivity(), questionList);
-        mBinding.leastScoredQuestRecyclerView.setHasFixedSize(true);
-        mBinding.leastScoredQuestRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mBinding.leastScoredQuestRecyclerView.setAdapter(testAdapter);
-    }*/
-
-   /* public void setTopScoredQuestionList() {
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mBinding.topScoredQuestRecyclerView.getContext(),
-                new LinearLayoutManager(getContext()).getOrientation());
-        mBinding.topScoredQuestRecyclerView.addItemDecoration(dividerItemDecoration);
-        List<Question> questionList = new ArrayList<>();
-        questionList.clear();
-        Question question = new Question(1, "Who is Prime Minister of United Kingdom?", "Scored (10/20)");
-        Question question1 = new Question(2, "What is story line for parasite movie?", "Scored (95/100)");
-        questionList.add(question);
-        questionList.add(question1);
-        QuestionAdapter testAdapter = new QuestionAdapter(getActivity(), questionList);
-        mBinding.topScoredQuestRecyclerView.setHasFixedSize(true);
-        mBinding.topScoredQuestRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mBinding.topScoredQuestRecyclerView.setAdapter(testAdapter);
-    }*/
 
     public void sortQSetList(List<QSet> qSetList) {
 
@@ -161,7 +135,7 @@ public class TestDetailsFragment extends BaseFragment {
 
     private void fetchTestList() {
         ProgressDialog.getInstance().show(getActivity());
-        Call<TestDetailsResponse> call = apiService.fetchTestDetails(1003, testModelNew.getTm_id());//todo change userId and tmIdd
+        Call<TestDetailsResponse> call = apiService.fetchTestDetails(new PreferenceManager(getActivity()).getInt(Constant.USER_ID), testModelNew.getTm_id());//todo change userId and tmIdd
         call.enqueue(new Callback<TestDetailsResponse>() {
             @Override
             public void onResponse(Call<TestDetailsResponse> call, Response<TestDetailsResponse> response) {

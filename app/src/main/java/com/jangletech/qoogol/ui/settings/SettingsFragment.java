@@ -6,13 +6,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.jangletech.qoogol.R;
@@ -27,11 +25,9 @@ import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.ui.test.my_test.MyTestViewModel;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -57,9 +53,15 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
         return mBinding.getRoot();
     }
 
+    private void initViews(){
+        mBinding.btnApply.setOnClickListener(v->{
+            MainActivity.navController.navigate(R.id.nav_test_my);
+        });
+    }
+
     private void fetchSubjectList() {
         ProgressDialog.getInstance().show(getActivity());
-        Call<FetchSubjectResponseList> call = apiService.fetchSubjectList(1002);//todo change userId
+        Call<FetchSubjectResponseList> call = apiService.fetchSubjectList(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));//todo change userId
         call.enqueue(new Callback<FetchSubjectResponseList>() {
             @Override
             public void onResponse(Call<FetchSubjectResponseList> call, Response<FetchSubjectResponseList> response) {
@@ -264,18 +266,6 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
 
     }
 
-    private void prepareBoardChips(List boardList) {
-        mBinding.boardChipGrp.removeAllViews();
-       /* for (int i = 0; i < boardList.size(); i++) {
-            Chip chip = (Chip) LayoutInflater.from(mBinding.classChipGrp.getContext()).inflate(R.layout.chip_layout, mBinding.boardChipGrp, false);
-            chip.setText(boardList.get(i).toString());
-            chip.setTag(boardList.get(i).toString());
-            chip.setId(i);
-            chip.setClickable(true);
-            chip.setCheckable(true);
-            mBinding.boardChipGrp.addView(chip);
-        }*/
-    }
 
     private void prepareClassesChips(List classList) {
         mBinding.classChipGrp.removeAllViews();

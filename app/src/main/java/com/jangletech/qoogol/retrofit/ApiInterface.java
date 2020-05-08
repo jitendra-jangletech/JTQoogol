@@ -12,7 +12,6 @@ import com.jangletech.qoogol.model.EmptyObject;
 import com.jangletech.qoogol.model.Exams;
 import com.jangletech.qoogol.model.FetchEducationsResponseDto;
 import com.jangletech.qoogol.model.FetchPreferableExamsResponseDto;
-import com.jangletech.qoogol.model.FetchSubjectResponse;
 import com.jangletech.qoogol.model.FetchSubjectResponseList;
 import com.jangletech.qoogol.model.GetUserPersonalDetails;
 import com.jangletech.qoogol.model.InstituteResponse;
@@ -20,7 +19,7 @@ import com.jangletech.qoogol.model.LearningQuestResponse;
 import com.jangletech.qoogol.model.MobileOtp;
 import com.jangletech.qoogol.model.NotificationResponse;
 import com.jangletech.qoogol.model.ProcessQuestion;
-import com.jangletech.qoogol.model.ResponseObj;
+import com.jangletech.qoogol.model.RegisterLoginModel;
 import com.jangletech.qoogol.model.SignInModel;
 import com.jangletech.qoogol.model.StartResumeTestResponse;
 import com.jangletech.qoogol.model.StateResponse;
@@ -46,8 +45,6 @@ import retrofit2.http.QueryMap;
  * Created by Pritali on 1/30/2020.
  */
 public interface ApiInterface {
-
-    //Todo Change Master Data Url
 
     @POST("auth/signInNew")
     Call<SignInModel> signCall(@QueryMap Map<String, String> request);
@@ -112,51 +109,89 @@ public interface ApiInterface {
     @POST("user/saveUserSelectedExams")
     Call<CommonResponseObject> saveUserSelectedExams(@Query("userId") int userId,
                                                      @Body List<Exams> selectedExamsList);
+
     @FormUrlEncoded
-    @POST("q152fetchtest")
+    @POST(Constant.FETCH_TEST_LIST)
     Call<TestListResponse> fetchTestList(@Field(Constant.u_user_id) int userId);
 
     @FormUrlEncoded
-    @POST("sm28FetchNotifications")
+    @POST(Constant.FETCH_NOTIFICATIONS)
     Call<NotificationResponse> fetchNotifications(@Field(Constant.u_user_id) int userId,
-                                                  @Field("126") String deviceId);
+                                                  @Field("126Q") String deviceId);
 
 
     @FormUrlEncoded
-    @POST("q111FetchSubjectMaster")
+    @POST(Constant.FETCH_SUBJECTS)
     Call<FetchSubjectResponseList> fetchSubjectList(@Field(Constant.u_user_id) int userId);
 
     @FormUrlEncoded
-    @POST("q132FetchTestDetails")
+    @POST(Constant.TEST_DETAILS)
     Call<TestDetailsResponse> fetchTestDetails(@Field(Constant.u_user_id) int userId,
                                                @Field(Constant.tm_id) int tmId);
 
     @FormUrlEncoded
-    @POST("q131StartResumeTest")
+    @POST(Constant.START_RESUME_TEST)
     Call<StartResumeTestResponse> fetchTestQuestionAnswers(@Field(Constant.u_user_id) int userId,
                                                            @Field(Constant.tm_id) int testMasterId);
 
+    @FormUrlEncoded
+    @POST(Constant.PROCESS_TEST)
+    Call<ProcessQuestion> addTestLike(@Field(Constant.u_user_id) int userid,
+                                      @Field(Constant.tm_id) int tmId,
+                                      @Field("Case") String caseL,
+                                      @Field(Constant.qlc_like_flag) int like);
+
+    @FormUrlEncoded
+    @POST(Constant.REGISTER_LOGIN)
+    Call<RegisterLoginModel> doRegisterLogin(@Field(Constant.u_mob_1) String mobile,
+                                             @Field("Case") String caseR,
+                                             @Field(Constant.u_calling_code) int countryCode,
+                                             @Field(Constant.u_Password) String password,
+                                             @Field(Constant.deviceId) String deviceId,
+                                             @Field(Constant.appName) String appName);
+
+    @FormUrlEncoded
     @POST(Constant.FETCH_QA)
     Call<LearningQuestResponse> fetchQAApi(@Field(Constant.u_user_id) String userid);
 
     @FormUrlEncoded
     @POST(Constant.PROCESS_QUESTION)
-    Call<ProcessQuestion> fetchComments(@Field(Constant.u_user_id) String userid, @Field(Constant.q_id) String queId, @Field("Case") String caseL);
+    Call<ProcessQuestion> fetchComments(@Field(Constant.u_user_id) int userid,
+                                        @Field(Constant.q_id) String queId,
+                                        @Field("Case") String caseL);
+
+    @FormUrlEncoded
+    @POST(Constant.PROCESS_TEST)
+    Call<ProcessQuestion> fetchTestComments(@Field(Constant.u_user_id) int userid,
+                                            @Field(Constant.tm_id) int tmId,
+                                            @Field("Case") String caseL);
 
     @FormUrlEncoded
     @POST(Constant.PROCESS_QUESTION)
-    Call<ProcessQuestion> likeApi(@Field(Constant.u_user_id) String userid, @Field(Constant.q_id) String queId, @Field("Case") String caseL, @Field(Constant.qlc_like_flag) int like);
-
-
-    @FormUrlEncoded
-    @POST(Constant.PROCESS_QUESTION)
-    Call<ProcessQuestion> favApi(@Field(Constant.u_user_id) String userid, @Field(Constant.q_id) String queId, @Field("Case") String caseL, @Field(Constant.qlc_fav_flag) int like);
-
+    Call<ProcessQuestion> likeApi(@Field(Constant.u_user_id) String userid,
+                                  @Field(Constant.q_id) String queId,
+                                  @Field("Case") String caseL,
+                                  @Field(Constant.qlc_like_flag) int like);
 
     @FormUrlEncoded
     @POST(Constant.PROCESS_QUESTION)
-    Call<ProcessQuestion> addCommentApi(@Field(Constant.u_user_id) String userid, @Field(Constant.q_id) String queId, @Field("Case") String caseL, @Field(Constant.qlc_comment_text) String comment);
+    Call<ProcessQuestion> favApi(@Field(Constant.u_user_id) String userid,
+                                 @Field(Constant.q_id) String queId,
+                                 @Field("Case") String caseL,
+                                 @Field(Constant.qlc_fav_flag) int like);
 
+    @FormUrlEncoded
+    @POST(Constant.PROCESS_QUESTION)
+    Call<ProcessQuestion> addCommentApi(@Field(Constant.u_user_id) int userid,
+                                        @Field(Constant.q_id) String queId,
+                                        @Field("Case") String caseL,
+                                        @Field(Constant.qlc_comment_text) String comment);
 
+    @FormUrlEncoded
+    @POST(Constant.PROCESS_TEST)
+    Call<ProcessQuestion> addTestCommentApi(@Field(Constant.u_user_id) int userid,
+                                            @Field(Constant.tm_id) int tmId,
+                                            @Field("Case") String caseL,
+                                            @Field(Constant.tlc_comment_text) String comment);
 
 }

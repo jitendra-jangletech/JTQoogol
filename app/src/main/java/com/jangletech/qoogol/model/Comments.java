@@ -11,6 +11,7 @@ import com.jangletech.qoogol.util.Constant;
  */
 @Entity
 public class Comments {
+
     @PrimaryKey
     @SerializedName(Constant.qlc_id)
     private String commentId;
@@ -39,6 +40,77 @@ public class Comments {
     @SerializedName(Constant.w_user_profile_image_name)
     private String profile_image;
 
+
+    /***
+     * New Fields Added For Test Comment By Jitendra
+     * @return
+     */
+
+    @SerializedName(Constant.tlc_id)
+    private String tlc_id;
+
+    @SerializedName(Constant.tlc_user_id)
+    private String tlc_user_id;
+
+    @SerializedName(Constant.tlc_tm_id)
+    private String tlc_tm_id;
+
+    @SerializedName(Constant.tlc_cdatetime)
+    private String tlc_cdatetime;
+
+    @SerializedName(Constant.tlc_comment_flag)
+    private String tlc_comment_flag;
+
+    @SerializedName(Constant.tlc_comment_text)
+    private String tlc_comment_text;
+
+    public String getTlc_id() {
+        return tlc_id;
+    }
+
+    public void setTlc_id(String tlc_id) {
+        this.tlc_id = tlc_id;
+    }
+
+    public String getTlc_user_id() {
+        return tlc_user_id;
+    }
+
+    public void setTlc_user_id(String tlc_user_id) {
+        this.tlc_user_id = tlc_user_id;
+    }
+
+    public String getTlc_tm_id() {
+        return tlc_tm_id;
+    }
+
+    public void setTlc_tm_id(String tlc_tm_id) {
+        this.tlc_tm_id = tlc_tm_id;
+    }
+
+    public String getTlc_cdatetime() {
+        return tlc_cdatetime;
+    }
+
+    public void setTlc_cdatetime(String tlc_cdatetime) {
+        this.tlc_cdatetime = tlc_cdatetime;
+    }
+
+    public String getTlc_comment_flag() {
+        return tlc_comment_flag;
+    }
+
+    public void setTlc_comment_flag(String tlc_comment_flag) {
+        this.tlc_comment_flag = tlc_comment_flag;
+    }
+
+    public String getTlc_comment_text() {
+        return tlc_comment_text;
+    }
+
+    public void setTlc_comment_text(String tlc_comment_text) {
+        this.tlc_comment_text = tlc_comment_text;
+    }
 
     public String getCommentId() {
         return commentId;

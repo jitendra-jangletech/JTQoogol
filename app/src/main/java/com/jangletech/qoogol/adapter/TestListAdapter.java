@@ -1,19 +1,25 @@
 package com.jangletech.qoogol.adapter;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.TestItemBinding;
 import com.jangletech.qoogol.model.TestModelNew;
+import com.jangletech.qoogol.util.DateUtils;
+
 import java.util.HashMap;
 import java.util.List;
 
 public class TestListAdapter extends RecyclerView.Adapter<TestListAdapter.ViewHolder> {
 
+    private static final String TAG = "TestListAdapter";
     Fragment fragment;
     List<TestModelNew> testModelList;
     TestItemBinding itemBinding;
@@ -47,7 +53,7 @@ public class TestListAdapter extends RecyclerView.Adapter<TestListAdapter.ViewHo
 
         TestModelNew testModel = testModelList.get(position);
 
-        itemBinding.tvTestNameSubject.setText(testModel.getTm_name()+"("+testModel.getSm_sub_name()+")");
+        itemBinding.tvTestNameSubject.setText(testModel.getTm_name() + "(" + testModel.getSm_sub_name() + ")");
         itemBinding.tvCategory.setText(testModel.getTm_catg());
         itemBinding.tvDuration.setText(testModel.getTm_duration() + " Min.");
         itemBinding.tvTotalMarks.setText(testModel.getTm_tot_marks());
@@ -56,11 +62,34 @@ public class TestListAdapter extends RecyclerView.Adapter<TestListAdapter.ViewHo
         itemBinding.tvAttendedBy.setText(testModel.getTm_attempted_by());
         itemBinding.tvRanking.setText(testModel.getTm_ranking());
         itemBinding.tvQuestCount.setText(testModel.getQuest_count());
-        itemBinding.likeValue.setText(testModel.getLikeCount());
+
+        if (testModel.getLikeCount() != null) {
+            itemBinding.likeValue.setText(testModel.getLikeCount());
+        } else {
+            itemBinding.likeValue.setText("0");
+        }
+
+        if (testModel.getShareCount() != null) {
+            itemBinding.shareValue.setText(testModel.getShareCount());
+        } else {
+            itemBinding.shareValue.setText("0");
+        }
+
+        if (testModel.getCommentsCount() != null) {
+            itemBinding.commentValue.setText(testModel.getCommentsCount());
+        } else {
+            itemBinding.commentValue.setText("0");
+        }
+
+       // Log.d(TAG, "Share Count : "+testModel.getShareCount());
+        //Log.d(TAG, "Comment Count : "+testModel.getCommentsCount());
+
         itemBinding.shareValue.setText(testModel.getShareCount());
         itemBinding.commentValue.setText(testModel.getCommentsCount());
 
-        itemBinding.tvPublishedDate.setText(testModel.getPublishedDate().substring(0, 10));
+        if(testModel.getPublishedDate()!=null)
+        itemBinding.tvPublishedDate.setText(DateUtils.getFormattedDate(testModel.getPublishedDate().substring(0, 10)));
+
         itemBinding.tvAuthorName.setText(testModel.getAuthor());
 
         if (testModel.isFavourite()) {
@@ -69,12 +98,11 @@ public class TestListAdapter extends RecyclerView.Adapter<TestListAdapter.ViewHo
             itemBinding.favorite.setChecked(false);
         }
 
-        if (testModel.isFavourite()) {
+        if (testModel.isLike()) {
             itemBinding.like.setChecked(true);
         } else {
             itemBinding.like.setChecked(false);
         }
-
 
         holder.itemBinding.testItemCard.setOnClickListener(v -> {
             testClickListener.onTestItemClick(testModel);
@@ -84,9 +112,10 @@ public class TestListAdapter extends RecyclerView.Adapter<TestListAdapter.ViewHo
             testClickListener.onStartTestClick(testModel);
         });
 
-        /*holder.itemBinding.likeLayout.setOnClickListener(v->{
-            testClickListener.onLikeClick(testModel);
-        });*/
+        holder.itemBinding.like.setOnClickListener(v -> {
+            boolean isChecked = holder.itemBinding.like.isChecked();
+            testClickListener.onLikeClick(testModel, position,isChecked);
+        });
 
         holder.itemBinding.commentLayout.setOnClickListener(v -> {
             testClickListener.onCommentClick(testModel);
@@ -125,13 +154,22 @@ public class TestListAdapter extends RecyclerView.Adapter<TestListAdapter.ViewHo
 
         void onShareClick(TestModelNew testModel);
 
-        void onLikeClick(TestModelNew testModel, int pos);
+        void onLikeClick(TestModelNew testModel, int pos,boolean isChecked);
 
         void onFavouriteClick(TestModelNew testModel, boolean isChecked);
+    }
+
+    public void updateList(List<TestModelNew> testModelList,int pos){
+        this.testModelList = testModelList;
+        notifyDataSetChanged();
     }
 
     public void setSearchResult(List<TestModelNew> result) {
         testModelList = result;
         notifyDataSetChanged();
+        for (TestModelNew testModelNew: testModelList) {
+            Log.d(TAG, "isLike "+testModelNew.isLike());
+            Log.d(TAG, "Like Count "+testModelNew.getLikeCount());
+        }
     }
 }

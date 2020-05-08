@@ -23,7 +23,18 @@ public class PreferenceManager {
 
     public String getString(String key) {
             //SharedPreferences sharedPref = context.getSharedPreferences(Constant.PREF_NAME, Context.MODE_PRIVATE);
-            return sharedPreferences.getString(key, QuestionFilterType.ALL.toString());
+            return sharedPreferences.getString(key, "");
+    }
+
+    public int getInt(String key) {
+        //SharedPreferences sharedPref = context.getSharedPreferences(Constant.PREF_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(key,0);
+    }
+
+    public void saveInt(String key,int value) {
+        sharedPreferences.edit()
+                .putInt(key,value)
+                .apply();
     }
 
     public void saveString(String key,String value) {

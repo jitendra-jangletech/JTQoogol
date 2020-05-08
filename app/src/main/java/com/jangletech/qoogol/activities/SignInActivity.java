@@ -28,10 +28,6 @@ import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.GenericTextWatcher;
 import com.jangletech.qoogol.util.PreferenceManager;
-import com.linkedin.platform.LISessionManager;
-import com.linkedin.platform.errors.LIAuthError;
-import com.linkedin.platform.listeners.AuthListener;
-import com.linkedin.platform.utils.Scope;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -140,24 +136,24 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
 
     }
 
-    private static Scope buildScope() {
-        return Scope.build(Scope.R_BASICPROFILE, Scope.R_EMAILADDRESS);
-    }
-
-    private void loginHandle() {
-        LISessionManager.getInstance(getApplicationContext()).init(SignInActivity.this, buildScope(), new AuthListener() {
-            @Override
-            public void onAuthSuccess() {
-                Toast.makeText(SignInActivity.this, "LinkedIn Success.", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onAuthError(LIAuthError error) {
-                // Handle authentication errors
-                Toast.makeText(getApplicationContext(), "Login Error " + error.toString(), Toast.LENGTH_LONG).show();
-            }
-        }, true);
-    }
+//    private static Scope buildScope() {
+//        return Scope.build(Scope.R_BASICPROFILE, Scope.R_EMAILADDRESS);
+//    }
+//
+//    private void loginHandle() {
+//        LISessionManager.getInstance(getApplicationContext()).init(SignInActivity.this, buildScope(), new AuthListener() {
+//            @Override
+//            public void onAuthSuccess() {
+//                Toast.makeText(SignInActivity.this, "LinkedIn Success.", Toast.LENGTH_SHORT).show();
+//            }
+//
+//            @Override
+//            public void onAuthError(LIAuthError error) {
+//                // Handle authentication errors
+//                Toast.makeText(getApplicationContext(), "Login Error " + error.toString(), Toast.LENGTH_LONG).show();
+//            }
+//        }, true);
+//    }
 
     public void setTextWatcher() {
         mBinding.etEmail.addTextChangedListener(new GenericTextWatcher(mBinding.tilEmail, this));

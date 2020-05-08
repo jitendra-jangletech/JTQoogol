@@ -2,9 +2,10 @@ package com.jangletech.qoogol.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.widget.ImageView;
+import android.widget.Toast;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import androidx.navigation.NavController;
@@ -18,12 +19,12 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jangletech.qoogol.R;
-import com.jangletech.qoogol.activities.BaseActivity;
-import com.jangletech.qoogol.activities.PracticeTestActivity;
-import com.jangletech.qoogol.activities.SignInActivity;
 import com.jangletech.qoogol.databinding.ActivityMainBinding;
 import com.jangletech.qoogol.dialog.UniversalDialog;
+import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
+
+import java.util.PropertyResourceBundle;
 
 public class MainActivity extends BaseActivity implements UniversalDialog.DialogButtonClickListener {
 
@@ -85,8 +86,8 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
             if (navController.getCurrentDestination().getId() != R.id.nav_learning) {
                 navController.popBackStack();
                 Bundle bundle = new Bundle();
-                bundle.putString("call_from","learning");
-                navController.navigate(R.id.nav_learning,bundle);
+                bundle.putString("call_from", "learning");
+                navController.navigate(R.id.nav_learning, bundle);
             }
         });
 //
@@ -131,8 +132,8 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
             if (navController.getCurrentDestination().getId() != R.id.nav_saved_questions) {
                 navController.popBackStack();
                 Bundle bundle = new Bundle();
-                bundle.putString("call_from","saved_questions");
-                navController.navigate(R.id.nav_learning,bundle);
+                bundle.putString("call_from", "saved_questions");
+                navController.navigate(R.id.nav_learning, bundle);
             }
         });
 
@@ -244,15 +245,6 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
         });
     }
 
-    @Override
-    public void onBackPressed() {
-        if (navController.getCurrentDestination().getId()==R.id.nav_comments) {
-            getSupportFragmentManager().popBackStack();
-        } else {
-            super.onBackPressed();
-        }
-    }
-
     private void loadProfilePic() {
         Glide.with(this)
                 .load(R.drawable.profile_img)
@@ -271,11 +263,31 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
     @Override
     public void onPositiveButtonClick() {
         new PreferenceManager(getApplicationContext()).setIsLoggedIn(false);
-        //finish();
-        Intent intent = new Intent(this, SignInActivity.class);
+        new PreferenceManager(getApplicationContext()).saveString(Constant.MOBILE,"");
+        new PreferenceManager(getApplicationContext()).saveString(Constant.USER_ID,"");
+        Intent intent = new Intent(this, LaunchActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }
 
+    boolean doubleBackToExitPressedOnce = false;
 
+    @Override
+    public void onBackPressed() {
+            if (doubleBackToExitPressedOnce) {
+                super.onBackPressed();
+                return;
+            }
+
+            this.doubleBackToExitPressedOnce = true;
+            Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+
+            new Handler().postDelayed(new Runnable() {
+
+                @Override
+                public void run() {
+                    doubleBackToExitPressedOnce = false;
+                }
+            }, 2000);
+        }
 }

@@ -1,10 +1,12 @@
 package com.jangletech.qoogol.ui;
 
+import android.app.Activity;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -40,6 +42,14 @@ public class BaseFragment extends Fragment {
                 }
             }
         }
+    }
+
+    public void showErrorDialog(Activity activity, String title, String msg){
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity,R.style.AlertDialogStyle);
+        builder.setTitle("Error Code : "+title)
+                .setMessage(msg)
+                .setPositiveButton("OK", null)
+                .show();
     }
 
     public void addFragment(Fragment fragment){

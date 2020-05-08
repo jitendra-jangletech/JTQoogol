@@ -9,6 +9,18 @@ import java.util.List;
  * Created by Pritali on 4/29/2020.
  */
 public class ProcessQuestion {
+
+    @SerializedName("Message")
+    private String message;
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
     @SerializedName(Constant.Response)
     private String response;
 

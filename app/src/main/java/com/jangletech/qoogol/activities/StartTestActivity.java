@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -23,6 +24,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.viewpager2.widget.ViewPager2;
+
 import com.google.android.material.tabs.TabLayout;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.QuestionPaletAdapter;
@@ -38,16 +40,19 @@ import com.jangletech.qoogol.model.StartResumeTestResponse;
 import com.jangletech.qoogol.model.TestQuestionNew;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
+import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.EndDrawerToggle;
 import com.jangletech.qoogol.util.PreferenceManager;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class StartTestActivity extends AppCompatActivity implements QuestionPaletAdapter.QuestClickListener,
+public class StartTestActivity extends BaseActivity implements QuestionPaletAdapter.QuestClickListener,
         SubmitTestDialog.SubmitDialogClickListener, QueViewClick, StartTestAdapter.StartAdapterButtonClickListener,
         QuestReportDialog.QuestReportDialogListener {
 
@@ -62,15 +67,16 @@ public class StartTestActivity extends AppCompatActivity implements QuestionPale
     QuestionPaletAdapter questionPaletAdapter;
     public static List<TestQuestionNew> testQuestionList = new ArrayList<>();
     CountDownTimer timer;
-    Long milliLeft, min, sec,hrs;
+    Long milliLeft, min, sec, hrs;
     SubmitTestDialog submitTestDialog;
     ApiInterface apiService = ApiClient.getInstance().getApi();
     StartTestAdapter startTestAdapter;
     QuestReportDialog questReportDialog;
-    private TextView tvTitle,tvTimer,tvPause;
+    private TextView tvTitle, tvTimer, tvPause;
     private ImageView imgNavIcon;
     private Toolbar toolbar;
     private EndDrawerToggle endDrawerToggle;
+    private int tmId;
     StartResumeTestResponse startResumeTestResponse;
 
 
@@ -87,8 +93,7 @@ public class StartTestActivity extends AppCompatActivity implements QuestionPale
         tvTitle = findViewById(R.id.tvTitle);
         imgNavIcon = findViewById(R.id.imgNavIcon);
         setupNavigationDrawer();
-        //startTimer(60*60*1000);
-        //Toast.makeText(this, ""+getStatusBarHeight(), Toast.LENGTH_SHORT).show();
+        tmId = getIntent().getIntExtra(Constant.TM_ID, 0);
         tvTitle.setText("Demo Test");
         mViewModel = new ViewModelProvider(this).get(StartTestViewModel.class);
         fetchTestQA();
@@ -98,14 +103,14 @@ public class StartTestActivity extends AppCompatActivity implements QuestionPale
                 Log.d(TAG, "onChanged Size : " + tests.size());
                 testQuestionList = tests;
                 setStartTestAdapter(testQuestionList);
-                startTimer(Integer.parseInt(startResumeTestResponse.getTm_duration())*60*1000);
+                startTimer(Integer.parseInt(startResumeTestResponse.getTm_duration()) * 60 * 1000);
             }
         });
 
-        imgNavIcon.setOnClickListener(v->{
-            if(mBinding.drawerLayout.isDrawerOpen(GravityCompat.END)){
+        imgNavIcon.setOnClickListener(v -> {
+            if (mBinding.drawerLayout.isDrawerOpen(GravityCompat.END)) {
                 mBinding.drawerLayout.closeDrawer(GravityCompat.END);
-            }else{
+            } else {
                 mBinding.drawerLayout.openDrawer(GravityCompat.END);
             }
         });
@@ -119,7 +124,7 @@ public class StartTestActivity extends AppCompatActivity implements QuestionPale
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
-               testQuestionList.get(getCurrentItemPos()).setTtqa_visited(true);
+                testQuestionList.get(getCurrentItemPos()).setTtqa_visited(true);
             }
 
             @Override
@@ -145,8 +150,8 @@ public class StartTestActivity extends AppCompatActivity implements QuestionPale
             } else {
                 prepareQuestPaletList(QuestionFilterType.ATTEMPTED.toString());
             }
-            new PreferenceManager(getApplicationContext()).saveString(Constant.FILTER_APPLIED,QuestionFilterType.ATTEMPTED.toString());
-            questionPaletAdapter.setPaletFilterResults(sortQuestListByFilter(testQuestionList,QuestionFilterType.ATTEMPTED.toString()));
+            new PreferenceManager(getApplicationContext()).saveString(Constant.FILTER_APPLIED, QuestionFilterType.ATTEMPTED.toString());
+            questionPaletAdapter.setPaletFilterResults(sortQuestListByFilter(testQuestionList, QuestionFilterType.ATTEMPTED.toString()));
             questionPaletAdapter.notifyDataSetChanged();
             mBinding.radioAll.setChecked(false);
             mBinding.radioUnseen.setChecked(false);
@@ -160,8 +165,8 @@ public class StartTestActivity extends AppCompatActivity implements QuestionPale
             } else {
                 prepareQuestPaletList(QuestionFilterType.MARKED.toString());
             }
-            new PreferenceManager(getApplicationContext()).saveString(Constant.FILTER_APPLIED,QuestionFilterType.MARKED.toString());
-            questionPaletAdapter.setPaletFilterResults(sortQuestListByFilter(testQuestionList,QuestionFilterType.MARKED.toString()));
+            new PreferenceManager(getApplicationContext()).saveString(Constant.FILTER_APPLIED, QuestionFilterType.MARKED.toString());
+            questionPaletAdapter.setPaletFilterResults(sortQuestListByFilter(testQuestionList, QuestionFilterType.MARKED.toString()));
             mBinding.radioAll.setChecked(false);
             mBinding.radioUnseen.setChecked(false);
             mBinding.radioAttempted.setChecked(false);
@@ -174,8 +179,8 @@ public class StartTestActivity extends AppCompatActivity implements QuestionPale
             } else {
                 prepareQuestPaletList(QuestionFilterType.UNATTEMPTED.toString());
             }
-            new PreferenceManager(getApplicationContext()).saveString(Constant.FILTER_APPLIED,QuestionFilterType.UNATTEMPTED.toString());
-            questionPaletAdapter.setPaletFilterResults(sortQuestListByFilter(testQuestionList,QuestionFilterType.UNATTEMPTED.toString()));
+            new PreferenceManager(getApplicationContext()).saveString(Constant.FILTER_APPLIED, QuestionFilterType.UNATTEMPTED.toString());
+            questionPaletAdapter.setPaletFilterResults(sortQuestListByFilter(testQuestionList, QuestionFilterType.UNATTEMPTED.toString()));
             mBinding.radioAll.setChecked(false);
             mBinding.radioUnseen.setChecked(false);
             mBinding.radioAttempted.setChecked(false);
@@ -187,8 +192,8 @@ public class StartTestActivity extends AppCompatActivity implements QuestionPale
             } else {
                 prepareQuestPaletList(QuestionFilterType.UNSEEN.toString());
             }
-            new PreferenceManager(getApplicationContext()).saveString(Constant.FILTER_APPLIED,QuestionFilterType.UNSEEN.toString());
-            questionPaletAdapter.setPaletFilterResults(sortQuestListByFilter(testQuestionList,QuestionFilterType.UNSEEN.toString()));
+            new PreferenceManager(getApplicationContext()).saveString(Constant.FILTER_APPLIED, QuestionFilterType.UNSEEN.toString());
+            questionPaletAdapter.setPaletFilterResults(sortQuestListByFilter(testQuestionList, QuestionFilterType.UNSEEN.toString()));
             mBinding.radioAll.setChecked(false);
             mBinding.radioUnattempted.setChecked(false);
             mBinding.radioAttempted.setChecked(false);
@@ -209,9 +214,10 @@ public class StartTestActivity extends AppCompatActivity implements QuestionPale
 
             @Override
             public void onDrawerOpened(@NonNull View drawerView) {
-                Log.d(TAG, "onDrawerOpened: "+new PreferenceManager(getApplicationContext()).getString(Constant.FILTER_APPLIED));
-                prepareQuestPaletList(new PreferenceManager(getApplicationContext()).getString(Constant.FILTER_APPLIED));
-                questionPaletAdapter.setPaletFilterResults(sortQuestListByFilter(testQuestionList,new PreferenceManager(getApplicationContext()).getString(Constant.FILTER_APPLIED)));
+                Log.d(TAG, "onDrawerOpened: " + new PreferenceManager(getApplicationContext()).getString(Constant.FILTER_APPLIED));
+                prepareQuestPaletList(QuestionFilterType.ALL.toString());
+                //prepareQuestPaletList(new PreferenceManager(getApplicationContext()).getString(Constant.FILTER_APPLIED));
+                //questionPaletAdapter.setPaletFilterResults(sortQuestListByFilter(testQuestionList,new PreferenceManager(getApplicationContext()).getString(Constant.FILTER_APPLIED)));
             }
 
             @Override
@@ -282,10 +288,10 @@ public class StartTestActivity extends AppCompatActivity implements QuestionPale
             @Override
             public void onTick(long milliTillFinish) {
                 milliLeft = milliTillFinish;
-                hrs = (milliTillFinish/(1000*60*60));
+                hrs = (milliTillFinish / (1000 * 60 * 60));
                 min = ((milliTillFinish / (1000 * 60)) - hrs * 60);
                 sec = ((milliTillFinish / 1000) - min * 60);
-                String time = String.format("%02d:%02d:%02d",hrs,min, sec);
+                String time = String.format("%02d:%02d:%02d", hrs, min, sec);
                 tvTimer.setText(time);
             }
 
@@ -411,20 +417,25 @@ public class StartTestActivity extends AppCompatActivity implements QuestionPale
 
     private void fetchTestQA() {
         ProgressDialog.getInstance().show(this);
-        Call<StartResumeTestResponse> call = apiService.fetchTestQuestionAnswers(1002, 1);
+        Call<StartResumeTestResponse> call = apiService.fetchTestQuestionAnswers(new PreferenceManager(getApplicationContext()).getInt(Constant.USER_ID), tmId);
         call.enqueue(new Callback<StartResumeTestResponse>() {
             @Override
             public void onResponse(Call<StartResumeTestResponse> call, Response<StartResumeTestResponse> response) {
                 ProgressDialog.getInstance().dismiss();
-                Log.d(TAG, "onResponse List : " + response.body().getTestQuestionNewList());
-                startResumeTestResponse = response.body();
-                mViewModel.setTestQuestAnsList(response.body().getTestQuestionNewList());
+                if (response.body() != null && response.body().getResponseCode().equals("200")) {
+                    startResumeTestResponse = response.body();
+                    mViewModel.setTestQuestAnsList(response.body().getTestQuestionNewList());
+                }else{
+                    Log.e(TAG, "onResponse Error : "+response.body().getResponseCode());
+                    showErrorDialog(StartTestActivity.this,response.body().getResponseCode(),response.body().getMessage());
+                }
             }
 
             @Override
             public void onFailure(Call<StartResumeTestResponse> call, Throwable t) {
                 ProgressDialog.getInstance().dismiss();
                 t.printStackTrace();
+
             }
         });
     }

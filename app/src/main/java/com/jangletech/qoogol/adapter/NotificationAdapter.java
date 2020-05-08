@@ -15,6 +15,7 @@ import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.NotificationItemBinding;
 import com.jangletech.qoogol.model.Notification;
 import com.jangletech.qoogol.util.Constant;
+import com.jangletech.qoogol.util.DateUtils;
 
 import java.util.List;
 
@@ -41,7 +42,8 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     public void onBindViewHolder(@NonNull NotificationAdapter.ViewHolder holder, int position) {
         Notification notification = notifications.get(position);
         holder.itemBinding.notificationText.setText(notification.getW_notification_desc());
-        holder.itemBinding.tvDate.setText(notification.getN_cdatetime());
+        if(notification.getN_cdatetime()!=null)
+        holder.itemBinding.tvDate.setText(DateUtils.getFormattedDate(notification.getN_cdatetime().substring(0,10)));
         Glide.with(mContext)
                 .load(getImageUrl(notification))
                 .apply(RequestOptions.circleCropTransform())

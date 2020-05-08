@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~
+  ~ /*
+  ~  * /////////////////////////////////////////////////////////////////////////////////////////////////
+  ~  * //
+  ~  * //            Copyright (c) 2020. JangleTech Systems Private Limited, Thane, India
+  ~  * //
+  ~  * /////////////////////////////////////////////////////////////////////////////////////////////////
+  ~  */
+  -->
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal">
+
+        <ImageView
+            android:id="@+id/imgLogo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="@dimen/margin_30"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="@dimen/margin_30"
+            android:contentDescription="@string/app_name"
+            android:scaleType="fitCenter" />
+
+        <TextView
+            android:id="@+id/loginUserName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/imgLogo"
+            android:layout_alignStart="@+id/imgLogo"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/colorBlack"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:textSize="@dimen/actionbar_title"
+            android:textStyle="bold"
+            android:visibility="visible" />
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etMobileNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/loginUserName"
+            android:layout_alignStart="@+id/imgLogo"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:hint="Email or mobile number"
+            android:importantForAutofill="no"
+            android:inputType="textEmailAddress"
+            android:maxLength="100"
+            android:maxLines="1"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/textSizeMedium" />
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etPassOTP"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/etMobileNumber"
+            android:layout_alignStart="@+id/imgLogo"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:hint="Password or Otp"
+            android:layout_toStartOf="@+id/resend_otp"
+            android:importantForAutofill="no"
+            android:inputType="textPassword"
+            android:maxLength="13"
+            android:maxLines="1"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/textSizeMedium" />
+
+      <!--  <TextView
+            android:id="@+id/resend_otp"
+            android:layout_below="@+id/etMobileNumber"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="5dp"
+            android:layout_width="wrap_content"
+            android:padding="8dp"
+            android:text="Send OTP"
+            android:layout_height="wrap_content"/>-->
+
+        <TextView
+            android:id="@+id/resend_otp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/etMobileNumber"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/gray_border"
+            android:padding="8dp"
+            android:layout_marginEnd="@dimen/activity_vertical_margin"
+            android:text="Send OTP"
+            android:textSize="@dimen/textSizexSmall" />
+
+        <RelativeLayout
+            android:id="@+id/rlReferral"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/etPassOTP"
+            android:layout_alignStart="@+id/imgLogo"
+            android:layout_centerHorizontal="true"
+            android:visibility="gone"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/etInput"
+                android:layout_below="@+id/referredUserName"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="5dp"
+                android:text="refferal code" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/etInputRefOptional"
+                android:layout_below="@+id/etInput"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="0dp"
+                android:text="Optional"
+                android:textSize="10sp" />
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/refrerral_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="5dp"
+                android:layout_toEndOf="@+id/etInput"
+                android:importantForAutofill="no"
+                android:inputType="number"
+                android:maxLength="6"
+                android:maxLines="1"
+                android:minWidth="80dp"
+                android:padding="5dp"
+                android:textAlignment="textStart"
+                android:textColor="@color/colorBlack"
+                android:textSize="16sp"
+                android:textStyle="normal" />
+
+            <TextView
+                android:id="@+id/btnVerify"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_10"
+                android:layout_toEndOf="@+id/refrerral_view"
+                android:padding="5dp"
+                android:textColor="@color/colorBlack"
+                android:text="verify"
+                android:textSize="@dimen/textSizexSmall"
+                android:textStyle="normal" />
+
+            <TextView
+                android:id="@+id/referredUserName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/btnVerify"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/margin_10"
+                android:textColor="@color/colorBlack"
+                android:textSize="14sp"
+                android:textStyle="normal"
+                android:visibility="gone" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/termsAndCondition"
+            android:layout_below="@+id/rlReferral"
+            android:layout_alignStart="@+id/imgLogo"
+            android:layout_alignEnd="@+id/imgLogo"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/btn_padding"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:padding="2dp"
+            android:textSize="@dimen/small_text" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnRegister"
+            android:layout_below="@+id/termsAndCondition"
+            android:layout_alignStart="@+id/imgLogo"
+            android:layout_alignEnd="@+id/imgLogo"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:backgroundTint="@color/colorBlack"
+            android:gravity="center"
+            android:onClick="register"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:text="Register" />
+
+    </RelativeLayout>
+</layout>
