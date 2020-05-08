@@ -25,8 +25,8 @@ public class QSet{
     @SerializedName(Constant.q_media_type)
     private String q_media_type;
 
-    @SerializedName(Constant.q_options_type)
-    private String q_options_type;
+   /* @SerializedName(Constant.q_options_type)
+    private String q_options_type;*/
 
     protected QSet(Parcel in) {
         qSet = in.readString();
@@ -35,7 +35,7 @@ public class QSet{
         q_quest_desc = in.readString();
         q_type = in.readString();
         q_media_type = in.readString();
-        q_options_type = in.readString();
+        //q_options_type = in.readString();
     }
 
     public String getqSet() {
@@ -86,11 +86,11 @@ public class QSet{
         this.q_media_type = q_media_type;
     }
 
-    public String getQ_options_type() {
+   /* public String getQ_options_type() {
         return q_options_type;
     }
 
     public void setQ_options_type(String q_options_type) {
         this.q_options_type = q_options_type;
-    }
+    }*/
 }

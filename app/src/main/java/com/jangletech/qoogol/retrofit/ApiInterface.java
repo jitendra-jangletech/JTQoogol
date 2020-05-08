@@ -21,6 +21,7 @@ import com.jangletech.qoogol.model.MobileOtp;
 import com.jangletech.qoogol.model.NotificationResponse;
 import com.jangletech.qoogol.model.ProcessQuestion;
 import com.jangletech.qoogol.model.RegisterLoginModel;
+import com.jangletech.qoogol.model.ResponseObj;
 import com.jangletech.qoogol.model.SignInModel;
 import com.jangletech.qoogol.model.StartResumeTestResponse;
 import com.jangletech.qoogol.model.StateResponse;
@@ -143,12 +144,12 @@ public interface ApiInterface {
                                       @Field(Constant.qlc_like_flag) int like);
 
 
-    @FormUrlEncoded
+   /* @FormUrlEncoded
     @POST("q031StartResumeTest")
     Call<TestingQuestionNew> fetchTestQuestionAnswers(@Field(Constant.u_user_id) int userId,
                                                       @Field(Constant.tt_id) int testTakenId,
                                                       @Field(Constant.tt_tm_id) int testTakentmId);
-
+*/
     @POST(Constant.REGISTER_LOGIN)
     Call<RegisterLoginModel> doRegisterLogin(@Field(Constant.u_mob_1) String mobile,
                                              @Field("Case") String caseR,
