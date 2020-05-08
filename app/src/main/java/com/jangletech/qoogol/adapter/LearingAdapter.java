@@ -18,6 +18,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,6 +54,7 @@ import static com.jangletech.qoogol.util.Constant.FILL_THE_BLANKS;
 import static com.jangletech.qoogol.util.Constant.IMAGE;
 import static com.jangletech.qoogol.util.Constant.LONG_ANSWER;
 import static com.jangletech.qoogol.util.Constant.MATCH_PAIR;
+import static com.jangletech.qoogol.util.Constant.MATCH_PAIR_IMAGE;
 import static com.jangletech.qoogol.util.Constant.MCQ;
 import static com.jangletech.qoogol.util.Constant.MCQ_IMAGE;
 import static com.jangletech.qoogol.util.Constant.MCQ_IMAGE_WITH_TEXT;
@@ -248,6 +250,11 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
 //            learningItemBinding.b2text.setText(learningQuestions.getB2());
 //            learningItemBinding.b3text.setText(learningQuestions.getB3());
 //            learningItemBinding.b4text.setText(learningQuestions.getB4());
+            }  else if (learningQuestions.getQue_option_type().equalsIgnoreCase(MATCH_PAIR_IMAGE)) {
+                learningItemBinding.mtpImgLayout.setVisibility(View.VISIBLE);
+                learningItemBinding.reset.setVisibility(View.VISIBLE);
+                learningItemBinding.resetLabel.setVisibility(View.VISIBLE);
+                learningItemBinding.categoryTextview.setText("Match the Pairs");
             }
         }
 
@@ -337,6 +344,7 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
         });
     }
 
+
     public void hideLayouts() {
         if (call_from == test) {
             learningItemBinding.expandableLayout.setVisibility(View.VISIBLE);
@@ -360,6 +368,7 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
         learningItemBinding.mcqImgLayout.setVisibility(View.GONE);
         learningItemBinding.scqImgtextLayout.setVisibility(View.GONE);
         learningItemBinding.mcqImgtextLayout.setVisibility(View.GONE);
+        learningItemBinding.mtpImgLayout.setVisibility(View.GONE);
     }
 
     @Override
@@ -381,6 +390,7 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
         Long milliLeft, min, sec;
         String scq_ans = "", mcq_ans = "", tfAns = "", scqimg_ans = "", scqimgtext_ans = "", mcqimg_ans = "", mcqimgtext_ans = "";
         HashMap<String, String> paired = new HashMap<String, String>();
+        HashMap<String, String> imgpaired = new HashMap<String, String>();
         HashMap<String, String> MTP_ans = new HashMap<String, String>();
         boolean isB1Selected = false, isB2Selected = false, isB3Selected = false, isB4Selected = false, isMCQImgSubmited = false,
                 isMCQImgTextSubmited = false;
@@ -407,6 +417,11 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
             learningItemBinding.a3.setOnTouchListener(new ChoiceTouchListener());
             learningItemBinding.a4.setOnTouchListener(new ChoiceTouchListener());
 
+            learningItemBinding.aMtp1.setOnTouchListener(new ChoiceTouchListener());
+            learningItemBinding.aMtp2.setOnTouchListener(new ChoiceTouchListener());
+            learningItemBinding.aMtp3.setOnTouchListener(new ChoiceTouchListener());
+            learningItemBinding.aMtp4.setOnTouchListener(new ChoiceTouchListener());
+
             //set drag listeners
             learningItemBinding.b1.setOnDragListener(new ChoiceDragListener());
             learningItemBinding.b2.setOnDragListener(new ChoiceDragListener());
@@ -417,6 +432,12 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
             learningItemBinding.b2text.setOnDragListener(new ChoiceDragListener());
             learningItemBinding.b3text.setOnDragListener(new ChoiceDragListener());
             learningItemBinding.b4text.setOnDragListener(new ChoiceDragListener());
+
+
+            learningItemBinding.bMtp1.setOnDragListener(new ImgChoiceDragListener());
+            learningItemBinding.bMtp2.setOnDragListener(new ImgChoiceDragListener());
+            learningItemBinding.bMtp3.setOnDragListener(new ImgChoiceDragListener());
+            learningItemBinding.bMtp4.setOnDragListener(new ImgChoiceDragListener());
 
 
             learningItemBinding.expand.setOnClickListener(v -> {
@@ -440,6 +461,14 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
                     onIconClick.onLikeClick(learningQuestions.getQuestion_id(),1);
                     Glide.with(activity).load(activity.getResources().getDrawable(R.drawable.ic_thumb_up_black_24dp)).into(learningItemBinding.like);
                     learningItemBinding.likeValue.setText(likes + 1 + "");
+                }
+            });
+
+            learningItemBinding.share.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    LearningQuestionsNew learningQuestions = learningQuestionsList.get(getAdapterPosition());
+                    onIconClick.onShareClick(learningQuestions.getQuestion_id());
                 }
             });
 
@@ -937,6 +966,29 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
                             }
                         }
                     }
+                }else  if (learningQuestions.getQue_option_type().equalsIgnoreCase(MATCH_PAIR_IMAGE)) {
+
+                    if (!isB1Selected || !isB2Selected || !isB3Selected || !isB4Selected) {
+                        Toast.makeText(activity, "Select all pairs first.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        boolean isFound = false;
+                        for (Map.Entry<String, String> entry : imgpaired.entrySet()) {
+                            Iterator ansIterator = MTP_ans.entrySet().iterator();
+                            String value = entry.getValue();
+                            for (Map.Entry<String, String> ansentry : MTP_ans.entrySet()) {
+                                if (entry.equals(ansentry)) {
+                                    isFound = true;
+                                    break;
+                                }
+                            }
+                            if (isFound) {
+                                isFound = false;
+                                setImgRightPair(value);
+                            } else {
+                                setImgWrongPair(value);
+                            }
+                        }
+                    }
                 }
             });
         }
@@ -1383,6 +1435,82 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
             }
         }
 
+        @SuppressLint("NewApi")
+        private class ImgChoiceDragListener implements View.OnDragListener {
+
+            @Override
+            public boolean onDrag(View v, DragEvent event) {
+                switch (event.getAction()) {
+                    case DragEvent.ACTION_DRAG_STARTED:
+                        break;
+                    case DragEvent.ACTION_DRAG_ENTERED:
+                        break;
+                    case DragEvent.ACTION_DRAG_EXITED:
+                        break;
+                    case DragEvent.ACTION_DROP:
+                        View view = (View) event.getLocalState();
+                        ImageView dropped = (ImageView) view;
+
+                        //make it bold to highlight the fact that an item has been dropped
+                        switch (v.getId()) {
+                            case R.id.b_mtp1:
+                                checkImgPairAvailability(getNameFromId(dropped.getId()), "b1");
+                                imgpaired.put(getNameFromId(dropped.getId()), "b1");
+                                isB1Selected = true;
+                                learningItemBinding.bMtpChck1.setVisibility(View.VISIBLE);
+                                learningItemBinding.bMtpChck1.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_mtp1));
+                                setMtpMatchedPair(getNameFromId(dropped.getId()), activity.getResources().getDrawable(R.drawable.ic_mtp1));
+                                if (imgpaired.size() == MTP_ans.size() - 1) {
+                                    setImgMtpLastPair();
+                                }
+                                break;
+                            case R.id.b_mtp2:
+                                checkImgPairAvailability(getNameFromId(dropped.getId()), "b2");
+                                imgpaired.put(getNameFromId(dropped.getId()), "b2");
+                                isB2Selected = true;
+                                learningItemBinding.bMtpChck2.setVisibility(View.VISIBLE);
+                                learningItemBinding.bMtpChck2.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_mtp2));
+                                setMtpMatchedPair(getNameFromId(dropped.getId()), activity.getResources().getDrawable(R.drawable.ic_mtp2));
+                                if (imgpaired.size() == MTP_ans.size() - 1) {
+                                    setImgMtpLastPair();
+                                }
+                                break;
+                            case R.id.b_mtp3:
+                                checkImgPairAvailability(getNameFromId(dropped.getId()), "b3");
+                                imgpaired.put(getNameFromId(dropped.getId()), "b3");
+                                isB3Selected = true;
+                                learningItemBinding.bMtpChck3.setVisibility(View.VISIBLE);
+                                learningItemBinding.bMtpChck3.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_mtp3));
+                                setMtpMatchedPair(getNameFromId(dropped.getId()), activity.getResources().getDrawable(R.drawable.ic_mtp3));
+                                if (imgpaired.size() == MTP_ans.size() - 1) {
+                                    setImgMtpLastPair();
+                                }
+                                break;
+                            case R.id.b_mtp4:
+                                checkImgPairAvailability(getNameFromId(dropped.getId()), "b4");
+                                imgpaired.put(getNameFromId(dropped.getId()), "b4");
+                                isB3Selected = true;
+                                learningItemBinding.bMtpChck4.setVisibility(View.VISIBLE);
+                                learningItemBinding.bMtpChck4.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_mtp4));
+                                setMtpMatchedPair(getNameFromId(dropped.getId()), activity.getResources().getDrawable(R.drawable.ic_mtp4));
+                                if (imgpaired.size() == MTP_ans.size() - 1) {
+                                    setImgMtpLastPair();
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+
+                        break;
+                    case DragEvent.ACTION_DRAG_ENDED:
+                        break;
+                    default:
+                        break;
+                }
+                return true;
+            }
+        }
+
 
         @SuppressLint("NewApi")
         private class ChoiceDragListener implements View.OnDragListener {
@@ -1460,6 +1588,35 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
             }
         }
 
+        private void setImgMtpLastPair() {
+            String a_group = "", b_group = "";
+            if (!imgpaired.containsKey("a1")) {
+                a_group = "a1";
+            } else if (!imgpaired.containsKey("a2")) {
+                a_group = "a2";
+            } else if (!imgpaired.containsKey("a3")) {
+                a_group = "a3";
+            } else if (!imgpaired.containsKey("a4")) {
+                a_group = "a4";
+            }
+
+            if (!imgpaired.containsValue("b1")) {
+                b_group = "b1";
+            } else if (!imgpaired.containsValue("b2")) {
+                b_group = "b2";
+            } else if (!imgpaired.containsValue("b3")) {
+                b_group = "b3";
+            } else if (!imgpaired.containsValue("b4")) {
+                b_group = "b4";
+            }
+
+            if (!a_group.equalsIgnoreCase("") && !b_group.equalsIgnoreCase("")) {
+                imgpaired.put(a_group, b_group);
+                setMtpMatchedPair(a_group, getPairColor(b_group));
+                setMtpMatchedPair(b_group, getPairColor(b_group));
+            }
+        }
+
         private void setLastPair() {
             String a_group = "", b_group = "";
             if (!paired.containsKey("a1")) {
@@ -1504,6 +1661,53 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
             }
         }
 
+        public void setMtpMatchedPair(String option, Drawable drawable) {
+            switch (option) {
+                case "b1":
+                    learningItemBinding.bMtpChck1.setImageDrawable(drawable);
+                    learningItemBinding.bMtpChck1.setVisibility(View.VISIBLE);
+                    learningItemBinding.bMtp1.setAlpha(150);
+                    break;
+                case "b2":
+                    learningItemBinding.bMtpChck2.setImageDrawable(drawable);
+                    learningItemBinding.bMtpChck2.setVisibility(View.VISIBLE);
+                    learningItemBinding.bMtp2.setAlpha(150);
+                    break;
+                case "b3":
+                    learningItemBinding.bMtpChck3.setImageDrawable(drawable);
+                    learningItemBinding.bMtpChck3.setVisibility(View.VISIBLE);
+                    learningItemBinding.bMtp3.setAlpha(150);
+                    break;
+                case "b4":
+                    learningItemBinding.bMtpChck4.setImageDrawable(drawable);
+                    learningItemBinding.bMtpChck4.setVisibility(View.VISIBLE);
+                    learningItemBinding.bMtp4.setAlpha(150);
+                    break;
+                case "a1":
+                    learningItemBinding.aMtpChck1.setImageDrawable(drawable);
+                    learningItemBinding.aMtpChck1.setVisibility(View.VISIBLE);
+                    learningItemBinding.aMtp1.setAlpha(150);
+                    break;
+                case "a2":
+                    learningItemBinding.aMtpChck2.setImageDrawable(drawable);
+                    learningItemBinding.aMtpChck2.setVisibility(View.VISIBLE);
+                    learningItemBinding.aMtp2.setAlpha(150);
+                    break;
+                case "a3":
+                    learningItemBinding.aMtpChck3.setImageDrawable(drawable);
+                    learningItemBinding.aMtpChck3.setVisibility(View.VISIBLE);
+                    learningItemBinding.aMtp3.setAlpha(150);
+                    break;
+                case "a4":
+                    learningItemBinding.aMtpChck4.setImageDrawable(drawable);
+                    learningItemBinding.aMtpChck4.setVisibility(View.VISIBLE);
+                    learningItemBinding.aMtp4.setAlpha(150);
+                    break;
+                default:
+                    break;
+            }
+        }
+
         public void setmatchedPair(String option, Drawable drawable) {
             switch (option) {
                 case "b1":
@@ -1534,6 +1738,54 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
                     break;
             }
         }
+
+        private void setImgRightPair(String option) {
+            switch (option) {
+                case "b1":
+                    learningItemBinding.bMtpChck1.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_right_mtp));
+                    learningItemBinding.bMtpChck1.setVisibility(View.VISIBLE);
+                    break;
+                case "b2":
+                    learningItemBinding.bMtpChck2.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_right_mtp));
+                    learningItemBinding.bMtpChck2.setVisibility(View.VISIBLE);
+                    break;
+                case "b3":
+                    learningItemBinding.bMtpChck3.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_right_mtp));
+                    learningItemBinding.bMtpChck3.setVisibility(View.VISIBLE);
+                    break;
+                case "b4":
+                    learningItemBinding.bMtpChck4.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_right_mtp));
+                    learningItemBinding.bMtpChck4.setVisibility(View.VISIBLE);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+
+        private void setImgWrongPair(String option) {
+            switch (option) {
+                case "b1":
+                    learningItemBinding.bMtpChck1.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_wrong_mtp));
+                    learningItemBinding.bMtpChck1.setVisibility(View.VISIBLE);
+                    break;
+                case "b2":
+                    learningItemBinding.bMtpChck2.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_wrong_mtp));
+                    learningItemBinding.bMtpChck2.setVisibility(View.VISIBLE);
+                    break;
+                case "b3":
+                    learningItemBinding.bMtpChck3.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_wrong_mtp));
+                    learningItemBinding.bMtpChck3.setVisibility(View.VISIBLE);
+                    break;
+                case "b4":
+                    learningItemBinding.bMtpChck4.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_wrong_mtp));
+                    learningItemBinding.bMtpChck4.setVisibility(View.VISIBLE);
+                    break;
+                default:
+                    break;
+            }
+        }
+
 
         private void setRightPair(String option) {
             switch (option) {
@@ -1583,9 +1835,32 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
         }
 
 
-        private void setListeners() {
+        private void checkImgPairAvailability(String option_1, String option_b) {
+            Iterator myVeryOwnIterator = imgpaired.keySet().iterator();
+            while (myVeryOwnIterator.hasNext()) {
+                String key = (String) myVeryOwnIterator.next();
+                String value = (String) imgpaired.get(key);
+                if (key.equalsIgnoreCase(option_1)) {
+                    setMtpImgtBg(option_1);
+                    setMtpImgtBg(value);
+                    imgpaired.remove(key);
+                    break;
+                }
+            }
 
+            Iterator myVeryOwnIterator1 = imgpaired.keySet().iterator();
+            while (myVeryOwnIterator1.hasNext()) {
+                String key = (String) myVeryOwnIterator1.next();
+                String value = (String) imgpaired.get(key);
+                if (value.equalsIgnoreCase(option_b)) {
+                    setMtpImgtBg(option_b);
+                    setMtpImgtBg(key);
+                    imgpaired.remove(key);
+                    break;
+                }
+            }
         }
+
 
         private void checkAvailability(String option_1, String option_b) {
             Iterator myVeryOwnIterator = paired.keySet().iterator();
@@ -1610,6 +1885,49 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
                     paired.remove(key);
                     break;
                 }
+            }
+        }
+
+        private void setMtpImgtBg(String option) {
+            switch (option) {
+                case "a1":
+                    learningItemBinding.aMtp1.setAlpha(255);
+                    learningItemBinding.aMtpChck1.setVisibility(View.GONE);
+                    break;
+                case "a2":
+                    learningItemBinding.aMtp2.setAlpha(255);
+                    learningItemBinding.aMtpChck2.setVisibility(View.GONE);
+                    break;
+                case "a3":
+                    learningItemBinding.aMtp3.setAlpha(255);
+                    learningItemBinding.aMtpChck3.setVisibility(View.GONE);
+                    break;
+                case "a4":
+                    learningItemBinding.aMtp4.setAlpha(255);
+                    learningItemBinding.aMtpChck4.setVisibility(View.GONE);
+                    break;
+                case "b1":
+                    isB1Selected = false;
+                    learningItemBinding.bMtp1.setAlpha(255);
+                    learningItemBinding.bMtpChck1.setVisibility(View.GONE);
+                    break;
+                case "b2":
+                    isB2Selected = false;
+                    learningItemBinding.bMtp2.setAlpha(255);
+                    learningItemBinding.bMtpChck2.setVisibility(View.GONE);
+                    break;
+                case "b3":
+                    isB3Selected = false;
+                    learningItemBinding.bMtp3.setAlpha(255);
+                    learningItemBinding.bMtpChck3.setVisibility(View.GONE);
+                    break;
+                case "b4":
+                    isB4Selected = false;
+                    learningItemBinding.bMtp4.setAlpha(255);
+                    learningItemBinding.bMtpChck4.setVisibility(View.GONE);
+                    break;
+                default:
+                    break;
             }
         }
 
@@ -1645,27 +1963,34 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
                     break;
                 default:
                     break;
-
             }
         }
 
         private String getNameFromId(int id) {
             switch (id) {
                 case R.id.a1:
+                case R.id.a_mtp1:
                     return "a1";
                 case R.id.a2:
+                case R.id.a_mtp2:
                     return "a2";
                 case R.id.a3:
+                case R.id.a_mtp3:
                     return "a3";
                 case R.id.a4:
+                case R.id.a_mtp4:
                     return "a4";
                 case R.id.b1:
+                case R.id.b_mtp1:
                     return "b1";
                 case R.id.b2:
+                case R.id.b_mtp2:
                     return "b2";
                 case R.id.b3:
+                case R.id.b_mtp3:
                     return "b3";
                 case R.id.b4:
+                case R.id.b_mtp4:
                     return "b4";
                 default:
                     return "";
@@ -1674,7 +1999,6 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
 
         public void reset() {
             paired.clear();
-            setListeners();
             learningItemBinding.img1.setVisibility(View.GONE);
             learningItemBinding.img2.setVisibility(View.GONE);
             learningItemBinding.img3.setVisibility(View.GONE);

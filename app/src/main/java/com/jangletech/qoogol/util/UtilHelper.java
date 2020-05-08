@@ -77,6 +77,10 @@ public class UtilHelper {
     }
 
 
+    public static String getProfilePath (String userId, String endPath) {
+        String paddedString = "0000000000".substring(userId.length());
+        return Constant.PRODUCTION_BASE_FILE_API + paddedString  +  userId + "/" + endPath;
+    }
 
     public static String parseDate(String dtStart) {
         SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);

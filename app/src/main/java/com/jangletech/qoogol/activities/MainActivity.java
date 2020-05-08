@@ -51,8 +51,8 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
                 R.id.edit_profile,
                 R.id.nav_home, R.id.nav_learning,
                 R.id.nav_home, /*R.id.nav_course, R.id.nav_exam, R.id.nav_questions*/
-                R.id.nav_practice_test, R.id.nav_test_my, R.id.nav_test_popular, R.id.nav_attended_by_friends,
-                R.id.nav_shared_with_you, R.id.nav_shared_by_you,
+                R.id.nav_practice_test, R.id.nav_test_my, R.id.nav_test_popular, R.id.nav_attended_by_friends, R.id.nav_blocked_connections,
+                R.id.nav_shared_with_you, R.id.nav_shared_by_you, R.id.nav_requests,
                 R.id.nav_reviews, R.id.nav_published, R.id.nav_notifications, R.id.nav_settings, R.id.nav_fav_test)
                 .setDrawerLayout(mBinding.drawerLayout)
                 .build();
@@ -88,6 +88,22 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
                 Bundle bundle = new Bundle();
                 bundle.putString("call_from", "learning");
                 navController.navigate(R.id.nav_learning, bundle);
+            }
+        });
+
+        findViewById(R.id.nav_requests).setOnClickListener(v -> {
+            mBinding.drawerLayout.closeDrawers();
+            if (navController.getCurrentDestination().getId() != R.id.nav_requests) {
+                navController.popBackStack();
+                navController.navigate(R.id.nav_requests);
+            }
+        });
+
+        findViewById(R.id.nav_blocked_connections).setOnClickListener(v -> {
+            mBinding.drawerLayout.closeDrawers();
+            if (navController.getCurrentDestination().getId() != R.id.nav_blocked_connections) {
+                navController.popBackStack();
+                navController.navigate(R.id.nav_blocked_connections);
             }
         });
 //

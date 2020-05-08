@@ -201,4 +201,28 @@
         android:label="@string/select_board"
         tools:layout="@layout/board_fragment" />
 
+    <fragment
+        android:id="@+id/nav_share"
+        android:name="com.jangletech.qoogol.ui.learning.ShareFragment"
+        android:label="@string/share"
+        tools:layout="@layout/fragment_share" />
+
+    <fragment
+        android:id="@+id/nav_connections"
+        android:name="com.jangletech.qoogol.ui.connections.ConnectionsFragment"
+        android:label="@string/connections"
+        tools:layout="@layout/fragment_connections" />
+
+    <fragment
+        android:id="@+id/nav_requests"
+        android:name="com.jangletech.qoogol.ui.connections.PendingRequestsFragment"
+        android:label="@string/pending_req"
+        tools:layout="@layout/fragment_pending_requests" />
+
+    <fragment
+        android:id="@+id/nav_blocked_connections"
+        android:name="com.jangletech.qoogol.ui.connections.BlockedFragment"
+        android:label="@string/blockedlist"
+        tools:layout="@layout/fragment_blocked" />
+
 </navigation>

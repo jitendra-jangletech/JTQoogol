@@ -12,6 +12,8 @@ public class Constant {
     public static final String USER_ID = "USER_ID";
     public static final String TM_ID = "TM_ID";
 
+    public static final String PRODUCTION_BASE_FILE_API = "https://jtmobileappstorage.blob.core.windows.net/spotmeets/media/images/";
+
     //Question Filter Type
     public static final String FILTER_APPLIED = "FILTER_APPLIED";
     public static final String TEST_NAME = "TEST_NAME";
@@ -31,6 +33,7 @@ public class Constant {
 
 
     //User table
+    public static final String qoogol = "Q";
     public static final String u_first_name = "104";
     public static final String u_last_name = "105";
     public static final String w_user_profile_image_name = "507";
@@ -165,10 +168,56 @@ public class Constant {
     public static final String COURSE = "sm15CourseData";
     public static final String INSTITUTE = "sm13InstOrgData";
     public static final String DEGREE = "sm14DegreeData";
+    public static final String FETCH_CONNECTIONS = "sm25FetchConnections";
+    public static final String UPDATE_CONNECTIONS = "sm24UpdateConnections";
     public static final String masterDataList = "61";
     public static final String likesList = "60";
     public static final String commentsList = "62";
 
+    //Connections
+    public static final String row_count = "548";
+    public static final String connection_list = "68";
+    public static final String cn_id = "306";
+    public static final String cn_u1_follows_u2 = "316H";
+    public static final String cn_u2_follows_u1 = "316I";
+    public static final String cn_blocked_by_u1 = "315";
+    public static final String cn_user_id_2 = "308";
+    public static final String cn_connected = "309";
+    public static final String u_gender = "110";
+    public static final String u_app_live = "172";
+    public static final String u_status_text = "187";
+    public static final String u_online_status = "116";
+    public static final String u_birth_date = "107";
+    public static final String w_datetime = "543";
+    public static final String u_latest_lat = "122";
+    public static final String u_latest_long = "123";
+    public static final String u_conn_count = "199B";
+    public static final String u_followers = "200M";
+    public static final String u_followings = "201M";
+    public static final String ucn_count = "71";
+    public static final String w_u_ms_count = "522";
+    public static final String w_distance = "549";
+    public static final String other_user = "516";
+
+
+    //Fetch connections cases
+    public static final String friends = "C";
+    public static final String followers = "FL";
+    public static final String following = "FG";
+    public static final String blocked_users = "B";
+    public static final String requests = "R";
+    public static final String friendrequests = "FRR";
+    public static final String followrequests = "FLr";
+
+    public static final String remove_connection = "X";
+    public static final String accept_follow_requests = "AF";
+    public static final String reject_follow_requests = "RF";
+    public static final String accept_friend_requests = "A";
+    public static final String reject_friend_requests = "R";
+    public static final String block = "B";
+    public static final String unblock = "U";
+    public static final String follow = "F";
+    public static final String unfollow = "UF";
 
     //Status code
     public static final String DB_TIMEOUT_ERROR = "Database Timeout error. Close app and try again.";
@@ -183,6 +232,8 @@ public class Constant {
     public static final String prev_q_id = "prev_q_id";
     public static final String question_list = "List1";
     public static final String u_user_id = "101";
+    public static final String device_id = "126Q";
+    public static final String pagestart = "PageStart";
 
 
     //Country
@@ -251,45 +302,10 @@ public class Constant {
     public static final String q_solved_by = "1360";
     public static final String q_media_type = "1361";
     public static final String q_option_type = "1362";
-//    public static final String q_id = "1325";
-//    public static final String q_cm_id = "326";
-//    public static final String q_md_id = "327";
-//    public static final String q_sm_id = "328";
-//    public static final String q_up_u_id = "329";
-//    public static final String q_credit = "330";
-//    public static final String q_mcq_op_1 = "1331";
-//    public static final String q_mcq_op_2 = "1332";
-//    public static final String q_mcq_op_3 = "1333";
-//    public static final String q_mcq_op_4 = "1334";
-//    public static final String q_mcq_op_5 = "1335";
-//    public static final String q_marks = "1336";
-//    public static final String q_diff_level = "1337";
-//    public static final String q_trending = "338";
-//    public static final String q_popular = "339";
-//    public static final String q_recent = "340";
-//    public static final String q_avg_ratings = "341";
-//    public static final String q_no_of_ratings = "342";
-//    public static final String q_status = "343";
-//    public static final String q_cdatetime = "344";
-//    public static final String q_udatetime = "345";
-//    public static final String q_type = "1346";
-//    public static final String q_source = "347";
-//    public static final String q_quest = "1348";
-//    public static final String q_view_count = "349";
-//    public static final String q_category = "1350";
-//    public static final String q_duration = "351";
-//    public static final String q_likes = "352";
-//    public static final String q_comments = "353";
-//    public static final String q_views = "354";
-//    public static final String q_shares = "355";
-//    public static final String q_last_used = "356";
-//    public static final String q_topic_id = "357";
-//    public static final String q_quest_desc = "1358";
-//    public static final String q_attempted_by = "359";
-//    public static final String q_solved_by = "360";
-//    public static final String q_media_type = "1361";
-
-    public static final String q_options_type = "1362";
+    public static final String friend_req_sent = "311";
+    public static final String friend_req_received = "312";
+    public static final String follow_req_sent = "316E";
+    public static final String follow_req_received = "316F";
 
     //Answers
     public static final String a_id = "1363";
@@ -320,18 +336,6 @@ public class Constant {
     public static final String qlc_cdatetime = "1388";
     public static final String qlc_deleted = "1389";
     public static final String qlc_fav_flag = "1390";
-
-
-//    public static final String qlc_id = "1381";
-//    public static final String qlc_q_id = "1382";
-//    public static final String qlc_like_flag = "1383";
-//    public static final String qlc_comment_flag = "1384";
-//    public static final String qlc_comment_text = "1385";
-//    public static final String qlc_user_id = "1386";
-//    public static final String qlc_share_flag = "1387";
-//    public static final String qlc_cdatetime = "1388";
-//    public static final String qlc_deleted = "1389";
-//    public static final String qlc_fav_flag = "1390";
 
     // SubjectMaster
     public static final String sm_id = "1300";
@@ -439,7 +443,7 @@ public class Constant {
     public static final String isFavourite = "1410";
 
     //Notification Fields
-    public static final String cn_connected = "309";
+    //public static final String cn_connected = "309";
     public static final String cn_request_active = "313";
     public static final String cn_initiated_by_u1 = "311";
     public static final String cn_initiated_by_u2 = "312";
@@ -477,7 +481,6 @@ public class Constant {
     public static final String SHORT_ANSWER = "5";
     public static final String LONG_ANSWER = "6";*/
 
-    public static final String PRODUCTION_BASE_FILE_API = "https://jtmobileappstorage.blob.core.windows.net/spotmeets/media/images/";
 
     //Media
     public static final String w_ans_text = "1701";

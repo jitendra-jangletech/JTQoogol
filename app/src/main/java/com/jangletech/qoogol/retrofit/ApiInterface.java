@@ -4,6 +4,7 @@ import com.jangletech.qoogol.model.ChangePassword;
 import com.jangletech.qoogol.model.CityResponse;
 import com.jangletech.qoogol.model.Classes;
 import com.jangletech.qoogol.model.CommonResponseObject;
+import com.jangletech.qoogol.model.ConnectionResponse;
 import com.jangletech.qoogol.model.CountryResponse;
 import com.jangletech.qoogol.model.CourseResponse;
 import com.jangletech.qoogol.model.DashboardInfo;
@@ -141,7 +142,13 @@ public interface ApiInterface {
                                       @Field("Case") String caseL,
                                       @Field(Constant.qlc_like_flag) int like);
 
+
     @FormUrlEncoded
+    @POST("q031StartResumeTest")
+    Call<TestingQuestionNew> fetchTestQuestionAnswers(@Field(Constant.u_user_id) int userId,
+                                                      @Field(Constant.tt_id) int testTakenId,
+                                                      @Field(Constant.tt_tm_id) int testTakentmId);
+
     @POST(Constant.REGISTER_LOGIN)
     Call<RegisterLoginModel> doRegisterLogin(@Field(Constant.u_mob_1) String mobile,
                                              @Field("Case") String caseR,
@@ -186,6 +193,16 @@ public interface ApiInterface {
                                         @Field(Constant.q_id) String queId,
                                         @Field("Case") String caseL,
                                         @Field(Constant.qlc_comment_text) String comment);
+
+
+    @FormUrlEncoded
+    @POST(Constant.FETCH_CONNECTIONS)
+    Call<ConnectionResponse> fetchConnections(@Field(Constant.u_user_id) String userid, @Field("Case") String connectionCase, @Field(Constant.device_id) String device_id, @Field("200Q") String app, @Field(Constant.pagestart) int pagestart);
+
+
+    @FormUrlEncoded
+    @POST(Constant.UPDATE_CONNECTIONS)
+    Call<ResponseObj> updateConnections(@Field(Constant.u_user_id) String userid, @Field("Case") String connectionCase, @Field(Constant.device_id) String device_id, @Field("200Q") String app, @Field(Constant.other_user) String other_user);
 
     @FormUrlEncoded
     @POST(Constant.PROCESS_TEST)
