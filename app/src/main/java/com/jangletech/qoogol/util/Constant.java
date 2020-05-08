@@ -34,6 +34,7 @@ public class Constant {
 
     //User table
     public static final String qoogol = "Q";
+    public static final String forcerefresh = "F";
     public static final String u_first_name = "104";
     public static final String u_last_name = "105";
     public static final String w_user_profile_image_name = "507";
@@ -207,7 +208,7 @@ public class Constant {
     public static final String blocked_users = "B";
     public static final String requests = "R";
     public static final String friendrequests = "FRR";
-    public static final String followrequests = "FLr";
+    public static final String followrequests = "FLR";
 
     public static final String remove_connection = "X";
     public static final String accept_follow_requests = "AF";

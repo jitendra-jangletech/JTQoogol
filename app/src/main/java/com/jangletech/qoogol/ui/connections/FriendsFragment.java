@@ -33,6 +33,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 
+import static com.jangletech.qoogol.util.Constant.forcerefresh;
 import static com.jangletech.qoogol.util.Constant.friends;
 import static com.jangletech.qoogol.util.Constant.qoogol;
 
@@ -48,6 +49,7 @@ public class FriendsFragment extends BaseFragment implements ConnectionAdapter.u
     ConnectionAdapter mAdapter;
     Boolean isVisible = false;
     String userId="";
+    Call<ConnectionResponse> call;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -59,7 +61,7 @@ public class FriendsFragment extends BaseFragment implements ConnectionAdapter.u
 
     private void init() {
         userId = String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));
-        mBinding.connectionSwiperefresh.setOnRefreshListener(() -> getData(0));
+        mBinding.connectionSwiperefresh.setOnRefreshListener(() -> getData(0,"refresh"));
     }
 
     @Override
@@ -71,7 +73,7 @@ public class FriendsFragment extends BaseFragment implements ConnectionAdapter.u
     public void onResume() {
         super.onResume();
         isVisible = true;
-        getData(0);
+        getData(0,"init");
 
     }
 
@@ -81,9 +83,13 @@ public class FriendsFragment extends BaseFragment implements ConnectionAdapter.u
         }
     }
 
-    private void getData(int pagestart) {
+    private void getData(int pagestart, String call_from) {
         ProgressDialog.getInstance().show(getActivity());
-        Call<ConnectionResponse> call = apiService.fetchConnections(userId,friends, getDeviceId(), qoogol,pagestart);
+        if (call_from.equalsIgnoreCase("refresh"))
+            call = apiService.fetchConnections(userId,friends, getDeviceId(), qoogol,pagestart);
+        else
+            call = apiService.fetchRefreshedConnections(userId,friends, getDeviceId(), qoogol,pagestart,forcerefresh);
+
         call.enqueue(new Callback<ConnectionResponse>() {
             @Override
             public void onResponse(Call<ConnectionResponse> call, retrofit2.Response<ConnectionResponse> response) {
@@ -118,7 +124,7 @@ public class FriendsFragment extends BaseFragment implements ConnectionAdapter.u
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser && isVisible)
-            getData(0);
+            getData(0,"init");
     }
 
 
@@ -138,11 +144,11 @@ public class FriendsFragment extends BaseFragment implements ConnectionAdapter.u
 
     @Override
     public void onUpdateConnection() {
-        getData(0);
+        getData(0,"refresh");
     }
 
     @Override
     public void onBottomReached(int size) {
-        getData(size);
+        getData(size,"refresh");
     }
 }
