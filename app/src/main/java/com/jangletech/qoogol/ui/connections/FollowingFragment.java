@@ -36,6 +36,7 @@ import retrofit2.Callback;
 
 import static com.jangletech.qoogol.util.Constant.followers;
 import static com.jangletech.qoogol.util.Constant.following;
+import static com.jangletech.qoogol.util.Constant.forcerefresh;
 import static com.jangletech.qoogol.util.Constant.friends;
 import static com.jangletech.qoogol.util.Constant.qoogol;
 
@@ -51,6 +52,7 @@ public class FollowingFragment extends BaseFragment implements ConnectionAdapter
     ConnectionAdapter mAdapter;
     Boolean isVisible = false;
     String userId="";
+    Call<ConnectionResponse> call;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -71,7 +73,7 @@ public class FollowingFragment extends BaseFragment implements ConnectionAdapter
         mBinding.connectionSwiperefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getData(0);
+                getData(0,"refresh");
             }
         });
     }
@@ -86,13 +88,18 @@ public class FollowingFragment extends BaseFragment implements ConnectionAdapter
     public void onResume() {
         super.onResume();
         isVisible=true;
-        getData(0);
+        getData(0,"init");
 
     }
 
-    private void getData(int pagestart) {
+    private void getData(int pagestart, String call_from) {
         ProgressDialog.getInstance().show(getActivity());
-        Call<ConnectionResponse> call = apiService.fetchConnections(userId,following, getDeviceId(), qoogol,pagestart);
+        if (call_from.equalsIgnoreCase("refresh"))
+         call = apiService.fetchConnections(userId,following, getDeviceId(), qoogol,pagestart);
+        else
+            call = apiService.fetchRefreshedConnections(userId,following, getDeviceId(), qoogol,pagestart, forcerefresh);
+
+
         call.enqueue(new Callback<ConnectionResponse>() {
             @Override
             public void onResponse(Call<ConnectionResponse> call, retrofit2.Response<ConnectionResponse> response) {
@@ -127,7 +134,7 @@ public class FollowingFragment extends BaseFragment implements ConnectionAdapter
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser && isVisible)
-            getData(0);
+            getData(0,"init");
     }
 
 
@@ -148,11 +155,11 @@ public class FollowingFragment extends BaseFragment implements ConnectionAdapter
 
     @Override
     public void onUpdateConnection() {
-        getData(0);
+        getData(0,"refresh");
     }
 
     @Override
     public void onBottomReached(int size) {
-        getData(size);
+        getData(size,"init");
     }
 }

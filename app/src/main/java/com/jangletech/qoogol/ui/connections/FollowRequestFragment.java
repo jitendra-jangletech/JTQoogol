@@ -33,7 +33,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 
 import static com.jangletech.qoogol.ui.BaseFragment.getDeviceId;
+import static com.jangletech.qoogol.util.Constant.following;
 import static com.jangletech.qoogol.util.Constant.followrequests;
+import static com.jangletech.qoogol.util.Constant.forcerefresh;
 import static com.jangletech.qoogol.util.Constant.friendrequests;
 import static com.jangletech.qoogol.util.Constant.qoogol;
 
@@ -49,6 +51,7 @@ public class FollowRequestFragment extends BaseFragment implements ConnectionAda
     ConnectionAdapter mAdapter;
     Boolean isVisible = false;
     String userId="";
+    Call<ConnectionResponse> call;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -60,7 +63,7 @@ public class FollowRequestFragment extends BaseFragment implements ConnectionAda
 
     private void init() {
         userId = String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));
-        mBinding.requestsSwiperefresh.setOnRefreshListener(() -> getData(0));
+        mBinding.requestsSwiperefresh.setOnRefreshListener(() -> getData(0,"refresh"));
     }
 
     public void checkRefresh() {
@@ -73,7 +76,7 @@ public class FollowRequestFragment extends BaseFragment implements ConnectionAda
     public void onResume() {
         super.onResume();
         isVisible = true;
-        getData(0);
+        getData(0,"init");
 
     }
 
@@ -81,12 +84,17 @@ public class FollowRequestFragment extends BaseFragment implements ConnectionAda
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser && isVisible)
-            getData(0);
+            getData(0,"init");
     }
 
-    private void getData(int pagestart) {
+    private void getData(int pagestart, String call_from) {
         ProgressDialog.getInstance().show(getActivity());
-        Call<ConnectionResponse> call = apiService.fetchConnections(userId,followrequests, getDeviceId(), qoogol,pagestart);
+
+        if (call_from.equalsIgnoreCase("refresh"))
+        call = apiService.fetchConnections(userId,followrequests, getDeviceId(), qoogol,pagestart);
+        else
+            call = apiService.fetchRefreshedConnections(userId,followrequests, getDeviceId(), qoogol,pagestart, forcerefresh);
+
         call.enqueue(new Callback<ConnectionResponse>() {
             @Override
             public void onResponse(Call<ConnectionResponse> call, retrofit2.Response<ConnectionResponse> response) {
@@ -133,11 +141,11 @@ public class FollowRequestFragment extends BaseFragment implements ConnectionAda
 
     @Override
     public void onUpdateConnection() {
-        getData(0);
+        getData(0,"refresh");
     }
 
     @Override
     public void onBottomReached(int size) {
-        getData(size);
+        getData(size,"init");
     }
 }

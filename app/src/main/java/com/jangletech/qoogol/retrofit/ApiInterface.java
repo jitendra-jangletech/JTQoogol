@@ -201,6 +201,10 @@ public interface ApiInterface {
     @POST(Constant.FETCH_CONNECTIONS)
     Call<ConnectionResponse> fetchConnections(@Field(Constant.u_user_id) String userid, @Field("Case") String connectionCase, @Field(Constant.device_id) String device_id, @Field("200Q") String app, @Field(Constant.pagestart) int pagestart);
 
+    @FormUrlEncoded
+    @POST(Constant.FETCH_CONNECTIONS)
+    Call<ConnectionResponse> fetchRefreshedConnections(@Field(Constant.u_user_id) String userid, @Field("Case") String connectionCase, @Field(Constant.device_id) String device_id, @Field("200Q") String app, @Field(Constant.pagestart) int pagestart, @Field("ForceRefresh") String refresh);
+
 
     @FormUrlEncoded
     @POST(Constant.UPDATE_CONNECTIONS)
