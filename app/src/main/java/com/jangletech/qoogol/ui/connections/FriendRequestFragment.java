@@ -26,6 +26,8 @@ import com.jangletech.qoogol.model.Connections;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
+import com.jangletech.qoogol.util.Constant;
+import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
 
 import java.util.ArrayList;
@@ -48,12 +50,14 @@ public class FriendRequestFragment extends BaseFragment implements ConnectionAda
     ApiInterface apiService = ApiClient.getInstance().getApi();
     ConnectionAdapter mAdapter;
     Boolean isVisible = false;
+    String userId="";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_friend_request, container, false);
         setHasOptionsMenu(true);
+        userId = String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));
         return  mBinding.getRoot();
     }
 
@@ -107,7 +111,7 @@ public class FriendRequestFragment extends BaseFragment implements ConnectionAda
 
     private void getData(int pagestart) {
         ProgressDialog.getInstance().show(getActivity());
-        Call<ConnectionResponse> call = apiService.fetchConnections("1069",friendrequests, getDeviceId(), qoogol,pagestart);
+        Call<ConnectionResponse> call = apiService.fetchConnections(userId,friendrequests, getDeviceId(), qoogol,pagestart);
         call.enqueue(new Callback<ConnectionResponse>() {
             @Override
             public void onResponse(Call<ConnectionResponse> call, retrofit2.Response<ConnectionResponse> response) {

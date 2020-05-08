@@ -150,6 +150,7 @@ public interface ApiInterface {
                                                       @Field(Constant.tt_id) int testTakenId,
                                                       @Field(Constant.tt_tm_id) int testTakentmId);
 */
+   @FormUrlEncoded
     @POST(Constant.REGISTER_LOGIN)
     Call<RegisterLoginModel> doRegisterLogin(@Field(Constant.u_mob_1) String mobile,
                                              @Field("Case") String caseR,

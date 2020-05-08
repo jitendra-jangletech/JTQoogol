@@ -32,6 +32,7 @@ public class ConnectionsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mbinding = DataBindingUtil.inflate(inflater, R.layout.fragment_connections, container, false);
+
         return mbinding.getRoot();
     }
 
