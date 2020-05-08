@@ -230,16 +230,17 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
 
     private void fetchSubjectList() {
         ProgressDialog.getInstance().show(getActivity());
-        Call<FetchSubjectResponseList> call = apiService.fetchSubjectList(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));//todo change userId
+        Call<FetchSubjectResponseList> call = apiService.fetchSubjectList(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));
         call.enqueue(new Callback<FetchSubjectResponseList>() {
             @Override
             public void onResponse(Call<FetchSubjectResponseList> call, Response<FetchSubjectResponseList> response) {
                 ProgressDialog.getInstance().dismiss();
-                if (response.body() != null && response.body().getResponse().equals("200")) {
+               // if (response.body() != null && response.body().getResponse().equals("200")) {
                     mViewModel.setAllSubjectList(response.body().getFetchSubjectResponseList());
-                } else {
+                //}
+                /*else {
                     showErrorDialog(getActivity(), response.body().getResponse(), response.body().getMessage());
-                }
+                }*/
             }
 
             @Override
@@ -263,7 +264,7 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
                     Log.d(TAG, "onResponse: " + response.body().getTestList());
                     Log.d(TAG, "onResponse: " + response.body().getTestList().size());
                 } else {
-                    //showErrorDialog(getActivity(),response.body().getResponse(),response.body().getMessage());
+                    showErrorDialog(getActivity(),response.body().getResponse(),response.body().getMessage());
                 }
             }
 

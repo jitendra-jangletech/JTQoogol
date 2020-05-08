@@ -15,9 +15,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.jangletech.qoogol.R;
@@ -25,6 +27,7 @@ import com.jangletech.qoogol.activities.StartTestActivity;
 import com.jangletech.qoogol.databinding.TestQuestionFragmentBinding;
 import com.jangletech.qoogol.model.TestQuestionNew;
 import com.jangletech.qoogol.util.Constant;
+
 import java.util.HashMap;
 import java.util.List;
 
@@ -39,7 +42,7 @@ public class StartTestAdapter extends RecyclerView.Adapter<StartTestAdapter.View
     StartAdapterButtonClickListener listener;
     HashMap<String, ToggleButton> mapImageMark = new HashMap<>();
     HashMap<String, TextView> mapTimer = new HashMap<>();
-    HashMap<String,EditText> mapAnsEditText;
+    HashMap<String, EditText> mapAnsEditText;
 
     public StartTestAdapter(List<TestQuestionNew> testQuestionNewList, Context mContext, StartAdapterButtonClickListener listener) {
         this.testQuestions = testQuestionNewList;
@@ -47,22 +50,22 @@ public class StartTestAdapter extends RecyclerView.Adapter<StartTestAdapter.View
         this.listener = listener;
     }
 
-    private void setEditTextMap(List<TestQuestionNew> list){
+    private void setEditTextMap(List<TestQuestionNew> list) {
         mapAnsEditText = new HashMap<>();
-       for(TestQuestionNew questionNew : testQuestions){
-           if(questionNew.getQ_type().equals(Constant.SHORT_ANSWER)){
-               mapAnsEditText.put(questionNew.getTq_quest_seq_num(),testQuestionFragmentBinding.shortAnswer.etMultiLineAnswer);
-           }
-           if(questionNew.getQ_type().equals(Constant.LONG_ANSWER)){
-               mapAnsEditText.put(questionNew.getTq_quest_seq_num(),testQuestionFragmentBinding.longAnswer.etMultiLineAnswer);
-           }
-           if(questionNew.getQ_type().equals(Constant.ONE_LINE_ANSWER)){
-               mapAnsEditText.put(questionNew.getTq_quest_seq_num(),testQuestionFragmentBinding.oneLineQuestionAns.etAnswer);
-           }
-           if(questionNew.getQ_type().equals(Constant.FILL_THE_BLANKS)){
-               mapAnsEditText.put(questionNew.getTq_quest_seq_num(),testQuestionFragmentBinding.fillInTheBlanks.etAnswer);
-           }
-       }
+        for (TestQuestionNew questionNew : testQuestions) {
+            if (questionNew.getQ_type().equals(Constant.SHORT_ANSWER)) {
+                mapAnsEditText.put(questionNew.getTq_quest_seq_num(), testQuestionFragmentBinding.shortAnswer.etMultiLineAnswer);
+            }
+            if (questionNew.getQ_type().equals(Constant.LONG_ANSWER)) {
+                mapAnsEditText.put(questionNew.getTq_quest_seq_num(), testQuestionFragmentBinding.longAnswer.etMultiLineAnswer);
+            }
+            if (questionNew.getQ_type().equals(Constant.ONE_LINE_ANSWER)) {
+                mapAnsEditText.put(questionNew.getTq_quest_seq_num(), testQuestionFragmentBinding.oneLineQuestionAns.etAnswer);
+            }
+            if (questionNew.getQ_type().equals(Constant.FILL_THE_BLANKS)) {
+                mapAnsEditText.put(questionNew.getTq_quest_seq_num(), testQuestionFragmentBinding.fillInTheBlanks.etAnswer);
+            }
+        }
     }
 
     @NonNull
@@ -123,8 +126,8 @@ public class StartTestAdapter extends RecyclerView.Adapter<StartTestAdapter.View
             holder.testQuestionFragmentBinding.singleChoiceQuestion.ans3.setText(questionNew.getQ_mcq_op_3());
             holder.testQuestionFragmentBinding.singleChoiceQuestion.ans4.setText(questionNew.getQ_mcq_op_4());
             holder.testQuestionFragmentBinding.singleChoiceQuestion.ans5.setText(questionNew.getQ_mcq_op_5());
-            mapTimer.put(testQuestions.get(poss).getTq_quest_seq_num(),testQuestionFragmentBinding.tvQuestTimer);
-            createTimer(StartTestActivity.getCurrentItemPos(),0, 0);
+            mapTimer.put(testQuestions.get(poss).getTq_quest_seq_num(), testQuestionFragmentBinding.tvQuestTimer);
+            createTimer(StartTestActivity.getCurrentItemPos(), 0, 0);
         }
 
         if (questionNew.getQ_type().equals(Constant.SHORT_ANSWER)) {
@@ -138,8 +141,8 @@ public class StartTestAdapter extends RecyclerView.Adapter<StartTestAdapter.View
             holder.testQuestionFragmentBinding.fillInTheBlanks.fillInTheBlanksRootLayout.setVisibility(View.GONE);
 
             holder.testQuestionFragmentBinding.shortAnswer.tvQuestion.setText(questionNew.getQ_quest());
-            mapTimer.put(testQuestions.get(poss).getTq_quest_seq_num(),testQuestionFragmentBinding.tvQuestTimer);
-            createTimer(StartTestActivity.getCurrentItemPos(),0, 0);
+            mapTimer.put(testQuestions.get(poss).getTq_quest_seq_num(), testQuestionFragmentBinding.tvQuestTimer);
+            createTimer(StartTestActivity.getCurrentItemPos(), 0, 0);
 
             //mapAnsEditText.put(testQuestions.get(StartTestActivity.getCurrentItemPos()).getTq_quest_seq_num(),holder.testQuestionFragmentBinding.shortAnswer.etMultiLineAnswer);
 
@@ -164,9 +167,9 @@ public class StartTestAdapter extends RecyclerView.Adapter<StartTestAdapter.View
             holder.testQuestionFragmentBinding.fillInTheBlanks.fillInTheBlanksRootLayout.setVisibility(View.GONE);
             //focusChangeListener(testQuestionFragmentBinding.longAnswer.etMultiLineAnswer);
             holder.testQuestionFragmentBinding.longAnswer.tvQuestion.setText(questionNew.getQ_quest());
-            mapAnsEditText.put(testQuestions.get(StartTestActivity.getCurrentItemPos()).getTq_quest_seq_num(),holder.testQuestionFragmentBinding.longAnswer.etMultiLineAnswer);
-            mapTimer.put(testQuestions.get(poss).getTq_quest_seq_num(),testQuestionFragmentBinding.tvQuestTimer);
-            createTimer(StartTestActivity.getCurrentItemPos(),0, 0);
+            mapAnsEditText.put(testQuestions.get(StartTestActivity.getCurrentItemPos()).getTq_quest_seq_num(), holder.testQuestionFragmentBinding.longAnswer.etMultiLineAnswer);
+            mapTimer.put(testQuestions.get(poss).getTq_quest_seq_num(), testQuestionFragmentBinding.tvQuestTimer);
+            createTimer(StartTestActivity.getCurrentItemPos(), 0, 0);
             holder.testQuestionFragmentBinding.longAnswer.etMultiLineAnswer.setKeyListener(DigitsKeyListener
                     .getInstance(" qwertyuiopasdfghjklzxcvbnm1234567890QWERTYUIOPASDFGHJKLZXCVBNM,.'?!()*&amp;%^-_+=\\/;:{}[]<>@`\""));
 
@@ -193,10 +196,9 @@ public class StartTestAdapter extends RecyclerView.Adapter<StartTestAdapter.View
             holder.testQuestionFragmentBinding.multiChoiceQuestion.ans3.setText(questionNew.getQ_mcq_op_3());
             holder.testQuestionFragmentBinding.multiChoiceQuestion.ans4.setText(questionNew.getQ_mcq_op_4());
             holder.testQuestionFragmentBinding.multiChoiceQuestion.ans5.setText(questionNew.getQ_mcq_op_5());
-            mapTimer.put(testQuestions.get(poss).getTq_quest_seq_num(),testQuestionFragmentBinding.tvQuestTimer);
-            createTimer(StartTestActivity.getCurrentItemPos(),0, 0);
+            mapTimer.put(testQuestions.get(poss).getTq_quest_seq_num(), testQuestionFragmentBinding.tvQuestTimer);
+            createTimer(StartTestActivity.getCurrentItemPos(), 0, 0);
         }
-
         if (questionNew.getQ_type().equals(Constant.ONE_LINE_ANSWER)) {
             Log.d(TAG, "onBindViewHolder : " + questionNew.getQ_quest());
             holder.testQuestionFragmentBinding.oneLineQuestionAns.oneLineAnsRootLayout.setVisibility(View.VISIBLE);
@@ -208,8 +210,8 @@ public class StartTestAdapter extends RecyclerView.Adapter<StartTestAdapter.View
             holder.testQuestionFragmentBinding.fillInTheBlanks.fillInTheBlanksRootLayout.setVisibility(View.GONE);
             //focusChangeListener(testQuestionFragmentBinding.oneLineQuestionAns.etAnswer);
             holder.testQuestionFragmentBinding.oneLineQuestionAns.tvQuestion.setText(questionNew.getQ_quest());
-            mapTimer.put(testQuestions.get(poss).getTq_quest_seq_num(),testQuestionFragmentBinding.tvQuestTimer);
-            createTimer(StartTestActivity.getCurrentItemPos(),0, 0);
+            mapTimer.put(testQuestions.get(poss).getTq_quest_seq_num(), testQuestionFragmentBinding.tvQuestTimer);
+            createTimer(StartTestActivity.getCurrentItemPos(), 0, 0);
             holder.testQuestionFragmentBinding.oneLineQuestionAns.etAnswer.setKeyListener(DigitsKeyListener
                     .getInstance(" qwertyuiopasdfghjklzxcvbnm1234567890QWERTYUIOPASDFGHJKLZXCVBNM,.'?!()*&amp;%^-_+=\\/;:{}[]<>@`\""));
             //holder.testQuestionFragmentBinding.oneLineQuestionAns.etAnswer.setText(questionNew.getTtqa_sub_ans());
@@ -229,8 +231,8 @@ public class StartTestAdapter extends RecyclerView.Adapter<StartTestAdapter.View
             holder.testQuestionFragmentBinding.oneLineQuestionAns.oneLineAnsRootLayout.setVisibility(View.GONE);
             //focusChangeListener(testQuestionFragmentBinding.fillInTheBlanks.etAnswer);
             holder.testQuestionFragmentBinding.fillInTheBlanks.tvQuestion.setText(questionNew.getQ_quest());
-            mapTimer.put(testQuestions.get(poss).getTq_quest_seq_num(),testQuestionFragmentBinding.tvQuestTimer);
-            createTimer(StartTestActivity.getCurrentItemPos(),0, 0);
+            mapTimer.put(testQuestions.get(poss).getTq_quest_seq_num(), testQuestionFragmentBinding.tvQuestTimer);
+            createTimer(StartTestActivity.getCurrentItemPos(), 0, 0);
             holder.testQuestionFragmentBinding.fillInTheBlanks.etAnswer.setKeyListener(DigitsKeyListener
                     .getInstance(" qwertyuiopasdfghjklzxcvbnm1234567890QWERTYUIOPASDFGHJKLZXCVBNM,.'?!()*&amp;%^-_+=\\/;:{}[]<>@`\""));
             //holder.testQuestionFragmentBinding.fillInTheBlanks.etAnswer.setText(questionNew.getTtqa_sub_ans());
@@ -248,13 +250,13 @@ public class StartTestAdapter extends RecyclerView.Adapter<StartTestAdapter.View
             ToggleButton markToggleButton = mapImageMark.get(testQuestions.get(posss).getTq_quest_seq_num());
 
             if (markToggleButton.isChecked()) {
-                Toast.makeText(mContext, "Checked!!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(mContext, "Checked!!", Toast.LENGTH_SHORT).show();
                 markToggleButton.setChecked(true);
                 testQuestions.get(posss).setTtqa_marked(true);
                 testQuestions.get(posss).setTtqa_visited(true);
                 mapImageMark.put(testQuestions.get(poss).getTq_quest_seq_num(), markToggleButton);
             } else {
-                Toast.makeText(mContext, "UnChecked!!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(mContext, "UnChecked!!", Toast.LENGTH_SHORT).show();
                 markToggleButton.setChecked(false);
                 testQuestions.get(posss).setTtqa_marked(false);
                 testQuestions.get(posss).setTtqa_visited(true);
@@ -309,9 +311,9 @@ public class StartTestAdapter extends RecyclerView.Adapter<StartTestAdapter.View
         });
     }*/
 
-    private void createTimer(int position,int seconds, int minutes) {
+    private void createTimer(int position, int seconds, int minutes) {
         TextView timer = mapTimer.get(String.valueOf(position));
-        if(timer!=null){
+        if (timer != null) {
             countDownTimer = new CountDownTimer(60 * 1000 * 60, 1000) {
                 int timerCountSeconds = seconds;
                 int timerCountMinutes = minutes;
@@ -392,7 +394,7 @@ public class StartTestAdapter extends RecyclerView.Adapter<StartTestAdapter.View
                     }
 
                     if (wordCount > 0) {
-                        Log.d(TAG, "Subjective Ans pos "+qPos);
+                        Log.d(TAG, "Subjective Ans pos " + qPos);
                         testQuestions.get(qPos).setTtqa_sub_ans(s.toString());
                         testQuestions.get(qPos).setTtqa_attempted(true);
                         testQuestions.get(qPos).setTtqa_visited(false);
@@ -468,7 +470,9 @@ public class StartTestAdapter extends RecyclerView.Adapter<StartTestAdapter.View
 
     public interface StartAdapterButtonClickListener {
         void onPreviousClick(int pos);
+
         void onNextClick(int pos);
+
         void onReportClick(int pos);
     }
 }

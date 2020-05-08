@@ -1,10 +1,10 @@
 package com.jangletech.qoogol.ui.notifications;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
@@ -42,7 +42,7 @@ public class NotificationsFragment extends BaseFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        mBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_notifications, container, false);
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_notifications, container, false);
         return mBinding.getRoot();
     }
 
@@ -54,10 +54,9 @@ public class NotificationsFragment extends BaseFragment {
         mViewModel.getNotificationList().observe(getActivity(), new Observer<List<Notification>>() {
             @Override
             public void onChanged(@Nullable final List<Notification> notifications) {
-                Log.d(TAG, "onChanged Size : " + notifications.size());
                 mBinding.notificationRecyclerView.setHasFixedSize(true);
                 mBinding.notificationRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                NotificationAdapter notificationAdapter = new NotificationAdapter(getActivity(),notifications);
+                NotificationAdapter notificationAdapter = new NotificationAdapter(getActivity(), notifications);
                 mBinding.notificationRecyclerView.setAdapter(notificationAdapter);
             }
         });
@@ -65,12 +64,16 @@ public class NotificationsFragment extends BaseFragment {
 
     private void fetchNotifications() {
         ProgressDialog.getInstance().show(getActivity());
-        Call<NotificationResponse> call = apiService.fetchNotifications(new PreferenceManager(getActivity()).getInt(Constant.USER_ID),getDeviceId());//todo change userId
+        Call<NotificationResponse> call = apiService.fetchNotifications(new PreferenceManager(getActivity()).getInt(Constant.USER_ID), getDeviceId());//todo change userId
         call.enqueue(new Callback<NotificationResponse>() {
             @Override
             public void onResponse(Call<NotificationResponse> call, Response<NotificationResponse> response) {
                 ProgressDialog.getInstance().dismiss();
-                mViewModel.setNotificationList(response.body().getNotifications());
+                if (response.body() != null && response.body().getResponse().equals("200")) {
+                    mViewModel.setNotificationList(response.body().getNotifications());
+                } else {
+                    showErrorDialog(getActivity(),response.body().getResponse(),response.body().getMessage());
+                }
             }
 
             @Override

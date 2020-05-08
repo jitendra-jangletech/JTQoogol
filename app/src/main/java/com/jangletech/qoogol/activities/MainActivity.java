@@ -106,33 +106,7 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
                 navController.navigate(R.id.nav_blocked_connections);
             }
         });
-//
-//        findViewById(R.id.nav_course).setOnClickListener(v -> {
-//            mBinding.drawerLayout.closeDrawers();
-//            startActivity(new Intent(this, CourseActivity.class));
-////            if (navController.getCurrentDestination().getId() != R.id.nav_course) {
-////                navController.popBackStack();
-////                navController.navigate(R.id.nav_course);
-////            }
-//        });
-//
-//        findViewById(R.id.nav_exam).setOnClickListener(v -> {
-//            mBinding.drawerLayout.closeDrawers();
-//            if (navController.getCurrentDestination().getId() != R.id.nav_exam) {
-//                navController.popBackStack();
-//                navController.navigate(R.id.nav_exam);
-//            }
-//        });
-//            startActivity(new Intent(this, CourseActivity.class));
-//        });
 
-//        findViewById(R.id.nav_exam).setOnClickListener(v -> {
-//            mBinding.drawerLayout.closeDrawers();
-//            if (navController.getCurrentDestination().getId() != R.id.nav_exam) {
-//                navController.popBackStack();
-//                navController.navigate(R.id.nav_exam);
-//            }
-//        });
 
         findViewById(R.id.nav_practice_test).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();

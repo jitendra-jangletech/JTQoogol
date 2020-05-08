@@ -156,12 +156,14 @@
 
 
                     <TextView
+                        android:visibility="gone"
                         android:id="@+id/nav_reviews"
                         style="@style/menu_item_style"
                         android:drawableLeft="@drawable/ic_reviews"
                         android:text="@string/reviews" />
 
                     <TextView
+                        android:visibility="gone"
                         android:id="@+id/nav_published"
                         style="@style/menu_item_style"
                         android:drawableLeft="@drawable/ic_published"
