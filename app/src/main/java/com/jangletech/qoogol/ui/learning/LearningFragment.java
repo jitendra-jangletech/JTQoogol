@@ -1,5 +1,6 @@
 package com.jangletech.qoogol.ui.learning;
 
+import android.media.audiofx.PresetReverb;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,18 +10,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
-
-import com.jangletech.qoogol.activities.MainActivity;
 import com.jangletech.qoogol.R;
+import com.jangletech.qoogol.activities.MainActivity;
 import com.jangletech.qoogol.adapter.LearingAdapter;
 import com.jangletech.qoogol.database.QoogolDatabase;
 import com.jangletech.qoogol.databinding.LearningFragmentBinding;
@@ -30,25 +28,23 @@ import com.jangletech.qoogol.model.LearningQuestResponse;
 import com.jangletech.qoogol.model.LearningQuestions;
 import com.jangletech.qoogol.model.LearningQuestionsNew;
 import com.jangletech.qoogol.model.ProcessQuestion;
-import com.jangletech.qoogol.model.ResponseObj;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
+import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.PropertyResourceBundle;
 
 import retrofit2.Call;
 import retrofit2.Callback;
-
 import static com.facebook.FacebookSdk.getApplicationContext;
+import static com.jangletech.qoogol.util.Constant.COUNTRY;
 import static com.jangletech.qoogol.util.Constant.learning;
 
-public class LearningFragment extends Fragment implements LearingAdapter.onIconClick {
+public class LearningFragment extends BaseFragment implements LearingAdapter.onIconClick {
 
     private LearningViewModel mViewModel;
     LearningFragmentBinding learningFragmentBinding;
@@ -128,7 +124,7 @@ public class LearningFragment extends Fragment implements LearingAdapter.onIconC
 
     private void getDataFromApi() {
         ProgressDialog.getInstance().show(getActivity());
-        Call<LearningQuestResponse> call = apiService.fetchQAApi(userId);
+        Call<LearningQuestResponse> call = apiService.fetchQAApi(new PreferenceManager(getApplicationContext()).getInt(Constant.USER_ID));
         call.enqueue(new Callback<LearningQuestResponse>() {
             @Override
             public void onResponse(Call<LearningQuestResponse> call, retrofit2.Response<LearningQuestResponse> response) {
@@ -163,7 +159,7 @@ public class LearningFragment extends Fragment implements LearingAdapter.onIconC
         learningFragmentBinding.learningRecycler.setAdapter(learingAdapter);
     }
 
-    private void ProcessQuestionAPI(String user_id, String que_id, String api_case, int flag, String call_from) {
+    private void ProcessQuestionAPI(int user_id, String que_id, String api_case, int flag, String call_from) {
         ProgressDialog.getInstance().show(getActivity());
         Call<ProcessQuestion> call;
 
@@ -584,7 +580,7 @@ public class LearningFragment extends Fragment implements LearingAdapter.onIconC
 
     @Override
     public void onLikeClick(String questionId, int isLiked) {
-        ProcessQuestionAPI(userId, questionId,"I",isLiked, "like");
+        ProcessQuestionAPI(new PreferenceManager(getApplicationContext()).getInt(Constant.USER_ID), questionId,"I",isLiked, "like");
     }
 
     @Override
@@ -596,6 +592,6 @@ public class LearningFragment extends Fragment implements LearingAdapter.onIconC
 
     @Override
     public void onFavouriteClick(String questionId, int isFav) {
-        ProcessQuestionAPI(userId, questionId,"I", isFav, "fav");
+        ProcessQuestionAPI(new PreferenceManager(getApplicationContext()).getInt(Constant.USER_ID), questionId,"I", isFav, "fav");
     }
 }

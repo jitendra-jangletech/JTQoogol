@@ -161,7 +161,7 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST(Constant.FETCH_QA)
-    Call<LearningQuestResponse> fetchQAApi(@Field(Constant.u_user_id) String userid);
+    Call<LearningQuestResponse> fetchQAApi(@Field(Constant.u_user_id) int userid);
 
     @FormUrlEncoded
     @POST(Constant.PROCESS_QUESTION)
@@ -177,14 +177,14 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST(Constant.PROCESS_QUESTION)
-    Call<ProcessQuestion> likeApi(@Field(Constant.u_user_id) String userid,
+    Call<ProcessQuestion> likeApi(@Field(Constant.u_user_id) int userid,
                                   @Field(Constant.q_id) String queId,
                                   @Field("Case") String caseL,
                                   @Field(Constant.qlc_like_flag) int like);
 
     @FormUrlEncoded
     @POST(Constant.PROCESS_QUESTION)
-    Call<ProcessQuestion> favApi(@Field(Constant.u_user_id) String userid,
+    Call<ProcessQuestion> favApi(@Field(Constant.u_user_id) int userid,
                                  @Field(Constant.q_id) String queId,
                                  @Field("Case") String caseL,
                                  @Field(Constant.qlc_fav_flag) int like);
