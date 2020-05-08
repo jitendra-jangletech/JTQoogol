@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_view_profile"
+        app:showAsAction="never"
+        android:title="@string/view_prof"/>
+
+    <item
+        android:id="@+id/action_remove_connection"
+        app:showAsAction="never"
+        android:visible="false"
+        android:title="@string/remove"/>
+    <item
+        android:id="@+id/action_add_friend"
+        android:visible="false"
+        android:title="@string/add_friend" />
+
+    <item
+        android:id="@+id/action_block"
+        android:visible="false"
+        android:title="@string/block" />
+
+    <item
+        android:id="@+id/action_unblock"
+        android:visible="false"
+        android:title="@string/unblock" />
+
+    <item
+        android:id="@+id/action_follow"
+        android:visible="false"
+        android:title="@string/follow" />
+
+    <item
+        android:id="@+id/action_unfollow"
+        android:visible="false"
+        android:title="@string/unfollow" />
+    <item
+        android:id="@+id/accept_follow"
+        android:visible="false"
+        android:title="@string/accept" />
+
+    <item
+        android:id="@+id/cancel_friend"
+        android:visible="false"
+        android:title="@string/cancel" />
+
+    <item
+        android:id="@+id/cancel_follow"
+        android:visible="false"
+        android:title="@string/cancel" />
+
+    <item
+        android:id="@+id/accept_friend"
+        android:visible="false"
+        android:title="@string/accept" />
+    <item
+        android:id="@+id/reject_follow"
+        android:visible="false"
+        android:title="@string/reject" />
+
+    <item
+        android:id="@+id/reject_friend"
+        android:visible="false"
+        android:title="@string/reject" />
+
+</menu>

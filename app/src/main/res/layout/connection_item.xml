@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_10sdp"
+        app:cardCornerRadius="@dimen/_5sdp"
+        app:cardElevation="@dimen/_5sdp">
+
+
+        <RelativeLayout
+            android:padding="@dimen/_10sdp"
+            android:id="@+id/rlProfile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/userProfileImage"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_profile_default" />
+
+            <TextView
+                android:id="@+id/tvUserName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="8dp"
+                android:layout_toEndOf="@+id/userProfileImage"
+                android:ellipsize="end"
+                android:fontFamily="sans-serif-black"
+                android:textAlignment="viewStart"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/textSizexSmall"
+                android:textStyle="bold" />
+
+
+            <TextView
+                android:textColor="@color/grey"
+                android:id="@+id/textViewOptions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:text="&#8942;"
+                android:textAppearance="?android:textAppearanceLarge" />
+        </RelativeLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+
+</layout>
