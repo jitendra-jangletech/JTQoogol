@@ -41,9 +41,8 @@ public class PracticeTestQuestPaletAdapter extends RecyclerView.Adapter<Practice
     public void onBindViewHolder(@NonNull PracticeTestQuestPaletAdapter.PracticeQuestionViewHolder holder, int position) {
         LearningQuestionsNew practiceQuestion = questionList.get(position);
         int questNo = position + 1;
-        holder.itemBinding.tvQuestNo.setText(String.valueOf(questNo));
+        holder.itemBinding.tvQuestNo.setText(practiceQuestion.getQuestion_id());
         holder.itemBinding.tvQuest.setText(practiceQuestion.getQuestion());
-
 
         holder.itemBinding.questLayout.setOnClickListener(v -> {
             questClickListener.onQuestionSelected(position);

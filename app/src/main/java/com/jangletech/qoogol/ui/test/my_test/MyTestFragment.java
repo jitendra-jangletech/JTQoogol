@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.MenuItemCompat;
@@ -19,6 +20,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.jangletech.qoogol.R;
@@ -38,8 +40,10 @@ import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -231,8 +235,8 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
             @Override
             public void onResponse(Call<FetchSubjectResponseList> call, Response<FetchSubjectResponseList> response) {
                 ProgressDialog.getInstance().dismiss();
-               // if (response.body() != null && response.body().getResponse().equals("200")) {
-                    mViewModel.setAllSubjectList(response.body().getFetchSubjectResponseList());
+                // if (response.body() != null && response.body().getResponse().equals("200")) {
+                mViewModel.setAllSubjectList(response.body().getFetchSubjectResponseList());
                 //}
                 /*else {
                     showErrorDialog(getActivity(), response.body().getResponse(), response.body().getMessage());
@@ -260,7 +264,7 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
                     Log.d(TAG, "onResponse: " + response.body().getTestList());
                     Log.d(TAG, "onResponse: " + response.body().getTestList().size());
                 } else {
-                    showErrorDialog(getActivity(),response.body().getResponse(),response.body().getMessage());
+                    showErrorDialog(getActivity(), response.body().getResponse(), response.body().getMessage());
                 }
             }
 
@@ -303,7 +307,11 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
 
     @Override
     public void onLikeClick(TestModelNew testModel, int pos, boolean isChecked) {
-        doLikeTest(pos, isChecked);
+        if (isChecked) {
+            callLikeTestApi(0, pos);
+        } else {
+            callLikeTestApi(1, pos);
+        }
     }
 
     @Override
@@ -311,24 +319,24 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
 
     }
 
-    private void doLikeTest(int pos, boolean isChecked) {
+    private void callLikeTestApi(int like, int pos) {
+        doLikeTest(like,pos);
+    }
+
+    private void doLikeTest(int like,int pos) {
         ProgressDialog.getInstance().show(getActivity());
-        Call<ProcessQuestion> call = apiService.addTestLike(new PreferenceManager(getActivity()).getInt(Constant.USER_ID), tmId, "I", 1);
+        Call<ProcessQuestion> call = apiService.addTestLike(new PreferenceManager(getActivity()).getInt(Constant.USER_ID), tmId, "I", like);
         call.enqueue(new Callback<ProcessQuestion>() {
             @Override
             public void onResponse(Call<ProcessQuestion> call, Response<ProcessQuestion> response) {
                 ProgressDialog.getInstance().dismiss();
                 if (response.body() != null && response.body().getResponse().equals("200")) {
                     Log.d(TAG, "onResponse Like : " + response.body().getResponse());
-                    if (isChecked) {
-                        testList.get(pos).setLikeCount("0");
-                        testList.get(pos).setLike(false);
-                        testAdapter.updateList(testList, pos);
-                    } else {
-                        testList.get(pos).setLikeCount("1");//todo change hardcoded value
-                        testList.get(pos).setLike(true);
-                        testAdapter.updateList(testList, pos);
-                    }
+                    Log.d(TAG, "onResponse Updated Like Count: " + response.body().getLikeCount());
+                    //testList.get(pos).setLikeCount();
+                    testList.get(pos).setLike(false);
+                    testAdapter.updateList(testList, pos);
+
                 } else {
                     showErrorDialog(getActivity(), response.body().getResponse(), response.body().getMessage());
                 }

@@ -1,6 +1,5 @@
 package com.jangletech.qoogol.ui.learning;
 
-import android.media.audiofx.PresetReverb;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -36,12 +35,9 @@ import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.PropertyResourceBundle;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import static com.facebook.FacebookSdk.getApplicationContext;
-import static com.jangletech.qoogol.util.Constant.COUNTRY;
 import static com.jangletech.qoogol.util.Constant.learning;
 
 public class LearningFragment extends BaseFragment implements LearingAdapter.onIconClick {
@@ -114,8 +110,6 @@ public class LearningFragment extends BaseFragment implements LearingAdapter.onI
         Bundle bundle = getArguments();
         if (bundle.getString("call_from").equalsIgnoreCase("saved_questions")) {
             ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Saved Questions");
-//            learningQuestionsList.clear();
-//            new getDataFromDb().execute();
         } else {
             ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Learning");
         }

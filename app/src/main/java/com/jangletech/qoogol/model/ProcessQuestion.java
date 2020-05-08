@@ -10,6 +10,17 @@ import java.util.List;
  */
 public class ProcessQuestion {
 
+    @SerializedName(Constant.q_likes)
+    private int likeCount;
+
+    public int getLikeCount() {
+        return likeCount;
+    }
+
+    public void setLikeCount(int likeCount) {
+        this.likeCount = likeCount;
+    }
+
     @SerializedName("Message")
     private String message;
 
