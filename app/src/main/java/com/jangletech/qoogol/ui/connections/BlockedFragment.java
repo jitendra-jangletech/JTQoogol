@@ -61,8 +61,19 @@ public class BlockedFragment extends BaseFragment implements BlockedConnectionAd
         // Inflate the layout for this fragment
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_blocked, container, false);
         setHasOptionsMenu(true);
-        userId = String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));
+        init();
         return  mBinding.getRoot();
+    }
+
+    private void init() {
+        userId = String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));
+        mBinding.blockedSwiperefresh.setOnRefreshListener(() -> getData(0));
+    }
+
+    public void checkRefresh() {
+        if ( mBinding.blockedSwiperefresh.isRefreshing()) {
+            mBinding.blockedSwiperefresh.setRefreshing(false);
+        }
     }
 
     @Override
@@ -87,8 +98,10 @@ public class BlockedFragment extends BaseFragment implements BlockedConnectionAd
                     } else {
                         Toast.makeText(getActivity(), UtilHelper.getAPIError(String.valueOf(response.body())),Toast.LENGTH_SHORT).show();
                     }
+                    checkRefresh();
                 } catch (Exception e) {
                     e.printStackTrace();
+                    checkRefresh();
                     ProgressDialog.getInstance().dismiss();
                 }
             }
@@ -96,6 +109,7 @@ public class BlockedFragment extends BaseFragment implements BlockedConnectionAd
             @Override
             public void onFailure(Call<ConnectionResponse> call, Throwable t) {
                 t.printStackTrace();
+                checkRefresh();
                 ProgressDialog.getInstance().dismiss();
             }
         });

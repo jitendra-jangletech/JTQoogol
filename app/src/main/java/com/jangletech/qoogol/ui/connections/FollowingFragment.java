@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,13 +57,29 @@ public class FollowingFragment extends BaseFragment implements ConnectionAdapter
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_friends, container, false);
-        userId = String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));
+       init();
         return  mBinding.getRoot();
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+    }
+
+    private void init() {
+        userId = String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));
+        mBinding.connectionSwiperefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getData(0);
+            }
+        });
+    }
+
+    public void checkRefresh() {
+        if ( mBinding.connectionSwiperefresh.isRefreshing()) {
+            mBinding.connectionSwiperefresh.setRefreshing(false);
+        }
     }
 
     @Override
@@ -85,11 +102,14 @@ public class FollowingFragment extends BaseFragment implements ConnectionAdapter
                     if (response.body()!=null && response.body().getResponse().equalsIgnoreCase("200")){
                         connectionsList = response.body().getConnection_list();
                         initView();
+                        checkRefresh();
                     } else {
+                        checkRefresh();
                         Toast.makeText(getActivity(), UtilHelper.getAPIError(String.valueOf(response.body())),Toast.LENGTH_SHORT).show();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
+                    checkRefresh();
                     ProgressDialog.getInstance().dismiss();
                 }
             }
@@ -97,6 +117,7 @@ public class FollowingFragment extends BaseFragment implements ConnectionAdapter
             @Override
             public void onFailure(Call<ConnectionResponse> call, Throwable t) {
                 t.printStackTrace();
+                checkRefresh();
                 ProgressDialog.getInstance().dismiss();
             }
         });

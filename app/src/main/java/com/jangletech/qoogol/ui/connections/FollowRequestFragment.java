@@ -54,8 +54,19 @@ public class FollowRequestFragment extends BaseFragment implements ConnectionAda
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_friend_request, container, false);
-        userId = String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));
+        init();
         return  mBinding.getRoot();
+    }
+
+    private void init() {
+        userId = String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));
+        mBinding.requestsSwiperefresh.setOnRefreshListener(() -> getData(0));
+    }
+
+    public void checkRefresh() {
+        if ( mBinding.requestsSwiperefresh.isRefreshing()) {
+            mBinding.requestsSwiperefresh.setRefreshing(false);
+        }
     }
 
     @Override
@@ -86,10 +97,13 @@ public class FollowRequestFragment extends BaseFragment implements ConnectionAda
                         connectionsList = response.body().getConnection_list();
                         initView();
                     } else {
+
                         Toast.makeText(getActivity(), UtilHelper.getAPIError(String.valueOf(response.body())),Toast.LENGTH_SHORT).show();
                     }
+                    checkRefresh();
                 } catch (Exception e) {
                     e.printStackTrace();
+                    checkRefresh();
                     ProgressDialog.getInstance().dismiss();
                 }
             }
@@ -97,6 +111,7 @@ public class FollowRequestFragment extends BaseFragment implements ConnectionAda
             @Override
             public void onFailure(Call<ConnectionResponse> call, Throwable t) {
                 t.printStackTrace();
+                checkRefresh();
                 ProgressDialog.getInstance().dismiss();
             }
         });

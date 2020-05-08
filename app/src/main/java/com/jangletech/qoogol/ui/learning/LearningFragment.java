@@ -128,6 +128,11 @@ public class LearningFragment extends Fragment implements LearingAdapter.onIconC
 
         learningFragmentBinding.learningSwiperefresh.setOnRefreshListener(() -> getDataFromApi());
     }
+    public void checkRefresh () {
+        if ( learningFragmentBinding.learningSwiperefresh.isRefreshing()) {
+            learningFragmentBinding.learningSwiperefresh.setRefreshing(false);
+        }
+    }
 
     private void getDataFromApi() {
         ProgressDialog.getInstance().show(getActivity());
@@ -141,11 +146,14 @@ public class LearningFragment extends Fragment implements LearingAdapter.onIconC
                     if (response.body()!=null && response.body().getResponse().equalsIgnoreCase("200")){
                         questionsNewList = response.body().getQuestion_list();
                         learingAdapter.updateList(questionsNewList);
+                        checkRefresh();
                     } else {
+                        checkRefresh();
                         Toast.makeText(getActivity(), UtilHelper.getAPIError(String.valueOf(response.body())),Toast.LENGTH_SHORT).show();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
+                    checkRefresh();
                     ProgressDialog.getInstance().dismiss();
                 }
             }
@@ -153,6 +161,7 @@ public class LearningFragment extends Fragment implements LearingAdapter.onIconC
             @Override
             public void onFailure(Call<LearningQuestResponse> call, Throwable t) {
                 t.printStackTrace();
+                checkRefresh();
                 ProgressDialog.getInstance().dismiss();
             }
         });
