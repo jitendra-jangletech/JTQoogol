@@ -131,6 +131,12 @@
                         android:drawableLeft="@drawable/ic_block"
                         android:text="@string/blockedconnection" />
 
+                    <TextView
+                        android:id="@+id/nav_import_contacts"
+                        style="@style/menu_item_style"
+                        android:drawableLeft="@drawable/ic_block"
+                        android:text="@string/importContacts" />
+
                    <!-- <TextView
                         android:id="@+id/nav_quest_trending"
                         style="@style/sub_menu_item_style"

@@ -38,6 +38,16 @@ public class Constant {
     public static final String u_first_name = "104";
     public static final String u_last_name = "105";
     public static final String w_user_profile_image_name = "507";
+    public static final String u_imei_num = "126";
+    public static final String GroupMembersList = "70"; /// List of master data id, desc
+
+
+    //Work fields
+    public static final String w_contact_name = "541";
+    public static final String w_contact_number = "540";
+    public static final String w_otp_sent = "542";
+    public static final String initial_letter = "541";
+    public static final String returnrows = "ReturnRows";
 
 
     //Preferences
@@ -171,6 +181,8 @@ public class Constant {
     public static final String DEGREE = "sm14DegreeData";
     public static final String FETCH_CONNECTIONS = "sm25FetchConnections";
     public static final String UPDATE_CONNECTIONS = "sm24UpdateConnections";
+    public static final String FETCH_VERIFIED_CONTACTLIST = "sm99ImportContacts";
+    public static final String INVITE_CONTACTLIST = "sm98SendInvite";
     public static final String masterDataList = "61";
     public static final String likesList = "60";
     public static final String commentsList = "62";
@@ -182,6 +194,7 @@ public class Constant {
     public static final String cn_u1_follows_u2 = "316H";
     public static final String cn_u2_follows_u1 = "316I";
     public static final String cn_blocked_by_u1 = "315";
+    public static final String cn_blocked_by_u2 = "316";
     public static final String cn_user_id_2 = "308";
     public static final String cn_connected = "309";
     public static final String u_gender = "110";
@@ -235,6 +248,7 @@ public class Constant {
     public static final String u_user_id = "101";
     public static final String device_id = "126Q";
     public static final String pagestart = "PageStart";
+
 
 
     //Country

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~
+  ~ /*
+  ~  * /////////////////////////////////////////////////////////////////////////////////////////////////
+  ~  * //
+  ~  * //            Copyright (c) 2020. JangleTech Systems Private Limited, Thane, India
+  ~  * //
+  ~  * /////////////////////////////////////////////////////////////////////////////////////////////////
+  ~  */
+  -->
+
+<layout>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:background="@color/colorWhite"
+        android:orientation="vertical">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:id="@+id/filter_recycler"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_height="wrap_content"/>
+
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/selectCheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_gravity="end"
+            android:button="@null"
+            android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+           android:layout_below="@+id/filter_recycler"
+            android:text="Select All"
+            android:layout_marginRight="@dimen/_20sdp"
+            android:textColor="@color/black"
+            android:gravity="center_vertical"
+            android:textSize="14sp" />
+
+
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/llSelect"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/filter_recycler"
+            android:layout_alignParentEnd="true"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <TextView
+                android:id="@+id/btnDeSelectAll"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:gravity="center"
+                android:paddingLeft="@dimen/margin_30"
+                android:paddingTop="@dimen/margin_10"
+                android:paddingRight="@dimen/margin_30"
+                android:paddingBottom="@dimen/margin_10"
+                android:text="@string/deselect_all"
+                android:textColor="@color/black"
+                android:textSize="@dimen/textSizeMedium"
+                android:visibility="visible" />
+
+            <TextView
+                android:id="@+id/btnSelectAll"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:gravity="center"
+                android:paddingLeft="@dimen/margin_30"
+                android:paddingTop="@dimen/margin_10"
+                android:paddingRight="@dimen/margin_30"
+                android:paddingBottom="@dimen/margin_10"
+                android:text="@string/select_all"
+                android:textColor="@color/black"
+                android:textSize="@dimen/textSizeMedium"
+                android:visibility="visible" />
+        </LinearLayout>
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeToRefresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/btnNext"
+            android:layout_below="@+id/llSelect" >
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/contactRc"
+                android:layout_below="@+id/selectCheckBox"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <TextView
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvNoContacts"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_horizontal"
+            android:text="@string/no_contacts"
+            android:textColor="?attr/colorPrimary"
+            android:textSize="22sp" />
+
+    </RelativeLayout>
+</layout>
