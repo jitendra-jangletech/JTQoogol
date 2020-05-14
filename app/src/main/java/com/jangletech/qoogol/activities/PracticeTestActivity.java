@@ -58,6 +58,7 @@ public class PracticeTestActivity extends BaseActivity implements LearingAdapter
     private ViewPager2 practiceViewPager;
     private PracticeTestQuestPaletAdapter adapter;
     int currentPos = 0;
+    boolean isQuestionSelected = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,8 +117,10 @@ public class PracticeTestActivity extends BaseActivity implements LearingAdapter
 
             @Override
             public void onDrawerClosed(@NonNull View drawerView) {
-                Toast.makeText(PracticeTestActivity.this, "Current Page Position : "+currentPos, Toast.LENGTH_SHORT).show();
-                practiceViewPager.setCurrentItem(currentPos,true);
+                if(isQuestionSelected) {
+                    practiceViewPager.setCurrentItem(currentPos, true);
+                    isQuestionSelected = false;
+                }
             }
 
             @Override
@@ -135,6 +138,7 @@ public class PracticeTestActivity extends BaseActivity implements LearingAdapter
     }
 
     private void prepareQuestPaletList() {
+        Log.d(TAG, "prepareQuestPaletList Size : "+questionsNewList.size());
         mBinding.paletQuestListRecyclerView.setNestedScrollingEnabled(false);
         adapter = new PracticeTestQuestPaletAdapter(this, questionsNewList, this);
         mBinding.paletQuestListRecyclerView.setHasFixedSize(true);
@@ -226,7 +230,7 @@ public class PracticeTestActivity extends BaseActivity implements LearingAdapter
     @Override
     public void onQuestionSelected(int position) {
         mBinding.drawerLayout.closeDrawer(Gravity.RIGHT);
-        currentPos = position;
+        isQuestionSelected = true;
     }
 
     private void ProcessQuestionAPI(int user_id, String que_id, String api_case, int flag, String call_from) {
@@ -262,7 +266,4 @@ public class PracticeTestActivity extends BaseActivity implements LearingAdapter
             }
         });
     }
-
-
-
 }
