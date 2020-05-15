@@ -87,12 +87,15 @@
                     app:layout_constraintRight_toLeftOf="@+id/img_save"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <ImageView
+                <ToggleButton
                     android:id="@+id/img_save"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/_10sdp"
-                    android:src="@drawable/ic_star_border"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:background="@drawable/button_marked"
+                    android:checked="false"
+                    android:text=""
+                    android:textOff=""
+                    android:textOn=""
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -265,11 +268,10 @@
             android:layout_height="@dimen/_40sdp"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="@dimen/_5sdp"
-            android:background="@color/colorWhite"
             android:padding="@dimen/_2sdp">
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btnMarkNext"
+                android:id="@+id/btnPrevious"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="@dimen/_5sdp"
@@ -281,7 +283,7 @@
                 app:layout_constraintStart_toStartOf="@+id/bottomLayout" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btnClearResponse"
+                android:id="@+id/btnReset"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_centerInParent="true"
@@ -297,7 +299,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btnSaveNext"
+                android:id="@+id/btnNext"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginRight="@dimen/_5sdp"

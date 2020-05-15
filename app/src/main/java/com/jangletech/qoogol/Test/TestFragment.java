@@ -623,7 +623,8 @@ public class TestFragment extends BaseFragment implements QueViewClick, QuestRep
     }
 
     @Override
-    public void onReportQuestSubmitClick() {
+    public void onReportQuestSubmitClick(int position) {
+        showToast("Question No : "+StartTestActivity.testQuestionList.get(position).getTq_quest_seq_num()+" Reported successfully.");
         questReportDialog.dismiss();
     }
 

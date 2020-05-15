@@ -80,7 +80,8 @@ public class QuestionPaletAdapter extends RecyclerView.Adapter<QuestionPaletAdap
         TestQuestionNew question = questions.get(position);
 
         if (strSortType.equalsIgnoreCase(QuestionSortType.GRID.toString())) {
-            holder.itemGridBinding.tvQuestNo.setText(String.valueOf(position + 1));
+
+            holder.itemGridBinding.tvQuestNo.setText(question.getTq_quest_seq_num());
 
             if (question.isTtqa_visited()) {
                 holder.itemGridBinding.tvQuestNo.setTextColor(context.getResources().getColor(R.color.colorWhite));
@@ -104,14 +105,13 @@ public class QuestionPaletAdapter extends RecyclerView.Adapter<QuestionPaletAdap
                 holder.itemGridBinding.tvQuestNo.setBackground(context.getResources().getDrawable(R.drawable.bg_quest_attempted));
             }
 
-
             holder.itemGridBinding.questLayout.setOnClickListener(v -> {
-                questClickListener.onQuestionSelected(position);
+                questClickListener.onQuestionSelected(question);
             });
         }
 
         if (strSortType.equalsIgnoreCase(QuestionSortType.LIST.toString())) {
-            holder.itemQuestionListBinding.tvQuestNo.setText(String.valueOf(position + 1));
+            holder.itemQuestionListBinding.tvQuestNo.setText(question.getTq_quest_seq_num());
             holder.itemQuestionListBinding.tvQuestDesc.setText(question.getQ_quest());
 
             if (question.isTtqa_visited()) {
@@ -137,7 +137,7 @@ public class QuestionPaletAdapter extends RecyclerView.Adapter<QuestionPaletAdap
             }
 
             holder.itemQuestionListBinding.questLayout.setOnClickListener(v -> {
-                questClickListener.onQuestionSelected(position);
+                questClickListener.onQuestionSelected(question);
             });
         }
     }
@@ -200,6 +200,6 @@ public class QuestionPaletAdapter extends RecyclerView.Adapter<QuestionPaletAdap
     }
 
     public interface QuestClickListener {
-        void onQuestionSelected(int questNo);
+        void onQuestionSelected(TestQuestionNew questionNew);
     }
 }

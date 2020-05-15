@@ -4,6 +4,7 @@
     <style name="AppTheme" parent="Theme.MaterialComponents.Light">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="otpViewStyle">@style/OtpWidget.OtpView</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:textColorPrimary">@color/colorWhite</item>
@@ -41,7 +42,20 @@
 
     <style name="ButtonStyle" parent="Widget.MaterialComponents.Button.UnelevatedButton">
         <item name="android:textAllCaps">false</item>
-        <item name="android:strokeColor">@color/color_button_background</item>
+        <!--<item name="android:strokeColor">@color/color_button_background</item>-->
+    </style>
+
+    <style name="OtpButtonStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/button_background</item>
+        <item name="android:paddingLeft">@dimen/btn_padding</item>
+        <item name="android:paddingRight">@dimen/btn_padding</item>
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:textSize">@dimen/textSizeMedium</item>
+        <item name="android:textAllCaps">false</item>
     </style>
 
     <style name="Dialog" parent="Theme.MaterialComponents.Light.Dialog.Alert">
@@ -173,13 +187,62 @@
         <item name="colorOnPrimary">@color/colorPrimary</item>
     </style>
 
+    <!-- Newly Added Parameters -->
 
-    <!-- <style name="TestTheme" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:windowTranslucentStatus">true</item>
-    </style>-->
+    <style name="ExpandableHeaderView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">@dimen/margin_30</item>
+        <item name="android:layout_marginTop">@dimen/activity_vertical_margin</item>
+        <item name="android:layout_marginRight">@dimen/margin_30</item>
+        <item name="android:background">@color/colorLightGray</item>
+        <item name="android:drawableEnd">@drawable/ic_add_gray</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingLeft">@dimen/btn_padding</item>
+        <item name="android:paddingRight">@dimen/btn_padding</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:fontFamily">@font/roboto_medium</item>
+    </style>
 
+    <style name="TextViewHeadStyle">
+        <item name="android:textSize">@dimen/small_text</item>
+        <item name="android:layout_marginLeft">@dimen/margin_30</item>
+        <item name="android:layout_marginRight">@dimen/margin_30</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/activity_vertical_margin</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <!--<item name="android:textColor">?attr/textColorBlack</item>-->
+    </style>
 
+    <style name="RadioButtonStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/textSizexSmall</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:buttonTint">?attr/colorPrimary</item>
+        <!--<item name="android:textColor">?attr/textColorBlack</item>-->
+    </style>
+
+    <style name="EditTextViewStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:imeOptions">actionNext</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:inputType">textCapSentences</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:textSize">@dimen/textSizeMedium</item>
+    </style>
+
+    <style name="MatchedTextViewDataStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">@dimen/margin_30</item>
+        <item name="android:layout_marginRight">@dimen/margin_30</item>
+        <item name="android:textSize">@dimen/small_text</item>
+        <item name="android:textColor">@android:color/darker_gray</item>
+    </style>
 
 </resources>

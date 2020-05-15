@@ -122,7 +122,7 @@ public class SignUpActivity extends BaseActivity
             int key = UtilHelper.getKeyFromValue(mViewModel.mMapCountry, name);
             if (key != -1) {
                 mBinding.countryAutocompleteView.setTag(key);
-                fetchStateData(key);
+                //fetchStateData(key);
             }
         });
 
@@ -184,7 +184,7 @@ public class SignUpActivity extends BaseActivity
                 //signUpData.setCourse(key);
                 Log.d(TAG, "courseAutocompleteView value : " + key);
                 mBinding.courseAutocompleteView.setTag(key);
-                fetchClassData(name);
+                //fetchClassData(name);
             }
         });
 
@@ -362,39 +362,39 @@ public class SignUpActivity extends BaseActivity
         });
     }
 
-    public void fetchStateData(int countryId) {
-        ProgressDialog.getInstance().show(this);
-        Map<String, Integer> requestBody = new HashMap<>();
-        requestBody.put("countryId", countryId);
-        Call<StateResponse> call = apiService.getStates();
-        call.enqueue(new Callback<StateResponse>() {
-            @Override
-            public void onResponse(Call<StateResponse> call, retrofit2.Response<StateResponse> response) {
-                ProgressDialog.getInstance().dismiss();
-                try {
-                    List<State> list = response.body().getStateList();
-                    mViewModel.setStateList(list);
-                    if (list != null && list.size() > 0) {
-                        mViewModel.mMapState = new HashMap<>();
-                        for (State state : list) {
-                            mViewModel.mMapState.put(Integer.valueOf(state.getS_id()), state.getS_name());
-                        }
-                        ProgressDialog.getInstance().dismiss();
-                        populateStates(mViewModel.mMapState);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    ProgressDialog.getInstance().dismiss();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<StateResponse> call, Throwable t) {
-                t.printStackTrace();
-                ProgressDialog.getInstance().dismiss();
-            }
-        });
-    }
+//       public void fetchStateData(int countryId) {
+//        ProgressDialog.getInstance().show(this);
+//        Map<String, Integer> requestBody = new HashMap<>();
+//        requestBody.put("countryId", countryId);
+//        Call<StateResponse> call = apiService.getStates();
+//        call.enqueue(new Callback<StateResponse>() {
+//            @Override
+//            public void onResponse(Call<StateResponse> call, retrofit2.Response<StateResponse> response) {
+//                ProgressDialog.getInstance().dismiss();
+//                try {
+//                    List<State> list = response.body().getStateList();
+//                    mViewModel.setStateList(list);
+//                    if (list != null && list.size() > 0) {
+//                        mViewModel.mMapState = new HashMap<>();
+//                        for (State state : list) {
+//                            mViewModel.mMapState.put(Integer.valueOf(state.getS_id()), state.getS_name());
+//                        }
+//                        ProgressDialog.getInstance().dismiss();
+//                        populateStates(mViewModel.mMapState);
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                    ProgressDialog.getInstance().dismiss();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<StateResponse> call, Throwable t) {
+//                t.printStackTrace();
+//                ProgressDialog.getInstance().dismiss();
+//            }
+//        });
+//    }
 
     private void fetchCityData(int key) {
         ProgressDialog.getInstance().show(this);
@@ -410,7 +410,7 @@ public class SignUpActivity extends BaseActivity
                     if (list != null && list.size() > 0) {
                         mViewModel.mMapCity = new HashMap<>();
                         for (City city : list) {
-                            mViewModel.mMapCity.put(Integer.valueOf(city.getCt_id()), city.getCt_name());
+                            //mViewModel.mMapCity.put(Integer.valueOf(city.getCt_id()), city.getCt_name());
                         }
                         ProgressDialog.getInstance().dismiss();
                         populateCity(mViewModel.mMapCity);
@@ -557,7 +557,7 @@ public class SignUpActivity extends BaseActivity
         });
     }
 
-    private void fetchClassData(String course_name) {
+   /* private void fetchClassData(String course_name) {
 //        ProgressDialog.getInstance().show(this);
         Map<String, Object> requestBody = new HashMap<>();
 
@@ -588,7 +588,7 @@ public class SignUpActivity extends BaseActivity
                 Log.i(TAG, t.toString());
             }
         });
-    }
+    }*/
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -601,12 +601,12 @@ public class SignUpActivity extends BaseActivity
         switch (v.getId()) {
             case R.id.btnSignUp:
                 if (validateSignUpForm()) {
-                    callSignUpApi();
+                    //callSignUpApi();
                 }
                 break;
             case R.id.tvMobileVerify:
                 if (!TextUtils.isEmpty(mBinding.tilMobile.getEditText().getText())) {
-                    callMobileVerifyApi();
+                    //callMobileVerifyApi();
                 } else {
                     mBinding.tilMobile.setError(getResources().getString(R.string.empty_mobile));
                 }
@@ -614,7 +614,7 @@ public class SignUpActivity extends BaseActivity
 
             case R.id.tvEmailVerify:
                 if (!TextUtils.isEmpty(mBinding.tilEmail.getEditText().getText())) {
-                    callEmailVerifyApi();
+                    //callEmailVerifyApi();
                 } else {
                     mBinding.tilEmail.setError(getResources().getString(R.string.empty_email));
                 }
@@ -622,126 +622,126 @@ public class SignUpActivity extends BaseActivity
         }
     }
 
-    private void callMobileVerifyApi() {
-        ProgressDialog.getInstance().show(this);
-        Map<String, String> requestBody = new HashMap<>();
-        requestBody.put(mobile_number, mBinding.tilMobile.getEditText().getText().toString());
-        Call<MobileOtp> call = apiService.getMobileOtp(requestBody);
-        call.enqueue(new Callback<MobileOtp>() {
-            @Override
-            public void onResponse(Call<MobileOtp> call, Response<MobileOtp> response) {
-                try {
-                    if (response.body() != null && response.body().getStatusCode().equalsIgnoreCase("1")) {
-                        ProgressDialog.getInstance().dismiss();
-                        createVerifySmsOtpDialog(response.body().getObject());
-                    } else {
-                        Toast.makeText(SignUpActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    ProgressDialog.getInstance().dismiss();
-                }
-            }
+//    private void callMobileVerifyApi() {
+//        ProgressDialog.getInstance().show(this);
+//        Map<String, String> requestBody = new HashMap<>();
+//        requestBody.put(mobile_number, mBinding.tilMobile.getEditText().getText().toString());
+//        Call<MobileOtp> call = apiService.getMobileOtp(requestBody);
+//        call.enqueue(new Callback<MobileOtp>() {
+//            @Override
+//            public void onResponse(Call<MobileOtp> call, Response<MobileOtp> response) {
+//                try {
+//                    if (response.body() != null && response.body().getStatusCode().equalsIgnoreCase("1")) {
+//                        ProgressDialog.getInstance().dismiss();
+//                        createVerifySmsOtpDialog(response.body().getObject());
+//                    } else {
+//                        Toast.makeText(SignUpActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                    ProgressDialog.getInstance().dismiss();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<MobileOtp> call, Throwable t) {
+//                t.printStackTrace();
+//                ProgressDialog.getInstance().dismiss();
+//            }
+//        });
+//    }
 
-            @Override
-            public void onFailure(Call<MobileOtp> call, Throwable t) {
-                t.printStackTrace();
-                ProgressDialog.getInstance().dismiss();
-            }
-        });
-    }
-
-    private void callEmailVerifyApi() {
-        ProgressDialog.getInstance().show(this);
-        Map<String, String> requestBody = new HashMap<>();
-        requestBody.put(email, mBinding.tilEmail.getEditText().getText().toString());
-        Call<MobileOtp> call = apiService.getEmailOtp(requestBody);
-        call.enqueue(new Callback<MobileOtp>() {
-            @Override
-            public void onResponse(Call<MobileOtp> call, Response<MobileOtp> response) {
-                try {
-                    if (response.body().getStatusCode().equalsIgnoreCase("1")) {
-                        ProgressDialog.getInstance().dismiss();
-                        createVerifyEmailOtpDialog(response.body().getObject());
-                    } else {
-                        //Todo Fixed Universal Dialog Issue
-                       /* UniversalDialog universalDialog = new UniversalDialog(getApplicationContext(),"Error",
-                                response.body().getMessage(),
-                                "", "Ok",uni);
-                        universalDialog.show();*/
-                        Toast.makeText(SignUpActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    ProgressDialog.getInstance().dismiss();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<MobileOtp> call, Throwable t) {
-                t.printStackTrace();
-                ProgressDialog.getInstance().dismiss();
-            }
-        });
-    }
-
-
-    private void callSignUpApi() {
-
-        ProgressDialog.getInstance().show(this);
-
-        Map<String, Object> requestBody = new HashMap<>();
-        requestBody.put(first_name, mBinding.etFirstName.getText().toString());
-        requestBody.put(last_name, mBinding.etLastName.getText().toString());
-        requestBody.put(email, mBinding.etEmail.getText().toString());
-        requestBody.put(mobile_no, mBinding.etMobile.getText().toString());
-        requestBody.put(password, mBinding.etCreatePassword.getText().toString());
-        requestBody.put(country, mBinding.countryAutocompleteView.getTag());
-        requestBody.put(state, mBinding.stateAutocompleteView.getTag());
-        requestBody.put(board, mBinding.universityBoardAutocompleteView.getTag());
-        requestBody.put(institute, mBinding.instituteAutocompleteView.getTag());
-        requestBody.put(degree, mBinding.degreeAutocompleteView.getTag());
-        requestBody.put(course, mBinding.courseAutocompleteView.getTag());
-        requestBody.put(cyNum, mBinding.classAutocompleteView.getTag());
-        requestBody.put(is_mobile_verified, true);
-        requestBody.put(is_email_verified, true);
+//    private void callEmailVerifyApi() {
+//        ProgressDialog.getInstance().show(this);
+//        Map<String, String> requestBody = new HashMap<>();
+//        requestBody.put(email, mBinding.tilEmail.getEditText().getText().toString());
+//        Call<MobileOtp> call = apiService.getEmailOtp(requestBody);
+//        call.enqueue(new Callback<MobileOtp>() {
+//            @Override
+//            public void onResponse(Call<MobileOtp> call, Response<MobileOtp> response) {
+//                try {
+//                    if (response.body().getStatusCode().equalsIgnoreCase("1")) {
+//                        ProgressDialog.getInstance().dismiss();
+//                        createVerifyEmailOtpDialog(response.body().getObject());
+//                    } else {
+//                        //Todo Fixed Universal Dialog Issue
+//                       /* UniversalDialog universalDialog = new UniversalDialog(getApplicationContext(),"Error",
+//                                response.body().getMessage(),
+//                                "", "Ok",uni);
+//                        universalDialog.show();*/
+//                        Toast.makeText(SignUpActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                    ProgressDialog.getInstance().dismiss();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<MobileOtp> call, Throwable t) {
+//                t.printStackTrace();
+//                ProgressDialog.getInstance().dismiss();
+//            }
+//        });
+//    }
 
 
-        try {
-            Call<SignUpResponseDto> call = apiService.signUpApi(requestBody);
-            call.enqueue(new Callback<SignUpResponseDto>() {
-                @Override
-                public void onResponse(Call<SignUpResponseDto> call, Response<SignUpResponseDto> response) {
-                    Log.d(TAG, "onResponse SignUpResponseDto : " + response.body());
-                    ProgressDialog.getInstance().dismiss();
-                    if (response.body() != null && response.body().getStatusCode() == 1) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(SignUpActivity.this, R.style.AlertDialogStyle);
-                        builder.setTitle("Success");
-                        builder.setMessage("Sign-up successfully, Please sing in with your credentials.");
-                        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                startActivity(intent);
-                            }
-                        }).setCancelable(false).show();
-                    } else {
-                        Toast.makeText(SignUpActivity.this, "Error : " + response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<SignUpResponseDto> call, Throwable t) {
-                    t.printStackTrace();
-                    ProgressDialog.getInstance().dismiss();
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-            ProgressDialog.getInstance().dismiss();
-        }
-    }
+//    private void callSignUpApi() {
+//
+//        ProgressDialog.getInstance().show(this);
+//
+//        Map<String, Object> requestBody = new HashMap<>();
+//        requestBody.put(first_name, mBinding.etFirstName.getText().toString());
+//        requestBody.put(last_name, mBinding.etLastName.getText().toString());
+//        requestBody.put(email, mBinding.etEmail.getText().toString());
+//        requestBody.put(mobile_no, mBinding.etMobile.getText().toString());
+//        requestBody.put(password, mBinding.etCreatePassword.getText().toString());
+//        requestBody.put(country, mBinding.countryAutocompleteView.getTag());
+//        requestBody.put(state, mBinding.stateAutocompleteView.getTag());
+//        requestBody.put(board, mBinding.universityBoardAutocompleteView.getTag());
+//        requestBody.put(institute, mBinding.instituteAutocompleteView.getTag());
+//        requestBody.put(degree, mBinding.degreeAutocompleteView.getTag());
+//        requestBody.put(course, mBinding.courseAutocompleteView.getTag());
+//        requestBody.put(cyNum, mBinding.classAutocompleteView.getTag());
+//        requestBody.put(is_mobile_verified, true);
+//        requestBody.put(is_email_verified, true);
+//
+//
+//        try {
+//            Call<SignUpResponseDto> call = apiService.signUpApi(requestBody);
+//            call.enqueue(new Callback<SignUpResponseDto>() {
+//                @Override
+//                public void onResponse(Call<SignUpResponseDto> call, Response<SignUpResponseDto> response) {
+//                    Log.d(TAG, "onResponse SignUpResponseDto : " + response.body());
+//                    ProgressDialog.getInstance().dismiss();
+//                    if (response.body() != null && response.body().getStatusCode() == 1) {
+//                        AlertDialog.Builder builder = new AlertDialog.Builder(SignUpActivity.this, R.style.AlertDialogStyle);
+//                        builder.setTitle("Success");
+//                        builder.setMessage("Sign-up successfully, Please sing in with your credentials.");
+//                        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
+//                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                                startActivity(intent);
+//                            }
+//                        }).setCancelable(false).show();
+//                    } else {
+//                        Toast.makeText(SignUpActivity.this, "Error : " + response.body().getMessage(), Toast.LENGTH_SHORT).show();
+//                    }
+//                }
+//
+//                @Override
+//                public void onFailure(Call<SignUpResponseDto> call, Throwable t) {
+//                    t.printStackTrace();
+//                    ProgressDialog.getInstance().dismiss();
+//                }
+//            });
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            ProgressDialog.getInstance().dismiss();
+//        }
+//    }
 
     private void setTextWatcher() {
         mBinding.etFirstName.addTextChangedListener(new GenericTextWatcher(mBinding.tilFirstName, this));
@@ -779,65 +779,65 @@ public class SignUpActivity extends BaseActivity
         });
     }
 
-    private void createVerifySmsOtpDialog(String otp) {
-        Dialog dialog = new Dialog(this);
-        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.otp_layout);
-        dialog.setCancelable(false);
-        OtpView otpText = dialog.findViewById(R.id.otp_view);
-        ImageView close = dialog.findViewById(R.id.btnClose);
+//    private void createVerifySmsOtpDialog(String otp) {
+//        Dialog dialog = new Dialog(this);
+//        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        dialog.setContentView(R.layout.otp_layout);
+//        dialog.setCancelable(false);
+//        OtpView otpText = dialog.findViewById(R.id.otp_view);
+//        ImageView close = dialog.findViewById(R.id.btnClose);
+//
+//        TextView textViewMsg = dialog.findViewById(R.id.tvDialogMsg);
+//        textViewMsg.setText(getResources().getString(R.string.verify_mobile_dialog_msg));
+//
+//        close.setOnClickListener(v -> dialog.dismiss());
+//        dialog.findViewById(R.id.btnValidate).setOnClickListener(v -> {
+//            if (!otpText.getText().toString().isEmpty()) {
+//                if (otp.equalsIgnoreCase(otpText.getText().toString())) {
+//                    signUpRequestDto.setMobileVerified(true);
+//                    mBinding.tvMobileVerify.setText("Verified");
+//                    mBinding.tvMobileVerify.setClickable(false);
+//                    mBinding.etMobile.setEnabled(false);
+//                    mBinding.tvMobileVerify.setTextColor(getResources().getColor(R.color.color_green));
+//                } else {
+//                    signUpRequestDto.setMobileVerified(false);
+//                }
+//            }
+//            dialog.dismiss();
+//        });
+//        dialog.show();
+//    }
 
-        TextView textViewMsg = dialog.findViewById(R.id.tvDialogMsg);
-        textViewMsg.setText(getResources().getString(R.string.verify_mobile_dialog_msg));
-
-        close.setOnClickListener(v -> dialog.dismiss());
-        dialog.findViewById(R.id.btnValidate).setOnClickListener(v -> {
-            if (!otpText.getText().toString().isEmpty()) {
-                if (otp.equalsIgnoreCase(otpText.getText().toString())) {
-                    signUpRequestDto.setMobileVerified(true);
-                    mBinding.tvMobileVerify.setText("Verified");
-                    mBinding.tvMobileVerify.setClickable(false);
-                    mBinding.etMobile.setEnabled(false);
-                    mBinding.tvMobileVerify.setTextColor(getResources().getColor(R.color.color_green));
-                } else {
-                    signUpRequestDto.setMobileVerified(false);
-                }
-            }
-            dialog.dismiss();
-        });
-        dialog.show();
-    }
-
-    private void createVerifyEmailOtpDialog(String otp) {
-        Dialog dialog = new Dialog(this);
-        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.otp_layout);
-        dialog.setCancelable(false);
-        OtpView otpText = dialog.findViewById(R.id.otp_view);
-        ImageView close = dialog.findViewById(R.id.btnClose);
-        TextView textViewMsg = dialog.findViewById(R.id.tvDialogMsg);
-
-        textViewMsg.setText(getResources().getString(R.string.verify_email_dialog_msg));
-
-        close.setOnClickListener(v -> dialog.dismiss());
-        dialog.findViewById(R.id.btnValidate).setOnClickListener(v -> {
-            if (!otpText.getText().toString().isEmpty()) {
-                if (otp.equalsIgnoreCase(otpText.getText().toString())) {
-                    signUpRequestDto.setMobileVerified(true);
-                    mBinding.tvMobileVerify.setText("Verified");
-                    mBinding.tvMobileVerify.setClickable(false);
-                    mBinding.etMobile.setEnabled(false);
-                    mBinding.tvEmailVerify.setTextColor(getResources().getColor(R.color.color_green));
-                } else {
-                    signUpRequestDto.setEmailVerified(false);
-                }
-            }
-            dialog.dismiss();
-        });
-        dialog.show();
-    }
+//    private void createVerifyEmailOtpDialog(String otp) {
+//        Dialog dialog = new Dialog(this);
+//        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        dialog.setContentView(R.layout.otp_layout);
+//        dialog.setCancelable(false);
+//        OtpView otpText = dialog.findViewById(R.id.otp_view);
+//        ImageView close = dialog.findViewById(R.id.btnClose);
+//        TextView textViewMsg = dialog.findViewById(R.id.tvDialogMsg);
+//
+//        textViewMsg.setText(getResources().getString(R.string.verify_email_dialog_msg));
+//
+//        close.setOnClickListener(v -> dialog.dismiss());
+//        dialog.findViewById(R.id.btnValidate).setOnClickListener(v -> {
+//            if (!otpText.getText().toString().isEmpty()) {
+//                if (otp.equalsIgnoreCase(otpText.getText().toString())) {
+//                    signUpRequestDto.setMobileVerified(true);
+//                    mBinding.tvMobileVerify.setText("Verified");
+//                    mBinding.tvMobileVerify.setClickable(false);
+//                    mBinding.etMobile.setEnabled(false);
+//                    mBinding.tvEmailVerify.setTextColor(getResources().getColor(R.color.color_green));
+//                } else {
+//                    signUpRequestDto.setEmailVerified(false);
+//                }
+//            }
+//            dialog.dismiss();
+//        });
+//        dialog.show();
+//    }
 
     @Override
     public void onPositiveButtonClick() {

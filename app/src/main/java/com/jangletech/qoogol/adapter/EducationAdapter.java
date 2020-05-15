@@ -2,14 +2,11 @@ package com.jangletech.qoogol.adapter;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -18,19 +15,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.AddEditEducationBinding;
-import com.jangletech.qoogol.databinding.AddEducationBinding;
 import com.jangletech.qoogol.databinding.ItemEducationBinding;
-import com.jangletech.qoogol.databinding.LayoutChangePasswordBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.model.Country;
 import com.jangletech.qoogol.model.CountryResponse;
 import com.jangletech.qoogol.model.FetchEducationsObject;
 import com.jangletech.qoogol.model.State;
 import com.jangletech.qoogol.model.StateResponse;
-import com.jangletech.qoogol.model.University;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
-import com.jangletech.qoogol.ui.educational_info.AddEduDialog;
 import com.jangletech.qoogol.util.UtilHelper;
 
 import java.util.ArrayList;
@@ -41,11 +34,6 @@ import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
-import retrofit2.Response;
-
-import static com.facebook.FacebookSdk.getApplicationContext;
-import static com.jangletech.qoogol.util.Constant.country_id;
-import static com.jangletech.qoogol.util.Constant.state_id;
 
 public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.ViewHolder>  {
 
@@ -194,7 +182,7 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.View
             int key = UtilHelper.getKeyFromValue(mMapCountry, name);
             if (key != -1) {
                 addEditEducationBinding.countryAutocompleteView.setTag(key);
-                fetchStateData(key);
+                //fetchStateData(key);
             }
         });
 
@@ -266,37 +254,37 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.View
         });
     }
 
-    public void fetchStateData(int countryId) {
-        ProgressDialog.getInstance().show(activity);
-        Map<String, Integer> requestBody = new HashMap<>();
-        requestBody.put("countryId", countryId);
-        Call<StateResponse> call = apiService.getStates();
-        call.enqueue(new Callback<StateResponse>() {
-            @Override
-            public void onResponse(Call<StateResponse> call, retrofit2.Response<StateResponse> response) {
-                try {
-                    List<State> list = response.body().getStateList();
-                    if (list != null && list.size() > 0) {
-                        mMapState = new HashMap<>();
-                        for (State state : list) {
-                            mMapState.put(Integer.valueOf(state.getS_id()), state.getS_name());
-                        }
-                        ProgressDialog.getInstance().dismiss();
-                        populateStates(mMapState);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    ProgressDialog.getInstance().dismiss();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<StateResponse> call, Throwable t) {
-                t.printStackTrace();
-                ProgressDialog.getInstance().dismiss();
-            }
-        });
-    }
+//    public void fetchStateData(int countryId) {
+//        ProgressDialog.getInstance().show(activity);
+//        Map<String, Integer> requestBody = new HashMap<>();
+//        requestBody.put("countryId", countryId);
+//        Call<StateResponse> call = apiService.getStates();
+//        call.enqueue(new Callback<StateResponse>() {
+//            @Override
+//            public void onResponse(Call<StateResponse> call, retrofit2.Response<StateResponse> response) {
+//                try {
+//                    List<State> list = response.body().getStateList();
+//                    if (list != null && list.size() > 0) {
+//                        mMapState = new HashMap<>();
+//                        for (State state : list) {
+//                            mMapState.put(Integer.valueOf(state.getS_id()), state.getS_name());
+//                        }
+//                        ProgressDialog.getInstance().dismiss();
+//                        populateStates(mMapState);
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                    ProgressDialog.getInstance().dismiss();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<StateResponse> call, Throwable t) {
+//                t.printStackTrace();
+//                ProgressDialog.getInstance().dismiss();
+//            }
+//        });
+//    }
 
     private void fetchUniversityData(int country, int state) {
 //        ProgressDialog.getInstance().show(activity);

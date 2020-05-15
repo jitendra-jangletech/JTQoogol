@@ -17,4 +17,16 @@ public class CityResponse {
     @SerializedName("61")
     private List<City> cityList;
 
+    public String getResponseCode() {
+        return responseCode;
+    }
+
+    public void setResponseCode(String responseCode) {
+        this.responseCode = responseCode;
+    }
+
+    @SerializedName("Response")
+    private String responseCode;
+
+
 }

@@ -64,7 +64,7 @@ public class NotificationsFragment extends BaseFragment {
 
     private void fetchNotifications() {
         ProgressDialog.getInstance().show(getActivity());
-        Call<NotificationResponse> call = apiService.fetchNotifications(new PreferenceManager(getActivity()).getInt(Constant.USER_ID), getDeviceId());//todo change userId
+        Call<NotificationResponse> call = apiService.fetchNotifications(new PreferenceManager(getActivity()).getInt(Constant.USER_ID), getDeviceId(),"Q");//todo change userId
         call.enqueue(new Callback<NotificationResponse>() {
             @Override
             public void onResponse(Call<NotificationResponse> call, Response<NotificationResponse> response) {

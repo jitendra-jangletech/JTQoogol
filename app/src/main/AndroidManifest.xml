@@ -21,18 +21,20 @@
             android:name=".activities.PracticeTestActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.SingleSelectionActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
+            android:windowSoftInputMode="adjustPan"
             android:name=".activities.StartTestActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.SignInActivity" />
+
+        <activity
+            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat" />
+
         <activity
             android:name=".activities.LaunchActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

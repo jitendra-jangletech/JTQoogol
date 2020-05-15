@@ -28,11 +28,13 @@
                 android:layout_height="match_parent">
 
                 <LinearLayout
+                    android:id="@+id/marginLayout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
                     <include
+                        android:id="@+id/nav_header"
                         layout="@layout/nav_header_main"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />

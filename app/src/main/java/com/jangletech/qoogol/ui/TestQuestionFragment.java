@@ -212,7 +212,7 @@ public class TestQuestionFragment extends BaseFragment implements QueViewClick, 
         Log.d(TAG, "onActivityCreated position : " + position);
 
         testQuestionFragmentBinding.imgReport.setOnClickListener(v -> {
-            questReportDialog = new QuestReportDialog(getContext(), this);
+            questReportDialog = new QuestReportDialog(getContext(), this,position);
             questReportDialog.show();
         });
 
@@ -252,6 +252,7 @@ public class TestQuestionFragment extends BaseFragment implements QueViewClick, 
                 testQuestions.get(position).setTtqa_mcq_ans_1(false);
             }
         });
+
         testQuestionFragmentBinding.singleChoiceQuestion.ans2.setOnClickListener(v -> {
             attemptedOrNot(testQuestionFragmentBinding.singleChoiceQuestion.singleChoiceAnswerGrp);
             if (testQuestionFragmentBinding.singleChoiceQuestion.ans2.isChecked()) {
@@ -260,6 +261,7 @@ public class TestQuestionFragment extends BaseFragment implements QueViewClick, 
                 testQuestions.get(position).setTtqa_mcq_ans_2(false);
             }
         });
+
         testQuestionFragmentBinding.singleChoiceQuestion.ans3.setOnClickListener(v -> {
             attemptedOrNot(testQuestionFragmentBinding.singleChoiceQuestion.singleChoiceAnswerGrp);
             if (testQuestionFragmentBinding.singleChoiceQuestion.ans3.isChecked()) {
@@ -276,6 +278,7 @@ public class TestQuestionFragment extends BaseFragment implements QueViewClick, 
                 testQuestions.get(position).setTtqa_mcq_ans_4(false);
             }
         });
+
         testQuestionFragmentBinding.singleChoiceQuestion.ans5.setOnClickListener(v -> {
             attemptedOrNot(testQuestionFragmentBinding.singleChoiceQuestion.singleChoiceAnswerGrp);
             if (testQuestionFragmentBinding.singleChoiceQuestion.ans5.isChecked()) {
@@ -294,6 +297,7 @@ public class TestQuestionFragment extends BaseFragment implements QueViewClick, 
                 testQuestions.get(position).setTtqa_mcq_ans_1(false);
             }
         });
+
         testQuestionFragmentBinding.multiChoiceQuestion.ans2.setOnClickListener(v -> {
             attemptedOrNot(testQuestionFragmentBinding.multiChoiceQuestion.multiChoiceAnswerGrp);
             if (testQuestionFragmentBinding.multiChoiceQuestion.ans2.isChecked()) {
@@ -302,6 +306,7 @@ public class TestQuestionFragment extends BaseFragment implements QueViewClick, 
                 testQuestions.get(position).setTtqa_mcq_ans_2(false);
             }
         });
+
         testQuestionFragmentBinding.multiChoiceQuestion.ans3.setOnClickListener(v -> {
             attemptedOrNot(testQuestionFragmentBinding.multiChoiceQuestion.multiChoiceAnswerGrp);
             if (testQuestionFragmentBinding.multiChoiceQuestion.ans3.isChecked()) {
@@ -310,6 +315,7 @@ public class TestQuestionFragment extends BaseFragment implements QueViewClick, 
                 testQuestions.get(position).setTtqa_mcq_ans_3(false);
             }
         });
+
         testQuestionFragmentBinding.multiChoiceQuestion.ans4.setOnClickListener(v -> {
             attemptedOrNot(testQuestionFragmentBinding.multiChoiceQuestion.multiChoiceAnswerGrp);
             if (testQuestionFragmentBinding.multiChoiceQuestion.ans4.isChecked()) {
@@ -318,6 +324,7 @@ public class TestQuestionFragment extends BaseFragment implements QueViewClick, 
                 testQuestions.get(position).setTtqa_mcq_ans_4(false);
             }
         });
+
         testQuestionFragmentBinding.multiChoiceQuestion.ans5.setOnClickListener(v -> {
             attemptedOrNot(testQuestionFragmentBinding.multiChoiceQuestion.multiChoiceAnswerGrp);
             if (testQuestionFragmentBinding.multiChoiceQuestion.ans5.isChecked()) {
@@ -604,7 +611,7 @@ public class TestQuestionFragment extends BaseFragment implements QueViewClick, 
             attemptedOrNot(multiChoiceQuestionBinding.multiChoiceAnswerGrp);
             setCheckedChip(mapMcqQuest);
         });*/
-
+/*
         multiChoiceQuestionBinding.btnMarkNext.setOnClickListener(v -> {
             //setMarkedQuest(testQuestion, multiChoiceQuestionBinding.imgSave);
             //testQuestion.setMarked(true);
@@ -621,10 +628,10 @@ public class TestQuestionFragment extends BaseFragment implements QueViewClick, 
             multiChoiceQuestionBinding.imgSave.setImageResource(R.drawable.ic_star_border);
             //resetAnswer(multiChoiceQuestionBinding.multiChoiceAnswerGrp, null, QuestionType.MCQ.toString());
             //questAnsBtnClickListener.onResetClick();
-        });
+        });*/
 
         multiChoiceQuestionBinding.imgReport.setOnClickListener(v -> {
-            questReportDialog = new QuestReportDialog(getContext(), this);
+            questReportDialog = new QuestReportDialog(getContext(), this,position);
             questReportDialog.show();
         });
     }
@@ -818,7 +825,7 @@ public class TestQuestionFragment extends BaseFragment implements QueViewClick, 
     }
 
     @Override
-    public void onReportQuestSubmitClick() {
+    public void onReportQuestSubmitClick(int pos) {
         questReportDialog.dismiss();
     }
 
@@ -895,7 +902,6 @@ public class TestQuestionFragment extends BaseFragment implements QueViewClick, 
         ImageView image = markedQuestMap.get(testQuestion.getTq_quest_disp_num());
         if (testQuestion != null) {
             if (testQuestion.isTtqa_marked()) {
-                //testQuestion.setImageResource(R.drawable.ic_star);
                 image.setImageResource(R.drawable.ic_star);
             } else {
                 image.setImageResource(R.drawable.ic_star_border);

@@ -1,37 +1,43 @@
 package com.jangletech.qoogol.activities;
 
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.tabs.TabLayout;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.QuestionPaletAdapter;
 import com.jangletech.qoogol.adapter.StartTestAdapter;
 import com.jangletech.qoogol.databinding.ActivityStartTestBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
-import com.jangletech.qoogol.dialog.QuestReportDialog;
 import com.jangletech.qoogol.dialog.SubmitTestDialog;
 import com.jangletech.qoogol.enums.QuestionFilterType;
 import com.jangletech.qoogol.enums.QuestionSortType;
@@ -40,7 +46,12 @@ import com.jangletech.qoogol.model.StartResumeTestResponse;
 import com.jangletech.qoogol.model.TestQuestionNew;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
-import com.jangletech.qoogol.ui.BaseFragment;
+import com.jangletech.qoogol.ui.FillBlanksFragment;
+import com.jangletech.qoogol.ui.LongAnsFragment;
+import com.jangletech.qoogol.ui.McqFragment;
+import com.jangletech.qoogol.ui.OneLineAnsFragment;
+import com.jangletech.qoogol.ui.ScqFragment;
+import com.jangletech.qoogol.ui.ShortAnsFragment;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.EndDrawerToggle;
 import com.jangletech.qoogol.util.PreferenceManager;
@@ -53,8 +64,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class StartTestActivity extends BaseActivity implements QuestionPaletAdapter.QuestClickListener,
-        SubmitTestDialog.SubmitDialogClickListener, QueViewClick, StartTestAdapter.StartAdapterButtonClickListener,
-        QuestReportDialog.QuestReportDialogListener {
+        SubmitTestDialog.SubmitDialogClickListener, QueViewClick {
 
     private static final String TAG = "CourseActivity";
     private StartTestViewModel mViewModel;
@@ -70,8 +80,6 @@ public class StartTestActivity extends BaseActivity implements QuestionPaletAdap
     Long milliLeft, min, sec, hrs;
     SubmitTestDialog submitTestDialog;
     ApiInterface apiService = ApiClient.getInstance().getApi();
-    StartTestAdapter startTestAdapter;
-    QuestReportDialog questReportDialog;
     private TextView tvTitle, tvTimer, tvPause;
     private ImageView imgNavIcon;
     private Toolbar toolbar;
@@ -93,6 +101,7 @@ public class StartTestActivity extends BaseActivity implements QuestionPaletAdap
         tvTitle = findViewById(R.id.tvTitle);
         imgNavIcon = findViewById(R.id.imgNavIcon);
         setupNavigationDrawer();
+        setMargins(mBinding.marginLayout);
         tmId = getIntent().getIntExtra(Constant.TM_ID, 0);
         tvTitle.setText("Demo Test");
         mViewModel = new ViewModelProvider(this).get(StartTestViewModel.class);
@@ -102,7 +111,7 @@ public class StartTestActivity extends BaseActivity implements QuestionPaletAdap
             public void onChanged(@Nullable final List<TestQuestionNew> tests) {
                 Log.d(TAG, "onChanged Size : " + tests.size());
                 testQuestionList = tests;
-                setStartTestAdapter(testQuestionList);
+                viewPager.setAdapter(createCardAdapter(testQuestionList));
                 startTimer(Integer.parseInt(startResumeTestResponse.getTm_duration()) * 60 * 1000);
             }
         });
@@ -115,6 +124,13 @@ public class StartTestActivity extends BaseActivity implements QuestionPaletAdap
             }
         });
 
+        mBinding.chipGrpQuestionFilter.setOnCheckedChangeListener(new ChipGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(ChipGroup group, int checkedId) {
+                setSelectedChip();
+            }
+        });
+
         viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -124,84 +140,30 @@ public class StartTestActivity extends BaseActivity implements QuestionPaletAdap
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
-                testQuestionList.get(getCurrentItemPos()).setTtqa_visited(true);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-                super.onPageScrollStateChanged(state);
+                //printList();
+                testQuestionList.get(position).setTtqa_visited(true);
             }
         });
 
-        mBinding.radioAll.setOnClickListener(v -> {
-            if (mBinding.questionsPaletGridRecyclerView.getVisibility() == View.VISIBLE) {
-                prepareQuestPaletGridList(QuestionFilterType.ALL.toString());
-            } else {
-                prepareQuestPaletList(QuestionFilterType.ALL.toString());
-            }
-            mBinding.radioAttempted.setChecked(false);
-            mBinding.radioUnseen.setChecked(false);
-            mBinding.radioMarked.setChecked(false);
-            mBinding.radioUnattempted.setChecked(false);
+        mBinding.chipAll.setOnClickListener(v -> {
+            setFilterRadio(QuestionFilterType.ALL.toString());
         });
-        mBinding.radioAttempted.setOnClickListener(v -> {
-            if (mBinding.questionsPaletGridRecyclerView.getVisibility() == View.VISIBLE) {
-                prepareQuestPaletGridList(QuestionFilterType.ATTEMPTED.toString());
-            } else {
-                prepareQuestPaletList(QuestionFilterType.ATTEMPTED.toString());
-            }
-            new PreferenceManager(getApplicationContext()).saveString(Constant.FILTER_APPLIED, QuestionFilterType.ATTEMPTED.toString());
-            questionPaletAdapter.setPaletFilterResults(sortQuestListByFilter(testQuestionList, QuestionFilterType.ATTEMPTED.toString()));
-            questionPaletAdapter.notifyDataSetChanged();
-            mBinding.radioAll.setChecked(false);
-            mBinding.radioUnseen.setChecked(false);
-            mBinding.radioMarked.setChecked(false);
-            mBinding.radioUnattempted.setChecked(false);
+        mBinding.chipAttempted.setOnClickListener(v -> {
+            setFilterRadio(QuestionFilterType.ATTEMPTED.toString());
         });
-        mBinding.radioMarked.setOnClickListener(v -> {
-
-            if (mBinding.questionsPaletGridRecyclerView.getVisibility() == View.VISIBLE) {
-                prepareQuestPaletGridList(QuestionFilterType.MARKED.toString());
-            } else {
-                prepareQuestPaletList(QuestionFilterType.MARKED.toString());
-            }
-            new PreferenceManager(getApplicationContext()).saveString(Constant.FILTER_APPLIED, QuestionFilterType.MARKED.toString());
-            questionPaletAdapter.setPaletFilterResults(sortQuestListByFilter(testQuestionList, QuestionFilterType.MARKED.toString()));
-            mBinding.radioAll.setChecked(false);
-            mBinding.radioUnseen.setChecked(false);
-            mBinding.radioAttempted.setChecked(false);
-            mBinding.radioUnattempted.setChecked(false);
+        mBinding.chipMarked.setOnClickListener(v -> {
+            setFilterRadio(QuestionFilterType.MARKED.toString());
         });
 
-        mBinding.radioUnattempted.setOnClickListener(v -> {
-            if (mBinding.questionsPaletGridRecyclerView.getVisibility() == View.VISIBLE) {
-                prepareQuestPaletGridList(QuestionFilterType.UNATTEMPTED.toString());
-            } else {
-                prepareQuestPaletList(QuestionFilterType.UNATTEMPTED.toString());
-            }
-            new PreferenceManager(getApplicationContext()).saveString(Constant.FILTER_APPLIED, QuestionFilterType.UNATTEMPTED.toString());
-            questionPaletAdapter.setPaletFilterResults(sortQuestListByFilter(testQuestionList, QuestionFilterType.UNATTEMPTED.toString()));
-            mBinding.radioAll.setChecked(false);
-            mBinding.radioUnseen.setChecked(false);
-            mBinding.radioAttempted.setChecked(false);
-            mBinding.radioMarked.setChecked(false);
+        mBinding.chipUnattempted.setOnClickListener(v -> {
+            setFilterRadio(QuestionFilterType.UNATTEMPTED.toString());
         });
-        mBinding.radioUnseen.setOnClickListener(v -> {
-            if (mBinding.questionsPaletGridRecyclerView.getVisibility() == View.VISIBLE) {
-                prepareQuestPaletGridList(QuestionFilterType.UNSEEN.toString());
-            } else {
-                prepareQuestPaletList(QuestionFilterType.UNSEEN.toString());
-            }
-            new PreferenceManager(getApplicationContext()).saveString(Constant.FILTER_APPLIED, QuestionFilterType.UNSEEN.toString());
-            questionPaletAdapter.setPaletFilterResults(sortQuestListByFilter(testQuestionList, QuestionFilterType.UNSEEN.toString()));
-            mBinding.radioAll.setChecked(false);
-            mBinding.radioUnattempted.setChecked(false);
-            mBinding.radioAttempted.setChecked(false);
-            mBinding.radioMarked.setChecked(false);
+        mBinding.chipUnseen.setOnClickListener(v -> {
+            setFilterRadio(QuestionFilterType.UNSEEN.toString());
         });
 
         btnSubmitTest.setOnClickListener(v -> {
-            mBinding.drawerLayout.closeDrawer(Gravity.LEFT);
+            mBinding.drawerLayout.closeDrawer(Gravity.RIGHT);
             submitTestDialog = new SubmitTestDialog(this, this, milliLeft);
             submitTestDialog.show();
         });
@@ -214,10 +176,12 @@ public class StartTestActivity extends BaseActivity implements QuestionPaletAdap
 
             @Override
             public void onDrawerOpened(@NonNull View drawerView) {
-                Log.d(TAG, "onDrawerOpened: " + new PreferenceManager(getApplicationContext()).getString(Constant.FILTER_APPLIED));
-                prepareQuestPaletList(QuestionFilterType.ALL.toString());
-                //prepareQuestPaletList(new PreferenceManager(getApplicationContext()).getString(Constant.FILTER_APPLIED));
-                //questionPaletAdapter.setPaletFilterResults(sortQuestListByFilter(testQuestionList,new PreferenceManager(getApplicationContext()).getString(Constant.FILTER_APPLIED)));
+                if (new PreferenceManager(getApplicationContext()).getString(Constant.FILTER_APPLIED).equals(QuestionSortType.LIST.toString())) {
+                    prepareQuestPaletList();
+                } else {
+                    prepareQuestPaletGridList();
+                }
+                setFilterRadio(new PreferenceManager(getApplicationContext()).getString(Constant.SORT_APPLIED));
             }
 
             @Override
@@ -234,7 +198,6 @@ public class StartTestActivity extends BaseActivity implements QuestionPaletAdap
 
             }
         });
-
 
         tvPause.setOnClickListener(v -> {
             pauseTimer();
@@ -258,29 +221,63 @@ public class StartTestActivity extends BaseActivity implements QuestionPaletAdap
 
 
         mBinding.gridView.setOnClickListener(v -> {
-            prepareQuestPaletGridList(new PreferenceManager(getApplicationContext()).getString(Constant.FILTER_APPLIED));
-            //Toast.makeText(this, "Grid View Selected", Toast.LENGTH_SHORT).show();
+            new PreferenceManager(getApplicationContext()).saveString(Constant.FILTER_APPLIED, QuestionSortType.GRID.toString());
+            prepareQuestPaletGridList();
         });
 
         mBinding.listView.setOnClickListener(v -> {
-            prepareQuestPaletList(new PreferenceManager(getApplicationContext()).getString(Constant.FILTER_APPLIED));
-            //Toast.makeText(this, "List View Selected", Toast.LENGTH_SHORT).show();
+            new PreferenceManager(getApplicationContext()).saveString(Constant.FILTER_APPLIED, QuestionSortType.LIST.toString());
+            prepareQuestPaletList();
         });
     }
 
-    public int getStatusBarHeight() {
-        int result = 0;
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = getResources().getDimensionPixelSize(resourceId);
+
+
+    /*private void resetRadioButtons(RadioButton radioButton) {
+        if (radioButton.getText().toString().equalsIgnoreCase("Attempted")) {
+            mBinding.radioAttempted.setChecked(true);
+            mBinding.radioAll.setChecked(false);
+            mBinding.radioUnseen.setChecked(false);
+            mBinding.radioMarked.setChecked(false);
+            mBinding.radioUnattempted.setChecked(false);
+        } else if (radioButton.getText().toString().equalsIgnoreCase("UnAttempted")) {
+            mBinding.radioAttempted.setChecked(false);
+            mBinding.radioAll.setChecked(false);
+            mBinding.radioUnseen.setChecked(false);
+            mBinding.radioMarked.setChecked(false);
+            mBinding.radioUnattempted.setChecked(true);
+        } else if (radioButton.getText().toString().equalsIgnoreCase("Unseen")) {
+            mBinding.radioAttempted.setChecked(false);
+            mBinding.radioAll.setChecked(false);
+            mBinding.radioUnseen.setChecked(true);
+            mBinding.radioMarked.setChecked(false);
+            mBinding.radioUnattempted.setChecked(false);
+        } else if (radioButton.getText().toString().equalsIgnoreCase("Marked For Review")) {
+            mBinding.radioAttempted.setChecked(false);
+            mBinding.radioAll.setChecked(false);
+            mBinding.radioUnseen.setChecked(false);
+            mBinding.radioMarked.setChecked(true);
+            mBinding.radioUnattempted.setChecked(false);
+        } else {
+            mBinding.radioAttempted.setChecked(false);
+            mBinding.radioAll.setChecked(true);
+            mBinding.radioUnseen.setChecked(false);
+            mBinding.radioMarked.setChecked(false);
+            mBinding.radioUnattempted.setChecked(false);
         }
-        return result;
-    }
+    }*/
 
-
-    private void setStartTestAdapter(List<TestQuestionNew> testQuestionList) {
+   /* private void setStartTestAdapter(List<TestQuestionNew> testQuestionList) {
         startTestAdapter = new StartTestAdapter(testQuestionList, this, this);
         viewPager.setAdapter(startTestAdapter);
+    }*/
+
+    public void printList() {
+        for (int i = 0; i < testQuestionList.size(); i++) {
+            Log.d(TAG, testQuestionList.get(i).getTq_quest_disp_num() + " = "
+                    + testQuestionList.get(i).getTtqa_sub_ans() + " = " + testQuestionList.get(i).isTtqa_marked() + " = "
+                    + testQuestionList.get(i).isTtqa_attempted());
+        }
     }
 
     public void startTimer(long timeLengthMilli) {
@@ -325,19 +322,15 @@ public class StartTestActivity extends BaseActivity implements QuestionPaletAdap
     }
 
 
-    private ViewPagerAdapterNew createCardAdapter(List<TestQuestionNew> testQuestionNewList) {
-        ViewPagerAdapterNew adapter = new ViewPagerAdapterNew(this, testQuestionNewList);
-        return adapter;
-    }
-
     @Override
-    public void onQuestionSelected(int questId) {
+    public void onQuestionSelected(TestQuestionNew questionNew) {
+        showToast("Position : " + questionNew.getTq_quest_seq_num());
         isDrawerItemClicked = true;
         mBinding.drawerLayout.closeDrawer(Gravity.RIGHT);
-        pos = questId;
+        pos = Integer.parseInt(questionNew.getTq_quest_seq_num()) - 1;
     }
 
-    private void prepareQuestPaletGridList(String filterType) {
+    private void prepareQuestPaletGridList() {
         mBinding.questionsPaletListRecyclerView.setVisibility(View.GONE);
         mBinding.questionsPaletGridRecyclerView.setVisibility(View.VISIBLE);
         mBinding.questionsPaletGridRecyclerView.setNestedScrollingEnabled(false);
@@ -347,7 +340,7 @@ public class StartTestActivity extends BaseActivity implements QuestionPaletAdap
         questionPaletAdapter.notifyDataSetChanged();
     }
 
-    private void prepareQuestPaletList(String filterType) {
+    private void prepareQuestPaletList() {
         mBinding.questionsPaletGridRecyclerView.setVisibility(View.GONE);
         mBinding.questionsPaletListRecyclerView.setVisibility(View.VISIBLE);
         mBinding.questionsPaletListRecyclerView.setNestedScrollingEnabled(false);
@@ -388,6 +381,30 @@ public class StartTestActivity extends BaseActivity implements QuestionPaletAdap
 
     }
 
+    private void setFilterRadio(String sortType) {
+        if (sortType.equalsIgnoreCase(QuestionFilterType.ATTEMPTED.toString())) {
+            new PreferenceManager(getApplicationContext()).saveString(Constant.SORT_APPLIED, QuestionFilterType.ATTEMPTED.toString());
+            questionPaletAdapter.setPaletFilterResults(sortQuestListByFilter(testQuestionList, QuestionFilterType.ATTEMPTED.toString()));
+            mBinding.chipAttempted.setChecked(true);
+        } else if (sortType.equalsIgnoreCase(QuestionFilterType.UNATTEMPTED.toString())) {
+            new PreferenceManager(getApplicationContext()).saveString(Constant.SORT_APPLIED, QuestionFilterType.UNATTEMPTED.toString());
+            questionPaletAdapter.setPaletFilterResults(sortQuestListByFilter(testQuestionList, QuestionFilterType.UNATTEMPTED.toString()));
+            mBinding.chipUnattempted.setChecked(true);
+        } else if (sortType.equalsIgnoreCase(QuestionFilterType.MARKED.toString())) {
+            new PreferenceManager(getApplicationContext()).saveString(Constant.SORT_APPLIED, QuestionFilterType.MARKED.toString());
+            questionPaletAdapter.setPaletFilterResults(sortQuestListByFilter(testQuestionList, QuestionFilterType.MARKED.toString()));
+            mBinding.chipMarked.setChecked(true);
+        } else if (sortType.equalsIgnoreCase(QuestionFilterType.UNSEEN.toString())) {
+            new PreferenceManager(getApplicationContext()).saveString(Constant.SORT_APPLIED, QuestionFilterType.UNSEEN.toString());
+            questionPaletAdapter.setPaletFilterResults(sortQuestListByFilter(testQuestionList, QuestionFilterType.UNSEEN.toString()));
+            mBinding.chipUnseen.setChecked(true);
+        } else {
+            new PreferenceManager(getApplicationContext()).saveString(Constant.SORT_APPLIED, QuestionFilterType.ALL.toString());
+            questionPaletAdapter.setPaletFilterResults(sortQuestListByFilter(testQuestionList, QuestionFilterType.ALL.toString()));
+            mBinding.chipAll.setChecked(true);
+        }
+    }
+
 
     private List<TestQuestionNew> sortQuestListByFilter(List<TestQuestionNew> questions, String questFilterType) {
         List<TestQuestionNew> questFilterList = new ArrayList<>();
@@ -411,6 +428,11 @@ public class StartTestActivity extends BaseActivity implements QuestionPaletAdap
                 questFilterList = questions;
             }
         }
+        if (questFilterList.size() > 0) {
+            mBinding.tvNoQuestions.setVisibility(View.GONE);
+        } else {
+            mBinding.tvNoQuestions.setVisibility(View.VISIBLE);
+        }
 
         return questFilterList;
     }
@@ -425,9 +447,9 @@ public class StartTestActivity extends BaseActivity implements QuestionPaletAdap
                 if (response.body() != null && response.body().getResponseCode().equals("200")) {
                     startResumeTestResponse = response.body();
                     mViewModel.setTestQuestAnsList(response.body().getTestQuestionNewList());
-                }else{
-                    Log.e(TAG, "onResponse Error : "+response.body().getResponseCode());
-                    showErrorDialog(StartTestActivity.this,response.body().getResponseCode(),response.body().getMessage());
+                } else {
+                    Log.e(TAG, "onResponse Error : " + response.body().getResponseCode());
+                    showErrorDialog(StartTestActivity.this, response.body().getResponseCode(), response.body().getMessage());
                 }
             }
 
@@ -456,7 +478,7 @@ public class StartTestActivity extends BaseActivity implements QuestionPaletAdap
         return true;
     }
 
-    @Override
+    /*@Override
     public void onPreviousClick(int pos) {
         int currentPos = viewPager.getCurrentItem();
         testQuestionList.get(getCurrentItemPos()).setTtqa_visited(true);
@@ -475,12 +497,17 @@ public class StartTestActivity extends BaseActivity implements QuestionPaletAdap
     public void onReportClick(int pos) {
         questReportDialog = new QuestReportDialog(this, this);
         questReportDialog.show();
-    }
+    }*/
 
-    @Override
+   /* @Override
     public void onReportQuestSubmitClick() {
         questReportDialog.dismiss();
         Toast.makeText(this, "Question Reported.", Toast.LENGTH_SHORT).show();
+    }*/
+
+    private ViewPagerAdapter createCardAdapter(List<TestQuestionNew> testQuestionNewList) {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(this, testQuestionNewList);
+        return adapter;
     }
 
     @Override
@@ -497,6 +524,52 @@ public class StartTestActivity extends BaseActivity implements QuestionPaletAdap
                 })
                 .setNegativeButton("NO", null)
                 .show();
+    }
+
+    public class ViewPagerAdapter extends FragmentStateAdapter {
+        private List<TestQuestionNew> testQuestionNewList;
+
+        public ViewPagerAdapter(@NonNull FragmentActivity fragmentActivity, List<TestQuestionNew> testQuestionNewList) {
+            super(fragmentActivity);
+            this.testQuestionNewList = testQuestionNewList;
+        }
+
+        @NonNull
+        @Override
+        public Fragment createFragment(int position) {
+            TestQuestionNew testQuestionNew = testQuestionNewList.get(position);
+            if (testQuestionNew.getQ_type().equals(Constant.SCQ)) {
+                return ScqFragment.newInstance(position);
+            } else if (testQuestionNew.getQ_type().equals(Constant.MCQ)) {
+                return McqFragment.newInstance(position);
+            } else if (testQuestionNew.getQ_type().equals(Constant.SHORT_ANSWER)) {
+                return ShortAnsFragment.newInstance(position);
+            } else if (testQuestionNew.getQ_type().equals(Constant.LONG_ANSWER)) {
+                return LongAnsFragment.newInstance(position);
+            } else if (testQuestionNew.getQ_type().equals(Constant.ONE_LINE_ANSWER)) {
+                return OneLineAnsFragment.newInstance(position);
+            } else if (testQuestionNew.getQ_type().equals(Constant.FILL_THE_BLANKS)) {
+                return FillBlanksFragment.newInstance(position);
+            } else {
+                return null;
+            }
+        }
+
+        @Override
+        public int getItemCount() {
+            return testQuestionNewList.size();
+        }
+    }
+
+    private void setSelectedChip() {
+        for (int i = 0; i < mBinding.chipGrpQuestionFilter.getChildCount(); i++) {
+            Chip chip = (Chip) mBinding.chipGrpQuestionFilter.getChildAt(i);
+            if (chip.isChecked()) {
+                chip.setTextColor(Color.WHITE);
+            } else {
+                chip.setTextColor(Color.BLACK);
+            }
+        }
     }
 
     /*

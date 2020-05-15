@@ -22,12 +22,13 @@ public class SignUpViewModel extends ViewModel {
     private MutableLiveData<SignInModel> signinlist;
     private MutableLiveData<List<Country>> countrylist;
     private MutableLiveData<List<State>> statelist;
+    private MutableLiveData<List<City>> citylist;
     private MutableLiveData<List<University>> universitylist;
     private MutableLiveData<List<Institute>> institutelist;
     private MutableLiveData<List<Degree>> degreelist;
     private MutableLiveData<List<Course>> courselist;
     private MutableLiveData<List<ClassData>> classlist;
-    private MutableLiveData<List<City>> citylist;
+
 
     public MutableLiveData<List<City>> getCityList() {
         return citylist;

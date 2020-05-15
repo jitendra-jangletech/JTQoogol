@@ -18,7 +18,9 @@
                 android:layout_height="@dimen/_150sdp">
 
 
-                <include layout="@layout/nav_header_main" />
+                <include
+                    android:id="@+id/navHeader"
+                    layout="@layout/nav_header_main" />
 
 
             </RelativeLayout>

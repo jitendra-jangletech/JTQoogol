@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,12 +19,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.service.NetworkSchedulerService;
 import com.jangletech.qoogol.util.AppUtils;
+import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.NetworkUtil;
+import com.jangletech.qoogol.util.PreferenceManager;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
@@ -36,6 +42,18 @@ public class BaseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
+    }
+
+    public void loadProfilePic(String url, ImageView imageView) {
+        RequestOptions options = new RequestOptions()
+                .centerCrop()
+                .circleCrop()
+                .placeholder(R.drawable.load)
+                .error(R.drawable.ic_profile_default);
+        Glide.with(this).load(url)
+                .apply(options)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(imageView);
     }
 
     //To Device get Android Id
@@ -53,6 +71,25 @@ public class BaseActivity extends AppCompatActivity {
                 .setMessage(msg)
                 .setPositiveButton("OK", null)
                 .show();
+    }
+
+    public String getProfileImageUrl(String imageName) {
+        String userId = String.valueOf(new PreferenceManager(getApplicationContext()).getInt(Constant.USER_ID));
+        return Constant.PRODUCTION_BASE_FILE_API + "000000" + userId + "/" + imageName;
+    }
+
+    public void setMargins (View view) {
+        int result = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+
+        if (view.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
+            ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
+            p.setMargins(0, result, 0, 0);
+            view.requestLayout();
+        }
     }
 
     @Override

@@ -6,11 +6,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.jangletech.qoogol.R;
@@ -25,9 +27,11 @@ import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.ui.test.my_test.MyTestViewModel;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -37,7 +41,7 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
     private static final String TAG = "SettingsFragment";
     private MyTestViewModel mViewModel;
     private FragmentSettingsBinding mBinding;
-    private HashMap<Integer,Chip> mapExamChips = new HashMap();
+    private HashMap<Integer, Chip> mapExamChips = new HashMap();
     private HashMap<Integer, Chip> mapSubjectChips = new HashMap();
     ApiInterface apiService = ApiClient.getInstance().getApi();
     public static String strBoardName;
@@ -50,12 +54,12 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_settings, container, false);
-        initViews();
+        initViews(mBinding);
         return mBinding.getRoot();
     }
 
-    private void initViews(){
-        mBinding.btnApply.setOnClickListener(v->{
+    private void initViews(FragmentSettingsBinding mBinding) {
+        mBinding.btnApply.setOnClickListener(v -> {
             MainActivity.navController.navigate(R.id.nav_test_my);
         });
     }
@@ -98,11 +102,11 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
             }
         });
 
-        mBinding.tvBoardEdit.setOnClickListener(v->{
+        mBinding.tvBoardEdit.setOnClickListener(v -> {
             MainActivity.navController.navigate(R.id.nav_board_fragment, Bundle.EMPTY);
         });
 
-        mBinding.boardChip.setOnClickListener(v->{
+        mBinding.boardChip.setOnClickListener(v -> {
             MainActivity.navController.navigate(R.id.nav_board_fragment, Bundle.EMPTY);
         });
 
@@ -378,11 +382,11 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
 
     private void setSelectedExamChips(Chip chip) {
         showToast("Selected : " + chip.getText().toString());
-        Chip selectedChip = mapExamChips.put(chip.getId(),chip);
-        for (int i = 0; i <mapExamChips.size() ; i++) {
-            if(mapExamChips.get(i).isChecked()){
+        Chip selectedChip = mapExamChips.put(chip.getId(), chip);
+        for (int i = 0; i < mapExamChips.size(); i++) {
+            if (mapExamChips.get(i).isChecked()) {
                 mapExamChips.get(i).setTextColor(Color.WHITE);
-            }else{
+            } else {
                 mapExamChips.get(i).setTextColor(Color.BLACK);
             }
         }
@@ -390,13 +394,13 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
 
     private void setSelectedSubjectsChips(Chip chip) {
         showToast("Selected : " + chip.getText().toString());
-        Chip selectedChip = mapSubjectChips.put(chip.getId(),chip);
-        for (int i = 0; i <mapSubjectChips.size() ; i++) {
-         if(mapSubjectChips.get(i).isChecked()){
-             mapSubjectChips.get(i).setTextColor(Color.WHITE);
-         }else{
-             mapSubjectChips.get(i).setTextColor(Color.BLACK);
-         }
+        Chip selectedChip = mapSubjectChips.put(chip.getId(), chip);
+        for (int i = 0; i < mapSubjectChips.size(); i++) {
+            if (mapSubjectChips.get(i).isChecked()) {
+                mapSubjectChips.get(i).setTextColor(Color.WHITE);
+            } else {
+                mapSubjectChips.get(i).setTextColor(Color.BLACK);
+            }
         }
     }
 

@@ -1,23 +1,15 @@
 package com.jangletech.qoogol.retrofit;
 
-import com.jangletech.qoogol.model.ChangePassword;
 import com.jangletech.qoogol.model.CityResponse;
-import com.jangletech.qoogol.model.Classes;
-import com.jangletech.qoogol.model.CommonResponseObject;
 import com.jangletech.qoogol.model.ConnectionResponse;
 import com.jangletech.qoogol.model.CountryResponse;
 import com.jangletech.qoogol.model.CourseResponse;
-import com.jangletech.qoogol.model.DashboardInfo;
 import com.jangletech.qoogol.model.DegreeResponse;
-import com.jangletech.qoogol.model.EmptyObject;
-import com.jangletech.qoogol.model.Exams;
-import com.jangletech.qoogol.model.FetchEducationsResponseDto;
-import com.jangletech.qoogol.model.FetchPreferableExamsResponseDto;
+import com.jangletech.qoogol.model.DistrictResponse;
 import com.jangletech.qoogol.model.FetchSubjectResponseList;
-import com.jangletech.qoogol.model.GetUserPersonalDetails;
 import com.jangletech.qoogol.model.InstituteResponse;
+import com.jangletech.qoogol.model.Language;
 import com.jangletech.qoogol.model.LearningQuestResponse;
-import com.jangletech.qoogol.model.MobileOtp;
 import com.jangletech.qoogol.model.NotificationResponse;
 import com.jangletech.qoogol.model.ProcessQuestion;
 import com.jangletech.qoogol.model.RegisterLoginModel;
@@ -28,24 +20,23 @@ import com.jangletech.qoogol.model.StateResponse;
 import com.jangletech.qoogol.model.TestDetailsResponse;
 import com.jangletech.qoogol.model.TestListResponse;
 import com.jangletech.qoogol.model.UniversityResponse;
-import com.jangletech.qoogol.model.UserSelectedExams;
-import com.jangletech.qoogol.model.signup.SignUpResponseDto;
+import com.jangletech.qoogol.model.UserProfile;
+import com.jangletech.qoogol.model.UserProfileResponse;
+import com.jangletech.qoogol.model.VerifyResponse;
 import com.jangletech.qoogol.util.Constant;
 
-import java.util.List;
 import java.util.Map;
 
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
-import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
-import retrofit2.http.Query;
+import retrofit2.http.Part;
 import retrofit2.http.QueryMap;
 
-/**
- * Created by Pritali on 1/30/2020.
- */
 public interface ApiInterface {
 
     @POST("auth/signInNew")
@@ -72,45 +63,78 @@ public interface ApiInterface {
     @POST(Constant.COURSE)
     Call<CourseResponse> getCourses();
 
-    @POST("masterData/classesForDegreeNew")
-    Call<Classes> getClasses(@QueryMap Map<String, Object> request);
+    @FormUrlEncoded
+    @POST(Constant.LANGUAGE_API)
+    Call<Language> fetchLanguages(@Field(Constant.u_user_id) int userId);
 
-    @POST("auth/signUpNew")
-    Call<SignUpResponseDto> signUpApi(@QueryMap Map<String, Object> request);
+    @FormUrlEncoded
+    @POST(Constant.COUNTRY_API)
+    Call<CountryResponse> fetchNationalities(@Field(Constant.u_user_id) int userId);
 
-    @POST("auth/verifyMobileNo")
-    Call<MobileOtp> getMobileOtp(@QueryMap Map<String, String> request);
+    @FormUrlEncoded
+    @POST(Constant.STATE_API)
+    Call<StateResponse> fetchStates(@Field(Constant.s_c_id) String s_c_id);
 
-    @POST("auth/verifyEmail")
-    Call<MobileOtp> getEmailOtp(@QueryMap Map<String, String> request);
+    @FormUrlEncoded
+    @POST(Constant.DISTRICT_API)
+    Call<DistrictResponse> fetchDistricts(@Field(Constant.dt_s_id) String dt_s_id);
 
-    @POST("user/fetchEduDetails")
-    Call<FetchEducationsResponseDto> getEducationDetails(@QueryMap Map<String, String> request);
+    @FormUrlEncoded
+    @POST(Constant.CITY_API)
+    Call<CityResponse> fetchCities(@Field(Constant.ct_dt_id) String ct_dt_id);
 
-    @POST("user/getApplicableExams")
-    Call<FetchPreferableExamsResponseDto> getApplicableExams(@QueryMap Map<String, String> request);
 
-    @POST("user/fetchUserSelectedExams")
-    Call<UserSelectedExams> getUserSelectedExams(@QueryMap Map<String, Integer> request);
+    @FormUrlEncoded
+    @POST(Constant.FETCH_USER_EDU)
+    Call<CityResponse> fetchUserEdu(@Field(Constant.u_user_id) String userId);
 
-    @POST("dashboard/dashboardStats")
-    Call<DashboardInfo> getDashboardStatistics(@QueryMap Map<String, String> request);
+    @Multipart
+    @POST(Constant.UPDATE_PROFILE_IMAGE_API)
+    Call<VerifyResponse> updateProfileImage(@Part(Constant.u_user_id) RequestBody userId,
+                                          @Part(Constant.device_id) RequestBody deviceId,
+                                          @Part(Constant.appName) RequestBody appName,
+                                          @Part(Constant.u_app_version) RequestBody appVersion,
+                                          @Part(Constant.CASE) RequestBody casel,
+                                          @Part MultipartBody.Part image);
 
-    @POST("user/fetchPersonalDetails")
-    Call<GetUserPersonalDetails> getPersonalDetails(@QueryMap Map<String, String> request);
+    @FormUrlEncoded
+    @POST(Constant.REGISTER_LOGIN)
+    Call<VerifyResponse> verifyMobileEmail(@Field(Constant.u_app_version) String appVersion,
+                                           @Field(Constant.device_id) String deviceId,
+                                           @Field(Constant.u_user_type) String userType,
+                                           @Field(Constant.u_mob_1) String email,
+                                           @Field(Constant.VERIFY) String Verify,
+                                           @Field(Constant.CASE) String caseL,
+                                           @Field(Constant.appName) String appName);
 
-    @POST("user/deleteEduDetails")
-    Call<EmptyObject> deleteEduDetails(@QueryMap Map<String, Object> request);
+    @FormUrlEncoded
+    @POST(Constant.UPDATE_USER_PROFILE)
+    Call<UserProfileResponse> updateUserProfile(@Field(Constant.u_user_id) String userId,
+                                                @Field(Constant.appName) String appName,
+                                                @Field(Constant.u_app_version) String appVersion,
+                                                @Field(Constant.device_id) String deviceId,
+                                                @Field(Constant.u_first_name) String firstName,
+                                                @Field(Constant.u_last_name) String lastName,
+                                                @Field(Constant.CASE) String caseU,
+                                                @Field(Constant.u_mob_1) String mobile,
+                                                @Field(Constant.u_Email) String email,
+                                                @Field(Constant.STATUS) String status,
+                                                @Field(Constant.u_Password) String password,
+                                                @Field(Constant.u_birth_date) String dob,
+                                                @Field(Constant.u_tagline) String tagLine,
+                                                @Field(Constant.u_native_ct_id) String u_native_ct_id,
+                                                @Field(Constant.u_native_s_id) String u_native_s_id,
+                                                @Field(Constant.u_native_dt_id) String u_native_dt_id,
+                                                @Field(Constant.u_nationality) String u_nationality,
+                                                @Field(Constant.w_lm_id_array) String w_lm_id_array,
+                                                @Field(Constant.u_gender) String gender);
 
-    @POST("user/updatePassword")
-    Call<ChangePassword> changePassword(@QueryMap Map<String, String> request);
-
-    @POST("user/updatePersonalDetails")
-    Call<GetUserPersonalDetails> updatePersonalDetails(@QueryMap Map<String, String> request);
-
-    @POST("user/saveUserSelectedExams")
-    Call<CommonResponseObject> saveUserSelectedExams(@Query("userId") int userId,
-                                                     @Body List<Exams> selectedExamsList);
+    @FormUrlEncoded
+    @POST(Constant.FETCH_USER_INFO)
+    Call<UserProfile> fetchUserInfo(@Field(Constant.u_user_id) int userId,
+                                    @Field(Constant.device_id) String deviceId,
+                                    @Field(Constant.appName) String appName,
+                                    @Field(Constant.u_app_version) String app_version);
 
     @FormUrlEncoded
     @POST(Constant.FETCH_TEST_LIST)
@@ -119,8 +143,8 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST(Constant.FETCH_NOTIFICATIONS)
     Call<NotificationResponse> fetchNotifications(@Field(Constant.u_user_id) int userId,
-                                                  @Field("126Q") String deviceId);
-
+                                                  @Field("126Q") String deviceId,
+                                                  @Field("200Q") String appName);
 
     @FormUrlEncoded
     @POST(Constant.FETCH_SUBJECTS)
@@ -144,19 +168,13 @@ public interface ApiInterface {
                                       @Field(Constant.qlc_like_flag) int like);
 
 
-   /* @FormUrlEncoded
-    @POST("q031StartResumeTest")
-    Call<TestingQuestionNew> fetchTestQuestionAnswers(@Field(Constant.u_user_id) int userId,
-                                                      @Field(Constant.tt_id) int testTakenId,
-                                                      @Field(Constant.tt_tm_id) int testTakentmId);
-*/
-   @FormUrlEncoded
+    @FormUrlEncoded
     @POST(Constant.REGISTER_LOGIN)
     Call<RegisterLoginModel> doRegisterLogin(@Field(Constant.u_mob_1) String mobile,
                                              @Field("Case") String caseR,
                                              @Field(Constant.u_calling_code) int countryCode,
                                              @Field(Constant.u_Password) String password,
-                                             @Field(Constant.deviceId) String deviceId,
+                                             @Field(Constant.device_id) String deviceId,
                                              @Field(Constant.appName) String appName);
 
     @FormUrlEncoded
@@ -199,16 +217,29 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST(Constant.FETCH_CONNECTIONS)
-    Call<ConnectionResponse> fetchConnections(@Field(Constant.u_user_id) String userid, @Field("Case") String connectionCase, @Field(Constant.device_id) String device_id, @Field("200Q") String app, @Field(Constant.pagestart) int pagestart);
+    Call<ConnectionResponse> fetchConnections(@Field(Constant.u_user_id) String userid,
+                                              @Field("Case") String connectionCase,
+                                              @Field(Constant.device_id) String device_id,
+                                              @Field("200Q") String app,
+                                              @Field(Constant.pagestart) int pagestart);
 
     @FormUrlEncoded
     @POST(Constant.FETCH_CONNECTIONS)
-    Call<ConnectionResponse> fetchRefreshedConnections(@Field(Constant.u_user_id) String userid, @Field("Case") String connectionCase, @Field(Constant.device_id) String device_id, @Field("200Q") String app, @Field(Constant.pagestart) int pagestart, @Field("ForceRefresh") String refresh);
+    Call<ConnectionResponse> fetchRefreshedConnections(@Field(Constant.u_user_id) String userid,
+                                                       @Field("Case") String connectionCase,
+                                                       @Field(Constant.device_id) String device_id,
+                                                       @Field("200Q") String app,
+                                                       @Field(Constant.pagestart) int pagestart,
+                                                       @Field("ForceRefresh") String refresh);
 
 
     @FormUrlEncoded
     @POST(Constant.UPDATE_CONNECTIONS)
-    Call<ResponseObj> updateConnections(@Field(Constant.u_user_id) String userid, @Field("Case") String connectionCase, @Field(Constant.device_id) String device_id, @Field("200Q") String app, @Field(Constant.other_user) String other_user);
+    Call<ResponseObj> updateConnections(@Field(Constant.u_user_id) String userid,
+                                        @Field("Case") String connectionCase,
+                                        @Field(Constant.device_id) String device_id,
+                                        @Field("200Q") String app,
+                                        @Field(Constant.other_user) String other_user);
 
     @FormUrlEncoded
     @POST(Constant.PROCESS_TEST)

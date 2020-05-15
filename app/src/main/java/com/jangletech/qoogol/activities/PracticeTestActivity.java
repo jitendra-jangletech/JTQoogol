@@ -18,8 +18,10 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.google.android.material.tabs.TabLayout;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.LearingAdapter;
 import com.jangletech.qoogol.adapter.PracticeTestQuestPaletAdapter;
@@ -69,6 +71,7 @@ public class PracticeTestActivity extends BaseActivity implements LearingAdapter
         practiceViewPager = findViewById(R.id.practice_viewpager);
         questionsNewList = new ArrayList<>();
         setupNavigationDrawer();
+        setMargins(mBinding.marginLayout);
         setTitle("Practice Test");
         getDataFromApi();
         mViewModel.getPracticeQA().observe(this, new Observer<List<LearningQuestionsNew>>() {
@@ -97,6 +100,30 @@ public class PracticeTestActivity extends BaseActivity implements LearingAdapter
             }
         });
 
+       practiceViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+           @Override
+           public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+               super.onPageScrolled(position, positionOffset, positionOffsetPixels);
+           }
+
+           @Override
+           public void onPageSelected(int position) {
+               super.onPageSelected(position);
+               Log.d(TAG, "onPageSelected: ");
+           }
+
+           @Override
+           public void onPageScrollStateChanged(int state) {
+               super.onPageScrollStateChanged(state);
+              /* if(isQuestionSelected){
+                   if(currentPos != practiceViewPager.getCurrentItem()){
+                       
+                   }
+               }*/
+               Log.d(TAG, "onPageScrollStateChanged: ");
+           }
+       });
+
         practiceViewPager.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -118,6 +145,8 @@ public class PracticeTestActivity extends BaseActivity implements LearingAdapter
             @Override
             public void onDrawerClosed(@NonNull View drawerView) {
                 if(isQuestionSelected) {
+                    Log.d(TAG, "Question Position : "+currentPos);
+                    Log.d(TAG, "Current Position: "+mBinding.appBarTest.practiceViewpager.getCurrentItem());
                     practiceViewPager.setCurrentItem(currentPos, true);
                     isQuestionSelected = false;
                 }
@@ -229,6 +258,7 @@ public class PracticeTestActivity extends BaseActivity implements LearingAdapter
 
     @Override
     public void onQuestionSelected(int position) {
+        currentPos = position;
         mBinding.drawerLayout.closeDrawer(Gravity.RIGHT);
         isQuestionSelected = true;
     }

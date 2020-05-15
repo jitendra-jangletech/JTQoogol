@@ -31,6 +31,10 @@ public class PreferenceManager {
         return sharedPreferences.getInt(key,0);
     }
 
+    public boolean getBoolean(String key) {
+        return sharedPreferences.getBoolean(key,false);
+    }
+
     public void saveInt(String key,int value) {
         sharedPreferences.edit()
                 .putInt(key,value)
@@ -41,6 +45,12 @@ public class PreferenceManager {
          sharedPreferences.edit()
         .putString(key,value)
         .apply();
+    }
+
+    public void saveBoolean(String key,boolean value) {
+        sharedPreferences.edit()
+                .putBoolean(key,value)
+                .apply();
     }
 
     public void resetSetting() {

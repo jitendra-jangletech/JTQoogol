@@ -62,7 +62,7 @@ public class PreferenceFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(PreferenceViewModel.class);
         Log.d(TAG, "onActivityCreated PreferenceFragment : ");
-        fetchApplicableExams();
+        //fetchApplicableExams();
 
         mBinding.btnSave.setOnClickListener(v -> {
             getSelectedChips();
@@ -127,81 +127,81 @@ public class PreferenceFragment extends Fragment {
         ProgressDialog.getInstance().dismiss();
     }
 
-    private void fetchUserSelectedExams(List<Exams> chipTextList) {
-        ProgressDialog.getInstance().show(getActivity());
-        Map<String, Integer> arguments = new HashMap<>();
-        arguments.put(Constant.user_id, Integer.parseInt(new PreferenceManager(getContext()).getUserId()));
-        Call<UserSelectedExams> call = apiService.getUserSelectedExams(arguments);
-        call.enqueue(new Callback<UserSelectedExams>() {
-            @Override
-            public void onResponse(Call<UserSelectedExams> call, Response<UserSelectedExams> response) {
-                ProgressDialog.getInstance().dismiss();
-                if (response.isSuccessful()) {
-                    List<UserSelectedExamsData> userSelectedExamsData = response.body().getObject();
-                    setPreferenceChips(chipTextList, userSelectedExamsData);
-                } else {
-                    Log.e(TAG, "Response Failed:");
-                    setPreferenceChips(chipTextList, null);
-                }
-            }
+//    private void fetchUserSelectedExams(List<Exams> chipTextList) {
+//        ProgressDialog.getInstance().show(getActivity());
+//        Map<String, Integer> arguments = new HashMap<>();
+//        arguments.put(Constant.user_id, Integer.parseInt(new PreferenceManager(getContext()).getUserId()));
+//        Call<UserSelectedExams> call = apiService.getUserSelectedExams(arguments);
+//        call.enqueue(new Callback<UserSelectedExams>() {
+//            @Override
+//            public void onResponse(Call<UserSelectedExams> call, Response<UserSelectedExams> response) {
+//                ProgressDialog.getInstance().dismiss();
+//                if (response.isSuccessful()) {
+//                    List<UserSelectedExamsData> userSelectedExamsData = response.body().getObject();
+//                    setPreferenceChips(chipTextList, userSelectedExamsData);
+//                } else {
+//                    Log.e(TAG, "Response Failed:");
+//                    setPreferenceChips(chipTextList, null);
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<UserSelectedExams> call, Throwable t) {
+//                t.printStackTrace();
+//                ProgressDialog.getInstance().dismiss();
+//                setPreferenceChips(chipTextList, null);
+//            }
+//        });
+//    }
+//
+//    public void saveUserSelectedExams(List<Exams> selectedExamsList) {
+//        ProgressDialog.getInstance().show(getActivity());
+//        Call<CommonResponseObject> call = apiService.saveUserSelectedExams(Integer.parseInt(new PreferenceManager(getContext()).getUserId()), selectedExamsList);
+//        call.enqueue(new Callback<CommonResponseObject>() {
+//            @Override
+//            public void onResponse(Call<CommonResponseObject> call, Response<CommonResponseObject> response) {
+//                ProgressDialog.getInstance().dismiss();
+//                Log.d(TAG, "onResponse Exams : " + response.body().getStatusCode());
+//                if (response.body() != null && response.body().getStatusCode() == 1) {
+//                    Log.d(TAG, "onResponse: "+response.body().getObject());
+//                    saveSelectedChips(response.body().getObject());
+//                    Toast.makeText(getActivity(), "Preferences updated.", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<CommonResponseObject> call, Throwable t) {
+//                ProgressDialog.getInstance().dismiss();
+//                t.printStackTrace();
+//            }
+//        });
+//    }
 
-            @Override
-            public void onFailure(Call<UserSelectedExams> call, Throwable t) {
-                t.printStackTrace();
-                ProgressDialog.getInstance().dismiss();
-                setPreferenceChips(chipTextList, null);
-            }
-        });
-    }
 
-    public void saveUserSelectedExams(List<Exams> selectedExamsList) {
-        ProgressDialog.getInstance().show(getActivity());
-        Call<CommonResponseObject> call = apiService.saveUserSelectedExams(Integer.parseInt(new PreferenceManager(getContext()).getUserId()), selectedExamsList);
-        call.enqueue(new Callback<CommonResponseObject>() {
-            @Override
-            public void onResponse(Call<CommonResponseObject> call, Response<CommonResponseObject> response) {
-                ProgressDialog.getInstance().dismiss();
-                Log.d(TAG, "onResponse Exams : " + response.body().getStatusCode());
-                if (response.body() != null && response.body().getStatusCode() == 1) {
-                    Log.d(TAG, "onResponse: "+response.body().getObject());
-                    saveSelectedChips(response.body().getObject());
-                    Toast.makeText(getActivity(), "Preferences updated.", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<CommonResponseObject> call, Throwable t) {
-                ProgressDialog.getInstance().dismiss();
-                t.printStackTrace();
-            }
-        });
-    }
-
-
-    public void fetchApplicableExams() {
-        ProgressDialog.getInstance().show(getActivity());
-        Map<String, String> arguments = new HashMap<>();
-        arguments.put(Constant.courseId, "1");
-
-        Call<FetchPreferableExamsResponseDto> call = apiService.getApplicableExams(arguments);
-        call.enqueue(new Callback<FetchPreferableExamsResponseDto>() {
-            @Override
-            public void onResponse(Call<FetchPreferableExamsResponseDto> call, Response<FetchPreferableExamsResponseDto> response) {
-                ProgressDialog.getInstance().dismiss();
-                if (response.body() != null && response.body().getStatusCode().equals("1")) {
-                    FetchPreferableExamsResponseDto fetchPreferableExamsResponseDto = (FetchPreferableExamsResponseDto) response.body();
-                    fetchUserSelectedExams(fetchPreferableExamsResponseDto.getObject());
-                } else {
-                    if(response.body()!=null)
-                    Toast.makeText(getActivity(), "" + response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<FetchPreferableExamsResponseDto> call, Throwable t) {
-                ProgressDialog.getInstance().dismiss();
-                t.printStackTrace();
-            }
-        });
-    }
+//    public void fetchApplicableExams() {
+//        ProgressDialog.getInstance().show(getActivity());
+//        Map<String, String> arguments = new HashMap<>();
+//        arguments.put(Constant.courseId, "1");
+//
+//        Call<FetchPreferableExamsResponseDto> call = apiService.getApplicableExams(arguments);
+//        call.enqueue(new Callback<FetchPreferableExamsResponseDto>() {
+//            @Override
+//            public void onResponse(Call<FetchPreferableExamsResponseDto> call, Response<FetchPreferableExamsResponseDto> response) {
+//                ProgressDialog.getInstance().dismiss();
+//                if (response.body() != null && response.body().getStatusCode().equals("1")) {
+//                    FetchPreferableExamsResponseDto fetchPreferableExamsResponseDto = (FetchPreferableExamsResponseDto) response.body();
+//                    fetchUserSelectedExams(fetchPreferableExamsResponseDto.getObject());
+//                } else {
+//                    if(response.body()!=null)
+//                    Toast.makeText(getActivity(), "" + response.body().getMessage(), Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<FetchPreferableExamsResponseDto> call, Throwable t) {
+//                ProgressDialog.getInstance().dismiss();
+//                t.printStackTrace();
+//            }
+//        });
+//    }
 }

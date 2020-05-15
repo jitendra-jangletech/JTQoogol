@@ -51,9 +51,9 @@ public class ClassFragment extends BaseFragment {
         mBinding.btnNext.setOnClickListener(v->{
             showToast(""+classAdapter.getSelected().getName());
             if(classAdapter.getSelected().getName().equals("11") || classAdapter.getSelected().getName().equals("12")){
-                addFragment(new StreamFragment());
+                //addFragment(new StreamFragment());
             }else{
-                addFragment(new BoardFragment());
+               // addFragment(new BoardFragment());
             }
 
         });

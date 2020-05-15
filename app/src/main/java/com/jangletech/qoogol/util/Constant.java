@@ -6,16 +6,29 @@ package com.jangletech.qoogol.util;
  */
 public class Constant {
 
+    public static final String EMAIL_STRING = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+            + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+
+    public static final String mdt_id = "273";
+    public static final String mdt_desc = "276";
+
     //Selected Board
     public static final String BOARD = "BOARD";
     public static final String MOBILE = "MOBILE";
     public static final String USER_ID = "USER_ID";
     public static final String TM_ID = "TM_ID";
 
+    public static final String DISPLAY_NAME = "DISPLAY_NAME";
+    public static final String PROFILE_PIC = "PROFILE_PIC";
+    public static final String GENDER = "GENDER";
+
     public static final String PRODUCTION_BASE_FILE_API = "https://jtmobileappstorage.blob.core.windows.net/spotmeets/media/images/";
+    public static final String PRODUCTION_MALE_PROFILE_API = "https://jtmobileappstorage.blob.core.windows.net/spotmeets/media/images/male.png";
+    public static final String PRODUCTION_FEMALE_PROFILE_API = "https://jtmobileappstorage.blob.core.windows.net/spotmeets/media/images/female.png";
 
     //Question Filter Type
     public static final String FILTER_APPLIED = "FILTER_APPLIED";
+    public static final String SORT_APPLIED = "SORT_APPLIED";
     public static final String TEST_NAME = "TEST_NAME";
 
     //Sort Type
@@ -38,7 +51,9 @@ public class Constant {
     public static final String u_first_name = "104";
     public static final String u_last_name = "105";
     public static final String w_user_profile_image_name = "507";
-
+    public static final String CASE = "case";
+    public static final String STATUS = "status";
+    public static final String VERIFY = "Verify";
 
     //Preferences
     public static final String PREF_NAME = "qoogol";
@@ -129,13 +144,15 @@ public class Constant {
     public static final String u_mob_1 = "108";
     public static final String u_calling_code = "177";
     public static final String u_Password = "199M";
-    public static final String deviceId = "126Q";
     public static final String appName = "200Q";
     public static final String u_app_version = "165";
     public static final String u_user_type = "106";
     public static final String u_app_type = "199";
     public static final String u_t_and_c = "114";
     public static final String u_referred_by = "143";
+
+    public static final String APP_NAME ="Q";
+    public static final String APP_VERSION = "1.0";
 
 
     // QLikesComments
@@ -159,6 +176,9 @@ public class Constant {
     public static final String START_RESUME_TEST = "q131StartResumeTest";
     public static final String TEST_DETAILS = "q132FetchTestDetails";
     public static final String FETCH_TEST_LIST = "q152fetchtest";
+    public static final String FETCH_USER_INFO = "sm21FetchUserInfo";
+    public static final String FETCH_USER_EDU = "q112FetchUserEdu";
+    public static final String UPDATE_USER_PROFILE = "sm23UpdateUserDetails";
     public static final String FETCH_SUBJECTS = "q111FetchSubjectMaster";
     public static final String FETCH_NOTIFICATIONS = "sm28FetchNotifications";
     public static final String COUNTRY = "sm05CountryData";
@@ -166,11 +186,17 @@ public class Constant {
     public static final String CITY = "sm09CityData";
     public static final String UNIVERSITY = "sm12UBMData";
     public static final String REGISTER_LOGIN = "sm01Signup";
+    public static final String UPDATE_PROFILE_IMAGE_API = "sm22UpdateProfilePic";
     public static final String COURSE = "sm15CourseData";
     public static final String INSTITUTE = "sm13InstOrgData";
     public static final String DEGREE = "sm14DegreeData";
     public static final String FETCH_CONNECTIONS = "sm25FetchConnections";
     public static final String UPDATE_CONNECTIONS = "sm24UpdateConnections";
+    public static final String COUNTRY_API = "sm05CountryData";
+    public static final String STATE_API = "sm06StateData";  /*Pass country id as params to fetch state s_c_id = ["94"]*/
+    public static final String DISTRICT_API = "sm07DistrictData"; /*Pass state id as params to fetch district dt_s_id = ["12"]*/
+    public static final String CITY_API = "sm09CityData";
+    public static final String LANGUAGE_API = "sm11LanguageData";
     public static final String masterDataList = "61";
     public static final String likesList = "60";
     public static final String commentsList = "62";
@@ -185,6 +211,14 @@ public class Constant {
     public static final String cn_user_id_2 = "308";
     public static final String cn_connected = "309";
     public static final String u_gender = "110";
+    public static final String u_relation = "109";
+    public static final String lm_id = "279";
+    public static final String u_Email = "199L";
+    public static final String u_Message_alerts = "199E";
+    public static final String u_AV_alerts = "199D";
+    public static final String u_notification_alerts = "199C";
+    public static final String u_total_points = "98";
+    public static final String u_lm_id = "156";
     public static final String u_app_live = "172";
     public static final String u_status_text = "187";
     public static final String u_online_status = "116";
@@ -199,6 +233,49 @@ public class Constant {
     public static final String w_u_ms_count = "522";
     public static final String w_distance = "549";
     public static final String other_user = "516";
+    public static final String un_count = "72"; /// count of connections
+
+    public static final String u_native_ct_id = "159";
+    public static final String u_native_s_id = "160";
+    public static final String u_native_dt_id = "103";
+    public static final String u_nationality = "111";
+    public static final String w_lm_id_array = "546A";
+
+    public static final String cn_initiated_by_u1 = "311";
+    public static final String cn_initiated_by_u2 = "312";
+    public static final String w_hobby_desc = "511";
+    public static final String cn_request_active = "313";
+    public static final String cn_request_date = "314";
+    public static final String cn_blocked_by_u2 = "316";
+    public static final String contact_from_phone = "551";
+
+    public static final String u_hobby = "133";
+    public static final String w_socialcomm_desc = "513";
+    public static final String u_socialcomm = "127";
+    public static final String w_religion_desc = "512";
+    public static final String u_religion = "128";
+    public static final String w_nationality_desc = "514";
+    public static final String lm_name = "280";
+    public static final String lm_lang_cat = "281";
+    public static final String lm_app_lang = "282";
+
+    public static final String u_purpose = "135";
+    public static final String w_purpose_desc = "510";
+    public static final String u_industry = "174";
+    public static final String w_industry_desc = "509";
+    public static final String u_p_id = "166";
+    public static final String w_p_id_desc = "501";
+    public static final String u_company_id = "161";
+    public static final String w_iom_name_company = "519";
+    public static final String u_project_code = "163";
+    public static final String dor_ubm_id = "269";
+    public static final String dor_iom_id = "270";
+    public static final String dor_co_id = "271";
+    public static final String u_batch = "129";
+    public static final String u_cy = "171";
+    public static final String dt_id = "229";
+    public static final String dt_name = "231";
+
 
 
     //Fetch connections cases
@@ -235,7 +312,8 @@ public class Constant {
     public static final String u_user_id = "101";
     public static final String device_id = "126Q";
     public static final String pagestart = "PageStart";
-
+    public static final String u_tagline = "141";
+    public static final String m_age = "335";
 
     //Country
     public static final String c_id = "200";
@@ -432,6 +510,7 @@ public class Constant {
     public static final String s_c_id = "226";
     public static final String s_name = "227";
     public static final String s_state_abbr = "228";
+    public static final String dt_s_id = "230";
 
     //latest Added parameter For Test List
     public static final String publishedDate = "1223E";
@@ -442,12 +521,11 @@ public class Constant {
     public static final String commentsCount = "1223C";
     public static final String isLike = "1403";
     public static final String isFavourite = "1410";
+    public static final String _1223G = "1223G";
+
 
     //Notification Fields
     //public static final String cn_connected = "309";
-    public static final String cn_request_active = "313";
-    public static final String cn_initiated_by_u1 = "311";
-    public static final String cn_initiated_by_u2 = "312";
     public static final String n_id = "297";
     public static final String n_sent_by_u_id = "298";
     public static final String n_sent_to_u_id = "299";

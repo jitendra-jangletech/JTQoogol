@@ -14,12 +14,13 @@ import com.jangletech.qoogol.activities.StartTestActivity;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.DialogSubmitTestBinding;
 import com.jangletech.qoogol.model.TestQuestion;
+import com.jangletech.qoogol.model.TestQuestionNew;
 
 public class SubmitTestDialog extends Dialog {
 
     private DialogSubmitTestBinding mBinding;
     private SubmitDialogClickListener submitDialogClickListener;
-    Long milliLeft, min, sec;
+    Long milliLeft, min, sec,hrs;
     CountDownTimer timer;
 
     public SubmitTestDialog(@NonNull Context context,SubmitDialogClickListener submitDialogClickListener,long milliesLeft) {
@@ -35,7 +36,7 @@ public class SubmitTestDialog extends Dialog {
         mBinding = DataBindingUtil.inflate(LayoutInflater.from(getContext()), R.layout.dialog_submit_test, null, false);
         setContentView(mBinding.getRoot());
         startTimer(milliLeft);
-        //setData();
+        setData();
 
         mBinding.tvYes.setOnClickListener(v->{
             submitDialogClickListener.onYesClick();
@@ -46,7 +47,7 @@ public class SubmitTestDialog extends Dialog {
         });
     }
 
-    public void startTimer(long timeLengthMilli) {
+    /*public void startTimer(long timeLengthMilli) {
         timer = new CountDownTimer(timeLengthMilli, 1000) {
 
             @Override
@@ -63,19 +64,38 @@ public class SubmitTestDialog extends Dialog {
 
             }
         }.start();
+    }*/
+
+    public void startTimer(long timeLengthMilli) {
+        timer = new CountDownTimer(timeLengthMilli, 1000) {
+            @Override
+            public void onTick(long milliTillFinish) {
+                milliLeft = milliTillFinish;
+                hrs = (milliTillFinish / (1000 * 60 * 60));
+                min = ((milliTillFinish / (1000 * 60)) - hrs * 60);
+                sec = ((milliTillFinish / 1000) - min * 60);
+                String time = String.format("%02d:%02d:%02d", hrs, min, sec);
+                mBinding.tvTimerCount.setText(time);
+            }
+
+            @Override
+            public void onFinish() {
+
+            }
+        }.start();
     }
 
-    /*private void setData(){
+    private void setData(){
         if(StartTestActivity.testQuestionList!=null){
             int totalQuestCount = StartTestActivity.testQuestionList.size();
             int attemptedCount = 0;
             int markedQuestCount = 0;
             int unattemptedQuestCount = 0;
-            for (TestQuestion question: StartTestActivity.testQuestionList) {
-                if(question.isAttempted()){
+            for (TestQuestionNew question: StartTestActivity.testQuestionList) {
+                if(question.isTtqa_attempted()){
                     attemptedCount++;
                 }
-                if(question.isMarked()){
+                if(question.isTtqa_marked()){
                     markedQuestCount++;
                 }
             }
@@ -84,7 +104,7 @@ public class SubmitTestDialog extends Dialog {
             mBinding.tvUnAttemptedCount.setText(String.valueOf(unattemptedQuestCount));
             mBinding.tvMarkedCount.setText(String.valueOf(markedQuestCount));
         }
-    }*/
+    }
 
     public interface SubmitDialogClickListener{
         void onYesClick();

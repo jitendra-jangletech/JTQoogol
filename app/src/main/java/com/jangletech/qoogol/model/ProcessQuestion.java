@@ -10,6 +10,9 @@ import java.util.List;
  */
 public class ProcessQuestion {
 
+    @SerializedName(Constant._1223G)
+    private int _1223G;
+
     @SerializedName(Constant.q_likes)
     private int likeCount;
 

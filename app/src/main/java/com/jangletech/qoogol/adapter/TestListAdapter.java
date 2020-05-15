@@ -161,7 +161,7 @@ public class TestListAdapter extends RecyclerView.Adapter<TestListAdapter.ViewHo
 
     public void updateList(List<TestModelNew> testModelList,int pos){
         this.testModelList = testModelList;
-        notifyDataSetChanged();
+        notifyItemChanged(pos);
     }
 
     public void setSearchResult(List<TestModelNew> result) {

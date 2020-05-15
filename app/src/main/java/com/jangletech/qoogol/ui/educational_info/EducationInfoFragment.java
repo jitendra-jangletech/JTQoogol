@@ -66,7 +66,7 @@ public class EducationInfoFragment extends Fragment implements EducationAdapter.
         mViewModel = ViewModelProviders.of(this).get(EducationInfoViewModel.class);
         Log.d(TAG, "onActivityCreated EducationInfoFragment : ");
         setListeners();
-        fetchEducationDetails();
+        //fetchEducationDetails();
     }
 
 
@@ -74,34 +74,34 @@ public class EducationInfoFragment extends Fragment implements EducationAdapter.
         mBinding.addedu.setOnClickListener(this);
     }
 
-    public void fetchEducationDetails() {
-        ProgressDialog.getInstance().show(getActivity());
-        Map<String, String> arguments = new HashMap<>();
-        Log.d(TAG, "fetchEducationDetails userId : "+new PreferenceManager(getContext()).getUserId());
-        arguments.put(Constant.user_id, new PreferenceManager(getContext()).getUserId());
-        Call<FetchEducationsResponseDto> call = apiService.getEducationDetails(arguments);
-        call.enqueue(new Callback<FetchEducationsResponseDto>() {
-            @Override
-            public void onResponse(Call<FetchEducationsResponseDto> call, Response<FetchEducationsResponseDto> response) {
-                if(response.isSuccessful()){
-                    FetchEducationsResponseDto education = (FetchEducationsResponseDto)response.body();
-                    setEducationListUi(education);
-                    Log.d(TAG, "onResponse Board: "+education.getObject().get(0).getUnivBrdName());
-
-                }else{
-                    Log.e(TAG, "onResponse Failed : ");
-                    ProgressDialog.getInstance().dismiss();
-                }
-                Log.d(TAG, "onResponse: "+response.body());
-            }
-
-            @Override
-            public void onFailure(Call<FetchEducationsResponseDto> call, Throwable t) {
-                t.printStackTrace();
-                ProgressDialog.getInstance().dismiss();
-            }
-        });
-    }
+//    public void fetchEducationDetails() {
+//        ProgressDialog.getInstance().show(getActivity());
+//        Map<String, String> arguments = new HashMap<>();
+//        Log.d(TAG, "fetchEducationDetails userId : "+new PreferenceManager(getContext()).getUserId());
+//        arguments.put(Constant.user_id, new PreferenceManager(getContext()).getUserId());
+//        Call<FetchEducationsResponseDto> call = apiService.getEducationDetails(arguments);
+//        call.enqueue(new Callback<FetchEducationsResponseDto>() {
+//            @Override
+//            public void onResponse(Call<FetchEducationsResponseDto> call, Response<FetchEducationsResponseDto> response) {
+//                if(response.isSuccessful()){
+//                    FetchEducationsResponseDto education = (FetchEducationsResponseDto)response.body();
+//                    setEducationListUi(education);
+//                    Log.d(TAG, "onResponse Board: "+education.getObject().get(0).getUnivBrdName());
+//
+//                }else{
+//                    Log.e(TAG, "onResponse Failed : ");
+//                    ProgressDialog.getInstance().dismiss();
+//                }
+//                Log.d(TAG, "onResponse: "+response.body());
+//            }
+//
+//            @Override
+//            public void onFailure(Call<FetchEducationsResponseDto> call, Throwable t) {
+//                t.printStackTrace();
+//                ProgressDialog.getInstance().dismiss();
+//            }
+//        });
+//    }
 
     public void setEducationListUi(FetchEducationsResponseDto education){
         ProgressDialog.getInstance().dismiss();
@@ -116,32 +116,32 @@ public class EducationInfoFragment extends Fragment implements EducationAdapter.
 
     @Override
     public void onDelete(FetchEducationsObject fetchEducationsObject) {
-        ProgressDialog.getInstance().show(getActivity());
-        Map<String, Object> arguments = new HashMap<>();
-        Log.d(TAG, "deleteEducationDetails userId : "+new PreferenceManager(getContext()).getUserId());
-        arguments.put(Constant.user_id, new PreferenceManager(getContext()).getUserId());
-        arguments.put(Constant.user_eduid, fetchEducationsObject.getUserEduId());
-        Call<EmptyObject> call = apiService.deleteEduDetails(arguments);
-        call.enqueue(new Callback<EmptyObject>() {
-            @Override
-            public void onResponse(Call<EmptyObject> call, Response<EmptyObject> response) {
-                if(response.isSuccessful()){
-                    ProgressDialog.getInstance().dismiss();
-                    fetchEducationDetails();
-                }else{
-                    Log.e(TAG, "onResponse Failed : ");
-                    ProgressDialog.getInstance().dismiss();
-                }
-
-                Log.d(TAG, "onResponse: "+response.body());
-            }
-
-            @Override
-            public void onFailure(Call<EmptyObject> call, Throwable t) {
-                t.printStackTrace();
-                ProgressDialog.getInstance().dismiss();
-            }
-        });
+//        ProgressDialog.getInstance().show(getActivity());
+//        Map<String, Object> arguments = new HashMap<>();
+//        Log.d(TAG, "deleteEducationDetails userId : "+new PreferenceManager(getContext()).getUserId());
+//        arguments.put(Constant.user_id, new PreferenceManager(getContext()).getUserId());
+//        arguments.put(Constant.user_eduid, fetchEducationsObject.getUserEduId());
+//        Call<EmptyObject> call = apiService.deleteEduDetails(arguments);
+//        call.enqueue(new Callback<EmptyObject>() {
+//            @Override
+//            public void onResponse(Call<EmptyObject> call, Response<EmptyObject> response) {
+//                if(response.isSuccessful()){
+//                    ProgressDialog.getInstance().dismiss();
+//                    fetchEducationDetails();
+//                }else{
+//                    Log.e(TAG, "onResponse Failed : ");
+//                    ProgressDialog.getInstance().dismiss();
+//                }
+//
+//                Log.d(TAG, "onResponse: "+response.body());
+//            }
+//
+//            @Override
+//            public void onFailure(Call<EmptyObject> call, Throwable t) {
+//                t.printStackTrace();
+//                ProgressDialog.getInstance().dismiss();
+//            }
+//        });
     }
 
     @Override

@@ -160,7 +160,7 @@ public class AddEduDialog extends Dialog {
             int key = UtilHelper.getKeyFromValue(mMapCountry, name);
             if (key != -1) {
                 addEditEducationBinding.countryAutocompleteView.setTag(key);
-                fetchStateData(key);
+                //fetchStateData(key);
             }
         });
 
@@ -172,7 +172,7 @@ public class AddEduDialog extends Dialog {
             if (state_id != -1 && country_id != -1) {
                 addEditEducationBinding.stateAutocompleteView.setTag(state_id);
                 fetchUniversityData(country_id, state_id);
-                fetchCityData(state_id);
+                //fetchCityData(state_id);
             }
         });
 
@@ -354,69 +354,69 @@ public class AddEduDialog extends Dialog {
         });
     }
 
-    public void fetchStateData(int countryId) {
-        ProgressDialog.getInstance().show(context);
-        Map<String, Integer> requestBody = new HashMap<>();
-        requestBody.put("countryId", countryId);
-        Call<StateResponse> call = apiService.getStates();
-        call.enqueue(new Callback<StateResponse>() {
-            @Override
-            public void onResponse(Call<StateResponse> call, retrofit2.Response<StateResponse> response) {
-                try {
-                    List<State> list = response.body().getStateList();
-                    if (list != null && list.size() > 0) {
-                        mMapState = new HashMap<>();
-                        for (State state : list) {
-                            mMapState.put(Integer.valueOf(state.getS_id()), state.getS_name());
-                        }
-                        ProgressDialog.getInstance().dismiss();
-                        populateStates(mMapState);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    ProgressDialog.getInstance().dismiss();
-                }
-            }
+//    public void fetchStateData(int countryId) {
+//        ProgressDialog.getInstance().show(context);
+//        Map<String, Integer> requestBody = new HashMap<>();
+//        requestBody.put("countryId", countryId);
+//        Call<StateResponse> call = apiService.getStates();
+//        call.enqueue(new Callback<StateResponse>() {
+//            @Override
+//            public void onResponse(Call<StateResponse> call, retrofit2.Response<StateResponse> response) {
+//                try {
+//                    List<State> list = response.body().getStateList();
+//                    if (list != null && list.size() > 0) {
+//                        mMapState = new HashMap<>();
+//                        for (State state : list) {
+//                            mMapState.put(Integer.valueOf(state.getS_id()), state.getS_name());
+//                        }
+//                        ProgressDialog.getInstance().dismiss();
+//                        populateStates(mMapState);
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                    ProgressDialog.getInstance().dismiss();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<StateResponse> call, Throwable t) {
+//                t.printStackTrace();
+//                ProgressDialog.getInstance().dismiss();
+//            }
+//        });
+//    }
 
-            @Override
-            public void onFailure(Call<StateResponse> call, Throwable t) {
-                t.printStackTrace();
-                ProgressDialog.getInstance().dismiss();
-            }
-        });
-    }
-
-    private void fetchCityData(int key) {
-        ProgressDialog.getInstance().show(context);
-        Map<String, Integer> requestBody = new HashMap<>();
-        requestBody.put("stateId", key);
-        Call<CityResponse> call = apiService.getCities();
-        call.enqueue(new Callback<CityResponse>() {
-            @Override
-            public void onResponse(Call<CityResponse> call, retrofit2.Response<CityResponse> response) {
-                try {
-                    List<City> list = response.body().getCityList();
-                    if (list != null && list.size() > 0) {
-                        mMapCity = new HashMap<>();
-                        for (City city : list) {
-                            mMapCity.put(Integer.valueOf(city.getCt_id()), city.getCt_name());
-                        }
-                        ProgressDialog.getInstance().dismiss();
-                        populateCities(mMapCity);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    ProgressDialog.getInstance().dismiss();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<CityResponse> call, Throwable t) {
-                t.printStackTrace();
-                ProgressDialog.getInstance().dismiss();
-            }
-        });
-    }
+//    private void fetchCityData(int key) {
+//        ProgressDialog.getInstance().show(context);
+//        Map<String, Integer> requestBody = new HashMap<>();
+//        requestBody.put("stateId", key);
+//        Call<CityResponse> call = apiService.getCities();
+//        call.enqueue(new Callback<CityResponse>() {
+//            @Override
+//            public void onResponse(Call<CityResponse> call, retrofit2.Response<CityResponse> response) {
+//                try {
+//                    List<City> list = response.body().getCityList();
+//                    if (list != null && list.size() > 0) {
+//                        mMapCity = new HashMap<>();
+//                        for (City city : list) {
+//                            mMapCity.put(Integer.valueOf(city.getCt_id()), city.getCt_name());
+//                        }
+//                        ProgressDialog.getInstance().dismiss();
+//                        populateCities(mMapCity);
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                    ProgressDialog.getInstance().dismiss();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<CityResponse> call, Throwable t) {
+//                t.printStackTrace();
+//                ProgressDialog.getInstance().dismiss();
+//            }
+//        });
+//    }
 
     private void fetchUniversityData(int country, int state) {
         ProgressDialog.getInstance().show(context);
