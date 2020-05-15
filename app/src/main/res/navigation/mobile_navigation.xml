@@ -225,4 +225,10 @@
         android:label="@string/blockedlist"
         tools:layout="@layout/fragment_blocked" />
 
+    <fragment
+        android:id="@+id/nav_import_contacts"
+        android:name="com.jangletech.qoogol.ui.usercontacts.ContactListFragment"
+        android:label="@string/importContacts"
+        tools:layout="@layout/contact_list_fragment" />
+
 </navigation>

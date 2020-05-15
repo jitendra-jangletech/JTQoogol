@@ -47,6 +47,7 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
     private HashMap<Integer, Chip> mapChapterChips = new HashMap();
     private HashMap<Integer, Chip> mapRatingsChips = new HashMap();
     ApiInterface apiService = ApiClient.getInstance().getApi();
+    private PreferenceManager mSettings;
 
     public static TestFilterFragment newInstance() {
         return new TestFilterFragment();
@@ -68,6 +69,7 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
     }
 
     private void initView() {
+        mSettings = new PreferenceManager(getActivity());
         Bundle bundle = getArguments();
         if (bundle!=null) {
             if (bundle.getString("call_from").equalsIgnoreCase("learning")) {
@@ -105,12 +107,9 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(MyTestViewModel.class);
         fetchSubjectList();
-        mViewModel.getAllSubjects().observe(getActivity(), new Observer<List<FetchSubjectResponse>>() {
-            @Override
-            public void onChanged(@Nullable final List<FetchSubjectResponse> subjects) {
-                Log.d(TAG, "onChanged Subjects Size : " + subjects.size());
-                prepareSubjectChips(subjects);
-            }
+        mViewModel.getAllSubjects().observe(getActivity(), subjects -> {
+            Log.d(TAG, "onChanged Subjects Size : " + subjects.size());
+            prepareSubjectChips(subjects);
         });
 
         prepareChapterChips();
@@ -267,7 +266,6 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
     }
 
     private void prepareSubjectChips(List<FetchSubjectResponse> subjects) {
-
         mBinding.subjectsChipGrp.removeAllViews();
         for (int i = 0; i < subjects.size(); i++) {
             Chip chip = (Chip) LayoutInflater.from(mBinding.subjectsChipGrp.getContext()).inflate(R.layout.chip_layout, mBinding.subjectsChipGrp, false);

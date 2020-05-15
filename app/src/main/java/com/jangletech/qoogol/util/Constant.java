@@ -54,6 +54,17 @@ public class Constant {
     public static final String CASE = "case";
     public static final String STATUS = "status";
     public static final String VERIFY = "Verify";
+    public static final String u_imei_num = "126";
+    public static final String GroupMembersList = "70"; /// List of master data id, desc
+
+
+    //Work fields
+    public static final String w_contact_name = "541";
+    public static final String w_contact_number = "540";
+    public static final String w_otp_sent = "542";
+    public static final String initial_letter = "541";
+    public static final String returnrows = "ReturnRows";
+
 
     //Preferences
     public static final String PREF_NAME = "qoogol";
@@ -197,6 +208,8 @@ public class Constant {
     public static final String DISTRICT_API = "sm07DistrictData"; /*Pass state id as params to fetch district dt_s_id = ["12"]*/
     public static final String CITY_API = "sm09CityData";
     public static final String LANGUAGE_API = "sm11LanguageData";
+    public static final String FETCH_VERIFIED_CONTACTLIST = "sm99ImportContacts";
+    public static final String INVITE_CONTACTLIST = "sm98SendInvite";
     public static final String masterDataList = "61";
     public static final String likesList = "60";
     public static final String commentsList = "62";
@@ -208,6 +221,7 @@ public class Constant {
     public static final String cn_u1_follows_u2 = "316H";
     public static final String cn_u2_follows_u1 = "316I";
     public static final String cn_blocked_by_u1 = "315";
+    public static final String cn_blocked_by_u2 = "316";
     public static final String cn_user_id_2 = "308";
     public static final String cn_connected = "309";
     public static final String u_gender = "110";
@@ -314,6 +328,7 @@ public class Constant {
     public static final String pagestart = "PageStart";
     public static final String u_tagline = "141";
     public static final String m_age = "335";
+
 
     //Country
     public static final String c_id = "200";

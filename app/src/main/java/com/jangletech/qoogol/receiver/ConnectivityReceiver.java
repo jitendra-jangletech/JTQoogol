@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-public class ConnectivityReceiver extends BroadcastReceiver {
+public  class ConnectivityReceiver extends BroadcastReceiver {
 
     private ConnectivityReceiverListener mConnectivityReceiverListener;
 

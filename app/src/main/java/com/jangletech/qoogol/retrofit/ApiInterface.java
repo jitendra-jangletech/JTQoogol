@@ -2,6 +2,7 @@ package com.jangletech.qoogol.retrofit;
 
 import com.jangletech.qoogol.model.CityResponse;
 import com.jangletech.qoogol.model.ConnectionResponse;
+import com.jangletech.qoogol.model.ContactResponse;
 import com.jangletech.qoogol.model.CountryResponse;
 import com.jangletech.qoogol.model.CourseResponse;
 import com.jangletech.qoogol.model.DegreeResponse;
@@ -14,6 +15,7 @@ import com.jangletech.qoogol.model.NotificationResponse;
 import com.jangletech.qoogol.model.ProcessQuestion;
 import com.jangletech.qoogol.model.RegisterLoginModel;
 import com.jangletech.qoogol.model.ResponseObj;
+import com.jangletech.qoogol.model.SendInviteResponse;
 import com.jangletech.qoogol.model.SignInModel;
 import com.jangletech.qoogol.model.StartResumeTestResponse;
 import com.jangletech.qoogol.model.StateResponse;
@@ -247,5 +249,14 @@ public interface ApiInterface {
                                             @Field(Constant.tm_id) int tmId,
                                             @Field("Case") String caseL,
                                             @Field(Constant.tlc_comment_text) String comment);
+
+    @FormUrlEncoded
+    @POST(Constant.FETCH_VERIFIED_CONTACTLIST)
+    Call<ContactResponse> fetchVerifiedContacts(@Field(Constant.u_user_id) String userid, @Field(Constant.device_id) String device_id, @Field("200Q") String app, @Field(Constant.pagestart) String pagestart, @Field(Constant.GroupMembersList) String list, @Field("Case") String Case, @Field(Constant.initial_letter) String letter, @Field(Constant.returnrows) String returnrows);
+
+    @FormUrlEncoded
+    @POST(Constant.INVITE_CONTACTLIST)
+    Call<SendInviteResponse> inviteContacts(@Field(Constant.u_user_id) String userid, @Field(Constant.device_id) String device_id, @Field("200Q") String app, @Field(Constant.GroupMembersList) String list);
+
 
 }

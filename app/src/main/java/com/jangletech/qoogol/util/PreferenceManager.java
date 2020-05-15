@@ -53,6 +53,16 @@ public class PreferenceManager {
                 .apply();
     }
 
+    public String getSubjectFilter(){
+        return sharedPreferences.getString("subject","");
+    }
+
+    public void setSubjectFilter(String subject) {
+        sharedPreferences.edit()
+                .putString("subject",subject)
+                .apply();
+    }
+
     public void resetSetting() {
         sharedPreferences.edit()
                 .putString(Constant.user_id, "")
