@@ -82,6 +82,12 @@ public class UtilHelper {
         return Constant.PRODUCTION_BASE_FILE_API + paddedString  +  userId + "/" + endPath;
     }
 
+    public static String getGroupProfilePath (String chatRoomId) {
+        String paddedString = "G" + "0000000000".substring(String.valueOf(chatRoomId).length());
+        String profilePath = Constant.PRODUCTION_BASE_FILE_API +  paddedString + chatRoomId + "/" + paddedString + chatRoomId + "0001.png";
+        return profilePath;
+    }
+
     public static String parseDate(String dtStart) {
         SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
         String date = "";

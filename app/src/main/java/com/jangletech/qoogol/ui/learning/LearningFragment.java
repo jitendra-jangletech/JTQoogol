@@ -108,11 +108,13 @@ public class LearningFragment extends BaseFragment implements LearingAdapter.onI
         userId = String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));
 
         Bundle bundle = getArguments();
-        if (bundle.getString("call_from").equalsIgnoreCase("saved_questions")) {
-            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Saved Questions");
-        } else {
-            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Learning");
-        }
+       if (bundle!=null) {
+           if (bundle.getString("call_from").equalsIgnoreCase("saved_questions")) {
+               ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Saved Questions");
+           } else {
+               ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Learning");
+           }
+       }
         getDataFromApi();
     }
 
@@ -582,6 +584,8 @@ public class LearningFragment extends BaseFragment implements LearingAdapter.onI
         Bundle bundle = new Bundle();
         bundle.putString("QuestionId", questionId);
         NavHostFragment.findNavController(this).navigate(R.id.nav_share, bundle);
+
+
     }
 
     @Override

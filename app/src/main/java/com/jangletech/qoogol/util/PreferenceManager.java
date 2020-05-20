@@ -5,6 +5,9 @@ import android.content.SharedPreferences;
 
 import com.jangletech.qoogol.enums.QuestionFilterType;
 
+import java.util.HashSet;
+import java.util.Set;
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -43,15 +46,28 @@ public class PreferenceManager {
         .apply();
     }
 
-    public String getSubjectFilter(){
-        return sharedPreferences.getString("subject","");
+    public Set<String> getSubjectFilter(){
+        return sharedPreferences.getStringSet("subject",new HashSet<>());
     }
 
-    public void setSubjectFilter(String subject) {
+    public void setSubjectFilter(Set subject) {
         sharedPreferences.edit()
-                .putString("subject",subject)
+                .putStringSet("subject",subject)
                 .apply();
     }
+
+
+    public Set<String> getRatingsFilter(){
+        return sharedPreferences.getStringSet("rating",new HashSet<>());
+    }
+
+    public void setRatingsFilter(Set subject) {
+        sharedPreferences.edit()
+                .putStringSet("rating",subject)
+                .apply();
+    }
+
+
 
     public void resetSetting() {
         sharedPreferences.edit()

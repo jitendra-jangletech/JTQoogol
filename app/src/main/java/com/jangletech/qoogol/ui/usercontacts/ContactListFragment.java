@@ -104,6 +104,7 @@ public class ContactListFragment extends BaseFragment implements ContactListAdap
         initView();
 
 
+
         contactsSet = new HashSet<>();
 
         mSettings = new PreferenceManager(activity);

@@ -13,6 +13,8 @@ public class Constant {
     public static final String TM_ID = "TM_ID";
 
     public static final String PRODUCTION_BASE_FILE_API = "https://jtmobileappstorage.blob.core.windows.net/spotmeets/media/images/";
+    public static final String PRODUCTION_MALE_PROFILE_API = "https://jtmobileappstorage.blob.core.windows.net/spotmeets/media/images/male.png";
+    public static final String PRODUCTION_FEMALE_PROFILE_API = "https://jtmobileappstorage.blob.core.windows.net/spotmeets/media/images/female.png";
 
     //Question Filter Type
     public static final String FILTER_APPLIED = "FILTER_APPLIED";
@@ -48,6 +50,8 @@ public class Constant {
     public static final String w_otp_sent = "542";
     public static final String initial_letter = "541";
     public static final String returnrows = "ReturnRows";
+    public static final String q_T_list = "69";
+    public static final String TorQ = "TorQ";
 
 
     //Preferences
@@ -182,6 +186,7 @@ public class Constant {
     public static final String FETCH_CONNECTIONS = "sm25FetchConnections";
     public static final String UPDATE_CONNECTIONS = "sm24UpdateConnections";
     public static final String FETCH_VERIFIED_CONTACTLIST = "sm99ImportContacts";
+    public static final String SHARE_QUESTION_TEST = "sm34UpdateMessages ";
     public static final String INVITE_CONTACTLIST = "sm98SendInvite";
     public static final String masterDataList = "61";
     public static final String likesList = "60";
@@ -212,10 +217,13 @@ public class Constant {
     public static final String w_u_ms_count = "522";
     public static final String w_distance = "549";
     public static final String other_user = "516";
+    public static final String RecordType = "RecordType";
+    public static final String group_id = "384";
 
 
     //Fetch connections cases
     public static final String friends = "C";
+    public static final String friends_and_groups = "A";
     public static final String followers = "FL";
     public static final String following = "FG";
     public static final String blocked_users = "B";
