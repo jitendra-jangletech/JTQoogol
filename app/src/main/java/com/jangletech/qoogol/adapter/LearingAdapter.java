@@ -2095,7 +2095,7 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
                         learningQuestionsNew.setComments(response.body().getQ_comments());
                         learningQuestionsNew.setShares(response.body().getQ_shares());
                         learningQuestionsNew.setAttended_by(response.body().getAttmpted_count()!=null?response.body().getAttmpted_count():"0");
-
+                        learningQuestionsList.set(position,learningQuestionsNew);
 //                        notifyItemChanged(position);
 
                     } else {
@@ -2115,6 +2115,8 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
             }
         });
     }
+
+
 
 
     private void displayRatingDialog(String questionid, int position) {
