@@ -81,6 +81,17 @@ public class Constant {
     public static final String VERIFY = "Verify";
     public static final String u_imei_num = "126";
     public static final String GroupMembersList = "70"; /// List of master data id, desc
+    public static final String u_fcm_token  = "178Q"; /// List of master data id, desc
+
+
+    // Firebase notification Constant
+    public static final String FB_FROM_TYPE = "fromtype";
+    public static final String FB_U_G_ID = "userID";
+    public static final String FB_MSG_BODY = "body";
+    public static final String FB_TITLE = "title";
+    public static final String FB_MS_ID = "msID";
+    public static final String FB_ACTION = "action";
+
 
 
     //Work fields
@@ -89,6 +100,8 @@ public class Constant {
     public static final String w_otp_sent = "542";
     public static final String initial_letter = "541";
     public static final String returnrows = "ReturnRows";
+    public static final String q_T_list = "69";
+    public static final String TorQ = "TorQ";
 
     //Preferences
     public static final String PREF_NAME = "qoogol";
@@ -146,6 +159,7 @@ public class Constant {
     //learning adapter
     public static int learning = 0;
     public static int test = 1;
+    public static int notification = 2;
 
     //Question media
     public static String TEXt = "1";
@@ -218,6 +232,7 @@ public class Constant {
     public static final String FETCH_FAQ = "sm18FAQ";
     public static final String UPDATE_USER_PROFILE = "sm23UpdateUserDetails";
     public static final String FETCH_SUBJECTS = "q111FetchSubjectMaster";
+    public static final String FETCH_CHAPTERS = "q114FetchChapterMaster";
     public static final String FETCH_NOTIFICATIONS = "sm28FetchNotifications";
     public static final String COUNTRY = "sm05CountryData";
     public static final String STATE = "sm06StateData";
@@ -240,6 +255,7 @@ public class Constant {
     public static final String ADD_INSTITUTE = "sm38AddIOM";
     public static final String LANGUAGE_API = "sm11LanguageData";
     public static final String FETCH_VERIFIED_CONTACTLIST = "sm99ImportContacts";
+    public static final String SHARE_QUESTION_TEST = "sm34UpdateMessages ";
     public static final String INVITE_CONTACTLIST = "sm98SendInvite";
     public static final String masterDataList = "61";
     public static final String likesList = "60";
@@ -278,6 +294,8 @@ public class Constant {
     public static final String w_u_ms_count = "522";
     public static final String w_distance = "549";
     public static final String other_user = "516";
+    public static final String RecordType = "RecordType";
+    public static final String group_id = "384";
     public static final String un_count = "72"; /// count of connections
 
     public static final String u_native_ct_id = "159";
@@ -324,6 +342,7 @@ public class Constant {
 
     //Fetch connections cases
     public static final String friends = "C";
+    public static final String friends_and_groups = "A";
     public static final String followers = "FL";
     public static final String following = "FG";
     public static final String blocked_users = "B";
@@ -443,6 +462,12 @@ public class Constant {
     public static final String friend_req_received = "312";
     public static final String follow_req_sent = "316E";
     public static final String follow_req_received = "316F";
+    public static final String solved_right = "1394";
+    public static final String attmpted = "1393";
+    public static final String q_favs = "1355A";
+    public static final String attmpted_count = "1355B";
+    public static final String right_solved_count = "1355C";
+
 
     //Answers
     public static final String a_id = "1363";
@@ -473,6 +498,8 @@ public class Constant {
     public static final String qlc_cdatetime = "1388";
     public static final String qlc_deleted = "1389";
     public static final String qlc_fav_flag = "1390";
+    public static final String qlc_rating = "1391";
+    public static final String qlc_feedback = "1392";
 
     // SubjectMaster
     public static final String sm_id = "1300";

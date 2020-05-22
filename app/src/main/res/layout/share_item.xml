@@ -3,6 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
+    <data>
+
+        <variable
+            name="connection"
+            type="com.jangletech.qoogol.model.ShareModel" />
+
+    </data>
+
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/container"
         android:layout_width="match_parent"
@@ -40,21 +48,21 @@
                 android:textSize="@dimen/textSizexSmall"
                 android:textStyle="bold" />
 
-<!--            <androidx.appcompat.widget.SwitchCompat-->
-<!--                android:id="@+id/pauseSwitch"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_alignParentEnd="true"-->
-<!--                android:layout_alignParentRight="true"-->
-<!--                android:layout_centerVertical="true"-->
-<!--                android:layout_marginStart="5dp"-->
-<!--                android:layout_marginLeft="5dp"-->
-<!--                android:text="Add"-->
-<!--                android:textColor="?attr/textColorWhite"-->
-<!--                android:textSize="@dimen/textSizexSmall"-->
-<!--                android:theme="@style/GroupSwitch"-->
-<!--                android:visibility="visible"-->
-<!--                app:switchPadding="5dp" />-->
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/pauseSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="5dp"
+                android:layout_marginLeft="5dp"
+                android:text="Add"
+                android:checked="@={connection.checkedItem}"
+                android:textColor="@color/white"
+                android:textSize="@dimen/textSizexSmall"
+                android:theme="@style/GroupSwitch"
+                android:visibility="visible"
+                app:switchPadding="5dp" />
 
 
         </RelativeLayout>

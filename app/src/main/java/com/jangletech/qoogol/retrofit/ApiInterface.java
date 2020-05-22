@@ -3,6 +3,8 @@ package com.jangletech.qoogol.retrofit;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.jangletech.qoogol.model.AddElementResponse;
+import com.jangletech.qoogol.model.ChangePassword;
+import com.jangletech.qoogol.model.ChapterResponse;
 import com.jangletech.qoogol.model.CityResponse;
 import com.jangletech.qoogol.model.ClassList;
 import com.jangletech.qoogol.model.ConnectionResponse;
@@ -22,6 +24,7 @@ import com.jangletech.qoogol.model.ProcessQuestion;
 import com.jangletech.qoogol.model.RegisterLoginModel;
 import com.jangletech.qoogol.model.ResponseObj;
 import com.jangletech.qoogol.model.SendInviteResponse;
+import com.jangletech.qoogol.model.ShareResponse;
 import com.jangletech.qoogol.model.SignInModel;
 import com.jangletech.qoogol.model.StartResumeTestResponse;
 import com.jangletech.qoogol.model.StateResponse;
@@ -204,6 +207,11 @@ public interface ApiInterface {
     Call<FetchSubjectResponseList> fetchSubjectList(@Field(Constant.u_user_id) int userId);
 
     @FormUrlEncoded
+    @POST(Constant.FETCH_CHAPTERS)
+    Call<ChapterResponse> fetchChapterList(@Field(Constant.u_user_id) int userId);
+
+
+    @FormUrlEncoded
     @POST(Constant.TEST_DETAILS)
     Call<TestDetailsResponse> fetchTestDetails(@Field(Constant.u_user_id) int userId,
                                                @Field(Constant.tm_id) int tmId);
@@ -229,10 +237,13 @@ public interface ApiInterface {
                                              @Field(Constant.u_Password) String password,
                                              @Field(Constant.device_id) String deviceId,
                                              @Field(Constant.appName) String appName);
+                                             @Field(Constant.deviceId) String deviceId,
+                                             @Field(Constant.appName) String appName,
+                                             @Field(Constant.u_fcm_token) String token);
 
     @FormUrlEncoded
     @POST(Constant.FETCH_QA)
-    Call<LearningQuestResponse> fetchQAApi(@Field(Constant.u_user_id) int userid);
+    Call<LearningQuestResponse> fetchQAApi(@Field(Constant.u_user_id) int userid, @Field(Constant.q_id) String question);
 
     @FormUrlEncoded
     @POST(Constant.PROCESS_QUESTION)
@@ -262,6 +273,22 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST(Constant.PROCESS_QUESTION)
+    Call<ProcessQuestion> addRatingsApi(@Field(Constant.u_user_id) int userid,
+                                 @Field(Constant.q_id) String queId,
+                                 @Field("Case") String caseL,
+                                 @Field(Constant.qlc_rating) String ratings,
+                                 @Field(Constant.qlc_feedback) String feedback);
+
+    @FormUrlEncoded
+    @POST(Constant.PROCESS_QUESTION)
+    Call<ProcessQuestion> questionAttemptApi(@Field(Constant.u_user_id) int userid,
+                                 @Field(Constant.q_id) String queId,
+                                 @Field("Case") String caseL,
+                                 @Field(Constant.attmpted) int attempted,
+                                 @Field(Constant.solved_right) int solved_right);
+
+    @FormUrlEncoded
+    @POST(Constant.PROCESS_QUESTION)
     Call<ProcessQuestion> addCommentApi(@Field(Constant.u_user_id) int userid,
                                         @Field(Constant.q_id) String queId,
                                         @Field(Constant.CASE) String caseL,
@@ -275,6 +302,15 @@ public interface ApiInterface {
                                               @Field(Constant.device_id) String device_id,
                                               @Field("200Q") String app,
                                               @Field(Constant.pagestart) int pagestart);
+
+    @FormUrlEncoded
+    @POST(Constant.FETCH_CONNECTIONS)
+    Call<ShareResponse> fetchConnectionsforShare(@Field(Constant.u_user_id) String userid, @Field("Case") String connectionCase, @Field(Constant.device_id) String device_id, @Field("200Q") String app, @Field(Constant.pagestart) int pagestart);
+
+
+    @FormUrlEncoded
+    @POST(Constant.SHARE_QUESTION_TEST)
+    Call<ResponseObj> shareAPI(@Field(Constant.q_T_list) String q_t_list, @Field(Constant.TorQ) String t_or_q, @Field("Case") String connectionCase, @Field(Constant.device_id) String device_id, @Field("SentBy") String user, @Field(Constant.GroupMembersList) String list, @Field(Constant.u_app_version) String version,@Field("200Q") String app);
 
     @FormUrlEncoded
     @POST(Constant.FETCH_CONNECTIONS)

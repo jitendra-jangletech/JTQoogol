@@ -118,6 +118,18 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
             mBinding.drawerLayout.closeDrawer(Gravity.LEFT);
             navController.navigate(R.id.nav_edit_profile);
         });
+        Intent intent = getIntent();
+        if (intent.hasExtra("bundle")) {
+            Bundle bundle = intent.getBundleExtra("bundle");
+            if (bundle != null && bundle.getBoolean("fromNotification")) {
+                if (bundle.getString(Constant.FB_FROM_TYPE).equalsIgnoreCase(Constant.qoogol))
+                    navController.navigate(R.id.nav_learning, bundle);
+                else
+                    navController.navigate(R.id.nav_test, bundle);
+            }
+
+        }
+
 
         /***
          * Navigations From Home Fragment

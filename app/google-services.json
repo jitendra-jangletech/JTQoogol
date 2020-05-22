@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "977947813878",
+    "firebase_url": "https://qoogol.firebaseio.com",
+    "project_id": "qoogol",
+    "storage_bucket": "qoogol.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:977947813878:android:fc307028e755a62120c9d7",
+        "android_client_info": {
+          "package_name": "com.jangletech.qoogol"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "977947813878-djplgqd7fb1u50oif89a4joea22bhden.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jangletech.qoogol",
+            "certificate_hash": "4404579d6f486ad0f6243e04d287342519804ce4"
+          }
+        },
+        {
+          "client_id": "977947813878-gos27tq3kb2cho3gvp7mq06ncqihjvpk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKS87lVSbL0DZRyFn754-v3p09gW95vUk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "977947813878-gos27tq3kb2cho3gvp7mq06ncqihjvpk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

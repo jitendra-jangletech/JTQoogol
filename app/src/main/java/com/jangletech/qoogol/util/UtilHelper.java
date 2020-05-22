@@ -1,9 +1,12 @@
 package com.jangletech.qoogol.util;
 
 import android.text.TextUtils;
+import android.util.Base64;
+import android.util.Log;
 
 import com.jangletech.qoogol.BuildConfig;
 
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.Map;
@@ -63,7 +66,10 @@ public class UtilHelper {
         return selectedKey;
     }
 
-
+    public static String roundAvoid(String value) {
+        double scale = Math.pow(10, 1);
+        return String.valueOf(Math.round(Double.parseDouble(value) * scale) / scale);
+    }
 
     public static String formatMarks(Float marks) {
         if (marks %1 ==0)
@@ -76,6 +82,22 @@ public class UtilHelper {
     public static String getProfilePath (String userId, String endPath) {
         String paddedString = "0000000000".substring(userId.length());
         return Constant.PRODUCTION_BASE_FILE_API + paddedString  +  userId + "/" + endPath;
+    }
+
+    public static String getGroupProfilePath (String chatRoomId) {
+        String paddedString = "G" + "0000000000".substring(String.valueOf(chatRoomId).length());
+        String profilePath = Constant.PRODUCTION_BASE_FILE_API +  paddedString + chatRoomId + "/" + paddedString + chatRoomId + "0001.png";
+        return profilePath;
+    }
+
+    public static String decodedMessage(String message) {
+        try {
+            byte[] messageBytes = Base64.decode(message, Base64.DEFAULT);
+            return new String(messageBytes, StandardCharsets.UTF_8);
+        } catch (Exception ex) {
+            Log.e(TAG, ex.getMessage());
+        }
+        return "";
     }
 
     public static String parseDate(String dtStart) {

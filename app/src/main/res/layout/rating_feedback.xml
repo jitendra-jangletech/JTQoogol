@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:padding="@dimen/_10sdp"
+        android:layout_height="wrap_content">
+
+
+
+        <TextView
+            android:textColor="@color/black"
+            android:fontFamily="@font/roboto_medium"
+            android:textSize="@dimen/_12ssp"
+            android:textAlignment="center"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:id="@+id/rating_heading"
+            android:text="@string/rating_heading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <androidx.appcompat.widget.AppCompatRatingBar
+            android:layout_width="wrap_content"
+            android:numStars="5"
+            android:id="@+id/rating"
+            android:layout_marginTop="@dimen/_15sdp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rating_heading"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_height="wrap_content"/>
+
+        <EditText
+            android:layout_marginTop="@dimen/_15sdp"
+            android:id="@+id/feedback"
+            android:background="@drawable/grey_border"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rating"
+            android:hint="@string/feedback_label"
+            android:textSize="@dimen/_12ssp"
+            android:textColor="@color/black"
+            android:gravity="top|left"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_width="match_parent"
+            android:lines="10"
+            android:maxLines="20"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:padding="@dimen/_10sdp"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_marginTop="@dimen/_20sdp"
+            app:strokeColor="@color/colorPrimary"
+            android:text="@string/submit"
+            android:id="@+id/submit_rating"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/feedback"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

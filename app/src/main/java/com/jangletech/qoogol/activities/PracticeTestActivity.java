@@ -178,7 +178,7 @@ public class PracticeTestActivity extends BaseActivity implements LearingAdapter
 
     private void getPractiseTestQuestions() {
         ProgressDialog.getInstance().show(this);
-        Call<LearningQuestResponse> call = apiService.fetchQAApi(new PreferenceManager(getApplicationContext()).getInt(Constant.USER_ID));
+        Call<LearningQuestResponse> call = apiService.fetchQAApi(new PreferenceManager(getApplicationContext()).getInt(Constant.USER_ID),"");
         call.enqueue(new Callback<LearningQuestResponse>() {
             @Override
             public void onResponse(Call<LearningQuestResponse> call, retrofit2.Response<LearningQuestResponse> response) {
@@ -245,6 +245,16 @@ public class PracticeTestActivity extends BaseActivity implements LearingAdapter
     @Override
     public void onFavouriteClick(String questionId, int isFav) {
         ProcessQuestionAPI(new PreferenceManager(getApplicationContext()).getInt(Constant.USER_ID), questionId, "I", isFav, "fav");
+    }
+
+    @Override
+    public void onSubmitClick(String questionId, int isRight) {
+
+    }
+
+    @Override
+    public void onRatingSubmit(String questionId, String rating, String feedbak) {
+
     }
 
     @Override

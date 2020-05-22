@@ -759,6 +759,11 @@
     <string name="trending">Trending</string>
 
 
+    <string name="internet_error">Check your internet connection and try again.</string>
+    <string name="submit">Submit</string>
+    <string name="submit_rate">Submit &amp; Rate</string>
+    <string name="rating_heading">Enjoying learning??  \n Tap a star to rate this question.</string>
+    <string name="feedback_label">Write feedback here</string>
     <!--Test Data remove it-->
     <string name="voice">Voice &amp; Video call</string>
     <string name="timeline">Timeline, Gallery &amp; feed</string>

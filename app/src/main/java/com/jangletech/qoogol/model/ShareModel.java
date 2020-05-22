@@ -1,12 +1,24 @@
 package com.jangletech.qoogol.model;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
+import com.jangletech.qoogol.model.enums.Gender;
 import com.jangletech.qoogol.util.Constant;
 
-/**
- * Created by Pritali on 5/4/2020.
+/*
+ *
+ *
+ *  * /////////////////////////////////////////////////////////////////////////////////////////////////
+ *  * //
+ *  * //            Copyright (c) 2020. JangleTech Systems Private Limited, Thane, India
+ *  * //
+ *  * /////////////////////////////////////////////////////////////////////////////////////////////////
+ *
  */
-public class Connections {
+
+public class ShareModel {
+
     @SerializedName(Constant.cn_id)
     private String cn_id;
 
@@ -72,11 +84,18 @@ public class Connections {
     @SerializedName(Constant.w_u_ms_count)
     private String w_u_ms_count;
 
+    private boolean isAddedtoList = false;
 
     @SerializedName(Constant.w_distance)
     private String w_distance;
 
+    public boolean isAddedtoList() {
+        return isAddedtoList;
+    }
 
+    public void setAddedtoList(boolean addedtoList) {
+        isAddedtoList = addedtoList;
+    }
 
     @SerializedName(Constant.w_user_profile_image_name)
     private String prof_pic;
@@ -342,4 +361,25 @@ public class Connections {
     public void setFollow_req_received(String follow_req_received) {
         this.follow_req_received = follow_req_received;
     }
+
+    public boolean getCheckedItem() {
+        return isAddedtoList;
+    }
+
+    public void setCheckedItem(boolean isChecked) {
+        isAddedtoList = isChecked;
+    }
+
+
+    @NonNull
+    @Override
+    public String toString() {
+        if (isAddedtoList && Integer.parseInt(cn_user_id_2) != 0) {
+            return cn_user_id_2 + "=U";
+        } else if (isAddedtoList && Integer.parseInt(group_id) != 0) {
+            return group_id + "=G";
+        }
+        return "";
+    }
+
 }

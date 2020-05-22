@@ -173,7 +173,7 @@ public class ConnectionAdapter extends RecyclerView.Adapter<ConnectionAdapter.Vi
             popup.show();
         });
 
-        if (position == connectionsList.size() - 1 && connectionsList.size() >= 250) {
+        if (position == connectionsList.size() && connectionsList.size()>=25) {
             listener.onBottomReached(connectionsList.size());
         }
 
