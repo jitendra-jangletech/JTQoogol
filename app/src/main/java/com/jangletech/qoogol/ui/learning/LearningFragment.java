@@ -106,6 +106,7 @@ public class LearningFragment extends BaseFragment implements LearingAdapter.onI
         learingAdapter = new LearingAdapter(getActivity(), questionsNewList, this, learning);
         learningFragmentBinding.learningRecycler.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        linearLayoutManager.setAutoMeasureEnabled(false);
         learningFragmentBinding.learningRecycler.setLayoutManager(linearLayoutManager);
         learningFragmentBinding.learningRecycler.setAdapter(learingAdapter);
         userId = String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));
@@ -161,21 +162,26 @@ public class LearningFragment extends BaseFragment implements LearingAdapter.onI
         });
     }
 
-    private void ProcessQuestionAPI(int user_id, String que_id, String api_case, int flag, String call_from) {
+    private void ProcessQuestionAPI(String que_id, int flag, String call_from, String rating, String feedback) {
         ProgressDialog.getInstance().show(getActivity());
         Call<ProcessQuestion> call;
+        int user_id  = new PreferenceManager(getApplicationContext()).getInt(Constant.USER_ID);
 
         if (call_from.equalsIgnoreCase("like"))
-         call = apiService.likeApi(user_id, que_id, api_case, flag);
+         call = apiService.likeApi(user_id, que_id, "I", flag);
+        else if (call_from.equalsIgnoreCase("fav"))
+            call = apiService.favApi(user_id, que_id, "I", flag);
+        else if (call_from.equalsIgnoreCase("submit"))
+            call = apiService.questionAttemptApi(user_id, que_id, "I", 1, flag);
         else
-            call = apiService.favApi(user_id, que_id, api_case, flag);
+            call = apiService.addRatingsApi(user_id, que_id, "I", rating, feedback);
 
         call.enqueue(new Callback<ProcessQuestion>() {
             @Override
             public void onResponse(Call<ProcessQuestion> call, retrofit2.Response<ProcessQuestion> response) {
                 try {
-                    questionsNewList.clear();
                     if (response.body()!=null && response.body().getResponse().equalsIgnoreCase("200")){
+
                     } else {
                         Toast.makeText(getActivity(), UtilHelper.getAPIError(String.valueOf(response.body())),Toast.LENGTH_SHORT).show();
                     }
@@ -229,7 +235,7 @@ public class LearningFragment extends BaseFragment implements LearingAdapter.onI
 
     @Override
     public void onLikeClick(String questionId, int isLiked) {
-        ProcessQuestionAPI(new PreferenceManager(getApplicationContext()).getInt(Constant.USER_ID), questionId,"I",isLiked, "like");
+        ProcessQuestionAPI(questionId, isLiked, "like","","");
     }
 
     @Override
@@ -241,6 +247,16 @@ public class LearningFragment extends BaseFragment implements LearingAdapter.onI
 
     @Override
     public void onFavouriteClick(String questionId, int isFav) {
-        ProcessQuestionAPI(new PreferenceManager(getApplicationContext()).getInt(Constant.USER_ID), questionId,"I", isFav, "fav");
+        ProcessQuestionAPI(questionId,isFav, "fav","","");
+    }
+
+    @Override
+    public void onSubmitClick(String questionId, int isRight) {
+        ProcessQuestionAPI(questionId, isRight, "submit","","");
+    }
+
+    @Override
+    public void onRatingSubmit(String questionId, String rating, String feedbak) {
+        ProcessQuestionAPI(questionId, 0, "rating",rating,feedbak);
     }
 }

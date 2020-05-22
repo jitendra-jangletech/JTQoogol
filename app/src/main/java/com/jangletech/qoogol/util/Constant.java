@@ -342,7 +342,12 @@ public class Constant {
     public static final String friend_req_received = "312";
     public static final String follow_req_sent = "316E";
     public static final String follow_req_received = "316F";
-    public static final String solved_right = "1355C";
+    public static final String solved_right = "1394";
+    public static final String attmpted = "1393";
+    public static final String q_favs = "1355A";
+    public static final String attmpted_count = "1355B";
+    public static final String right_solved_count = "1355C";
+
 
     //Answers
     public static final String a_id = "1363";
@@ -373,6 +378,8 @@ public class Constant {
     public static final String qlc_cdatetime = "1388";
     public static final String qlc_deleted = "1389";
     public static final String qlc_fav_flag = "1390";
+    public static final String qlc_rating = "1391";
+    public static final String qlc_feedback = "1392";
 
     // SubjectMaster
     public static final String sm_id = "1300";

@@ -217,6 +217,16 @@ public class PracticeTestActivity extends BaseActivity implements LearingAdapter
     }
 
     @Override
+    public void onSubmitClick(String questionId, int isRight) {
+
+    }
+
+    @Override
+    public void onRatingSubmit(String questionId, String rating, String feedbak) {
+
+    }
+
+    @Override
     public void onBackPressed() {
         if (mBinding.drawerLayout.isDrawerOpen(GravityCompat.END)) {
             mBinding.drawerLayout.closeDrawer(GravityCompat.END);

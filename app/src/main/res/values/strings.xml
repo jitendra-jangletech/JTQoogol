@@ -296,5 +296,9 @@
     <!--Error-->
 
     <string name="internet_error">Check your internet connection and try again.</string>
+    <string name="submit">Submit</string>
+    <string name="submit_rate">Submit &amp; Rate</string>
+    <string name="rating_heading">Enjoying learning??  \n Tap a star to rate this question.</string>
+    <string name="feedback_label">Write feedback here</string>
 
 </resources>

@@ -1910,11 +1910,28 @@
                         android:layout_marginTop="@dimen/_20sdp"
                         android:layout_marginBottom="@dimen/_20sdp"
                         android:backgroundTint="@color/color_red"
-                        android:text="Submit"
+                        android:text="@string/submit"
+                        android:textColor="@color/colorWhite"
+                        app:cornerRadius="@dimen/_50sdp"
+                        android:textAllCaps="false"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/mtp_img_layout" />
+
+
+                    <Button
+                        android:id="@+id/submit_and_rate"
+                        style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_15sdp"
+                        android:layout_marginBottom="@dimen/_20sdp"
+                        android:backgroundTint="@color/color_red"
+                        android:text="@string/submit_rate"
+                        android:textAllCaps="false"
                         android:textColor="@color/colorWhite"
                         app:cornerRadius="@dimen/_50sdp"
                         app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/mtp_img_layout" />
+                        app:layout_constraintTop_toBottomOf="@+id/submit" />
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>

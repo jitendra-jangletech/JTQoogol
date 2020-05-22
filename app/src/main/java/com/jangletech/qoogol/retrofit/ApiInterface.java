@@ -201,6 +201,22 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST(Constant.PROCESS_QUESTION)
+    Call<ProcessQuestion> addRatingsApi(@Field(Constant.u_user_id) int userid,
+                                 @Field(Constant.q_id) String queId,
+                                 @Field("Case") String caseL,
+                                 @Field(Constant.qlc_rating) String ratings,
+                                 @Field(Constant.qlc_feedback) String feedback);
+
+    @FormUrlEncoded
+    @POST(Constant.PROCESS_QUESTION)
+    Call<ProcessQuestion> questionAttemptApi(@Field(Constant.u_user_id) int userid,
+                                 @Field(Constant.q_id) String queId,
+                                 @Field("Case") String caseL,
+                                 @Field(Constant.attmpted) int attempted,
+                                 @Field(Constant.solved_right) int solved_right);
+
+    @FormUrlEncoded
+    @POST(Constant.PROCESS_QUESTION)
     Call<ProcessQuestion> addCommentApi(@Field(Constant.u_user_id) int userid,
                                         @Field(Constant.q_id) String queId,
                                         @Field("Case") String caseL,
