@@ -96,19 +96,12 @@ public class LearningFragment extends BaseFragment implements LearingAdapter.onI
     @Override
     public void onResume() {
         super.onResume();
-        learingAdapter.notifyDataSetChanged();
     }
 
     private void initView() {
         learningFragmentBinding.learningSwiperefresh.setRefreshing(false);
         learningQuestionsList = new ArrayList<>();
         questionsNewList = new ArrayList<>();
-        learingAdapter = new LearingAdapter(getActivity(), questionsNewList, this, learning);
-        learningFragmentBinding.learningRecycler.setHasFixedSize(true);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        linearLayoutManager.setAutoMeasureEnabled(false);
-        learningFragmentBinding.learningRecycler.setLayoutManager(linearLayoutManager);
-        learningFragmentBinding.learningRecycler.setAdapter(learingAdapter);
         userId = String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));
 
         Bundle bundle = getArguments();
@@ -143,7 +136,8 @@ public class LearningFragment extends BaseFragment implements LearingAdapter.onI
                     questionsNewList.clear();
                     if (response.body()!=null && response.body().getResponse().equalsIgnoreCase("200")){
                         questionsNewList = response.body().getQuestion_list();
-                        learingAdapter.updateList(questionsNewList);
+                        initRecycler();
+//                        learingAdapter.updateList(questionsNewList);
                     } else {
                         Toast.makeText(getActivity(), UtilHelper.getAPIError(String.valueOf(response.body())),Toast.LENGTH_SHORT).show();
                     }
@@ -160,6 +154,15 @@ public class LearningFragment extends BaseFragment implements LearingAdapter.onI
                 ProgressDialog.getInstance().dismiss();
             }
         });
+    }
+
+    private void initRecycler() {
+        learingAdapter = new LearingAdapter(getActivity(), questionsNewList, this, learning);
+        learningFragmentBinding.learningRecycler.setHasFixedSize(true);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        linearLayoutManager.setAutoMeasureEnabled(false);
+        learningFragmentBinding.learningRecycler.setLayoutManager(linearLayoutManager);
+        learningFragmentBinding.learningRecycler.setAdapter(learingAdapter);
     }
 
     private void ProcessQuestionAPI(String que_id, int flag, String call_from, String rating, String feedback) {
