@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.jangletech.qoogol.model.Chapter;
 import com.jangletech.qoogol.model.FetchSubjectResponse;
 import com.jangletech.qoogol.model.TestModelNew;
 
@@ -16,6 +17,7 @@ public class MyTestViewModel extends AndroidViewModel {
 
     private MutableLiveData<List<TestModelNew>> allTestList;
     private MutableLiveData<List<FetchSubjectResponse>> allSubjectList;
+    private MutableLiveData<List<Chapter>> allChapterList;
 
     public LiveData<List<FetchSubjectResponse>> getAllSubjects(){
         return allSubjectList;
@@ -29,6 +31,14 @@ public class MyTestViewModel extends AndroidViewModel {
         this.allSubjectList.setValue(subjectList);
     }
 
+    public void setAllChapterList(List<Chapter> chapterList){
+        this.allChapterList.setValue(chapterList);
+    }
+
+    public LiveData<List<Chapter>> getAllChapter(){
+        return allChapterList;
+    }
+
     public void setAllTestList(List<TestModelNew> allTestList) {
         this.allTestList.setValue(allTestList);
     }
@@ -40,6 +50,7 @@ public class MyTestViewModel extends AndroidViewModel {
         //mRepository = new TestRepository(application);
         allTestList = new MutableLiveData<>();
         allSubjectList = new MutableLiveData<>();
+        allChapterList = new MutableLiveData<>();
     }
 
    /* public void insert(TestModel testModel) {

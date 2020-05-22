@@ -1,6 +1,7 @@
 package com.jangletech.qoogol.retrofit;
 
 import com.jangletech.qoogol.model.ChangePassword;
+import com.jangletech.qoogol.model.ChapterResponse;
 import com.jangletech.qoogol.model.CityResponse;
 import com.jangletech.qoogol.model.Classes;
 import com.jangletech.qoogol.model.CommonResponseObject;
@@ -130,6 +131,11 @@ public interface ApiInterface {
     Call<FetchSubjectResponseList> fetchSubjectList(@Field(Constant.u_user_id) int userId);
 
     @FormUrlEncoded
+    @POST(Constant.FETCH_CHAPTERS)
+    Call<ChapterResponse> fetchChapterList(@Field(Constant.u_user_id) int userId);
+
+
+    @FormUrlEncoded
     @POST(Constant.TEST_DETAILS)
     Call<TestDetailsResponse> fetchTestDetails(@Field(Constant.u_user_id) int userId,
                                                @Field(Constant.tm_id) int tmId);
@@ -160,11 +166,12 @@ public interface ApiInterface {
                                              @Field(Constant.u_calling_code) int countryCode,
                                              @Field(Constant.u_Password) String password,
                                              @Field(Constant.deviceId) String deviceId,
-                                             @Field(Constant.appName) String appName);
+                                             @Field(Constant.appName) String appName,
+                                             @Field(Constant.u_fcm_token) String token);
 
     @FormUrlEncoded
     @POST(Constant.FETCH_QA)
-    Call<LearningQuestResponse> fetchQAApi(@Field(Constant.u_user_id) int userid);
+    Call<LearningQuestResponse> fetchQAApi(@Field(Constant.u_user_id) int userid, @Field(Constant.q_id) String question);
 
     @FormUrlEncoded
     @POST(Constant.PROCESS_QUESTION)

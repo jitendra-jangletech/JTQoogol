@@ -42,6 +42,17 @@ public class Constant {
     public static final String w_user_profile_image_name = "507";
     public static final String u_imei_num = "126";
     public static final String GroupMembersList = "70"; /// List of master data id, desc
+    public static final String u_fcm_token  = "178Q"; /// List of master data id, desc
+
+
+    // Firebase notification Constant
+    public static final String FB_FROM_TYPE = "fromtype";
+    public static final String FB_U_G_ID = "userID";
+    public static final String FB_MSG_BODY = "body";
+    public static final String FB_TITLE = "title";
+    public static final String FB_MS_ID = "msID";
+    public static final String FB_ACTION = "action";
+
 
 
     //Work fields
@@ -110,6 +121,7 @@ public class Constant {
     //learning adapter
     public static int learning = 0;
     public static int test = 1;
+    public static int notification = 2;
 
     //Question media
     public static String TEXt = "1";
@@ -174,6 +186,7 @@ public class Constant {
     public static final String TEST_DETAILS = "q132FetchTestDetails";
     public static final String FETCH_TEST_LIST = "q152fetchtest";
     public static final String FETCH_SUBJECTS = "q111FetchSubjectMaster";
+    public static final String FETCH_CHAPTERS = "q114FetchChapterMaster";
     public static final String FETCH_NOTIFICATIONS = "sm28FetchNotifications";
     public static final String COUNTRY = "sm05CountryData";
     public static final String STATE = "sm06StateData";
@@ -329,6 +342,7 @@ public class Constant {
     public static final String friend_req_received = "312";
     public static final String follow_req_sent = "316E";
     public static final String follow_req_received = "316F";
+    public static final String solved_right = "1355C";
 
     //Answers
     public static final String a_id = "1363";

@@ -148,7 +148,7 @@ public class PracticeTestActivity extends BaseActivity implements LearingAdapter
 
     private void getDataFromApi() {
         ProgressDialog.getInstance().show(this);
-        Call<LearningQuestResponse> call = apiService.fetchQAApi(new PreferenceManager(getApplicationContext()).getInt(Constant.USER_ID));
+        Call<LearningQuestResponse> call = apiService.fetchQAApi(new PreferenceManager(getApplicationContext()).getInt(Constant.USER_ID),"");
         call.enqueue(new Callback<LearningQuestResponse>() {
             @Override
             public void onResponse(Call<LearningQuestResponse> call, retrofit2.Response<LearningQuestResponse> response) {

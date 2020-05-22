@@ -24,6 +24,8 @@ import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.activities.MainActivity;
 import com.jangletech.qoogol.databinding.TestFilterFragmentBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
+import com.jangletech.qoogol.model.Chapter;
+import com.jangletech.qoogol.model.ChapterResponse;
 import com.jangletech.qoogol.model.Contacts;
 import com.jangletech.qoogol.model.FetchSubjectResponse;
 import com.jangletech.qoogol.model.FetchSubjectResponseList;
@@ -56,6 +58,7 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
     ApiInterface apiService = ApiClient.getInstance().getApi();
     private PreferenceManager mSettings;
     Set subjectset = new HashSet<String>();
+    Set chapterset = new HashSet<String>();
     Set ratingset = new HashSet<String>();
     String call_from="";
 
@@ -119,12 +122,18 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(MyTestViewModel.class);
         fetchSubjectList();
+        fetchchapterList();
         mViewModel.getAllSubjects().observe(getActivity(), subjects -> {
             Log.d(TAG, "onChanged Subjects Size : " + subjects.size());
             prepareSubjectChips(subjects);
         });
 
-        prepareChapterChips();
+        mViewModel.getAllChapter().observe(getActivity(), chapters -> {
+            Log.d(TAG, "onChanged Subjects Size : " + chapters.size());
+            prepareChapterChips(chapters);
+        });
+
+//        prepareChapterChips();
         prepareRatingChips();
         prepareTestCategoryChips();
         prepareDiffLevelChips();
@@ -134,6 +143,9 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
                 Toast.makeText(getActivity(), "Filters Applied", Toast.LENGTH_SHORT).show();
                 if (subjectset!=null && subjectset.size()>0)
                     mSettings.setSubjectFilter(subjectset);
+
+                if (chapterset!=null && chapterset.size()>0)
+                    mSettings.setChapterFilter(chapterset);
 
                 if (ratingset != null && ratingset.size()>0)
                     mSettings.setRatingsFilter(ratingset);
@@ -190,6 +202,24 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
                 if (chip.isChecked()) {
                     setCheckedChip(mBinding.testDifficultyLevelChipGrp);
                 }
+            }
+        });
+    }
+
+    private void fetchchapterList() {
+        ProgressDialog.getInstance().show(getActivity());
+        Call<ChapterResponse> call = apiService.fetchChapterList(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));//todo change userId
+        call.enqueue(new Callback<ChapterResponse>() {
+            @Override
+            public void onResponse(Call<ChapterResponse> call, Response<ChapterResponse> response) {
+                ProgressDialog.getInstance().dismiss();
+                mViewModel.setAllChapterList(response.body().getChapterList());
+            }
+
+            @Override
+            public void onFailure(Call<ChapterResponse> call, Throwable t) {
+                ProgressDialog.getInstance().dismiss();
+                t.printStackTrace();
             }
         });
     }
@@ -270,30 +300,54 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
         }
     }
 
-    private void prepareChapterChips() {
-        List subjectList = new ArrayList();
-        subjectList.add("All");
-        subjectList.add("Current");
-        subjectList.add("The Solid State.");
-        subjectList.add("Solutions");
-        subjectList.add("Solutions");
-        subjectList.add("Chemical Kinetics");
-        subjectList.add("Surface Chemistry");
-
-        mBinding.chapterChipGrp.removeAllViews();
-        for (int i = 0; i < subjectList.size(); i++) {
-            Chip chip = (Chip) LayoutInflater.from(mBinding.chapterChipGrp.getContext()).inflate(R.layout.chip_layout, mBinding.chapterChipGrp, false);
-            chip.setText(subjectList.get(i).toString());
-            chip.setTag("Chapters");
-            chip.setId(i);
-            if (i == 0)
-                chip.setChecked(true);
-            mapChapterChips.put(i, chip);
-            chip.setOnClickListener(this);
-            chip.setClickable(true);
-            chip.setCheckable(true);
-            mBinding.chapterChipGrp.addView(chip);
+    private void prepareChapterChips(List<Chapter> chapters) {
+        try {
+            Set chapterset = new HashSet<String>();
+            if (mSettings.getChapterFilter()!=null) {
+                chapterset = mSettings.getChapterFilter();
+            }
+            mBinding.chapterChipGrp.removeAllViews();
+            for (int i = 0; i < chapters.size(); i++) {
+                Chip chip = (Chip) LayoutInflater.from(mBinding.chapterChipGrp.getContext()).inflate(R.layout.chip_layout, mBinding.chapterChipGrp, false);
+                chip.setText(chapters.get(i).getChapter_name());
+                chip.setTag("Chapters");
+                chip.setId(Integer.parseInt(chapters.get(i).getChapter_id()));
+                if (chapterset.contains(chapters.get(i).getChapter_id()))
+                    chip.setChecked(true);
+                mapChapterChips.put(i, chip);
+                chip.setOnClickListener(this);
+                chip.setClickable(true);
+                chip.setCheckable(true);
+                mBinding.chapterChipGrp.addView(chip);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
+
+//        List subjectList = new ArrayList();
+//        subjectList.add("All");
+//        subjectList.add("Current");
+//        subjectList.add("The Solid State.");
+//        subjectList.add("Solutions");
+//        subjectList.add("Solutions");
+//        subjectList.add("Chemical Kinetics");
+//        subjectList.add("Surface Chemistry");
+//
+//        mBinding.chapterChipGrp.removeAllViews();
+//        for (int i = 0; i < subjectList.size(); i++) {
+//            Chip chip = (Chip) LayoutInflater.from(mBinding.chapterChipGrp.getContext()).inflate(R.layout.chip_layout, mBinding.chapterChipGrp, false);
+//            chip.setText(subjectList.get(i).toString());
+//            chip.setTag("Chapters");
+//            chip.setId(i);
+//            if (i == 0)
+//                chip.setChecked(true);
+//            mapChapterChips.put(i, chip);
+//            chip.setOnClickListener(this);
+//            chip.setClickable(true);
+//            chip.setCheckable(true);
+//            mBinding.chapterChipGrp.addView(chip);
+//        }
     }
 
     private void prepareSubjectChips(List<FetchSubjectResponse> subjects) {
@@ -348,13 +402,35 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
     }
 
     private void setSelectedChapterChips(Chip chip) {
-        for (int i = 0; i < mapChapterChips.size(); i++) {
-            if (mapChapterChips.get(i).isChecked()) {
-                mapChapterChips.get(i).setTextColor(Color.WHITE);
-            } else {
-                mapChapterChips.get(i).setTextColor(Color.BLACK);
+        try {
+            chapterset.clear();
+            if (mSettings.getSubjectFilter()!=null) {
+                chapterset = mSettings.getChapterFilter();
             }
+            for (int i = 0; i < mapChapterChips.size(); i++) {
+                String id = String.valueOf(mapChapterChips.get(i).getId());
+                if (mapChapterChips.get(i).isChecked()) {
+                    mapChapterChips.get(i).setTextColor(Color.WHITE);
+                    if (!chapterset.contains(id))
+                        chapterset.add(id);
+
+                } else {
+                    mapChapterChips.get(i).setTextColor(Color.BLACK);
+                    if (chapterset.contains(id))
+                        chapterset.remove(id);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
+//        for (int i = 0; i < mapChapterChips.size(); i++) {
+//            if (mapChapterChips.get(i).isChecked()) {
+//                mapChapterChips.get(i).setTextColor(Color.WHITE);
+//            } else {
+//                mapChapterChips.get(i).setTextColor(Color.BLACK);
+//            }
+//        }
     }
 
     private void setSelectedRatingChips(Chip chip) {

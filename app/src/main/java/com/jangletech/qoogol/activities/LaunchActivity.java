@@ -26,6 +26,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.facebook.FacebookSdk.getApplicationContext;
+
 
 public class LaunchActivity extends BaseActivity {
 
@@ -104,7 +106,7 @@ public class LaunchActivity extends BaseActivity {
     private void doRegisterLogin(String mobile, String caseR, int countryCode, String passwordOtp, String deviceId, String appName) {
         Log.d(TAG, "Mobile : " + mobile);
         ProgressDialog.getInstance().show(this);
-        Call<RegisterLoginModel> call = apiService.doRegisterLogin(mobile, caseR, countryCode, passwordOtp, deviceId, appName);
+        Call<RegisterLoginModel> call = apiService.doRegisterLogin(mobile, caseR, countryCode, passwordOtp, deviceId, appName, new PreferenceManager(getApplicationContext()).getToken());
         call.enqueue(new Callback<RegisterLoginModel>() {
             @Override
             public void onResponse(Call<RegisterLoginModel> call, Response<RegisterLoginModel> response) {

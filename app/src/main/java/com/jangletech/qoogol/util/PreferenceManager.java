@@ -56,6 +56,26 @@ public class PreferenceManager {
                 .apply();
     }
 
+    public Set<String> getChapterFilter(){
+        return sharedPreferences.getStringSet("chapter",new HashSet<>());
+    }
+
+    public void setChapterFilter(Set chapterFilter) {
+        sharedPreferences.edit()
+                .putStringSet("chapter",chapterFilter)
+                .apply();
+    }
+
+    public void saveToken(String token) {
+        sharedPreferences.edit()
+                .putString(Constant.u_fcm_token, token)
+                .apply();
+    }
+
+    public String getToken() {
+        return sharedPreferences.getString(Constant.u_fcm_token, "");
+    }
+
 
     public Set<String> getRatingsFilter(){
         return sharedPreferences.getStringSet("rating",new HashSet<>());
