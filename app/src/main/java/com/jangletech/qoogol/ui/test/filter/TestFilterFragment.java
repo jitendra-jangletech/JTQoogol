@@ -354,7 +354,7 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
         try {
             Set subjectset = new HashSet<String>();
             if (mSettings.getSubjectFilter()!=null) {
-                subjectset = mSettings.getSubjectFilter();
+                //subjectset = mSettings.getSubjectFilter();
             }
             mBinding.subjectsChipGrp.removeAllViews();
             for (int i = 0; i < subjects.size(); i++) {
@@ -379,7 +379,7 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
         try {
             subjectset.clear();
             if (mSettings.getSubjectFilter()!=null) {
-                subjectset = mSettings.getSubjectFilter();
+                //subjectset = mSettings.getSubjectFilter();
             }
             for (int i = 0; i < mapSubjectChips.size(); i++) {
                 String id = String.valueOf(mapSubjectChips.get(i).getId());

@@ -24,6 +24,31 @@ public class PreferenceManager {
         sharedPreferences = ctx.getSharedPreferences(Constant.PREF_NAME, Context.MODE_PRIVATE);
     }
 
+    public void setChapterFilter(Set chapterFilter) {
+        sharedPreferences.edit()
+                .putStringSet("chapter",chapterFilter)
+                .apply();
+    }
+
+    public Set<String> getRatingsFilter(){
+        return sharedPreferences.getStringSet("rating",new HashSet<>());
+    }
+
+    public void setRatingsFilter(Set subject) {
+        sharedPreferences.edit()
+                .putStringSet("rating",subject)
+                .apply();
+    }
+
+    public void saveToken(String token) {
+        sharedPreferences.edit()
+                .putString(Constant.u_fcm_token, token)
+                .apply();
+    }
+    public String getToken() {
+        return sharedPreferences.getString(Constant.u_fcm_token, "");
+    }
+
     public String getString(String key) {
             //SharedPreferences sharedPref = context.getSharedPreferences(Constant.PREF_NAME, Context.MODE_PRIVATE);
             return sharedPreferences.getString(key, "");
@@ -32,6 +57,10 @@ public class PreferenceManager {
     public int getInt(String key) {
         //SharedPreferences sharedPref = context.getSharedPreferences(Constant.PREF_NAME, Context.MODE_PRIVATE);
         return sharedPreferences.getInt(key,0);
+    }
+
+    public boolean getBoolean(String key) {
+        return sharedPreferences.getBoolean(key,false);
     }
 
     public void saveInt(String key,int value) {
@@ -46,8 +75,14 @@ public class PreferenceManager {
         .apply();
     }
 
-    public Set<String> getSubjectFilter(){
-        return sharedPreferences.getStringSet("subject",new HashSet<>());
+    public void saveBoolean(String key,boolean value) {
+        sharedPreferences.edit()
+                .putBoolean(key,value)
+                .apply();
+    }
+
+    public String getSubjectFilter(){
+        return sharedPreferences.getString("subject","");
     }
 
     public void setSubjectFilter(Set subject) {
@@ -60,34 +95,12 @@ public class PreferenceManager {
         return sharedPreferences.getStringSet("chapter",new HashSet<>());
     }
 
-    public void setChapterFilter(Set chapterFilter) {
+
+    public void setSubjectFilter(String subject) {
         sharedPreferences.edit()
-                .putStringSet("chapter",chapterFilter)
+                .putString("subject",subject)
                 .apply();
     }
-
-    public void saveToken(String token) {
-        sharedPreferences.edit()
-                .putString(Constant.u_fcm_token, token)
-                .apply();
-    }
-
-    public String getToken() {
-        return sharedPreferences.getString(Constant.u_fcm_token, "");
-    }
-
-
-    public Set<String> getRatingsFilter(){
-        return sharedPreferences.getStringSet("rating",new HashSet<>());
-    }
-
-    public void setRatingsFilter(Set subject) {
-        sharedPreferences.edit()
-                .putStringSet("rating",subject)
-                .apply();
-    }
-
-
 
     public void resetSetting() {
         sharedPreferences.edit()

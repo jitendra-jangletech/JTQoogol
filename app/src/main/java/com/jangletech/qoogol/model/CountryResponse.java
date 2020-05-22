@@ -9,6 +9,7 @@ import java.util.List;
  * Created by Pritali on 4/27/2020.
  */
 public class CountryResponse {
+
     @SerializedName(Constant.Response)
     private String response;
 

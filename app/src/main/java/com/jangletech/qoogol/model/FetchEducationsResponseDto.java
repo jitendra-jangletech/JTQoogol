@@ -6,7 +6,7 @@ public class FetchEducationsResponseDto {
 
     private int statusCode;
     private String message;
-    private List<FetchEducationsObject> object;
+    private List<FetchEducationResponse> object;
 
     public int getStatusCode() {
         return statusCode;
@@ -24,11 +24,11 @@ public class FetchEducationsResponseDto {
         this.message = message;
     }
 
-    public List<FetchEducationsObject> getObject() {
+    public List<FetchEducationResponse> getObject() {
         return object;
     }
 
-    public void setObject(List<FetchEducationsObject> object) {
+    public void setObject(List<FetchEducationResponse> object) {
         this.object = object;
     }
 }

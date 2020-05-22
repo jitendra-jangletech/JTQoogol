@@ -7,8 +7,6 @@ import androidx.room.PrimaryKey;
 import com.google.gson.annotations.SerializedName;
 import com.jangletech.qoogol.util.Constant;
 
-import java.util.ArrayList;
-
 
 /**
  * Created by Pritali on 4/24/2020.
@@ -365,7 +363,6 @@ public class LearningQuestionsNew {
     public void setQue_option_type(String que_option_type) {
         this.que_option_type = que_option_type;
     }
-
 
     public String getQue_images() {
         return que_images;

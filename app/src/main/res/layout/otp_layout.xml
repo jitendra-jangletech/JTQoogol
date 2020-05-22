@@ -1,73 +1,168 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~
+  ~ /*
+  ~  * /////////////////////////////////////////////////////////////////////////////////////////////////
+  ~  * //
+  ~  * //            Copyright (c) 2020. JangleTech Systems Private Limited, Thane, India
+  ~  * //
+  ~  * /////////////////////////////////////////////////////////////////////////////////////////////////
+  ~  */
+  -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@drawable/round_white"
-    android:minWidth="@dimen/_300sdp"
-    android:orientation="vertical">
+    android:padding="25dp">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        app:srcCompat="@drawable/ic_close" />
+
+    <TextView
+        android:id="@+id/loginUserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/close"
+        android:layout_centerHorizontal="true"
+        android:textSize="@dimen/actionbar_title"
+        android:textStyle="bold"
+        android:visibility="gone" />
+
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/loginUserName"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/margin_10"
+        android:text="@string/verify_mobile_number"
+        android:textSize="@dimen/actionbar_title"
+        android:textStyle="bold" />
+
+    <TextView
+        android:gravity="center"
+        android:id="@+id/desc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/title"
+        android:padding="10dp"
+        android:text="@string/enter_otp"
+        android:textSize="@dimen/textSizeMedium" />
+
+    <TextView
+        android:id="@+id/resend_otp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/title"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/gray_border"
+        android:padding="8dp"
+        android:visibility="gone"
+        android:textColor="@color/colorBlack"
+        android:text="@string/resend_otp"
+        android:textSize="@dimen/textSizexSmall" />
+
+    <com.mukesh.OtpView
+        android:id="@+id/otp_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/desc"
+        android:layout_centerHorizontal="true"
+        android:inputType="number"
+        android:textSize="@dimen/textSizeMedium"
+        android:textStyle="bold"
+        android:textColor="@color/colorBlack"
+        app:itemCount="4"
+        app:lineColor="@android:color/darker_gray"
+        app:viewType="line" />
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:id="@+id/rlReferral"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/otp_view"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"
+        android:layout_marginTop="20dp">
 
-        <ImageView
-            android:id="@+id/btnClose"
+        <TextView
+            android:id="@+id/etInput"
+            style="@style/MatchedTextViewDataStyle"
+            android:layout_below="@+id/referredUserName"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="5dp"
+            android:text="@string/referral_code_" />
+
+        <TextView
+            android:id="@+id/etInputRefOptional"
+            style="@style/MatchedTextViewDataStyle"
+            android:layout_below="@+id/etInput"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="0dp"
+            android:text="@string/optional"
+            android:textSize="10sp" />
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/refrerral_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:padding="@dimen/_5sdp"
-            android:src="@drawable/ic_wrong" />
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="5dp"
+            android:layout_toEndOf="@+id/etInput"
+            android:importantForAutofill="no"
+            android:inputType="number"
+            android:maxLength="6"
+            android:maxLines="1"
+            android:minWidth="80dp"
+            android:padding="5dp"
+            android:textAlignment="textStart"
+            android:textColor="@color/colorBlack"
+            android:textSize="16sp"
+            android:textStyle="normal" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/btnVerify"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="25dp">
+            android:layout_marginStart="@dimen/margin_10"
+            android:layout_toEndOf="@+id/refrerral_view"
+            android:background="@drawable/gray_border"
+            android:padding="5dp"
+            android:text="@string/verify"
+            android:textSize="@dimen/textSizexSmall"
+            android:textStyle="normal" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/_10sdp"
-                android:gravity="center"
-                android:text="Verification Code"
-                android:textSize="@dimen/_15ssp"
-                android:textStyle="bold" />
+        <TextView
+            android:id="@+id/referredUserName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/btnVerify"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/margin_10"
+            android:textSize="14sp"
+            android:textStyle="normal"
+            android:visibility="gone" />
 
-            <TextView
-                android:id="@+id/tvDialogMsg"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text=""
-                android:textSize="@dimen/_12ssp"
-                android:textStyle="bold" />
-
-            <com.mukesh.OtpView
-                android:id="@+id/otp_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="@dimen/_35sdp"
-                android:layout_marginBottom="@dimen/_35sdp"
-                android:focusable="true"
-                android:focusedByDefault="true"
-                android:inputType="number"
-                android:itemBackground="@color/colorWhite"
-                android:textColor="@android:color/black"
-                app:itemCount="4"
-                app:lineColor="@color/colorPrimary"
-                app:viewType="rectangle" />
-
-            <Button
-                android:id="@+id/btnValidate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Validate"
-                android:textAllCaps="false" />
-
-        </LinearLayout>
     </RelativeLayout>
-</LinearLayout>
+
+    <Button
+        android:id="@+id/btnDone"
+        style="@style/OtpButtonStyle"
+        android:layout_below="@+id/rlReferral"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:text="@string/done" />
+</RelativeLayout>
 

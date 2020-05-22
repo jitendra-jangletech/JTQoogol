@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import com.jangletech.qoogol.model.City;
-import com.jangletech.qoogol.model.ClassData;
 import com.jangletech.qoogol.model.Country;
 import com.jangletech.qoogol.model.Course;
 import com.jangletech.qoogol.model.Degree;
@@ -22,12 +21,12 @@ public class SignUpViewModel extends ViewModel {
     private MutableLiveData<SignInModel> signinlist;
     private MutableLiveData<List<Country>> countrylist;
     private MutableLiveData<List<State>> statelist;
+    private MutableLiveData<List<City>> citylist;
     private MutableLiveData<List<University>> universitylist;
     private MutableLiveData<List<Institute>> institutelist;
     private MutableLiveData<List<Degree>> degreelist;
     private MutableLiveData<List<Course>> courselist;
-    private MutableLiveData<List<ClassData>> classlist;
-    private MutableLiveData<List<City>> citylist;
+
 
     public MutableLiveData<List<City>> getCityList() {
         return citylist;
@@ -55,7 +54,6 @@ public class SignUpViewModel extends ViewModel {
         institutelist = new MutableLiveData<>();
         degreelist = new MutableLiveData<>();
         courselist = new MutableLiveData<>();
-        classlist = new MutableLiveData<>();
         citylist = new MutableLiveData<>();
     }
 
@@ -116,11 +114,4 @@ public class SignUpViewModel extends ViewModel {
         courselist.setValue(courseList);
     }
 
-    public LiveData<List<ClassData>> getClassList() {
-        return classlist;
-    }
-
-    public void setClassList(List<ClassData> courseList) {
-        classlist.setValue(courseList);
-    }
 }

@@ -13,32 +13,26 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
-
 import com.azoft.carousellayoutmanager.CenterScrollListener;
-import com.jangletech.qoogol.util.CenterZoomLayoutManager;
 import com.jangletech.qoogol.R;
+import com.jangletech.qoogol.activities.MainActivity;
 import com.jangletech.qoogol.adapter.HomeAdapter;
 import com.jangletech.qoogol.databinding.FragmentHomeBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.model.DashboardData;
-import com.jangletech.qoogol.model.DashboardInfo;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
+import com.jangletech.qoogol.ui.BaseFragment;
+import com.jangletech.qoogol.util.CenterZoomLayoutManager;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
-public class HomeFragment extends Fragment implements View.OnClickListener {
+public class HomeFragment extends BaseFragment implements View.OnClickListener {
 
     private HomeViewModel homeViewModel;
     FragmentHomeBinding fragmentHomeBinding;
@@ -55,6 +49,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 //        getStatisticsData();
         homeAdapter = new HomeAdapter(getActivity(), itemlist);
         setListeners();
+        setUserInfo();
 //        final CarouselLayoutManager layoutManager = new CarouselLayoutManager(CarouselLayoutManager.HORIZONTAL, true);
 //        layoutManager.setPostLayoutListener(new CarouselZoomPostLayoutListener());
 //
@@ -139,34 +134,34 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
 
 
-    private void getStatisticsData() {
-        ProgressDialog.getInstance().show(getActivity());
-        Map<String, String> arguments = new HashMap<>();
-        Log.d(TAG, "fetchEducationDetails userId : " + new PreferenceManager(getContext()).getUserId());
-        arguments.put(Constant.user_id, new PreferenceManager(getContext()).getUserId());
-        Call<DashboardInfo> call = apiService.getDashboardStatistics(arguments);
-        call.enqueue(new Callback<DashboardInfo>() {
-            @Override
-            public void onResponse(Call<DashboardInfo> call, Response<DashboardInfo> response) {
-                if (response.isSuccessful()) {
-                    DashboardData dashboardData = (DashboardData) response.body().getObject();
-                    setData(dashboardData);
-
-                } else {
-                    Log.e(TAG, "onResponse Failed : ");
-                    ProgressDialog.getInstance().dismiss();
-                }
-
-                Log.d(TAG, "onResponse: " + response.body());
-            }
-
-            @Override
-            public void onFailure(Call<DashboardInfo> call, Throwable t) {
-                t.printStackTrace();
-                ProgressDialog.getInstance().dismiss();
-            }
-        });
-    }
+//    private void getStatisticsData() {
+//        ProgressDialog.getInstance().show(getActivity());
+//        Map<String, String> arguments = new HashMap<>();
+//        Log.d(TAG, "fetchEducationDetails userId : " + new PreferenceManager(getContext()).getUserId());
+//        arguments.put(Constant.user_id, new PreferenceManager(getContext()).getUserId());
+//        Call<DashboardInfo> call = apiService.getDashboardStatistics(arguments);
+//        call.enqueue(new Callback<DashboardInfo>() {
+//            @Override
+//            public void onResponse(Call<DashboardInfo> call, Response<DashboardInfo> response) {
+//                if (response.isSuccessful()) {
+//                    DashboardData dashboardData = (DashboardData) response.body().getObject();
+//                    setData(dashboardData);
+//
+//                } else {
+//                    Log.e(TAG, "onResponse Failed : ");
+//                    ProgressDialog.getInstance().dismiss();
+//                }
+//
+//                Log.d(TAG, "onResponse: " + response.body());
+//            }
+//
+//            @Override
+//            public void onFailure(Call<DashboardInfo> call, Throwable t) {
+//                t.printStackTrace();
+//                ProgressDialog.getInstance().dismiss();
+//            }
+//        });
+//    }
 
     private void setData(DashboardData dashboardData) {
         ProgressDialog.getInstance().dismiss();
@@ -207,6 +202,29 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 break;
              default:
                     break;
+        }
+    }
+
+    private void setUserInfo() {
+        Log.d(TAG, "setUserInfo: ");
+        String displayName = new PreferenceManager(requireActivity()).getString(Constant.DISPLAY_NAME);
+        String gender = new PreferenceManager(requireActivity()).getString(Constant.GENDER);
+        String imageUrl = new PreferenceManager(requireActivity()).getString(Constant.PROFILE_PIC);
+        if(!displayName.isEmpty()) {
+             MainActivity.textViewDisplayName.setText(displayName.isEmpty() ? "Qoogol User" : displayName);
+            if (imageUrl.isEmpty()) {
+                if (gender.equalsIgnoreCase("M")) {
+                    loadProfilePic(Constant.PRODUCTION_MALE_PROFILE_API,MainActivity.profileImage);
+                } else if (gender.equalsIgnoreCase("F")) {
+                    loadProfilePic(Constant.PRODUCTION_FEMALE_PROFILE_API, MainActivity.profileImage);
+                } else {
+                    loadProfilePic(Constant.PRODUCTION_MALE_PROFILE_API, MainActivity.profileImage);
+                }
+            } else {
+                loadProfilePic(imageUrl,MainActivity.profileImage);
+            }
+        }else{
+            //fetchUserProfile();
         }
     }
 

@@ -15,11 +15,6 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 
-import com.github.mikephil.charting.animation.Easing;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.utils.ColorTemplate;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.FragmentQuestionsBinding;
 import com.jangletech.qoogol.ui.edit_profile.EditProfileFragment;
@@ -51,7 +46,7 @@ public class QuestionsFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(QuestionsViewModel.class);
 
-        //set pie chart
+      /*  //set pie chart
         mBinding.piechart.setUsePercentValues(true);
         mBinding.piechart.getDescription().setEnabled(false);
         mBinding.piechart.setExtraOffsets(5,10,5,5);
@@ -77,7 +72,7 @@ public class QuestionsFragment extends Fragment {
         pieData.setValueTextSize(10f);
         pieData.setValueTextColor(Color.YELLOW);
 
-        mBinding.piechart.setData(pieData);
+        mBinding.piechart.setData(pieData);*/
 
         setupViewPager(mBinding.viewpager);
         mBinding.resultTabs.setupWithViewPager(mBinding.viewpager);

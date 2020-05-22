@@ -6,7 +6,6 @@
     <string name="action_settings">Settings</string>
 
     <string name="menu_home">Home</string>
-
     <string name="menu_fav">Favourite</string>
 
 
@@ -18,8 +17,8 @@
     <string name="menu_subject">Subject</string>
     <string name="menu_chapter">Chapter</string>
     <string name="menu_rating">Rating</string>
-    <string name="menu_diff_level">Difficulty Level</string>
 
+    <string name="menu_diff_level">Difficulty Level</string>
     <string name="menu_edit_profile">Edit Profile</string>
     <string name="menu_test_details">Test Details</string>
 
@@ -53,14 +52,11 @@
     <string name="classes">Class</string>
     <string name="university">University/Board</string>
     <string name="institute">Institute</string>
-    <string name="degree">Degree</string>
-    <string name="course">Course</string>
+
     <string name="country">Country</string>
-    <string name="state">State</string>
+
 
     <!-- SignUp -->
-    <string name="first_name">First Name</string>
-    <string name="last_name">Last Name</string>
     <string name="mobile">Mobile</string>
     <string name="email">Email</string>
     <string name="create_password">Create Password</string>
@@ -82,14 +78,6 @@
     <string name="valid_input_chars">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ </string>
 
 
-    <string name="session_timeout">Timeout error. Please check your internet connection and try again!!!</string>
-    <string name="auth_error"></string>
-    <string name="server_error">Something went wrong please try again later.</string>
-    <string name="network_error">Please check your internet connection and try again!!!</string>
-    <string name="parse_error"></string>
-
-    <string name="verify_mobile_number">Verify Mobile Number</string>
-    <string name="enter_otp">Enter OTP</string>
 
 
     <!--Error Messages-->
@@ -100,9 +88,6 @@
     <string name="empty_mobile">Please enter valid mobile number.</string>
     <string name="empty_confirm_password">Please re-enter password.</string>
     <string name="valid_email">Please enter valid email.</string>
-    <string name="search">Search</string>
-
-    <string name="resend_otp">Resend OTP</string>
 
 
     <!--facebook-->
@@ -110,7 +95,6 @@
     <string name="fb_login_protocol_scheme">fb125515072005255</string>
     <string name="verify_text"><u>Verify</u></string>
     <string name="verified_text">Verified</string>
-    <string name="done">done</string>
     <string name="learning">Learning</string>
     <string name="exam">Exam</string>
     <string name="test">Test</string>
@@ -120,7 +104,6 @@
     <string name="attended_by_friends">Attended By Friends</string>
     <string name="shared_with_you">Shared with you</string>
     <string name="shared_by_you">Shared by you</string>
-    <string name="share">Share</string>
     <string name="create_test">Create Test</string>
     <string name="favourite_test">Favourite Test</string>
     <string name="questions">Questions</string>
@@ -131,12 +114,10 @@
     <string name="trending_questions">Trending Questions</string>
     <string name="popular_questions">Popular Questions</string>
     <string name="recent_questions">Recent Questions</string>
-    <string name="saved_drafts">Saved Drafts</string>
+    <string name="saved">Saved</string>
     <string name="reviews">Reviews</string>
     <string name="published">Published</string>
     <string name="notifications">Notifications</string>
-    <string name="settings">Settings</string>
-    <string name="logout">Logout</string>
     <string name="home">home</string>
 
 
@@ -203,7 +184,6 @@
     <string name="educational_info">Educational Information</string>
     <string name="employement_info">Employement Information</string>
     <string name="preferences">Preferences</string>
-    <string name="gender">Gender</string>
     <string name="birthdate">Birth Date</string>
     <string name="city">City</string>
     <string name="alt_email">Alternate Email</string>
@@ -215,13 +195,11 @@
     <string name="qoogol_version_1_0">Qoogol Version 1.0</string>
     <string name="menu_learning">Learning</string>
     <string name="menu_learning_details">Question Details</string>
-    <string name="comments">Comments</string>
     <string name="menu_test">Test</string>
     <string name="menu_questions">Questions</string>
     <string name="personal_info_tab">Personal</string>
     <string name="educational_info_tab">Educational</string>
     <string name="preference_tab">Preferences</string>
-    <string name="date_of_birth">Date Of Birth</string>
     <string name="verify_mobile_dialog_msg">Please type the verification code sent to your mobile number</string>
     <string name="verify_email_dialog_msg">Please type the verification code sent to your email</string>
     <string name="question">A pie chart with one or more slices offset is called a(n)_____________ple chart. \n
@@ -229,8 +207,7 @@
     A pie chart with one or more slices offset is called a(n)_____________ple chart. \n
     A pie chart with one or more slices offset is called a(n)_____________ple chart. \n
     A pie chart with one or more slices offset is called a(n)_____________ple chart.</string>
-    <string name="previous"> <![CDATA[<]]> Previous</string>
-    <string name="next"> Next <![CDATA[>]]> </string>
+
     <string name="title_activity_practise_questions">PractiseQuestionsActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -264,19 +241,14 @@
     <string name="mark_and_next">Previous</string>
 
     <!--Connections-->
-    <string name="invite">Invite</string>
     <string name="friends">Friends</string>
     <string name="followers">Followers</string>
     <string name="following">Following</string>
-    <string name="connections">Connections</string>
     <string name="remove">Remove</string>
-    <string name="connect">Connect</string>
+
     <string name="block">Block</string>
     <string name="add_friend">Add Friend</string>
     <string name="unblock">Unblock</string>
-    <string name="accept">Accept</string>
-    <string name="cancel">Cancel</string>
-    <string name="reject">Reject</string>
     <string name="follow">Follow</string>
     <string name="unfollow">Unfollow</string>
     <string name="friend_req">Friend Requests</string>
@@ -287,18 +259,528 @@
     <string name="blockedlist">Block List</string>
     <string name="importContacts">Import Contacts</string>
     <string name="contacts">Contacts</string>
-    <string name="save">Save</string>
-    <string name="deselect_all">Clear All</string>
-    <string name="select_all">Select All</string>
-    <string name="no_contacts">No contacts available for this letter.</string>
-    <string name="skip">Skip</string>
+
+
+
+
 
     <!--Error-->
+
+
+    <string name="register">Login or Register</string>
+    <string name="date_of_birth"><![CDATA[Date of Birth <font color=\'#cc0029\'><b>*</b></font>]]></string>
+    <string name="mobile_number"><![CDATA[Mobile number <font color=\'#cc0029\'><b>*</b></font>]]></string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="female">Female</string>
+    <string name="other">Other</string>
+    <string name="male">Male</string>
+
+    <string name="edit">Profile</string>
+    <string name="first_name"><![CDATA[First Name<font color=\'#cc0029\'>*</font>]]></string>
+    <string name="last_name"><![CDATA[Last Name <font color=\'#cc0029\'><b>*</b></font>]]></string>
+
+    <string name="relationship">Relationship:</string>
+    <string name="select_relationship">Select relationship</string>
+    <string name="language">Language:</string>
+    <string name="select_language">Select or add language</string>
+    <string name="nationality">Nationality:</string>
+    <string name="select_nationality">Select nationality</string>
+    <string name="purpose">Purpose:</string>
+    <string name="choose_the_purpose">Select purpose</string>
+    <string name="profession">Profession:</string>
+    <string name="choose_the_profession">Select or add Profession</string>
+    <string name="company_name">Company name:</string>
+    <string name="select_company_name">Select or add company name</string>
+    <string name="board">University/Board:</string>
+    <string name="select_board_name">Select or add board name</string>
+    <string name="college_name">College Name:</string>
+    <string name="select_college_name">Select or add college name</string>
+    <string name="degree">Degree:</string>
+    <string name="select_degree">Select degree</string>
+    <string name="course">Course:</string>
+    <string name="select_course">Select or add course</string>
+    <string name="course_year">Enrolled course answer:</string>
+    <string name="select_passing_year">Enter enrolled course answer</string>
+    <string name="batch">Batch or passing answer:</string>
+    <string name="select_batch_year">Enter batch or passing answer</string>
+    <string name="religion">Religion:</string>
+    <string name="select_religion">Select Religion</string>
+    <string name="social_community">Community:</string>
+    <string name="select_social_community">Select Class/Community</string>
+    <string name="native_state">State:</string>
+    <string name="select_native_state">Select state</string>
+    <string name="native_district">Division:</string>
+    <string name="select_native_district">Select district</string>
+    <string name="native_city">City:</string>
+    <string name="select_native_city">Select or add city</string>
+    <string name="save">Save</string>
+    <string name="hobby">Hobby:</string>
+    <string name="your_hobby">Select hobby</string>
+    <string name="tag_lines">Tagline</string>
+    <string name="status">Text for other status</string>
+
+    <string name="industry_type">Industry</string>
+    <string name="choose_industry_type">Select industry</string>
+
+    <string name="account">Account</string>
+    <string name="notification">Notifications</string>
+    <string name="theme">Color Themes</string>
+    <string name="sound">Mute All Groups</string>
+    <string name="refresh_frequency">Location refresh frequency</string>
+    <string name="logout">Logout</string>
+    <string name="project_code">Project code:</string>
+    <string name="project_code_hint">Project code</string>
+    <string name="connect">Connect</string>
+    <string name="ignore">Block</string>
+    <string name="gender">Gender</string>
+    <string name="age">Age :</string>
+    <string name="done">Done</string>
+    <string name="verify_mobile_number">Verify</string>
+    <string name="enter_otp">Enter OTP</string>
+    <string name="chat">Message</string>
+    <string name="search">Search</string>
+    <string name="search_hint">Search by name</string>
+    <string name="deactivate_my_account">Deactivate My Account</string>
+    <string name="blocked_list">Blocked list</string>
+    <string name="yes">Yes</string>
+    <string name="type_message">Type message</string>
+    <string name="fetching_your_connections">Fetching your friends.</string>
+    <string name="donot_have_connections">Import contacts and send invites to connect with your contacts.</string>
+
+    <!--Dialog messages-->
+    <!--<string name="enable_or_pause_messages"></string>-->
+    <string name="social_circle">People Finder</string>
+    <string name="pending_request">Friend request</string>
+    <string name="search_criteria">Filter</string>
+    <string name="settings">Settings</string>
+    <string name="faq">FAQ</string>
+    <string name="about_spotmeet">About Spotmeets</string>
+    <string name="session_timeout">Check your internet connection and try again.</string>
+    <string name="auth_error"></string>
+    <string name="server_error">Something went wrong please try again later.</string>
+    <string name="network_error">Please check your internet connection and try again.</string>
+    <string name="parse_error"></string>
+    <string name="all">All</string>
+    <string name="no_matches_found">No matches found.\nEdit your profile and filters.</string>
+    <string name="fetching_your_matches">Searching for people.</string>
+    <string name="donot_have_pending_request">No pending request</string>
+    <string name="fetching_your_request">Fetching your request.</string>
+    <string name="accept">Accept</string>
+    <string name="resend_otp">Resend OTP</string>
+    <string name="cancel_request">Cancel Request</string>
+    <string name="connections">Friends</string>
+    <string name="radius">Radius</string>
+    <string name="add">Generate matches</string>
+    <string name="match_date_time_default">Seen on</string>
+    <string name="distance">Distance</string>
+    <string name="gender_">Gender</string>
+    <string name="online_status">Online status</string>
+    <string name="match_count">Match count</string>
+    <string name="first_name_">First Name</string>
+    <string name="last_name_">Last Name</string>
+    <string name="sort_results">Sort Results</string>
+    <string name="message">Message</string>
+    <string name="groups">Groups</string>
+    <string name="chat_room">Profile groups</string>
+    <string name="professional_details">Profession based search</string>
+    <string name="education_details">Education based search</string>
+    <string name="native_location_details">Location based search</string>
+    <string name="age_range">Age range:</string>
+    <string name="_50_meter">50 meter</string>
+    <string name="_30000_meter">30000 meter</string>
+    <string name="search_by_name">Search by name:</string>
+    <string name="no_conversation">No Conversation</string>
+    <string name="include_institutes">Include institutes</string>
+    <string name="remove_connection">Remove\nconnection</string>
+    <string name="online">Online</string>
+    <string name="terms_and_conditions"><![CDATA[By registering and login, I accept the <a href="https://spot20191210061236.azurewebsites.net/uploads/Policies/terms_and_conditions.html">terms and conditions</a> and <a href="https://spot20191210061236.azurewebsites.net/uploads/Policies/privacy_policy.html">privacy policy</a>.]]></string>
+    <string name="spotmeets_desc"><b>spotmeets</b> helps people connect and collaborate socially and professionally. It provides multiple useful features to find right people online on your finger tips. We acknowledge and attribute of audio video calling to <a href="https://jitsi.org/">jitsi.org</a></string>
+    <string name="support"><![CDATA[Send your suggestions at : <a href="admin@spotmeets.com">admin@spotmeets.com</a>]]></string>
+    <string name="link"><![CDATA[For more information, visit : <a href="https://www.spotmeets.com">www.spotmeets.com</a>]]></string>
+    <string name="about_jangletch">Jangletech Systems is a big family of IT professionals driven by desire to invent and innovate new IT Products and Services.</string>
+    <string name="reachout_text"><![CDATA[Reach out to us at : <a href="contactus@jangletech.com">contactus@jangletech.com</a>]]></string>
+    <string name="more_info_link"><![CDATA[For more information, visit : <a href="https://www.jangletech.com">www.jangletech.com</a>]]></string>
+    <string name="code_conduct_head"><![CDATA[<b><font color=#FF0000>spotmeets</font> Community Code of Conduct</b><br/>]]></string>
+    <string name="code_conduct_desc"><![CDATA[<b>&#8226;</b> <font color=#FF0000>Be genuine.</font> Provide actual details in your profile including name, birth date and gender. <br/><br/>&#8226; <font color=#FF0000>Be professional.</font> Connecting is good and spamming is bad. Don’t be rude or foul. Do not harass. <br/><br/><b>&#8226;</b> <font color=#FF0000>Be honest.</font> Earn trust by being honest every moment every day. Accept and correct mistakes. <br/><br/><b>&#8226;</b> <font color=#FF0000>Be smart.</font> Forward content that is useful for recipients. Help stop spreading of rumors. <br/><br/><b>&#8226;</b> <font color=#FF0000>Be safe.</font> Verify identity before sharing contact details or meeting someone. <br/><br/><b>&#8226;</b> <font color=#FF0000>Be creative.</font> Create innovative content and display in larger forums like chatrooms. <br/><br/><b>&#8226;</b> <font color=#FF0000>Be collaborative.</font> Share content, ask questions and answer queries and interact. <br/><br/><b>&#8226;</b> <font color=#FF0000>Be respectful.</font> Respect ideas and work. Praise good work. Do not taunt or shame anyone. Agree to disagree. <br/><br/><b>&#8226;</b> <font color=#FF0000>Be truly human.</font> Honour diversity in all aspects. Show compassion, kindness, care and love for others.]]></string>
+    <string name="company">Company</string>
+    <string name="religion_">Religion</string>
+    <string name="community">Community</string>
+    <string name="nationality_">Nationality</string>
+    <string name="location_filters">Location filters</string>
+    <string name="state">State</string>
+    <string name="district">Division</string>
+    <string name="city_">City</string>
+    <string name="college">College</string>
+    <string name="degree_">Degree</string>
+    <string name="course_">Course</string>
+    <string name="year_">Year</string>
+    <string name="batch_">Batch</string>
+    <string name="everyone">Everyone</string>
+    <string name="clear_all">Clear all</string>
+    <string name="range">Range</string>
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">
+        AIzaSyDcQlNfTSJ98XqGCUdfFHuFAtzRjQv_seI
+    </string>
+    <string name="group_name_error">Please enter group name.</string>
+    <string name="add_">Add</string>
+    <string name="forward">forward</string>
+    <string name="delete">delete</string>
+    <string name="select_language_">Select language</string>
+    <string name="social_filters">Social filters:</string>
+    <string name="profession_filters">Profession filters:</string>
+    <string name="select_profession">Select profession</string>
+    <string name="send">Send</string>
+    <string name="my_locations">My Recent Places</string>
+    <string name="share">Share</string>
+    <string name="referral_code">Referral Code:</string>
+    <string name="university_board">University/Board</string>
+    <string name="rate_us_on_play_store">Rate us on Play Store</string>
+    <string name="warning">Warning</string>
+    <string name="delete_group">Force Delete</string>
+    <string name="copy">Copy</string>
+    <string name="_60_years">60 years</string>
+    <string name="_13_years">13 Years</string>
+    <string name="m_km">km/m</string>
+    <string name="search_options">Search Options</string>
+    <string name="code_conduct">Code of Conduct</string>
+    <string name="no_contacts">Please wait, this may take a while.</string>
+    <string name="phone_contacts">Import Contacts</string>
+    <string name="point_earned">Points Earned:</string>
+
+    <string name="conn">Friends</string>
+    <string name="anyone_can_join">Anyone can join</string>
+    <string name="public_">Public</string>
+    <string name="group_name">Group Name</string>
+    <string name="join">Join</string>
+    <string name="members_nconnections">Allow members to add friends</string>
+    <string name="invite">Invite</string>
+    <string name="select_all">Select All</string>
+    <string name="plus">+</string>
+    <string name="education_filters">Education filters:</string>
+    <string name="deselect_all">Clear All</string>
+    <string name="green_hulk">Green Hulk</string>
+    <string name="yellow">Yellow</string>
+    <string name="pink_roses">Pink Roses</string>
+    <string name="purple_daisy">Purple daisy</string>
+    <string name="blue_berry">Blue berry</string>
+    <string name="dark_theme">Queen of the Night</string>
+    <string name="red_chilly">Red chilly</string>
+    <string name="my_groups">My Groups</string>
+    <string name="_1_min">1 min</string>
+    <string name="_5_min">5 min</string>
+    <string name="_10_min">10 min</string>
+    <string name="_20_min">20 min</string>
+    <string name="_30_min">30 min</string>
+    <string name="_60_min">60 min</string>
+    <string name="referral_code_">Referral code:</string>
+    <string name="optional">(Optional)</string>
+    <string name="verify">Verify</string>
+    <string name="capture">Capture</string>
+    <string name="record">Record</string>
+    <string name="gallery">Gallery</string>
+    <string name="documents">Documents</string>
+    <string name="videos">Videos</string>
+    <string name="audios">Audios</string>
+    <string name="reject">Reject</string>
+    <string name="exit">Exit</string>
+    <string name="no_thanks">No thanks</string>
+    <string name="update">Update</string>
+    <string name="update_desc">New version is available in Google PlayStore. Update NOW for fast and smooth experience.</string>
+    <string name="import_desc">Would you like to import contacts?</string>
+    <string name="no">No</string>
+    <string name="fetching_connections">Fetching friends.</string>
+    <string name="decline">Decline</string>
+    <string name="answer">Answer</string>
+    <string name="hungup">HungUp</string>
+    <string name="skip">Skip</string>
+    <string name="next">Next</string>
+    <string name="write_post">Write Post</string>
+    <string name="share_media">Share Media</string>
+    <string name="like">Like</string>
+    <string name="unlike">Unlike</string>
+    <string name="comment">Comment</string>
+    <string name="write_post_in_timeline">Write post in timeline…</string>
+    <string name="no_comments">No comments</string>
+    <string name="comments">Comments</string>
+    <string name="more_info">Profile info</string>
+    <string name="user">User</string>
+    <string name="socials">Socials</string>
+    <string name="notification_alerts">Mute group</string>
+    <string name="post">Post</string>
+    <string name="join_call">Join Call</string>
+
+    <string-array name="relationship">
+        <item>Divorced</item>
+        <item>Engaged</item>
+        <item>LiveIn</item>
+        <item>Married</item>
+        <item>Separated</item>
+        <item>Single</item>
+    </string-array>
+
+    <string-array name="CountryCodes">
+        <item>+93,AF</item>
+        <item>+355,AL</item>
+        <item>+213,DZ</item>
+        <item>+376,AD</item>
+        <item>+244,AO</item>
+        <item>+672,AQ</item>
+        <item>+54,AR</item>
+        <item>+374,AM</item>
+        <item>+297,AW</item>
+        <item>+61,AU</item>
+        <item>+43,AT</item>
+        <item>+994,AZ</item>
+        <item>+973,BH</item>
+        <item>+880,BD</item>
+        <item>+375,BY</item>
+        <item>+32,BE</item>
+        <item>+501,BZ</item>
+        <item>+229,BJ</item>
+        <item>+975,BT</item>
+        <item>+591,BO</item>
+        <item>+387,BA</item>
+        <item>+267,BW</item>
+        <item>+55,BR</item>
+        <item>+673,BN</item>
+        <item>+359,BG</item>
+        <item>+226,BF</item>
+        <item>+95,MM</item>
+        <item>+257,BI</item>
+        <item>+855,KH</item>
+        <item>+237,CM</item>
+        <item>+1,CA</item>
+        <item>+238,CV</item>
+        <item>+236,CF</item>
+        <item>+235,TD</item>
+        <item>+56,CL</item>
+        <item>+86,CN</item>
+        <item>+61,CX</item>
+        <item>+61,CC</item>
+        <item>+57,CO</item>
+        <item>+269,KM</item>
+        <item>+242,CG</item>
+        <item>+243,CD</item>
+        <item>+682,CK</item>
+        <item>+506,CR</item>
+        <item>+385,HR</item>
+        <item>+53,CU</item>
+        <item>+357,CY</item>
+        <item>+420,CZ</item>
+        <item>+45,DK</item>
+        <item>+253,DJ</item>
+        <item>+670,TL</item>
+        <item>+593,EC</item>
+        <item>+20,EG</item>
+        <item>+503,SV</item>
+        <item>+240,GQ</item>
+        <item>+291,ER</item>
+        <item>+372,EE</item>
+        <item>+251,ET</item>
+        <item>+500,FK</item>
+        <item>+298,FO</item>
+        <item>+679,FJ</item>
+        <item>+358,FI</item>
+        <item>+33,FR</item>
+        <item>+689,PF</item>
+        <item>+241,GA</item>
+        <item>+220,GM</item>
+        <item>+995,GE</item>
+        <item>+49,DE</item>
+        <item>+233,GH</item>
+        <item>+350,GI</item>
+        <item>+30,GR</item>
+        <item>+299,GL</item>
+        <item>+502,GT</item>
+        <item>+224,GN</item>
+        <item>+245,GW</item>
+        <item>+592,GY</item>
+        <item>+509,HT</item>
+        <item>+504,HN</item>
+        <item>+852,HK</item>
+        <item>+36,HU</item>
+        <item>+91,IN</item>
+        <item>+62,ID</item>
+        <item>+98,IR</item>
+        <item>+964,IQ</item>
+        <item>+353,IE</item>
+        <item>+44,IM</item>
+        <item>+972,IL</item>
+        <item>+39,IT</item>
+        <item>+225,CI</item>
+        <item>+81,JP</item>
+        <item>+962,JO</item>
+        <item>+7,KZ</item>
+        <item>+254,KE</item>
+        <item>+686,KI</item>
+        <item>+965,KW</item>
+        <item>+996,KG</item>
+        <item>+856,LA</item>
+        <item>+371,LV</item>
+        <item>+961,LB</item>
+        <item>+266,LS</item>
+        <item>+231,LR</item>
+        <item>+218,LY</item>
+        <item>+423,LI</item>
+        <item>+370,LT</item>
+        <item>+352,LU</item>
+        <item>+853,MO</item>
+        <item>+389,MK</item>
+        <item>+261,MG</item>
+        <item>+265,MW</item>
+        <item>+60,MY</item>
+        <item>+960,MV</item>
+        <item>+223,ML</item>
+        <item>+356,MT</item>
+        <item>+692,MH</item>
+        <item>+222,MR</item>
+        <item>+230,MU</item>
+        <item>+262,YT</item>
+        <item>+52,MX</item>
+        <item>+691,FM</item>
+        <item>+373,MD</item>
+        <item>+377,MC</item>
+        <item>+976,MN</item>
+        <item>+382,ME</item>
+        <item>+212,MA</item>
+        <item>+258,MZ</item>
+        <item>+264,NA</item>
+        <item>+674,NR</item>
+        <item>+977,NP</item>
+        <item>+31,NL</item>
+        <item>+599,AN</item>
+        <item>+687,NC</item>
+        <item>+64,NZ</item>
+        <item>+505,NI</item>
+        <item>+227,NE</item>
+        <item>+234,NG</item>
+        <item>+683,NU</item>
+        <item>+850,KP</item>
+        <item>+47,NO</item>
+        <item>+968,OM</item>
+        <item>+92,PK</item>
+        <item>+680,PW</item>
+        <item>+507,PA</item>
+        <item>+675,PG</item>
+        <item>+595,PY</item>
+        <item>+51,PE</item>
+        <item>+63,PH</item>
+        <item>+870,PN</item>
+        <item>+48,PL</item>
+        <item>+351,PT</item>
+        <item>+1,PR</item>
+        <item>+974,QA</item>
+        <item>+40,RO</item>
+        <item>+7,RU</item>
+        <item>+250,RW</item>
+        <item>+590,BL</item>
+        <item>+685,WS</item>
+        <item>+378,SM</item>
+        <item>+239,ST</item>
+        <item>+966,SA</item>
+        <item>+221,SN</item>
+        <item>+381,RS</item>
+        <item>+248,SC</item>
+        <item>+232,SL</item>
+        <item>+65,SG</item>
+        <item>+421,SK</item>
+        <item>+386,SI</item>
+        <item>+677,SB</item>
+        <item>+252,SO</item>
+        <item>+27,ZA</item>
+        <item>+82,KR</item>
+        <item>+34,ES</item>
+        <item>+94,LK</item>
+        <item>+290,SH</item>
+        <item>+508,PM</item>
+        <item>+249,SD</item>
+        <item>+597,SR</item>
+        <item>+268,SZ</item>
+        <item>+46,SE</item>
+        <item>+41,CH</item>
+        <item>+963,SY</item>
+        <item>+886,TW</item>
+        <item>+992,TJ</item>
+        <item>+255,TZ</item>
+        <item>+66,TH</item>
+        <item>+228,TG</item>
+        <item>+690,TK</item>
+        <item>+676,TO</item>
+        <item>+216,TN</item>
+        <item>+90,TR</item>
+        <item>+993,TM</item>
+        <item>+688,TV</item>
+        <item>+971,AE</item>
+        <item>+256,UG</item>
+        <item>+44,GB</item>
+        <item>+380,UA</item>
+        <item>+598,UY</item>
+        <item>+1,US</item>
+        <item>+998,UZ</item>
+        <item>+678,VU</item>
+        <item>+39,VA</item>
+        <item>+58,VE</item>
+        <item>+84,VN</item>
+        <item>+681,WF</item>
+        <item>+967,YE</item>
+        <item>+260,ZM</item>
+        <item>+263,ZW</item>
+    </string-array>
+
+    <string-array name="status_list">
+        <item>AttendingClass</item>
+        <item>Away</item>
+        <item>Available</item>
+        <item>Busy</item>
+        <item>Cafe</item>
+        <item>Canteen</item>
+        <item>Cooking</item>
+        <item>DoNotDisturb</item>
+        <item>Free</item>
+        <item>Guests</item>
+        <item>Gym</item>
+        <item>Hostel</item>
+        <item>Library</item>
+        <item>Meeting</item>
+        <item>Movie</item>
+        <item>Sleeping</item>
+        <item>Studying</item>
+        <item>Traveling</item>
+        <item>Working</item>
+        <item>Other</item>
+    </string-array>
+
+    <string name="meeting_name">Meeting Name</string>
+    <string name="enter_meet_name">Enter meet name</string>
+    <string name="fetching_blocked_users">Fetching blocked users</string>
+    <string name="audio_video_call">Mute Audio/Video call</string>
+    <string name="trending">Trending</string>
+
 
     <string name="internet_error">Check your internet connection and try again.</string>
     <string name="submit">Submit</string>
     <string name="submit_rate">Submit &amp; Rate</string>
     <string name="rating_heading">Enjoying learning??  \n Tap a star to rate this question.</string>
     <string name="feedback_label">Write feedback here</string>
+    <!--Test Data remove it-->
+    <string name="voice">Voice &amp; Video call</string>
+    <string name="timeline">Timeline, Gallery &amp; feed</string>
+    <string name="private_groups">Private, public &amp; Profile Groups</string>
+    <string name="people_dm">Find people &amp; DM</string>
+    <string name="quick_easy">Quick &amp; Easy</string>
+
+    <string name="voice_text">with contacts &amp; unlimited Private Groups members.</string>
+    <string name="timeline_text">Browse, Like, Share, Comment &amp; Post</string>
+    <string name="private_groups_text">Browse, chat &amp; Post</string>
+    <string name="share_media_text">30 photos &amp; 5 videos with 30 members in a go</string>
+    <string name="people_dm_text">Everyone NearBy, Age, Language, Hobby, Profession, Education &amp; Social filters</string>
+    <string name="quick_easy_text">Smart Alerts, Color Themes.\nImport Phone Contacts &amp; Invite.</string>
+    <string name="get_started">Get Started</string>
+    <string name="previous">Previous</string>
+    <string name="mute_messages">Mute Messages</string>
+    <string name="spotmeets_voice_call">SPOTMEETS %s CALL</string>
+    <string name="incoming_call">Incoming Call</string>
+
 
 </resources>

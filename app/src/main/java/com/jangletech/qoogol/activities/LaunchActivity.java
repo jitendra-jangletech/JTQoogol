@@ -61,18 +61,31 @@ public class LaunchActivity extends BaseActivity {
                 mBinding.etPassOTP.setError("Please enter valid password or otp");
                 return;
             }
-            strMobile = new PreferenceManager(getApplicationContext()).getString(Constant.MOBILE);//mBinding.etMobileNumber.getText().toString().trim();
+
+            strMobile = mBinding.etMobileNumber.getText().toString().trim();
+            //if(strMobile.equals(new PreferenceManager(getApplicationContext()).getString(Constant.MOBILE)))
+            //strMobile = new PreferenceManager(getApplicationContext()).getString(Constant.MOBILE);//mBinding.etMobileNumber.getText().toString().trim();
             strPasswordOtp = mBinding.etPassOTP.getText().toString().trim();
             if (isOtpSent && registerLoginModel.getNewOTP().equals(strPasswordOtp)) {
                 doRegisterLogin(strMobile, "2", countryCode, strPasswordOtp, getDeviceId(), "Q");
-            } else {
+                return;
+            } else if(isOtpSent && (strPasswordOtp.length() == 4) && !registerLoginModel.getNewOTP().equals(strPasswordOtp) ){
                 mBinding.etPassOTP.setError("Please enter valid otp");
+                return;
+            }else if(!isOtpSent && (strPasswordOtp.length() >= 8)){
+                doRegisterLogin(strMobile, "2", countryCode, strPasswordOtp, getDeviceId(), "Q");
+            }else if(!isOtpSent && strPasswordOtp.isEmpty()){
+                mBinding.etPassOTP.setError("Please enter otp or password.");
+                return;
+            }else if(!isOtpSent && strPasswordOtp.length() < 8){
+                mBinding.etPassOTP.setError("Please enter otp or password.");
+                return;
             }
         });
 
         mBinding.resendOtp.setOnClickListener(v -> {
-
-            //mBinding.etPassOTP.setError(null);
+            mBinding.etPassOTP.setError(null);
+            mBinding.etPassOTP.setText("");
             mBinding.etMobileNumber.setError(null);
             if (mBinding.etMobileNumber.getText().toString().isEmpty()) {
                 mBinding.etMobileNumber.setError("Please enter valid email or mobile");

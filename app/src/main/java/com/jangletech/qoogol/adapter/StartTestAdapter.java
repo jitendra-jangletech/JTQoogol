@@ -80,18 +80,6 @@ public class StartTestAdapter extends RecyclerView.Adapter<StartTestAdapter.View
     public void onBindViewHolder(@NonNull StartTestAdapter.ViewHolder holder, int position) {
         poss = position; //StartTestActivity.viewPager.getCurrentItem();
 
-       /* Log.d(TAG, "Exact Position : "+StartTestActivity.viewPager.getCurrentItem());
-        for (int i = 0; i <testQuestions.size() ; i++) {
-            TestQuestionNew q = testQuestions.get(i);
-            Log.d(TAG, "_______________________________________________________");
-            Log.d(TAG, "pos : "+i);
-            Log.d(TAG, "Question No : "+q.getTq_quest_seq_num());
-            Log.d(TAG, "Question : "+q.getQ_quest());
-            Log.d(TAG, "Subjective Ans : "+q.getTtqa_sub_ans());
-            Log.d(TAG, "Attempted : "+q.isTtqa_attempted());
-            Log.d(TAG, "isMarked : "+q.isTtqa_marked());
-            Log.d(TAG, "______________________________________________________");
-        }*/
         setEditTextMap(testQuestions);
         //startTimer(StartTestActivity.viewPager.getCurrentItem());
         //Toast.makeText(mContext, "Executed!!!", Toast.LENGTH_SHORT).show();
@@ -220,7 +208,7 @@ public class StartTestAdapter extends RecyclerView.Adapter<StartTestAdapter.View
             //answerCharCounter(holder.testQuestionFragmentBinding.oneLineQuestionAns.etAnswer, holder.testQuestionFragmentBinding.oneLineQuestionAns.tvCharCounter, 10);
         }
 
-        if (questionNew.getQ_type().equals(Constant.Fill_THE_BLANKS)) {
+        if (questionNew.getQ_type().equals(Constant.Fill_THE_BLANKS_TEST)) {
             Log.d(TAG, "onBindViewHolder : " + questionNew.getQ_quest());
             holder.testQuestionFragmentBinding.fillInTheBlanks.fillInTheBlanksRootLayout.setVisibility(View.VISIBLE);
 
@@ -434,7 +422,7 @@ public class StartTestAdapter extends RecyclerView.Adapter<StartTestAdapter.View
             }
         }
 
-        if (question.getQ_type().equals(Constant.Fill_THE_BLANKS)) {
+        if (question.getQ_type().equals(Constant.Fill_THE_BLANKS_TEST)) {
             question.setTtqa_sub_ans("");
             testQuestionFragmentBinding.fillInTheBlanks.etAnswer.setText("");
         }

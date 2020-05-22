@@ -10,6 +10,9 @@ import java.util.List;
  */
 public class LearningQuestResponse {
 
+
+    private String Message;
+
     @SerializedName(Constant.prev_q_id)
     private String prev_q_id;
 
@@ -41,5 +44,13 @@ public class LearningQuestResponse {
 
     public void setQuestion_list(List<LearningQuestionsNew> question_list) {
         this.question_list = question_list;
+    }
+
+    public String getMessage() {
+        return Message;
+    }
+
+    public void setMessage(String message) {
+        Message = message;
     }
 }

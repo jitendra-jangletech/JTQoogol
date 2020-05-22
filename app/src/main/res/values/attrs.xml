@@ -9,4 +9,16 @@
     <attr name="navHeaderMainCenterColor" format="reference" />
     <attr name="radioButtonColor" format="reference" />
     <attr name="activeSwitch" format="reference" />
+
+    <attr name="lightTextColor" format="reference" />
+    <attr name="customIconColorST" format="reference" />
+    <attr name="customThumbColorST" format="reference" />
+    <attr name="popupBackgroundColor" format="reference" />
+    <attr name="sentMessageBackground" format="reference" />
+    <attr name="messageBackgroundColor" format="reference" />
+    <attr name="expandableHeadTextColor" format="reference" />
+    <attr name="card_backgroundColor" format="reference" />
+    <declare-styleable name="ExpandableTextView">
+        <attr name="trimLength" format="integer"/>
+    </declare-styleable>
 </resources>

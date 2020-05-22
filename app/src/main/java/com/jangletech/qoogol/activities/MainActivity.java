@@ -3,49 +3,63 @@ package com.jangletech.qoogol.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
+import android.view.Gravity;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.ActivityMainBinding;
 import com.jangletech.qoogol.dialog.UniversalDialog;
+import com.jangletech.qoogol.model.UserProfile;
+import com.jangletech.qoogol.retrofit.ApiClient;
+import com.jangletech.qoogol.retrofit.ApiInterface;
+import com.jangletech.qoogol.ui.personal_info.PersonalInfoViewModel;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 
-import java.util.PropertyResourceBundle;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends BaseActivity implements UniversalDialog.DialogButtonClickListener {
 
+    private static final String TAG = "MainActivity";
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding mBinding;
     public static NavController navController;
-    private ImageView profileImage;
+    private PersonalInfoViewModel mViewmodel;
+    public static ImageView profileImage;
+    public static TextView textViewDisplayName;
+    ApiInterface apiService = ApiClient.getInstance().getApi();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        mViewmodel = new ViewModelProvider(this).get(PersonalInfoViewModel.class);
         profileImage = findViewById(R.id.profilePic);
+        textViewDisplayName = findViewById(R.id.tvName);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        loadProfilePic();
-
+        //setMargins(mBinding.marginLayout);
         GsonBuilder gsonBuilder = new GsonBuilder();
         Gson gson = gsonBuilder.create();
-
+        setUserInfo();
         NavigationView navigationView = findViewById(R.id.nav_view);
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.edit_profile,
@@ -61,6 +75,49 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
+        //fetchUserProfile();
+        mViewmodel.getUserProfileInfo().observe(this, new Observer<UserProfile>() {
+            @Override
+            public void onChanged(@Nullable final UserProfile userProfile) {
+                Log.d(TAG, "First Name : " + userProfile.getFirstName());
+                new PreferenceManager(getApplicationContext()).saveString(Constant.DISPLAY_NAME,userProfile.getFirstName()+" "+userProfile.getLastName());
+                new PreferenceManager(getApplicationContext()).saveString(Constant.GENDER,userProfile.getStrGender());
+                new PreferenceManager(getApplicationContext()).saveString(Constant.PROFILE_PIC,getProfileImageUrl(userProfile.getEndPathImage()));
+                setUserInfo();
+            }
+        });
+
+       /* mBinding.drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
+
+            }
+
+            @Override
+            public void onDrawerOpened(@NonNull View drawerView) {
+                setUserInfo();
+            }
+
+            @Override
+            public void onDrawerClosed(@NonNull View drawerView) {
+
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+            }
+        });*/
+
+        mBinding.navHeader.tvName.setOnClickListener(v -> {
+            mBinding.drawerLayout.closeDrawer(Gravity.LEFT);
+            navController.navigate(R.id.nav_edit_profile);
+        });
+
+        mBinding.navHeader.profilePic.setOnClickListener(v -> {
+            mBinding.drawerLayout.closeDrawer(Gravity.LEFT);
+            navController.navigate(R.id.nav_edit_profile);
+        });
         Intent intent = getIntent();
         if (intent.hasExtra("bundle")) {
             Bundle bundle = intent.getBundleExtra("bundle");
@@ -138,13 +195,13 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
             }
         });
 
-        findViewById(R.id.nav_saved_questions).setOnClickListener(v -> {
+        findViewById(R.id.nav_saved).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
-            if (navController.getCurrentDestination().getId() != R.id.nav_saved_questions) {
+            if (navController.getCurrentDestination().getId() != R.id.nav_saved) {
                 navController.popBackStack();
-                Bundle bundle = new Bundle();
-                bundle.putString("call_from", "saved_questions");
-                navController.navigate(R.id.nav_learning, bundle);
+               // Bundle bundle = new Bundle();
+                //bundle.putString("call_from", "saved_questions");
+                navController.navigate(R.id.nav_saved);
             }
         });
 
@@ -152,7 +209,9 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
             mBinding.drawerLayout.closeDrawers();
             if (navController.getCurrentDestination().getId() != R.id.nav_test_my) {
                 navController.popBackStack();
-                navController.navigate(R.id.nav_test_my);
+                Bundle bundle = new Bundle();
+                bundle.putString(Constant.CALL_FROM,"MY_TEST");
+                navController.navigate(R.id.nav_test_my,bundle);
             }
         });
 
@@ -190,23 +249,6 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
             }
         });
 
-        findViewById(R.id.nav_fav_test).setOnClickListener(v -> {
-            mBinding.drawerLayout.closeDrawers();
-            if (navController.getCurrentDestination().getId() != R.id.nav_fav_test) {
-                navController.popBackStack();
-                navController.navigate(R.id.nav_fav_test);
-            }
-        });
-
-
-       /* findViewById(R.id.nav_questions).setOnClickListener(v -> {
-            mBinding.drawerLayout.closeDrawers();
-            if (navController.getCurrentDestination().getId() != R.id.nav_questions) {
-                navController.popBackStack();
-                navController.navigate(R.id.nav_questions);
-            }
-        });*/
-
         findViewById(R.id.nav_reviews).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
             if (navController.getCurrentDestination().getId() != R.id.nav_reviews) {
@@ -239,6 +281,15 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
             }
         });
 
+        findViewById(R.id.nav_faq).setOnClickListener(v -> {
+            mBinding.drawerLayout.closeDrawers();
+            if (navController.getCurrentDestination().getId() != R.id.nav_faq) {
+                navController.popBackStack();
+                navController.navigate(R.id.nav_faq);
+            }
+        });
+
+
         findViewById(R.id.edit_profile).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
             if (navController.getCurrentDestination().getId() != R.id.nav_edit_profile) {
@@ -256,11 +307,27 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
         });
     }
 
-    private void loadProfilePic() {
-        Glide.with(this)
-                .load(R.drawable.profile_img)
-                .apply(RequestOptions.circleCropTransform())
-                .into(profileImage);
+    private void setUserInfo() {
+        Log.d(TAG, "setUserInfo: ");
+        String displayName = new PreferenceManager(this).getString(Constant.DISPLAY_NAME);
+        String gender = new PreferenceManager(this).getString(Constant.GENDER);
+        String imageUrl = new PreferenceManager(this).getString(Constant.PROFILE_PIC);
+        if(!displayName.isEmpty()) {
+            mBinding.navHeader.tvName.setText(displayName.isEmpty() ? "Qoogol User" : displayName);
+            if (imageUrl.isEmpty()) {
+                if (gender.equalsIgnoreCase("M")) {
+                    loadProfilePic(Constant.PRODUCTION_MALE_PROFILE_API,profileImage);
+                } else if (gender.equalsIgnoreCase("F")) {
+                    loadProfilePic(Constant.PRODUCTION_FEMALE_PROFILE_API,profileImage);
+                } else {
+                    loadProfilePic(Constant.PRODUCTION_MALE_PROFILE_API,profileImage);
+                }
+            } else {
+                loadProfilePic(imageUrl,profileImage);
+            }
+        }else{
+            fetchUserProfile();
+        }
     }
 
 
@@ -274,31 +341,64 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
     @Override
     public void onPositiveButtonClick() {
         new PreferenceManager(getApplicationContext()).setIsLoggedIn(false);
-        new PreferenceManager(getApplicationContext()).saveString(Constant.MOBILE,"");
-        new PreferenceManager(getApplicationContext()).saveString(Constant.USER_ID,"");
+        new PreferenceManager(getApplicationContext()).saveString(Constant.MOBILE, "");
+        new PreferenceManager(getApplicationContext()).saveString(Constant.USER_ID, "");
         Intent intent = new Intent(this, LaunchActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
+    }
+
+    private void fetchUserProfile() {
+        //ProgressDialog.getInstance().show(this);
+        Log.d(TAG, "fetchUserProfile: ");
+        Call<UserProfile> call = apiService.fetchUserInfo(new PreferenceManager(getApplicationContext()).getInt(Constant.USER_ID),
+                getDeviceId(), Constant.APP_NAME, Constant.APP_VERSION);
+        call.enqueue(new Callback<UserProfile>() {
+            @Override
+            public void onResponse(Call<UserProfile> call, Response<UserProfile> response) {
+                //ProgressDialog.getInstance().dismiss();
+                if (response.body() != null && response.body().getResponseCode().equals("200")) {
+                    mViewmodel.setUserProfileResponse(response.body());
+                } else {
+                    showErrorDialog(MainActivity.this, response.body().getResponseCode(), "");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserProfile> call, Throwable t) {
+                //ProgressDialog.getInstance().dismiss();
+                showToast("Something went wrong!!");
+                t.printStackTrace();
+            }
+        });
+    }
+
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setUserInfo();
     }
 
     boolean doubleBackToExitPressedOnce = false;
 
     @Override
     public void onBackPressed() {
-            if (doubleBackToExitPressedOnce) {
-                super.onBackPressed();
-                return;
-            }
-
-            this.doubleBackToExitPressedOnce = true;
-            Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
-
-            new Handler().postDelayed(new Runnable() {
-
-                @Override
-                public void run() {
-                    doubleBackToExitPressedOnce = false;
-                }
-            }, 2000);
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            return;
         }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce = false;
+            }
+        }, 2000);
+    }
 }

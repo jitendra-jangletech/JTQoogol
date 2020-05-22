@@ -50,31 +50,10 @@ public class EditProfileFragment extends Fragment {
         fragmentEditProfileBinding.resultTabs.setupWithViewPager(fragmentEditProfileBinding.viewpager);
     }
 
-    private void addEducation(final int called_from) {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
-        addEducationBinding = DataBindingUtil.inflate(
-                LayoutInflater.from(getActivity()),
-                R.layout.add_education, null, false);
-        dialogBuilder.setView(addEducationBinding.getRoot());
-
-        addEducationBinding.saveEdu.setOnClickListener(v -> {
-            if (called_from == add_edu)
-                saveEducation();
-        });
-
-        educationDialog = dialogBuilder.create();
-        educationDialog.show();
-    }
-
-    private void saveEducation() {
-        educationDialog.dismiss();
-    }
-
     private void setupViewPager(ViewPager viewPager){
         Adapter adapter = new Adapter(getChildFragmentManager());
         adapter.addFragment(new PersonalInfoFragment(), getContext().getString(R.string.personal_info_tab));
         adapter.addFragment(new EducationInfoFragment(), getContext().getString(R.string.educational_info_tab));
-        adapter.addFragment(new PreferenceFragment(), getString(R.string.preference_tab));
         viewPager.setAdapter(adapter);
     }
 
