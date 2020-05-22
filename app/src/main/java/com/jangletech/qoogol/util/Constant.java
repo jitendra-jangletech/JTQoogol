@@ -201,8 +201,7 @@ public class Constant {
     public static final String u_referred_by = "143";
 
     public static final String APP_NAME ="Q";
-    public static final String APP_VERSION = "1.0";
-
+    public static final String APP_VERSION = "1.28";
 
     // QLikesComments
     public static final String tlc_id = "1401";
@@ -215,7 +214,6 @@ public class Constant {
     public static final String tlc_cdatetime = "1408";
     public static final String tlc_deleted = "1409";
     public static final String tlc_fav_flag = "1410";
-
 
     //learning
     public static final String QUESTION_IMAGES_API = "https://jtmobileappstorage.blob.core.windows.net/spotmeets/media/qoogol/questions/";
@@ -644,7 +642,6 @@ public class Constant {
     public static final String ONE_LINE_ANSWER = "4";
     public static final String SHORT_ANSWER = "5";
     public static final String LONG_ANSWER = "6";*/
-
 
     //Media
     public static final String w_ans_text = "1701";

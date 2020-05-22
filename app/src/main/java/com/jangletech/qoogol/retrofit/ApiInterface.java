@@ -236,8 +236,6 @@ public interface ApiInterface {
                                              @Field(Constant.u_calling_code) int countryCode,
                                              @Field(Constant.u_Password) String password,
                                              @Field(Constant.device_id) String deviceId,
-                                             @Field(Constant.appName) String appName);
-                                             @Field(Constant.deviceId) String deviceId,
                                              @Field(Constant.appName) String appName,
                                              @Field(Constant.u_fcm_token) String token);
 

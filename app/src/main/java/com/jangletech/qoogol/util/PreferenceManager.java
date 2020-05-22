@@ -5,6 +5,9 @@ import android.content.SharedPreferences;
 
 import com.jangletech.qoogol.enums.QuestionFilterType;
 
+import java.util.HashSet;
+import java.util.Set;
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -19,6 +22,31 @@ public class PreferenceManager {
 
     public PreferenceManager(Context ctx) {
         sharedPreferences = ctx.getSharedPreferences(Constant.PREF_NAME, Context.MODE_PRIVATE);
+    }
+
+    public void setChapterFilter(Set chapterFilter) {
+        sharedPreferences.edit()
+                .putStringSet("chapter",chapterFilter)
+                .apply();
+    }
+
+    public Set<String> getRatingsFilter(){
+        return sharedPreferences.getStringSet("rating",new HashSet<>());
+    }
+
+    public void setRatingsFilter(Set subject) {
+        sharedPreferences.edit()
+                .putStringSet("rating",subject)
+                .apply();
+    }
+
+    public void saveToken(String token) {
+        sharedPreferences.edit()
+                .putString(Constant.u_fcm_token, token)
+                .apply();
+    }
+    public String getToken() {
+        return sharedPreferences.getString(Constant.u_fcm_token, "");
     }
 
     public String getString(String key) {
@@ -56,6 +84,17 @@ public class PreferenceManager {
     public String getSubjectFilter(){
         return sharedPreferences.getString("subject","");
     }
+
+    public void setSubjectFilter(Set subject) {
+        sharedPreferences.edit()
+                .putStringSet("subject",subject)
+                .apply();
+    }
+
+    public Set<String> getChapterFilter(){
+        return sharedPreferences.getStringSet("chapter",new HashSet<>());
+    }
+
 
     public void setSubjectFilter(String subject) {
         sharedPreferences.edit()

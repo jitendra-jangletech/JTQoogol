@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.jangletech.qoogol.model.Chapter;
 import com.jangletech.qoogol.model.ClassList;
 import com.jangletech.qoogol.model.ClassResponse;
 import com.jangletech.qoogol.model.Course;
@@ -27,6 +28,15 @@ public class MyTestViewModel extends AndroidViewModel {
     private MutableLiveData<List<Degree>> degrees;
     private MutableLiveData<List<Course>> courses;
     private MutableLiveData<List<Institute>> institutes;
+    private MutableLiveData<List<Chapter>> allChapterList;
+
+    public void setAllChapterList(List<Chapter> chapterList){
+        this.allChapterList.setValue(chapterList);
+    }
+
+    public LiveData<List<Chapter>> getAllChapter(){
+        return allChapterList;
+    }
 
     public LiveData<List<Degree>> getDegrees(){
         return degrees;

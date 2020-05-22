@@ -54,7 +54,6 @@ public class EditProfileFragment extends Fragment {
         Adapter adapter = new Adapter(getChildFragmentManager());
         adapter.addFragment(new PersonalInfoFragment(), getContext().getString(R.string.personal_info_tab));
         adapter.addFragment(new EducationInfoFragment(), getContext().getString(R.string.educational_info_tab));
-        //adapter.addFragment(new PreferenceFragment(), getString(R.string.preference_tab));
         viewPager.setAdapter(adapter);
     }
 

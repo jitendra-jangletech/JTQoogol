@@ -78,6 +78,7 @@ import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.http.Url;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -507,6 +508,7 @@ public class PersonalInfoFragment extends BaseFragment {
     }
 
     private void loadProfilePic(String url) {
+        Log.d(TAG, "loadProfilePic : "+ url);
         RequestOptions options = new RequestOptions()
                 .centerCrop()
                 .circleCrop()
