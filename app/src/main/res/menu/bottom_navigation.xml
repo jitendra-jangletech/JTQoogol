@@ -27,10 +27,4 @@
         android:title="@string/questions"
         app:showAsAction="ifRoom" />
 
-    <item
-        android:id="@+id/actions_saved_drafts"
-        android:checkable="false"
-        android:icon="@drawable/ic_saved_drafts"
-        android:title="@string/saved_drafts"
-        app:showAsAction="ifRoom" />
 </menu>

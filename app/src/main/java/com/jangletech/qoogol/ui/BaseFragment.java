@@ -2,13 +2,16 @@ package com.jangletech.qoogol.ui;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.os.CountDownTimer;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -58,6 +61,23 @@ public class BaseFragment extends Fragment {
                 .into(imageView);
     }
 
+    public void loadImages(String url,ImageView imageView){
+        RequestOptions options = new RequestOptions()
+                .placeholder(R.drawable.load);
+        Glide.with(this).load(url)
+                .apply(options)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(imageView);
+    }
+
+    public String getTempImageUrl(String path){
+        return Constant.QUESTION_IMAGES_API+path.split("/")[1].split(":")[0];
+    }
+
+    public void setFragmentTitle(String title){
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(title);
+    }
+
     public void clearErrors(ViewGroup viewGroup) {
         for (int i = 0; i < viewGroup.getChildCount(); i++) {
             if (viewGroup.getChildAt(i) instanceof TextInputLayout) {
@@ -76,6 +96,39 @@ public class BaseFragment extends Fragment {
                 .show();
     }
 
+    public void setTimer(TextView timer, int seconds, int minutes) {
+        CountDownTimer countDownTimer = new CountDownTimer(60 * 1000 * 60, 1000) {
+            int timerCountSeconds = seconds;
+            int timerCountMinutes = minutes;
+
+            public void onTick(long millisUntilFinished) {
+                // timer.setText(new SimpleDateFormat("mm:ss").format(new Date( millisUntilFinished)));
+                if (timerCountSeconds < 59) {
+                    timerCountSeconds++;
+                } else {
+                    timerCountSeconds = 0;
+                    timerCountMinutes++;
+                }
+                if (timerCountMinutes < 10) {
+                    if (timerCountSeconds < 10) {
+                        timer.setText(String.valueOf("0" + timerCountMinutes + ":0" + timerCountSeconds));
+                    } else {
+                        timer.setText(String.valueOf("0" + timerCountMinutes + ":" + timerCountSeconds));
+                    }
+                } else {
+                    if (timerCountSeconds < 10) {
+                        timer.setText(String.valueOf(timerCountMinutes + ":0" + timerCountSeconds));
+                    } else {
+                        timer.setText(String.valueOf(timerCountMinutes + ":" + timerCountSeconds));
+                    }
+                }
+            }
+
+            public void onFinish() {
+                timer.setText("00:00");
+            }
+        }.start();
+    }
     /*public void addFragment(Fragment fragment){
         FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.fragmentContainer, fragment);

@@ -9,13 +9,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.activities.MainActivity;
 import com.jangletech.qoogol.adapter.LearingAdapter;
@@ -33,10 +34,13 @@ import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
+
 import static com.facebook.FacebookSdk.getApplicationContext;
 import static com.jangletech.qoogol.util.Constant.learning;
 
@@ -107,12 +111,12 @@ public class LearningFragment extends BaseFragment implements LearingAdapter.onI
         learningFragmentBinding.learningRecycler.setAdapter(learingAdapter);
         userId = String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));
 
-        Bundle bundle = getArguments();
-        if (bundle.getString("call_from").equalsIgnoreCase("saved_questions")) {
-            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Saved Questions");
-        } else {
-            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Learning");
-        }
+//        Bundle bundle = getArguments();
+//        if (bundle!=null && bundle.getString("call_from").equalsIgnoreCase("saved_questions")) {
+//            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Saved Questions");
+//        } else {
+//            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Learning");
+//        }
         getDataFromApi();
     }
 

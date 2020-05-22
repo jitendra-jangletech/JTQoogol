@@ -12,6 +12,30 @@ public class Constant {
     public static final String mdt_id = "273";
     public static final String mdt_desc = "276";
 
+    //FAQ
+    public static final String faqt_id = "600";
+    public static final String faqt_name = "601";
+    public static final String faqt_app = "602";
+    public static final String faqt_status = "603";
+    public static final String faqt_seq = "604";
+
+    public static final String faq_id = "605";
+    public static final String faq_question = "606";
+    public static final String faq_answer = "607";
+    public static final String faq_app = "608";
+    public static final String faq_type = "609";
+    public static final String faq_category = "610";
+    public static final String faq_status = "611";
+    public static final String faq_level = "612";
+    public static final String faq_references = "613";
+    public static final String faq_faqt_id = "614";
+    public static final String faq_p_faq_id = "615";
+    public static final String faq_seq = "616";
+    public static final String faq_related_faqs = "617";
+    public static final String w_media_name = "534";
+    public static final String md_from_type = "425A";
+
+
     //Selected Board
     public static final String BOARD = "BOARD";
     public static final String MOBILE = "MOBILE";
@@ -51,7 +75,8 @@ public class Constant {
     public static final String u_first_name = "104";
     public static final String u_last_name = "105";
     public static final String w_user_profile_image_name = "507";
-    public static final String CASE = "case";
+    public static final String CASE = "Case";
+
     public static final String STATUS = "status";
     public static final String VERIFY = "Verify";
     public static final String u_imei_num = "126";
@@ -64,7 +89,6 @@ public class Constant {
     public static final String w_otp_sent = "542";
     public static final String initial_letter = "541";
     public static final String returnrows = "ReturnRows";
-
 
     //Preferences
     public static final String PREF_NAME = "qoogol";
@@ -131,7 +155,7 @@ public class Constant {
 
 
     //Question type
-    public static String Fill_THE_BLANKS = "3";
+    public static String Fill_THE_BLANKS_TEST = "3";
     public static String ONE_LINE_ANSWER = "4";
     public static String SHORT_ANSWER = "5";
     public static String LONG_ANSWER = "6";
@@ -188,7 +212,10 @@ public class Constant {
     public static final String TEST_DETAILS = "q132FetchTestDetails";
     public static final String FETCH_TEST_LIST = "q152fetchtest";
     public static final String FETCH_USER_INFO = "sm21FetchUserInfo";
-    public static final String FETCH_USER_EDU = "q112FetchUserEdu";
+    public static final String FETCH_USER_EDU = "q112ProcessUserEdu";
+    public static final String FETCH_USER_SETTINGS = "q113ProcessUserSetting";
+
+    public static final String FETCH_FAQ = "sm18FAQ";
     public static final String UPDATE_USER_PROFILE = "sm23UpdateUserDetails";
     public static final String FETCH_SUBJECTS = "q111FetchSubjectMaster";
     public static final String FETCH_NOTIFICATIONS = "sm28FetchNotifications";
@@ -207,6 +234,10 @@ public class Constant {
     public static final String STATE_API = "sm06StateData";  /*Pass country id as params to fetch state s_c_id = ["94"]*/
     public static final String DISTRICT_API = "sm07DistrictData"; /*Pass state id as params to fetch district dt_s_id = ["12"]*/
     public static final String CITY_API = "sm09CityData";
+    public static final String CLASS_MASTER = "q115FetchClassMaster";
+
+    public static final String ADD_UNIVERSITY = "sm37AddUBM";
+    public static final String ADD_INSTITUTE = "sm38AddIOM";
     public static final String LANGUAGE_API = "sm11LanguageData";
     public static final String FETCH_VERIFIED_CONTACTLIST = "sm99ImportContacts";
     public static final String INVITE_CONTACTLIST = "sm98SendInvite";
@@ -260,7 +291,6 @@ public class Constant {
     public static final String w_hobby_desc = "511";
     public static final String cn_request_active = "313";
     public static final String cn_request_date = "314";
-    public static final String cn_blocked_by_u2 = "316";
     public static final String contact_from_phone = "551";
 
     public static final String u_hobby = "133";
@@ -328,6 +358,8 @@ public class Constant {
     public static final String pagestart = "PageStart";
     public static final String u_tagline = "141";
     public static final String m_age = "335";
+    public static final String u_filter_matches = "193";
+
 
 
     //Country
@@ -348,10 +380,21 @@ public class Constant {
     public static final String dm_id = "255";
     public static final String dm_degree_name = "256";
 
+    // Q_UserEdu
+    public static final String ue_id = "1450";
+    public static final String ue_user_id = "1451";
+    public static final String ue_startdate = "1452";
+    public static final String ue_enddate = "1453";
+    public static final String ue_marks = "1454";
+    public static final String ue_grade = "1455";
+    public static final String ue_dor_id = "1456";
+    public static final String ue_cy_num = "1457";
+
     //Course
     public static final String co_id = "261";
     public static final String co_dm_id = "262";
     public static final String co_name = "263";
+    public static final String _70E = "70E";
 
     // ChapterMaster
     public static final String ex_id = "1435";

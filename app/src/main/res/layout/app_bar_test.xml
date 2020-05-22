@@ -28,9 +28,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ScrollView
+            <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/_50sdp"
                 android:fillViewport="true"
                 android:scrollbars="none">
 
@@ -38,16 +39,14 @@
                     android:id="@+id/practice_viewpager"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginBottom="@dimen/_20sdp"
                     android:padding="@dimen/_10sdp" />
 
-            </ScrollView>
+            </androidx.core.widget.NestedScrollView>
 
             <LinearLayout
                 android:layout_alignParentBottom="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_20sdp"
                 android:orientation="horizontal"
                 android:weightSum="2">
 

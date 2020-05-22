@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.MenuItemCompat;
@@ -19,6 +20,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.jangletech.qoogol.R;
@@ -38,8 +40,10 @@ import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -70,7 +74,7 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
                              @Nullable Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_test_my, container, false);
         mViewModel = new ViewModelProvider(this).get(MyTestViewModel.class);
-        initViews(mBinding);
+        initViews();
         return mBinding.getRoot();
     }
 
@@ -109,7 +113,24 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
         }
     }
 
-    private void initViews(FragmentTestMyBinding mBinding) {
+    private void initViews() {
+
+        if (getArguments() != null && getArguments().getString(Constant.CALL_FROM).equalsIgnoreCase("MY_TEST")) {
+            Log.d(TAG, "My Test Bundle : "+getArguments().getString(Constant.CALL_FROM));
+            mBinding.horizontalScrollView.setVisibility(View.VISIBLE);
+            fetchSubjectList();
+            mViewModel.getAllSubjects().observe(getActivity(), new Observer<List<FetchSubjectResponse>>() {
+                @Override
+                public void onChanged(@Nullable final List<FetchSubjectResponse> subjects) {
+                    Log.d(TAG, "onChanged Subjects Size : " + subjects.size());
+                    prepareSubjectChips(subjects);
+                }
+            });
+
+        } else {
+            mBinding.horizontalScrollView.setVisibility(View.GONE);
+        }
+
         fetchTestList();
         mViewModel.getAllTestList().observe(getActivity(), new Observer<List<TestModelNew>>() {
             @Override
@@ -120,14 +141,6 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
             }
         });
 
-        fetchSubjectList();
-        mViewModel.getAllSubjects().observe(getActivity(), new Observer<List<FetchSubjectResponse>>() {
-            @Override
-            public void onChanged(@Nullable final List<FetchSubjectResponse> subjects) {
-                Log.d(TAG, "onChanged Subjects Size : " + subjects.size());
-                prepareSubjectChips(subjects);
-            }
-        });
 
         mBinding.subjectsChipGrp.setOnCheckedChangeListener((chipGroup, id) -> {
             Chip chip = ((Chip) chipGroup.getChildAt(chipGroup.getCheckedChipId()));
@@ -317,10 +330,10 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
     }
 
     private void callLikeTestApi(int like, int pos) {
-        doLikeTest(like,pos);
+        doLikeTest(like, pos);
     }
 
-    private void doLikeTest(int like,int pos) {
+    private void doLikeTest(int like, int pos) {
         ProgressDialog.getInstance().show(getActivity());
         Call<ProcessQuestion> call = apiService.addTestLike(new PreferenceManager(getActivity()).getInt(Constant.USER_ID), tmId, "I", like);
         call.enqueue(new Callback<ProcessQuestion>() {

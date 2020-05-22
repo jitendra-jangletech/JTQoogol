@@ -1,12 +1,18 @@
 package com.jangletech.qoogol.retrofit;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
+
+import com.jangletech.qoogol.model.AddElementResponse;
 import com.jangletech.qoogol.model.CityResponse;
+import com.jangletech.qoogol.model.ClassList;
 import com.jangletech.qoogol.model.ConnectionResponse;
 import com.jangletech.qoogol.model.ContactResponse;
 import com.jangletech.qoogol.model.CountryResponse;
 import com.jangletech.qoogol.model.CourseResponse;
 import com.jangletech.qoogol.model.DegreeResponse;
 import com.jangletech.qoogol.model.DistrictResponse;
+import com.jangletech.qoogol.model.FaqResponse;
+import com.jangletech.qoogol.model.FetchEducationResponse;
 import com.jangletech.qoogol.model.FetchSubjectResponseList;
 import com.jangletech.qoogol.model.InstituteResponse;
 import com.jangletech.qoogol.model.Language;
@@ -66,6 +72,13 @@ public interface ApiInterface {
     Call<CourseResponse> getCourses();
 
     @FormUrlEncoded
+    @POST(Constant.FETCH_FAQ)
+    Call<FaqResponse> fetchFaq(@Field(Constant.u_user_id) String userId,
+                               @Field(Constant.CASE) String caseFaq,
+                               @Field(Constant.faq_app) String faq_app,
+                               @Field(Constant.faqt_id)  String faqTopicId);
+
+    @FormUrlEncoded
     @POST(Constant.LANGUAGE_API)
     Call<Language> fetchLanguages(@Field(Constant.u_user_id) int userId);
 
@@ -87,27 +100,65 @@ public interface ApiInterface {
 
 
     @FormUrlEncoded
+    @POST(Constant.CLASS_MASTER)
+    Call<ClassList> fetchClasses(@Field(Constant.co_id) int courseId);
+
+    @FormUrlEncoded
+    @POST(Constant.ADD_UNIVERSITY)
+    Call<AddElementResponse> addUniversity(@Field(Constant.ubm_board_name) String boardName);
+
+    @FormUrlEncoded
+    @POST(Constant.ADD_INSTITUTE)
+    Call<AddElementResponse> addInstitute(@Field(Constant.iom_name) String instituteName);
+
+    @FormUrlEncoded
+    @POST(Constant.FETCH_USER_SETTINGS)
+    Call<VerifyResponse> fetchUserSettings(@Field(Constant.u_user_id) int userId,
+                                                   @Field(Constant.device_id) String deviceId,
+                                                   @Field(Constant.appName) String appName);
+
+
+    @FormUrlEncoded
     @POST(Constant.FETCH_USER_EDU)
-    Call<CityResponse> fetchUserEdu(@Field(Constant.u_user_id) String userId);
+    Call<VerifyResponse> updateUserEdu(@Field(Constant.u_user_id) String userId,
+                                       @Field(Constant.CASE) String casel,
+                                       @Field(Constant.device_id) String deviceId,
+                                       @Field(Constant.appName) String appName,
+                                       @Field(Constant.ue_startdate) String satrtDate,
+                                       @Field(Constant.ue_enddate) String endDate,
+                                       @Field(Constant.ue_marks) String marks,
+                                       @Field(Constant.ue_grade) String grade,
+                                       @Field(Constant.ubm_id) String universityId,
+                                       @Field(Constant.iom_id) String instituteId,
+                                       @Field(Constant.co_id) String courseId,
+                                       @Field(Constant.dm_id) String dmId,
+                                       @Field(Constant.ue_id) String ueId);
+
+    @FormUrlEncoded
+    @POST(Constant.FETCH_USER_EDU)
+    Call<FetchEducationResponse> fetchUserEdu(@Field(Constant.u_user_id) int userId,
+                                              @Field(Constant.CASE) String casel,
+                                              @Field(Constant.device_id) String deviceId,
+                                              @Field(Constant.appName) String appName);
 
     @Multipart
     @POST(Constant.UPDATE_PROFILE_IMAGE_API)
     Call<VerifyResponse> updateProfileImage(@Part(Constant.u_user_id) RequestBody userId,
-                                          @Part(Constant.device_id) RequestBody deviceId,
-                                          @Part(Constant.appName) RequestBody appName,
-                                          @Part(Constant.u_app_version) RequestBody appVersion,
-                                          @Part(Constant.CASE) RequestBody casel,
-                                          @Part MultipartBody.Part image);
+                                            @Part(Constant.device_id) RequestBody deviceId,
+                                            @Part(Constant.appName) RequestBody appName,
+                                            @Part(Constant.u_app_version) RequestBody appVersion,
+                                            @Part(Constant.CASE) RequestBody casel,
+                                            @Part MultipartBody.Part image);
 
     @FormUrlEncoded
     @POST(Constant.REGISTER_LOGIN)
-    Call<VerifyResponse> verifyMobileEmail(@Field(Constant.u_app_version) String appVersion,
+    Call<VerifyResponse> verifyMobileEmail(@Field(Constant.appName) String appName,
+                                           @Field(Constant.u_app_version) String appVersion,
                                            @Field(Constant.device_id) String deviceId,
                                            @Field(Constant.u_user_type) String userType,
                                            @Field(Constant.u_mob_1) String email,
                                            @Field(Constant.VERIFY) String Verify,
-                                           @Field(Constant.CASE) String caseL,
-                                           @Field(Constant.appName) String appName);
+                                           @Field(Constant.CASE) String caseL);
 
     @FormUrlEncoded
     @POST(Constant.UPDATE_USER_PROFILE)
@@ -145,8 +196,8 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST(Constant.FETCH_NOTIFICATIONS)
     Call<NotificationResponse> fetchNotifications(@Field(Constant.u_user_id) int userId,
-                                                  @Field("126Q") String deviceId,
-                                                  @Field("200Q") String appName);
+                                                  @Field(Constant.device_id) String deviceId,
+                                                  @Field(Constant.appName) String appName);
 
     @FormUrlEncoded
     @POST(Constant.FETCH_SUBJECTS)
@@ -166,14 +217,14 @@ public interface ApiInterface {
     @POST(Constant.PROCESS_TEST)
     Call<ProcessQuestion> addTestLike(@Field(Constant.u_user_id) int userid,
                                       @Field(Constant.tm_id) int tmId,
-                                      @Field("Case") String caseL,
+                                      @Field(Constant.CASE) String caseL,
                                       @Field(Constant.qlc_like_flag) int like);
 
 
     @FormUrlEncoded
     @POST(Constant.REGISTER_LOGIN)
     Call<RegisterLoginModel> doRegisterLogin(@Field(Constant.u_mob_1) String mobile,
-                                             @Field("Case") String caseR,
+                                             @Field(Constant.CASE) String caseR,
                                              @Field(Constant.u_calling_code) int countryCode,
                                              @Field(Constant.u_Password) String password,
                                              @Field(Constant.device_id) String deviceId,
@@ -187,33 +238,33 @@ public interface ApiInterface {
     @POST(Constant.PROCESS_QUESTION)
     Call<ProcessQuestion> fetchComments(@Field(Constant.u_user_id) int userid,
                                         @Field(Constant.q_id) String queId,
-                                        @Field("Case") String caseL);
+                                        @Field(Constant.CASE) String caseL);
 
     @FormUrlEncoded
     @POST(Constant.PROCESS_TEST)
     Call<ProcessQuestion> fetchTestComments(@Field(Constant.u_user_id) int userid,
                                             @Field(Constant.tm_id) int tmId,
-                                            @Field("Case") String caseL);
+                                            @Field(Constant.CASE) String caseL);
 
     @FormUrlEncoded
     @POST(Constant.PROCESS_QUESTION)
     Call<ProcessQuestion> likeApi(@Field(Constant.u_user_id) int userid,
                                   @Field(Constant.q_id) String queId,
-                                  @Field("Case") String caseL,
+                                  @Field(Constant.CASE) String caseL,
                                   @Field(Constant.qlc_like_flag) int like);
 
     @FormUrlEncoded
     @POST(Constant.PROCESS_QUESTION)
     Call<ProcessQuestion> favApi(@Field(Constant.u_user_id) int userid,
                                  @Field(Constant.q_id) String queId,
-                                 @Field("Case") String caseL,
+                                 @Field(Constant.CASE) String caseL,
                                  @Field(Constant.qlc_fav_flag) int like);
 
     @FormUrlEncoded
     @POST(Constant.PROCESS_QUESTION)
     Call<ProcessQuestion> addCommentApi(@Field(Constant.u_user_id) int userid,
                                         @Field(Constant.q_id) String queId,
-                                        @Field("Case") String caseL,
+                                        @Field(Constant.CASE) String caseL,
                                         @Field(Constant.qlc_comment_text) String comment);
 
 
@@ -238,16 +289,16 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST(Constant.UPDATE_CONNECTIONS)
     Call<ResponseObj> updateConnections(@Field(Constant.u_user_id) String userid,
-                                        @Field("Case") String connectionCase,
+                                        @Field(Constant.CASE) String connectionCase,
                                         @Field(Constant.device_id) String device_id,
-                                        @Field("200Q") String app,
+                                        @Field(Constant.appName) String app,
                                         @Field(Constant.other_user) String other_user);
 
     @FormUrlEncoded
     @POST(Constant.PROCESS_TEST)
     Call<ProcessQuestion> addTestCommentApi(@Field(Constant.u_user_id) int userid,
                                             @Field(Constant.tm_id) int tmId,
-                                            @Field("Case") String caseL,
+                                            @Field(Constant.CASE) String caseL,
                                             @Field(Constant.tlc_comment_text) String comment);
 
     @FormUrlEncoded

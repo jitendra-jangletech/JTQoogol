@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~
+  ~ /*
+  ~  * /////////////////////////////////////////////////////////////////////////////////////////////////
+  ~  * //
+  ~  * //            Copyright (c) 2020. JangleTech Systems Private Limited, Thane, India
+  ~  * //
+  ~  * /////////////////////////////////////////////////////////////////////////////////////////////////
+  ~  */
+  -->
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/round_white"
+    android:minWidth="@dimen/_280sdp">
+
+    <TextView
+        android:id="@+id/tvHead"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/_16sdp"
+        android:background="@color/colorPrimary"
+        android:padding="@dimen/_10sdp"
+        android:text="Add Title"
+        android:textAllCaps="false"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="@color/colorWhite"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tvInputLayout"
+        app:errorEnabled="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin_10"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="@dimen/margin_10"
+        app:layout_constraintTop_toBottomOf="@+id/tvHead">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etAddItem"
+            android:textColor="@color/colorBlack"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorWhite"
+            android:importantForAutofill="no" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/_12sdp"
+        android:orientation="horizontal"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvInputLayout">
+
+
+        <TextView
+            android:id="@+id/btnAdd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_16sdp"
+            android:layout_marginRight="@dimen/_10sdp"
+            android:background="@color/colorPrimary"
+            android:gravity="center"
+            android:padding="@dimen/_5sdp"
+            android:text="Add"
+            android:textColor="@color/colorWhite"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvInputLayout" />
+
+        <TextView
+            android:id="@+id/btnCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_16sdp"
+            android:layout_marginRight="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_10sdp"
+            android:background="@color/colorPrimary"
+            android:gravity="center"
+            android:padding="@dimen/_5sdp"
+            android:text="Cancel"
+            android:textColor="@color/colorWhite"
+            app:layout_constraintRight_toLeftOf="@+id/btnAdd"
+            app:layout_constraintTop_toBottomOf="@+id/tvInputLayout" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

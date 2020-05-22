@@ -106,8 +106,15 @@
         <item name="android:popupBackground">@color/colorWhite</item>
         <item name="android:maxLines">1</item>
         <item name="android:selectAllOnFocus">true</item>
-        <item name="android:inputType">textCapSentences</item>
+        <item name="android:inputType">textCapSentences|textNoSuggestions</item>
         <item name="android:textColor">@color/colorBlack</item>
+    </style>
+
+    <style name="OutLineBoxColor" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">?attr/textColorBlack</item>
+        <item name="boxStrokeWidth">1dp</item>
+        <item name="hintTextColor">@color/colorDarkGray</item>
+        <item name="boxBackgroundColor">?attr/messageBackgroundColor</item>
     </style>
 
     <style name="TextInputLayoutStyle">
@@ -238,7 +245,7 @@
         <item name="android:fontFamily">@font/roboto_medium</item>
     </style>
 
-    <style name="TextViewHeadStyle">
+   <!-- <style name="TextViewHeadStyle">
         <item name="android:textSize">@dimen/small_text</item>
         <item name="android:layout_marginLeft">@dimen/margin_30</item>
         <item name="android:layout_marginRight">@dimen/margin_30</item>
@@ -246,17 +253,17 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginTop">@dimen/activity_vertical_margin</item>
         <item name="android:fontFamily">@font/roboto_regular</item>
-        <!--<item name="android:textColor">?attr/textColorBlack</item>-->
-    </style>
+        &lt;!&ndash;<item name="android:textColor">?attr/textColorBlack</item>&ndash;&gt;
+    </style>-->
 
-    <style name="RadioButtonStyle">
+   <!-- <style name="RadioButtonStyle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">@dimen/textSizexSmall</item>
         <item name="android:fontFamily">@font/roboto_regular</item>
-        <item name="android:buttonTint">?attr/colorPrimary</item>
-        <!--<item name="android:textColor">?attr/textColorBlack</item>-->
-    </style>
+        <item name="android:buttonTint">?attr/colorPrimary</item>-->
+        <!--<item name="android:textColor">?attr/textColorBlack</item>
+    </style> -->
 
     <style name="EditTextViewStyle">
         <item name="android:layout_width">match_parent</item>

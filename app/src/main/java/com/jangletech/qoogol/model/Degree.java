@@ -12,7 +12,6 @@ public class Degree
     @SerializedName(Constant.dm_id)
     private int degreeId;
 
-
     @SerializedName(Constant.dm_degree_name)
     private String name;
 

@@ -1,33 +1,31 @@
 package com.jangletech.qoogol.ui.favourite;
 
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.lifecycle.ViewModelProviders;
-
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
-
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.viewpager.widget.ViewPager;
+
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.FavouriteFragmentBinding;
-import com.jangletech.qoogol.ui.edit_profile.EditProfileFragment;
-import com.jangletech.qoogol.ui.questions.popular_questions.PopularQuestFragment;
-import com.jangletech.qoogol.ui.questions.recent_questions.RecentQuestFragment;
-import com.jangletech.qoogol.ui.questions.trending_quesions.TrendingQuestFragment;
+import com.jangletech.qoogol.ui.BaseFragment;
+import com.jangletech.qoogol.ui.learning.LearningFragment;
 import com.jangletech.qoogol.ui.test.my_test.MyTestFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class FavouriteFragment extends Fragment {
+public class FavouriteFragment extends BaseFragment {
 
     private static final String TAG = "FavouriteFragment";
     private FavouriteViewModel mViewModel;
@@ -38,23 +36,55 @@ public class FavouriteFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.favourite_fragment, container, false);
+        initViews();
         return mBinding.getRoot();
+    }
+
+    private void initViews() {
+        setupViewPager(mBinding.favViewpager);
+        mBinding.favTabs.setupWithViewPager(mBinding.favViewpager);
+
+//        mBinding.favViewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+//            @Override
+//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//
+//            }
+//
+//            @Override
+//            public void onPageSelected(int position) {
+//                Log.d(TAG, "onPageSelected: "+position);
+//                if(position == 0){
+//                    setFragmentTitle("Question");
+//                }else if(position == 1){
+//                    setFragmentTitle("Test");
+//                }
+//            }
+//
+//            @Override
+//            public void onPageScrollStateChanged(int state) {
+//
+//            }
+//        });
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(FavouriteViewModel.class);
-        setupViewPager(mBinding.viewpager);
     }
 
     private void setupViewPager(ViewPager viewPager) {
         Adapter adapter = new Adapter(getChildFragmentManager());
-        adapter.addFragment(new TrendingQuestFragment(), getContext().getString(R.string.menu_questions));
-        adapter.addFragment(new MyTestFragment(), getContext().getString(R.string.menu_test_my));
+        adapter.addFragment(new LearningFragment(), "Questions");
+        adapter.addFragment(new MyTestFragment(),"Test");
         viewPager.setAdapter(adapter);
     }
 

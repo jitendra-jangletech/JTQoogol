@@ -5,11 +5,8 @@ import android.text.TextUtils;
 import com.jangletech.qoogol.BuildConfig;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
-
-import kotlin.random.Random;
 
 
 /**
@@ -23,7 +20,6 @@ public class UtilHelper {
 
     //Debug
     private static final String DEBUG_BASE_API = "http://192.168.0.109:8080/Qoogol/";
-
 
     private static final String SIGN_IN_API = "auth/signInNew";
     private static final String COUNTRY = "auth/countryList";

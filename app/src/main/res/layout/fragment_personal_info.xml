@@ -402,6 +402,7 @@
                         android:text='@{userProfile.u_Hobby}' />-->
 
                     <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnImportContacts"
                         android:textAllCaps="false"
                         android:text="Import Contacts"
                         android:layout_marginTop="@dimen/_10sdp"

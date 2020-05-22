@@ -1,18 +1,12 @@
 package com.jangletech.qoogol;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,14 +14,11 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.jangletech.qoogol.activities.BaseActivity;
-import com.jangletech.qoogol.activities.SignInActivity;
 import com.jangletech.qoogol.databinding.ActivitySignupBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.dialog.UniversalDialog;
 import com.jangletech.qoogol.model.City;
 import com.jangletech.qoogol.model.CityResponse;
-import com.jangletech.qoogol.model.ClassData;
-import com.jangletech.qoogol.model.Classes;
 import com.jangletech.qoogol.model.Country;
 import com.jangletech.qoogol.model.CountryResponse;
 import com.jangletech.qoogol.model.Course;
@@ -36,19 +27,14 @@ import com.jangletech.qoogol.model.Degree;
 import com.jangletech.qoogol.model.DegreeResponse;
 import com.jangletech.qoogol.model.Institute;
 import com.jangletech.qoogol.model.InstituteResponse;
-import com.jangletech.qoogol.model.MobileOtp;
-import com.jangletech.qoogol.model.State;
-import com.jangletech.qoogol.model.StateResponse;
 import com.jangletech.qoogol.model.University;
 import com.jangletech.qoogol.model.UniversityResponse;
 import com.jangletech.qoogol.model.signup.SignUpRequestDto;
-import com.jangletech.qoogol.model.signup.SignUpResponseDto;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.GenericTextWatcher;
 import com.jangletech.qoogol.util.UtilHelper;
-import com.mukesh.OtpView;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -59,23 +45,6 @@ import java.util.Map;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static com.jangletech.qoogol.util.Constant.board;
-import static com.jangletech.qoogol.util.Constant.country;
-import static com.jangletech.qoogol.util.Constant.course;
-import static com.jangletech.qoogol.util.Constant.cyNum;
-import static com.jangletech.qoogol.util.Constant.degree;
-import static com.jangletech.qoogol.util.Constant.degree_name;
-import static com.jangletech.qoogol.util.Constant.email;
-import static com.jangletech.qoogol.util.Constant.first_name;
-import static com.jangletech.qoogol.util.Constant.institute;
-import static com.jangletech.qoogol.util.Constant.is_email_verified;
-import static com.jangletech.qoogol.util.Constant.is_mobile_verified;
-import static com.jangletech.qoogol.util.Constant.last_name;
-import static com.jangletech.qoogol.util.Constant.mobile_no;
-import static com.jangletech.qoogol.util.Constant.mobile_number;
-import static com.jangletech.qoogol.util.Constant.password;
-import static com.jangletech.qoogol.util.Constant.state;
 
 public class SignUpActivity extends BaseActivity
         implements View.OnClickListener, UniversalDialog.DialogButtonClickListener {

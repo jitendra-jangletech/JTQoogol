@@ -192,7 +192,7 @@ public class TestQuestionFragment extends BaseFragment implements QueViewClick, 
             answerCharCounter(testQuestionFragmentBinding.oneLineQuestionAns.etAnswer, testQuestionFragmentBinding.oneLineQuestionAns.tvCharCounter, 10);
         }
 
-        if (questionNew.getQ_type().equals(Constant.Fill_THE_BLANKS)) {
+        if (questionNew.getQ_type().equals(Constant.Fill_THE_BLANKS_TEST)) {
             testQuestionFragmentBinding.fillInTheBlanks.fillInTheBlanksRootLayout.setVisibility(View.VISIBLE);
             testQuestionFragmentBinding.fillInTheBlanks.tvQuestion.setText(questionNew.getQ_quest());
             setTimer(testQuestionFragmentBinding.tvQuestTimer, 0, 0);
@@ -706,42 +706,6 @@ public class TestQuestionFragment extends BaseFragment implements QueViewClick, 
         this.position = position;
     }
 
-    private void setTimer(TextView timer, int seconds, int minutes) {
-
-        new CountDownTimer(60 * 1000 * 60, 1000) {
-            int timerCountSeconds = seconds;
-            int timerCountMinutes = minutes;
-
-            public void onTick(long millisUntilFinished) {
-                // timer.setText(new SimpleDateFormat("mm:ss").format(new Date( millisUntilFinished)));
-                if (timerCountSeconds < 59) {
-                    timerCountSeconds++;
-                } else {
-                    timerCountSeconds = 0;
-                    timerCountMinutes++;
-                }
-                if (timerCountMinutes < 10) {
-                    if (timerCountSeconds < 10) {
-                        timer.setText(String.valueOf("0" + timerCountMinutes + ":0" + timerCountSeconds));
-                    } else {
-                        timer.setText(String.valueOf("0" + timerCountMinutes + ":" + timerCountSeconds));
-                    }
-                } else {
-                    if (timerCountSeconds < 10) {
-                        timer.setText(String.valueOf(timerCountMinutes + ":0" + timerCountSeconds));
-                    } else {
-                        timer.setText(String.valueOf(timerCountMinutes + ":" + timerCountSeconds));
-                    }
-                }
-            }
-
-            public void onFinish() {
-                timer.setText("00:00");
-            }
-
-        }.start();
-    }
-
     private void answerCharCounter(EditText etAnswer, TextView tvCounter, int maxWordLength) {
 
         InputFilter filter = new InputFilter() {
@@ -848,7 +812,7 @@ public class TestQuestionFragment extends BaseFragment implements QueViewClick, 
             }
         }
 
-        if (question.getQ_type().equals(Constant.Fill_THE_BLANKS)) {
+        if (question.getQ_type().equals(Constant.Fill_THE_BLANKS_TEST)) {
             question.setTtqa_sub_ans("");
             testQuestionFragmentBinding.fillInTheBlanks.etAnswer.setText("");
         }

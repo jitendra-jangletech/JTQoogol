@@ -208,7 +208,7 @@ public class StartTestAdapter extends RecyclerView.Adapter<StartTestAdapter.View
             //answerCharCounter(holder.testQuestionFragmentBinding.oneLineQuestionAns.etAnswer, holder.testQuestionFragmentBinding.oneLineQuestionAns.tvCharCounter, 10);
         }
 
-        if (questionNew.getQ_type().equals(Constant.Fill_THE_BLANKS)) {
+        if (questionNew.getQ_type().equals(Constant.Fill_THE_BLANKS_TEST)) {
             Log.d(TAG, "onBindViewHolder : " + questionNew.getQ_quest());
             holder.testQuestionFragmentBinding.fillInTheBlanks.fillInTheBlanksRootLayout.setVisibility(View.VISIBLE);
 
@@ -422,7 +422,7 @@ public class StartTestAdapter extends RecyclerView.Adapter<StartTestAdapter.View
             }
         }
 
-        if (question.getQ_type().equals(Constant.Fill_THE_BLANKS)) {
+        if (question.getQ_type().equals(Constant.Fill_THE_BLANKS_TEST)) {
             question.setTtqa_sub_ans("");
             testQuestionFragmentBinding.fillInTheBlanks.etAnswer.setText("");
         }

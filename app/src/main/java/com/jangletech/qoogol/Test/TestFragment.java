@@ -503,42 +503,6 @@ public class TestFragment extends BaseFragment implements QueViewClick, QuestRep
         this.position = position;
     }
 
-    private void setTimer(TextView timer, int seconds, int minutes) {
-
-        new CountDownTimer(60 * 1000 * 60, 1000) {
-            int timerCountSeconds = seconds;
-            int timerCountMinutes = minutes;
-
-            public void onTick(long millisUntilFinished) {
-                // timer.setText(new SimpleDateFormat("mm:ss").format(new Date( millisUntilFinished)));
-                if (timerCountSeconds < 59) {
-                    timerCountSeconds++;
-                } else {
-                    timerCountSeconds = 0;
-                    timerCountMinutes++;
-                }
-                if (timerCountMinutes < 10) {
-                    if (timerCountSeconds < 10) {
-                        timer.setText(String.valueOf("0" + timerCountMinutes + ":0" + timerCountSeconds));
-                    } else {
-                        timer.setText(String.valueOf("0" + timerCountMinutes + ":" + timerCountSeconds));
-                    }
-                } else {
-                    if (timerCountSeconds < 10) {
-                        timer.setText(String.valueOf(timerCountMinutes + ":0" + timerCountSeconds));
-                    } else {
-                        timer.setText(String.valueOf(timerCountMinutes + ":" + timerCountSeconds));
-                    }
-                }
-            }
-
-            public void onFinish() {
-                timer.setText("00:00");
-            }
-
-        }.start();
-    }
-
     private void answerCharCounter(EditText etAnswer, TextView tvCounter, int maxWordLength) {
 
         InputFilter filter = new InputFilter() {

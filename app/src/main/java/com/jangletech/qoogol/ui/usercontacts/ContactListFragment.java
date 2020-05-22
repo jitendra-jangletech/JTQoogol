@@ -12,7 +12,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -23,7 +22,6 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.ContactFilterAdapter;
@@ -305,32 +303,32 @@ public class ContactListFragment extends BaseFragment implements ContactListAdap
     }
 
 
-    private void enableRuntimePermission() {
-        Dexter.withActivity(activity)
-                .withPermission(Manifest.permission.READ_CONTACTS)
-                .withListener(new PermissionListener() {
-                    @Override
-                    public void onPermissionGranted(PermissionGrantedResponse response) {
-                        mBinding.swipeToRefresh.setRefreshing(true);
-                        getContactList();
-                    }
+        private void enableRuntimePermission() {
+            Dexter.withActivity(activity)
+                    .withPermission(Manifest.permission.READ_CONTACTS)
+                    .withListener(new PermissionListener() {
+                        @Override
+                        public void onPermissionGranted(PermissionGrantedResponse response) {
+                            mBinding.swipeToRefresh.setRefreshing(true);
+                            getContactList();
+                        }
 
-                    @Override
-                    public void onPermissionDenied(PermissionDeniedResponse response) {
-                        mBinding.swipeToRefresh.setRefreshing(false);
-                        Toast.makeText(activity, "CONTACTS permission denied.", Toast.LENGTH_LONG).show();
-                    }
+                        @Override
+                        public void onPermissionDenied(PermissionDeniedResponse response) {
+                            mBinding.swipeToRefresh.setRefreshing(false);
+                            Toast.makeText(activity, "CONTACTS permission denied.", Toast.LENGTH_LONG).show();
+                        }
 
-                    @Override
-                    public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
-                        token.continuePermissionRequest();
-                    }
-                })
-                .withErrorListener(error ->
-                        Toast.makeText(activity, "Error occurred! ", Toast.LENGTH_SHORT).show())
-                .onSameThread()
-                .check();
-    }
+                        @Override
+                        public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+                            token.continuePermissionRequest();
+                        }
+                    })
+                    .withErrorListener(error ->
+                            Toast.makeText(activity, "Error occurred! ", Toast.LENGTH_SHORT).show())
+                    .onSameThread()
+                    .check();
+        }
 
     private void getContactList() {
         try {

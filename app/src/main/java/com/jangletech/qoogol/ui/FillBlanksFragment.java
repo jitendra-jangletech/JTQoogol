@@ -142,39 +142,4 @@ public class FillBlanksFragment extends BaseFragment implements QuestReportDialo
         showToast("Question No : "+StartTestActivity.testQuestionList.get(pos).getTq_quest_seq_num()+" Reported successfully.");
         questReportDialog.dismiss();
     }
-
-    private void setTimer(TextView timer, int seconds, int minutes) {
-
-        new CountDownTimer(60 *60*1000, 1000) {
-            int timerCountSeconds = seconds;
-            int timerCountMinutes = minutes;
-
-            public void onTick(long millisUntilFinished) {
-                if (timerCountSeconds < 59) {
-                    timerCountSeconds++;
-                } else {
-                    timerCountSeconds = 0;
-                    timerCountMinutes++;
-                }
-                if (timerCountMinutes < 10) {
-                    if (timerCountSeconds < 10) {
-                        timer.setText(String.valueOf("0" + timerCountMinutes + ":0" + timerCountSeconds));
-                    } else {
-                        timer.setText(String.valueOf("0" + timerCountMinutes + ":" + timerCountSeconds));
-                    }
-                } else {
-                    if (timerCountSeconds < 10) {
-                        timer.setText(String.valueOf(timerCountMinutes + ":0" + timerCountSeconds));
-                    } else {
-                        timer.setText(String.valueOf(timerCountMinutes + ":" + timerCountSeconds));
-                    }
-                }
-            }
-
-            public void onFinish() {
-                timer.setText("00:00");
-            }
-
-        }.start();
-    }
 }

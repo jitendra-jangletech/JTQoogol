@@ -189,7 +189,7 @@ public class StartTestActivity extends BaseActivity implements QuestionPaletAdap
                 if (isDrawerItemClicked) {
                     isDrawerItemClicked = false;
                     testQuestionList.get(pos).setTtqa_visited(true);
-                    viewPager.setCurrentItem(pos);
+                    viewPager.setCurrentItem(pos,true);
                 }
             }
 
@@ -548,7 +548,7 @@ public class StartTestActivity extends BaseActivity implements QuestionPaletAdap
                 return LongAnsFragment.newInstance(position);
             } else if (testQuestionNew.getQ_type().equals(Constant.ONE_LINE_ANSWER)) {
                 return OneLineAnsFragment.newInstance(position);
-            } else if (testQuestionNew.getQ_type().equals(Constant.FILL_THE_BLANKS)) {
+            } else if (testQuestionNew.getQ_type().equals(Constant.Fill_THE_BLANKS_TEST)) {
                 return FillBlanksFragment.newInstance(position);
             } else {
                 return null;

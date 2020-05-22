@@ -2,11 +2,9 @@ package com.jangletech.qoogol.ui.personal_info;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.Html;
@@ -55,18 +53,21 @@ import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.DateUtils;
-import com.jangletech.qoogol.util.ImageOptimization;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.mukesh.OtpView;
 import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.io.File;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Pattern;
@@ -184,6 +185,10 @@ public class PersonalInfoFragment extends BaseFragment {
 
         mBinding.userProfilePic.setOnClickListener(v -> {
             loadImage();
+        });
+
+        mBinding.btnImportContacts.setOnClickListener(v->{
+            MainActivity.navController.navigate(R.id.nav_import_contacts);
         });
 
         //set Mandatory Fields
@@ -660,22 +665,15 @@ public class PersonalInfoFragment extends BaseFragment {
     }
 
     private void showDatePicker() {
-        //showToast("Clicked Inside method");
-        //1996-12-16
-        int YEAR=0,MONTH=0,DAY=0;
-        String strDob = profile.getDob().substring(0,10);
-        if(strDob!=null && !strDob.isEmpty()){
-            String[] parts = strDob.substring(0,10).split("-");
-            YEAR = Integer.parseInt(parts[0]);
-            MONTH = Integer.parseInt(parts[1]);
-            DAY = Integer.parseInt(parts[2]);
+        DateFormat format = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
+        Date date = null;
+        try {
+            date = format.parse(mBinding.etDob.getText().toString());
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
-
         Calendar newCalendar = Calendar.getInstance();
-        newCalendar.setTime(new Date());
-        newCalendar.set(Calendar.YEAR,YEAR);
-        newCalendar.set(Calendar.MONTH,MONTH-1);
-        newCalendar.set(Calendar.DAY_OF_MONTH,DAY);
+        newCalendar.setTime(date);
         DatePickerDialog dialog = new DatePickerDialog(getContext(), android.R.style.Theme_Holo_Dialog, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
@@ -773,13 +771,13 @@ public class PersonalInfoFragment extends BaseFragment {
         Log.d(TAG, "verifyMobileEmail: " + map);
         ProgressDialog.getInstance().show(requireActivity());
         Call<VerifyResponse> call = apiService.verifyMobileEmail(
+                map.get(Constant.appName),
                 map.get(Constant.u_app_version),
                 map.get(Constant.device_id),
                 map.get(Constant.u_user_type),
                 map.get(Constant.u_mob_1),
                 map.get(Constant.VERIFY),
-                map.get(Constant.CASE),
-                map.get(Constant.APP_NAME));
+                map.get(Constant.CASE));
 
         call.enqueue(new Callback<VerifyResponse>() {
             @Override

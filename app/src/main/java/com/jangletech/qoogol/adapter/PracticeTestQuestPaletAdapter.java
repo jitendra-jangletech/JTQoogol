@@ -45,7 +45,7 @@ public class PracticeTestQuestPaletAdapter extends RecyclerView.Adapter<Practice
         holder.itemBinding.tvQuest.setText(practiceQuestion.getQuestion());
 
         holder.itemBinding.questLayout.setOnClickListener(v -> {
-            questClickListener.onQuestionSelected(position);
+            questClickListener.onQuestionSelected(holder.getAdapterPosition());
         });
     }
 
@@ -64,6 +64,6 @@ public class PracticeTestQuestPaletAdapter extends RecyclerView.Adapter<Practice
     }
 
     public interface QuestClickListener {
-        void onQuestionSelected(int position);
+        void onQuestionSelected(int pos);
     }
 }

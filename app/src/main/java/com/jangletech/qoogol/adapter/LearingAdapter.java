@@ -339,7 +339,6 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
         });
     }
 
-
     public void hideLayouts() {
         if (call_from == test) {
             learningItemBinding.expandableLayout.setVisibility(View.VISIBLE);

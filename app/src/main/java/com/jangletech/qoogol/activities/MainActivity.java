@@ -56,7 +56,7 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
         textViewDisplayName = findViewById(R.id.tvName);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        setMargins(mBinding.marginLayout);
+        //setMargins(mBinding.marginLayout);
         GsonBuilder gsonBuilder = new GsonBuilder();
         Gson gson = gsonBuilder.create();
         setUserInfo();
@@ -183,13 +183,13 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
             }
         });
 
-        findViewById(R.id.nav_saved_questions).setOnClickListener(v -> {
+        findViewById(R.id.nav_saved).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
-            if (navController.getCurrentDestination().getId() != R.id.nav_saved_questions) {
+            if (navController.getCurrentDestination().getId() != R.id.nav_saved) {
                 navController.popBackStack();
-                Bundle bundle = new Bundle();
-                bundle.putString("call_from", "saved_questions");
-                navController.navigate(R.id.nav_learning, bundle);
+               // Bundle bundle = new Bundle();
+                //bundle.putString("call_from", "saved_questions");
+                navController.navigate(R.id.nav_saved);
             }
         });
 
@@ -197,7 +197,9 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
             mBinding.drawerLayout.closeDrawers();
             if (navController.getCurrentDestination().getId() != R.id.nav_test_my) {
                 navController.popBackStack();
-                navController.navigate(R.id.nav_test_my);
+                Bundle bundle = new Bundle();
+                bundle.putString(Constant.CALL_FROM,"MY_TEST");
+                navController.navigate(R.id.nav_test_my,bundle);
             }
         });
 
@@ -235,14 +237,6 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
             }
         });
 
-        findViewById(R.id.nav_fav_test).setOnClickListener(v -> {
-            mBinding.drawerLayout.closeDrawers();
-            if (navController.getCurrentDestination().getId() != R.id.nav_fav_test) {
-                navController.popBackStack();
-                navController.navigate(R.id.nav_fav_test);
-            }
-        });
-
         findViewById(R.id.nav_reviews).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
             if (navController.getCurrentDestination().getId() != R.id.nav_reviews) {
@@ -274,6 +268,15 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
                 navController.navigate(R.id.nav_settings);
             }
         });
+
+        findViewById(R.id.nav_faq).setOnClickListener(v -> {
+            mBinding.drawerLayout.closeDrawers();
+            if (navController.getCurrentDestination().getId() != R.id.nav_faq) {
+                navController.popBackStack();
+                navController.navigate(R.id.nav_faq);
+            }
+        });
+
 
         findViewById(R.id.edit_profile).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();

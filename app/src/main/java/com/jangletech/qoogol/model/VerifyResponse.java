@@ -3,8 +3,20 @@ package com.jangletech.qoogol.model;
 import com.google.gson.annotations.SerializedName;
 import com.jangletech.qoogol.util.Constant;
 
+import java.util.List;
+
 public class VerifyResponse {
 
+    @SerializedName("List1")
+    private List<UserPreferences> preferencesList;
+
+    public List<UserPreferences> getPreferencesList() {
+        return preferencesList;
+    }
+
+    public void setPreferencesList(List<UserPreferences> preferencesList) {
+        this.preferencesList = preferencesList;
+    }
 
     public String getNewOTP() {
         return newOTP;

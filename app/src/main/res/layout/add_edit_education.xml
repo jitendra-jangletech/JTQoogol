@@ -8,46 +8,46 @@
         android:background="@color/colorWhite"
         android:elevation="@dimen/_40sdp">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/top_layout"
-            android:weightSum="2"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:background="@color/colorPrimaryDark"
-            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="?android:attr/actionBarSize">
+            android:layout_height="?android:attr/actionBarSize"
+            android:background="@color/colorPrimaryDark"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
                 android:id="@+id/btnClose"
-                android:layout_margin="@dimen/_10sdp"
-                android:layout_weight="0.2"
-                android:layout_width="0dp"
-                android:background="@drawable/ic_close_white"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_margin="@dimen/_10sdp"
+                android:background="@drawable/ic_close_white"
                 android:gravity="center"
                 android:textColor="@color/colorWhite"
-                android:textSize="@dimen/_13sdp" />
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/titletv"
-                android:gravity="center_vertical"
-                android:layout_weight="1.8"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="Add Education"
                 android:layout_gravity="center_vertical"
+                android:layout_margin="@dimen/_10sdp"
+                android:gravity="center_vertical"
+                android:text="Add Education"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/colorWhite"
-                android:textSize="@dimen/_15ssp" />
+                app:layout_constraintLeft_toRightOf="@+id/btnClose"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ScrollView
             android:layout_width="match_parent"
-            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_height="wrap_content"
             android:fillViewport="true"
-            app:layout_constraintTop_toBottomOf="@+id/top_layout"
-            android:layout_height="wrap_content">
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/top_layout">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -55,139 +55,133 @@
                 android:padding="@dimen/_10sdp">
 
                 <com.jangletech.qoogol.view.CustomAutoCompleteTextView
-                    android:id="@+id/countryAutocompleteView"
-                    style="@style/AutoCompleteTextViewStyle"
-                    android:hint="@string/country"
-                    android:layout_marginTop="@dimen/_5sdp"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-
-                <com.jangletech.qoogol.view.CustomAutoCompleteTextView
-                    android:id="@+id/stateAutocompleteView"
-                    style="@style/AutoCompleteTextViewStyle"
-                    android:hint="@string/state"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/countryAutocompleteView" />
-
-                <com.jangletech.qoogol.view.CustomAutoCompleteTextView
-                    android:id="@+id/cityAutocompleteView"
-                    style="@style/AutoCompleteTextViewStyle"
-                    android:hint="@string/city"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/stateAutocompleteView" />
-
-                <com.jangletech.qoogol.view.CustomAutoCompleteTextView
                     android:id="@+id/universityBoardAutocompleteView"
                     style="@style/AutoCompleteTextViewStyle"
-                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:hint="@string/university" />
+
+                <ImageView
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:id="@+id/addUniversity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignEnd="@+id/universityBoardAutocompleteView"
+                    android:layout_marginTop="@dimen/_18sdp"
+                    android:contentDescription="@string/app_name"
+                    android:src="@drawable/ic_add"
+                    android:visibility="visible" />
+
+               <!-- <com.jangletech.qoogol.view.CustomAutoCompleteTextView
+                    android:id="@+id/universityBoardAutocompleteView"
+                    style="@style/AutoCompleteTextViewStyle"
+                    android:layout_marginTop="@dimen/_10sdp"
                     android:hint="@string/university"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/cityAutocompleteView" />
+                    app:layout_constraintTop_toBottomOf="@+id/cityAutocompleteView" />-->
 
                 <com.jangletech.qoogol.view.CustomAutoCompleteTextView
                     android:id="@+id/instituteAutocompleteView"
                     style="@style/AutoCompleteTextViewStyle"
+                    android:layout_marginTop="@dimen/_10sdp"
                     android:hint="@string/institute"
-                    android:layout_marginTop="@dimen/_5sdp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/universityBoardAutocompleteView" />
+
+
+                <ImageView
+                    app:layout_constraintTop_toBottomOf="@+id/universityBoardAutocompleteView"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:id="@+id/addInstitute"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignEnd="@+id/instituteAutocompleteView"
+                    android:layout_marginTop="@dimen/_18sdp"
+                    android:contentDescription="@string/app_name"
+                    android:src="@drawable/ic_add"
+                    android:visibility="visible" />
 
                 <com.jangletech.qoogol.view.CustomAutoCompleteTextView
                     android:id="@+id/degreeAutocompleteView"
                     style="@style/AutoCompleteTextViewStyle"
+                    android:layout_marginTop="@dimen/_10sdp"
                     android:hint="@string/degree"
-                    android:layout_marginTop="@dimen/_5sdp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/instituteAutocompleteView" />
 
                 <com.jangletech.qoogol.view.CustomAutoCompleteTextView
                     android:id="@+id/courseAutocompleteView"
                     style="@style/AutoCompleteTextViewStyle"
+                    android:layout_marginTop="@dimen/_10sdp"
                     android:hint="@string/course"
-                    android:layout_marginTop="@dimen/_5sdp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/degreeAutocompleteView" />
 
-                <com.jangletech.qoogol.view.CustomAutoCompleteTextView
-                    android:id="@+id/classAutocompleteView"
-                    style="@style/AutoCompleteTextViewStyle"
-                    android:hint="@string/classes"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/courseAutocompleteView" />
-
                 <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/courseAutocompleteView"
                     android:id="@+id/date_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5sdp"
-                    android:weightSum="2"
-                    app:layout_constraintTop_toBottomOf="@+id/classAutocompleteView"
-                    android:layout_height="wrap_content">
+                    android:orientation="horizontal"
+                    android:weightSum="2">
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/til_startdate"
-                        android:layout_weight="1"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/_5sdp"
                         android:layout_marginRight="@dimen/_2sdp"
+                        android:layout_marginBottom="@dimen/_10sdp"
+                        android:layout_weight="1"
                         android:hint="@string/start_date"
                         app:errorEnabled="true">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etstartdate"
-                            android:focusable="false"
                             style="@style/EditTextStyle"
                             android:drawableRight="@drawable/ic_date_calender"
+                            android:focusable="false"
                             android:maxLength="15" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/til_enddate"
-                        android:layout_weight="1"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
-                        android:layout_marginLeft="@dimen/_2sdp"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_2sdp"
                         android:layout_marginBottom="@dimen/_5sdp"
+                        android:layout_weight="1"
                         android:hint="@string/end_date"
                         app:errorEnabled="true">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etenddate"
-                            android:focusable="false"
                             style="@style/EditTextStyle"
                             android:drawableRight="@drawable/ic_date_calender"
+                            android:focusable="false"
                             android:maxLength="15" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                 </LinearLayout>
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_25sdp"
-                    android:layout_marginRight="@dimen/_5sdp"
-                    android:layout_weight="1"
-                    android:text="Save"
-                    android:id="@+id/save_edu"
-                    android:textAllCaps="false"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/date_layout" />
-
-
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </ScrollView>
 
-
+        <TextView
+            android:id="@+id/btnSave"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_38sdp"
+            android:background="@color/colorPrimary"
+            android:gravity="center"
+            android:text="Save"
+            android:textAllCaps="false"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/colorWhite"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -2,21 +2,17 @@ package com.jangletech.qoogol.adapter;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.ShareItemBinding;
 import com.jangletech.qoogol.model.Connections;
-import com.jangletech.qoogol.util.UtilHelper;
 
 import java.util.ArrayList;
 import java.util.List;

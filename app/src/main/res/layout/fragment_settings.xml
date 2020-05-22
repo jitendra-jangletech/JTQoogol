@@ -3,7 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <RelativeLayout
+    <data>
+
+        <variable
+            name="preference"
+            type="com.jangletech.qoogol.model.UserPreferences" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.settings.SettingsFragment">
@@ -17,543 +24,149 @@
             android:scrollbars="none">
 
             <LinearLayout
-                android:padding="@dimen/_10sdp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="@dimen/_10sdp">
 
-                <LinearLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_height="wrap_content">
 
                     <TextView
-                        style="@style/chipTitleStyle"
-                        android:text="My school board is" />
+                        android:id="@+id/tvBoard"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_15sdp"
+                        android:text="University/Board"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                    <TextView
+                    <com.jangletech.qoogol.view.CustomAutoCompleteTextView
+                        android:id="@+id/boardAutocompleteView"
+                        style="@style/AutoCompleteTextViewStyle"
+                        android:hint="Select University"
+                        android:tag="@{preference.ubm_id}"
+                        android:text="@{preference.ubm_board_name}"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tvBoard" />
+
+                    <ImageView
+                        android:id="@+id/addUniversity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignEnd="@+id/boardAutocompleteView"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:contentDescription="@string/app_name"
+                        android:src="@drawable/ic_add"
                         android:visibility="visible"
-                        android:id="@+id/tvBoardEdit"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/_10sdp" />
-                </LinearLayout>
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tvBoard" />
 
-                <com.google.android.material.chip.ChipGroup
-                    android:id="@+id/boardChipGrp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    app:selectionRequired="true"
-                    app:singleSelection="true">
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/boardChip"
-                        style="@style/Widget.MaterialComponents.Chip.Filter"
-                        app:chipStrokeColor="@color/icon_color"
-                        app:chipStrokeWidth="@dimen/_1sdp"
-                        android:textColor="@color/colorBlack"
-                        android:gravity="center_vertical"
-                        android:text="Maharashtra State Board"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-
-
-                </com.google.android.material.chip.ChipGroup>
-
-                <View
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_1sdp"
-                    android:layout_marginLeft="@dimen/_10sdp"
-                    android:layout_marginTop="@dimen/_15sdp"
-                    android:layout_marginRight="@dimen/_10sdp"
-                    android:background="@color/colorBlack" />
-
-                <TextView
-                    style="@style/chipTitleStyle"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:text="I am in class" />
-
-                <com.google.android.material.chip.ChipGroup
-                    android:id="@+id/classChipGrp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    app:selectionRequired="true"
-                    app:singleSelection="true">
-
-
-                </com.google.android.material.chip.ChipGroup>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_1sdp"
-                    android:layout_marginLeft="@dimen/_10sdp"
-                    android:layout_marginTop="@dimen/_15sdp"
-                    android:layout_marginRight="@dimen/_10sdp"
-                    android:background="@color/colorBlack" />
-
-                <LinearLayout
-                    android:id="@+id/layoutStream"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:orientation="vertical"
-                    android:visibility="gone">
+                    android:layout_height="wrap_content">
 
                     <TextView
-                        style="@style/chipTitleStyle"
-                        android:text="My stream is" />
-
-                    <com.google.android.material.chip.ChipGroup
-                        android:id="@+id/hscChipGrp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        app:selectionRequired="true"
-                        app:singleSelection="true">
-
-                        <!--  <com.google.android.material.chip.Chip
-                              style="@style/Widget.MaterialComponents.Chip.Choice"
-                              android:layout_width="wrap_content"
-                              android:layout_height="@dimen/_25sdp"
-                              android:checkable="true"
-                              android:text="Science"
-                              app:chipBackgroundColor="@drawable/chip_background"
-                              app:chipStrokeColor="@color/icon_color"
-                              app:chipStrokeWidth="@dimen/_1sdp" />
-
-                          <com.google.android.material.chip.Chip
-                              style="@style/Widget.MaterialComponents.Chip.Choice"
-                              android:layout_width="wrap_content"
-                              android:layout_height="@dimen/_25sdp"
-                              android:checkable="true"
-                              android:text="Commerce"
-                              app:chipBackgroundColor="@drawable/chip_background"
-                              app:chipStrokeColor="@color/icon_color"
-                              app:chipStrokeWidth="@dimen/_1sdp" />-->
-
-                    </com.google.android.material.chip.ChipGroup>
-
-                    <View
+                        android:id="@+id/tvInstitute"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/_1sdp"
-                        android:layout_marginLeft="@dimen/_10sdp"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_15sdp"
-                        android:layout_marginRight="@dimen/_10sdp"
-                        android:background="@color/colorBlack" />
-                </LinearLayout>
+                        android:text="Institute"
+                        app:layout_constraintTop_toTopOf="parent" />
 
+                    <com.jangletech.qoogol.view.CustomAutoCompleteTextView
+                        android:id="@+id/instituteAutocompleteView"
+                        style="@style/AutoCompleteTextViewStyle"
+                        android:hint="Select Institute"
+                        android:tag="@{preference.iom_id}"
+                        android:text="@{preference.iom_name}"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tvInstitute" />
 
-                <LinearLayout
-                    android:id="@+id/layoutDegree"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:orientation="vertical"
-                    android:visibility="gone">
-
-                    <TextView
-                        style="@style/chipTitleStyle"
-                        android:text="My Degree is" />
-
-                    <com.google.android.material.chip.ChipGroup
-                        android:id="@+id/degreeChipGrp"
+                    <ImageView
+                        android:id="@+id/addInstitute"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_alignEnd="@+id/instituteAutocompleteView"
                         android:layout_marginTop="@dimen/_10sdp"
-                        app:selectionRequired="true"
-                        app:singleSelection="true">
+                        android:contentDescription="@string/app_name"
+                        android:src="@drawable/ic_add"
+                        android:visibility="visible"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tvInstitute" />
 
-                        <!--<com.google.android.material.chip.Chip
-                            style="@style/Widget.MaterialComponents.Chip.Choice"
-                            android:layout_width="wrap_content"
-                            android:layout_height="@dimen/_25sdp"
-                            android:checkable="true"
-                            android:text="B-tech"
-                            app:chipBackgroundColor="@drawable/chip_background"
-                            app:chipStrokeColor="@color/icon_color"
-                            app:chipStrokeWidth="@dimen/_1sdp" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-                        <com.google.android.material.chip.Chip
-                            style="@style/Widget.MaterialComponents.Chip.Choice"
-                            android:layout_width="wrap_content"
-                            android:layout_height="@dimen/_25sdp"
-                            android:checkable="true"
-                            android:text="M-tech"
-                            app:chipBackgroundColor="@drawable/chip_background"
-                            app:chipStrokeColor="@color/icon_color"
-                            app:chipStrokeWidth="@dimen/_1sdp" />
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-                        <com.google.android.material.chip.Chip
-                            style="@style/Widget.MaterialComponents.Chip.Choice"
-                            android:layout_width="wrap_content"
-                            android:layout_height="@dimen/_25sdp"
-                            android:checkable="true"
-                            android:text="B-Comm"
-                            app:chipBackgroundColor="@drawable/chip_background"
-                            app:chipStrokeColor="@color/icon_color"
-                            app:chipStrokeWidth="@dimen/_1sdp" />
-
-                        <com.google.android.material.chip.Chip
-                            style="@style/Widget.MaterialComponents.Chip.Choice"
-                            android:layout_width="wrap_content"
-                            android:layout_height="@dimen/_25sdp"
-                            android:checkable="true"
-                            android:text="Bsc"
-                            app:chipBackgroundColor="@drawable/chip_background"
-                            app:chipStrokeColor="@color/icon_color"
-                            app:chipStrokeWidth="@dimen/_1sdp" />
-
-                        <com.google.android.material.chip.Chip
-                            style="@style/Widget.MaterialComponents.Chip.Choice"
-                            android:layout_width="wrap_content"
-                            android:layout_height="@dimen/_25sdp"
-                            android:checkable="true"
-                            android:text="Msc"
-                            app:chipBackgroundColor="@drawable/chip_background"
-                            app:chipStrokeColor="@color/icon_color"
-                            app:chipStrokeWidth="@dimen/_1sdp" />-->
-
-                    </com.google.android.material.chip.ChipGroup>
-
-
-                    <View
+                    <TextView
+                        android:id="@+id/tvDegree"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/_1sdp"
-                        android:layout_marginLeft="@dimen/_10sdp"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_15sdp"
-                        android:layout_marginRight="@dimen/_10sdp"
-                        android:background="@color/colorBlack" />
-                </LinearLayout>
+                        android:text="Degree"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.jangletech.qoogol.view.CustomAutoCompleteTextView
+                        android:id="@+id/degreeAutocompleteView"
+                        style="@style/AutoCompleteTextViewStyle"
+                        android:hint="Select Degree"
+                        android:tag="@{preference.dm_id}"
+                        android:text="@{preference.dm_degree_name}"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvDegree" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-                <LinearLayout
-                    android:id="@+id/layoutDegreeStream"
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:orientation="vertical"
-                    android:visibility="gone">
+                    android:layout_height="wrap_content">
 
                     <TextView
-                        android:id="@+id/tvDegreeStream"
-                        style="@style/chipTitleStyle"
-                        android:text="My Degree Stream is" />
-
-                    <com.google.android.material.chip.ChipGroup
-                        android:id="@+id/degreeStreamChipGrp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        app:selectionRequired="true"
-                        app:singleSelection="true">
-
-                        <!-- <com.google.android.material.chip.Chip
-                             style="@style/Widget.MaterialComponents.Chip.Choice"
-                             android:layout_width="wrap_content"
-                             android:layout_height="@dimen/_25sdp"
-                             android:checkable="true"
-                             android:text="Mechanical"
-                             app:chipBackgroundColor="@drawable/chip_background"
-                             app:chipStrokeColor="@color/icon_color"
-                             app:chipStrokeWidth="@dimen/_1sdp" />
-
-                         <com.google.android.material.chip.Chip
-                             style="@style/Widget.MaterialComponents.Chip.Choice"
-                             android:layout_width="wrap_content"
-                             android:layout_height="@dimen/_25sdp"
-                             android:checkable="true"
-                             android:text="Computer Science"
-                             app:chipBackgroundColor="@drawable/chip_background"
-                             app:chipStrokeColor="@color/icon_color"
-                             app:chipStrokeWidth="@dimen/_1sdp" />
-
-                         <com.google.android.material.chip.Chip
-                             style="@style/Widget.MaterialComponents.Chip.Choice"
-                             android:layout_width="wrap_content"
-                             android:layout_height="@dimen/_25sdp"
-                             android:checkable="true"
-                             android:text="Electrical"
-                             app:chipBackgroundColor="@drawable/chip_background"
-                             app:chipStrokeColor="@color/icon_color"
-                             app:chipStrokeWidth="@dimen/_1sdp" />
-
-                         <com.google.android.material.chip.Chip
-                             style="@style/Widget.MaterialComponents.Chip.Choice"
-                             android:layout_width="wrap_content"
-                             android:layout_height="@dimen/_25sdp"
-                             android:checkable="true"
-                             android:text="Civil"
-                             app:chipBackgroundColor="@drawable/chip_background"
-                             app:chipStrokeColor="@color/icon_color"
-                             app:chipStrokeWidth="@dimen/_1sdp" />
-
-                         <com.google.android.material.chip.Chip
-                             style="@style/Widget.MaterialComponents.Chip.Choice"
-                             android:layout_width="wrap_content"
-                             android:layout_height="@dimen/_25sdp"
-                             android:checkable="true"
-                             android:text="Chemical"
-                             app:chipBackgroundColor="@drawable/chip_background"
-                             app:chipStrokeColor="@color/icon_color"
-                             app:chipStrokeWidth="@dimen/_1sdp" />-->
-
-                    </com.google.android.material.chip.ChipGroup>
-
-                    <View
+                        android:id="@+id/tvCourse"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/_1sdp"
-                        android:layout_marginLeft="@dimen/_10sdp"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_15sdp"
-                        android:layout_marginRight="@dimen/_10sdp"
-                        android:background="@color/colorBlack" />
+                        android:text="Course"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                </LinearLayout>
+                    <com.jangletech.qoogol.view.CustomAutoCompleteTextView
+                        android:id="@+id/courseAutocompleteView"
+                        style="@style/AutoCompleteTextViewStyle"
+                        android:hint="Select Course"
+                        android:tag="@{preference.co_id}"
+                        android:text="@{preference.co_name}"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvCourse" />
 
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <LinearLayout
-                    android:id="@+id/layoutCourseYear"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/tvClassLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:orientation="vertical"
-                    android:visibility="gone">
+                    android:visibility="visible">
 
                     <TextView
-                        style="@style/chipTitleStyle"
-                        android:text="I am in" />
-
-                    <com.google.android.material.chip.ChipGroup
-                        android:id="@+id/CourseYearChipGrp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        app:selectionRequired="true"
-                        app:singleSelection="true">
-
-                        <!-- <com.google.android.material.chip.Chip
-                             style="@style/Widget.MaterialComponents.Chip.Choice"
-                             android:layout_width="wrap_content"
-                             android:layout_height="@dimen/_25sdp"
-                             android:checkable="true"
-                             android:text="1st year"
-                             app:chipBackgroundColor="@drawable/chip_background"
-                             app:chipStrokeColor="@color/icon_color"
-                             app:chipStrokeWidth="@dimen/_1sdp" />
-
-                         <com.google.android.material.chip.Chip
-                             style="@style/Widget.MaterialComponents.Chip.Choice"
-                             android:layout_width="wrap_content"
-                             android:layout_height="@dimen/_25sdp"
-                             android:checkable="true"
-                             android:text="2nd year"
-                             app:chipBackgroundColor="@drawable/chip_background"
-                             app:chipStrokeColor="@color/icon_color"
-                             app:chipStrokeWidth="@dimen/_1sdp" />
-
-                         <com.google.android.material.chip.Chip
-                             style="@style/Widget.MaterialComponents.Chip.Choice"
-                             android:layout_width="wrap_content"
-                             android:layout_height="@dimen/_25sdp"
-                             android:checkable="true"
-                             android:text="3rd year"
-                             app:chipBackgroundColor="@drawable/chip_background"
-                             app:chipStrokeColor="@color/icon_color"
-                             app:chipStrokeWidth="@dimen/_1sdp" />
-
-
-                         <com.google.android.material.chip.Chip
-                             style="@style/Widget.MaterialComponents.Chip.Choice"
-                             android:layout_width="wrap_content"
-                             android:layout_height="@dimen/_25sdp"
-                             android:checkable="true"
-                             android:text="4th year"
-                             app:chipBackgroundColor="@drawable/chip_background"
-                             app:chipStrokeColor="@color/icon_color"
-                             app:chipStrokeWidth="@dimen/_1sdp" />-->
-                    </com.google.android.material.chip.ChipGroup>
-
-                    <View
+                        android:id="@+id/tvClass"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/_1sdp"
-                        android:layout_marginLeft="@dimen/_10sdp"
-                        android:layout_marginTop="@dimen/_15sdp"
-                        android:layout_marginRight="@dimen/_10sdp"
-                        android:background="@color/colorBlack" />
-
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:id="@+id/layoutSubjects"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:orientation="vertical"
-                    android:visibility="gone">
-
-                    <TextView
-                        style="@style/chipTitleStyle"
-                        android:text="I want to learn" />
-
-                    <com.google.android.material.chip.ChipGroup
-                        android:id="@+id/subjectsChipGrp"
-                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        app:selectionRequired="true">
-
-                        <!--<com.google.android.material.chip.Chip
-                            style="@style/Widget.MaterialComponents.Chip.Choice"
-                            android:layout_width="wrap_content"
-                            android:layout_height="@dimen/_25sdp"
-                            android:checkable="true"
-                            android:text="Chemistry"
-                            app:chipBackgroundColor="@drawable/chip_background"
-                            app:chipStrokeColor="@color/icon_color"
-                            app:chipStrokeWidth="@dimen/_1sdp" />
-
-                        <com.google.android.material.chip.Chip
-                            style="@style/Widget.MaterialComponents.Chip.Choice"
-                            android:layout_width="wrap_content"
-                            android:layout_height="@dimen/_25sdp"
-                            android:checkable="true"
-                            android:text="Drawing"
-                            app:chipBackgroundColor="@drawable/chip_background"
-                            app:chipStrokeColor="@color/icon_color"
-                            app:chipStrokeWidth="@dimen/_1sdp" />
-
-
-                        <com.google.android.material.chip.Chip
-                            style="@style/Widget.MaterialComponents.Chip.Choice"
-                            android:layout_width="wrap_content"
-                            android:layout_height="@dimen/_25sdp"
-                            android:checkable="true"
-                            android:text="Maths"
-                            app:chipBackgroundColor="@drawable/chip_background"
-                            app:chipStrokeColor="@color/icon_color"
-                            app:chipStrokeWidth="@dimen/_1sdp" />
-
-                        <com.google.android.material.chip.Chip
-                            style="@style/Widget.MaterialComponents.Chip.Choice"
-                            android:layout_width="wrap_content"
-                            android:layout_height="@dimen/_25sdp"
-                            android:checkable="true"
-                            android:text="Physics"
-                            app:chipBackgroundColor="@drawable/chip_background"
-                            app:chipStrokeColor="@color/icon_color"
-                            app:chipStrokeWidth="@dimen/_1sdp" />
-
-                        <com.google.android.material.chip.Chip
-                            style="@style/Widget.MaterialComponents.Chip.Choice"
-                            android:layout_width="wrap_content"
-                            android:layout_height="@dimen/_25sdp"
-                            android:checkable="true"
-                            android:text="Evs"
-                            app:chipBackgroundColor="@drawable/chip_background"
-                            app:chipStrokeColor="@color/icon_color"
-                            app:chipStrokeWidth="@dimen/_1sdp" />
-
-                        <com.google.android.material.chip.Chip
-                            style="@style/Widget.MaterialComponents.Chip.Choice"
-                            android:layout_width="wrap_content"
-                            android:layout_height="@dimen/_25sdp"
-                            android:checkable="true"
-                            android:text="English"
-                            app:chipBackgroundColor="@drawable/chip_background"
-                            app:chipStrokeColor="@color/icon_color"
-                            app:chipStrokeWidth="@dimen/_1sdp" />
-
-                        <com.google.android.material.chip.Chip
-                            style="@style/Widget.MaterialComponents.Chip.Choice"
-                            android:layout_width="wrap_content"
-                            android:layout_height="@dimen/_25sdp"
-                            android:checkable="true"
-                            android:text="Marathi"
-                            app:chipBackgroundColor="@drawable/chip_background"
-                            app:chipStrokeColor="@color/icon_color"
-                            app:chipStrokeWidth="@dimen/_1sdp" />
-
-                        <com.google.android.material.chip.Chip
-                            style="@style/Widget.MaterialComponents.Chip.Choice"
-                            android:layout_width="wrap_content"
-                            android:layout_height="@dimen/_25sdp"
-                            android:checkable="true"
-                            android:text="Telugu"
-                            app:chipBackgroundColor="@drawable/chip_background"
-                            app:chipStrokeColor="@color/icon_color"
-                            app:chipStrokeWidth="@dimen/_1sdp" />-->
-
-                    </com.google.android.material.chip.ChipGroup>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/_1sdp"
-                        android:layout_marginLeft="@dimen/_10sdp"
                         android:layout_marginTop="@dimen/_15sdp"
-                        android:layout_marginRight="@dimen/_10sdp"
-                        android:background="@color/colorBlack" />
-                </LinearLayout>
+                        android:text="Class"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-
-
-                <LinearLayout
-                    android:id="@+id/layoutExams"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:orientation="vertical"
-                    android:visibility="gone">
-
-                    <TextView
-                        style="@style/chipTitleStyle"
-                        android:text="I am preparing for" />
-
-                    <com.google.android.material.chip.ChipGroup
-                        android:id="@+id/examsChipGrp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        app:selectionRequired="true">
-
-
-
-                       <!-- <com.google.android.material.chip.Chip
-                            style="@style/Widget.MaterialComponents.Chip.Choice"
-                            android:layout_width="wrap_content"
-                            android:layout_height="@dimen/_25sdp"
-                            android:checkable="true"
-                            android:text="MPSC"
-                            app:chipBackgroundColor="@drawable/chip_background"
-                            app:chipStrokeColor="@color/icon_color"
-                            app:chipStrokeWidth="@dimen/_1sdp" />
-
-                        <com.google.android.material.chip.Chip
-                            style="@style/Widget.MaterialComponents.Chip.Choice"
-                            android:layout_width="wrap_content"
-                            android:layout_height="@dimen/_25sdp"
-                            android:checkable="true"
-                            android:text="SSC"
-                            app:chipBackgroundColor="@drawable/chip_background"
-                            app:chipStrokeColor="@color/icon_color"
-                            app:chipStrokeWidth="@dimen/_1sdp" />
-
-                        <com.google.android.material.chip.Chip
-                            style="@style/Widget.MaterialComponents.Chip.Choice"
-                            android:layout_width="wrap_content"
-                            android:layout_height="@dimen/_25sdp"
-                            android:checkable="true"
-                            android:text="IIT-JEE"
-                            app:chipBackgroundColor="@drawable/chip_background"
-                            app:chipStrokeColor="@color/icon_color"
-                            app:chipStrokeWidth="@dimen/_1sdp" />-->
-
-
-                    </com.google.android.material.chip.ChipGroup>
-
-
-                </LinearLayout>
+                    <com.jangletech.qoogol.view.CustomAutoCompleteTextView
+                        android:id="@+id/classAutocompleteView"
+                        style="@style/AutoCompleteTextViewStyle"
+                        android:hint="Select Class"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvClass" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
 
             </LinearLayout>
@@ -563,15 +176,15 @@
 
 
         <TextView
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:gravity="center"
-            android:background="@color/colorPrimaryDark"
-            android:textColor="@color/colorWhite"
             android:id="@+id/btnApply"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_40sdp"
-            android:layout_alignParentBottom="true"
-            android:text="Apply" />
+            android:background="@color/colorPrimaryDark"
+            android:gravity="center"
+            android:text="Apply"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/colorWhite"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
-    </RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
