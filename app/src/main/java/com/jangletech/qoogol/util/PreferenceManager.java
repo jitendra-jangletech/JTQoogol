@@ -81,8 +81,8 @@ public class PreferenceManager {
                 .apply();
     }
 
-    public String getSubjectFilter(){
-        return sharedPreferences.getString("subject","");
+    public Set<String> getSubjectFilter(){
+        return sharedPreferences.getStringSet("subject",new HashSet<>());
     }
 
     public void setSubjectFilter(Set subject) {
@@ -96,11 +96,6 @@ public class PreferenceManager {
     }
 
 
-    public void setSubjectFilter(String subject) {
-        sharedPreferences.edit()
-                .putString("subject",subject)
-                .apply();
-    }
 
     public void resetSetting() {
         sharedPreferences.edit()
