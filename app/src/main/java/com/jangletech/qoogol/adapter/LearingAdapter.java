@@ -838,15 +838,18 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
         }
         
         private void submitCall() {
-            isSolvedRight = 1;
-            isAttempted = 0;
-            LearningQuestionsNew learningQuestions = learningQuestionsList.get(getAdapterPosition());
-            submitFunction(learningQuestions);
-            if (isAttempted == 1) {
-                int attempt = Integer.parseInt(learningQuestions.getAttended_by());
-                learningItemBinding.attemptedValue.setText(String.valueOf(attempt+1));
-                onIconClick.onSubmitClick(learningQuestions.getQuestion_id(),isSolvedRight);
+            try {
+                isSolvedRight = 1;
+                isAttempted = 0;
+                LearningQuestionsNew learningQuestions = learningQuestionsList.get(getAdapterPosition());
+                submitFunction(learningQuestions);
+                if (isAttempted == 1) {
+                    onIconClick.onSubmitClick(learningQuestions.getQuestion_id(),isSolvedRight);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+
         }
 
         private void submitFunction(LearningQuestionsNew learningQuestions) {

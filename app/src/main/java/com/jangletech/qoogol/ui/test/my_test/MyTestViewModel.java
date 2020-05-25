@@ -98,6 +98,7 @@ public class MyTestViewModel extends AndroidViewModel {
         //mRepository = new TestRepository(application);
         allTestList = new MutableLiveData<>();
         allSubjectList = new MutableLiveData<>();
+        allChapterList = new MutableLiveData<>();
         userPreference = new MutableLiveData<>();
         classes = new MutableLiveData<>();
         degrees = new MutableLiveData<>();

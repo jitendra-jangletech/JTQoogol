@@ -123,17 +123,19 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
         mViewModel = ViewModelProviders.of(this).get(MyTestViewModel.class);
         fetchSubjectList();
         fetchchapterList();
+
+
         mViewModel.getAllSubjects().observe(getActivity(), subjects -> {
             Log.d(TAG, "onChanged Subjects Size : " + subjects.size());
             prepareSubjectChips(subjects);
         });
+
 
         mViewModel.getAllChapter().observe(getActivity(), chapters -> {
             Log.d(TAG, "onChanged Subjects Size : " + chapters.size());
             prepareChapterChips(chapters);
         });
 
-//        prepareChapterChips();
         prepareRatingChips();
         prepareTestCategoryChips();
         prepareDiffLevelChips();
