@@ -123,17 +123,19 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
         mViewModel = ViewModelProviders.of(this).get(MyTestViewModel.class);
         fetchSubjectList();
         fetchchapterList();
+
+
         mViewModel.getAllSubjects().observe(getActivity(), subjects -> {
             Log.d(TAG, "onChanged Subjects Size : " + subjects.size());
             prepareSubjectChips(subjects);
         });
+
 
         mViewModel.getAllChapter().observe(getActivity(), chapters -> {
             Log.d(TAG, "onChanged Subjects Size : " + chapters.size());
             prepareChapterChips(chapters);
         });
 
-//        prepareChapterChips();
         prepareRatingChips();
         prepareTestCategoryChips();
         prepareDiffLevelChips();
@@ -325,36 +327,13 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
         }
 
 
-//        List subjectList = new ArrayList();
-//        subjectList.add("All");
-//        subjectList.add("Current");
-//        subjectList.add("The Solid State.");
-//        subjectList.add("Solutions");
-//        subjectList.add("Solutions");
-//        subjectList.add("Chemical Kinetics");
-//        subjectList.add("Surface Chemistry");
-//
-//        mBinding.chapterChipGrp.removeAllViews();
-//        for (int i = 0; i < subjectList.size(); i++) {
-//            Chip chip = (Chip) LayoutInflater.from(mBinding.chapterChipGrp.getContext()).inflate(R.layout.chip_layout, mBinding.chapterChipGrp, false);
-//            chip.setText(subjectList.get(i).toString());
-//            chip.setTag("Chapters");
-//            chip.setId(i);
-//            if (i == 0)
-//                chip.setChecked(true);
-//            mapChapterChips.put(i, chip);
-//            chip.setOnClickListener(this);
-//            chip.setClickable(true);
-//            chip.setCheckable(true);
-//            mBinding.chapterChipGrp.addView(chip);
-//        }
     }
 
     private void prepareSubjectChips(List<FetchSubjectResponse> subjects) {
         try {
             Set subjectset = new HashSet<String>();
             if (mSettings.getSubjectFilter()!=null) {
-                //subjectset = mSettings.getSubjectFilter();
+                subjectset = mSettings.getSubjectFilter();
             }
             mBinding.subjectsChipGrp.removeAllViews();
             for (int i = 0; i < subjects.size(); i++) {
@@ -379,7 +358,7 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
         try {
             subjectset.clear();
             if (mSettings.getSubjectFilter()!=null) {
-                //subjectset = mSettings.getSubjectFilter();
+                subjectset = mSettings.getSubjectFilter();
             }
             for (int i = 0; i < mapSubjectChips.size(); i++) {
                 String id = String.valueOf(mapSubjectChips.get(i).getId());
@@ -423,14 +402,6 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-//        for (int i = 0; i < mapChapterChips.size(); i++) {
-//            if (mapChapterChips.get(i).isChecked()) {
-//                mapChapterChips.get(i).setTextColor(Color.WHITE);
-//            } else {
-//                mapChapterChips.get(i).setTextColor(Color.BLACK);
-//            }
-//        }
     }
 
     private void setSelectedRatingChips(Chip chip) {
