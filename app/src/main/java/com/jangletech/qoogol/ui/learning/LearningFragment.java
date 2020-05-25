@@ -236,10 +236,6 @@ public class LearningFragment extends BaseFragment implements LearingAdapter.onI
         NavHostFragment.findNavController(this).navigate(R.id.nav_comments, bundle);
     }
 
-    @Override
-    public void onLikeClick(String questionId, int isLiked) {
-        ProcessQuestionAPI(questionId, isLiked, "like","","");
-    }
 
     @Override
     public void onShareClick(String questionId) {
@@ -248,18 +244,11 @@ public class LearningFragment extends BaseFragment implements LearingAdapter.onI
         NavHostFragment.findNavController(this).navigate(R.id.nav_share, bundle);
     }
 
-    @Override
-    public void onFavouriteClick(String questionId, int isFav) {
-        ProcessQuestionAPI(questionId,isFav, "fav","","");
-    }
 
     @Override
     public void onSubmitClick(String questionId, int isRight) {
         ProcessQuestionAPI(questionId, isRight, "submit","","");
     }
 
-    @Override
-    public void onRatingSubmit(String questionId, String rating, String feedbak) {
-        ProcessQuestionAPI(questionId, 0, "rating",rating,feedbak);
-    }
+
 }

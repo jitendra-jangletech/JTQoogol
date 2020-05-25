@@ -230,10 +230,7 @@ public class PracticeTestActivity extends BaseActivity implements LearingAdapter
         MainActivity.navController.navigate(R.id.nav_comments, bundle);
     }
 
-    @Override
-    public void onLikeClick(String questionId, int isLiked) {
-        ProcessQuestionAPI(new PreferenceManager(getApplicationContext()).getInt(Constant.USER_ID), questionId, "I", isLiked, "like");
-    }
+
 
     @Override
     public void onShareClick(String questionId) {
@@ -242,20 +239,14 @@ public class PracticeTestActivity extends BaseActivity implements LearingAdapter
         MainActivity.navController.navigate(R.id.nav_share, bundle);
     }
 
-    @Override
-    public void onFavouriteClick(String questionId, int isFav) {
-        ProcessQuestionAPI(new PreferenceManager(getApplicationContext()).getInt(Constant.USER_ID), questionId, "I", isFav, "fav");
-    }
+
 
     @Override
     public void onSubmitClick(String questionId, int isRight) {
 
     }
 
-    @Override
-    public void onRatingSubmit(String questionId, String rating, String feedbak) {
 
-    }
 
     @Override
     public void onBackPressed() {
