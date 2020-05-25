@@ -101,7 +101,7 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
 
     private void fetchSubjectList() {
         ProgressDialog.getInstance().show(getActivity());
-        Call<FetchSubjectResponseList> call = apiService.fetchSubjectList(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));//todo change userId
+        Call<FetchSubjectResponseList> call = apiService.fetchSubjectList("");//todo change userId
         call.enqueue(new Callback<FetchSubjectResponseList>() {
             @Override
             public void onResponse(Call<FetchSubjectResponseList> call, Response<FetchSubjectResponseList> response) {

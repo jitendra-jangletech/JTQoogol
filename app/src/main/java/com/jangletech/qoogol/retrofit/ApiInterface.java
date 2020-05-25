@@ -204,7 +204,7 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST(Constant.FETCH_SUBJECTS)
-    Call<FetchSubjectResponseList> fetchSubjectList(@Field(Constant.u_user_id) int userId);
+    Call<FetchSubjectResponseList> fetchSubjectList(@Field(Constant.scr_co_id) String scr_co_id);
 
     @FormUrlEncoded
     @POST(Constant.FETCH_CHAPTERS)

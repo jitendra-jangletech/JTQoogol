@@ -66,7 +66,7 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
     private static final String TAG = "SettingsFragment";
     private MyTestViewModel mViewModel;
     private FragmentSettingsBinding mBinding;
-    private Map<Integer, String> mMapClasses;
+    private Map<String, String> mMapClasses;
     private Map<Integer, String> mMapUniversity;
     private Map<Integer, String> mMapInstitute;
     private Map<Integer, String> mMapDegree;
@@ -95,7 +95,6 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
         fetchUniversityData();
         fetchDegreeData();
 
-
         mBinding.boardAutocompleteView.setOnItemClickListener((parent, view, position, id) -> {
             final String name = ((TextView) view).getText().toString();
             int key = UtilHelper.getKeyFromValue(mMapUniversity, name);
@@ -122,6 +121,9 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
             }
             mBinding.courseAutocompleteView.setText("");
             mBinding.courseAutocompleteView.setTag("");
+            mBinding.classAutocompleteView.setText("");
+            mBinding.classAutocompleteView.setText("");
+            mBinding.subjectsChipGrp.removeAllViews();
             Log.e(TAG, "Degree Id : "+key);
             Log.e(TAG, "Degree : "+name);
         });
@@ -133,8 +135,17 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
                 mBinding.courseAutocompleteView.setTag(key);
                 fetchClassList(key);
             }
+            mBinding.classAutocompleteView.setText("");
+            mBinding.classAutocompleteView.setTag("");
+            mBinding.subjectsChipGrp.removeAllViews();
             Log.e(TAG, "Course Id : "+key);
             Log.e(TAG, "Course : "+name);
+        });
+
+        mBinding.classAutocompleteView.setOnItemClickListener((parent, view, position, id) -> {
+            final String name = ((TextView) view).getText().toString();
+            fetchSubjectList(mMapClasses.get(name));
+            mBinding.classAutocompleteView.setTag(mMapClasses.get(name));
         });
 
         mBinding.btnApply.setOnClickListener(v -> {
@@ -156,7 +167,7 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
                 Log.d(TAG, "onChanged Board Name : " + userPreferences.getUbm_board_name());
                 Log.d(TAG, "onChanged Co Id : " + userPreferences.getCo_id());
                 mBinding.setPreference(userPreferences);
-                //fetchCourseData(Integer.parseInt(userPreferences.getDm_id()));
+                fetchCourseData(Integer.parseInt(userPreferences.getDm_id()));
                 fetchClassList(Integer.parseInt(userPreferences.getCo_id()));
                 setUserPreferences(userPreferences);
             }
@@ -168,20 +179,21 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
             public void onChanged(@Nullable final List<ClassResponse> classResponseList) {
                 Log.d(TAG, "onChanged Class List Size : " + classResponseList.size());
                 List<String> classDesc = new ArrayList<>();
+                mMapClasses = new HashMap<>();
                 for(ClassResponse classResponse:classResponseList){
                     classDesc.add(classResponse.get_1297());
+                    mMapClasses.put(classResponse.get_1297(),classResponse.get_1296());
                 }
-                Log.d(TAG, "onChanged Classes : "+classDesc);
                 populateClasses(classDesc);
             }
         });
 
-        fetchSubjectList();
+
         mViewModel.getAllSubjects().observe(getActivity(), new Observer<List<FetchSubjectResponse>>() {
             @Override
             public void onChanged(@Nullable final List<FetchSubjectResponse> subjects) {
                 Log.d(TAG, "onChanged Subjects Size : " + subjects.size());
-                //prepareSubjectChips(subjects);
+                prepareSubjectChips(subjects);
             }
         });
 
@@ -455,6 +467,7 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
     }
 
     private void fetchClassList(int courseId) {
+        Log.d(TAG, "fetchClassList: "+courseId);
         ProgressDialog.getInstance().show(getActivity());
         Call<ClassList> call = apiService.fetchClasses(courseId);
         call.enqueue(new Callback<ClassList>() {
@@ -463,17 +476,11 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
                 ProgressDialog.getInstance().dismiss();
                 if (response.body() != null) {
                     mViewModel.setClassList(response.body().getClassResponseList());
-                    List<String> list = new ArrayList<>();
-                    Log.d(TAG, "onResponse Size  : "+list.size());
-                    if (list != null && list.size() > 0) {
-                        //mMapClasses = new HashMap<>();
-                        for (ClassResponse classdesc : response.body().getClassResponseList()) {
-                            list.add(classdesc.get_1297());
-                            //mMapClasses.put(Integer.valueOf(classResponse.get_1297()), classResponse.get_1296());
-                        }
-                        populateClasses(list);
+                    //List<String> list = new ArrayList<>();
+                    //                    //Log.d(TAG, "onResponse Size  : "+list.size());
+                    //                    //if (list != null && list.size() > 0) {
                         ProgressDialog.getInstance().dismiss();
-                    }
+                    //}
                 }else {
                     showErrorDialog(getActivity(), response.body().getResponse(), "");
                 }
@@ -634,9 +641,9 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
         });
     }
 
-    private void fetchSubjectList() {
+    private void fetchSubjectList(String scr_co_id) {
         ProgressDialog.getInstance().show(getActivity());
-        Call<FetchSubjectResponseList> call = apiService.fetchSubjectList(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));
+        Call<FetchSubjectResponseList> call = apiService.fetchSubjectList(scr_co_id);
         call.enqueue(new Callback<FetchSubjectResponseList>() {
             @Override
             public void onResponse(Call<FetchSubjectResponseList> call, Response<FetchSubjectResponseList> response) {
@@ -741,7 +748,7 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
         }
     }*/
 
-    /*private void prepareSubjectChips(List<FetchSubjectResponse> subjectList) {
+    private void prepareSubjectChips(List<FetchSubjectResponse> subjectList) {
         mBinding.subjectsChipGrp.removeAllViews();
         for (int i = 0; i < subjectList.size(); i++) {
             Chip chip = (Chip) LayoutInflater.from(mBinding.subjectsChipGrp.getContext()).inflate(R.layout.chip_layout, mBinding.subjectsChipGrp, false);
@@ -754,7 +761,7 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
             chip.setCheckable(true);
             mBinding.subjectsChipGrp.addView(chip);
         }
-    }*/
+    }
 
     private void setCheckedChip(ChipGroup chipGroup) {
         for (int i = 0; i < chipGroup.getChildCount(); i++) {
@@ -801,8 +808,6 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
 
     private void populateClasses(List<String> list) {
         Log.d(TAG, "populateClasses list : "+list);
-        //List<String> list = new ArrayList<>(mMapClass.values());
-        //Collections.sort(list);
         ArrayAdapter<String> classAdapter = new ArrayAdapter<String>(requireActivity(),
                 R.layout.autocomplete_list_item, list);
         mBinding.classAutocompleteView.setAdapter(classAdapter);

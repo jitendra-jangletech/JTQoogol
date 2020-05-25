@@ -239,7 +239,7 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
 
     private void fetchSubjectList() {
         ProgressDialog.getInstance().show(getActivity());
-        Call<FetchSubjectResponseList> call = apiService.fetchSubjectList(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));
+        Call<FetchSubjectResponseList> call = apiService.fetchSubjectList("");
         call.enqueue(new Callback<FetchSubjectResponseList>() {
             @Override
             public void onResponse(Call<FetchSubjectResponseList> call, Response<FetchSubjectResponseList> response) {
