@@ -47,7 +47,7 @@ public class LearningFragment extends BaseFragment implements LearingAdapter.onI
     private LearningViewModel mViewModel;
     LearningFragmentBinding learningFragmentBinding;
     LearingAdapter learingAdapter;
-    List<LearningQuestions> learningQuestionsList;
+    List<LearningQuestionsNew> learningQuestionsList;
     List<LearningQuestionsNew> questionsNewList;
     ApiInterface apiService = ApiClient.getInstance().getApi();
     String userId = "";
@@ -137,7 +137,6 @@ public class LearningFragment extends BaseFragment implements LearingAdapter.onI
                     if (response.body()!=null && response.body().getResponse().equalsIgnoreCase("200")){
                         questionsNewList = response.body().getQuestion_list();
                         initRecycler();
-//                        learingAdapter.updateList(questionsNewList);
                     } else {
                         Toast.makeText(getActivity(), UtilHelper.getAPIError(String.valueOf(response.body())),Toast.LENGTH_SHORT).show();
                     }

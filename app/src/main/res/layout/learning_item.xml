@@ -161,14 +161,28 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/subheader_layout" />
 
-            <io.github.kexanie.library.MathView
+            <TextView
                 android:id="@+id/question_textview"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_10sdp"
                 android:layout_marginRight="@dimen/_10sdp"
-                android:padding="@dimen/_10sdp"
                 android:text="question"
+                android:visibility="visible"
+                android:textColor="@color/colorSkyBlue"
+                android:textSize="@dimen/_12ssp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/reset"
+                app:layout_constraintTop_toBottomOf="@+id/subheader_view" />
+
+            <io.github.kexanie.library.MathView
+                android:id="@+id/question_mathview"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_10sdp"
+                android:layout_marginRight="@dimen/_10sdp"
+                android:padding="@dimen/_10sdp"
+                android:visibility="gone"
                 android:textColor="@color/colorSkyBlue"
                 android:textSize="@dimen/_14ssp"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -322,7 +336,6 @@
                                 android:id="@+id/scq1"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="mcq1"
                                 android:textColor="@color/colorSkyBlue"
                                 app:layout_constraintLeft_toLeftOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -353,7 +366,6 @@
                                 android:id="@+id/scq2"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="mcq2"
                                 android:textColor="@color/colorSkyBlue"
                                 app:layout_constraintLeft_toLeftOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -384,7 +396,6 @@
                                 android:id="@+id/scq3"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="mcq3"
                                 android:textColor="@color/colorSkyBlue"
                                 app:layout_constraintLeft_toLeftOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -414,7 +425,6 @@
                                 android:id="@+id/scq4"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="mcq4"
                                 android:textColor="@color/colorSkyBlue"
                                 app:layout_constraintLeft_toLeftOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -572,7 +582,6 @@
                                 android:id="@+id/mcq1"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="mcq1"
                                 android:textColor="@color/colorSkyBlue"
                                 app:layout_constraintLeft_toLeftOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -603,7 +612,6 @@
                                 android:id="@+id/mcq2"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="mcq2"
                                 android:textColor="@color/colorSkyBlue"
                                 app:layout_constraintLeft_toLeftOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -634,7 +642,6 @@
                                 android:id="@+id/mcq3"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="mcq3"
                                 android:textColor="@color/colorSkyBlue"
                                 app:layout_constraintLeft_toLeftOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -664,7 +671,6 @@
                                 android:id="@+id/mcq4"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="mcq4"
                                 android:textColor="@color/colorSkyBlue"
                                 app:layout_constraintLeft_toLeftOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -721,8 +727,7 @@
                                     android:id="@+id/a1text"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_3sdp"
-                                    android:text="A1" />
+                                    android:layout_marginTop="@dimen/_3sdp" />
                             </LinearLayout>
 
 
@@ -744,8 +749,7 @@
                                     android:id="@+id/b1text"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_3sdp"
-                                    android:text="B1" />
+                                    android:layout_marginTop="@dimen/_3sdp"/>
                             </LinearLayout>
 
 
@@ -790,8 +794,7 @@
                                     android:id="@+id/a2text"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_3sdp"
-                                    android:text="A2" />
+                                    android:layout_marginTop="@dimen/_3sdp" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -812,8 +815,7 @@
                                     android:id="@+id/b2text"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_3sdp"
-                                    android:text="B2" />
+                                    android:layout_marginTop="@dimen/_3sdp" />
                             </LinearLayout>
 
                         </LinearLayout>
@@ -857,8 +859,7 @@
                                     android:id="@+id/a3text"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_3sdp"
-                                    android:text="A3" />
+                                    android:layout_marginTop="@dimen/_3sdp"/>
                             </LinearLayout>
 
                             <LinearLayout
@@ -879,8 +880,7 @@
                                     android:id="@+id/b3text"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_3sdp"
-                                    android:text="B3" />
+                                    android:layout_marginTop="@dimen/_3sdp" />
                             </LinearLayout>
 
                         </LinearLayout>
@@ -924,8 +924,7 @@
                                     android:id="@+id/a4text"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_3sdp"
-                                    android:text="A4" />
+                                    android:layout_marginTop="@dimen/_3sdp"/>
                             </LinearLayout>
 
                             <LinearLayout
@@ -946,8 +945,7 @@
                                     android:id="@+id/b4text"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_3sdp"
-                                    android:text="B4" />
+                                    android:layout_marginTop="@dimen/_3sdp"/>
                             </LinearLayout>
 
                         </LinearLayout>

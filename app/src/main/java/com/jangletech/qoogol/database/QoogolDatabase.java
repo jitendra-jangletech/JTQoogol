@@ -14,21 +14,21 @@ import com.jangletech.qoogol.database.converter.Converters;
 import com.jangletech.qoogol.database.dao.LearningQuestionDao;
 import com.jangletech.qoogol.database.dao.TestDao;
 import com.jangletech.qoogol.database.dao.TestQuestionDao;
-import com.jangletech.qoogol.enums.QuestionType;
-import com.jangletech.qoogol.model.LearningQuestions;
+import com.jangletech.qoogol.model.LearningQuestionsNew;
 import com.jangletech.qoogol.model.TestModel;
 import com.jangletech.qoogol.model.TestQuestion;
-import java.util.ArrayList;
-import java.util.List;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {LearningQuestions.class, TestModel.class, TestQuestion.class},version = 1,exportSchema = false)
+@Database(entities = {LearningQuestionsNew.class, TestModel.class, TestQuestion.class}, version = 1, exportSchema = false)
 @TypeConverters(Converters.class)
-public abstract  class QoogolDatabase extends RoomDatabase {
+public abstract class QoogolDatabase extends RoomDatabase {
 
     public abstract TestDao testDao();
+
     public abstract TestQuestionDao testQuestionDao();
+
     public abstract LearningQuestionDao learningQuestionDao();
 
     private static volatile QoogolDatabase INSTANCE;
@@ -45,7 +45,7 @@ public abstract  class QoogolDatabase extends RoomDatabase {
             synchronized (QoogolDatabase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            QoogolDatabase.class,"qoogol_database")
+                            QoogolDatabase.class, "qoogol_database")
                             .addCallback(sRoomDatabaseCallback)
                             .build();
                 }

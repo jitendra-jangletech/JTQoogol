@@ -251,7 +251,7 @@ public class LearningQuestionsNew {
     }
 
     public String getMarks() {
-        return marks;
+        return marks!=null?marks:"";
     }
 
     public void setMarks(String marks) {
@@ -315,7 +315,7 @@ public class LearningQuestionsNew {
     }
 
     public String getIs_liked() {
-        return is_liked;
+        return is_liked!=null?is_liked:"";
     }
 
     public void setIs_liked(String is_liked) {
@@ -323,7 +323,7 @@ public class LearningQuestionsNew {
     }
 
     public String getIs_fav() {
-        return is_fav;
+        return is_fav!=null?is_fav:"";
     }
 
     public void setIs_fav(String is_fav) {
@@ -386,5 +386,21 @@ public class LearningQuestionsNew {
 
     public void setAns_media_names(String ans_media_names) {
         this.ans_media_names = ans_media_names;
+    }
+
+    public String getSubject_id() {
+        return subject_id;
+    }
+
+    public void setSubject_id(String subject_id) {
+        this.subject_id = subject_id;
+    }
+
+    public String getChapter_id() {
+        return chapter_id;
+    }
+
+    public void setChapter_id(String chapter_id) {
+        this.chapter_id = chapter_id;
     }
 }

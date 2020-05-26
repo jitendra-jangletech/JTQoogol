@@ -35,6 +35,7 @@ import com.google.android.material.card.MaterialCardView;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.activities.MainActivity;
 import com.jangletech.qoogol.activities.PracticeTestActivity;
+import com.jangletech.qoogol.database.QoogolDatabase;
 import com.jangletech.qoogol.databinding.LearningItemBinding;
 import com.jangletech.qoogol.databinding.RatingFeedbackBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
@@ -137,6 +138,15 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
             if (learningQuestions.getQuestiondesc() == null || learningQuestions.getQuestiondesc() == "")
                 learningItemBinding.questiondescTextview.setVisibility(View.GONE);
 
+            if (learningQuestions.getQuestion()!=null && learningQuestions.getQuestion().contains("$")) {
+                learningItemBinding.questionMathview.setVisibility(View.VISIBLE);
+                learningItemBinding.questionMathview.setText(learningQuestions.getQuestion());
+            } else {
+                learningItemBinding.questionTextview.setVisibility(View.VISIBLE);
+                learningItemBinding.questionTextview.setText(learningQuestions.getQuestion());
+            }
+
+
             learningItemBinding.favorite.setImageDrawable(learningQuestions.getIs_fav().equalsIgnoreCase("true") ? activity.getResources().getDrawable(R.drawable.ic_favorite_black_24dp) : activity.getResources().getDrawable(R.drawable.ic_fav));
             learningItemBinding.like.setImageDrawable(learningQuestions.getIs_liked().equalsIgnoreCase("true") ? activity.getResources().getDrawable(R.drawable.ic_thumb_up_black_24dp) : activity.getResources().getDrawable(R.drawable.ic_like));
             learningItemBinding.idTextview.setText(learningQuestions.getQuestion_id());
@@ -155,120 +165,12 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
             learningItemBinding.topicTextview.setText(learningQuestions.getTopic());
             learningItemBinding.postedValue.setText(learningQuestions.getPosted_on() != null ? learningQuestions.getPosted_on().substring(0, 10) : "");
             learningItemBinding.lastUsedValue.setText(learningQuestions.getLastused_on() != null ? learningQuestions.getLastused_on().substring(0, 10) : "");
-            learningItemBinding.questionTextview.setText(learningQuestions.getQuestion());
+
+
             learningItemBinding.questiondescTextview.setText(learningQuestions.getQuestiondesc());
 
             learningItemBinding.solutionOption.setText("Answer : " + learningQuestions.getAnswer());
             learningItemBinding.solutionDesc.setText(learningQuestions.getAnswerDesc());
-
-            if (learningQuestions.getType().equalsIgnoreCase(FILL_THE_BLANKS)) {
-                learningItemBinding.fillInTheBlanks.setVisibility(View.VISIBLE);
-                learningItemBinding.categoryTextview.setText("Fill in the Blanks");
-            } else if (learningQuestions.getType().equalsIgnoreCase(ONE_LINE_ANSWER) || learningQuestions.getType().equalsIgnoreCase(SHORT_ANSWER)) {
-                learningItemBinding.singleLine.setVisibility(View.VISIBLE);
-                learningItemBinding.singleLineCounter.setVisibility(View.VISIBLE);
-                learningItemBinding.categoryTextview.setText("Short Answer");
-                answerCharCounter(learningItemBinding.singleLine, learningItemBinding.singleLineCounter, 200);
-            } else if (learningQuestions.getType().equalsIgnoreCase(LONG_ANSWER)) {
-                learningItemBinding.multiLine.setVisibility(View.VISIBLE);
-                learningItemBinding.multiLineCounter.setVisibility(View.VISIBLE);
-                answerCharCounter(learningItemBinding.multiLine, learningItemBinding.multiLineCounter, 400);
-                learningItemBinding.categoryTextview.setText("Long Answer");
-            } else {
-                if (learningQuestions.getQue_option_type().equalsIgnoreCase(SCQ)) {
-                    learningItemBinding.categoryTextview.setText("SCQ");
-                    learningItemBinding.singleChoice.setVisibility(View.VISIBLE);
-                    learningItemBinding.scq1.setText(learningQuestions.getMcq1());
-                    learningItemBinding.scq2.setText(learningQuestions.getMcq2());
-                    learningItemBinding.scq3.setText(learningQuestions.getMcq3());
-                    learningItemBinding.scq4.setText(learningQuestions.getMcq4());
-                } else if (learningQuestions.getQue_option_type().equalsIgnoreCase(SCQ_IMAGE)) {
-                    learningItemBinding.categoryTextview.setText("SCQ");
-                    learningItemBinding.scqImgLayout.setVisibility(View.VISIBLE);
-                    try {
-                        Glide.with(activity).load(new URL(learningQuestions.getMcq1())).into(learningItemBinding.scqImg1);
-                        Glide.with(activity).load(new URL(learningQuestions.getMcq2())).into(learningItemBinding.scqImg2);
-                        Glide.with(activity).load(new URL(learningQuestions.getMcq3())).into(learningItemBinding.scqImg3);
-                        Glide.with(activity).load(new URL(learningQuestions.getMcq4())).into(learningItemBinding.scqImg4);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                } else if (learningQuestions.getQue_option_type().equalsIgnoreCase(SCQ_IMAGE_WITH_TEXT)) {
-                    learningItemBinding.categoryTextview.setText("SCQ");
-                    learningItemBinding.scqImgtextLayout.setVisibility(View.VISIBLE);
-                    try {
-                        Glide.with(activity).load(new URL(Constant.QUESTION_IMAGES_API + learningQuestions.getMcq1().split(":")[0].trim())).into(learningItemBinding.scqImgtextImg1);
-                        Glide.with(activity).load(new URL(Constant.QUESTION_IMAGES_API + learningQuestions.getMcq2().split(":")[0].trim())).into(learningItemBinding.scqImgtextImg2);
-                        Glide.with(activity).load(new URL(Constant.QUESTION_IMAGES_API + learningQuestions.getMcq3().split(":")[0].trim())).into(learningItemBinding.scqImgtextImg3);
-                        Glide.with(activity).load(new URL(Constant.QUESTION_IMAGES_API + learningQuestions.getMcq4().split(":")[0].trim())).into(learningItemBinding.scqImgtextImg4);
-
-                        learningItemBinding.scqImgtextText1.setText(learningQuestions.getMcq1().split(":")[1]);
-                        learningItemBinding.scqImgtextText2.setText(learningQuestions.getMcq2().split(":")[1]);
-                        learningItemBinding.scqImgtextText3.setText(learningQuestions.getMcq3().split(":")[1]);
-                        learningItemBinding.scqImgtextText4.setText(learningQuestions.getMcq4().split(":")[1]);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                } else if (learningQuestions.getQue_option_type().equalsIgnoreCase(MCQ_IMAGE_WITH_TEXT)) {
-                    learningItemBinding.categoryTextview.setText("MCQ");
-                    learningItemBinding.mcqImgtextLayout.setVisibility(View.VISIBLE);
-                    try {
-                        Glide.with(activity).load(new URL(Constant.QUESTION_IMAGES_API + learningQuestions.getMcq1().split(":")[0].trim())).into(learningItemBinding.mcqImgtextImg1);
-                        Glide.with(activity).load(new URL(Constant.QUESTION_IMAGES_API + learningQuestions.getMcq2().split(":")[0].trim())).into(learningItemBinding.mcqImgtextImg2);
-                        Glide.with(activity).load(new URL(Constant.QUESTION_IMAGES_API + learningQuestions.getMcq3().split(":")[0].trim())).into(learningItemBinding.mcqImgtextImg3);
-                        Glide.with(activity).load(new URL(Constant.QUESTION_IMAGES_API + learningQuestions.getMcq4().split(":")[0].trim())).into(learningItemBinding.mcqImgtextImg4);
-
-
-                        learningItemBinding.mcqImgtextText1.setText(learningQuestions.getMcq1().split(":")[1]);
-                        learningItemBinding.mcqImgtextText2.setText(learningQuestions.getMcq2().split(":")[1]);
-                        learningItemBinding.mcqImgtextText3.setText(learningQuestions.getMcq3().split(":")[1]);
-                        learningItemBinding.mcqImgtextText4.setText(learningQuestions.getMcq4().split(":")[1]);
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                } else if (learningQuestions.getQue_option_type().equalsIgnoreCase(MCQ_IMAGE)) {
-                    learningItemBinding.categoryTextview.setText("MCQ");
-                    learningItemBinding.mcqImgLayout.setVisibility(View.VISIBLE);
-                    try {
-                        Glide.with(activity).load(new URL(learningQuestions.getMcq1())).into(learningItemBinding.mcqImg1);
-                        Glide.with(activity).load(new URL(learningQuestions.getMcq2())).into(learningItemBinding.mcqImg2);
-                        Glide.with(activity).load(new URL(learningQuestions.getMcq3())).into(learningItemBinding.mcqImg3);
-                        Glide.with(activity).load(new URL(learningQuestions.getMcq4())).into(learningItemBinding.mcqImg4);
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                } else if (learningQuestions.getQue_option_type().equalsIgnoreCase(MCQ)) {
-                    learningItemBinding.categoryTextview.setText("MCQ");
-                    learningItemBinding.multiChoice.setVisibility(View.VISIBLE);
-                    learningItemBinding.mcq1.setText(learningQuestions.getMcq1());
-                    learningItemBinding.mcq2.setText(learningQuestions.getMcq2());
-                    learningItemBinding.mcq3.setText(learningQuestions.getMcq3());
-                    learningItemBinding.mcq4.setText(learningQuestions.getMcq4());
-                } else if (learningQuestions.getQue_option_type().equalsIgnoreCase(TRUE_FALSE)) {
-                    learningItemBinding.categoryTextview.setText("True False");
-                    learningItemBinding.trueFalse.setVisibility(View.VISIBLE);
-                } else if (learningQuestions.getQue_option_type().equalsIgnoreCase(MATCH_PAIR)) {
-                    learningItemBinding.matchThePairs.setVisibility(View.VISIBLE);
-                    learningItemBinding.reset.setVisibility(View.VISIBLE);
-                    learningItemBinding.resetLabel.setVisibility(View.VISIBLE);
-                    learningItemBinding.categoryTextview.setText("Match the Pairs");
-//            learningItemBinding.a1text.setText(learningQuestions.getA1());
-//            learningItemBinding.a2text.setText(learningQuestions.getA2());
-//            learningItemBinding.a3text.setText(learningQuestions.getA3());
-//            learningItemBinding.a4text.setText(learningQuestions.getA4());
-//            learningItemBinding.b1text.setText(learningQuestions.getB1());
-//            learningItemBinding.b2text.setText(learningQuestions.getB2());
-//            learningItemBinding.b3text.setText(learningQuestions.getB3());
-//            learningItemBinding.b4text.setText(learningQuestions.getB4());
-                } else if (learningQuestions.getQue_option_type().equalsIgnoreCase(MATCH_PAIR_IMAGE)) {
-                    learningItemBinding.mtpImgLayout.setVisibility(View.VISIBLE);
-                    learningItemBinding.reset.setVisibility(View.VISIBLE);
-                    learningItemBinding.resetLabel.setVisibility(View.VISIBLE);
-                    learningItemBinding.categoryTextview.setText("Match the Pairs");
-                }
-            }
 
             if (learningQuestions.getQue_media_typs() != null && learningQuestions.getQue_media_typs().equalsIgnoreCase(IMAGE) && learningQuestions.getQue_images() != null) {
                 String[] stringrray = learningQuestions.getQue_images().split(",");
@@ -456,6 +358,7 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
                 learningItemBinding.timerLayout.setVisibility(View.VISIBLE);
                 learningItemBinding.close.setVisibility(View.VISIBLE);
                 learningItemBinding.expand.setVisibility(View.GONE);
+                showLayout();
                 setTimer(learningItemBinding.tvtimer, 0, 0);
             });
 
@@ -825,6 +728,118 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
             });
         }
 
+        private void showLayout() {
+            LearningQuestionsNew learningQuestions = learningQuestionsList.get(getAdapterPosition());
+            if (learningQuestions.getType().equalsIgnoreCase(FILL_THE_BLANKS)) {
+                learningItemBinding.fillInTheBlanks.setVisibility(View.VISIBLE);
+                learningItemBinding.categoryTextview.setText("Fill in the Blanks");
+            } else if (learningQuestions.getType().equalsIgnoreCase(ONE_LINE_ANSWER) || learningQuestions.getType().equalsIgnoreCase(SHORT_ANSWER)) {
+                learningItemBinding.singleLine.setVisibility(View.VISIBLE);
+                learningItemBinding.singleLineCounter.setVisibility(View.VISIBLE);
+                learningItemBinding.categoryTextview.setText("Short Answer");
+                answerCharCounter(learningItemBinding.singleLine, learningItemBinding.singleLineCounter, 200);
+            } else if (learningQuestions.getType().equalsIgnoreCase(LONG_ANSWER)) {
+                learningItemBinding.multiLine.setVisibility(View.VISIBLE);
+                learningItemBinding.multiLineCounter.setVisibility(View.VISIBLE);
+                answerCharCounter(learningItemBinding.multiLine, learningItemBinding.multiLineCounter, 400);
+                learningItemBinding.categoryTextview.setText("Long Answer");
+            } else {
+                if (learningQuestions.getQue_option_type().equalsIgnoreCase(SCQ)) {
+                    learningItemBinding.categoryTextview.setText("SCQ");
+                    learningItemBinding.singleChoice.setVisibility(View.VISIBLE);
+                    learningItemBinding.scq1.setText(learningQuestions.getMcq1());
+                    learningItemBinding.scq2.setText(learningQuestions.getMcq2());
+                    learningItemBinding.scq3.setText(learningQuestions.getMcq3());
+                    learningItemBinding.scq4.setText(learningQuestions.getMcq4());
+                } else if (learningQuestions.getQue_option_type().equalsIgnoreCase(SCQ_IMAGE)) {
+                    learningItemBinding.categoryTextview.setText("SCQ");
+                    learningItemBinding.scqImgLayout.setVisibility(View.VISIBLE);
+                    try {
+                        Glide.with(activity).load(new URL(learningQuestions.getMcq1())).into(learningItemBinding.scqImg1);
+                        Glide.with(activity).load(new URL(learningQuestions.getMcq2())).into(learningItemBinding.scqImg2);
+                        Glide.with(activity).load(new URL(learningQuestions.getMcq3())).into(learningItemBinding.scqImg3);
+                        Glide.with(activity).load(new URL(learningQuestions.getMcq4())).into(learningItemBinding.scqImg4);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else if (learningQuestions.getQue_option_type().equalsIgnoreCase(SCQ_IMAGE_WITH_TEXT)) {
+                    learningItemBinding.categoryTextview.setText("SCQ");
+                    learningItemBinding.scqImgtextLayout.setVisibility(View.VISIBLE);
+                    try {
+                        Glide.with(activity).load(new URL(Constant.QUESTION_IMAGES_API + learningQuestions.getMcq1().split(":")[0].trim())).into(learningItemBinding.scqImgtextImg1);
+                        Glide.with(activity).load(new URL(Constant.QUESTION_IMAGES_API + learningQuestions.getMcq2().split(":")[0].trim())).into(learningItemBinding.scqImgtextImg2);
+                        Glide.with(activity).load(new URL(Constant.QUESTION_IMAGES_API + learningQuestions.getMcq3().split(":")[0].trim())).into(learningItemBinding.scqImgtextImg3);
+                        Glide.with(activity).load(new URL(Constant.QUESTION_IMAGES_API + learningQuestions.getMcq4().split(":")[0].trim())).into(learningItemBinding.scqImgtextImg4);
+
+                        learningItemBinding.scqImgtextText1.setText(learningQuestions.getMcq1().split(":")[1]);
+                        learningItemBinding.scqImgtextText2.setText(learningQuestions.getMcq2().split(":")[1]);
+                        learningItemBinding.scqImgtextText3.setText(learningQuestions.getMcq3().split(":")[1]);
+                        learningItemBinding.scqImgtextText4.setText(learningQuestions.getMcq4().split(":")[1]);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else if (learningQuestions.getQue_option_type().equalsIgnoreCase(MCQ_IMAGE_WITH_TEXT)) {
+                    learningItemBinding.categoryTextview.setText("MCQ");
+                    learningItemBinding.mcqImgtextLayout.setVisibility(View.VISIBLE);
+                    try {
+                        Glide.with(activity).load(new URL(Constant.QUESTION_IMAGES_API + learningQuestions.getMcq1().split(":")[0].trim())).into(learningItemBinding.mcqImgtextImg1);
+                        Glide.with(activity).load(new URL(Constant.QUESTION_IMAGES_API + learningQuestions.getMcq2().split(":")[0].trim())).into(learningItemBinding.mcqImgtextImg2);
+                        Glide.with(activity).load(new URL(Constant.QUESTION_IMAGES_API + learningQuestions.getMcq3().split(":")[0].trim())).into(learningItemBinding.mcqImgtextImg3);
+                        Glide.with(activity).load(new URL(Constant.QUESTION_IMAGES_API + learningQuestions.getMcq4().split(":")[0].trim())).into(learningItemBinding.mcqImgtextImg4);
+
+
+                        learningItemBinding.mcqImgtextText1.setText(learningQuestions.getMcq1().split(":")[1]);
+                        learningItemBinding.mcqImgtextText2.setText(learningQuestions.getMcq2().split(":")[1]);
+                        learningItemBinding.mcqImgtextText3.setText(learningQuestions.getMcq3().split(":")[1]);
+                        learningItemBinding.mcqImgtextText4.setText(learningQuestions.getMcq4().split(":")[1]);
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else if (learningQuestions.getQue_option_type().equalsIgnoreCase(MCQ_IMAGE)) {
+                    learningItemBinding.categoryTextview.setText("MCQ");
+                    learningItemBinding.mcqImgLayout.setVisibility(View.VISIBLE);
+                    try {
+                        Glide.with(activity).load(new URL(learningQuestions.getMcq1())).into(learningItemBinding.mcqImg1);
+                        Glide.with(activity).load(new URL(learningQuestions.getMcq2())).into(learningItemBinding.mcqImg2);
+                        Glide.with(activity).load(new URL(learningQuestions.getMcq3())).into(learningItemBinding.mcqImg3);
+                        Glide.with(activity).load(new URL(learningQuestions.getMcq4())).into(learningItemBinding.mcqImg4);
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else if (learningQuestions.getQue_option_type().equalsIgnoreCase(MCQ)) {
+                    learningItemBinding.categoryTextview.setText("MCQ");
+                    learningItemBinding.multiChoice.setVisibility(View.VISIBLE);
+                    learningItemBinding.mcq1.setText(learningQuestions.getMcq1());
+                    learningItemBinding.mcq2.setText(learningQuestions.getMcq2());
+                    learningItemBinding.mcq3.setText(learningQuestions.getMcq3());
+                    learningItemBinding.mcq4.setText(learningQuestions.getMcq4());
+                } else if (learningQuestions.getQue_option_type().equalsIgnoreCase(TRUE_FALSE)) {
+                    learningItemBinding.categoryTextview.setText("True False");
+                    learningItemBinding.trueFalse.setVisibility(View.VISIBLE);
+                } else if (learningQuestions.getQue_option_type().equalsIgnoreCase(MATCH_PAIR)) {
+                    learningItemBinding.matchThePairs.setVisibility(View.VISIBLE);
+                    learningItemBinding.reset.setVisibility(View.VISIBLE);
+                    learningItemBinding.resetLabel.setVisibility(View.VISIBLE);
+                    learningItemBinding.categoryTextview.setText("Match the Pairs");
+//            learningItemBinding.a1text.setText(learningQuestions.getA1());
+//            learningItemBinding.a2text.setText(learningQuestions.getA2());
+//            learningItemBinding.a3text.setText(learningQuestions.getA3());
+//            learningItemBinding.a4text.setText(learningQuestions.getA4());
+//            learningItemBinding.b1text.setText(learningQuestions.getB1());
+//            learningItemBinding.b2text.setText(learningQuestions.getB2());
+//            learningItemBinding.b3text.setText(learningQuestions.getB3());
+//            learningItemBinding.b4text.setText(learningQuestions.getB4());
+                } else if (learningQuestions.getQue_option_type().equalsIgnoreCase(MATCH_PAIR_IMAGE)) {
+                    learningItemBinding.mtpImgLayout.setVisibility(View.VISIBLE);
+                    learningItemBinding.reset.setVisibility(View.VISIBLE);
+                    learningItemBinding.resetLabel.setVisibility(View.VISIBLE);
+                    learningItemBinding.categoryTextview.setText("Match the Pairs");
+                }
+            }
+        }
+
         private void submitCall() {
             try {
                 isSolvedRight = 1;
@@ -1046,34 +1061,36 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
         }
 
         private void saveToDb(LearningQuestionsNew learningQuestions) {
-            class SaveTask extends AsyncTask<Void, Void, Void> {
-
-                @Override
-                protected Void doInBackground(Void... voids) {
-                    //adding to database
-                    try {
+//            class SaveTask extends AsyncTask<Void, Void, Void> {
+//
+//                @Override
+//                protected Void doInBackground(Void... voids) {
+//                    //adding to database
+//                    try {
 //                        QoogolDatabase.getDatabase(getApplicationContext())
 //                                .learningQuestionDao()
 //                                .insert(learningQuestions);
 //
-//                        List<LearningQuestions> learningQuestions1 = QoogolDatabase.getDatabase(getApplicationContext())
+//                        List<LearningQuestionsNew> learningQuestions1 = QoogolDatabase.getDatabase(getApplicationContext())
 //                                .learningQuestionDao()
 //                                .getAll();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    return null;
-                }
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                    return null;
+//                }
+//
+//                @Override
+//                protected void onPostExecute(Void aVoid) {
+//                    super.onPostExecute(aVoid);
+//                    Toast.makeText(getApplicationContext(), "Saved", Toast.LENGTH_LONG).show();
+//                }
+//            }
+//
+//            SaveTask st = new SaveTask();
+//            st.execute();
 
-                @Override
-                protected void onPostExecute(Void aVoid) {
-                    super.onPostExecute(aVoid);
-                    Toast.makeText(getApplicationContext(), "Saved", Toast.LENGTH_LONG).show();
-                }
-            }
-
-            SaveTask st = new SaveTask();
-            st.execute();
+            throw new RuntimeException("Test Crash");
         }
 
         private void setTimer(TextView timer, int seconds, int minutes) {
