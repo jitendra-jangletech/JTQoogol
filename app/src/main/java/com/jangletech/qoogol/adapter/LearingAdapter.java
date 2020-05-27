@@ -194,7 +194,6 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
                                 if (activity instanceof PracticeTestActivity) {
                                     fragmentTransaction = ((PracticeTestActivity) activity).getSupportFragmentManager().beginTransaction();
                                 }
-
                                 SlideshowDialogFragment newFragment = SlideshowDialogFragment.newInstance();
                                 newFragment.setArguments(bundle);
                                 newFragment.show(fragmentTransaction, "slideshow");

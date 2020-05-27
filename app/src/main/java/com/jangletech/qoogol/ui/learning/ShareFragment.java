@@ -2,16 +2,6 @@ package com.jangletech.qoogol.ui.learning;
 
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.widget.SearchView;
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
-import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,12 +12,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SearchView;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.jangletech.qoogol.R;
-import com.jangletech.qoogol.adapter.LearingAdapter;
 import com.jangletech.qoogol.adapter.ShareAdapter;
 import com.jangletech.qoogol.databinding.FragmentShareBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
-import com.jangletech.qoogol.model.ConnectionResponse;
 import com.jangletech.qoogol.model.Connections;
 import com.jangletech.qoogol.model.ResponseObj;
 import com.jangletech.qoogol.model.ShareModel;
@@ -40,22 +35,23 @@ import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 
-import static com.jangletech.qoogol.util.Constant.friends;
 import static com.jangletech.qoogol.util.Constant.friends_and_groups;
+import static com.jangletech.qoogol.util.Constant.learning;
 import static com.jangletech.qoogol.util.Constant.qoogol;
+import static com.jangletech.qoogol.util.Constant.question_share;
+import static com.jangletech.qoogol.util.Constant.test;
+import static com.jangletech.qoogol.util.Constant.test_share;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ShareFragment extends BaseFragment  implements ShareAdapter.OnItemClickListener {
+public class ShareFragment extends BaseFragment implements ShareAdapter.OnItemClickListener {
 
 
     FragmentShareBinding shareBinding;
@@ -64,7 +60,9 @@ public class ShareFragment extends BaseFragment  implements ShareAdapter.OnItemC
     List<ShareModel> selectedconnectionsList;
     private static final String TAG = "ShareFragment";
     ApiInterface apiService = ApiClient.getInstance().getApi();
-    String userId="", question_id="";
+    String userId = "", question_id = "", testId="";
+    int call_from;
+    Call<ResponseObj> call;
 
 
     @Override
@@ -80,18 +78,18 @@ public class ShareFragment extends BaseFragment  implements ShareAdapter.OnItemC
 
     private void getData(int pagestart) {
         ProgressDialog.getInstance().show(getActivity());
-        Call<ShareResponse> call = apiService.fetchConnectionsforShare(userId,friends_and_groups,getDeviceId(), qoogol,pagestart);
+        Call<ShareResponse> call = apiService.fetchConnectionsforShare(userId, friends_and_groups, getDeviceId(), qoogol, pagestart);
         call.enqueue(new Callback<ShareResponse>() {
             @Override
             public void onResponse(Call<ShareResponse> call, retrofit2.Response<ShareResponse> response) {
                 try {
                     ProgressDialog.getInstance().dismiss();
                     connectionsList.clear();
-                    if (response.body()!=null && response.body().getResponse().equalsIgnoreCase("200")){
+                    if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
                         connectionsList = response.body().getConnection_list();
                         initRecycler();
                     } else {
-                        Toast.makeText(getActivity(), UtilHelper.getAPIError(String.valueOf(response.body())),Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), UtilHelper.getAPIError(String.valueOf(response.body())), Toast.LENGTH_SHORT).show();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -112,8 +110,13 @@ public class ShareFragment extends BaseFragment  implements ShareAdapter.OnItemC
         connectionsList = new ArrayList<>();
         selectedconnectionsList = new ArrayList<>();
         Bundle bundle = getArguments();
-        if (bundle!=null) {
-            question_id = bundle.getString("QuestionId");
+        if (bundle != null) {
+            if (bundle.getInt("call_from")==learning) {
+                question_id = bundle.getString("QuestionId");
+            } else {
+                call_from = test;
+                testId = bundle.getString("testId");
+            }
         }
         userId = String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));
     }
@@ -169,8 +172,8 @@ public class ShareFragment extends BaseFragment  implements ShareAdapter.OnItemC
     public void actionPerformed(ShareModel connections, int position) {
         if (selectedconnectionsList.contains(connections))
             selectedconnectionsList.remove(connections);
-         else
-             selectedconnectionsList.add(connections);
+        else
+            selectedconnectionsList.add(connections);
     }
 
     @Override
@@ -183,22 +186,30 @@ public class ShareFragment extends BaseFragment  implements ShareAdapter.OnItemC
         modelAction = modelAction.replace("A", "U");
 
         ProgressDialog.getInstance().show(getActivity());
-        Call<ResponseObj> call = apiService.shareAPI(question_id,"Q","F",getDeviceId(), userId,modelAction,"1.68","Q");
+
+        if (call_from==learning)
+            call = apiService.shareAPI(question_id, question_share, "F", getDeviceId(), userId, modelAction, "1.68", qoogol);
+        else
+            call = apiService.shareAPI(testId, test_share  , "F", getDeviceId(), userId, modelAction, "1.68", qoogol);
+
         call.enqueue(new Callback<ResponseObj>() {
             @Override
             public void onResponse(Call<ResponseObj> call, retrofit2.Response<ResponseObj> response) {
                 try {
                     ProgressDialog.getInstance().dismiss();
                     connectionsList.clear();
-                    if (response.body()!=null && response.body().getResponse().equalsIgnoreCase("200")){
+                    if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
                         Log.i(TAG, "shared successfully");
 
                     } else {
-                        Toast.makeText(getActivity(), UtilHelper.getAPIError(String.valueOf(response.body())),Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), UtilHelper.getAPIError(String.valueOf(response.body())), Toast.LENGTH_SHORT).show();
                     }
                     Bundle bundle = new Bundle();
-                    bundle.putString("call_from","share");
-                    NavHostFragment.findNavController(ShareFragment.this).navigate(R.id.nav_learning, bundle);
+                    bundle.putString("call_from", "share");
+                    if (call_from==learning)
+                        NavHostFragment.findNavController(ShareFragment.this).navigate(R.id.nav_learning, bundle);
+                    else
+                        NavHostFragment.findNavController(ShareFragment.this).navigate(R.id.nav_test_my, bundle);
                 } catch (Exception e) {
                     e.printStackTrace();
                     ProgressDialog.getInstance().dismiss();

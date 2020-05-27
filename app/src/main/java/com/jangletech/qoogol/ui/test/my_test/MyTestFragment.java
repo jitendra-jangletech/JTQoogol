@@ -48,6 +48,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.jangletech.qoogol.util.Constant.learning;
+import static com.jangletech.qoogol.util.Constant.test;
+
 public class MyTestFragment extends BaseFragment implements TestListAdapter.TestClickListener, SearchView.OnQueryTextListener {
 
     private static final String TAG = "MyTestFragment";
@@ -311,8 +314,11 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
     }
 
     @Override
-    public void onShareClick(TestModelNew testModel) {
-
+    public void onShareClick(int testid) {
+        Bundle bundle = new Bundle();
+        bundle.putString("testId", String.valueOf(testid));
+        bundle.putInt("call_from", test);
+        NavHostFragment.findNavController(this).navigate(R.id.nav_share, bundle);
     }
 
     @Override

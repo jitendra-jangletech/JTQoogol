@@ -122,7 +122,7 @@ public class TestListAdapter extends RecyclerView.Adapter<TestListAdapter.ViewHo
         });
 
         holder.itemBinding.shareLayout.setOnClickListener(v -> {
-            testClickListener.onShareClick(testModel);
+            testClickListener.onShareClick(testModel.getTm_id());
         });
 
         holder.itemBinding.favorite.setOnClickListener(v -> {
@@ -152,7 +152,7 @@ public class TestListAdapter extends RecyclerView.Adapter<TestListAdapter.ViewHo
 
         void onCommentClick(TestModelNew testModel);
 
-        void onShareClick(TestModelNew testModel);
+        void onShareClick(int testid);
 
         void onLikeClick(TestModelNew testModel, int pos,boolean isChecked);
 

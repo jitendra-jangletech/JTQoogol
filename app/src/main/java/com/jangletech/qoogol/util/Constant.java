@@ -102,6 +102,8 @@ public class Constant {
     public static final String returnrows = "ReturnRows";
     public static final String q_T_list = "69";
     public static final String TorQ = "TorQ";
+    public static final String test_share = "T";
+    public static final String question_share = "Q";
 
     //Preferences
     public static final String PREF_NAME = "qoogol";

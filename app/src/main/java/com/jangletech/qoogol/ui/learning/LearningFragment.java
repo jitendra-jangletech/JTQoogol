@@ -70,7 +70,6 @@ public class LearningFragment extends BaseFragment implements LearingAdapter.onI
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(LearningViewModel.class);
         initView();
-
     }
 
     @Override
@@ -92,6 +91,8 @@ public class LearningFragment extends BaseFragment implements LearingAdapter.onI
                 return super.onOptionsItemSelected(item);
         }
     }
+
+
 
     @Override
     public void onResume() {
@@ -240,6 +241,7 @@ public class LearningFragment extends BaseFragment implements LearingAdapter.onI
     public void onShareClick(String questionId) {
         Bundle bundle = new Bundle();
         bundle.putString("QuestionId", questionId);
+        bundle.putInt("call_from", learning);
         NavHostFragment.findNavController(this).navigate(R.id.nav_share, bundle);
     }
 
