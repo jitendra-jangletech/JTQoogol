@@ -163,6 +163,10 @@ public class LearningFragment extends BaseFragment implements LearingAdapter.onI
         linearLayoutManager.setAutoMeasureEnabled(false);
         learningFragmentBinding.learningRecycler.setLayoutManager(linearLayoutManager);
         learningFragmentBinding.learningRecycler.setAdapter(learingAdapter);
+        learningFragmentBinding.learningRecycler.setNestedScrollingEnabled(false);
+        learningFragmentBinding.learningRecycler.setItemViewCacheSize(20);
+        learningFragmentBinding.learningRecycler.setDrawingCacheEnabled(true);
+        learningFragmentBinding.learningRecycler.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
     }
 
     private void ProcessQuestionAPI(String que_id, int flag, String call_from, String rating, String feedback) {

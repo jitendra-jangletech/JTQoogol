@@ -132,7 +132,10 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
         try {
+
             LearningQuestionsNew learningQuestions = learningQuestionsList.get(position);
+            learningItemBinding.setQuestion(learningQuestions);
+
             hideLayouts();
 
             if (learningQuestions.getQuestiondesc() == null || learningQuestions.getQuestiondesc() == "")
@@ -147,32 +150,18 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
             }
 
 
+
             learningItemBinding.favorite.setImageDrawable(learningQuestions.getIs_fav().equalsIgnoreCase("true") ? activity.getResources().getDrawable(R.drawable.ic_favorite_black_24dp) : activity.getResources().getDrawable(R.drawable.ic_fav));
             learningItemBinding.like.setImageDrawable(learningQuestions.getIs_liked().equalsIgnoreCase("true") ? activity.getResources().getDrawable(R.drawable.ic_thumb_up_black_24dp) : activity.getResources().getDrawable(R.drawable.ic_like));
-            learningItemBinding.idTextview.setText(learningQuestions.getQuestion_id());
+//
             learningItemBinding.timeTextview.setText("Time: " + learningQuestions.getRecommended_time() + " Sec");
-            learningItemBinding.difflevelValue.setText(learningQuestions.getDifficulty_level());
-            learningItemBinding.likeValue.setText(learningQuestions.getLikes());
-            learningItemBinding.commentValue.setText(learningQuestions.getComments());
-            learningItemBinding.shareValue.setText(learningQuestions.getShares());
             learningItemBinding.attemptedValue.setText(learningQuestions.getAttended_by() != null ? learningQuestions.getAttended_by() : "0");
             learningItemBinding.ratingvalue.setText(learningQuestions.getRating() != null ? UtilHelper.roundAvoid(learningQuestions.getRating()) : "0");
 
-            learningItemBinding.subjectTextview.setText(learningQuestions.getSubject());
             learningItemBinding.marksTextview.setText("Marks : " + UtilHelper.formatMarks(Float.parseFloat(learningQuestions.getMarks())));
 
-            learningItemBinding.chapterTextview.setText(learningQuestions.getChapter());
-            learningItemBinding.topicTextview.setText(learningQuestions.getTopic());
             learningItemBinding.postedValue.setText(learningQuestions.getPosted_on() != null ? learningQuestions.getPosted_on().substring(0, 10) : "");
             learningItemBinding.lastUsedValue.setText(learningQuestions.getLastused_on() != null ? learningQuestions.getLastused_on().substring(0, 10) : "");
-
-
-            learningItemBinding.questiondescTextview.setText(learningQuestions.getQuestiondesc());
-
-            learningItemBinding.solutionOption.setText("Answer : " + learningQuestions.getAnswer());
-            learningItemBinding.solutionDesc.setText(learningQuestions.getAnswerDesc());
-
-
 
             if (learningQuestions.getType().equalsIgnoreCase(FILL_THE_BLANKS)) {
                 learningItemBinding.categoryTextview.setText("Fill in the Blanks");

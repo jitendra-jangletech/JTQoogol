@@ -211,7 +211,7 @@ public class LearningQuestionsNew {
     }
 
     public String getLikes() {
-        return likes!=null?likes:"";
+        return likes!=null?likes:"0";
     }
 
     public void setLikes(String likes) {
@@ -219,7 +219,7 @@ public class LearningQuestionsNew {
     }
 
     public String getComments() {
-        return comments!=null?comments:"";
+        return comments!=null?comments:"0";
     }
 
     public void setComments(String comments) {
@@ -227,7 +227,7 @@ public class LearningQuestionsNew {
     }
 
     public String getShares() {
-        return shares!=null?shares:"";
+        return shares!=null?shares:"0";
     }
 
     public void setShares(String shares) {

@@ -2,6 +2,16 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+
+        <variable
+            name="question"
+            type="com.jangletech.qoogol.model.LearningQuestionsNew" />
+
+    </data>
+
+
+
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/container"
         android:layout_width="match_parent"
@@ -31,7 +41,7 @@
                     android:layout_marginRight="@dimen/_10sdp"
                     android:ellipsize="end"
                     android:singleLine="true"
-                    android:text="Id"
+                    android:text="@{question.question_id}"
                     android:textColor="@color/colorWhite"
                     android:textSize="@dimen/_10ssp"
                     app:layout_constraintLeft_toLeftOf="parent"
@@ -72,7 +82,7 @@
                     android:layout_weight="1"
                     android:ellipsize="end"
                     android:singleLine="true"
-                    android:text="Subject"
+                    android:text="@{question.subject}"
                     android:textColor="@color/colorSkyBlue"
                     android:textSize="@dimen/_10ssp" />
 
@@ -83,7 +93,7 @@
                     android:layout_weight="1"
                     android:ellipsize="end"
                     android:singleLine="true"
-                    android:text="Topic"
+                    android:text="@{question.topic}"
                     android:textAlignment="center"
                     android:textColor="@color/colorSkyBlue"
                     android:textSize="@dimen/_10ssp" />
@@ -96,7 +106,7 @@
                     android:layout_weight="1"
                     android:ellipsize="end"
                     android:singleLine="true"
-                    android:text="Subject"
+                    android:text="@{question.chapter}"
                     android:textAlignment="textEnd"
                     android:textColor="@color/colorSkyBlue"
                     android:textSize="@dimen/_10ssp" />
@@ -167,7 +177,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_10sdp"
                 android:layout_marginRight="@dimen/_10sdp"
-                android:text="question"
+                android:text="@{question.question}"
                 android:visibility="visible"
                 android:textColor="@color/colorSkyBlue"
                 android:textSize="@dimen/_12ssp"
@@ -219,7 +229,7 @@
                 android:layout_marginLeft="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/_5sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
-                android:text="question desc"
+                android:text="@{question.questiondesc}"
                 android:textColor="@color/colorBlack"
                 android:textSize="@dimen/_10ssp"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -1969,7 +1979,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_5sdp"
-                        android:text="Answer"
+                        android:text="@{question.answer}"
                         android:textColor="@color/colorBlack"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/solution" />
@@ -1995,7 +2005,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_5sdp"
-                        android:text="Answer desc"
+                        android:text="@{question.answerDesc}"
                         android:textColor="@color/colorBlack"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/ans_img1" />
@@ -2030,7 +2040,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:layout_marginRight="@dimen/_10sdp"
-                    android:text=""
+                    android:text="@{question.difficulty_level}"
                     android:textColor="@color/colorBlack"
                     android:textSize="@dimen/_10ssp"
                     app:layout_constraintLeft_toRightOf="@+id/difflevel_textview"
@@ -2182,7 +2192,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/_5sdp"
-                            android:text="5"
+                            android:text="@{question.likes}"
                             android:textAlignment="textStart"
                             android:textColor="@color/colorBlack"
                             app:layout_constraintBottom_toBottomOf="@+id/like"
@@ -2215,7 +2225,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/_5sdp"
-                            android:text="5"
+                            android:text="@{question.comments}"
                             android:textAlignment="textStart"
                             android:textColor="@color/colorBlack"
                             app:layout_constraintBottom_toBottomOf="@+id/comment"
@@ -2248,7 +2258,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/_5sdp"
-                            android:text="5"
+                            android:text="@{question.shares}"
                             android:textAlignment="textStart"
                             android:textColor="@color/colorBlack"
                             app:layout_constraintBottom_toBottomOf="@+id/share"
