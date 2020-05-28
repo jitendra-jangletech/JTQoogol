@@ -172,6 +172,37 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
             learningItemBinding.solutionOption.setText("Answer : " + learningQuestions.getAnswer());
             learningItemBinding.solutionDesc.setText(learningQuestions.getAnswerDesc());
 
+
+
+            if (learningQuestions.getType().equalsIgnoreCase(FILL_THE_BLANKS)) {
+                learningItemBinding.categoryTextview.setText("Fill in the Blanks");
+            } else if (learningQuestions.getType().equalsIgnoreCase(ONE_LINE_ANSWER) || learningQuestions.getType().equalsIgnoreCase(SHORT_ANSWER)) {
+                learningItemBinding.categoryTextview.setText("Short Answer");
+            } else if (learningQuestions.getType().equalsIgnoreCase(LONG_ANSWER)) {
+                learningItemBinding.categoryTextview.setText("Long Answer");
+            } else {
+                if (learningQuestions.getQue_option_type().equalsIgnoreCase(SCQ)) {
+                    learningItemBinding.categoryTextview.setText("SCQ");
+                } else if (learningQuestions.getQue_option_type().equalsIgnoreCase(SCQ_IMAGE)) {
+                    learningItemBinding.categoryTextview.setText("SCQ");
+                } else if (learningQuestions.getQue_option_type().equalsIgnoreCase(SCQ_IMAGE_WITH_TEXT)) {
+                    learningItemBinding.categoryTextview.setText("SCQ");
+                } else if (learningQuestions.getQue_option_type().equalsIgnoreCase(MCQ_IMAGE_WITH_TEXT)) {
+                    learningItemBinding.categoryTextview.setText("MCQ");
+                } else if (learningQuestions.getQue_option_type().equalsIgnoreCase(MCQ_IMAGE)) {
+                    learningItemBinding.categoryTextview.setText("MCQ");
+                } else if (learningQuestions.getQue_option_type().equalsIgnoreCase(MCQ)) {
+                    learningItemBinding.categoryTextview.setText("MCQ");
+                } else if (learningQuestions.getQue_option_type().equalsIgnoreCase(TRUE_FALSE)) {
+                    learningItemBinding.categoryTextview.setText("True False");
+                } else if (learningQuestions.getQue_option_type().equalsIgnoreCase(MATCH_PAIR)) {
+                    learningItemBinding.categoryTextview.setText("Match the Pairs");
+                } else if (learningQuestions.getQue_option_type().equalsIgnoreCase(MATCH_PAIR_IMAGE)) {
+                    learningItemBinding.categoryTextview.setText("Match the Pairs");
+                }
+            }
+
+
             if (learningQuestions.getQue_media_typs() != null && learningQuestions.getQue_media_typs().equalsIgnoreCase(IMAGE) && learningQuestions.getQue_images() != null) {
                 String[] stringrray = learningQuestions.getQue_images().split(",");
                 List<String> tempimgList = new ArrayList<>();
@@ -366,9 +397,9 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
             learningItemBinding.like.setOnClickListener(v -> {
                 LearningQuestionsNew learningQuestions = learningQuestionsList.get(getAdapterPosition());
                 if (learningQuestions.getIs_liked().equalsIgnoreCase("true")) {
-                    ProcessQuestionAPI(learningQuestions.getQuestion_id(), 0, "like","","",getAdapterPosition());
+                    ProcessQuestionAPI(learningQuestions.getQuestion_id(), 0, "like","","",getAdapterPosition(),"");
                 } else {
-                    ProcessQuestionAPI(learningQuestions.getQuestion_id(), 1, "like","","",getAdapterPosition());
+                    ProcessQuestionAPI(learningQuestions.getQuestion_id(), 1, "like","","",getAdapterPosition(),"");
                 }
             });
 
@@ -380,9 +411,9 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
             learningItemBinding.favorite.setOnClickListener(v -> {
                 LearningQuestionsNew learningQuestions = learningQuestionsList.get(getAdapterPosition());
                 if (learningQuestions.getIs_fav().equalsIgnoreCase("true")) {
-                    ProcessQuestionAPI(learningQuestions.getQuestion_id(), 0, "fav","","",getAdapterPosition());
+                    ProcessQuestionAPI(learningQuestions.getQuestion_id(), 0, "fav","","",getAdapterPosition(),"");
                 } else {
-                    ProcessQuestionAPI(learningQuestions.getQuestion_id(), 1, "fav","","",getAdapterPosition());
+                    ProcessQuestionAPI(learningQuestions.getQuestion_id(), 1, "fav","","",getAdapterPosition(),"");
                 }
             });
 
@@ -875,9 +906,21 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
                     }
                 }
             } else if (learningQuestions.getType().equalsIgnoreCase(ONE_LINE_ANSWER) || learningQuestions.getType().equalsIgnoreCase(SHORT_ANSWER)) {
-                Toast.makeText(activity, "Work in Progress", Toast.LENGTH_SHORT).show();
+                if (learningItemBinding.singleLine.getText().toString().isEmpty()) {
+                    Toast.makeText(activity, "Please enter answer first.", Toast.LENGTH_SHORT).show();
+                } else {
+                    isAttempted = 1;
+                    ProcessQuestionAPI(learningQuestions.getQuestion_id(), 0, ONE_LINE_ANSWER,"","",getAdapterPosition(),learningItemBinding.singleLine.getText().toString());
+                }
+
             } else if (learningQuestions.getType().equalsIgnoreCase(LONG_ANSWER)) {
-                Toast.makeText(activity, "Work in Progress", Toast.LENGTH_SHORT).show();
+                if (learningItemBinding.multiLine.getText().toString().isEmpty()) {
+                    Toast.makeText(activity, "Please enter answer first.", Toast.LENGTH_SHORT).show();
+                } else {
+                    isAttempted = 1;
+                    ProcessQuestionAPI(learningQuestions.getQuestion_id(), 0, LONG_ANSWER,"","",getAdapterPosition(), learningItemBinding.multiLine.getText().toString());
+                }
+
             } else {
                 if (learningQuestions.getQue_option_type().equalsIgnoreCase(SCQ)) {
                     if (!scq_ans.trim().equalsIgnoreCase("")) {
@@ -2083,7 +2126,7 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
 
         }
 
-        private void ProcessQuestionAPI(String que_id, int flag, String call_from, String rating, String feedback, int position) {
+        private void ProcessQuestionAPI(String que_id, int flag, String call_from, String rating, String feedback, int position, String answer) {
             ProgressDialog.getInstance().show(activity);
             ApiInterface apiService = ApiClient.getInstance().getApi();
             Call<ProcessQuestion> call;
@@ -2095,8 +2138,10 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
                 call = apiService.favApi(user_id, que_id, "I", flag);
             else if (call_from.equalsIgnoreCase("submit"))
                 call = apiService.questionAttemptApi(user_id, que_id, "I", 1, flag);
-            else
+            else if (call_from.equalsIgnoreCase("rating"))
                 call = apiService.addRatingsApi(user_id, que_id, "I", rating, feedback);
+            else
+                call = apiService.submitSubjectiveQueApi(user_id, que_id, "I",answer);
 
             call.enqueue(new Callback<ProcessQuestion>() {
                 @Override
@@ -2127,6 +2172,22 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
                                     Glide.with(activity).load(activity.getResources().getDrawable(R.drawable.ic_fav)).into(learningItemBinding.favorite);
                                 else
                                     Glide.with(activity).load(activity.getResources().getDrawable(R.drawable.ic_favorite_black_24dp)).into(learningItemBinding.favorite);
+                            } else if (call_from.equalsIgnoreCase(ONE_LINE_ANSWER)) {
+                                if (response.body().getSolved_right().equalsIgnoreCase("true")) {
+                                    learningItemBinding.singleLine.setBackground(activity.getResources().getDrawable(R.drawable.green_border));
+                                } else {
+                                    learningItemBinding.singleLine.setBackground(activity.getResources().getDrawable(R.drawable.red_border));
+                                }
+                                learningItemBinding.solutionLayout.setVisibility(View.VISIBLE);
+                                learningItemBinding.solutionDesc.setText(response.body().getA_sub_ans());
+                            } else if  (call_from.equalsIgnoreCase(LONG_ANSWER)) {
+                                if (response.body().getSolved_right().equalsIgnoreCase("true")) {
+                                    learningItemBinding.multiLine.setBackground(activity.getResources().getDrawable(R.drawable.green_border));
+                                } else {
+                                    learningItemBinding.multiLine.setBackground(activity.getResources().getDrawable(R.drawable.red_border));
+                                }
+                                learningItemBinding.solutionLayout.setVisibility(View.VISIBLE);
+                                learningItemBinding.solutionDesc.setText(response.body().getA_sub_ans());
                             }
 
                         } else {
@@ -2160,7 +2221,7 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
                 ratingFeedbackBinding.submitRating.setOnClickListener(v -> {
                     dialog.dismiss();
                     if (ratingFeedbackBinding.rating.getRating() != 0) {
-                        ProcessQuestionAPI(questionid, 0, "rating", String.valueOf(ratingFeedbackBinding.rating.getRating()), ratingFeedbackBinding.feedback.getText().toString(), position);
+                        ProcessQuestionAPI(questionid, 0, "rating", String.valueOf(ratingFeedbackBinding.rating.getRating()), ratingFeedbackBinding.feedback.getText().toString(), position,"");
                     } else {
                         Toast.makeText(activity, "Please add ratings", Toast.LENGTH_SHORT).show();
                     }

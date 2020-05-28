@@ -49,6 +49,39 @@ public class ProcessQuestion {
     @SerializedName(Constant.right_solved_count)
     private String right_solved_count;
 
+    @SerializedName(Constant.solved_right)
+    private String solved_right;
+
+    @SerializedName(Constant.sub_ans_ratio)
+    private String sub_ans_ratio;
+
+    @SerializedName(Constant.a_sub_ans)
+    private String a_sub_ans;
+
+    public String getA_sub_ans() {
+        return a_sub_ans!=null?a_sub_ans:"";
+    }
+
+    public void setA_sub_ans(String a_sub_ans) {
+        this.a_sub_ans = a_sub_ans;
+    }
+
+    public String getSolved_right() {
+        return solved_right!=null?solved_right:"";
+    }
+
+    public void setSolved_right(String solved_right) {
+        this.solved_right = solved_right;
+    }
+
+    public String getSub_ans_ratio() {
+        return sub_ans_ratio!=null?sub_ans_ratio:"";
+    }
+
+    public void setSub_ans_ratio(String sub_ans_ratio) {
+        this.sub_ans_ratio = sub_ans_ratio;
+    }
+
     public String getLikeCount() {
         return likeCount;
     }

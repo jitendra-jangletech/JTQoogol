@@ -95,6 +95,8 @@ public class ConnectionAdapter extends RecyclerView.Adapter<ConnectionAdapter.Vi
 
 
 
+
+
         PopupMenu popup = new PopupMenu(activity, connectionItemBinding.textViewOptions,END);
         popup.setGravity(END);
         popup.inflate(R.menu.connection_options);

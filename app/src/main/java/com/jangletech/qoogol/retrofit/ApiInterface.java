@@ -296,6 +296,13 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST(Constant.PROCESS_QUESTION)
+    Call<ProcessQuestion> submitSubjectiveQueApi(@Field(Constant.u_user_id) int userid,
+                                        @Field(Constant.q_id) String queId,
+                                        @Field("Case") String caseL,
+                                        @Field(Constant.sub_ans) String ratings);
+
+    @FormUrlEncoded
+    @POST(Constant.PROCESS_QUESTION)
     Call<ProcessQuestion> questionAttemptApi(@Field(Constant.u_user_id) int userid,
                                  @Field(Constant.q_id) String queId,
                                  @Field("Case") String caseL,

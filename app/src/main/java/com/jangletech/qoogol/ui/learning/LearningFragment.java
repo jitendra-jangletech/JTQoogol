@@ -131,9 +131,7 @@ public class LearningFragment extends BaseFragment implements LearingAdapter.onI
         call.enqueue(new Callback<LearningQuestResponse>() {
             @Override
             public void onResponse(Call<LearningQuestResponse> call, retrofit2.Response<LearningQuestResponse> response) {
-                    learningFragmentBinding.learningSwiperefresh.setRefreshing(false);
                 try {
-                    ProgressDialog.getInstance().dismiss();
                     questionsNewList.clear();
                     if (response.body()!=null && response.body().getResponse().equalsIgnoreCase("200")){
                         questionsNewList = response.body().getQuestion_list();
@@ -141,6 +139,8 @@ public class LearningFragment extends BaseFragment implements LearingAdapter.onI
                     } else {
                         Toast.makeText(getActivity(), UtilHelper.getAPIError(String.valueOf(response.body())),Toast.LENGTH_SHORT).show();
                     }
+                    learningFragmentBinding.learningSwiperefresh.setRefreshing(false);
+                    ProgressDialog.getInstance().dismiss();
                 } catch (Exception e) {
                     e.printStackTrace();
                     ProgressDialog.getInstance().dismiss();
