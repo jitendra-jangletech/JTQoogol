@@ -44,7 +44,6 @@ public class ConnectionsFragment extends Fragment {
         if (bundle != null) {
             position = bundle.getInt("QuestionId");
         }
-//        mbinding.viewpager.setCurrentItem(position);
         mbinding.resultTabs.setupWithViewPager(mbinding.viewpager);
 
     }

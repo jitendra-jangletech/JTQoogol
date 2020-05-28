@@ -83,11 +83,11 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST(Constant.LANGUAGE_API)
-    Call<Language> fetchLanguages(@Field(Constant.u_user_id) int userId);
+    Call<Language> fetchLanguages(@Field(Constant.u_user_id) String userId);
 
     @FormUrlEncoded
     @POST(Constant.COUNTRY_API)
-    Call<CountryResponse> fetchNationalities(@Field(Constant.u_user_id) int userId);
+    Call<CountryResponse> fetchNationalities(@Field(Constant.u_user_id) String userId);
 
     @FormUrlEncoded
     @POST(Constant.STATE_API)
@@ -139,10 +139,18 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST(Constant.FETCH_USER_EDU)
-    Call<FetchEducationResponse> fetchUserEdu(@Field(Constant.u_user_id) int userId,
+    Call<FetchEducationResponse> fetchUserEdu(@Field(Constant.u_user_id) String userId,
                                               @Field(Constant.CASE) String casel,
                                               @Field(Constant.device_id) String deviceId,
                                               @Field(Constant.appName) String appName);
+
+    @FormUrlEncoded
+    @POST(Constant.FETCH_USER_EDU)
+    Call<FetchEducationResponse> fetchOtherUSersUserEdu(@Field(Constant.u_user_id) String userId,
+                                              @Field(Constant.CASE) String casel,
+                                              @Field(Constant.device_id) String deviceId,
+                                              @Field(Constant.appName) String appName,
+                                                        @Field(Constant.other_user) String other_user);
 
     @Multipart
     @POST(Constant.UPDATE_PROFILE_IMAGE_API)
@@ -187,10 +195,19 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST(Constant.FETCH_USER_INFO)
-    Call<UserProfile> fetchUserInfo(@Field(Constant.u_user_id) int userId,
+    Call<UserProfile> fetchUserInfo(@Field(Constant.u_user_id) String userId,
                                     @Field(Constant.device_id) String deviceId,
                                     @Field(Constant.appName) String appName,
                                     @Field(Constant.u_app_version) String app_version);
+
+    @FormUrlEncoded
+    @POST(Constant.FETCH_OTHER_USER_INFO)
+    Call<UserProfile> fetchOtherUsersInfo(@Field(Constant.u_user_id) String userId,
+                                    @Field(Constant.device_id) String deviceId,
+                                    @Field(Constant.appName) String appName,
+                                    @Field(Constant.u_app_version) String app_version,
+                                    @Field(Constant.other_user) String other_user,
+                                    @Field(Constant.CASE) String caseU);
 
     @FormUrlEncoded
     @POST(Constant.FETCH_TEST_LIST)

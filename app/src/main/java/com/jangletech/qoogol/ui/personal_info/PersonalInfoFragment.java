@@ -81,6 +81,8 @@ import retrofit2.Response;
 import retrofit2.http.Url;
 
 import static android.app.Activity.RESULT_OK;
+import static com.jangletech.qoogol.util.Constant.fetch_loged_in_user;
+import static com.jangletech.qoogol.util.Constant.fetch_other_user;
 
 public class PersonalInfoFragment extends BaseFragment {
 
@@ -101,6 +103,10 @@ public class PersonalInfoFragment extends BaseFragment {
     private boolean isMailVerified = false;
     private boolean isMobileVerified = false;
     ApiInterface apiService = ApiClient.getInstance().getApi();
+    String userid="";
+    private PreferenceManager mSettings;
+    Call<UserProfile> call;
+
 
     public static PersonalInfoFragment newInstance() {
         return new PersonalInfoFragment();
@@ -116,72 +122,20 @@ public class PersonalInfoFragment extends BaseFragment {
     }
 
     public void initViews() {
-        fetchUserProfile();
-        mViewModel.getUserProfileInfo().observe(requireActivity(), new Observer<UserProfile>() {
-            @Override
-            public void onChanged(@Nullable final UserProfile userProfile) {
-                mBinding.setUserProfile(userProfile);
-                Log.d(TAG, "First Name : " + userProfile.getFirstName());
-                profile = userProfile;
-                updateUi(userProfile);
-            }
-        });
+        mSettings = new PreferenceManager(getActivity());
+        userid = mSettings.getProfileFetchId();
+        if (userid.equalsIgnoreCase(mSettings.getUserId()))
+            fetchUserProfile(fetch_loged_in_user);
+        else
+            fetchUserProfile(fetch_other_user);
 
-        fetchLanguages();
-        mViewModel.getLanguages().observe(requireActivity(), new Observer<List<Language>>() {
-            @Override
-            public void onChanged(@Nullable final List<Language> languages) {
-                mMapLanguage = new HashMap<>();
-                for (Language language : languages) {
-                    mMapLanguage.put(language.getLang_id(), language.getLanguageName());
-                }
-                populateLanguage(mMapLanguage);
-            }
-        });
-
-        fetchNationalities();
-        mViewModel.getCountries().observe(requireActivity(), new Observer<List<Country>>() {
-            @Override
-            public void onChanged(@Nullable final List<Country> countries) {
-                mMapNationality = new HashMap<>();
-                for (Country country : countries) {
-                    mMapNationality.put(country.getCountryId(), country.getCountryName());
-                }
-                populateCountries(mMapNationality);
-            }
-        });
-
-        mViewModel.getStates().observe(requireActivity(), new Observer<List<State>>() {
-            @Override
-            public void onChanged(@Nullable final List<State> states) {
-                mMapStates = new HashMap<>();
-                for (State state : states) {
-                    mMapStates.put(Integer.valueOf(state.getState_id()), state.getStateName());
-                }
-                populateState(mMapStates);
-            }
-        });
-
-        mViewModel.getDistricts().observe(requireActivity(), new Observer<List<District>>() {
-            @Override
-            public void onChanged(@Nullable final List<District> districts) {
-                mMapDistricts = new HashMap<>();
-                for (District district : districts) {
-                    mMapDistricts.put(Integer.valueOf(district.getDistrict_id()), district.getDistrictName());
-                }
-                populateDistrict(mMapDistricts);
-            }
-        });
-
-        mViewModel.getCities().observe(requireActivity(), new Observer<List<City>>() {
-            @Override
-            public void onChanged(@Nullable final List<City> cities) {
-                mMapCities = new HashMap<>();
-                for (City city : cities) {
-                    mMapCities.put(Integer.valueOf(city.getCity_id()), city.getCityName());
-                }
-                populateCity(mMapCities);
-            }
+        mViewModel.getUserProfileInfo().observe(requireActivity(), userProfile -> {
+            mBinding.setUserProfile(userProfile);
+            Log.d(TAG, "First Name : " + userProfile.getFirstName());
+            profile = userProfile;
+            updateUi(userProfile);
+            if (!userid.equalsIgnoreCase(mSettings.getUserId()))
+                manageUnwantedFields(userProfile);
         });
 
         mBinding.userProfilePic.setOnClickListener(v -> {
@@ -220,6 +174,144 @@ public class PersonalInfoFragment extends BaseFragment {
             }
             verifyMobile(mBinding.etMobile.getText().toString().trim(), "M");
         });
+
+
+
+        if (userid.equalsIgnoreCase(mSettings.getUserId())) {
+            fetchLanguages();
+            mViewModel.getLanguages().observe(requireActivity(), new Observer<List<Language>>() {
+                @Override
+                public void onChanged(@Nullable final List<Language> languages) {
+                    mMapLanguage = new HashMap<>();
+                    for (Language language : languages) {
+                        mMapLanguage.put(language.getLang_id(), language.getLanguageName());
+                    }
+                    populateLanguage(mMapLanguage);
+                }
+            });
+
+            fetchNationalities();
+            mViewModel.getCountries().observe(requireActivity(), new Observer<List<Country>>() {
+                @Override
+                public void onChanged(@Nullable final List<Country> countries) {
+                    mMapNationality = new HashMap<>();
+                    for (Country country : countries) {
+                        mMapNationality.put(country.getCountryId(), country.getCountryName());
+                    }
+                    populateCountries(mMapNationality);
+                }
+            });
+
+            mViewModel.getStates().observe(requireActivity(), new Observer<List<State>>() {
+                @Override
+                public void onChanged(@Nullable final List<State> states) {
+                    mMapStates = new HashMap<>();
+                    for (State state : states) {
+                        mMapStates.put(Integer.valueOf(state.getState_id()), state.getStateName());
+                    }
+                    populateState(mMapStates);
+                }
+            });
+
+            mViewModel.getDistricts().observe(requireActivity(), new Observer<List<District>>() {
+                @Override
+                public void onChanged(@Nullable final List<District> districts) {
+                    mMapDistricts = new HashMap<>();
+                    for (District district : districts) {
+                        mMapDistricts.put(Integer.valueOf(district.getDistrict_id()), district.getDistrictName());
+                    }
+                    populateDistrict(mMapDistricts);
+                }
+            });
+
+            mViewModel.getCities().observe(requireActivity(), new Observer<List<City>>() {
+                @Override
+                public void onChanged(@Nullable final List<City> cities) {
+                    mMapCities = new HashMap<>();
+                    for (City city : cities) {
+                        mMapCities.put(Integer.valueOf(city.getCity_id()), city.getCityName());
+                    }
+                    populateCity(mMapCities);
+                }
+            });
+
+        } else {
+            manageLayoutForOtherUser();
+        }
+
+
+
+    }
+
+    private void manageUnwantedFields(UserProfile userProfile) {
+        if (userProfile.getStrTagLine().equalsIgnoreCase("")) {
+            mBinding.taglineLayout.setVisibility(View.GONE);
+        }
+
+        if (userProfile.getU_language().equalsIgnoreCase("")) {
+            mBinding.tvLanguage.setVisibility(View.GONE);
+            mBinding.langAutocompleteView.setVisibility(View.GONE);
+        }
+
+        if (userProfile.getU_Nationality().equalsIgnoreCase("")) {
+            mBinding.tvNationality.setVisibility(View.GONE);
+            mBinding.nationalityAutocompleteView.setVisibility(View.GONE);
+        }
+
+        if (userProfile.getU_State().equalsIgnoreCase("")) {
+            mBinding.tvState.setVisibility(View.GONE);
+            mBinding.stateAutocompleteView.setVisibility(View.GONE);
+        }
+
+        if (userProfile.getU_District().equalsIgnoreCase("")) {
+            mBinding.tvDivision.setVisibility(View.GONE);
+            mBinding.divisionAutocompleteView.setVisibility(View.GONE);
+        }
+
+        if (userProfile.getU_State().equalsIgnoreCase("")) {
+            mBinding.tvState.setVisibility(View.GONE);
+            mBinding.stateAutocompleteView.setVisibility(View.GONE);
+        }
+
+        if (userProfile.getU_City().equalsIgnoreCase("")) {
+            mBinding.tvCity.setVisibility(View.GONE);
+            mBinding.cityAutocompleteView.setVisibility(View.GONE);
+        }
+
+        mBinding.radioMale.setVisibility(View.GONE);
+        mBinding.radioFemale.setVisibility(View.GONE);
+        mBinding.radioOthers.setVisibility(View.GONE);
+
+        if (userProfile.getStrGender().equalsIgnoreCase("M"))
+            mBinding.radioMale.setVisibility(View.VISIBLE);
+        else  if (userProfile.getStrGender().equalsIgnoreCase("F"))
+            mBinding.radioFemale.setVisibility(View.VISIBLE);
+        else  if (userProfile.getStrGender().equalsIgnoreCase("O"))
+            mBinding.radioOthers.setVisibility(View.VISIBLE);
+
+    }
+
+    private void manageLayoutForOtherUser() {
+        mBinding.btnImportContacts.setVisibility(View.GONE);
+        mBinding.btnSave.setVisibility(View.GONE);
+        mBinding.passwordLayout.setVisibility(View.GONE);
+        mBinding.refferalLayout.setVisibility(View.GONE);
+        mBinding.pointsLayout.setVisibility(View.GONE);
+        mBinding.mobileLayout.setVisibility(View.GONE);
+        mBinding.mobileEmailLayout.setVisibility(View.GONE);
+
+        mBinding.etDob.setOnClickListener(null);
+        mBinding.userProfilePic.setOnClickListener(null);
+
+        mBinding.genderGrp.setEnabled(false);
+        mBinding.etFirstName.setEnabled(false);
+        mBinding.etLastName.setEnabled(false);
+        mBinding.langAutocompleteView.setEnabled(false);
+        mBinding.etTagLine.setEnabled(false);
+        mBinding.stateAutocompleteView.setEnabled(false);
+        mBinding.nationalityAutocompleteView.setEnabled(false);
+        mBinding.divisionAutocompleteView.setEnabled(false);
+        mBinding.cityAutocompleteView.setEnabled(false);
     }
 
     private void verifyMobile(String mobile, String verify) {
@@ -317,7 +409,7 @@ public class PersonalInfoFragment extends BaseFragment {
 
 
             HashMap userProfileMap = new HashMap();
-            userProfileMap.put(Constant.u_user_id, getSingleQuoteString(String.valueOf(new PreferenceManager(requireActivity()).getInt(Constant.USER_ID))));
+            userProfileMap.put(Constant.u_user_id, getSingleQuoteString(String.valueOf(userid)));
             userProfileMap.put(Constant.u_app_version, Constant.APP_VERSION);
             userProfileMap.put(Constant.device_id, getSingleQuoteString(getDeviceId()));
             userProfileMap.put(Constant.appName, getSingleQuoteString(Constant.APP_NAME));
@@ -520,10 +612,14 @@ public class PersonalInfoFragment extends BaseFragment {
                 .into(mBinding.userProfilePic);
     }
 
-    private void fetchUserProfile() {
+    private void fetchUserProfile(int call_from) {
         ProgressDialog.getInstance().show(requireActivity());
-        Call<UserProfile> call = apiService.fetchUserInfo(new PreferenceManager(requireActivity()).getInt(Constant.USER_ID),
-                getDeviceId(), Constant.APP_NAME, Constant.APP_VERSION);
+        if (call_from==fetch_loged_in_user)
+            call = apiService.fetchUserInfo(userid,getDeviceId(), Constant.APP_NAME, Constant.APP_VERSION);
+        else
+            call = apiService.fetchOtherUsersInfo(mSettings.getUserId(),getDeviceId(), Constant.APP_NAME, Constant.APP_VERSION,userid,"UP");
+
+
         call.enqueue(new Callback<UserProfile>() {
             @Override
             public void onResponse(Call<UserProfile> call, Response<UserProfile> response) {
@@ -547,7 +643,7 @@ public class PersonalInfoFragment extends BaseFragment {
 
     private void fetchLanguages() {
         ProgressDialog.getInstance().show(requireActivity());
-        Call<Language> call = apiService.fetchLanguages(new PreferenceManager(requireActivity()).getInt(Constant.USER_ID));
+        Call<Language> call = apiService.fetchLanguages(userid);
         call.enqueue(new Callback<Language>() {
             @Override
             public void onResponse(Call<Language> call, Response<Language> response) {
@@ -570,7 +666,7 @@ public class PersonalInfoFragment extends BaseFragment {
 
     private void fetchNationalities() {
         ProgressDialog.getInstance().show(requireActivity());
-        Call<CountryResponse> call = apiService.fetchNationalities(new PreferenceManager(requireActivity()).getInt(Constant.USER_ID));
+        Call<CountryResponse> call = apiService.fetchNationalities(userid);
         call.enqueue(new Callback<CountryResponse>() {
             @Override
             public void onResponse(Call<CountryResponse> call, Response<CountryResponse> response) {
@@ -882,41 +978,6 @@ public class PersonalInfoFragment extends BaseFragment {
         startActivityForResult(i, RESULT_REQUEST_LOAD_IMAGE_CODE);
     }
 
-//    private class compressImageTask extends AsyncTask<Void, Void, byte[]> {
-//
-//        private Uri data;
-//        private String userId;
-//        private Context mContext;
-//
-//        public compressImageTask(Uri data, String userId, Context context) {
-//            this.data = data;
-//            this.mContext = context;
-//            this.userId = userId;
-//        }
-//
-//        @Override
-//        protected void onPreExecute() {
-//            super.onPreExecute();
-//            ProgressDialog.getInstance().show(requireActivity());
-//        }
-//
-//        @Override
-//        protected byte[] doInBackground(final Void... voids) {
-//            try {
-//               return new ImageOptimization(requireActivity()).compressImage(data.toString());
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//            return null;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(byte[] bytes) {
-//            super.onPostExecute(bytes);
-//            ProgressDialog.getInstance().dismiss();
-//        }
-//    }
-
     private void updateProfileImage(File imageFile) {
         //pass it like this
         //File file = new File("/storage/emulated/0/Download/Corrections 6.jpg");
@@ -924,14 +985,14 @@ public class PersonalInfoFragment extends BaseFragment {
                 RequestBody.create(MediaType.parse("image/png"), imageFile);
 
         HashMap<String, String> params = new HashMap<>();
-        params.put(Constant.u_user_id, String.valueOf(new PreferenceManager(requireActivity()).getInt(Constant.USER_ID)));
+        params.put(Constant.u_user_id, String.valueOf(userid));
         params.put(Constant.device_id, getDeviceId());
         params.put(Constant.appName, Constant.APP_NAME);
         params.put(Constant.u_app_version, Constant.APP_VERSION);
         params.put(Constant.CASE, "N");
 
         RequestBody userId =
-                RequestBody.create(MediaType.parse("multipart/form-data"), String.valueOf(new PreferenceManager(requireActivity()).getInt(Constant.USER_ID)));
+                RequestBody.create(MediaType.parse("multipart/form-data"), userid);
         RequestBody deviceId =
                 RequestBody.create(MediaType.parse("multipart/form-data"), getDeviceId());
         RequestBody appName =

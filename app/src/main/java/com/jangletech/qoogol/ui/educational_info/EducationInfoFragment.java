@@ -21,6 +21,7 @@ import com.jangletech.qoogol.databinding.FragmentEducationInfoBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.model.Education;
 import com.jangletech.qoogol.model.FetchEducationResponse;
+import com.jangletech.qoogol.model.UserProfile;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
@@ -34,6 +35,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.jangletech.qoogol.util.Constant.fetch_loged_in_user;
+import static com.jangletech.qoogol.util.Constant.fetch_other_user;
+
 public class EducationInfoFragment extends BaseFragment implements EducationAdapter.EducationItemClickListener
         , View.OnClickListener, AddEduDialog.ApiCallListener {
 
@@ -44,6 +48,10 @@ public class EducationInfoFragment extends BaseFragment implements EducationAdap
     private List<Education> educationList;
     private List<FetchEducationResponse> fetchEducationResponseList = new ArrayList();
     ApiInterface apiService = ApiClient.getInstance().getApi();
+    String userid="";
+    private PreferenceManager mSettings;
+    Call<FetchEducationResponse> call;
+
 
     public static EducationInfoFragment newInstance() {
         return new EducationInfoFragment();
@@ -59,28 +67,42 @@ public class EducationInfoFragment extends BaseFragment implements EducationAdap
     }
 
     private void initViews() {
-        mBinding.addedu.setOnClickListener(this);
-        fetchEducationDetails();
-        mViewModel.getEducationList().observe(getActivity(), new Observer<List<Education>>() {
-            @Override
-            public void onChanged(@Nullable final List<Education> educations) {
-                Log.d(TAG, "onChanged Education List Size : " + educations.size());
-                educationList  = educations;
-                setEducationListAdapter(educations);
-            }
+        mSettings = new PreferenceManager(getActivity());
+        userid = mSettings.getProfileFetchId();
+        if (userid.equalsIgnoreCase(mSettings.getUserId())) {
+            fetchEducationDetails(fetch_loged_in_user);
+            mBinding.addedu.setOnClickListener(this);
+        } else {
+            fetchEducationDetails(fetch_other_user);
+            mBinding.addedu.setVisibility(View.GONE);
+        }
+
+
+        mViewModel.getEducationList().observe(getActivity(), educations -> {
+            Log.d(TAG, "onChanged Education List Size : " + educations.size());
+            educationList  = educations;
+            if (userid.equalsIgnoreCase(mSettings.getUserId()))
+                    setEducationListAdapter(educations, fetch_loged_in_user);
+            else
+                setEducationListAdapter(educations, fetch_other_user);
         });
     }
 
-    private void setEducationListAdapter(List<Education> educationList){
-        educationAdapter = new EducationAdapter(requireActivity(),educationList,this);
+    private void setEducationListAdapter(List<Education> educationList, int call_from){
+        educationAdapter = new EducationAdapter(requireActivity(),educationList,this, call_from);
         mBinding.educationListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mBinding.educationListRecyclerView.setAdapter(educationAdapter);
     }
 
-    private void fetchEducationDetails() {
+    private void fetchEducationDetails(int call_from) {
         ProgressDialog.getInstance().show(getActivity());
-        Call<FetchEducationResponse> call = apiService.fetchUserEdu(new PreferenceManager(getActivity()).getInt(Constant.USER_ID),
-                "L", getDeviceId(), Constant.APP_NAME);
+
+        if (call_from==fetch_loged_in_user)
+             call = apiService.fetchUserEdu(userid, "L", getDeviceId(), Constant.APP_NAME);
+        else
+            call = apiService.fetchOtherUSersUserEdu(mSettings.getUserId(), "L", getDeviceId(), Constant.APP_NAME, userid);
+
+
         call.enqueue(new Callback<FetchEducationResponse>() {
             @Override
             public void onResponse(Call<FetchEducationResponse> call, Response<FetchEducationResponse> response) {
@@ -144,6 +166,6 @@ public class EducationInfoFragment extends BaseFragment implements EducationAdap
 
     @Override
     public void onSuccess() {
-        fetchEducationDetails();
+        fetchEducationDetails(fetch_loged_in_user);
     }
 }
