@@ -130,14 +130,16 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
                 public void onChanged(@Nullable final List<FetchSubjectResponse> subjects) {
                     Log.d(TAG, "onChanged Subjects Size : " + subjects.size());
                     prepareSubjectChips(subjects);
+                    fetchTestList("");
                 }
             });
 
         } else {
+            fetchTestList("FV");
             mBinding.horizontalScrollView.setVisibility(View.GONE);
         }
 
-        fetchTestList();
+
         mViewModel.getAllTestList().observe(getActivity(), new Observer<List<TestModelNew>>() {
             @Override
             public void onChanged(@Nullable final List<TestModelNew> tests) {
@@ -271,9 +273,9 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
         });
     }
 
-    private void fetchTestList() {
+    private void fetchTestList(String caseFav) {
         ProgressDialog.getInstance().show(getActivity());
-        Call<TestListResponse> call = apiService.fetchTestList(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));//todo change userId
+        Call<TestListResponse> call = apiService.fetchTestList(new PreferenceManager(getActivity()).getInt(Constant.USER_ID),caseFav);//todo change userId
 //        Call<TestListResponse> call = apiService.fetchTestList(1003);//todo change userId
         call.enqueue(new Callback<TestListResponse>() {
             @Override
