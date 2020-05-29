@@ -36,7 +36,7 @@ public class UserProfile {
     private String cityId;
 
     public String getCityId() {
-        return cityId;
+        return cityId!=null?cityId:"";
     }
 
     public void setCityId(String cityId) {
@@ -320,7 +320,7 @@ public class UserProfile {
     }
 
     public String getU_DistrictId() {
-        return u_DistrictId;
+        return u_DistrictId!=null?u_DistrictId:"";
     }
 
     void setU_DistrictId(String u_DistrictId) {
