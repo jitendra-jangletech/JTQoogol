@@ -120,7 +120,8 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
 
     private void initViews() {
 
-        if (getArguments() != null && getArguments().getString(Constant.CALL_FROM).equalsIgnoreCase("MY_TEST")) {
+        if (getArguments() != null && getArguments().getString(Constant.CALL_FROM) != null &&
+                getArguments().getString(Constant.CALL_FROM).equalsIgnoreCase("MY_TEST")) {
             Log.d(TAG, "My Test Bundle : " + getArguments().getString(Constant.CALL_FROM));
             mBinding.horizontalScrollView.setVisibility(View.VISIBLE);
             fetchSubjectList();
@@ -383,14 +384,14 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
                             else
                                 testModelNew.setLikeCount("" + (likeCount - 1));
 
-                            testList.set(pos,testModelNew);
-                            testAdapter.notifyItemChanged(pos,testModelNew);
+                            testList.set(pos, testModelNew);
+                            testAdapter.notifyItemChanged(pos, testModelNew);
                         }
                         if (like == 1) {
                             testModelNew.setLike(true);
                             testModelNew.setLikeCount("" + (likeCount + 1));
-                            testList.set(pos,testModelNew);
-                            testAdapter.notifyItemChanged(pos,testModelNew);
+                            testList.set(pos, testModelNew);
+                            testAdapter.notifyItemChanged(pos, testModelNew);
                             //testAdapter.updateList(testList, pos);
                         }
 
