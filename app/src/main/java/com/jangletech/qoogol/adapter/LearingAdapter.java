@@ -130,67 +130,22 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-
         try {
-
             LearningQuestionsNew learningQuestions = learningQuestionsList.get(position);
             learningItemBinding.setQuestion(learningQuestions);
 
             hideLayouts();
 
-            if (learningQuestions.getQuestiondesc() == null || learningQuestions.getQuestiondesc() == "")
-                learningItemBinding.questiondescTextview.setVisibility(View.GONE);
 
             if (learningQuestions.getQuestion()!=null && learningQuestions.getQuestion().contains("$")) {
                 learningItemBinding.questionMathview.setVisibility(View.VISIBLE);
-                learningItemBinding.questionMathview.setText(learningQuestions.getQuestion());
             } else {
                 learningItemBinding.questionTextview.setVisibility(View.VISIBLE);
-                learningItemBinding.questionTextview.setText(learningQuestions.getQuestion());
             }
-
 
 
             learningItemBinding.favorite.setImageDrawable(learningQuestions.getIs_fav().equalsIgnoreCase("true") ? activity.getResources().getDrawable(R.drawable.ic_favorite_black_24dp) : activity.getResources().getDrawable(R.drawable.ic_fav));
             learningItemBinding.like.setImageDrawable(learningQuestions.getIs_liked().equalsIgnoreCase("true") ? activity.getResources().getDrawable(R.drawable.ic_thumb_up_black_24dp) : activity.getResources().getDrawable(R.drawable.ic_like));
-//
-            learningItemBinding.timeTextview.setText("Time: " + learningQuestions.getRecommended_time() + " Sec");
-            learningItemBinding.attemptedValue.setText(learningQuestions.getAttended_by() != null ? learningQuestions.getAttended_by() : "0");
-            learningItemBinding.ratingvalue.setText(learningQuestions.getRating() != null ? UtilHelper.roundAvoid(learningQuestions.getRating()) : "0");
-
-            learningItemBinding.marksTextview.setText("Marks : " + UtilHelper.formatMarks(Float.parseFloat(learningQuestions.getMarks())));
-
-            learningItemBinding.postedValue.setText(learningQuestions.getPosted_on() != null ? learningQuestions.getPosted_on().substring(0, 10) : "");
-            learningItemBinding.lastUsedValue.setText(learningQuestions.getLastused_on() != null ? learningQuestions.getLastused_on().substring(0, 10) : "");
-
-            if (learningQuestions.getType().equalsIgnoreCase(FILL_THE_BLANKS)) {
-                learningItemBinding.categoryTextview.setText("Fill in the Blanks");
-            } else if (learningQuestions.getType().equalsIgnoreCase(ONE_LINE_ANSWER) || learningQuestions.getType().equalsIgnoreCase(SHORT_ANSWER)) {
-                learningItemBinding.categoryTextview.setText("Short Answer");
-            } else if (learningQuestions.getType().equalsIgnoreCase(LONG_ANSWER)) {
-                learningItemBinding.categoryTextview.setText("Long Answer");
-            } else {
-                if (learningQuestions.getQue_option_type().equalsIgnoreCase(SCQ)) {
-                    learningItemBinding.categoryTextview.setText("SCQ");
-                } else if (learningQuestions.getQue_option_type().equalsIgnoreCase(SCQ_IMAGE)) {
-                    learningItemBinding.categoryTextview.setText("SCQ");
-                } else if (learningQuestions.getQue_option_type().equalsIgnoreCase(SCQ_IMAGE_WITH_TEXT)) {
-                    learningItemBinding.categoryTextview.setText("SCQ");
-                } else if (learningQuestions.getQue_option_type().equalsIgnoreCase(MCQ_IMAGE_WITH_TEXT)) {
-                    learningItemBinding.categoryTextview.setText("MCQ");
-                } else if (learningQuestions.getQue_option_type().equalsIgnoreCase(MCQ_IMAGE)) {
-                    learningItemBinding.categoryTextview.setText("MCQ");
-                } else if (learningQuestions.getQue_option_type().equalsIgnoreCase(MCQ)) {
-                    learningItemBinding.categoryTextview.setText("MCQ");
-                } else if (learningQuestions.getQue_option_type().equalsIgnoreCase(TRUE_FALSE)) {
-                    learningItemBinding.categoryTextview.setText("True False");
-                } else if (learningQuestions.getQue_option_type().equalsIgnoreCase(MATCH_PAIR)) {
-                    learningItemBinding.categoryTextview.setText("Match the Pairs");
-                } else if (learningQuestions.getQue_option_type().equalsIgnoreCase(MATCH_PAIR_IMAGE)) {
-                    learningItemBinding.categoryTextview.setText("Match the Pairs");
-                }
-            }
-
 
             if (learningQuestions.getQue_media_typs() != null && learningQuestions.getQue_media_typs().equalsIgnoreCase(IMAGE) && learningQuestions.getQue_images() != null) {
                 String[] stringrray = learningQuestions.getQue_images().split(",");
@@ -239,21 +194,14 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
 
     private void answerCharCounter(EditText etAnswer, TextView tvCounter, int maxWordLength) {
 
-        InputFilter filter = new InputFilter() {
-            @Override
-            public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
-                return null;
-            }
-        };
+        InputFilter filter = (source, start, end, dest, dstart, dend) -> null;
         etAnswer.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
             }
 
             @Override
@@ -271,7 +219,6 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
                 if (wordCount == maxWordLength) {
                     etAnswer.setFilters(new InputFilter[]{new InputFilter.LengthFilter(s.length())});
                 }
-
                 tvCounter.setText("Words Remaining : " + (maxWordLength - wordCount + "/" + String.valueOf(maxWordLength)));
             }
         });
