@@ -42,7 +42,7 @@
                             android:layout_height="match_parent"
                             android:layout_marginRight="@dimen/_1sdp"
                             android:layout_weight="1"
-                            android:background="@color/colorWhite">
+                            android:background="?attr/selectableItemBackground">
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -67,7 +67,7 @@
                             android:layout_height="match_parent"
                             android:layout_marginLeft="@dimen/_1sdp"
                             android:layout_weight="1"
-                            android:background="@color/colorWhite">
+                            android:background="?attr/selectableItemBackground">
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -89,7 +89,7 @@
                         android:layout_below="@+id/rootLayout"
                         android:background="@color/colorLightGrey" />
 
-                    <ScrollView
+                    <androidx.core.widget.NestedScrollView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_below="@+id/seperator"
@@ -121,6 +121,7 @@
                                     app:singleSelection="true">
 
                                     <com.google.android.material.chip.Chip
+                                        android:foreground="?attr/selectableItemBackground"
                                         android:id="@+id/chipAll"
                                         style="@style/Widget.MaterialComponents.Chip.Filter"
                                         android:layout_width="wrap_content"
@@ -141,6 +142,7 @@
                                         app:chipStrokeWidth="@dimen/_2sdp" />
 
                                     <com.google.android.material.chip.Chip
+                                        android:foreground="?attr/selectableItemBackground"
                                         android:id="@+id/chipAttempted"
                                         style="@style/Widget.MaterialComponents.Chip.Filter"
                                         android:layout_width="wrap_content"
@@ -161,6 +163,7 @@
                                         app:chipStrokeWidth="@dimen/_2sdp" />
 
                                     <com.google.android.material.chip.Chip
+                                        android:foreground="?attr/selectableItemBackground"
                                         android:id="@+id/chipUnattempted"
                                         style="@style/Widget.MaterialComponents.Chip.Filter"
                                         android:layout_width="wrap_content"
@@ -181,6 +184,7 @@
                                         app:chipStrokeWidth="@dimen/_2sdp" />
 
                                     <com.google.android.material.chip.Chip
+                                        android:foreground="?attr/selectableItemBackground"
                                         android:id="@+id/chipUnseen"
                                         style="@style/Widget.MaterialComponents.Chip.Filter"
                                         android:layout_width="wrap_content"
@@ -200,6 +204,7 @@
                                         app:chipStrokeColor="@color/icon_color"
                                         app:chipStrokeWidth="@dimen/_2sdp" />
                                     <com.google.android.material.chip.Chip
+                                        android:foreground="?attr/selectableItemBackground"
                                         android:id="@+id/chipMarked"
                                         style="@style/Widget.MaterialComponents.Chip.Filter"
                                         android:layout_width="wrap_content"
@@ -405,7 +410,7 @@
 
                         </RelativeLayout>
 
-                    </ScrollView>
+                    </androidx.core.widget.NestedScrollView>
 
                     <RelativeLayout
                         android:id="@+id/bottomLayout"
@@ -416,6 +421,7 @@
                         android:padding="@dimen/_15sdp">
 
                         <Button
+                            android:background="?attr/selectableItemBackground"
                             android:id="@+id/btnSubmitTest"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/_40sdp"

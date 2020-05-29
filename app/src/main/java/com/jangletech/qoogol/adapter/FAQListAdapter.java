@@ -108,6 +108,12 @@ public class FAQListAdapter extends RecyclerView.Adapter<FAQListAdapter.FaqVH> {
                 movie.setExpanded(!movie.isExpanded());
                 notifyItemChanged(getAdapterPosition());
             });
+
+            tvAnswer.setOnClickListener(view -> {
+                FAQModel movie = faqModelList.get(getAdapterPosition());
+                movie.setExpanded(!movie.isExpanded());
+                notifyItemChanged(getAdapterPosition());
+            });
         }
     }
 }

@@ -2,6 +2,8 @@ package com.jangletech.qoogol.ui;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.LauncherActivity;
+import android.content.Intent;
 import android.os.CountDownTimer;
 import android.provider.Settings;
 import android.util.Log;
@@ -13,22 +15,19 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.textfield.TextInputLayout;
 import com.jangletech.qoogol.R;
-import com.jangletech.qoogol.databinding.FragmentClassBinding;
-import com.jangletech.qoogol.enums.Module;
-import com.jangletech.qoogol.model.Comments;
-import com.jangletech.qoogol.ui.syllabus.ClassFragment;
+import com.jangletech.qoogol.activities.LaunchActivity;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
@@ -68,6 +67,23 @@ public class BaseFragment extends Fragment {
                 .apply(options)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(imageView);
+    }
+
+    public void resetSettingAndLogout() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(requireActivity(),R.style.AlertDialogStyle);
+        alertDialog.setTitle(getActivity().getResources().getString(R.string.warning));
+        alertDialog.setMessage("You have signed-in from another device. Logging out.");
+        alertDialog.setPositiveButton("Ok", (dialog, which) -> {
+            new PreferenceManager(getApplicationContext()).setIsLoggedIn(false);
+            new PreferenceManager(getApplicationContext()).saveString(Constant.MOBILE, "");
+            new PreferenceManager(getApplicationContext()).saveString(Constant.USER_ID, "");
+            Intent intent = new Intent(requireActivity(), LaunchActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            Objects.requireNonNull(requireActivity()).finish();
+            dialog.dismiss();
+        });
+        alertDialog.show();
     }
 
     public String getTempImageUrl(String path){

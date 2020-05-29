@@ -11,6 +11,15 @@
         app:cardCornerRadius="@dimen/_5sdp"
         app:cardElevation="@dimen/_5sdp">
 
+        <io.github.kexanie.library.MathView
+            android:id="@+id/scq134"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="mcq1"
+            android:textColor="@color/colorSkyBlue"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -124,7 +133,6 @@
                 android:weightSum="2"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/header_view">
-
 
                 <TextView
                     android:id="@+id/marks_textview"

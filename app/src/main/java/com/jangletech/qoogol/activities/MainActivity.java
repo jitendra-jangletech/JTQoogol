@@ -359,7 +359,10 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
                 //ProgressDialog.getInstance().dismiss();
                 if (response.body() != null && response.body().getResponseCode().equals("200")) {
                     mViewmodel.setUserProfileResponse(response.body());
-                } else {
+                }else if(response.body().getResponseCode().equals("501")){
+                    resetSettingAndLogout();
+                }
+                else {
                     showErrorDialog(MainActivity.this, response.body().getResponseCode(), "");
                 }
             }

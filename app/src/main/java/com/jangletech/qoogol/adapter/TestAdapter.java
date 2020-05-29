@@ -81,7 +81,7 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.ViewHolder> {
         });
 
 
-        itemBinding.like.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+       /* itemBinding.like.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     testModel.setLikeCount(testModel.getLikeCount() + 1);
@@ -96,7 +96,7 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.ViewHolder> {
                     testClickListener.onLikeClick(testModel, position);
                 }
             }
-        });
+        });*/
 
         if (testModel.isPaused()) {
             holder.itemBinding.btnStartTest.setText(" Resume Test ");
@@ -150,7 +150,6 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.ViewHolder> {
     public int getItemCount() {
         return testModelList.size();
     }
-
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TestItemBinding itemBinding;

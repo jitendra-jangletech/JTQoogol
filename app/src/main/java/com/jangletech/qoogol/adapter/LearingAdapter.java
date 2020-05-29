@@ -43,6 +43,7 @@ import com.jangletech.qoogol.model.ProcessQuestion;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.learning.SlideshowDialogFragment;
+import com.jangletech.qoogol.ui.test.my_test.MyTestFragment;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
@@ -87,7 +88,6 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
     onIconClick onIconClick;
     int call_from;
     MaterialCardView.LayoutParams params;
-
 
     public LearingAdapter(Activity activity, List<LearningQuestionsNew> learningQuestionsList, onIconClick onIconClick, int call_from) {
         this.activity = activity;
@@ -849,7 +849,6 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
         }
 
         private void submitFunction(LearningQuestionsNew learningQuestions) {

@@ -22,12 +22,12 @@ import java.util.List;
 public class QuestionPaletAdapter extends RecyclerView.Adapter<QuestionPaletAdapter.QuestionPaletViewHolder> {
 
     private static final String TAG = "QuestionPaletAdapter";
-    List<TestQuestionNew> questions;
-    QuestPaletItemBinding itemGridQuestBinding;
-    ItemQuestionBinding itemListQuestBinding;
-    QuestClickListener questClickListener;
-    String strSortType;
-    Context context;
+    private List<TestQuestionNew> questions;
+    private QuestPaletItemBinding itemGridQuestBinding;
+    private ItemQuestionBinding itemListQuestBinding;
+    private QuestClickListener questClickListener;
+    private String strSortType;
+    private Context context;
 
    /* private void printList() {
         if (questions != null) {

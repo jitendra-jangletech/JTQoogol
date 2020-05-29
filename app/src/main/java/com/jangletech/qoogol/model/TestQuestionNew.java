@@ -3,130 +3,226 @@ package com.jangletech.qoogol.model;
 import com.google.gson.annotations.SerializedName;
 import com.jangletech.qoogol.util.Constant;
 
-public class TestQuestionNew {
+import java.io.Serializable;
 
-    @SerializedName(Constant.a_mcq_2)
-    private String a_mcq_2;
+public class TestQuestionNew implements Serializable {
 
-    @SerializedName(Constant.a_mcq_3)
-    private String a_mcq_3;
-
-    @SerializedName(Constant.a_mcq_4)
-    private String a_mcq_4;
-
-    @SerializedName(Constant.a_mcq_5)
-    private String a_mcq_5;
-
-    @SerializedName(Constant.q_mcq_op_1)
-    private String q_mcq_op_1;
-
-    @SerializedName(Constant.q_mcq_op_2)
-    private String q_mcq_op_2;
-
-    @SerializedName(Constant.q_mcq_op_3)
-    private String q_mcq_op_3;
-
-    @SerializedName(Constant.q_mcq_op_4)
-    private String q_mcq_op_4;
-
-    @SerializedName(Constant.q_mcq_op_5)
-    private String q_mcq_op_5;
-
-    @SerializedName(Constant.q_marks)
-    private String q_marks;
-
-    @SerializedName(Constant.ttqa_attempted)
-    private boolean ttqa_attempted;
-
-    @SerializedName(Constant.ttqa_visited)
-    private boolean ttqa_visited;
-
-    @SerializedName(Constant.ttqa_saved)
-    private boolean ttqa_saved;
-
-    @SerializedName(Constant.ttqa_marked)
-    private boolean ttqa_marked;
-
-    @SerializedName(Constant.ttqa_md_id)
-    private String ttqa_md_id;
-
-    @SerializedName(Constant.ttqa_duration_taken)
-    private String ttqa_duration_taken;
-
-    @SerializedName(Constant.ttqa_mcq_ans_5)
-    private boolean ttqa_mcq_ans_5;
-
-    @SerializedName(Constant.ttqa_mcq_ans_4)
-    private boolean ttqa_mcq_ans_4;
-
-    @SerializedName(Constant.ttqa_mcq_ans_3)
-    private boolean ttqa_mcq_ans_3;
-
-    @SerializedName(Constant.ttqa_mcq_ans_2)
-    private boolean ttqa_mcq_ans_2;
-
-    @SerializedName(Constant.ttqa_mcq_ans_1)
-    private boolean ttqa_mcq_ans_1;
-
-    @SerializedName(Constant.ttqa_sub_ans)
-    private String ttqa_sub_ans;
+    @SerializedName(Constant.ttqa_id)
+    private int ttqa_id;
 
     @SerializedName(Constant.ttqa_obtain_marks)
     private String ttqa_obtain_marks;
 
-    @SerializedName(Constant.ttqa_id)
-    private String ttqa_id;
+    @SerializedName(Constant.ttqa_sub_ans)
+    private String ttqa_sub_ans;
 
-    @SerializedName(Constant.a_status)
-    private String a_status;
+    @SerializedName(Constant.ttqa_mcq_ans_1)
+    private boolean ttqa_mcq_ans_1;
 
-    @SerializedName(Constant.a_sub_ans)
-    private String a_sub_ans;
+    @SerializedName(Constant.ttqa_mcq_ans_2)
+    private boolean ttqa_mcq_ans_2;
 
-    @SerializedName(Constant.tq_status)
-    private String tq_status;
+    @SerializedName(Constant.ttqa_mcq_ans_3)
+    private boolean ttqa_mcq_ans_3;
 
-    @SerializedName(Constant.tq_id)
-    private String tq_id;
+    @SerializedName(Constant.ttqa_mcq_ans_4)
+    private boolean ttqa_mcq_ans_4;
 
-    @SerializedName(Constant.tq_q_id)
-    private String tq_q_id;
+    @SerializedName(Constant.ttqa_mcq_ans_5)
+    private boolean ttqa_mcq_ans_5;
 
-    @SerializedName(Constant.tq_marks)
-    private String tq_marks;
+    @SerializedName(Constant.ttqa_duration_taken)
+    private int ttqa_duration_taken;
 
-    @SerializedName(Constant.tq_quest_seq_num)
-    private String tq_quest_seq_num;
+    @SerializedName(Constant.ttqa_md_id)
+    private int ttqa_md_id;
 
-    @SerializedName(Constant.tq_compulsory_quest)
-    private boolean tq_compulsory_quest;
+    @SerializedName(Constant.ttqa_marked)
+    private boolean ttqa_marked;
 
-    @SerializedName(Constant.ct_id)
-    private String ct_id;
+    @SerializedName(Constant.ttqa_saved)
+    private boolean ttqa_saved;
 
-    @SerializedName(Constant.tq_quest_catg)
-    private String tq_quest_catg;
+    @SerializedName(Constant.ttqa_visited)
+    private boolean ttqa_visited;
 
-    @SerializedName(Constant.tq_quest_disp_num)
-    private String tq_quest_disp_num;
+    @SerializedName(Constant.ttqa_attempted)
+    private boolean ttqa_attempted;
 
-    @SerializedName(Constant.tq_duration)
-    private String tq_duration;
+    @SerializedName(Constant.q_media_type)
+    private String q_media_type;
 
-    @SerializedName(Constant.q_quest)
-    private String q_quest;
+    @SerializedName(Constant.q_sm_id)
+    private String q_sm_id;
 
-    @SerializedName(Constant.q_quest_desc)
-    private String q_quest_desc;
+    public boolean isQlc_like_flag() {
+        return qlc_like_flag;
+    }
 
-    @SerializedName(Constant.q_type)
-    private String q_type;
+    public void setQlc_like_flag(boolean qlc_like_flag) {
+        this.qlc_like_flag = qlc_like_flag;
+    }
 
-    @SerializedName(Constant.q_diff_level)
-    private String q_diff_level;
+    public boolean isQlc_fav_flag() {
+        return qlc_fav_flag;
+    }
 
-    @SerializedName(Constant.q_category)
-    private String q_category;
+    public void setQlc_fav_flag(boolean qlc_fav_flag) {
+        this.qlc_fav_flag = qlc_fav_flag;
+    }
+
+    public String getQ_media_type() {
+        return q_media_type;
+    }
+
+    public void setQ_media_type(String q_media_type) {
+        this.q_media_type = q_media_type;
+    }
+
+    public String getQ_sm_id() {
+        return q_sm_id;
+    }
+
+    public void setQ_sm_id(String q_sm_id) {
+        this.q_sm_id = q_sm_id;
+    }
+
+    public String getQ_cm_id() {
+        return q_cm_id;
+    }
+
+    public void setQ_cm_id(String q_cm_id) {
+        this.q_cm_id = q_cm_id;
+    }
+
+    public String getQ_md_id() {
+        return q_md_id;
+    }
+
+    public void setQ_md_id(String q_md_id) {
+        this.q_md_id = q_md_id;
+    }
+
+    public String getQ_trending() {
+        return q_trending;
+    }
+
+    public void setQ_trending(String q_trending) {
+        this.q_trending = q_trending;
+    }
+
+    public String getQ_popular() {
+        return q_popular;
+    }
+
+    public void setQ_popular(String q_popular) {
+        this.q_popular = q_popular;
+    }
+
+    public String getQ_recent() {
+        return q_recent;
+    }
+
+    public void setQ_recent(String q_recent) {
+        this.q_recent = q_recent;
+    }
+
+    public String getQ_no_of_ratings() {
+        return q_no_of_ratings;
+    }
+
+    public void setQ_no_of_ratings(String q_no_of_ratings) {
+        this.q_no_of_ratings = q_no_of_ratings;
+    }
+
+    public String getQ_status() {
+        return q_status;
+    }
+
+    public void setQ_status(String q_status) {
+        this.q_status = q_status;
+    }
+
+    public String getQ_view_count() {
+        return q_view_count;
+    }
+
+    public void setQ_view_count(String q_view_count) {
+        this.q_view_count = q_view_count;
+    }
+
+    public String getQ_views() {
+        return q_views;
+    }
+
+    public void setQ_views(String q_views) {
+        this.q_views = q_views;
+    }
+
+    public String getQ_solved_by() {
+        return q_solved_by;
+    }
+
+    public void setQ_solved_by(String q_solved_by) {
+        this.q_solved_by = q_solved_by;
+    }
+
+
+    public String getRating() {
+        return rating;
+    }
+
+    public void setRating(String rating) {
+        this.rating = rating;
+    }
+
+    public String getAttended_by() {
+        return attended_by;
+    }
+
+    public void setAttended_by(String attended_by) {
+        this.attended_by = attended_by;
+    }
+
+    public String getQue_option_type() {
+        return que_option_type;
+    }
+
+    public void setQue_option_type(String que_option_type) {
+        this.que_option_type = que_option_type;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getLikes() {
+        return likes;
+    }
+
+    public void setLikes(String likes) {
+        this.likes = likes;
+    }
+
+    public String getComments() {
+        return comments;
+    }
+
+    public void setComments(String comments) {
+        this.comments = comments;
+    }
+
+    public String getShares() {
+        return shares;
+    }
+
+    public void setShares(String shares) {
+        this.shares = shares;
+    }
 
     public String getA_mcq_2() {
         return a_mcq_2;
@@ -240,21 +336,7 @@ public class TestQuestionNew {
         this.ttqa_marked = ttqa_marked;
     }
 
-    public String getTtqa_md_id() {
-        return ttqa_md_id;
-    }
 
-    public void setTtqa_md_id(String ttqa_md_id) {
-        this.ttqa_md_id = ttqa_md_id;
-    }
-
-    public String getTtqa_duration_taken() {
-        return ttqa_duration_taken;
-    }
-
-    public void setTtqa_duration_taken(String ttqa_duration_taken) {
-        this.ttqa_duration_taken = ttqa_duration_taken;
-    }
 
     public boolean isTtqa_mcq_ans_5() {
         return ttqa_mcq_ans_5;
@@ -312,13 +394,6 @@ public class TestQuestionNew {
         this.ttqa_obtain_marks = ttqa_obtain_marks;
     }
 
-    public String getTtqa_id() {
-        return ttqa_id;
-    }
-
-    public void setTtqa_id(String ttqa_id) {
-        this.ttqa_id = ttqa_id;
-    }
 
     public String getA_status() {
         return a_status;
@@ -432,13 +507,7 @@ public class TestQuestionNew {
         this.q_quest_desc = q_quest_desc;
     }
 
-    public String getQ_type() {
-        return q_type;
-    }
 
-    public void setQ_type(String q_type) {
-        this.q_type = q_type;
-    }
 
     public String getQ_diff_level() {
         return q_diff_level;
@@ -454,5 +523,164 @@ public class TestQuestionNew {
 
     public void setQ_category(String q_category) {
         this.q_category = q_category;
+    }
+
+    @SerializedName(Constant.q_cm_id)
+    private String q_cm_id;
+
+    @SerializedName(Constant.q_md_id)
+    private String q_md_id;
+
+    @SerializedName(Constant.q_trending)
+    private String q_trending;
+
+    @SerializedName(Constant.q_popular)
+    private String q_popular;
+
+    @SerializedName(Constant.q_recent)
+    private String q_recent;
+
+    @SerializedName(Constant.q_no_of_ratings)
+    private String q_no_of_ratings;
+
+    @SerializedName(Constant.q_status)
+    private String q_status;
+
+    @SerializedName(Constant.q_view_count)
+    private String q_view_count;
+
+    @SerializedName(Constant.q_views)
+    private String q_views;
+
+    @SerializedName(Constant.q_solved_by)
+    private String q_solved_by;
+
+    @SerializedName(Constant.qlc_like_flag)
+    private boolean qlc_like_flag;
+
+    @SerializedName(Constant.qlc_fav_flag)
+    private boolean qlc_fav_flag;
+
+    @SerializedName(Constant.q_avg_ratings)
+    private String rating;
+
+    @SerializedName(Constant.q_attempted_by)
+    private String attended_by;
+
+    @SerializedName(Constant.q_option_type)
+    private String que_option_type;
+
+    @SerializedName(Constant.q_type)
+    private String type;
+
+    @SerializedName(Constant.q_likes)
+    private String likes;
+
+    @SerializedName(Constant.q_comments)
+    private String comments;
+
+    @SerializedName(Constant.q_shares)
+    private String shares;
+
+    @SerializedName(Constant.a_mcq_2)
+    private String a_mcq_2;
+
+    @SerializedName(Constant.a_mcq_3)
+    private String a_mcq_3;
+
+    @SerializedName(Constant.a_mcq_4)
+    private String a_mcq_4;
+
+    @SerializedName(Constant.a_mcq_5)
+    private String a_mcq_5;
+
+    @SerializedName(Constant.q_mcq_op_1)
+    private String q_mcq_op_1;
+
+    @SerializedName(Constant.q_mcq_op_2)
+    private String q_mcq_op_2;
+
+    @SerializedName(Constant.q_mcq_op_3)
+    private String q_mcq_op_3;
+
+    @SerializedName(Constant.q_mcq_op_4)
+    private String q_mcq_op_4;
+
+    @SerializedName(Constant.q_mcq_op_5)
+    private String q_mcq_op_5;
+
+    @SerializedName(Constant.q_marks)
+    private String q_marks;
+
+    @SerializedName(Constant.a_status)
+    private String a_status;
+
+    @SerializedName(Constant.a_sub_ans)
+    private String a_sub_ans;
+
+    @SerializedName(Constant.tq_status)
+    private String tq_status;
+
+    @SerializedName(Constant.tq_id)
+    private String tq_id;
+
+    @SerializedName(Constant.tq_q_id)
+    private String tq_q_id;
+
+    @SerializedName(Constant.tq_marks)
+    private String tq_marks;
+
+    @SerializedName(Constant.tq_quest_seq_num)
+    private String tq_quest_seq_num;
+
+    @SerializedName(Constant.tq_compulsory_quest)
+    private boolean tq_compulsory_quest;
+
+    @SerializedName(Constant.ct_id)
+    private String ct_id;
+
+    @SerializedName(Constant.tq_quest_catg)
+    private String tq_quest_catg;
+
+    @SerializedName(Constant.tq_quest_disp_num)
+    private String tq_quest_disp_num;
+
+    @SerializedName(Constant.tq_duration)
+    private String tq_duration;
+
+    @SerializedName(Constant.q_quest)
+    private String q_quest;
+
+    @SerializedName(Constant.q_quest_desc)
+    private String q_quest_desc;
+
+    @SerializedName(Constant.q_diff_level)
+    private String q_diff_level;
+
+    @SerializedName(Constant.q_category)
+    private String q_category;
+
+    public int getTtqa_id() {
+        return ttqa_id;
+    }
+
+    public void setTtqa_id(int ttqa_id) {
+        this.ttqa_id = ttqa_id;
+    }
+
+    public int getTtqa_duration_taken() {
+        return ttqa_duration_taken;
+    }
+
+    public void setTtqa_duration_taken(int ttqa_duration_taken) {
+        this.ttqa_duration_taken = ttqa_duration_taken;
+    }
+
+    public int getTtqa_md_id() {
+        return ttqa_md_id;
+    }
+
+    public void setTtqa_md_id(int ttqa_md_id) {
+        this.ttqa_md_id = ttqa_md_id;
     }
 }

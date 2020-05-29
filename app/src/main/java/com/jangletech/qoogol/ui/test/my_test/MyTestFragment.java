@@ -25,6 +25,7 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.activities.MainActivity;
+import com.jangletech.qoogol.activities.PracticeTestActivity;
 import com.jangletech.qoogol.activities.StartTestActivity;
 import com.jangletech.qoogol.adapter.TestListAdapter;
 import com.jangletech.qoogol.databinding.FragmentTestMyBinding;
@@ -38,6 +39,7 @@ import com.jangletech.qoogol.model.TestModelNew;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
+import com.jangletech.qoogol.ui.test.my_test.MyTestViewModel;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 
@@ -116,7 +118,7 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
     private void initViews() {
 
         if (getArguments() != null && getArguments().getString(Constant.CALL_FROM).equalsIgnoreCase("MY_TEST")) {
-            Log.d(TAG, "My Test Bundle : "+getArguments().getString(Constant.CALL_FROM));
+            Log.d(TAG, "My Test Bundle : " + getArguments().getString(Constant.CALL_FROM));
             mBinding.horizontalScrollView.setVisibility(View.VISIBLE);
             fetchSubjectList();
             mViewModel.getAllSubjects().observe(getActivity(), new Observer<List<FetchSubjectResponse>>() {
@@ -145,16 +147,20 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
         mBinding.subjectsChipGrp.setOnCheckedChangeListener((chipGroup, id) -> {
             Chip chip = ((Chip) chipGroup.getChildAt(chipGroup.getCheckedChipId()));
             if (chip != null) {
-                if (chip.isChecked()) {
-                    setCheckedChip(mBinding.subjectsChipGrp);
-                    List<TestModelNew> filteredModelList = filterBySubject(testList, chip.getText().toString());
-                    if (filteredModelList.size() > 0) {
-                        mBinding.tvNoTest.setVisibility(View.GONE);
-                        testAdapter.setSearchResult(filteredModelList);
-                    } else {
-                        testAdapter.setSearchResult(filteredModelList);
-                        mBinding.tvNoTest.setVisibility(View.VISIBLE);
+                try {
+                    if (chip.isChecked()) {
+                        setCheckedChip(mBinding.subjectsChipGrp);
+                        List<TestModelNew> filteredModelList = filterBySubject(testList, chip.getText().toString());
+                        if (filteredModelList.size() > 0) {
+                            mBinding.tvNoTest.setVisibility(View.GONE);
+                            testAdapter.setSearchResult(filteredModelList);
+                        } else {
+                            testAdapter.setSearchResult(filteredModelList);
+                            mBinding.tvNoTest.setVisibility(View.VISIBLE);
+                        }
                     }
+                } catch (NullPointerException npe) {
+                    showToast("Something went wrong!!");
                 }
             }
         });
@@ -273,6 +279,8 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
                     mViewModel.setAllTestList(response.body().getTestList());
                     Log.d(TAG, "onResponse: " + response.body().getTestList());
                     Log.d(TAG, "onResponse: " + response.body().getTestList().size());
+                } else if (response.body().getResponse().equals("501")) {
+                    resetSettingAndLogout();
                 } else {
                     showErrorDialog(getActivity(), response.body().getResponse(), response.body().getMessage());
                 }
@@ -296,7 +304,8 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
 
     @Override
     public void onStartTestClick(TestModelNew testModel) {
-        Intent intent = new Intent(getActivity(), StartTestActivity.class);
+        Log.d(TAG, "onStartTestClick: " + testModel.getTm_id());
+        Intent intent = new Intent(getActivity(), PracticeTestActivity.class);
         intent.putExtra(Constant.TM_ID, testModel.getTm_id());
         startActivity(intent);
     }
@@ -326,29 +335,68 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
 
     @Override
     public void onFavouriteClick(TestModelNew testModel, boolean isChecked) {
+        if (isChecked) {
+            showToast("Added to favourites");
+        } else {
+            showToast("Deleted from favourites");
+        }
+    }
 
+    @Override
+    public void onAttemptsClick(TestModelNew testModel) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("PARAMS", testModel);
+        NavHostFragment.findNavController(this).navigate(R.id.nav_test_attempt_history, bundle);
+        //MainActivity.navController.navigate(R.id.nav_test_attempt_history,bundle);
     }
 
     private void callLikeTestApi(int like, int pos) {
-        doLikeTest(like, pos);
+        doLikeTest(like, pos, testList.get(pos).getTm_id());
     }
 
-    private void doLikeTest(int like, int pos) {
+    private void doLikeTest(int like, int pos, int testId) {
         ProgressDialog.getInstance().show(getActivity());
-        Call<ProcessQuestion> call = apiService.addTestLike(new PreferenceManager(getActivity()).getInt(Constant.USER_ID), tmId, "I", like);
+        Call<ProcessQuestion> call = apiService.addTestLike(new PreferenceManager(getActivity()).getInt(Constant.USER_ID), testId, "I", like);
         call.enqueue(new Callback<ProcessQuestion>() {
             @Override
             public void onResponse(Call<ProcessQuestion> call, Response<ProcessQuestion> response) {
                 ProgressDialog.getInstance().dismiss();
-                if (response.body() != null && response.body().getResponse().equals("200")) {
-                    Log.d(TAG, "onResponse Like : " + response.body().getResponse());
-                    Log.d(TAG, "onResponse Updated Like Count: " + response.body().getLikeCount());
-                    //testList.get(pos).setLikeCount();
-                    testList.get(pos).setLike(false);
-                    testAdapter.updateList(testList, pos);
+                try {
+                    if (response.body() != null && response.body().getResponse().equals("200")) {
+                        Log.d(TAG, "onResponse Like : " + response.body().getResponse());
+                        Log.d(TAG, "onResponse Updated Like Count: " + response.body().getLikeCount());
+                        //testList.get(pos).setLikeCount();
+                        //testList.get(pos).setLike(false);
+                        TestModelNew testModelNew = testList.get(pos);
+                        int likeCount = Integer.parseInt(testModelNew.getLikeCount());
+                        if (like == 0) {
+                            Log.e(TAG, "like 0 ");
+                            testModelNew.setLike(false);
+                            if (likeCount <= 0)
+                                testModelNew.setLikeCount("0");
+                            else
+                                testModelNew.setLikeCount("" + (likeCount - 1));
 
-                } else {
-                    showErrorDialog(getActivity(), response.body().getResponse(), response.body().getMessage());
+                            testList.set(pos,testModelNew);
+                            testAdapter.notifyItemChanged(pos,testModelNew);
+                        }
+                        if (like == 1) {
+                            testModelNew.setLike(true);
+                            testModelNew.setLikeCount("" + (likeCount + 1));
+                            testList.set(pos,testModelNew);
+                            testAdapter.notifyItemChanged(pos,testModelNew);
+                            //testAdapter.updateList(testList, pos);
+                        }
+
+                        //Log.d(TAG, "id  " + testList.get(pos).getTm_id());
+                        //Log.d(TAG, "Like Count  " + testList.get(pos).getLikeCount());
+                        //Log.d(TAG, "IsLiked   " + testList.get(pos).isLike());
+
+                    } else {
+                        showErrorDialog(getActivity(), response.body().getResponse(), response.body().getMessage());
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
 

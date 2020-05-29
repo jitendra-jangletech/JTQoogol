@@ -14,6 +14,34 @@ import com.jangletech.qoogol.util.Constant;
 @Entity
 public class LearningQuestionsNew {
 
+    public boolean isAttempted() {
+        return isAttempted;
+    }
+
+    public void setAttempted(boolean attempted) {
+        isAttempted = attempted;
+    }
+
+    public boolean isMarked() {
+        return isMarked;
+    }
+
+    public void setMarked(boolean marked) {
+        isMarked = marked;
+    }
+
+    public boolean isVisited() {
+        return isVisited;
+    }
+
+    public void setVisited(boolean visited) {
+        isVisited = visited;
+    }
+
+    private boolean isAttempted;
+    private boolean isMarked;
+    private boolean isVisited;
+
     @PrimaryKey
     @NonNull
     @SerializedName(Constant.q_id)

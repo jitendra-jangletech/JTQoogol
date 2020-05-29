@@ -122,13 +122,13 @@ public class TestQuestionFragment extends BaseFragment implements QueViewClick, 
         }*/
 
         testQuestionFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.test_question_fragment, container, false);
-        return setCommonLayout(testQuestionFragmentBinding);
+        //return setCommonLayout(testQuestionFragmentBinding);
         //return testQuestionFragmentBinding.getRoot();
 
-        //return null;
+        return null;
     }
 
-    private View setCommonLayout(TestQuestionFragmentBinding testQuestionFragmentBinding) {
+   /* private View setCommonLayout(TestQuestionFragmentBinding testQuestionFragmentBinding) {
         TestQuestionNew questionNew = testQuestions.get(position);
 
         testQuestionFragmentBinding.tvQuestNo.setText(questionNew.getTq_quest_seq_num());
@@ -203,7 +203,7 @@ public class TestQuestionFragment extends BaseFragment implements QueViewClick, 
         }
 
         return testQuestionFragmentBinding.getRoot();
-    }
+    }*/
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -228,7 +228,7 @@ public class TestQuestionFragment extends BaseFragment implements QueViewClick, 
 
         testQuestionFragmentBinding.btnReset.setOnClickListener(v -> {
             testQuestions.get(position).setTtqa_visited(true);
-            resetAnswer();
+            //resetAnswer();
         });
 
         testQuestionFragmentBinding.imgSave.setOnClickListener(v -> {
@@ -793,7 +793,7 @@ public class TestQuestionFragment extends BaseFragment implements QueViewClick, 
         questReportDialog.dismiss();
     }
 
-    private void resetAnswer() {
+   /* private void resetAnswer() {
         TestQuestionNew question = testQuestions.get(position);
 
         if (question.getQ_type().equals(Constant.SCQ)) {
@@ -842,7 +842,7 @@ public class TestQuestionFragment extends BaseFragment implements QueViewClick, 
         question.setTtqa_marked(false);
         question.setTtqa_saved(false);
         question.setTtqa_attempted(false);
-    }
+    }*/
 
     private void attemptedOrNot(ChipGroup chipGroup) {
         int checkCounter = 0;

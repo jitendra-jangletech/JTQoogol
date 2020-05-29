@@ -1,8 +1,10 @@
 package com.jangletech.qoogol.adapter;
 
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
@@ -12,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.TestItemBinding;
 import com.jangletech.qoogol.model.TestModelNew;
+import com.jangletech.qoogol.model.TestQuestionNew;
 import com.jangletech.qoogol.util.DateUtils;
 
 import java.util.HashMap;
@@ -63,6 +66,15 @@ public class TestListAdapter extends RecyclerView.Adapter<TestListAdapter.ViewHo
         itemBinding.tvRanking.setText(testModel.getTm_ranking());
         itemBinding.tvQuestCount.setText(testModel.getQuest_count());
 
+        if(testModel.getAttemptedTests()!=null)
+        itemBinding.tvNoOfAttempts.setText(Html.fromHtml("<h>Attempts : "+testModel.getAttemptedTests().size()+"</h>"));
+
+        itemBinding.tvNoOfAttempts.setOnClickListener(v->{
+            testClickListener.onAttemptsClick(testModel);
+        });
+
+        Log.e(TAG, "Like Count : "+testModel.getLikeCount());
+
         if (testModel.getLikeCount() != null) {
             itemBinding.likeValue.setText(testModel.getLikeCount());
         } else {
@@ -113,7 +125,7 @@ public class TestListAdapter extends RecyclerView.Adapter<TestListAdapter.ViewHo
         });
 
         holder.itemBinding.like.setOnClickListener(v -> {
-            boolean isChecked = holder.itemBinding.like.isChecked();
+            boolean isChecked = testModel.isLike();
             testClickListener.onLikeClick(testModel, position,isChecked);
         });
 
@@ -125,9 +137,16 @@ public class TestListAdapter extends RecyclerView.Adapter<TestListAdapter.ViewHo
             testClickListener.onShareClick(testModel);
         });
 
-        holder.itemBinding.favorite.setOnClickListener(v -> {
+       /* holder.itemBinding.favorite.setOnClickListener(v -> {
             //Toast.makeText(fragment.getContext(), ""+isSelected, Toast.LENGTH_SHORT).show();
             //testClickListener.onFavouriteClick(testModel, isSelected[0]);
+        });*/
+
+        holder.itemBinding.favorite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                testClickListener.onFavouriteClick(testModel,isChecked);
+            }
         });
     }
 
@@ -157,11 +176,13 @@ public class TestListAdapter extends RecyclerView.Adapter<TestListAdapter.ViewHo
         void onLikeClick(TestModelNew testModel, int pos,boolean isChecked);
 
         void onFavouriteClick(TestModelNew testModel, boolean isChecked);
+        void onAttemptsClick(TestModelNew testModel);
     }
 
     public void updateList(List<TestModelNew> testModelList,int pos){
         this.testModelList = testModelList;
-        notifyItemChanged(pos);
+        notifyDataSetChanged();
+        //notifyItemChanged(pos);
     }
 
     public void setSearchResult(List<TestModelNew> result) {

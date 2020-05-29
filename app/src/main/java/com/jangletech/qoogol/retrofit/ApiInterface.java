@@ -217,9 +217,19 @@ public interface ApiInterface {
                                                @Field(Constant.tm_id) int tmId);
 
     @FormUrlEncoded
+    @POST(Constant.SUBMIT_TEST)
+    Call<TestDetailsResponse> submitTest(@Field(Constant._70E) TestListResponse testListResponse);
+
+
+    @FormUrlEncoded
     @POST(Constant.START_RESUME_TEST)
     Call<StartResumeTestResponse> fetchTestQuestionAnswers(@Field(Constant.u_user_id) int userId,
                                                            @Field(Constant.tm_id) int testMasterId);
+
+    @FormUrlEncoded
+    @POST(Constant.START_RESUME_TEST)
+    Call<StartResumeTestResponse> fetchAttemptedTests(@Field(Constant.u_user_id) int userId,
+                                                           @Field(Constant.tt_id) int ttId);
 
     @FormUrlEncoded
     @POST(Constant.PROCESS_TEST)

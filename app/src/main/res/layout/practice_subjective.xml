@@ -2,12 +2,10 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-
-    <com.google.android.material.card.MaterialCardView
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="@dimen/_15sdp"
-        app:cardCornerRadius="@dimen/_5sdp"
         app:cardElevation="@dimen/_5sdp">
 
         <androidx.core.widget.NestedScrollView
@@ -41,80 +39,7 @@
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <TextView
-                        android:id="@+id/time_textview"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:singleLine="true"
-                        android:text="Recommended time : "
-                        android:textAlignment="textEnd"
-                        android:textColor="@color/colorWhite"
-                        android:textSize="@dimen/_10ssp"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
                 </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <LinearLayout
-                    android:id="@+id/header_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:orientation="horizontal"
-                    android:paddingLeft="@dimen/_10sdp"
-                    android:paddingRight="@dimen/_10sdp"
-                    android:weightSum="3"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/header">
-
-                    <TextView
-                        android:id="@+id/subject_textview"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:ellipsize="end"
-                        android:singleLine="true"
-                        android:text="Subject"
-                        android:textColor="@color/colorSkyBlue"
-                        android:textSize="@dimen/_10ssp" />
-
-                    <TextView
-                        android:id="@+id/topic_textview"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:ellipsize="end"
-                        android:singleLine="true"
-                        android:text="Topic"
-                        android:textAlignment="center"
-                        android:textColor="@color/colorSkyBlue"
-                        android:textSize="@dimen/_10ssp" />
-
-                    <TextView
-                        android:id="@+id/chapter_textview"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/_5sdp"
-                        android:layout_weight="1"
-                        android:ellipsize="end"
-                        android:singleLine="true"
-                        android:text="Subject"
-                        android:textAlignment="textEnd"
-                        android:textColor="@color/colorSkyBlue"
-                        android:textSize="@dimen/_10ssp" />
-
-                </LinearLayout>
-
-                <View
-                    android:id="@+id/header_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:layout_marginBottom="@dimen/_10sdp"
-                    android:background="@color/colorLightGrey"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/header_layout" />
 
                 <LinearLayout
                     android:id="@+id/subheader_layout"
@@ -126,8 +51,7 @@
                     android:paddingRight="@dimen/_10sdp"
                     android:weightSum="2"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/header_view">
-
+                    app:layout_constraintTop_toBottomOf="@+id/header">
 
                     <TextView
                         android:id="@+id/marks_textview"
@@ -141,6 +65,7 @@
                         android:textSize="@dimen/_10ssp" />
 
                     <TextView
+                        android:visibility="gone"
                         android:id="@+id/category_textview"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -180,18 +105,15 @@
                     app:layout_constraintTop_toBottomOf="@+id/subheader_view" />
 
                 <TextView
-                    android:id="@+id/tvQuestion"
-                    android:layout_width="match_parent"
+                    android:id="@+id/question_textview"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_5sdp"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginTop="8dp"
-                    android:textColor="@color/colorBlack"
+                    android:layout_margin="@dimen/_10sdp"
                     android:layout_marginRight="@dimen/_10sdp"
                     android:padding="@dimen/_10sdp"
-                    android:text="Question Text"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    android:visibility="visible"
+                    android:text="question"
+                    android:textColor="@color/colorSkyBlue"
+                    android:textSize="@dimen/_12ssp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toLeftOf="@+id/reset"
                     app:layout_constraintTop_toBottomOf="@+id/subheader_view" />
@@ -203,7 +125,7 @@
                     android:orientation="horizontal"
                     android:padding="@dimen/_10sdp"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvQuestion">
+                    app:layout_constraintTop_toBottomOf="@+id/question_textview">
 
                     <TextView
                         android:id="@+id/tvtimer"
@@ -236,24 +158,22 @@
                         app:layout_constraintRight_toLeftOf="@+id/timer"
                         app:layout_constraintTop_toTopOf="@id/timer" />
 
-
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@id/answerLayout"
-                    app:layout_constraintTop_toBottomOf="@+id/timer_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@+id/timer_layout">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/multi_line_answer"
-                        android:visibility="gone"
-                        app:layout_constraintTop_toTopOf="parent"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        app:layout_constraintTop_toTopOf="parent">
 
                         <EditText
-                            app:layout_constraintTop_toTopOf="parent"
                             android:id="@+id/multi_line"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -263,43 +183,44 @@
                             android:lines="5"
                             android:maxLines="5"
                             android:textColor="@color/colorBlack"
-                            android:visibility="visible" />
+                            android:visibility="visible"
+                            app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
                             android:id="@+id/tvWordCounter"
-                            android:textColor="@color/colorSkyBlue"
-                            android:padding="@dimen/_5sdp"
-                            app:layout_constraintRight_toRightOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/multi_line"
-                            android:text="120/200"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content"
+                            android:padding="@dimen/_5sdp"
+                            android:text="120/200"
+                            android:textColor="@color/colorSkyBlue"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/multi_line" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
-                        android:visibility="gone"
                         android:id="@+id/fill_in_the_blanks_layout"
-                        app:layout_constraintTop_toBottomOf="@+id/multi_line_answer"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        app:layout_constraintTop_toBottomOf="@+id/multi_line_answer">
 
                         <EditText
-                            app:layout_constraintTop_toTopOf="parent"
                             android:id="@+id/fill_in_the_blanks"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@drawable/grey_border"
                             android:maxLines="2"
                             android:textColor="@color/colorBlack"
-                            android:visibility="visible" />
+                            android:visibility="visible"
+                            app:layout_constraintTop_toTopOf="parent" />
 
                         <ImageView
                             android:id="@+id/fib_img"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@drawable/ic_right"
-                            android:visibility="visible"
+                            android:visibility="gone"
                             app:layout_constraintBottom_toBottomOf="@+id/fill_in_the_blanks"
                             app:layout_constraintRight_toRightOf="@+id/fill_in_the_blanks"
                             app:layout_constraintTop_toTopOf="@+id/fill_in_the_blanks" />
@@ -309,12 +230,8 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-
-
                 <Button
                     android:id="@+id/submit"
-                    style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_20sdp"
@@ -337,12 +254,12 @@
                     app:layout_constraintTop_toBottomOf="@+id/submit" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:visibility="gone"
                     android:id="@+id/solution_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:elevation="@dimen/_4sdp"
                     android:padding="@dimen/_10sdp"
+                    android:visibility="gone"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/button_below_view">
 
@@ -429,6 +346,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/solution_layout" />
 
                 <TextView
+                    android:visibility="gone"
                     android:id="@+id/posted_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -447,6 +365,7 @@
                     android:layout_marginEnd="@dimen/_10sdp"
                     android:textColor="@color/colorBlack"
                     android:textSize="@dimen/_10ssp"
+                    android:visibility="gone"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/solution_layout" />
 
@@ -475,6 +394,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/difflevel_textview" />
 
                 <TextView
+                    android:visibility="gone"
                     android:id="@+id/last_used_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -486,6 +406,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/difflevel_textview" />
 
                 <TextView
+                    android:visibility="gone"
                     android:id="@+id/last_used_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -505,7 +426,7 @@
                     android:layout_marginBottom="@dimen/_10sdp"
                     android:background="@color/colorLightGrey"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/last_used_value" />
+                    app:layout_constraintTop_toBottomOf="@+id/attended_count_textview" />
 
                 <LinearLayout
                     android:id="@+id/bottom_layout"
@@ -560,14 +481,28 @@
                         app:layout_constraintLeft_toRightOf="@+id/rating"
                         app:layout_constraintTop_toTopOf="parent">
 
-                        <ImageView
+                        <!-- <ImageView
+                             android:id="@+id/like"
+                             android:layout_width="wrap_content"
+                             android:layout_height="wrap_content"
+                             android:src="@drawable/ic_like"
+                             app:layout_constraintBottom_toBottomOf="parent"
+                             app:layout_constraintLeft_toLeftOf="parent"
+                             app:layout_constraintTop_toTopOf="parent" />-->
+
+                        <ToggleButton
                             android:id="@+id/like"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/ic_like"
+                            android:layout_width="@dimen/_20sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:background="@drawable/button_like"
+                            android:checked="false"
+                            android:text=""
+                            android:textOff=""
+                            android:textOn=""
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintLeft_toLeftOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
+
 
                         <TextView
                             android:id="@+id/like_value"
@@ -648,15 +583,29 @@
                             app:layout_constraintTop_toTopOf="@+id/share" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <ImageView
+                    <!--  <ImageView
+                          android:id="@+id/favorite"
+                          android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_weight="1"
+                          android:src="@drawable/ic_favorite"
+                          app:layout_constraintBottom_toBottomOf="parent"
+                          app:layout_constraintLeft_toLeftOf="parent"
+                          app:layout_constraintTop_toTopOf="parent" />-->
+
+                    <ToggleButton
                         android:id="@+id/favorite"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:src="@drawable/ic_favorite"
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:background="@drawable/button_favorite"
+                        android:checked="false"
+                        android:text=""
+                        android:textOff=""
+                        android:textOn=""
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
+
                 </LinearLayout>
 
                 <View
@@ -673,6 +622,6 @@
 
         </androidx.core.widget.NestedScrollView>
 
-    </com.google.android.material.card.MaterialCardView>
+    </androidx.cardview.widget.CardView>
 
 </layout>

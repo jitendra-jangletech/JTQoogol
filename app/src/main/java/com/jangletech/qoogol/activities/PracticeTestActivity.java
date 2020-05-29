@@ -1,7 +1,9 @@
 package com.jangletech.qoogol.activities;
 
 import android.content.Intent;
+import android.media.tv.TvContract;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -18,20 +20,29 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.LearingAdapter;
 import com.jangletech.qoogol.adapter.PracticeTestQuestPaletAdapter;
+import com.jangletech.qoogol.adapter.PractiseViewPagerAdapter;
+import com.jangletech.qoogol.adapter.QuestionPaletAdapter;
 import com.jangletech.qoogol.databinding.ActivityPracticeTestBinding;
 import com.jangletech.qoogol.databinding.PracticeScqImageTextBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
+import com.jangletech.qoogol.dialog.SubmitTestDialog;
 import com.jangletech.qoogol.enums.Module;
+import com.jangletech.qoogol.enums.QuestionFilterType;
+import com.jangletech.qoogol.enums.QuestionSortType;
 import com.jangletech.qoogol.model.LearningQuestResponse;
 import com.jangletech.qoogol.model.LearningQuestionsNew;
 import com.jangletech.qoogol.model.ProcessQuestion;
+import com.jangletech.qoogol.model.StartResumeTestResponse;
+import com.jangletech.qoogol.model.TestQuestionNew;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.practise.PractiseMcqFragment;
@@ -49,6 +60,7 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.Response;
 
 import static com.jangletech.qoogol.util.Constant.MATCH_PAIR;
 import static com.jangletech.qoogol.util.Constant.SCQ;
@@ -56,41 +68,61 @@ import static com.jangletech.qoogol.util.Constant.SCQ_IMAGE;
 import static com.jangletech.qoogol.util.Constant.SCQ_IMAGE_WITH_TEXT;
 import static com.jangletech.qoogol.util.Constant.test;
 
-public class PracticeTestActivity extends BaseActivity implements LearingAdapter.onIconClick, PracticeTestQuestPaletAdapter.QuestClickListener {
+public class PracticeTestActivity extends BaseActivity implements LearingAdapter.onIconClick,
+        PracticeTestQuestPaletAdapter.QuestClickListener, SubmitTestDialog.SubmitDialogClickListener {
 
     private static final String TAG = "PracticeTestActivity";
-    public static List<LearningQuestionsNew> questionsNewList = new ArrayList<>();
-    private PracticeTestViewModel mViewModel;
+    public static List<TestQuestionNew> questionsNewList = new ArrayList<>();
+    private StartTestViewModel mViewModel;
     private ActivityPracticeTestBinding mBinding;
     ApiInterface apiService = ApiClient.getInstance().getApi();
-    LearingAdapter learingAdapter;
     private EndDrawerToggle endDrawerToggle;
     private Toolbar toolbar;
-    private ViewPager2 practiceViewPager;
-    private PracticeTestQuestPaletAdapter adapter;
-    int currentPos = 0;
-    int pos =0;
+    private ViewPager practiceViewPager;
+    private SubmitTestDialog submitTestDialog;
+    private PracticeTestQuestPaletAdapter questionListAdapter,questionGridAdapter;
+    private int currentPos = 0;
+    private int pos = 0;
+    private int tmId = 0;
     private boolean isQuestionSelected = false;
+    private StartResumeTestResponse startResumeTestResponse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_practice_test);
-        mViewModel = new ViewModelProvider(this).get(PracticeTestViewModel.class);
+        mViewModel = new ViewModelProvider(this).get(StartTestViewModel.class);
         toolbar = findViewById(R.id.toolbar);
         practiceViewPager = findViewById(R.id.practice_viewpager);
         questionsNewList = new ArrayList<>();
         setupNavigationDrawer();
         setMargins(mBinding.marginLayout);
         setTitle("Practice Test");
-        getPractiseTestQuestions();
-        mViewModel.getPracticeQA().observe(this, new Observer<List<LearningQuestionsNew>>() {
+        Log.d(TAG, "onCreate: " + getIntent().getIntExtra(Constant.TM_ID, 0));
+        fetchTestQA();
+        mViewModel.getTestQuestAnsList().observe(this, new Observer<List<TestQuestionNew>>() {
             @Override
-            public void onChanged(@Nullable final List<LearningQuestionsNew> practiceQAList) {
+            public void onChanged(@Nullable final List<TestQuestionNew> practiceQAList) {
                 questionsNewList = practiceQAList;
-                practiceViewPager.setAdapter(createCardAdapter(questionsNewList));
-                //setPracticeTestAdapter(questionsNewList);
+                practiceViewPager.setOffscreenPageLimit(practiceQAList.size());
+                practiceViewPager.setAdapter(new PractiseViewPagerAdapter(PracticeTestActivity.this, practiceQAList));
+                setQuestPaletAdapter();
             }
+        });
+
+        mBinding.gridView.setOnClickListener(v -> {
+            //prepareQuestPaletGridList();
+            mBinding.questionsPaletListRecyclerView.setVisibility(View.GONE);
+            mBinding.questionsPaletGridRecyclerView.setVisibility(View.VISIBLE);
+            questionGridAdapter.notifyDataSetChanged();
+
+        });
+
+        mBinding.listView.setOnClickListener(v -> {
+            //prepareQuestPaletList();
+            mBinding.questionsPaletListRecyclerView.setVisibility(View.VISIBLE);
+            mBinding.questionsPaletGridRecyclerView.setVisibility(View.GONE);
+            questionListAdapter.notifyDataSetChanged();
         });
 
         mBinding.appBarTest.btnNext.setOnClickListener(v -> {
@@ -111,19 +143,43 @@ public class PracticeTestActivity extends BaseActivity implements LearingAdapter
             }
         });
 
-        practiceViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                super.onPageScrolled(position, positionOffset, positionOffsetPixels);
-            }
+//        mBinding.chipAll.setOnClickListener(v -> {
+//            setFilterRadio(QuestionFilterType.ALL.toString());
+//        });
+//        mBinding.chipAttempted.setOnClickListener(v -> {
+//            setFilterRadio(QuestionFilterType.ATTEMPTED.toString());
+//        });
+//        mBinding.chipMarked.setOnClickListener(v -> {
+//            setFilterRadio(QuestionFilterType.MARKED.toString());
+//        });
+//
+//        mBinding.chipUnattempted.setOnClickListener(v -> {
+//            setFilterRadio(QuestionFilterType.UNATTEMPTED.toString());
+//        });
+//        mBinding.chipUnseen.setOnClickListener(v -> {
+//            setFilterRadio(QuestionFilterType.UNSEEN.toString());
+//        });
 
-            @Override
-            public void onPageSelected(int position) {
-                super.onPageSelected(position);
-                Log.d(TAG, "onPageSelected: ");
-            }
-
+        mBinding.btnSubmitTest.setOnClickListener(v -> {
+            mBinding.drawerLayout.closeDrawer(Gravity.RIGHT);
+            submitTestDialog = new SubmitTestDialog(this, this, 0);
+            submitTestDialog.show();
         });
+
+
+//        practiceViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+//            @Override
+//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//                super.onPageScrolled(position, positionOffset, positionOffsetPixels);
+//            }
+//
+//            @Override
+//            public void onPageSelected(int position) {
+//                super.onPageSelected(position);
+//                Log.d(TAG, "onPageSelected: ");
+//            }
+//
+//        });
 
         practiceViewPager.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -140,17 +196,12 @@ public class PracticeTestActivity extends BaseActivity implements LearingAdapter
 
             @Override
             public void onDrawerOpened(@NonNull View drawerView) {
-                prepareQuestPaletList();
+                questionListAdapter.notifyDataSetChanged();
             }
 
             @Override
             public void onDrawerClosed(@NonNull View drawerView) {
-                if (isQuestionSelected) {
-                    //Log.d(TAG, "Question Position : " + currentPos);
-                    //Log.d(TAG, "Current Position: " + mBinding.appBarTest.practiceViewpager.getCurrentItem());
-                    practiceViewPager.setCurrentItem(pos);
-                    isQuestionSelected = false;
-                }
+
             }
 
             @Override
@@ -160,31 +211,132 @@ public class PracticeTestActivity extends BaseActivity implements LearingAdapter
         });
     }
 
-    private void setPracticeTestAdapter(List<LearningQuestionsNew> questionsNewList) {
-        Log.d(TAG, "setPracticeTestAdapter List : " + questionsNewList.size());
-        learingAdapter = new LearingAdapter(PracticeTestActivity.this, questionsNewList, this, test);
-        practiceViewPager.setAdapter(learingAdapter);
-        //learingAdapter.updateList(questionsNewList);
-    }
-
-    private void prepareQuestPaletList() {
-        Log.d(TAG, "prepareQuestPaletList Size : " + questionsNewList.size());
-        mBinding.paletQuestListRecyclerView.setNestedScrollingEnabled(false);
-        adapter = new PracticeTestQuestPaletAdapter(this, questionsNewList, this);
-        mBinding.paletQuestListRecyclerView.setHasFixedSize(true);
-        mBinding.paletQuestListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mBinding.paletQuestListRecyclerView.setAdapter(adapter);
-    }
-
-    private void getPractiseTestQuestions() {
+    private void fetchTestQA() {
         ProgressDialog.getInstance().show(this);
-        Call<LearningQuestResponse> call = apiService.fetchQAApi(new PreferenceManager(getApplicationContext()).getInt(Constant.USER_ID),"");
-        call.enqueue(new Callback<LearningQuestResponse>() {
+        Log.e(TAG, "fetchTestQA UserId : " + new PreferenceManager(getApplicationContext()).getInt(Constant.USER_ID));
+        Log.e(TAG, "fetchTestQA TmId : " + getIntent().getIntExtra(Constant.TM_ID, 2));
+        tmId = getIntent().getIntExtra(Constant.TM_ID, 0);
+
+        Call<StartResumeTestResponse> call;
+        if (getIntent() != null && getIntent().getStringExtra("FLAG") != null &&
+                getIntent().getStringExtra("FLAG").equalsIgnoreCase("ATTEMPTED"))
+            call = apiService.fetchAttemptedTests(new PreferenceManager(getApplicationContext()).getInt(Constant.USER_ID), tmId);
+        else
+            call = apiService.fetchTestQuestionAnswers(new PreferenceManager(getApplicationContext()).getInt(Constant.USER_ID), tmId);
+
+        call.enqueue(new Callback<StartResumeTestResponse>() {
             @Override
-            public void onResponse(Call<LearningQuestResponse> call, retrofit2.Response<LearningQuestResponse> response) {
+            public void onResponse(Call<StartResumeTestResponse> call, Response<StartResumeTestResponse> response) {
+                ProgressDialog.getInstance().dismiss();
+                if (response.body() != null && response.body().getResponseCode()!=null
+                       && response.body().getResponseCode().equals("200")) {
+                    startResumeTestResponse = response.body();
+                    mViewModel.setTestQuestAnsList(response.body().getTestQuestionNewList());
+                } else {
+                    Log.e(TAG, "onResponse Error : " + response.body().getResponseCode());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<StartResumeTestResponse> call, Throwable t) {
+                ProgressDialog.getInstance().dismiss();
+                t.printStackTrace();
+            }
+        });
+    }
+
+//    private void prepareQuestPaletList() {
+//        mBinding.questionsPaletListRecyclerView.setVisibility(View.VISIBLE);
+//        mBinding.questionsPaletGridRecyclerView.setVisibility(View.GONE);
+//        adapter = new PracticeTestQuestPaletAdapter(this, questionsNewList, this, QuestionSortType.LIST.toString());
+//        mBinding.questionsPaletListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+//        mBinding.questionsPaletListRecyclerView.setAdapter(adapter);
+//    }
+
+    private void setQuestPaletAdapter() {
+        mBinding.questionsPaletGridRecyclerView.setLayoutManager(new GridLayoutManager(this, 5));
+        questionGridAdapter = new PracticeTestQuestPaletAdapter(this, questionsNewList, this, QuestionSortType.GRID.toString());
+        mBinding.questionsPaletGridRecyclerView.setAdapter(questionGridAdapter);
+
+        questionListAdapter = new PracticeTestQuestPaletAdapter(this, questionsNewList, this, QuestionSortType.LIST.toString());
+        mBinding.questionsPaletListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mBinding.questionsPaletListRecyclerView.setAdapter(questionListAdapter);
+    }
+
+//    private void prepareQuestPaletGridList() {
+//        //mBinding.questionsPaletListRecyclerView.setVisibility(View.GONE);
+//        //mBinding.questionsPaletGridRecyclerView.setVisibility(View.VISIBLE);
+//        //mBinding.questionsPaletGridRecyclerView.setNestedScrollingEnabled(false);
+//        mBinding.questionsPaletGridRecyclerView.setLayoutManager(new GridLayoutManager(this, 5));
+//        adapter = new PracticeTestQuestPaletAdapter(this, questionsNewList, this, QuestionSortType.GRID.toString());
+//        mBinding.questionsPaletGridRecyclerView.setAdapter(adapter);
+//        adapter.notifyDataSetChanged();
+//    }
+
+//    private void setFilterRadio(String sortType) {
+////        if (sortType.equalsIgnoreCase(QuestionFilterType.ATTEMPTED.toString())) {
+////            new PreferenceManager(getApplicationContext()).saveString(Constant.SORT_APPLIED, QuestionFilterType.ATTEMPTED.toString());
+////            adapter.setPaletFilterResults(sortQuestListByFilter(questionsNewList, QuestionFilterType.ATTEMPTED.toString()));
+////            mBinding.chipAttempted.setChecked(true);
+////        } else if (sortType.equalsIgnoreCase(QuestionFilterType.UNATTEMPTED.toString())) {
+////            new PreferenceManager(getApplicationContext()).saveString(Constant.SORT_APPLIED, QuestionFilterType.UNATTEMPTED.toString());
+////            adapter.setPaletFilterResults(sortQuestListByFilter(questionsNewList, QuestionFilterType.UNATTEMPTED.toString()));
+////            mBinding.chipUnattempted.setChecked(true);
+////        } else if (sortType.equalsIgnoreCase(QuestionFilterType.MARKED.toString())) {
+////            new PreferenceManager(getApplicationContext()).saveString(Constant.SORT_APPLIED, QuestionFilterType.MARKED.toString());
+////            adapter.setPaletFilterResults(sortQuestListByFilter(questionsNewList, QuestionFilterType.MARKED.toString()));
+////            mBinding.chipMarked.setChecked(true);
+////        } else if (sortType.equalsIgnoreCase(QuestionFilterType.UNSEEN.toString())) {
+////            new PreferenceManager(getApplicationContext()).saveString(Constant.SORT_APPLIED, QuestionFilterType.UNSEEN.toString());
+////            adapter.setPaletFilterResults(sortQuestListByFilter(questionsNewList, QuestionFilterType.UNSEEN.toString()));
+////            mBinding.chipUnseen.setChecked(true);
+////        } else {
+////            new PreferenceManager(getApplicationContext()).saveString(Constant.SORT_APPLIED, QuestionFilterType.ALL.toString());
+////            adapter.setPaletFilterResults(sortQuestListByFilter(questionsNewList, QuestionFilterType.ALL.toString()));
+////            mBinding.chipAll.setChecked(true);
+////        }
+////    }
+
+    private List<TestQuestionNew> sortQuestListByFilter(List<TestQuestionNew> questions, String questFilterType) {
+        List<TestQuestionNew> questFilterList = new ArrayList<>();
+        for (TestQuestionNew question : questions) {
+
+            if (questFilterType.equals(QuestionFilterType.ATTEMPTED.toString()) && question.isTtqa_attempted()) {
+                questFilterList.add(question);
+            }
+            if (questFilterType.equals(QuestionFilterType.UNATTEMPTED.toString())
+                    && question.isTtqa_visited() && !question.isTtqa_attempted()) {
+                questFilterList.add(question);
+            }
+            if (questFilterType.equals(QuestionFilterType.UNSEEN.toString()) && !question.isTtqa_attempted()
+                    && !question.isTtqa_visited() && !question.isTtqa_marked()) {
+                questFilterList.add(question);
+            }
+            if (questFilterType.equals(QuestionFilterType.MARKED.toString()) && question.isTtqa_marked()) {
+                questFilterList.add(question);
+            }
+            if (questFilterType.equals(QuestionFilterType.ALL.toString())) {
+                questFilterList = questions;
+            }
+        }
+        if (questFilterList.size() > 0) {
+            mBinding.tvNoQuestions.setVisibility(View.GONE);
+        } else {
+            mBinding.tvNoQuestions.setVisibility(View.VISIBLE);
+        }
+
+        return questFilterList;
+    }
+
+   /* private void getPractiseTestQuestions() {
+        ProgressDialog.getInstance().show(this);
+        Call<TestQuestionNew> call = apiService.fetchTestQuestionAnswers(new PreferenceManager(getApplicationContext()).getInt(Constant.USER_ID),"");
+        call.enqueue(new Callback<TestQuestionNew>() {
+            @Override
+            public void onResponse(Call<TestQuestionNew> call, retrofit2.Response<TestQuestionNew> response) {
                 try {
                     ProgressDialog.getInstance().dismiss();
-                    if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
+                    if (response.body() != null && response.body().getRe().equalsIgnoreCase("200")) {
                         questionsNewList = response.body().getQuestion_list();
                         mViewModel.setPracticeQAList(questionsNewList);
                     } else {
@@ -198,13 +350,12 @@ public class PracticeTestActivity extends BaseActivity implements LearingAdapter
             }
 
             @Override
-            public void onFailure(Call<LearningQuestResponse> call, Throwable t) {
+            public void onFailure(Call<TestQuestionNew> call, Throwable t) {
                 t.printStackTrace();
                 ProgressDialog.getInstance().dismiss();
             }
         });
-    }
-
+    }*/
 
     private void setupNavigationDrawer() {
         setSupportActionBar(toolbar);
@@ -270,16 +421,27 @@ public class PracticeTestActivity extends BaseActivity implements LearingAdapter
 
     @Override
     public void onQuestionSelected(int position) {
-        Log.d(TAG, "onQuestionSelected Position : "+position);
-        isQuestionSelected = true;
+        Log.d(TAG, "onQuestionSelected Position : " + position);
+        //isQuestionSelected = true;
         mBinding.drawerLayout.closeDrawer(Gravity.RIGHT);
-        pos = position;
+        practiceViewPager.setCurrentItem(position);
+        //pos = position;
+    }
+
+    @Override
+    public void onYesClick() {
+        submitTestDialog.dismiss();
+    }
+
+    @Override
+    public void onNoClick() {
+        submitTestDialog.dismiss();
     }
 
     public class ViewPagerAdapter extends FragmentStateAdapter {
-        private List<LearningQuestionsNew> testQuestionNewList;
+        private List<TestQuestionNew> testQuestionNewList;
 
-        public ViewPagerAdapter(@NonNull FragmentActivity fragmentActivity, List<LearningQuestionsNew> testQuestionNewList) {
+        public ViewPagerAdapter(@NonNull FragmentActivity fragmentActivity, List<TestQuestionNew> testQuestionNewList) {
             super(fragmentActivity);
             this.testQuestionNewList = testQuestionNewList;
         }
@@ -287,7 +449,7 @@ public class PracticeTestActivity extends BaseActivity implements LearingAdapter
         @NonNull
         @Override
         public Fragment createFragment(int position) {
-            LearningQuestionsNew testQuestionNew = testQuestionNewList.get(position);
+            TestQuestionNew testQuestionNew = testQuestionNewList.get(position);
             if (testQuestionNew.getType().equals(Constant.SHORT_ANSWER) ||
                     testQuestionNew.getType().equals(Constant.ONE_LINE_ANSWER) ||
                     testQuestionNew.getType().equals(Constant.LONG_ANSWER) ||
@@ -296,17 +458,15 @@ public class PracticeTestActivity extends BaseActivity implements LearingAdapter
             } else {
                 if (testQuestionNew.getQue_option_type().equalsIgnoreCase(SCQ)) {
                     return PractiseScqFragment.newInstance(position);
-                }else  if (testQuestionNew.getQue_option_type().equalsIgnoreCase(SCQ_IMAGE_WITH_TEXT)) {
+                } else if (testQuestionNew.getQue_option_type().equalsIgnoreCase(SCQ_IMAGE_WITH_TEXT)) {
                     return PractiseScqImageText.newInstance(position);
-                }
-                else if (testQuestionNew.getQue_option_type().equalsIgnoreCase(Constant.MCQ)) {
+                } else if (testQuestionNew.getQue_option_type().equalsIgnoreCase(Constant.MCQ)) {
                     return PractiseMcqFragment.newInstance(position);
                 } else if (testQuestionNew.getQue_option_type().equals(MATCH_PAIR)) {
                     return PractiseMtpFragment.newInstance(position);
-                }else{
+                } else {
                     return PractiseSubjectiveFragment.newInstance(position);
                 }
-
             }
         }
 
@@ -316,7 +476,7 @@ public class PracticeTestActivity extends BaseActivity implements LearingAdapter
         }
     }
 
-    private ViewPagerAdapter createCardAdapter(List<LearningQuestionsNew> testQuestionNewList) {
+    private ViewPagerAdapter createCardAdapter(List<TestQuestionNew> testQuestionNewList) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(this, testQuestionNewList);
         return adapter;
     }
@@ -336,7 +496,7 @@ public class PracticeTestActivity extends BaseActivity implements LearingAdapter
                 try {
                     questionsNewList.clear();
                     if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
-                        getPractiseTestQuestions();
+                        //getPractiseTestQuestions();
                     } else {
                         Toast.makeText(getApplicationContext(), UtilHelper.getAPIError(String.valueOf(response.body())), Toast.LENGTH_SHORT).show();
                     }

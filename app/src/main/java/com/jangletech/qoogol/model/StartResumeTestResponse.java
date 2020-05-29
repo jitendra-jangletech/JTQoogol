@@ -7,8 +7,23 @@ import java.util.List;
 
 public class StartResumeTestResponse {
 
-    @SerializedName("Message")
-    private String message;
+    @SerializedName(Constant.tt_id)
+    private int ttId;
+
+    @SerializedName(Constant.tt_obtain_marks)
+    private String testTakenObtainMarks;
+
+    @SerializedName(Constant.tt_status)
+    private String tt_status;
+
+    @SerializedName(Constant.tt_duration_taken)
+    private String tt_duration_taken;
+
+    @SerializedName(Constant.tt_comment)
+    private String tt_comment;
+
+    @SerializedName(Constant.tt_pause_datetime)
+    private String tt_pause_datetime;
 
     @SerializedName(Constant.tm_id)
     private String tm_id;
@@ -264,14 +279,6 @@ public class StartResumeTestResponse {
 
     public void setTestQuestionNewList(List<TestQuestionNew> testQuestionNewList) {
         this.testQuestionNewList = testQuestionNewList;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
     }
 
     public String getResponseCode() {

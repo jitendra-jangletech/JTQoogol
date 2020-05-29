@@ -85,7 +85,7 @@ public class StartTestActivity extends BaseActivity implements QuestionPaletAdap
     private Toolbar toolbar;
     private EndDrawerToggle endDrawerToggle;
     private int tmId;
-    StartResumeTestResponse startResumeTestResponse;
+    private StartResumeTestResponse startResumeTestResponse;
 
 
     @Override
@@ -315,11 +315,11 @@ public class StartTestActivity extends BaseActivity implements QuestionPaletAdap
         endDrawerToggle.syncState();
     }
 
-    private void stopTimer() {
-        if (StartTestAdapter.countDownTimer != null) {
-            StartTestAdapter.countDownTimer.cancel();
-        }
-    }
+//    private void stopTimer() {
+////        if (StartTestAdapter.countDownTimer != null) {
+////            StartTestAdapter.countDownTimer.cancel();
+////        }
+////    }
 
 
     @Override
@@ -449,7 +449,7 @@ public class StartTestActivity extends BaseActivity implements QuestionPaletAdap
                     mViewModel.setTestQuestAnsList(response.body().getTestQuestionNewList());
                 } else {
                     Log.e(TAG, "onResponse Error : " + response.body().getResponseCode());
-                    showErrorDialog(StartTestActivity.this, response.body().getResponseCode(), response.body().getMessage());
+                    showErrorDialog(StartTestActivity.this, response.body().getResponseCode(), "");
                 }
             }
 
@@ -538,7 +538,7 @@ public class StartTestActivity extends BaseActivity implements QuestionPaletAdap
         @Override
         public Fragment createFragment(int position) {
             TestQuestionNew testQuestionNew = testQuestionNewList.get(position);
-            if (testQuestionNew.getQ_type().equals(Constant.SCQ)) {
+           /* if (testQuestionNew.getQ_type().equals(Constant.SCQ)) {
                 return ScqFragment.newInstance(position);
             } else if (testQuestionNew.getQ_type().equals(Constant.MCQ)) {
                 return McqFragment.newInstance(position);
@@ -552,7 +552,8 @@ public class StartTestActivity extends BaseActivity implements QuestionPaletAdap
                 return FillBlanksFragment.newInstance(position);
             } else {
                 return null;
-            }
+            }*/
+           return null;
         }
 
         @Override

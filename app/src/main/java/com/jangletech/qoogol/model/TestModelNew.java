@@ -6,6 +6,7 @@ import com.google.gson.annotations.SerializedName;
 import com.jangletech.qoogol.util.Constant;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 public class TestModelNew implements Serializable {
@@ -216,6 +217,17 @@ public class TestModelNew implements Serializable {
 
     @SerializedName(Constant.tm_attempted_by)
     private String tm_attempted_by;
+
+    @SerializedName(Constant._70E)
+    private List<AttemptedTest> attemptedTests;
+
+    public List<AttemptedTest> getAttemptedTests() {
+        return attemptedTests;
+    }
+
+    public void setAttemptedTests(List<AttemptedTest> attemptedTests) {
+        this.attemptedTests = attemptedTests;
+    }
 
     public String getTest_description() {
         return test_description;

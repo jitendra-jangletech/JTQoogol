@@ -31,6 +31,8 @@ import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.NetworkUtil;
 import com.jangletech.qoogol.util.PreferenceManager;
 
+import java.util.Objects;
+
 import static com.facebook.FacebookSdk.getApplicationContext;
 
 
@@ -42,6 +44,24 @@ public class BaseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
+    }
+
+    public void resetSettingAndLogout() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this,R.style.AlertDialogStyle);
+        alertDialog.setTitle(getResources().getString(R.string.warning));
+        alertDialog.setMessage("You have signed-in from another device. Logging out.");
+        alertDialog.setPositiveButton("Ok", (dialog, which) -> {
+            new PreferenceManager(getApplicationContext()).setIsLoggedIn(false);
+            new PreferenceManager(getApplicationContext()).saveString(Constant.MOBILE, "");
+            new PreferenceManager(getApplicationContext()).saveString(Constant.USER_ID, "");
+            Intent intent = new Intent(this, LaunchActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            Objects.requireNonNull(this).finish();
+            dialog.dismiss();
+        });
+        alertDialog.setCancelable(false)
+                .show();
     }
 
     public void loadProfilePic(String url, ImageView imageView) {

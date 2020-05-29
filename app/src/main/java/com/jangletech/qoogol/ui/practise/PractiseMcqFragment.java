@@ -15,6 +15,8 @@ import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.activities.PracticeTestActivity;
 import com.jangletech.qoogol.databinding.PracticeMcqBinding;
 import com.jangletech.qoogol.model.LearningQuestionsNew;
+import com.jangletech.qoogol.model.TestQuestion;
+import com.jangletech.qoogol.model.TestQuestionNew;
 import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.util.UtilHelper;
 
@@ -53,8 +55,8 @@ public class PractiseMcqFragment extends BaseFragment {
     }
 
     private void initViews() {
-        LearningQuestionsNew learningQuestionsNew = PracticeTestActivity.questionsNewList.get(counter);
-        mBinding.idTextview.setText(learningQuestionsNew.getQuestion_id());
+        TestQuestionNew learningQuestionsNew = PracticeTestActivity.questionsNewList.get(counter);
+        /*mBinding.idTextview.setText(learningQuestionsNew.getQuestion_id());
         mBinding.timeTextview.setText("Time: " + learningQuestionsNew.getRecommended_time() + " Sec");
         mBinding.difflevelValue.setText(learningQuestionsNew.getDifficulty_level());
         mBinding.likeValue.setText(learningQuestionsNew.getLikes());
@@ -73,7 +75,7 @@ public class PractiseMcqFragment extends BaseFragment {
         mBinding.ratingvalue.setText(learningQuestionsNew.getRating());
         mBinding.solutionOption.setText("Answer : " + learningQuestionsNew.getAnswer());
         mBinding.solutionDesc.setText(learningQuestionsNew.getAnswerDesc());
-        setTimer(mBinding.tvtimer, 0, 0);
+        setTimer(mBinding.tvtimer, 0, 0);*/
         mBinding.categoryTextview.setText("MCQ");
 
     }

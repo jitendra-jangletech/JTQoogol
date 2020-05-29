@@ -35,11 +35,17 @@
                 android:fillViewport="true"
                 android:scrollbars="none">
 
-                <androidx.viewpager2.widget.ViewPager2
+               <!-- <androidx.viewpager2.widget.ViewPager2
                     android:id="@+id/practice_viewpager"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:padding="@dimen/_10sdp" />
+                    android:padding="@dimen/_10sdp" />-->
+
+                <androidx.viewpager.widget.ViewPager
+                    android:padding="@dimen/_10sdp"
+                    android:id="@+id/practice_viewpager"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
 
             </androidx.core.widget.NestedScrollView>
 

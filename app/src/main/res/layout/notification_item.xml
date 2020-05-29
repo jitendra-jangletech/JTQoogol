@@ -1,49 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:padding="@dimen/_5sdp"
-        android:layout_height="wrap_content">
+        android:foreground="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/_5sdp">
 
-        <ImageView
-            android:id="@+id/profilePic"
-            android:layout_width="@dimen/_40sdp"
-            android:layout_height="@dimen/_40sdp"
-            android:contentDescription="Hello"
-            android:src="@drawable/profile_img"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <LinearLayout
+            android:id="@+id/notificationLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:padding="@dimen/_4sdp"
-            android:text="Amey shared test with you Amey shared test with you Amey shared test with you"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/profilePic"
-            android:id="@+id/notificationText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            <ImageView
+                android:id="@+id/profilePic"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_40sdp"
+                android:layout_weight="0.4"
+                android:contentDescription="Hello"
+                android:src="@drawable/profile_img" />
+
+            <TextView
+                android:id="@+id/notificationText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.6"
+                android:padding="@dimen/_4sdp"
+                android:text="Amey shared test with you Amey shared test with you Amey shared test with you
+Amey shared test with you Amey shared test with you Amey shared test with you
+Amey shared test with you Amey shared test with you Amey shared test with you"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        </LinearLayout>
+
 
         <TextView
             android:id="@+id/tvDate"
-            android:padding="@dimen/_5sdp"
-            app:layout_constraintTop_toBottomOf="@+id/notificationText"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:text="19 March 2020"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_5sdp"
+            android:text="19 March 2020"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/notificationLayout" />
 
         <View
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvDate"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginTop="@dimen/_2sdp"
             android:layout_marginBottom="@dimen/_2sdp"
-            android:background="@color/colorLightGrey" />
+            android:background="@color/colorLightGrey"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvDate" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

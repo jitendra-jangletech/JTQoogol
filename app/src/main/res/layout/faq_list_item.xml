@@ -29,6 +29,7 @@
         android:paddingBottom="@dimen/btn_padding">
 
         <TextView
+            android:foreground="?attr/selectableItemBackground"
             android:id="@+id/titleTextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

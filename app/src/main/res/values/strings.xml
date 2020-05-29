@@ -13,6 +13,8 @@
     <string name="menu_course">Course</string>
     <string name="menu_exam">Exam</string>
 
+    <string name="menu_test_attempt">Test Attempt History</string>
+
     //Learning Filter Menu
     <string name="menu_subject">Subject</string>
     <string name="menu_chapter">Chapter</string>
@@ -76,8 +78,6 @@
 
     <!-- validation strings -->
     <string name="valid_input_chars">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ </string>
-
-
 
 
     <!--Error Messages-->
@@ -259,9 +259,6 @@
     <string name="blockedlist">Block List</string>
     <string name="importContacts">Import Contacts</string>
     <string name="contacts">Contacts</string>
-
-
-
 
 
     <!--Error-->

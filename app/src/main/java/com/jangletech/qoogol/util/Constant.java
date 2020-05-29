@@ -222,6 +222,7 @@ public class Constant {
     public static final String PROCESS_TEST = "q133ProcessTest";
     public static final String START_RESUME_TEST = "q131StartResumeTest";
     public static final String TEST_DETAILS = "q132FetchTestDetails";
+    public static final String SUBMIT_TEST = "q134SubmitTest";
     public static final String FETCH_TEST_LIST = "q152fetchtest";
     public static final String FETCH_USER_INFO = "sm21FetchUserInfo";
     public static final String FETCH_USER_EDU = "q112ProcessUserEdu";
@@ -498,6 +499,7 @@ public class Constant {
     public static final String qlc_fav_flag = "1390";
     public static final String qlc_rating = "1391";
     public static final String qlc_feedback = "1392";
+    public static final String tt_pause_datetime = "1250";
 
     // SubjectMaster
     public static final String sm_id = "1300";

@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.jangletech.qoogol.R;
+import com.jangletech.qoogol.activities.PracticeTestActivity;
 import com.jangletech.qoogol.activities.StartTestActivity;
 import com.jangletech.qoogol.adapter.QuestionAdapter;
 import com.jangletech.qoogol.databinding.TestDetailsFragmentBinding;
@@ -63,7 +64,7 @@ public class TestDetailsFragment extends BaseFragment {
             testModelNew = (TestModelNew) getArguments().getSerializable(Constant.TEST_NAME);
         }
         mViewModel = ViewModelProviders.of(this).get(TestDetailsViewModel.class);
-        fetchTestList();
+        fetchTestDetails();
         mViewModel.getQsetList().observe(getActivity(), new Observer<List<QSet>>() {
             @Override
             public void onChanged(@Nullable final List<QSet> qSetList) {
@@ -74,7 +75,7 @@ public class TestDetailsFragment extends BaseFragment {
         });
 
         mBinding.btnStartTest.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(),StartTestActivity.class);
+            Intent intent = new Intent(getActivity(), PracticeTestActivity.class);
             intent.putExtra(Constant.TM_ID,testModelNew.getTm_id());
             startActivity(intent);
         });
@@ -133,16 +134,23 @@ public class TestDetailsFragment extends BaseFragment {
         mBinding.leastScoredQuestRecyclerView.setAdapter(adapter);
     }
 
-    private void fetchTestList() {
+    private void fetchTestDetails() {
         ProgressDialog.getInstance().show(getActivity());
         Call<TestDetailsResponse> call = apiService.fetchTestDetails(new PreferenceManager(getActivity()).getInt(Constant.USER_ID), testModelNew.getTm_id());//todo change userId and tmIdd
         call.enqueue(new Callback<TestDetailsResponse>() {
             @Override
             public void onResponse(Call<TestDetailsResponse> call, Response<TestDetailsResponse> response) {
                 ProgressDialog.getInstance().dismiss();
-                mViewModel.setQsetList(response.body().getqSetList());
-                Log.d(TAG, "onResponse: " + response.body().getqSetList());
-                Log.d(TAG, "onResponse: " + response.body().getqSetList().size());
+                if(response.body()!=null && response.body().getResponseCode().equals("200")){
+                    mViewModel.setQsetList(response.body().getqSetList());
+                    Log.d(TAG, "onResponse: " + response.body().getqSetList());
+                    Log.d(TAG, "onResponse: " + response.body().getqSetList().size());
+                }else if(response.body().getResponseCode().equals("501")){
+                    resetSettingAndLogout();
+                }else{
+                    showErrorDialog(requireActivity(),response.body().getResponseCode(),"");
+                }
+
             }
 
             @Override

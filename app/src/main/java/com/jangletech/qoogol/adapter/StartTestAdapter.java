@@ -1,37 +1,7 @@
 package com.jangletech.qoogol.adapter;
 
-import android.content.Context;
-import android.os.CountDownTimer;
-import android.text.Editable;
-import android.text.InputFilter;
-import android.text.Spanned;
-import android.text.TextWatcher;
-import android.text.method.DigitsKeyListener;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.ToggleButton;
-
-import androidx.annotation.NonNull;
-import androidx.databinding.DataBindingUtil;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.android.material.chip.Chip;
-import com.google.android.material.chip.ChipGroup;
-import com.jangletech.qoogol.R;
-import com.jangletech.qoogol.activities.StartTestActivity;
-import com.jangletech.qoogol.databinding.TestQuestionFragmentBinding;
-import com.jangletech.qoogol.model.TestQuestionNew;
-import com.jangletech.qoogol.util.Constant;
-
-import java.util.HashMap;
-import java.util.List;
-
-public class StartTestAdapter extends RecyclerView.Adapter<StartTestAdapter.ViewHolder> {
+public class StartTestAdapter{
+/*extends RecyclerView.Adapter<StartTestAdapter.ViewHolder> {
 
     private static final String TAG = "StartTestAdapter";
     public static List<TestQuestionNew> testQuestions;
@@ -52,7 +22,7 @@ public class StartTestAdapter extends RecyclerView.Adapter<StartTestAdapter.View
 
     private void setEditTextMap(List<TestQuestionNew> list) {
         mapAnsEditText = new HashMap<>();
-        for (TestQuestionNew questionNew : testQuestions) {
+        *//*for (TestQuestionNew questionNew : testQuestions) {
             if (questionNew.getQ_type().equals(Constant.SHORT_ANSWER)) {
                 mapAnsEditText.put(questionNew.getTq_quest_seq_num(), testQuestionFragmentBinding.shortAnswer.etMultiLineAnswer);
             }
@@ -65,7 +35,7 @@ public class StartTestAdapter extends RecyclerView.Adapter<StartTestAdapter.View
             if (questionNew.getQ_type().equals(Constant.FILL_THE_BLANKS)) {
                 mapAnsEditText.put(questionNew.getTq_quest_seq_num(), testQuestionFragmentBinding.fillInTheBlanks.etAnswer);
             }
-        }
+        }*//*
     }
 
     @NonNull
@@ -286,7 +256,7 @@ public class StartTestAdapter extends RecyclerView.Adapter<StartTestAdapter.View
         }
     }
 
-    /*private void focusChangeListener(EditText editText){
+    *//*private void focusChangeListener(EditText editText){
         editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
@@ -297,7 +267,7 @@ public class StartTestAdapter extends RecyclerView.Adapter<StartTestAdapter.View
                 }
             }
         });
-    }*/
+    }*//*
 
     private void createTimer(int position, int seconds, int minutes) {
         TextView timer = mapTimer.get(String.valueOf(position));
@@ -335,7 +305,7 @@ public class StartTestAdapter extends RecyclerView.Adapter<StartTestAdapter.View
         }
     }
 
-   /* private void startTimer(int exactPs) {
+   *//* private void startTimer(int exactPs) {
         for (int i = 0; i < testQuestions.size(); i++) {
             CountDownTimer countDownTimer = mapTimer.get(testQuestions.get(i).getTq_quest_seq_num());
             if (testQuestions.get(i).getTq_quest_seq_num().equals(testQuestions.get(exactPs).getTq_quest_seq_num())) {
@@ -346,7 +316,7 @@ public class StartTestAdapter extends RecyclerView.Adapter<StartTestAdapter.View
                     countDownTimer.cancel();
             }
         }
-    }*/
+    }*//*
 
 
     private void answerCharCounter(EditText etAnswer, TextView tvCounter, int maxWordLength) {
@@ -462,5 +432,5 @@ public class StartTestAdapter extends RecyclerView.Adapter<StartTestAdapter.View
         void onNextClick(int pos);
 
         void onReportClick(int pos);
-    }
+    }*/
 }
