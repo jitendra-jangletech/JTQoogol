@@ -195,7 +195,8 @@ public class PracticeTestActivity extends BaseActivity implements LearingAdapter
             }
 
             @Override
-            public void onDrawerOpened(@NonNull View drawerView) {
+                public void onDrawerOpened(@NonNull View drawerView) {
+                hideSoftKeyboard();
                 questionListAdapter.notifyDataSetChanged();
             }
 

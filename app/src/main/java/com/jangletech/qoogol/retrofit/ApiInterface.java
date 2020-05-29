@@ -211,7 +211,8 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST(Constant.FETCH_TEST_LIST)
-    Call<TestListResponse> fetchTestList(@Field(Constant.u_user_id) int userId);
+    Call<TestListResponse> fetchTestList(@Field(Constant.u_user_id) int userId,
+                                         @Field(Constant.CASE) String caseFav);
 
     @FormUrlEncoded
     @POST(Constant.FETCH_NOTIFICATIONS)

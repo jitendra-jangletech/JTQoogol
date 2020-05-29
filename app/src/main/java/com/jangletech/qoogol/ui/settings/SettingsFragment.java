@@ -167,7 +167,9 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
                 Log.d(TAG, "onChanged Board Name : " + userPreferences.getUbm_board_name());
                 Log.d(TAG, "onChanged Co Id : " + userPreferences.getCo_id());
                 mBinding.setPreference(userPreferences);
+                if(userPreferences.getDm_id()!=null)
                 fetchCourseData(Integer.parseInt(userPreferences.getDm_id()));
+                if(userPreferences.getCo_id()!=null)
                 fetchClassList(Integer.parseInt(userPreferences.getCo_id()));
                 setUserPreferences(userPreferences);
             }
