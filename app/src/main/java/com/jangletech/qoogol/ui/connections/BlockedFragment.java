@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.util.Log;
@@ -186,5 +187,10 @@ public class BlockedFragment extends BaseFragment implements BlockedConnectionAd
     @Override
     public void unblockUser(String userId) {
         updateConnection(userId, unblock);
+    }
+
+    @Override
+    public void showProfileClick(Bundle bundle) {
+        NavHostFragment.findNavController(this).navigate(R.id.nav_edit_profile,bundle);
     }
 }

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -61,6 +62,10 @@ public class FriendsFragment extends BaseFragment implements ConnectionAdapter.u
 
     private void init() {
         userId = String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));
+        if (!isVisible) {
+            isVisible = true;
+            getData(0,"init");
+        }
         mBinding.connectionSwiperefresh.setOnRefreshListener(() -> getData(0,"refresh"));
     }
 
@@ -72,9 +77,6 @@ public class FriendsFragment extends BaseFragment implements ConnectionAdapter.u
     @Override
     public void onResume() {
         super.onResume();
-        isVisible = true;
-        getData(0,"init");
-
     }
 
     public void checkRefresh() {
@@ -86,9 +88,10 @@ public class FriendsFragment extends BaseFragment implements ConnectionAdapter.u
     private void getData(int pagestart, String call_from) {
         ProgressDialog.getInstance().show(getActivity());
         if (call_from.equalsIgnoreCase("refresh"))
-            call = apiService.fetchConnections(userId,friends, getDeviceId(), qoogol,pagestart);
-        else
             call = apiService.fetchRefreshedConnections(userId,friends, getDeviceId(), qoogol,pagestart,forcerefresh);
+        else
+            call = apiService.fetchConnections(userId,friends, getDeviceId(), qoogol,pagestart);
+
 
         call.enqueue(new Callback<ConnectionResponse>() {
             @Override
@@ -150,5 +153,11 @@ public class FriendsFragment extends BaseFragment implements ConnectionAdapter.u
     @Override
     public void onBottomReached(int size) {
         getData(size,"refresh");
+    }
+
+    @Override
+    public void showProfileClick(Bundle bundle) {
+        NavHostFragment.findNavController(this).navigate(R.id.nav_edit_profile,bundle);
+
     }
 }

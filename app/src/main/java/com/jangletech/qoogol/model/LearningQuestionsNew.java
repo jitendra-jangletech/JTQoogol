@@ -151,7 +151,7 @@ public class LearningQuestionsNew {
 
     @NonNull
     public String getQuestion_id() {
-        return question_id;
+        return question_id!=null?question_id:"";
     }
 
     public void setQuestion_id(@NonNull String question_id) {
@@ -159,7 +159,7 @@ public class LearningQuestionsNew {
     }
 
     public String getQuestion() {
-        return question;
+        return question!=null?question:"";
     }
 
     public void setQuestion(String question) {
@@ -175,7 +175,7 @@ public class LearningQuestionsNew {
     }
 
     public String getCategory() {
-        return category;
+        return category!=null?category:"";
     }
 
     public void setCategory(String category) {
@@ -183,7 +183,7 @@ public class LearningQuestionsNew {
     }
 
     public String getSubject() {
-        return subject;
+        return subject!=null?subject:"";
     }
 
     public void setSubject(String subject) {
@@ -191,7 +191,7 @@ public class LearningQuestionsNew {
     }
 
     public String getChapter() {
-        return chapter;
+        return chapter!=null?chapter:"";
     }
 
     public void setChapter(String chapter) {
@@ -199,7 +199,7 @@ public class LearningQuestionsNew {
     }
 
     public String getRating() {
-        return rating;
+        return rating!=null?rating:"";
     }
 
     public void setRating(String rating) {
@@ -207,7 +207,7 @@ public class LearningQuestionsNew {
     }
 
     public String getDifficulty_level() {
-        return difficulty_level;
+        return difficulty_level!=null?difficulty_level:"";
     }
 
     public void setDifficulty_level(String difficulty_level) {
@@ -215,7 +215,7 @@ public class LearningQuestionsNew {
     }
 
     public String getTopic() {
-        return topic;
+        return topic!=null?topic:"";
     }
 
     public void setTopic(String topic) {
@@ -223,7 +223,7 @@ public class LearningQuestionsNew {
     }
 
     public String getPosted_on() {
-        return posted_on;
+        return posted_on!=null?posted_on:"";
     }
 
     public void setPosted_on(String posted_on) {
@@ -231,7 +231,7 @@ public class LearningQuestionsNew {
     }
 
     public String getLastused_on() {
-        return lastused_on;
+        return lastused_on!=null?lastused_on:"";
     }
 
     public void setLastused_on(String lastused_on) {
@@ -239,7 +239,7 @@ public class LearningQuestionsNew {
     }
 
     public String getLikes() {
-        return likes;
+        return likes!=null?likes:"0";
     }
 
     public void setLikes(String likes) {
@@ -247,7 +247,7 @@ public class LearningQuestionsNew {
     }
 
     public String getComments() {
-        return comments;
+        return comments!=null?comments:"0";
     }
 
     public void setComments(String comments) {
@@ -255,7 +255,7 @@ public class LearningQuestionsNew {
     }
 
     public String getShares() {
-        return shares;
+        return shares!=null?shares:"0";
     }
 
     public void setShares(String shares) {
@@ -263,7 +263,7 @@ public class LearningQuestionsNew {
     }
 
     public String getRecommended_time() {
-        return recommended_time;
+        return recommended_time!=null?recommended_time:"";
     }
 
     public void setRecommended_time(String recommended_time) {
@@ -279,7 +279,7 @@ public class LearningQuestionsNew {
     }
 
     public String getMarks() {
-        return marks;
+        return marks!=null?marks:"";
     }
 
     public void setMarks(String marks) {
@@ -287,7 +287,7 @@ public class LearningQuestionsNew {
     }
 
     public String getMcq1() {
-        return mcq1;
+        return mcq1!=null?mcq1:"";
     }
 
     public void setMcq1(String mcq1) {
@@ -295,7 +295,7 @@ public class LearningQuestionsNew {
     }
 
     public String getMcq2() {
-        return mcq2;
+        return mcq2!=null?mcq2:"";
     }
 
     public void setMcq2(String mcq2) {
@@ -303,7 +303,7 @@ public class LearningQuestionsNew {
     }
 
     public String getMcq3() {
-        return mcq3;
+        return mcq3!=null?mcq3:"";
     }
 
     public void setMcq3(String mcq3) {
@@ -311,7 +311,7 @@ public class LearningQuestionsNew {
     }
 
     public String getMcq4() {
-        return mcq4;
+        return mcq4!=null?mcq4:"";
     }
 
     public void setMcq4(String mcq4) {
@@ -319,7 +319,7 @@ public class LearningQuestionsNew {
     }
 
     public String getMcq5() {
-        return mcq5;
+        return mcq5!=null?mcq5:"";
     }
 
     public void setMcq5(String mcq5) {
@@ -327,7 +327,7 @@ public class LearningQuestionsNew {
     }
 
     public String getAttended_by() {
-        return attended_by;
+        return attended_by!=null?attended_by:"";
     }
 
     public void setAttended_by(String attended_by) {
@@ -335,7 +335,7 @@ public class LearningQuestionsNew {
     }
 
     public String getSolve_right() {
-        return solve_right;
+        return solve_right!=null?solve_right:"";
     }
 
     public void setSolve_right(String solve_right) {
@@ -343,7 +343,7 @@ public class LearningQuestionsNew {
     }
 
     public String getIs_liked() {
-        return is_liked;
+        return is_liked!=null?is_liked:"";
     }
 
     public void setIs_liked(String is_liked) {
@@ -351,7 +351,7 @@ public class LearningQuestionsNew {
     }
 
     public String getIs_fav() {
-        return is_fav;
+        return is_fav!=null?is_fav:"";
     }
 
     public void setIs_fav(String is_fav) {
@@ -359,7 +359,7 @@ public class LearningQuestionsNew {
     }
 
     public String getType() {
-        return type;
+        return type!=null?type:"";
     }
 
     public void setType(String type) {
@@ -367,7 +367,7 @@ public class LearningQuestionsNew {
     }
 
     public String getAnswer() {
-        return answer;
+        return answer!=null?answer:"";
     }
 
     public void setAnswer(String answer) {
@@ -377,7 +377,7 @@ public class LearningQuestionsNew {
 
 
     public String getQue_media_typs() {
-        return que_media_typs;
+        return que_media_typs!=null?que_media_typs:"";
     }
 
     public void setQue_media_typs(String que_media_typs) {
@@ -385,7 +385,7 @@ public class LearningQuestionsNew {
     }
 
     public String getQue_option_type() {
-        return que_option_type;
+        return que_option_type!=null?que_option_type:"";
     }
 
     public void setQue_option_type(String que_option_type) {
@@ -393,7 +393,7 @@ public class LearningQuestionsNew {
     }
 
     public String getQue_images() {
-        return que_images;
+        return que_images!=null?que_images:"";
     }
 
     public void setQue_images(String que_images) {
@@ -401,7 +401,7 @@ public class LearningQuestionsNew {
     }
 
     public String getAns_mediaId() {
-        return ans_mediaId;
+        return ans_mediaId!=null?ans_mediaId:"";
     }
 
     public void setAns_mediaId(String ans_mediaId) {
@@ -414,5 +414,21 @@ public class LearningQuestionsNew {
 
     public void setAns_media_names(String ans_media_names) {
         this.ans_media_names = ans_media_names;
+    }
+
+    public String getSubject_id() {
+        return subject_id;
+    }
+
+    public void setSubject_id(String subject_id) {
+        this.subject_id = subject_id;
+    }
+
+    public String getChapter_id() {
+        return chapter_id;
+    }
+
+    public void setChapter_id(String chapter_id) {
+        this.chapter_id = chapter_id;
     }
 }

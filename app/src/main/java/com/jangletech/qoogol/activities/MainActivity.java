@@ -36,6 +36,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.jangletech.qoogol.util.Constant.CALL_FROM;
+import static com.jangletech.qoogol.util.Constant.profile;
+
 public class MainActivity extends BaseActivity implements UniversalDialog.DialogButtonClickListener {
 
     private static final String TAG = "MainActivity";
@@ -111,12 +114,16 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
 
         mBinding.navHeader.tvName.setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawer(Gravity.LEFT);
-            navController.navigate(R.id.nav_edit_profile);
+            Bundle bundle = new Bundle();
+            bundle.putInt(CALL_FROM, profile);
+            navController.navigate(R.id.nav_edit_profile,bundle);
         });
 
         mBinding.navHeader.profilePic.setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawer(Gravity.LEFT);
-            navController.navigate(R.id.nav_edit_profile);
+            Bundle bundle = new Bundle();
+            bundle.putInt(CALL_FROM, profile);
+            navController.navigate(R.id.nav_edit_profile,bundle);
         });
         Intent intent = getIntent();
         if (intent.hasExtra("bundle")) {
@@ -210,7 +217,7 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
             if (navController.getCurrentDestination().getId() != R.id.nav_test_my) {
                 navController.popBackStack();
                 Bundle bundle = new Bundle();
-                bundle.putString(Constant.CALL_FROM,"MY_TEST");
+                bundle.putString(CALL_FROM,"MY_TEST");
                 navController.navigate(R.id.nav_test_my,bundle);
             }
         });
@@ -294,7 +301,9 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
             mBinding.drawerLayout.closeDrawers();
             if (navController.getCurrentDestination().getId() != R.id.nav_edit_profile) {
                 navController.popBackStack();
-                navController.navigate(R.id.nav_edit_profile);
+                Bundle bundle = new Bundle();
+                bundle.putInt(CALL_FROM, profile);
+                navController.navigate(R.id.nav_edit_profile,bundle);
             }
         });
 
@@ -351,7 +360,7 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
     private void fetchUserProfile() {
         //ProgressDialog.getInstance().show(this);
         Log.d(TAG, "fetchUserProfile: ");
-        Call<UserProfile> call = apiService.fetchUserInfo(new PreferenceManager(getApplicationContext()).getInt(Constant.USER_ID),
+        Call<UserProfile> call = apiService.fetchUserInfo(new PreferenceManager(getApplicationContext()).getUserId(),
                 getDeviceId(), Constant.APP_NAME, Constant.APP_VERSION);
         call.enqueue(new Callback<UserProfile>() {
             @Override

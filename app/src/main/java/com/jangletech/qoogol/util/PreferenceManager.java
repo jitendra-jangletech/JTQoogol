@@ -124,4 +124,14 @@ public class PreferenceManager {
         return sharedPreferences.getString(Constant.user_id, "");
     }
 
+    public void saveProfileFetchId(String userId) {
+        sharedPreferences.edit()
+                .putString(Constant.fetch_profile_id, userId)
+                .apply();
+    }
+
+    public String getProfileFetchId() {
+        return sharedPreferences.getString(Constant.fetch_profile_id, "");
+    }
+
 }

@@ -2,6 +2,7 @@ package com.jangletech.qoogol.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -15,17 +16,21 @@ import com.jangletech.qoogol.util.DateUtils;
 
 import java.util.List;
 
+import static com.jangletech.qoogol.util.Constant.fetch_loged_in_user;
+
 public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.ViewHolder>  {
 
     private List<Education> educationList;
     private Context mContext;
     private ItemEducationBinding itemEducationBinding;
     private EducationItemClickListener educationItemClickListener;
+    int call_from;
 
-    public EducationAdapter(Context mContext,List<Education> educationList,EducationItemClickListener educationItemClickListener){
+    public EducationAdapter(Context mContext,List<Education> educationList,EducationItemClickListener educationItemClickListener, int call_from){
         this.mContext = mContext;
         this.educationList = educationList;
         this.educationItemClickListener = educationItemClickListener;
+        this.call_from = call_from;
     }
 
     @NonNull
@@ -47,13 +52,19 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.View
         holder.itemEducationBinding.tvStartDate.setText(DateUtils.getFormattedDate(education.getUe_startdate()));
         holder.itemEducationBinding.tvEndDate.setText(DateUtils.getFormattedDate(education.getUe_enddate()));
 
-        holder.itemEducationBinding.rootLayout.setOnClickListener(v->{
-            educationItemClickListener.onItemClick(education);
-        });
+        if (call_from==fetch_loged_in_user) {
+            holder.itemEducationBinding.rootLayout.setOnClickListener(v->{
+                educationItemClickListener.onItemClick(education);
+            });
+            holder.itemEducationBinding.delete.setOnClickListener(v->{
+                educationItemClickListener.onDeleteClick(education);
+            });
+        } else {
+            itemEducationBinding.delete.setVisibility(View.GONE);
+        }
 
-        holder.itemEducationBinding.delete.setOnClickListener(v->{
-            educationItemClickListener.onDeleteClick(education);
-        });
+
+
     }
 
     @Override

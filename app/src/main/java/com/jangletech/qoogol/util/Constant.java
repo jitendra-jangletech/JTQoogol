@@ -102,6 +102,8 @@ public class Constant {
     public static final String returnrows = "ReturnRows";
     public static final String q_T_list = "69";
     public static final String TorQ = "TorQ";
+    public static final String test_share = "T";
+    public static final String question_share = "Q";
 
     //Preferences
     public static final String PREF_NAME = "qoogol";
@@ -114,6 +116,7 @@ public class Constant {
 
     //user
     public static final String user_id = "userId";
+    public static final String fetch_profile_id = "other_user";
 
     //course
     public static final String courseId = "courseId";
@@ -159,7 +162,10 @@ public class Constant {
     //learning adapter
     public static int learning = 0;
     public static int test = 1;
-    public static int notification = 2;
+    public static int profile = 2;
+    public static int connectonId = 3;
+    public static int fetch_loged_in_user = 0;
+    public static int fetch_other_user = 1;
 
     //Question media
     public static String TEXt = "1";
@@ -225,6 +231,7 @@ public class Constant {
     public static final String SUBMIT_TEST = "q134SubmitTest";
     public static final String FETCH_TEST_LIST = "q152fetchtest";
     public static final String FETCH_USER_INFO = "sm21FetchUserInfo";
+    public static final String FETCH_OTHER_USER_INFO = "sm51FetchOtherUserInfo";
     public static final String FETCH_USER_EDU = "q112ProcessUserEdu";
     public static final String FETCH_USER_SETTINGS = "q113ProcessUserSetting";
 
@@ -349,6 +356,7 @@ public class Constant {
     public static final String friendrequests = "FRR";
     public static final String followrequests = "FLR";
 
+    public static final String sent_friend_req = "C";
     public static final String remove_connection = "X";
     public static final String accept_follow_requests = "AF";
     public static final String reject_follow_requests = "RF";
@@ -462,6 +470,8 @@ public class Constant {
     public static final String follow_req_sent = "316E";
     public static final String follow_req_received = "316F";
     public static final String solved_right = "1394";
+    public static final String sub_ans = "1395";
+    public static final String sub_ans_ratio = "1396";
     public static final String attmpted = "1393";
     public static final String q_favs = "1355A";
     public static final String attmpted_count = "1355B";

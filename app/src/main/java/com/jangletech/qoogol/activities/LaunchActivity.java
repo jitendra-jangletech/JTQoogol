@@ -133,6 +133,7 @@ public class LaunchActivity extends BaseActivity {
                     } else {
                         if (!response.body().getU_user_id().isEmpty()) {
                             new PreferenceManager(LaunchActivity.this).saveInt(Constant.USER_ID, Integer.parseInt(response.body().getU_user_id()));
+                            new PreferenceManager(LaunchActivity.this).saveUserId(response.body().getU_user_id());
                             new PreferenceManager(LaunchActivity.this).setIsLoggedIn(true);
                             Intent i = new Intent(LaunchActivity.this, MainActivity.class);
                             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

@@ -8,6 +8,7 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 import com.jangletech.qoogol.model.LearningQuestions;
+import com.jangletech.qoogol.model.LearningQuestionsNew;
 
 import java.util.List;
 
@@ -17,15 +18,15 @@ import java.util.List;
 @Dao
 public interface LearningQuestionDao {
 
-    @Query("SELECT * FROM LearningQuestions")
-    List<LearningQuestions> getAll();
+    @Query("SELECT * FROM LearningQuestionsNew")
+    List<LearningQuestionsNew> getAll();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(LearningQuestions learningQuestions);
+    void insert(LearningQuestionsNew learningQuestions);
 
     @Delete
-    void delete(LearningQuestions learningQuestions);
+    void delete(LearningQuestionsNew learningQuestions);
 
     @Update
-    void update(LearningQuestions learningQuestions);
+    void update(LearningQuestionsNew learningQuestions);
 }

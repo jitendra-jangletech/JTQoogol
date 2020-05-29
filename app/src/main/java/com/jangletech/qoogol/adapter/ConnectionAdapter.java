@@ -1,6 +1,7 @@
 package com.jangletech.qoogol.adapter;
 
 import android.app.Activity;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.databinding.DataBindingUtil;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -33,15 +35,18 @@ import retrofit2.Callback;
 
 import static android.view.Gravity.END;
 import static com.jangletech.qoogol.ui.BaseFragment.getDeviceId;
+import static com.jangletech.qoogol.util.Constant.CALL_FROM;
 import static com.jangletech.qoogol.util.Constant.accept_follow_requests;
 import static com.jangletech.qoogol.util.Constant.accept_friend_requests;
 import static com.jangletech.qoogol.util.Constant.block;
+import static com.jangletech.qoogol.util.Constant.connectonId;
 import static com.jangletech.qoogol.util.Constant.follow;
 import static com.jangletech.qoogol.util.Constant.followers;
 import static com.jangletech.qoogol.util.Constant.following;
 import static com.jangletech.qoogol.util.Constant.followrequests;
 import static com.jangletech.qoogol.util.Constant.friendrequests;
 import static com.jangletech.qoogol.util.Constant.friends;
+import static com.jangletech.qoogol.util.Constant.profile;
 import static com.jangletech.qoogol.util.Constant.qoogol;
 import static com.jangletech.qoogol.util.Constant.reject_follow_requests;
 import static com.jangletech.qoogol.util.Constant.reject_friend_requests;
@@ -87,6 +92,8 @@ public class ConnectionAdapter extends RecyclerView.Adapter<ConnectionAdapter.Vi
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+
 
 
 
@@ -166,6 +173,14 @@ public class ConnectionAdapter extends RecyclerView.Adapter<ConnectionAdapter.Vi
                     updateConnection(connections.getCn_user_id_2(),reject_friend_requests);
                     break;
 
+                case  R.id.action_view_profile:
+                    Bundle bundle = new Bundle();
+                    bundle.putInt(CALL_FROM, connectonId);
+                    bundle.putString(Constant.fetch_profile_id,connections.getCn_user_id_2());
+                    listener.showProfileClick(bundle);
+//                    NavHostFragment.findNavController(this).navigate(R.id.nav_edit_profile,bundle);
+                    break;
+
             }
             return false;
         });
@@ -213,6 +228,7 @@ public class ConnectionAdapter extends RecyclerView.Adapter<ConnectionAdapter.Vi
     public interface updateConnectionListener {
         void onUpdateConnection();
         void onBottomReached(int size);
+        void showProfileClick(Bundle bundle);
     }
 
     private void updateConnection(String user, String Processcase) {

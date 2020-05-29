@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.util.Log;
@@ -63,6 +64,10 @@ public class FollowRequestFragment extends BaseFragment implements ConnectionAda
 
     private void init() {
         userId = String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));
+        if (!isVisible) {
+            isVisible = true;
+            getData(0,"init");
+        }
         mBinding.requestsSwiperefresh.setOnRefreshListener(() -> getData(0,"refresh"));
     }
 
@@ -75,9 +80,6 @@ public class FollowRequestFragment extends BaseFragment implements ConnectionAda
     @Override
     public void onResume() {
         super.onResume();
-        isVisible = true;
-        getData(0,"init");
-
     }
 
     @Override
@@ -90,8 +92,8 @@ public class FollowRequestFragment extends BaseFragment implements ConnectionAda
     private void getData(int pagestart, String call_from) {
         ProgressDialog.getInstance().show(getActivity());
 
-        if (call_from.equalsIgnoreCase("refresh"))
-        call = apiService.fetchConnections(userId,followrequests, getDeviceId(), qoogol,pagestart);
+        if (!call_from.equalsIgnoreCase("refresh"))
+            call = apiService.fetchConnections(userId,followrequests, getDeviceId(), qoogol,pagestart);
         else
             call = apiService.fetchRefreshedConnections(userId,followrequests, getDeviceId(), qoogol,pagestart, forcerefresh);
 
@@ -147,5 +149,10 @@ public class FollowRequestFragment extends BaseFragment implements ConnectionAda
     @Override
     public void onBottomReached(int size) {
         getData(size,"init");
+    }
+
+    @Override
+    public void showProfileClick(Bundle bundle) {
+        NavHostFragment.findNavController(this).navigate(R.id.nav_edit_profile,bundle);
     }
 }

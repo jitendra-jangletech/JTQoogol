@@ -47,7 +47,7 @@ public class LearningFragment extends BaseFragment implements LearingAdapter.onI
     private LearningViewModel mViewModel;
     LearningFragmentBinding learningFragmentBinding;
     LearingAdapter learingAdapter;
-    List<LearningQuestions> learningQuestionsList;
+    List<LearningQuestionsNew> learningQuestionsList;
     List<LearningQuestionsNew> questionsNewList;
     ApiInterface apiService = ApiClient.getInstance().getApi();
     String userId = "";
@@ -70,7 +70,6 @@ public class LearningFragment extends BaseFragment implements LearingAdapter.onI
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(LearningViewModel.class);
         initView();
-
     }
 
     @Override
@@ -92,6 +91,8 @@ public class LearningFragment extends BaseFragment implements LearingAdapter.onI
                 return super.onOptionsItemSelected(item);
         }
     }
+
+
 
     @Override
     public void onResume() {
@@ -130,17 +131,16 @@ public class LearningFragment extends BaseFragment implements LearingAdapter.onI
         call.enqueue(new Callback<LearningQuestResponse>() {
             @Override
             public void onResponse(Call<LearningQuestResponse> call, retrofit2.Response<LearningQuestResponse> response) {
-                    learningFragmentBinding.learningSwiperefresh.setRefreshing(false);
                 try {
-                    ProgressDialog.getInstance().dismiss();
                     questionsNewList.clear();
                     if (response.body()!=null && response.body().getResponse().equalsIgnoreCase("200")){
                         questionsNewList = response.body().getQuestion_list();
                         initRecycler();
-//                        learingAdapter.updateList(questionsNewList);
                     } else {
                         Toast.makeText(getActivity(), UtilHelper.getAPIError(String.valueOf(response.body())),Toast.LENGTH_SHORT).show();
                     }
+                    learningFragmentBinding.learningSwiperefresh.setRefreshing(false);
+                    ProgressDialog.getInstance().dismiss();
                 } catch (Exception e) {
                     e.printStackTrace();
                     ProgressDialog.getInstance().dismiss();
@@ -163,6 +163,10 @@ public class LearningFragment extends BaseFragment implements LearingAdapter.onI
         linearLayoutManager.setAutoMeasureEnabled(false);
         learningFragmentBinding.learningRecycler.setLayoutManager(linearLayoutManager);
         learningFragmentBinding.learningRecycler.setAdapter(learingAdapter);
+        learningFragmentBinding.learningRecycler.setNestedScrollingEnabled(false);
+        learningFragmentBinding.learningRecycler.setItemViewCacheSize(20);
+        learningFragmentBinding.learningRecycler.setDrawingCacheEnabled(true);
+        learningFragmentBinding.learningRecycler.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
     }
 
     private void ProcessQuestionAPI(String que_id, int flag, String call_from, String rating, String feedback) {
@@ -236,30 +240,20 @@ public class LearningFragment extends BaseFragment implements LearingAdapter.onI
         NavHostFragment.findNavController(this).navigate(R.id.nav_comments, bundle);
     }
 
-    @Override
-    public void onLikeClick(String questionId, int isLiked) {
-        ProcessQuestionAPI(questionId, isLiked, "like","","");
-    }
 
     @Override
     public void onShareClick(String questionId) {
         Bundle bundle = new Bundle();
         bundle.putString("QuestionId", questionId);
+        bundle.putInt("call_from", learning);
         NavHostFragment.findNavController(this).navigate(R.id.nav_share, bundle);
     }
 
-    @Override
-    public void onFavouriteClick(String questionId, int isFav) {
-        ProcessQuestionAPI(questionId,isFav, "fav","","");
-    }
 
     @Override
     public void onSubmitClick(String questionId, int isRight) {
         ProcessQuestionAPI(questionId, isRight, "submit","","");
     }
 
-    @Override
-    public void onRatingSubmit(String questionId, String rating, String feedbak) {
-        ProcessQuestionAPI(questionId, 0, "rating",rating,feedbak);
-    }
+
 }

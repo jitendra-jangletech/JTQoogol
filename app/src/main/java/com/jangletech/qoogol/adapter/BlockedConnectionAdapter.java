@@ -1,6 +1,7 @@
 package com.jangletech.qoogol.adapter;
 
 import android.app.Activity;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +16,14 @@ import com.bumptech.glide.Glide;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.BlockedItemBinding;
 import com.jangletech.qoogol.model.Connections;
+import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.UtilHelper;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.jangletech.qoogol.util.Constant.CALL_FROM;
+import static com.jangletech.qoogol.util.Constant.connectonId;
 
 /**
  * Created by Pritali on 5/7/2020.
@@ -58,11 +63,19 @@ public class BlockedConnectionAdapter extends RecyclerView.Adapter<BlockedConnec
             e.printStackTrace();
         }
 
+        blockedItemBinding.getRoot().setOnClickListener(v -> {
+            Bundle bundle = new Bundle();
+            bundle.putInt(CALL_FROM, connectonId);
+            bundle.putString(Constant.fetch_profile_id,connections.getCn_user_id_2());
+            blockedItemClick.showProfileClick(bundle);
+        });
+
         blockedItemBinding.unblock.setOnClickListener(v -> blockedItemClick.unblockUser(connections.getCn_user_id_2()));
     }
 
     public interface BlockedItemClick {
         void unblockUser(String userId);
+        void showProfileClick(Bundle bundle);
     }
 
     @Override
