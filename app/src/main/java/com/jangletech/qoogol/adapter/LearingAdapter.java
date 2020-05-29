@@ -2142,7 +2142,6 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
                             learningQuestionsNew.setComments(response.body().getQ_comments());
                             learningQuestionsNew.setShares(response.body().getQ_shares());
                             learningQuestionsNew.setAttended_by(response.body().getAttmpted_count() != null ? response.body().getAttmpted_count() : "0");
-                            learningQuestionsList.set(position, learningQuestionsNew);
 
                             learningItemBinding.commentValue.setText(response.body().getQ_comments());
                             learningItemBinding.shareValue.setText(response.body().getQ_shares());
@@ -2151,15 +2150,21 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
                             learningItemBinding.ratingvalue.setText(response.body().getRatings() != null ? UtilHelper.roundAvoid(response.body().getRatings()) : "0");
 
                             if (call_from.equalsIgnoreCase("like")) {
-                                if (flag==0)
+                                if (flag==0) {
                                     Glide.with(activity).load(activity.getResources().getDrawable(R.drawable.ic_like)).into(learningItemBinding.like);
-                                else
+                                    learningQuestionsNew.setIs_liked("false");
+                                } else {
+                                    learningQuestionsNew.setIs_liked("true");
                                     Glide.with(activity).load(activity.getResources().getDrawable(R.drawable.ic_thumb_up_black_24dp)).into(learningItemBinding.like);
+                                }
                             } else if (call_from.equalsIgnoreCase("fav")) {
-                                if (flag==0)
+                                if (flag==0) {
+                                    learningQuestionsNew.setIs_fav("false");
                                     Glide.with(activity).load(activity.getResources().getDrawable(R.drawable.ic_fav)).into(learningItemBinding.favorite);
-                                else
+                                } else {
                                     Glide.with(activity).load(activity.getResources().getDrawable(R.drawable.ic_favorite_black_24dp)).into(learningItemBinding.favorite);
+                                    learningQuestionsNew.setIs_fav("true");
+                                }
                             } else if (call_from.equalsIgnoreCase(ONE_LINE_ANSWER)) {
                                 if (response.body().getSolved_right().equalsIgnoreCase("true")) {
                                     learningItemBinding.singleLine.setBackground(activity.getResources().getDrawable(R.drawable.green_border));
@@ -2177,6 +2182,9 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
                                 learningItemBinding.solutionLayout.setVisibility(View.VISIBLE);
                                 learningItemBinding.solutionDesc.setText(response.body().getA_sub_ans());
                             }
+
+                            learningQuestionsList.set(position, learningQuestionsNew);
+
 
                         } else {
                             Toast.makeText(activity, UtilHelper.getAPIError(String.valueOf(response.body())), Toast.LENGTH_SHORT).show();
