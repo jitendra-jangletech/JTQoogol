@@ -374,12 +374,11 @@ public class ShareModel {
     @NonNull
     @Override
     public String toString() {
-        if (isAddedtoList && Integer.parseInt(cn_user_id_2) != 0) {
+        if (isAddedtoList && cn_user_id_2!=null && Integer.parseInt(cn_user_id_2) != 0) {
             return cn_user_id_2 + "=U";
-        } else if (isAddedtoList && Integer.parseInt(group_id) != 0) {
+        } else if (isAddedtoList && group_id!=null && Integer.parseInt(group_id) != 0) {
             return group_id + "=G";
         }
         return "";
     }
-
 }
