@@ -2,6 +2,7 @@ package com.jangletech.qoogol.adapter;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -29,11 +30,13 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     Activity activity;
     List<Comments> commentList;
     String callingFrom;
+    onCommentItemClickListener commentItemClickListener;
 
-    public CommentAdapter(Activity activity, List<Comments> commentList, String callingFrom) {
+    public CommentAdapter(Activity activity, List<Comments> commentList, String callingFrom,onCommentItemClickListener commentItemClickListener) {
         this.activity = activity;
         this.commentList = commentList;
         this.callingFrom = callingFrom;
+        this.commentItemClickListener = commentItemClickListener;
     }
 
     @NonNull
@@ -82,9 +85,22 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         return commentList.size();
     }
 
+    public interface onCommentItemClickListener {
+        void onItemClick(String userId);
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         public ViewHolder(@NonNull CommentItemBinding itemView) {
             super(itemView.getRoot());
+
+            commentItemBinding.getRoot().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Comments comments = commentList.get(getAdapterPosition());
+                    commentItemClickListener.onItemClick(comments.getUserId());
+                }
+            });
+
         }
     }
 
