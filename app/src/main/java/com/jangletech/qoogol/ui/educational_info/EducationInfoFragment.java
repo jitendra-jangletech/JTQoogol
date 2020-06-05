@@ -167,12 +167,7 @@ public class EducationInfoFragment extends BaseFragment implements EducationAdap
         androidx.appcompat.app.AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity(), R.style.AlertDialogStyle);
         builder.setTitle("Confirm")
                 .setMessage("Are you sure you want to delete education?")
-                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                })
+                .setPositiveButton("YES", (dialog, which) -> dialog.dismiss())
                 .setNegativeButton("NO", null)
                 .show();
     }

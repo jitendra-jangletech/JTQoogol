@@ -91,10 +91,14 @@ public class Like {
     }
 
     public String getProfile_image() {
-        return profile_image;
+        return profile_image!=null?profile_image:"";
     }
 
     public void setProfile_image(String profile_image) {
         this.profile_image = profile_image;
+    }
+
+    public String getUserName() {
+        return userFirstName == null && userLastName == null ? "" : userFirstName + " " + userLastName;
     }
 }

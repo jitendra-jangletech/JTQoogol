@@ -1,11 +1,13 @@
 package com.jangletech.qoogol.util;
 
+import android.content.Context;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
 
 import com.jangletech.qoogol.BuildConfig;
 
+import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -20,6 +22,10 @@ public class UtilHelper {
 
     //Production
     private static final String PRODUCTION_BASE_API = "http://192.168.0.109:8080/Qoogol/";
+    public static final String PRODUCTION_BASE_FILE_API = "https://jtmobileappstorage.blob.core.windows.net/spotmeets/media/images/";
+    public static final String PRODUCTION_MALE_PROFILE_API = "https://jtmobileappstorage.blob.core.windows.net/spotmeets/media/images/male.png";
+    public static final String PRODUCTION_FEMALE_PROFILE_API = "https://jtmobileappstorage.blob.core.windows.net/spotmeets/media/images/female.png";
+
 
     //Debug
     private static final String DEBUG_BASE_API = "http://192.168.0.109:8080/Qoogol/";
@@ -36,6 +42,16 @@ public class UtilHelper {
             return PRODUCTION_BASE_API;
         }
     }
+
+    private static String getProfileApi() {
+        if (BuildConfig.DEBUG) {
+            return PRODUCTION_BASE_FILE_API;
+        } else {
+            return PRODUCTION_BASE_FILE_API;
+        }
+    }
+
+
 
     public static String signIn() {
         return getBaseApi() + SIGN_IN_API;
@@ -76,6 +92,27 @@ public class UtilHelper {
            return String.valueOf(Math.round(marks));
         else
             return String.valueOf(marks);
+    }
+
+
+    public static File getDirectory(Context context) {
+        File directory = context.getExternalFilesDir("Qoogol");
+        if (directory != null) {
+            String path = directory.getAbsolutePath();
+            if (path.contains("/Android/")) {
+                path = path.substring(0, path.indexOf("/Android/"));
+                directory = new File(path, "Qoogol");
+                if (!directory.exists()) {
+                    if (directory.mkdir()) {
+                        return directory;
+                    }
+                } else {
+                    return directory;
+                }
+            }
+        }
+        Log.e(TAG, "error in creation of directory");
+        return context.getExternalFilesDir("Qoogol");
     }
 
 

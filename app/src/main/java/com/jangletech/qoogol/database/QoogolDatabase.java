@@ -39,6 +39,9 @@ public abstract class QoogolDatabase extends RoomDatabase {
     public abstract DashboardDao dashboardDao();
     //public abstract TestDetailsDao testDetailsDao();
     public abstract TestDao testDao();
+
+    public abstract TestQuestionDao testQuestionDao();
+
     public abstract LearningQuestionDao learningQuestionDao();
 
     private static volatile QoogolDatabase INSTANCE;
@@ -63,4 +66,18 @@ public abstract class QoogolDatabase extends RoomDatabase {
     }
 
 
+    public abstract LearningQuestionDao learningQuestionDao();
+
+
+    private static RoomDatabase.Callback sRoomDatabaseCallback = new RoomDatabase.Callback() {
+        @Override
+        public void onOpen(@NonNull SupportSQLiteDatabase db) {
+            super.onOpen(db);
+            databaseWriteExecutor.execute(() -> {
+                TestDao dao = INSTANCE.testDao();
+                TestQuestionDao testQuestionDao = INSTANCE.testQuestionDao();
+
+            });
+        }
+    };
 }

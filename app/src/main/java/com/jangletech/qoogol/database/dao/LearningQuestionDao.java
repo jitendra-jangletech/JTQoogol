@@ -1,10 +1,12 @@
 package com.jangletech.qoogol.database.dao;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Transaction;
 import androidx.room.Update;
 
 import com.jangletech.qoogol.model.LearningQuestions;
@@ -19,14 +21,23 @@ import java.util.List;
 public interface LearningQuestionDao {
 
     @Query("SELECT * FROM LearningQuestionsNew")
-    List<LearningQuestionsNew> getAll();
+    LiveData<List<LearningQuestionsNew>> getAllQuestions();
+
+    @Query("SELECT * FROM LearningQuestionsNew")
+    List<LearningQuestionsNew> getQuestions();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(LearningQuestionsNew learningQuestions);
+    void insertQuestions(List<LearningQuestionsNew> learningQuestions);
 
     @Delete
-    void delete(LearningQuestionsNew learningQuestions);
+    void delete(List<LearningQuestionsNew> learningQuestions);
 
     @Update
-    void update(LearningQuestionsNew learningQuestions);
+    void updateQuestions(List<LearningQuestionsNew> learningQuestions);
+
+    @Transaction
+    default void upsertQuestions(List<LearningQuestionsNew> messageList) {
+        insertQuestions(messageList);
+        updateQuestions(messageList);
+    }
 }

@@ -779,6 +779,7 @@
     <string name="mute_messages">Mute Messages</string>
     <string name="spotmeets_voice_call">SPOTMEETS %s CALL</string>
     <string name="incoming_call">Incoming Call</string>
+    <string name="likes">Likes</string>
 
 
 </resources>
