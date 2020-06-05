@@ -273,7 +273,7 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST(Constant.PROCESS_QUESTION)
-    Call<ProcessQuestion> fetchComments(@Field(Constant.u_user_id) int userid,
+    Call<ProcessQuestion> fetchComments(@Field(Constant.u_user_id) String userid,
                                         @Field(Constant.q_id) String queId,
                                         @Field(Constant.CASE) String caseL);
 
@@ -322,7 +322,7 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST(Constant.PROCESS_QUESTION)
-    Call<ProcessQuestion> addCommentApi(@Field(Constant.u_user_id) int userid,
+    Call<ProcessQuestion> addCommentApi(@Field(Constant.u_user_id) String userid,
                                         @Field(Constant.q_id) String queId,
                                         @Field(Constant.CASE) String caseL,
                                         @Field(Constant.qlc_comment_text) String comment);

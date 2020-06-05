@@ -398,6 +398,10 @@ public class PracticeTestActivity extends BaseActivity implements LearingAdapter
 
     }
 
+    @Override
+    public void onLikeClick(String userId) {
+
+    }
 
 
     @Override

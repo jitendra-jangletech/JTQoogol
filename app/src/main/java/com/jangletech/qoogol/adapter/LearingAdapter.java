@@ -43,12 +43,15 @@ import com.jangletech.qoogol.model.LearningQuestionsNew;
 import com.jangletech.qoogol.model.ProcessQuestion;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
+import com.jangletech.qoogol.ui.learning.LearningFragment;
+import com.jangletech.qoogol.ui.learning.LikeListingDialog;
 import com.jangletech.qoogol.ui.learning.SlideshowDialogFragment;
 import com.jangletech.qoogol.ui.test.my_test.MyTestFragment;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
 
+import java.io.File;
 import java.io.Serializable;
 import java.net.URL;
 import java.util.ArrayList;
@@ -259,11 +262,12 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
         void onCommentClick(String questionId);
         void onShareClick(String questionId);
         void onSubmitClick(String questionId, int isRight);
+        void onLikeClick(String userId);
 
     }
 
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements LikeAdapter.onItemClickListener {
         LearningItemBinding learningItemBinding;
         CountDownTimer countDownTimer;
         int isSolvedRight, isAttempted = 0;
@@ -328,7 +332,6 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
                 setTimer(learningItemBinding.tvtimer, 0, 0);
             });
 
-            learningItemBinding.saveQue.setOnClickListener(v -> saveToDb(learningQuestionsList.get(getAdapterPosition())));
 
             learningItemBinding.like.setOnClickListener(v -> {
                 LearningQuestionsNew learningQuestions = learningQuestionsList.get(getAdapterPosition());
@@ -336,6 +339,14 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
                     ProcessQuestionAPI(learningQuestions.getQuestion_id(), 0, "like","","",getAdapterPosition(),"");
                 } else {
                     ProcessQuestionAPI(learningQuestions.getQuestion_id(), 1, "like","","",getAdapterPosition(),"");
+                }
+            });
+
+            learningItemBinding.likeValue.setOnClickListener(v -> {
+                LearningQuestionsNew learningQuestions = learningQuestionsList.get(getAdapterPosition());
+                if (!learningQuestions.getLikes().equalsIgnoreCase("0")) {
+                    LikeListingDialog listingDialog = new LikeListingDialog(activity,learningQuestions.getQuestion_id(),this::onItemCLick);
+                    listingDialog.show();
                 }
             });
 
@@ -690,8 +701,18 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
 
             learningItemBinding.submitAndRate.setOnClickListener(v -> {
                 submitCall();
-                displayRatingDialog(learningQuestionsList.get(getAdapterPosition()).getQuestion_id(), getAdapterPosition());
+                displayRatingDialog(learningQuestionsList.get(getAdapterPosition()), getAdapterPosition());
             });
+        }
+
+        private void loadImage(String img, ImageView imageView) {
+            String fileName = img.substring(img.lastIndexOf('/') + 1);
+            File file = new File(UtilHelper.getDirectory(getApplicationContext()), fileName);
+            if (file.exists()) {
+                Glide.with(activity).load(file).into(imageView);
+            } else {
+                Glide.with(activity).load(R.drawable.profile).into(imageView);
+            }
         }
 
         private void showLayout() {
@@ -721,10 +742,15 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
                     learningItemBinding.categoryTextview.setText("SCQ");
                     learningItemBinding.scqImgLayout.setVisibility(View.VISIBLE);
                     try {
-                        Glide.with(activity).load(new URL(learningQuestions.getMcq1())).into(learningItemBinding.scqImg1);
-                        Glide.with(activity).load(new URL(learningQuestions.getMcq2())).into(learningItemBinding.scqImg2);
-                        Glide.with(activity).load(new URL(learningQuestions.getMcq3())).into(learningItemBinding.scqImg3);
-                        Glide.with(activity).load(new URL(learningQuestions.getMcq4())).into(learningItemBinding.scqImg4);
+                        loadImage(learningQuestions.getMcq1(), learningItemBinding.scqImg1);
+                        loadImage(learningQuestions.getMcq2(), learningItemBinding.scqImg2);
+                        loadImage(learningQuestions.getMcq3(), learningItemBinding.scqImg3);
+                        loadImage(learningQuestions.getMcq4(), learningItemBinding.scqImg4);
+
+//                        Glide.with(activity).load(new URL(learningQuestions.getMcq1())).into(learningItemBinding.scqImg1);
+//                        Glide.with(activity).load(new URL(learningQuestions.getMcq2())).into(learningItemBinding.scqImg2);
+//                        Glide.with(activity).load(new URL(learningQuestions.getMcq3())).into(learningItemBinding.scqImg3);
+//                        Glide.with(activity).load(new URL(learningQuestions.getMcq4())).into(learningItemBinding.scqImg4);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -732,10 +758,17 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
                     learningItemBinding.categoryTextview.setText("SCQ");
                     learningItemBinding.scqImgtextLayout.setVisibility(View.VISIBLE);
                     try {
-                        Glide.with(activity).load(new URL(Constant.QUESTION_IMAGES_API + learningQuestions.getMcq1().split(":")[0].trim())).into(learningItemBinding.scqImgtextImg1);
-                        Glide.with(activity).load(new URL(Constant.QUESTION_IMAGES_API + learningQuestions.getMcq2().split(":")[0].trim())).into(learningItemBinding.scqImgtextImg2);
-                        Glide.with(activity).load(new URL(Constant.QUESTION_IMAGES_API + learningQuestions.getMcq3().split(":")[0].trim())).into(learningItemBinding.scqImgtextImg3);
-                        Glide.with(activity).load(new URL(Constant.QUESTION_IMAGES_API + learningQuestions.getMcq4().split(":")[0].trim())).into(learningItemBinding.scqImgtextImg4);
+
+                        loadImage(learningQuestions.getMcq1().split(":")[0], learningItemBinding.scqImgtextImg1);
+                        loadImage(learningQuestions.getMcq2().split(":")[0], learningItemBinding.scqImgtextImg2);
+                        loadImage(learningQuestions.getMcq3().split(":")[0], learningItemBinding.scqImgtextImg3);
+                        loadImage(learningQuestions.getMcq4().split(":")[0], learningItemBinding.scqImgtextImg4);
+
+
+//                        Glide.with(activity).load(new URL(Constant.QUESTION_IMAGES_API + learningQuestions.getMcq1().split(":")[0].trim())).into(learningItemBinding.scqImgtextImg1);
+//                        Glide.with(activity).load(new URL(Constant.QUESTION_IMAGES_API + learningQuestions.getMcq2().split(":")[0].trim())).into(learningItemBinding.scqImgtextImg2);
+//                        Glide.with(activity).load(new URL(Constant.QUESTION_IMAGES_API + learningQuestions.getMcq3().split(":")[0].trim())).into(learningItemBinding.scqImgtextImg3);
+//                        Glide.with(activity).load(new URL(Constant.QUESTION_IMAGES_API + learningQuestions.getMcq4().split(":")[0].trim())).into(learningItemBinding.scqImgtextImg4);
 
                         learningItemBinding.scqImgtextText1.setText(learningQuestions.getMcq1().split(":")[1]);
                         learningItemBinding.scqImgtextText2.setText(learningQuestions.getMcq2().split(":")[1]);
@@ -1037,38 +1070,6 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
 
         }
 
-        private void saveToDb(LearningQuestionsNew learningQuestions) {
-//            class SaveTask extends AsyncTask<Void, Void, Void> {
-//
-//                @Override
-//                protected Void doInBackground(Void... voids) {
-//                    //adding to database
-//                    try {
-//                        QoogolDatabase.getDatabase(getApplicationContext())
-//                                .learningQuestionDao()
-//                                .insert(learningQuestions);
-//
-//                        List<LearningQuestionsNew> learningQuestions1 = QoogolDatabase.getDatabase(getApplicationContext())
-//                                .learningQuestionDao()
-//                                .getAll();
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
-//                    return null;
-//                }
-//
-//                @Override
-//                protected void onPostExecute(Void aVoid) {
-//                    super.onPostExecute(aVoid);
-//                    Toast.makeText(getApplicationContext(), "Saved", Toast.LENGTH_LONG).show();
-//                }
-//            }
-//
-//            SaveTask st = new SaveTask();
-//            st.execute();
-
-            throw new RuntimeException("Test Crash");
-        }
 
         private void setTimer(TextView timer, int seconds, int minutes) {
             countDownTimer = new CountDownTimer(60 * 1000 * 60, 1000) {
@@ -1458,6 +1459,12 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
                     learningItemBinding.btnfalse.setBackground(activity.getResources().getDrawable(R.drawable.bg_red_round));
                     break;
             }
+        }
+
+        @Override
+        public void onItemCLick(String user_id) {
+            onIconClick.onLikeClick(user_id);
+
         }
 
         private final class ChoiceTouchListener implements View.OnTouchListener {
@@ -2127,7 +2134,7 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
                                     learningItemBinding.multiLine.setBackground(activity.getResources().getDrawable(R.drawable.red_border));
                                 }
                                 learningItemBinding.solutionLayout.setVisibility(View.VISIBLE);
-                                learningItemBinding.solutionDesc.setText(response.body().getA_sub_ans());
+//                                learningItemBinding.solutionDesc.setText(response.body().getA_sub_ans());
                             }
 
                             learningQuestionsList.set(position, learningQuestionsNew);
@@ -2152,7 +2159,7 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
         }
 
 
-        private void displayRatingDialog(String questionid, int position) {
+        private void displayRatingDialog(LearningQuestionsNew learningQuestionsNew, int position) {
             try {
                 Dialog dialog = new Dialog(activity);
                 RatingFeedbackBinding ratingFeedbackBinding = DataBindingUtil.inflate(LayoutInflater.from(activity), R.layout.rating_feedback, null, false);
@@ -2161,10 +2168,12 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
                 dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation_2;
                 dialog.show();
 
+                ratingFeedbackBinding.rating.setRating(Float.parseFloat(learningQuestionsNew.getRating()));
+                ratingFeedbackBinding.feedback.setText(learningQuestionsNew.getFeedback());
                 ratingFeedbackBinding.submitRating.setOnClickListener(v -> {
                     dialog.dismiss();
                     if (ratingFeedbackBinding.rating.getRating() != 0) {
-                        ProcessQuestionAPI(questionid, 0, "rating", String.valueOf(ratingFeedbackBinding.rating.getRating()), ratingFeedbackBinding.feedback.getText().toString(), position,"");
+                        ProcessQuestionAPI(learningQuestionsNew.getQuestion_id(), 0, "rating", String.valueOf(ratingFeedbackBinding.rating.getRating()), ratingFeedbackBinding.feedback.getText().toString(), position,"");
                     } else {
                         Toast.makeText(activity, "Please add ratings", Toast.LENGTH_SHORT).show();
                     }

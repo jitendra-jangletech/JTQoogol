@@ -65,11 +65,11 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
             shareItemBinding.pauseSwitch.setOnClickListener(v -> {
                 onItemClickListener.actionPerformed(connections, position);
             });
-
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
 
     @Override
     public int getItemCount() {

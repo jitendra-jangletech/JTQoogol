@@ -222,7 +222,7 @@ public class Constant {
     public static final String tlc_fav_flag = "1410";
 
     //learning
-    public static final String QUESTION_IMAGES_API = "https://jtmobileappstorage.blob.core.windows.net/spotmeets/media/qoogol/questions/";
+    public static final String QUESTION_IMAGES_API = "https://jtmobileappstorage.blob.core.windows.net/spotmeets/media/images/";
     public static final String FETCH_QA = "q151FetchQA";
     public static final String PROCESS_QUESTION = "q141ProcessQuestion";
     public static final String PROCESS_TEST = "q133ProcessTest";

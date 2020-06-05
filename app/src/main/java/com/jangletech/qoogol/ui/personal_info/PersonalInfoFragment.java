@@ -224,24 +224,20 @@ public class PersonalInfoFragment extends BaseFragment {
                 }
             });
 
-            mViewModel.getCities().observe(requireActivity(), new Observer<List<City>>() {
-                @Override
-                public void onChanged(@Nullable final List<City> cities) {
-                    mMapCities = new HashMap<>();
-                    for (City city : cities) {
-                        mMapCities.put(Integer.valueOf(city.getCity_id()), city.getCityName());
-                    }
-                    populateCity(mMapCities);
+            mViewModel.getCities().observe(requireActivity(), cities -> {
+                mMapCities = new HashMap<>();
+                for (City city : cities) {
+                    mMapCities.put(Integer.valueOf(city.getCity_id()), city.getCityName());
                 }
+                populateCity(mMapCities);
             });
 
         } else {
             manageLayoutForOtherUser();
         }
-
-
-
     }
+
+
 
     private void manageUnwantedFields(UserProfile userProfile) {
         if (userProfile.getStrTagLine().equalsIgnoreCase("")) {

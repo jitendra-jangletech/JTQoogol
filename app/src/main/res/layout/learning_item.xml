@@ -151,7 +151,7 @@
                     android:layout_weight="1"
                     android:ellipsize="end"
                     android:singleLine="true"
-                    android:text="@{question.marks}"
+                    android:text="@{question.getFormatedMarks}"
                     android:textColor="@color/colorSkyBlue"
                     android:textSize="@dimen/_10ssp" />
 

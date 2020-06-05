@@ -9,6 +9,11 @@ import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.UtilHelper;
 
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.jangletech.qoogol.util.Constant.FILL_THE_BLANKS;
 import static com.jangletech.qoogol.util.Constant.LONG_ANSWER;
 import static com.jangletech.qoogol.util.Constant.MATCH_PAIR;
@@ -87,6 +92,9 @@ public class LearningQuestionsNew {
     @SerializedName(Constant.q_avg_ratings)
     private String rating;
 
+    @SerializedName(Constant.qlc_feedback)
+    private String feedback;
+
     @SerializedName(Constant.q_diff_level)
     private String difficulty_level;
 
@@ -164,6 +172,14 @@ public class LearningQuestionsNew {
 
     @SerializedName(Constant.w_ans_text)
     private String ans_media_names;
+
+    public String getFeedback() {
+        return feedback!=null?feedback:"";
+    }
+
+    public void setFeedback(String feedback) {
+        this.feedback = feedback;
+    }
 
     @NonNull
     public String getQuestion_id() {
@@ -266,7 +282,7 @@ public class LearningQuestionsNew {
     }
 
     public String getLastused_on() {
-        return lastused_on!=null?lastused_on.substring(0, 10):"";
+        return lastused_on!=null&&!lastused_on.equalsIgnoreCase("")?lastused_on.substring(0, 10):"";
     }
 
     public void setLastused_on(String lastused_on) {
@@ -314,6 +330,10 @@ public class LearningQuestionsNew {
     }
 
     public String getMarks() {
+         return marks;
+    }
+
+    public String getFormatedMarks() {
         return marks!=null?"Marks : " + UtilHelper.formatMarks(Float.parseFloat(marks)):"";
     }
 
@@ -474,5 +494,35 @@ public class LearningQuestionsNew {
 
     public int getQueMathviwVisibility() {
         return getQuestion().contains("$") ? 0 :2;
+    }
+
+    public String getImageList() {
+        String imglist="";
+
+
+        List<String> img = new ArrayList<>();
+
+        if (!getType().equalsIgnoreCase(FILL_THE_BLANKS) || !getType().equalsIgnoreCase(LONG_ANSWER) || !getType().equalsIgnoreCase(ONE_LINE_ANSWER)) {
+            if (getQue_option_type().equalsIgnoreCase(SCQ_IMAGE) || getQue_option_type().equalsIgnoreCase(MCQ_IMAGE)) {
+                img.add(mcq1);
+                img.add(mcq2);
+                img.add(mcq3);
+                img.add(mcq4);
+            }
+            if (getQue_option_type().equalsIgnoreCase(SCQ_IMAGE_WITH_TEXT) || getQue_option_type().equalsIgnoreCase(MCQ_IMAGE_WITH_TEXT)) {
+                img.add(getMcq1().split(":")[0]);
+                img.add(getMcq2().split(":")[0]);
+                img.add(getMcq3().split(":")[0]);
+                img.add(getMcq4().split(":")[0]);
+            }
+        }
+
+        if (img.size()>0)
+        imglist = StringUtils.join(img,",");
+
+        if (que_images!=null)
+            imglist = imglist + que_images;
+
+        return imglist;
     }
 }

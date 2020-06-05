@@ -158,6 +158,5 @@ public class FriendsFragment extends BaseFragment implements ConnectionAdapter.u
     @Override
     public void showProfileClick(Bundle bundle) {
         NavHostFragment.findNavController(this).navigate(R.id.nav_edit_profile,bundle);
-
     }
 }

@@ -66,7 +66,7 @@ public class CommentFragment extends Fragment implements View.OnClickListener {
     }
 
 
-    private void fetchCommentsAPI(int user_id, String que_id, String api_case, String comment_text) {
+    private void fetchCommentsAPI(String user_id, String que_id, String api_case, String comment_text) {
         ProgressDialog.getInstance().show(getActivity());
         Call<ProcessQuestion> call;
 
@@ -145,7 +145,7 @@ public class CommentFragment extends Fragment implements View.OnClickListener {
         emptyView();
         if (bundle != null && bundle.getString(Constant.CALL_FROM).equals(Module.Learning.toString())) {
             questionId = bundle.getString("QuestionId");
-            fetchCommentsAPI(new PreferenceManager(getActivity()).getInt(Constant.USER_ID), questionId, "L", "");
+            fetchCommentsAPI(new PreferenceManager(getActivity()).getUserId(), questionId, "L", "");
         }
 
         if (bundle != null && bundle.getString(Constant.CALL_FROM).equals(Module.Test.toString())) {
@@ -191,7 +191,7 @@ public class CommentFragment extends Fragment implements View.OnClickListener {
             case R.id.btnSend:
                 if (!commentViewBinding.etComment.getText().toString().isEmpty()) {
                     if (bundle != null && bundle.getString(Constant.CALL_FROM).equals(Module.Learning.toString())) {
-                        fetchCommentsAPI(new PreferenceManager(getActivity()).getInt(Constant.USER_ID), questionId, "I", commentViewBinding.etComment.getText().toString().trim());
+                        fetchCommentsAPI(new PreferenceManager(getActivity()).getUserId(), questionId, "I", commentViewBinding.etComment.getText().toString().trim());
                     }
                     if (bundle != null && bundle.getString(Constant.CALL_FROM).equals(Module.Test.toString())) {
                         fetchTestCommentsAPI(new PreferenceManager(getActivity()).getInt(Constant.USER_ID), tmId, "I", commentViewBinding.etComment.getText().toString().trim());
