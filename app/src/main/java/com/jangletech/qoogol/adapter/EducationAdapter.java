@@ -49,8 +49,9 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.View
         holder.itemEducationBinding.tvInstitute.setText(education.getIom_name());
         holder.itemEducationBinding.tvDegree.setText(education.getDm_degree_name());
         holder.itemEducationBinding.tvCourse.setText(education.getCo_name());
-        holder.itemEducationBinding.tvStartDate.setText(DateUtils.getFormattedDate(education.getUe_startdate()));
-        holder.itemEducationBinding.tvEndDate.setText(DateUtils.getFormattedDate(education.getUe_enddate()));
+        holder.itemEducationBinding.tvCourseYear.setText(education.getUe_cy_num());
+        holder.itemEducationBinding.tvStartDate.setText(education.getUe_startdate()!=null?DateUtils.getFormattedDate(education.getUe_startdate()):"");
+        holder.itemEducationBinding.tvEndDate.setText(education.getUe_enddate()!=null?DateUtils.getFormattedDate(education.getUe_enddate()):"");
 
         if (call_from==fetch_loged_in_user) {
             holder.itemEducationBinding.rootLayout.setOnClickListener(v->{
@@ -62,9 +63,6 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.View
         } else {
             itemEducationBinding.delete.setVisibility(View.GONE);
         }
-
-
-
     }
 
     @Override

@@ -59,7 +59,7 @@
             android:id="@+id/tvName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Amey"
+            android:text="Qoogol User"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textSize="@dimen/_15ssp"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -104,10 +104,11 @@
 
 
                 <TextView
+                    android:id="@+id/tvNavConn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_3sdp"
-                    android:text="2000"
+                    android:text="0"
                     android:textColor="@color/colorWhite"
                     android:textSize="@dimen/_12ssp"
                     android:textStyle="bold" />
@@ -116,7 +117,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_2sdp"
-                    android:text="Credits"
+                    android:text="Connections"
                     android:textColor="@color/colorWhite"
                     android:textSize="@dimen/_8ssp" />
             </LinearLayout>
@@ -135,10 +136,11 @@
 
 
                 <TextView
+                    android:id="@+id/tvNavFriends"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_3sdp"
-                    android:text="90"
+                    android:text="0"
                     android:textColor="@color/colorWhite"
                     android:textSize="@dimen/_12ssp"
                     android:textStyle="bold" />
@@ -167,10 +169,11 @@
 
 
                 <TextView
+                    android:id="@+id/tvNavFollowers"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_3sdp"
-                    android:text="790"
+                    android:text="0"
                     android:textColor="@color/colorWhite"
                     android:textSize="@dimen/_12ssp"
                     android:textStyle="bold" />
@@ -198,10 +201,11 @@
 
 
                 <TextView
+                    android:id="@+id/tvNavFollowing"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_3sdp"
-                    android:text="2245"
+                    android:text="0"
                     android:textColor="@color/colorWhite"
                     android:textSize="@dimen/_12ssp"
                     android:textStyle="bold" />

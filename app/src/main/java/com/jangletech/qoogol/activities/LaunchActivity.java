@@ -69,15 +69,15 @@ public class LaunchActivity extends BaseActivity {
             if (isOtpSent && registerLoginModel.getNewOTP().equals(strPasswordOtp)) {
                 doRegisterLogin(strMobile, "2", countryCode, strPasswordOtp, getDeviceId(), "Q");
                 return;
-            } else if(isOtpSent && (strPasswordOtp.length() == 4) && !registerLoginModel.getNewOTP().equals(strPasswordOtp) ){
+            } else if (isOtpSent && (strPasswordOtp.length() == 4) && !registerLoginModel.getNewOTP().equals(strPasswordOtp)) {
                 mBinding.etPassOTP.setError("Please enter valid otp");
                 return;
-            }else if(!isOtpSent && (strPasswordOtp.length() >= 8)){
+            } else if (!isOtpSent && (strPasswordOtp.length() >= 8)) {
                 doRegisterLogin(strMobile, "2", countryCode, strPasswordOtp, getDeviceId(), "Q");
-            }else if(!isOtpSent && strPasswordOtp.isEmpty()){
+            } else if (!isOtpSent && strPasswordOtp.isEmpty()) {
                 mBinding.etPassOTP.setError("Please enter otp or password.");
                 return;
-            }else if(!isOtpSent && strPasswordOtp.length() < 8){
+            } else if (!isOtpSent && strPasswordOtp.length() < 8) {
                 mBinding.etPassOTP.setError("Please enter otp or password.");
                 return;
             }
@@ -98,7 +98,7 @@ public class LaunchActivity extends BaseActivity {
                 return;
             }
             strMobile = mBinding.etMobileNumber.getText().toString().trim();
-            new PreferenceManager(getApplicationContext()).saveString(Constant.MOBILE,strMobile);
+            new PreferenceManager(getApplicationContext()).saveString(Constant.MOBILE, strMobile);
             if (!isOtpSent) {
                 doRegisterLogin(strMobile, isOtpSent ? "R" : "1", countryCode, "", getDeviceId(), "Q");
             } else {
@@ -114,6 +114,14 @@ public class LaunchActivity extends BaseActivity {
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(i);
         }
+    }
+
+    private void deleteOfflineData(){
+        mViewModel.deleteDashboard();
+        mViewModel.deleteEducations();
+        mViewModel.deleteNotifications();
+        mViewModel.deletePersonalInfo();
+        mViewModel.deleteTests();
     }
 
     private void doRegisterLogin(String mobile, String caseR, int countryCode, String passwordOtp, String deviceId, String appName) {
@@ -132,6 +140,7 @@ public class LaunchActivity extends BaseActivity {
                         setTimer();
                     } else {
                         if (!response.body().getU_user_id().isEmpty()) {
+                            deleteOfflineData();
                             new PreferenceManager(LaunchActivity.this).saveInt(Constant.USER_ID, Integer.parseInt(response.body().getU_user_id()));
                             new PreferenceManager(LaunchActivity.this).saveUserId(response.body().getU_user_id());
                             new PreferenceManager(LaunchActivity.this).setIsLoggedIn(true);
@@ -141,7 +150,7 @@ public class LaunchActivity extends BaseActivity {
                         }
                     }
                 } else {
-                    showErrorDialog(LaunchActivity.this,response.body().getResponse(),response.body().getMessage());
+                    showErrorDialog(LaunchActivity.this, response.body().getResponse(), response.body().getMessage());
                     showToast("Error Code : " + response.body().getResponse());
                 }
             }

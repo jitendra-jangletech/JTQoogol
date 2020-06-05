@@ -2,7 +2,6 @@ package com.jangletech.qoogol.ui;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.LauncherActivity;
 import android.content.Intent;
 import android.os.CountDownTimer;
 import android.provider.Settings;
@@ -25,6 +24,7 @@ import com.jangletech.qoogol.activities.LaunchActivity;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 
+import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
@@ -94,6 +94,7 @@ public class BaseFragment extends Fragment {
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(title);
     }
 
+
     public void clearErrors(ViewGroup viewGroup) {
         for (int i = 0; i < viewGroup.getChildCount(); i++) {
             if (viewGroup.getChildAt(i) instanceof TextInputLayout) {
@@ -153,7 +154,22 @@ public class BaseFragment extends Fragment {
     }*/
 
     public void showToast(String msg) {
-        Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
+        Toast.makeText(requireActivity(), msg, Toast.LENGTH_SHORT).show();
+    }
+
+    public void apiCallFailureDialog(Throwable t) {
+        if (t instanceof UnknownHostException) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity(), R.style.AlertDialogStyle);
+            builder.setTitle("Alert")
+                    .setMessage("Check your internet connection.")
+                    .setPositiveButton("OK", null)
+                    .show();
+
+        }
+    }
+
+    public String getSingleQuoteString(String text) {
+        return String.format("'%s'", text);
     }
 
     //To Device get Android Id
@@ -161,9 +177,13 @@ public class BaseFragment extends Fragment {
         return Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
     }
 
+    public static String getUserId() {
+        return String.valueOf(new PreferenceManager(getApplicationContext()).getInt(Constant.USER_ID));
+    }
+
     public String getProfileImageUrl(String imageName) {
-        String userId = String.valueOf(new PreferenceManager(getApplicationContext()).getInt(Constant.USER_ID));
-        return Constant.PRODUCTION_BASE_FILE_API + "000000" + userId + "/" + imageName;
+        //String userId = String.valueOf(new PreferenceManager(getApplicationContext()).getInt(Constant.USER_ID));
+        return Constant.PRODUCTION_BASE_FILE_API + imageName;
     }
 
     @SuppressLint("SimpleDateFormat")

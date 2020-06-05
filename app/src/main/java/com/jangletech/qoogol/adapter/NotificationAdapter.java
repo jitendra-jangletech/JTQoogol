@@ -64,7 +64,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     }
 
     public String getImageUrl(Notification notification){
-        String paddedString = Constant.PRODUCTION_BASE_FILE_API+"000000"+notification.getN_sent_by_u_id()+"/"
+        String paddedString = Constant.PRODUCTION_BASE_FILE_API
                 +notification.getW_user_profile_image_name();
         return paddedString;
     }

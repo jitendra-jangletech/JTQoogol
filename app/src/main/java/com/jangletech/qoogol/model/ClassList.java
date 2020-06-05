@@ -1,13 +1,13 @@
 package com.jangletech.qoogol.model;
 
 import com.google.gson.annotations.SerializedName;
+import com.jangletech.qoogol.util.Constant;
 
 import java.util.List;
 
 public class ClassList {
 
     private String Response;
-
 
     public String getResponse() {
         return Response;
@@ -28,3 +28,6 @@ public class ClassList {
     @SerializedName("List1")
     private List<ClassResponse> classResponseList;
 }
+
+
+

@@ -90,9 +90,9 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
 
     private String getProfileImageUrl(Comments comments) {
         if (callingFrom.equals(Module.Test.toString()))
-            return Constant.PRODUCTION_BASE_FILE_API + "000000" + comments.getTlc_user_id() + "/" + comments.getProfile_image();
+            return Constant.PRODUCTION_BASE_FILE_API + comments.getProfile_image();
 
         else
-            return Constant.PRODUCTION_BASE_FILE_API + "000000" + comments.getUserId() + "/" + comments.getProfile_image();
+            return Constant.PRODUCTION_BASE_FILE_API + comments.getProfile_image();
     }
 }

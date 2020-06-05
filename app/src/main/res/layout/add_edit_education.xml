@@ -54,17 +54,24 @@
                 android:layout_height="wrap_content"
                 android:padding="@dimen/_10sdp">
 
-                <com.jangletech.qoogol.view.CustomAutoCompleteTextView
-                    app:layout_constraintTop_toTopOf="parent"
+                <TextView
                     app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:id="@+id/tvUniversity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:text="@string/university"
+                    android:textColor="@color/colorSkyBlue" />
+
+                <com.jangletech.qoogol.view.CustomAutoCompleteTextView
                     android:id="@+id/universityBoardAutocompleteView"
                     style="@style/AutoCompleteTextViewStyle"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:hint="@string/university" />
+                    android:hint="@string/university"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvUniversity" />
 
                 <ImageView
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
                     android:id="@+id/addUniversity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -72,28 +79,30 @@
                     android:layout_marginTop="@dimen/_18sdp"
                     android:contentDescription="@string/app_name"
                     android:src="@drawable/ic_add"
-                    android:visibility="visible" />
+                    android:visibility="visible"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-               <!-- <com.jangletech.qoogol.view.CustomAutoCompleteTextView
-                    android:id="@+id/universityBoardAutocompleteView"
-                    style="@style/AutoCompleteTextViewStyle"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:hint="@string/university"
+
+                <TextView
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/cityAutocompleteView" />-->
+                    app:layout_constraintTop_toBottomOf="@+id/universityBoardAutocompleteView"
+                    android:id="@+id/tvInstitute"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:text="@string/institute"
+                    android:textColor="@color/colorSkyBlue" />
 
                 <com.jangletech.qoogol.view.CustomAutoCompleteTextView
                     android:id="@+id/instituteAutocompleteView"
                     style="@style/AutoCompleteTextViewStyle"
-                    android:layout_marginTop="@dimen/_10sdp"
                     android:hint="@string/institute"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/universityBoardAutocompleteView" />
+                    app:layout_constraintTop_toBottomOf="@+id/tvInstitute" />
 
 
                 <ImageView
-                    app:layout_constraintTop_toBottomOf="@+id/universityBoardAutocompleteView"
-                    app:layout_constraintRight_toRightOf="parent"
                     android:id="@+id/addInstitute"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -101,37 +110,75 @@
                     android:layout_marginTop="@dimen/_18sdp"
                     android:contentDescription="@string/app_name"
                     android:src="@drawable/ic_add"
-                    android:visibility="visible" />
+                    android:visibility="visible"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/universityBoardAutocompleteView" />
+
+                <TextView
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/instituteAutocompleteView"
+                    android:id="@+id/tvDegree"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:text="@string/degree"
+                    android:textColor="@color/colorSkyBlue" />
 
                 <com.jangletech.qoogol.view.CustomAutoCompleteTextView
                     android:id="@+id/degreeAutocompleteView"
                     style="@style/AutoCompleteTextViewStyle"
-                    android:layout_marginTop="@dimen/_10sdp"
                     android:hint="@string/degree"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/instituteAutocompleteView" />
+                    app:layout_constraintTop_toBottomOf="@+id/tvDegree" />
+
+                <TextView
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/degreeAutocompleteView"
+                android:id="@+id/tvCourse"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:text="@string/course"
+                android:textColor="@color/colorSkyBlue" />
 
                 <com.jangletech.qoogol.view.CustomAutoCompleteTextView
                     android:id="@+id/courseAutocompleteView"
                     style="@style/AutoCompleteTextViewStyle"
-                    android:layout_marginTop="@dimen/_10sdp"
                     android:hint="@string/course"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/degreeAutocompleteView" />
+                    app:layout_constraintTop_toBottomOf="@+id/tvCourse" />
+
+                <TextView
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/courseAutocompleteView"
+                    android:id="@+id/tvCourseYear"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:text="@string/course_year"
+                    android:textColor="@color/colorSkyBlue" />
+
+                <com.jangletech.qoogol.view.CustomAutoCompleteTextView
+                    android:id="@+id/courseYearAutocompleteView"
+                    style="@style/AutoCompleteTextViewStyle"
+                    android:hint="@string/course_year"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvCourseYear" />
 
                 <LinearLayout
-                    app:layout_constraintTop_toBottomOf="@+id/courseAutocompleteView"
                     android:id="@+id/date_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:orientation="horizontal"
-                    android:weightSum="2">
+                    android:weightSum="2"
+                    app:layout_constraintTop_toBottomOf="@+id/courseYearAutocompleteView">
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/til_startdate"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
+                        app:hintTextColor="@color/colorSkyBlue"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="@dimen/_2sdp"
                         android:layout_marginBottom="@dimen/_10sdp"
@@ -154,6 +201,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/_2sdp"
                         android:layout_marginBottom="@dimen/_5sdp"
+                        app:hintTextColor="@color/colorSkyBlue"
                         android:layout_weight="1"
                         android:hint="@string/end_date"
                         app:errorEnabled="true">

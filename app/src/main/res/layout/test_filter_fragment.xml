@@ -18,10 +18,10 @@
             android:scrollbars="none">
 
             <LinearLayout
-                android:padding="@dimen/_10sdp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="@dimen/_10sdp">
 
                 <LinearLayout
                     android:id="@+id/subject_layout"
@@ -53,9 +53,9 @@
                 <LinearLayout
                     android:id="@+id/chapter_layout"
                     android:layout_width="match_parent"
-                    android:visibility="gone"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
                     <TextView
                         style="@style/chipTitleStyle"
@@ -108,10 +108,10 @@
 
                 <LinearLayout
                     android:id="@+id/rating_layout"
-                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
                     <TextView
                         style="@style/chipTitleStyle"
@@ -136,10 +136,10 @@
 
                 <LinearLayout
                     android:id="@+id/testcat_layout"
-                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
 
                     <TextView
@@ -165,11 +165,11 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:visibility="gone"
                     android:id="@+id/duration_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
                     <TextView
                         style="@style/chipTitleStyle"
@@ -218,11 +218,11 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:visibility="gone"
                     android:id="@+id/total_marks_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
                     <TextView
                         style="@style/chipTitleStyle"
@@ -271,11 +271,11 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:visibility="gone"
                     android:id="@+id/auther_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
                     <TextView
                         style="@style/chipTitleStyle"
@@ -297,15 +297,15 @@
         </ScrollView>
 
         <TextView
-            android:gravity="center"
-            android:background="@color/colorPrimaryDark"
-            android:textColor="@color/colorWhite"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:id="@+id/btnApply"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_40sdp"
             android:layout_alignParentBottom="true"
-            android:text="Apply" />
+            android:background="@color/colorPrimaryDark"
+            android:gravity="center"
+            android:text="Apply"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/colorWhite" />
 
     </RelativeLayout>
 </layout>

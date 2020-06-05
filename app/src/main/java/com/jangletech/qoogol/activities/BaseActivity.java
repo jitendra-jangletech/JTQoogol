@@ -32,6 +32,7 @@ import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.NetworkUtil;
 import com.jangletech.qoogol.util.PreferenceManager;
 
+import java.net.UnknownHostException;
 import java.util.Objects;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
@@ -47,15 +48,19 @@ public class BaseActivity extends AppCompatActivity {
         setContentView(R.layout.activity_base);
     }
 
+    public String getSingleQuoteString(String text) {
+        return String.format("'%s'", text);
+    }
+
     public void hideSoftKeyboard() {
-        if(getCurrentFocus()!=null) {
+        if (getCurrentFocus() != null) {
             InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
             inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         }
     }
 
     public void resetSettingAndLogout() {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this,R.style.AlertDialogStyle);
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this, R.style.AlertDialogStyle);
         alertDialog.setTitle(getResources().getString(R.string.warning));
         alertDialog.setMessage("You have signed-in from another device. Logging out.");
         alertDialog.setPositiveButton("Ok", (dialog, which) -> {
@@ -93,9 +98,9 @@ public class BaseActivity extends AppCompatActivity {
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
 
-    public void showErrorDialog(Activity activity,String title,String msg){
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity,R.style.AlertDialogStyle);
-        builder.setTitle("Error Code : "+title)
+    public void showErrorDialog(Activity activity, String title, String msg) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.AlertDialogStyle);
+        builder.setTitle("Error Code : " + title)
                 .setMessage(msg)
                 .setPositiveButton("OK", null)
                 .show();
@@ -106,7 +111,7 @@ public class BaseActivity extends AppCompatActivity {
         return Constant.PRODUCTION_BASE_FILE_API + "000000" + userId + "/" + imageName;
     }
 
-    public void setMargins (View view) {
+    public void setMargins(View view) {
         int result = 0;
         int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
         if (resourceId > 0) {

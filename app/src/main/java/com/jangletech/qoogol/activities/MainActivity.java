@@ -38,6 +38,7 @@ import retrofit2.Response;
 
 import static com.jangletech.qoogol.util.Constant.CALL_FROM;
 import static com.jangletech.qoogol.util.Constant.profile;
+import static com.jangletech.qoogol.util.Constant.user_id;
 
 public class MainActivity extends BaseActivity implements UniversalDialog.DialogButtonClickListener {
 
@@ -48,7 +49,7 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
     private PersonalInfoViewModel mViewmodel;
     public static ImageView profileImage;
     public static TextView textViewDisplayName;
-    ApiInterface apiService = ApiClient.getInstance().getApi();
+    public static TextView tvNavConnections,tvNavFriends,tvNavFollowers,tvNavFollowing;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,12 +58,17 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
         mViewmodel = new ViewModelProvider(this).get(PersonalInfoViewModel.class);
         profileImage = findViewById(R.id.profilePic);
         textViewDisplayName = findViewById(R.id.tvName);
+
+        tvNavConnections = findViewById(R.id.tvNavConn);
+        tvNavFriends = findViewById(R.id.tvNavFriends);
+        tvNavFollowing = findViewById(R.id.tvNavFollowing);
+        tvNavFollowers = findViewById(R.id.tvNavFollowers);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         //setMargins(mBinding.marginLayout);
         GsonBuilder gsonBuilder = new GsonBuilder();
         Gson gson = gsonBuilder.create();
-        setUserInfo();
         NavigationView navigationView = findViewById(R.id.nav_view);
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.edit_profile,
@@ -78,52 +84,18 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-        //fetchUserProfile();
-        mViewmodel.getUserProfileInfo().observe(this, new Observer<UserProfile>() {
-            @Override
-            public void onChanged(@Nullable final UserProfile userProfile) {
-                Log.d(TAG, "First Name : " + userProfile.getFirstName());
-                new PreferenceManager(getApplicationContext()).saveString(Constant.DISPLAY_NAME,userProfile.getFirstName()+" "+userProfile.getLastName());
-                new PreferenceManager(getApplicationContext()).saveString(Constant.GENDER,userProfile.getStrGender());
-                new PreferenceManager(getApplicationContext()).saveString(Constant.PROFILE_PIC,getProfileImageUrl(userProfile.getEndPathImage()));
-                setUserInfo();
-            }
-        });
-
-       /* mBinding.drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
-            @Override
-            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
-
-            }
-
-            @Override
-            public void onDrawerOpened(@NonNull View drawerView) {
-                setUserInfo();
-            }
-
-            @Override
-            public void onDrawerClosed(@NonNull View drawerView) {
-
-            }
-
-            @Override
-            public void onDrawerStateChanged(int newState) {
-
-            }
-        });*/
-
         mBinding.navHeader.tvName.setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawer(Gravity.LEFT);
             Bundle bundle = new Bundle();
             bundle.putInt(CALL_FROM, profile);
-            navController.navigate(R.id.nav_edit_profile,bundle);
+            navController.navigate(R.id.nav_edit_profile, bundle);
         });
 
         mBinding.navHeader.profilePic.setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawer(Gravity.LEFT);
             Bundle bundle = new Bundle();
             bundle.putInt(CALL_FROM, profile);
-            navController.navigate(R.id.nav_edit_profile,bundle);
+            navController.navigate(R.id.nav_edit_profile, bundle);
         });
         Intent intent = getIntent();
         if (intent.hasExtra("bundle")) {
@@ -150,7 +122,7 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
         });
 
         mBinding.navFav.setOnClickListener(v -> {
-            mBinding.drawerLayout.closeDrawers();
+            mBinding.drawerLayout.closeDrawer(Gravity.LEFT);
             if (navController.getCurrentDestination().getId() != R.id.nav_fav) {
                 navController.popBackStack();
                 navController.navigate(R.id.nav_fav);
@@ -206,7 +178,7 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
             mBinding.drawerLayout.closeDrawers();
             if (navController.getCurrentDestination().getId() != R.id.nav_saved) {
                 navController.popBackStack();
-               // Bundle bundle = new Bundle();
+                // Bundle bundle = new Bundle();
                 //bundle.putString("call_from", "saved_questions");
                 navController.navigate(R.id.nav_saved);
             }
@@ -217,8 +189,8 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
             if (navController.getCurrentDestination().getId() != R.id.nav_test_my) {
                 navController.popBackStack();
                 Bundle bundle = new Bundle();
-                bundle.putString(CALL_FROM,"MY_TEST");
-                navController.navigate(R.id.nav_test_my,bundle);
+                bundle.putString(CALL_FROM, "MY_TEST");
+                navController.navigate(R.id.nav_test_my, bundle);
             }
         });
 
@@ -303,7 +275,7 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
                 navController.popBackStack();
                 Bundle bundle = new Bundle();
                 bundle.putInt(CALL_FROM, profile);
-                navController.navigate(R.id.nav_edit_profile,bundle);
+                navController.navigate(R.id.nav_edit_profile, bundle);
             }
         });
 
@@ -314,29 +286,6 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
                     "Logout", "Cancel", this);
             universalDialog.show();
         });
-    }
-
-    private void setUserInfo() {
-        Log.d(TAG, "setUserInfo: ");
-        String displayName = new PreferenceManager(this).getString(Constant.DISPLAY_NAME);
-        String gender = new PreferenceManager(this).getString(Constant.GENDER);
-        String imageUrl = new PreferenceManager(this).getString(Constant.PROFILE_PIC);
-        if(!displayName.isEmpty()) {
-            mBinding.navHeader.tvName.setText(displayName.isEmpty() ? "Qoogol User" : displayName);
-            if (imageUrl.isEmpty()) {
-                if (gender.equalsIgnoreCase("M")) {
-                    loadProfilePic(Constant.PRODUCTION_MALE_PROFILE_API,profileImage);
-                } else if (gender.equalsIgnoreCase("F")) {
-                    loadProfilePic(Constant.PRODUCTION_FEMALE_PROFILE_API,profileImage);
-                } else {
-                    loadProfilePic(Constant.PRODUCTION_MALE_PROFILE_API,profileImage);
-                }
-            } else {
-                loadProfilePic(imageUrl,profileImage);
-            }
-        }else{
-            fetchUserProfile();
-        }
     }
 
 
@@ -357,41 +306,6 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
         startActivity(intent);
     }
 
-    private void fetchUserProfile() {
-        //ProgressDialog.getInstance().show(this);
-        Log.d(TAG, "fetchUserProfile: ");
-        Call<UserProfile> call = apiService.fetchUserInfo(new PreferenceManager(getApplicationContext()).getUserId(),
-                getDeviceId(), Constant.APP_NAME, Constant.APP_VERSION);
-        call.enqueue(new Callback<UserProfile>() {
-            @Override
-            public void onResponse(Call<UserProfile> call, Response<UserProfile> response) {
-                //ProgressDialog.getInstance().dismiss();
-                if (response.body() != null && response.body().getResponseCode().equals("200")) {
-                    mViewmodel.setUserProfileResponse(response.body());
-                }else if(response.body().getResponseCode().equals("501")){
-                    resetSettingAndLogout();
-                }
-                else {
-                    showErrorDialog(MainActivity.this, response.body().getResponseCode(), "");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<UserProfile> call, Throwable t) {
-                //ProgressDialog.getInstance().dismiss();
-                showToast("Something went wrong!!");
-                t.printStackTrace();
-            }
-        });
-    }
-
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        setUserInfo();
-    }
 
     boolean doubleBackToExitPressedOnce = false;
 

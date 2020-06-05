@@ -1,9 +1,78 @@
 package com.jangletech.qoogol.model;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import com.google.gson.annotations.SerializedName;
 import com.jangletech.qoogol.util.Constant;
 
+import org.jetbrains.annotations.NotNull;
+
+@Entity
 public class Education {
+    public void setUe_id(String ue_id) {
+        this.ue_id = ue_id;
+    }
+
+    public void setUe_user_id(String ue_user_id) {
+        this.ue_user_id = ue_user_id;
+    }
+
+    public void setUe_startdate(String ue_startdate) {
+        this.ue_startdate = ue_startdate;
+    }
+
+    public void setUe_enddate(String ue_enddate) {
+        this.ue_enddate = ue_enddate;
+    }
+
+    public void setUe_marks(String ue_marks) {
+        this.ue_marks = ue_marks;
+    }
+
+    public void setUe_grade(String ue_grade) {
+        this.ue_grade = ue_grade;
+    }
+
+    public void setUe_dor_id(String ue_dor_id) {
+        this.ue_dor_id = ue_dor_id;
+    }
+
+    public void setUe_cy_num(String ue_cy_num) {
+        this.ue_cy_num = ue_cy_num;
+    }
+
+    public void setUbm_board_name(String ubm_board_name) {
+        this.ubm_board_name = ubm_board_name;
+    }
+
+    public void setIom_name(String iom_name) {
+        this.iom_name = iom_name;
+    }
+
+    public void setDm_degree_name(String dm_degree_name) {
+        this.dm_degree_name = dm_degree_name;
+    }
+
+    public void setCo_name(String co_name) {
+        this.co_name = co_name;
+    }
+
+    public void setUbm_id(String ubm_id) {
+        this.ubm_id = ubm_id;
+    }
+
+    public void setIom_id(String iom_id) {
+        this.iom_id = iom_id;
+    }
+
+    public void setCo_id(String co_id) {
+        this.co_id = co_id;
+    }
+
+    public void setDm_id(String dm_id) {
+        this.dm_id = dm_id;
+    }
 
     public String getUe_id() {
         return ue_id;
@@ -69,6 +138,8 @@ public class Education {
         return dm_id;
     }
 
+    @NotNull
+    @PrimaryKey
     @SerializedName(Constant.ue_id)
     private String ue_id;
 

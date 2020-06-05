@@ -9,7 +9,7 @@
         android:background="@color/bg_recycler">
 
         <HorizontalScrollView
-            android:visibility="gone"
+            android:visibility="visible"
             android:fillViewport="true"
             android:padding="@dimen/_5sdp"
             android:id="@+id/horizontalScrollView"
@@ -36,6 +36,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeToRefresh"
+            android:layout_below="@+id/horizontalScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
         <androidx.recyclerview.widget.RecyclerView
             android:layout_below="@+id/horizontalScrollView"
             android:id="@+id/testListRecyclerView"
@@ -44,16 +50,8 @@
             android:layout_height="wrap_content"
             tools:listitem="@layout/test_item" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_filter"
-            android:visibility="gone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:layout_margin="@dimen/_10sdp"
-            android:foregroundTint="@color/colorWhite"
-            android:src="@drawable/ic_filter" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
     </RelativeLayout>
 
 </layout>

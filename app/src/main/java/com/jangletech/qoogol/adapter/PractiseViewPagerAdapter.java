@@ -23,6 +23,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.jangletech.qoogol.R;
+import com.jangletech.qoogol.dialog.CommentDialog;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.model.ProcessQuestion;
 import com.jangletech.qoogol.model.TestQuestionNew;
@@ -31,27 +32,30 @@ import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
+
 import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
+
 import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class PractiseViewPagerAdapter extends PagerAdapter {
     private static final String TAG = "PractiseViewPagerAdapte";
     private Activity context;
     private List<TestQuestionNew> testModelNewList;
-    //private PracticeScqBinding learningItemBinding;
+    private ViewPagerClickListener viewPagerClickListener;
+    private CommentDialog commentDialog;
     ApiInterface apiService = ApiClient.getInstance().getApi();
     private int isSolvedRight, isAttempted = 0;
-    //private TextView scq1, scq2, scq3, scq4, tvWordCounter, multi_lineCounter;
-    //private EditText etMultiLineAns, etSinlgeineAns;
-    //private ConstraintLayout multiLineAnswerLayout,fillTheBlanksLayout;
     private CountDownTimer countDownTimer;
     public static String scq_ans = "", scqimgtext_ans = "";
 
-    public PractiseViewPagerAdapter(Activity context, List<TestQuestionNew> testModelNewList) {
+    public PractiseViewPagerAdapter(Activity context, List<TestQuestionNew> testModelNewList,
+                                    ViewPagerClickListener viewPagerClickListener) {
         this.context = context;
         this.testModelNewList = testModelNewList;
+        this.viewPagerClickListener = viewPagerClickListener;
     }
 
     @Override
@@ -66,6 +70,7 @@ public class PractiseViewPagerAdapter extends PagerAdapter {
             initViews(layout, testQuestionNew);
             initSubjective(layout, testQuestionNew);
             collection.addView(layout);
+            layout.setTag(position);
             return layout;
         } else {
 
@@ -75,6 +80,7 @@ public class PractiseViewPagerAdapter extends PagerAdapter {
                 initViews(layout, testQuestionNew);
                 initScq(layout, testQuestionNew);
                 collection.addView(layout);
+                layout.setTag(position);
                 return layout;
             }
 
@@ -83,6 +89,7 @@ public class PractiseViewPagerAdapter extends PagerAdapter {
                 initViews(layout, testQuestionNew);
                 initScqImageText(layout, testQuestionNew);
                 collection.addView(layout);
+                layout.setTag(position);
                 return layout;
             }
 
@@ -90,6 +97,7 @@ public class PractiseViewPagerAdapter extends PagerAdapter {
                 ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.practice_mcq, collection, false);
                 initViews(layout, testQuestionNew);
                 collection.addView(layout);
+                layout.setTag(position);
                 return layout;
             }
         }
@@ -119,7 +127,7 @@ public class PractiseViewPagerAdapter extends PagerAdapter {
         return view == object;
     }
 
-    private void ProcessQuestionAPI(String que_id, int flag, String call_from, TestQuestionNew testQuestionNew, TextView labelValue) {
+    private void ProcessQuestionAPI(String que_id, int flag, String call_from, int prevLikes) {
         ProgressDialog.getInstance().show(context);
         Call<ProcessQuestion> call;
         int user_id = new PreferenceManager(getApplicationContext()).getInt(Constant.USER_ID);
@@ -135,28 +143,26 @@ public class PractiseViewPagerAdapter extends PagerAdapter {
                 try {
                     if (response.body() != null && response.body().getResponse().equals("200")) {
 
-                        if (!call_from.equalsIgnoreCase("like")) {
+                        if (call_from.equalsIgnoreCase("fav")) {
                             if (flag == 1) {
-                                testQuestionNew.setQlc_fav_flag(true);
                                 showToast("Added to favourites.");
                             } else {
-                                testQuestionNew.setQlc_fav_flag(false);
                                 showToast("Deleted from favourites.");
                             }
                         }
 
                         if (call_from.equalsIgnoreCase("like") && flag == 1) {
-                            int likeCount = Integer.parseInt(testQuestionNew.getLikes()) + 1;
-                            labelValue.setText(likeCount);
-                            testQuestionNew.setLikes(String.valueOf(likeCount));
-                            testQuestionNew.setQlc_like_flag(true);
-                            notifyDataSetChanged();
+                            Log.d(TAG, "onResponse Like Flag : 1");
+                            int likeCount = prevLikes + 1;
+                            viewPagerClickListener.onLikeClick(true, likeCount);
                         } else if (call_from.equalsIgnoreCase("like") && flag == 0) {
-                            int likeCount = Integer.parseInt(testQuestionNew.getLikes()) - 1;
-                            labelValue.setText(likeCount);
-                            testQuestionNew.setLikes(String.valueOf(likeCount));
-                            testQuestionNew.setQlc_like_flag(false);
-                            notifyDataSetChanged();
+                            Log.d(TAG, "onResponse Like Flag : 0");
+                            int likeCount = prevLikes - 1;
+                            viewPagerClickListener.onLikeClick(false, likeCount);
+                            //labelValue.setText(likeCount);
+                            //testQuestionNew.setLikes(String.valueOf(likeCount));
+                            //testQuestionNew.setQlc_like_flag(false);
+                            //notifyDataSetChanged();
                         }
                     } else {
                         Toast.makeText(context, UtilHelper.getAPIError(String.valueOf(response.body())), Toast.LENGTH_SHORT).show();
@@ -234,9 +240,11 @@ public class PractiseViewPagerAdapter extends PagerAdapter {
             if (!scq_ans.trim().equalsIgnoreCase("")) {
                 isAttempted = 1;
                 setSCQAnsIndicator(img1, img2, img3, img4);
+                Log.d(TAG, "scq_ans : " + scq_ans);
+                Log.d(TAG, "getTtqa_sub_ans : " + testModelNew.getTtqa_sub_ans());
                 Log.d(TAG, "initScq: " + scq_ans.equalsIgnoreCase(testModelNew.getTtqa_sub_ans()));
-                if (scq_ans.equalsIgnoreCase(testModelNew.getTtqa_sub_ans())) {
-                    setRightSCQ(scq_ans.toString(), img1, img2, img3, img4);
+                if (scq_ans.equalsIgnoreCase(testModelNew.getA_sub_ans())) {
+                    setRightSCQ(scq_ans, img1, img2, img3, img4);
                     if (scq_ans.equalsIgnoreCase("A")) {
                         testModelNew.setTtqa_mcq_ans_1(true);
                         testModelNew.setTtqa_mcq_ans_2(false);
@@ -383,7 +391,6 @@ public class PractiseViewPagerAdapter extends PagerAdapter {
         if (testModelNew.getType().equalsIgnoreCase(Constant.ONE_LINE_ANSWER) ||
                 testModelNew.getType().equalsIgnoreCase(Constant.FILL_THE_BLANKS)) {
             fillTheBlanksLayout.setVisibility(View.VISIBLE);
-            //answerCharCounter();
             etSinlgeineAns.setText(testModelNew.getTtqa_sub_ans());
         }
         if (testModelNew.getType().equalsIgnoreCase(Constant.SHORT_ANSWER) ||
@@ -474,7 +481,8 @@ public class PractiseViewPagerAdapter extends PagerAdapter {
         TextView tvtimer = layout.findViewById(R.id.tvtimer);
         TextView tvQuestion = layout.findViewById(R.id.question_textview);
         TextView tvMarks = layout.findViewById(R.id.marks_textview);
-        Button btnSubmit = layout.findViewById(R.id.submit);
+        //Button btnSubmit = layout.findViewById(R.id.submit);
+        ImageView imgComment = layout.findViewById(R.id.comment);
         ImageView imgQueDownload = layout.findViewById(R.id.save_que);
         TextView tvDiffLevel = layout.findViewById(R.id.difflevel_value);
         TextView tvPostedValue = layout.findViewById(R.id.posted_value);
@@ -485,11 +493,10 @@ public class PractiseViewPagerAdapter extends PagerAdapter {
         TextView tvCommentValue = layout.findViewById(R.id.comment_value);
         TextView tvShareValue = layout.findViewById(R.id.share_value);
 
+
         //Toggle Buttons
         ToggleButton favorite = layout.findViewById(R.id.favorite);
         ToggleButton like = layout.findViewById(R.id.like);
-
-        //solutionLayout = layout.findViewById(R.id.solution_layout);
 
         //set the values
         tvQuestion.setText(testModelNew.getQ_quest());
@@ -504,10 +511,10 @@ public class PractiseViewPagerAdapter extends PagerAdapter {
         tvLikeValue.setText(testModelNew.getLikes());
         tvCommentValue.setText(testModelNew.getComments());
         tvShareValue.setText(testModelNew.getShares());
-        if(favorite!=null)
-        favorite.setChecked(testModelNew.isQlc_fav_flag() ? true : false);
-        if(like!=null)
-        like.setChecked(testModelNew.isQlc_like_flag() ? true : false);
+        if (favorite != null)
+            favorite.setChecked(testModelNew.isQlc_fav_flag() ? true : false);
+        if (like != null)
+            like.setChecked(testModelNew.isQlc_like_flag() ? true : false);
         setTimer(tvtimer, 0, 0);
 
         imgQueDownload.setOnClickListener(v -> {
@@ -515,17 +522,16 @@ public class PractiseViewPagerAdapter extends PagerAdapter {
             showToast("Added to saved questions List.");
         });
 
+        imgComment.setOnClickListener(v->{
+            commentDialog = new CommentDialog(context,testModelNew);
+            commentDialog.show();
+        });
+
         if (favorite != null)
             favorite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isChecked) {
-                        ProcessQuestionAPI(testModelNew.getTq_q_id(), 1, "fav", testModelNew, null);
-                        //Toast.makeText(context, "checked", Toast.LENGTH_SHORT).show();
-                    } else {
-                        ProcessQuestionAPI(testModelNew.getTq_q_id(), 0, "fav", testModelNew, null);
-                        //Toast.makeText(context, "Unchecked", Toast.LENGTH_SHORT).show();
-                    }
+                    ProcessQuestionAPI(testModelNew.getTq_q_id(), isChecked ? 1 : 0, "fav", 0);
                 }
             });
 
@@ -533,19 +539,12 @@ public class PractiseViewPagerAdapter extends PagerAdapter {
             like.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isChecked) {
-                        ProcessQuestionAPI(testModelNew.getTq_q_id(), 1, "like", testModelNew, tvLikeValue);
-                        //Toast.makeText(context, "checked", Toast.LENGTH_SHORT).show();
-                    } else {
-                        ProcessQuestionAPI(testModelNew.getTq_q_id(), 0, "like", testModelNew, tvLikeValue);
-                        //Toast.makeText(context, "Unchecked", Toast.LENGTH_SHORT).show();
-                    }
+                    int prevLikeCount = Integer.parseInt(tvLikeValue.getText().toString());
+                    ProcessQuestionAPI(testModelNew.getTq_q_id(), isChecked ? 1 : 0, "like", prevLikeCount);
                 }
             });
 
-        btnSubmit.setOnClickListener(v -> {
 
-        });
     }
 
     private void answerCharCounter(EditText etAnswer, TextView tvCounter, int maxWordLength, TestQuestionNew testQuestionNew) {
@@ -661,5 +660,15 @@ public class PractiseViewPagerAdapter extends PagerAdapter {
                 timer.setText("00:00");
             }
         }.start();
+    }
+
+    public interface ViewPagerClickListener {
+        void onLikeClick(boolean isChecked, int likeCount);
+
+        void onCommentClick();
+
+        void onShareClick();
+
+        void onFavouriteClick(boolean isChecked);
     }
 }

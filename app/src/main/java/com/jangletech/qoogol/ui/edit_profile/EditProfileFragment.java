@@ -47,6 +47,7 @@ public class EditProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         fragmentEditProfileBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_edit_profile, container, false);
+        fragmentEditProfileBinding.setLifecycleOwner(this);
         return fragmentEditProfileBinding.getRoot();
     }
 

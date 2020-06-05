@@ -1,50 +1,51 @@
 package com.jangletech.qoogol.model;
 
 import com.google.gson.annotations.SerializedName;
+import com.jangletech.qoogol.util.Constant;
 
-public class ClassResponse
-{
-    @SerializedName("1297")
-    private String _1297;
+public class ClassResponse {
 
-    @SerializedName("1296")
-    private String _1296;
+    @SerializedName(Constant.clm_class_name)
+    private String className;
 
-    @SerializedName("1299")
-    private String _1299;
+    @SerializedName(Constant.clm_co_id)
+    private String clm_co_id;
 
-    @SerializedName("1298")
-    private String _1298;
+    @SerializedName(Constant.clm_cy)
+    private String clm_cy;
 
-    public String get_1297() {
-        return _1297;
+    @SerializedName(Constant.clm_class_num)
+    private String clm_class_num;
+
+    public String getClassName() {
+        return className;
     }
 
-    public void set_1297(String _1297) {
-        this._1297 = _1297;
+    public void setClassName(String className) {
+        this.className = className;
     }
 
-    public String get_1296() {
-        return _1296;
+    public String getClm_co_id() {
+        return clm_co_id;
     }
 
-    public void set_1296(String _1296) {
-        this._1296 = _1296;
+    public void setClm_co_id(String clm_co_id) {
+        this.clm_co_id = clm_co_id;
     }
 
-    public String get_1299() {
-        return _1299;
+    public String getClm_cy() {
+        return clm_cy;
     }
 
-    public void set_1299(String _1299) {
-        this._1299 = _1299;
+    public void setClm_cy(String clm_cy) {
+        this.clm_cy = clm_cy;
     }
 
-    public String get_1298() {
-        return _1298;
+    public String getClm_class_num() {
+        return clm_class_num;
     }
 
-    public void set_1298(String _1298) {
-        this._1298 = _1298;
+    public void setClm_class_num(String clm_class_num) {
+        this.clm_class_num = clm_class_num;
     }
 }

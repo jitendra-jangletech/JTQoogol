@@ -24,6 +24,7 @@ import com.jangletech.qoogol.model.Comments;
 import com.jangletech.qoogol.model.ProcessQuestion;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
+import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
@@ -35,7 +36,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 
 
-public class CommentFragment extends Fragment implements View.OnClickListener {
+public class CommentFragment extends BaseFragment implements View.OnClickListener {
 
     private static final String TAG = "CommentFragment";
     private CommentViewModel mViewModel;
