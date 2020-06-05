@@ -11,6 +11,7 @@ import com.jangletech.qoogol.model.ConnectionResponse;
 import com.jangletech.qoogol.model.ContactResponse;
 import com.jangletech.qoogol.model.CountryResponse;
 import com.jangletech.qoogol.model.CourseResponse;
+import com.jangletech.qoogol.model.DashBoard;
 import com.jangletech.qoogol.model.DegreeResponse;
 import com.jangletech.qoogol.model.DistrictResponse;
 import com.jangletech.qoogol.model.FaqResponse;
@@ -79,7 +80,7 @@ public interface ApiInterface {
     Call<FaqResponse> fetchFaq(@Field(Constant.u_user_id) String userId,
                                @Field(Constant.CASE) String caseFaq,
                                @Field(Constant.faq_app) String faq_app,
-                               @Field(Constant.faqt_id)  String faqTopicId);
+                               @Field(Constant.faqt_id) String faqTopicId);
 
     @FormUrlEncoded
     @POST(Constant.LANGUAGE_API)
@@ -104,7 +105,7 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST(Constant.CLASS_MASTER)
-    Call<ClassList> fetchClasses(@Field(Constant.co_id) int courseId);
+    Call<ClassList> fetchClasses(@Field(Constant.co_id) String courseId);
 
     @FormUrlEncoded
     @POST(Constant.ADD_UNIVERSITY)
@@ -116,9 +117,21 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST(Constant.FETCH_USER_SETTINGS)
-    Call<VerifyResponse> fetchUserSettings(@Field(Constant.u_user_id) int userId,
-                                                   @Field(Constant.device_id) String deviceId,
-                                                   @Field(Constant.appName) String appName);
+    Call<VerifyResponse> fetchUserSettings(@Field(Constant.u_user_id) String userId,
+                                           @Field(Constant.device_id) String deviceId,
+                                           @Field(Constant.appName) String appName,
+                                           @Field(Constant.CASE) String CaseL);
+
+    @FormUrlEncoded
+    @POST(Constant.FETCH_USER_SETTINGS)
+    Call<VerifyResponse> updateUserSettings(@Field(Constant.u_user_id) String userId,
+                                            @Field(Constant.device_id) String deviceId,
+                                            @Field(Constant.appName) String appName,
+                                            @Field(Constant.CASE) String casel,
+                                            @Field(Constant.ubm_id) String ubmId,
+                                            @Field(Constant.iom_id) String iomId,
+                                            @Field(Constant.co_id) String coId,
+                                            @Field(Constant.dm_id) String dmId);
 
 
     @FormUrlEncoded
@@ -135,7 +148,8 @@ public interface ApiInterface {
                                        @Field(Constant.iom_id) String instituteId,
                                        @Field(Constant.co_id) String courseId,
                                        @Field(Constant.dm_id) String dmId,
-                                       @Field(Constant.ue_id) String ueId);
+                                       @Field(Constant.ue_id) String ueId,
+                                       @Field(Constant.ue_cy_num) String cyNum);
 
     @FormUrlEncoded
     @POST(Constant.FETCH_USER_EDU)
@@ -147,9 +161,9 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST(Constant.FETCH_USER_EDU)
     Call<FetchEducationResponse> fetchOtherUSersUserEdu(@Field(Constant.u_user_id) String userId,
-                                              @Field(Constant.CASE) String casel,
-                                              @Field(Constant.device_id) String deviceId,
-                                              @Field(Constant.appName) String appName,
+                                                        @Field(Constant.CASE) String casel,
+                                                        @Field(Constant.device_id) String deviceId,
+                                                        @Field(Constant.appName) String appName,
                                                         @Field(Constant.other_user) String other_user);
 
     @Multipart
@@ -201,13 +215,18 @@ public interface ApiInterface {
                                     @Field(Constant.u_app_version) String app_version);
 
     @FormUrlEncoded
+    @POST(Constant.DASHBOARD)
+    Call<DashBoard> fetchDashBoardDetails(@Field(Constant.u_user_id) String userId,
+                                          @Field(Constant.device_id) String deviceId);
+
+    @FormUrlEncoded
     @POST(Constant.FETCH_OTHER_USER_INFO)
     Call<UserProfile> fetchOtherUsersInfo(@Field(Constant.u_user_id) String userId,
-                                    @Field(Constant.device_id) String deviceId,
-                                    @Field(Constant.appName) String appName,
-                                    @Field(Constant.u_app_version) String app_version,
-                                    @Field(Constant.other_user) String other_user,
-                                    @Field(Constant.CASE) String caseU);
+                                          @Field(Constant.device_id) String deviceId,
+                                          @Field(Constant.appName) String appName,
+                                          @Field(Constant.u_app_version) String app_version,
+                                          @Field(Constant.other_user) String other_user,
+                                          @Field(Constant.CASE) String caseU);
 
     @FormUrlEncoded
     @POST(Constant.FETCH_TEST_LIST)
@@ -224,6 +243,7 @@ public interface ApiInterface {
     @POST(Constant.FETCH_SUBJECTS)
     Call<FetchSubjectResponseList> fetchSubjectList(@Field(Constant.scr_co_id) String scr_co_id);
 
+
     @FormUrlEncoded
     @POST(Constant.FETCH_CHAPTERS)
     Call<ChapterResponse> fetchChapterList(@Field(Constant.u_user_id) int userId);
@@ -236,7 +256,7 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST(Constant.SUBMIT_TEST)
-    Call<TestDetailsResponse> submitTest(@Field(Constant._70E) TestListResponse testListResponse);
+    Call<TestDetailsResponse> submitTestQuestion(@Field(Constant.DataList) TestListResponse testListResponse);
 
 
     @FormUrlEncoded
@@ -247,14 +267,21 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST(Constant.START_RESUME_TEST)
     Call<StartResumeTestResponse> fetchAttemptedTests(@Field(Constant.u_user_id) int userId,
-                                                           @Field(Constant.tt_id) int ttId);
+                                                      @Field(Constant.tt_id) int ttId);
 
     @FormUrlEncoded
     @POST(Constant.PROCESS_TEST)
     Call<ProcessQuestion> addTestLike(@Field(Constant.u_user_id) int userid,
                                       @Field(Constant.tm_id) int tmId,
                                       @Field(Constant.CASE) String caseL,
-                                      @Field(Constant.qlc_like_flag) int like);
+                                      @Field(Constant.tlc_like_flag) int like);
+
+    @FormUrlEncoded
+    @POST(Constant.PROCESS_TEST)
+    Call<ProcessQuestion> addFavTest(@Field(Constant.u_user_id) int userid,
+                                     @Field(Constant.tm_id) int tmId,
+                                     @Field(Constant.CASE) String caseL,
+                                     @Field(Constant.isFavourite) int fav);
 
 
     @FormUrlEncoded
@@ -273,7 +300,7 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST(Constant.PROCESS_QUESTION)
-    Call<ProcessQuestion> fetchComments(@Field(Constant.u_user_id) String userid,
+    Call<ProcessQuestion> fetchComments(@Field(Constant.u_user_id) int userid,
                                         @Field(Constant.q_id) String queId,
                                         @Field(Constant.CASE) String caseL);
 
@@ -300,25 +327,25 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST(Constant.PROCESS_QUESTION)
     Call<ProcessQuestion> addRatingsApi(@Field(Constant.u_user_id) int userid,
-                                 @Field(Constant.q_id) String queId,
-                                 @Field("Case") String caseL,
-                                 @Field(Constant.qlc_rating) String ratings,
-                                 @Field(Constant.qlc_feedback) String feedback);
+                                        @Field(Constant.q_id) String queId,
+                                        @Field("Case") String caseL,
+                                        @Field(Constant.qlc_rating) String ratings,
+                                        @Field(Constant.qlc_feedback) String feedback);
 
     @FormUrlEncoded
     @POST(Constant.PROCESS_QUESTION)
     Call<ProcessQuestion> submitSubjectiveQueApi(@Field(Constant.u_user_id) int userid,
-                                        @Field(Constant.q_id) String queId,
-                                        @Field("Case") String caseL,
-                                        @Field(Constant.sub_ans) String ratings);
+                                                 @Field(Constant.q_id) String queId,
+                                                 @Field("Case") String caseL,
+                                                 @Field(Constant.sub_ans) String ratings);
 
     @FormUrlEncoded
     @POST(Constant.PROCESS_QUESTION)
     Call<ProcessQuestion> questionAttemptApi(@Field(Constant.u_user_id) int userid,
-                                 @Field(Constant.q_id) String queId,
-                                 @Field("Case") String caseL,
-                                 @Field(Constant.attmpted) int attempted,
-                                 @Field(Constant.solved_right) int solved_right);
+                                             @Field(Constant.q_id) String queId,
+                                             @Field("Case") String caseL,
+                                             @Field(Constant.attmpted) int attempted,
+                                             @Field(Constant.solved_right) int solved_right);
 
     @FormUrlEncoded
     @POST(Constant.PROCESS_QUESTION)
@@ -343,7 +370,7 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST(Constant.SHARE_QUESTION_TEST)
-    Call<ResponseObj> shareAPI(@Field(Constant.q_T_list) String q_t_list, @Field(Constant.TorQ) String t_or_q, @Field("Case") String connectionCase, @Field(Constant.device_id) String device_id, @Field("SentBy") String user, @Field(Constant.GroupMembersList) String list, @Field(Constant.u_app_version) String version,@Field("200Q") String app);
+    Call<ResponseObj> shareAPI(@Field(Constant.q_T_list) String q_t_list, @Field(Constant.TorQ) String t_or_q, @Field("Case") String connectionCase, @Field(Constant.device_id) String device_id, @Field("SentBy") String user, @Field(Constant.GroupMembersList) String list, @Field(Constant.u_app_version) String version, @Field("200Q") String app);
 
     @FormUrlEncoded
     @POST(Constant.FETCH_CONNECTIONS)

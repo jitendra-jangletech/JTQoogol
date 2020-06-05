@@ -6,20 +6,18 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
-import com.jangletech.qoogol.model.TestModelNew;
-
-import java.util.List;
+import com.jangletech.qoogol.model.DashBoard;
 
 @Dao
-public interface TestDao {
+public interface DashboardDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertAll(List<TestModelNew> testModelNewList);
+    void insert(DashBoard dashBoard);
 
-    @Query("Select * from TestModelNew")
-    LiveData<List<TestModelNew>> getAllTests();
+    @Query("Select * from DashBoard where userId =:uId")
+    LiveData<DashBoard> getDashboardDetails(String uId);
 
-    @Query("delete from TestModelNew")
+    @Query("delete from DashBoard")
     void delete();
 
 }

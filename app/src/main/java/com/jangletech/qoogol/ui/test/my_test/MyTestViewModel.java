@@ -7,8 +7,8 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.jangletech.qoogol.database.repo.AppRepository;
 import com.jangletech.qoogol.model.Chapter;
-import com.jangletech.qoogol.model.ClassList;
 import com.jangletech.qoogol.model.ClassResponse;
 import com.jangletech.qoogol.model.Course;
 import com.jangletech.qoogol.model.Degree;
@@ -21,6 +21,7 @@ import java.util.List;
 
 public class MyTestViewModel extends AndroidViewModel {
 
+    private AppRepository appRepository;
     private MutableLiveData<List<TestModelNew>> allTestList;
     private MutableLiveData<List<FetchSubjectResponse>> allSubjectList;
     private MutableLiveData<UserPreferences> userPreference;
@@ -30,52 +31,55 @@ public class MyTestViewModel extends AndroidViewModel {
     private MutableLiveData<List<Institute>> institutes;
     private MutableLiveData<List<Chapter>> allChapterList;
 
-    public void setAllChapterList(List<Chapter> chapterList){
+    public void setAllChapterList(List<Chapter> chapterList) {
         this.allChapterList.setValue(chapterList);
     }
 
-    public LiveData<List<Chapter>> getAllChapter(){
+    public LiveData<List<Chapter>> getAllChapter() {
         return allChapterList;
     }
 
-    public LiveData<List<Degree>> getDegrees(){
+    public LiveData<List<Degree>> getDegrees() {
         return degrees;
     }
-    public void setDegrees(List<Degree> degrees){
+
+    public void setDegrees(List<Degree> degrees) {
         this.degrees.setValue(degrees);
     }
 
-    public LiveData<List<Course>> getCourses(){
+    public LiveData<List<Course>> getCourses() {
         return courses;
     }
-    public void setCourses(List<Course> courses){
+
+    public void setCourses(List<Course> courses) {
         this.courses.setValue(courses);
     }
 
-    public LiveData<List<Institute>> getInstitutes(){
+    public LiveData<List<Institute>> getInstitutes() {
         return institutes;
     }
-    public void setInstitutes(List<Institute> institutes){
+
+    public void setInstitutes(List<Institute> institutes) {
         this.institutes.setValue(institutes);
     }
 
-    public LiveData<List<ClassResponse>> getClasses(){
+    public LiveData<List<ClassResponse>> getClasses() {
         return classes;
     }
 
-    public void setClassList(List<ClassResponse> classList){
+    public void setClassList(List<ClassResponse> classList) {
         this.classes.setValue(classList);
     }
 
-    public LiveData<UserPreferences> getPreferences(){
+    public LiveData<UserPreferences> getPreferences() {
         return userPreference;
     }
 
-    public void setUserPreference(UserPreferences userPreference){
+    public void setUserPreference(UserPreferences userPreference) {
         this.userPreference.setValue(userPreference);
     }
 
-    public LiveData<List<FetchSubjectResponse>> getAllSubjects(){
+    public LiveData<List<FetchSubjectResponse>> getAllSubjects() {
         return allSubjectList;
     }
 
@@ -83,7 +87,7 @@ public class MyTestViewModel extends AndroidViewModel {
         return allTestList;
     }
 
-    public void setAllSubjectList(List<FetchSubjectResponse> subjectList){
+    public void setAllSubjectList(List<FetchSubjectResponse> subjectList) {
         this.allSubjectList.setValue(subjectList);
     }
 
@@ -92,10 +96,9 @@ public class MyTestViewModel extends AndroidViewModel {
     }
 
 
-
     public MyTestViewModel(@NonNull Application application) {
         super(application);
-        //mRepository = new TestRepository(application);
+        appRepository = new AppRepository(application);
         allTestList = new MutableLiveData<>();
         allSubjectList = new MutableLiveData<>();
         allChapterList = new MutableLiveData<>();
@@ -106,7 +109,23 @@ public class MyTestViewModel extends AndroidViewModel {
         institutes = new MutableLiveData<>();
     }
 
-   /* public void insert(TestModel testModel) {
-        mRepository.insert(testModel);
+    public void insert(List<TestModelNew> testModelNewList) {
+        appRepository.insertTests(testModelNewList);
+    }
+
+    public LiveData<List<TestModelNew>> getAllTests() {
+        return appRepository.getAllTests();
+    }
+
+    /*public void insertAttemptedTest(List<AttemptedTest> attemptedTests) {
+        appRepository.insertAttemptedTest(attemptedTests);
+    }
+
+    public void deleteAttemptedTest() {
+        appRepository.deleteAttemptedTest();
+    }
+
+    public LiveData<List<AttemptedTest>> getAllAttemptedTests() {
+        return appRepository.getAllAttemptedTests();
     }*/
 }

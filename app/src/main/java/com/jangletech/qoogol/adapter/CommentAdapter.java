@@ -41,7 +41,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
 
     @NonNull
     @Override
-    public CommentAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         commentItemBinding = DataBindingUtil.inflate(
                 LayoutInflater.from(parent.getContext()),
                 R.layout.comment_item, parent, false);
@@ -50,7 +50,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CommentAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Comments comments = commentList.get(position);
         if (callingFrom.equals(Module.Learning.toString())) {
             commentItemBinding.tvSenderName.setText(comments.getUserFirstName() + " " + comments.getUserLastName());
@@ -106,9 +106,9 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
 
     private String getProfileImageUrl(Comments comments) {
         if (callingFrom.equals(Module.Test.toString()))
-            return Constant.PRODUCTION_BASE_FILE_API + "000000" + comments.getTlc_user_id() + "/" + comments.getProfile_image();
+            return Constant.PRODUCTION_BASE_FILE_API + comments.getProfile_image();
 
         else
-            return Constant.PRODUCTION_BASE_FILE_API + "000000" + comments.getUserId() + "/" + comments.getProfile_image();
+            return Constant.PRODUCTION_BASE_FILE_API +comments.getProfile_image();
     }
 }

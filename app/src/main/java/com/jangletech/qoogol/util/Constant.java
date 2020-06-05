@@ -6,6 +6,9 @@ package com.jangletech.qoogol.util;
  */
 public class Constant {
 
+    public static final int LIKE = 1;
+    public static final int FAVOURITE = 0;
+
     public static final String EMAIL_STRING = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
             + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 
@@ -224,6 +227,7 @@ public class Constant {
     //learning
     public static final String QUESTION_IMAGES_API = "https://jtmobileappstorage.blob.core.windows.net/spotmeets/media/images/";
     public static final String FETCH_QA = "q151FetchQA";
+    public static final String DASHBOARD = "q110FetchDashboard";
     public static final String PROCESS_QUESTION = "q141ProcessQuestion";
     public static final String PROCESS_TEST = "q133ProcessTest";
     public static final String START_RESUME_TEST = "q131StartResumeTest";
@@ -295,8 +299,24 @@ public class Constant {
     public static final String u_latest_long = "123";
     public static final String u_conn_count = "199B";
     public static final String u_followers = "200M";
+    public static final String u_dash_followers = "200A";
     public static final String u_followings = "201M";
+    public static final String u_dash_followings = "200B";
+    public static final String u_friends = "200C";
     public static final String ucn_count = "71";
+    public static final String _1504 = "1504";
+
+//    public static final String _1507 = "1507";
+//    public static final String _1508 = "1508";
+//    public static final String _1512 = "1512";
+//    public static final String _1509 = "1509";
+//    public static final String _1506 = "1506";
+//    public static final String _1511 = "1511";
+//    public static final String _1503 = "1503";
+//    public static final String _1510 = "1510";
+//    public static final String _1514 = "1514";
+//    public static final String _1513 = "1513";
+
     public static final String w_u_ms_count = "522";
     public static final String w_distance = "549";
     public static final String other_user = "516";
@@ -309,6 +329,23 @@ public class Constant {
     public static final String u_native_dt_id = "103";
     public static final String u_nationality = "111";
     public static final String w_lm_id_array = "546A";
+
+    //Dashboard fields
+    public static final String up_u_id = "1501";
+    public static final String up_c_id = "1502";
+    public static final String up_rank = "1503";
+    public static final String up_credits = "1504";
+    public static final String up_tests_taken = "1505";
+    public static final String up_q_ratings_given = "1506";
+    public static final String up_fav_q = "1507";
+    public static final String up_fav_tests = "1508";
+    public static final String up_q_likes = "1509";
+    public static final String up_tests_likes = "1510";
+    public static final String up_q_shares = "1511";
+    public static final String up_q_attempts = "1512";
+    public static final String up_q_right_answers = "1513";
+    public static final String up_tests_ratings_given = "1514";
+    public static final String up_tests_shares = "1515";
 
     public static final String cn_initiated_by_u1 = "311";
     public static final String cn_initiated_by_u2 = "312";
@@ -377,6 +414,7 @@ public class Constant {
 
     //comman
     public static final String Response = "Response";
+    public static final String Message = "Message";
     public static final String prev_q_id = "prev_q_id";
     public static final String question_list = "List1";
     public static final String u_user_id = "101";
@@ -386,6 +424,11 @@ public class Constant {
     public static final String m_age = "335";
     public static final String u_filter_matches = "193";
 
+    public static final String clm_id = "1295";
+    public static final String clm_co_id = "1296";
+    public static final String clm_class_name = "1297";
+    public static final String clm_class_num = "1298";
+    public static final String clm_cy = "1299";
 
 
     //Country
@@ -420,7 +463,7 @@ public class Constant {
     public static final String co_id = "261";
     public static final String co_dm_id = "262";
     public static final String co_name = "263";
-    public static final String _70E = "70E";
+    public static final String DataList = "70E";
 
     // ChapterMaster
     public static final String ex_id = "1435";

@@ -1,8 +1,14 @@
 package com.jangletech.qoogol.model;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import com.google.gson.annotations.SerializedName;
 import com.jangletech.qoogol.util.Constant;
 
+import org.jetbrains.annotations.NotNull;
+
+@Entity
 public class Notification {
 
     @SerializedName(Constant.cn_connected)
@@ -17,6 +23,8 @@ public class Notification {
     @SerializedName(Constant.cn_initiated_by_u2)
     private String cn_initiated_by_u2;
 
+    @NotNull
+    @PrimaryKey
     @SerializedName(Constant.n_id)
     private String n_id;
 

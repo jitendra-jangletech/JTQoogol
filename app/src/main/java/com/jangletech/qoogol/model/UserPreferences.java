@@ -5,6 +5,12 @@ import com.jangletech.qoogol.util.Constant;
 
 public class UserPreferences {
 
+    @SerializedName(Constant.clm_cy)
+    private String classId;
+
+    @SerializedName(Constant.clm_class_name)
+    private String className;
+
     @SerializedName(Constant.u_user_id)
     private String userId;
 
@@ -35,8 +41,43 @@ public class UserPreferences {
     @SerializedName(Constant.co_id)
     private String co_id;
 
-    @SerializedName(Constant._70E)
-    private String _70E;
+    @SerializedName(Constant.DataList)
+    private String dataList;
+
+    @SerializedName(Constant.question_list)
+    private String examList;
+
+    public String getClassId() {
+        return classId;
+    }
+
+    public void setClassId(String classId) {
+        this.classId = classId;
+    }
+
+    public String getClassName() {
+        return className;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
+    }
+
+    public String getDataList() {
+        return dataList;
+    }
+
+    public void setDataList(String dataList) {
+        this.dataList = dataList;
+    }
+
+    public String getExamList() {
+        return examList;
+    }
+
+    public void setExamList(String examList) {
+        this.examList = examList;
+    }
 
     public String getDm_degree_name() {
         return dm_degree_name;
@@ -118,11 +159,4 @@ public class UserPreferences {
         this.co_id = co_id;
     }
 
-    public String get_70E() {
-        return _70E;
-    }
-
-    public void set_70E(String _70E) {
-        this._70E = _70E;
-    }
 }

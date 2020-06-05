@@ -6,13 +6,17 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
+import com.jangletech.qoogol.database.repo.AppRepository;
 import com.jangletech.qoogol.model.QSet;
+import com.jangletech.qoogol.model.TestDetailsResponse;
+import com.jangletech.qoogol.model.TestModelNew;
 
 import java.util.List;
 
 public class TestDetailsViewModel extends AndroidViewModel {
+
+    private AppRepository appRepository;
 
     public LiveData<List<QSet>> getQsetList() {
         return qsetList;
@@ -28,5 +32,15 @@ public class TestDetailsViewModel extends AndroidViewModel {
     public TestDetailsViewModel(@NonNull Application application) {
         super(application);
         this.qsetList = new MutableLiveData<>();
+        appRepository = new AppRepository(application);
     }
+
+   /* public void insert(TestDetailsResponse testDetailsResponse) {
+        appRepository.insertTestDetails(testDetailsResponse);
+    }*/
+
+    public LiveData<List<TestModelNew>> getAllTests() {
+        return appRepository.getAllTests();
+    }
+
 }

@@ -20,6 +20,7 @@ import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.FavouriteFragmentBinding;
 import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.ui.learning.LearningFragment;
+import com.jangletech.qoogol.ui.test.favourite.TestFavouriteFragment;
 import com.jangletech.qoogol.ui.test.my_test.MyTestFragment;
 
 import java.util.ArrayList;
@@ -83,8 +84,8 @@ public class FavouriteFragment extends BaseFragment {
 
     private void setupViewPager(ViewPager viewPager) {
         Adapter adapter = new Adapter(getChildFragmentManager());
+        adapter.addFragment(new TestFavouriteFragment(),"Test");
         adapter.addFragment(new LearningFragment(), "Questions");
-        adapter.addFragment(new MyTestFragment(),"Test");
         viewPager.setAdapter(adapter);
     }
 

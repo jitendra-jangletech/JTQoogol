@@ -11,24 +11,41 @@ import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.jangletech.qoogol.database.converter.Converters;
+import com.jangletech.qoogol.database.dao.DashboardDao;
+import com.jangletech.qoogol.database.dao.EducationDetailsDao;
 import com.jangletech.qoogol.database.dao.LearningQuestionDao;
+import com.jangletech.qoogol.database.dao.NotificationDao;
 import com.jangletech.qoogol.database.dao.TestDao;
-import com.jangletech.qoogol.database.dao.TestQuestionDao;
+import com.jangletech.qoogol.database.dao.UserProfileDao;
+import com.jangletech.qoogol.model.DashBoard;
+import com.jangletech.qoogol.model.Education;
 import com.jangletech.qoogol.model.LearningQuestionsNew;
-import com.jangletech.qoogol.model.TestModel;
+import com.jangletech.qoogol.model.Notification;
+import com.jangletech.qoogol.model.TestModelNew;
 import com.jangletech.qoogol.model.TestQuestion;
+import com.jangletech.qoogol.model.UserProfile;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {LearningQuestionsNew.class, TestModel.class, TestQuestion.class}, version = 1, exportSchema = false)
+@Database(entities = {LearningQuestionsNew.class, DashBoard.class, TestModelNew.class,
+        TestQuestion.class, UserProfile.class, Education.class,
+        Notification.class}, version = 1, exportSchema = false)
 @TypeConverters(Converters.class)
 public abstract class QoogolDatabase extends RoomDatabase {
 
+    public abstract UserProfileDao userProfileDao();
+
+    public abstract EducationDetailsDao educationDetailsDao();
+
+    public abstract NotificationDao notificationDao();
+
+    public abstract DashboardDao dashboardDao();
+
+    //public abstract TestDetailsDao testDetailsDao();
     public abstract TestDao testDao();
 
-    public abstract TestQuestionDao testQuestionDao();
-
+    public abstract LearningQuestionDao learningQuestionDao();
 
     private static volatile QoogolDatabase INSTANCE;
     private static final int NUMBER_OF_THREADS = 4;
@@ -38,14 +55,12 @@ public abstract class QoogolDatabase extends RoomDatabase {
     private static final String DB_PATH = String.format("%s/%s",
             Environment.getExternalStorageDirectory().getAbsolutePath(), DB_NAME);
 
-
     public static QoogolDatabase getDatabase(final Context context) {
         if (INSTANCE == null) {
             synchronized (QoogolDatabase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            QoogolDatabase.class, "qoogol_database")
-                            .addCallback(sRoomDatabaseCallback)
+                            QoogolDatabase.class, DB_NAME)
                             .build();
                 }
             }
@@ -54,19 +69,15 @@ public abstract class QoogolDatabase extends RoomDatabase {
     }
 
 
-    public abstract LearningQuestionDao learningQuestionDao();
-
-
     private static RoomDatabase.Callback sRoomDatabaseCallback = new RoomDatabase.Callback() {
         @Override
         public void onOpen(@NonNull SupportSQLiteDatabase db) {
             super.onOpen(db);
             databaseWriteExecutor.execute(() -> {
                 TestDao dao = INSTANCE.testDao();
-                TestQuestionDao testQuestionDao = INSTANCE.testQuestionDao();
+                //TestQuestionDao testQuestionDao = INSTANCE.testQuestionDao();
 
             });
         }
     };
-
 }

@@ -2,12 +2,8 @@ package com.jangletech.qoogol.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-
-import com.jangletech.qoogol.enums.QuestionFilterType;
-
 import java.util.HashSet;
 import java.util.Set;
-
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -21,6 +17,7 @@ public class PreferenceManager {
     private SharedPreferences sharedPreferences;
 
     public PreferenceManager(Context ctx) {
+        if(ctx!=null)
         sharedPreferences = ctx.getSharedPreferences(Constant.PREF_NAME, Context.MODE_PRIVATE);
     }
 

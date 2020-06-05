@@ -79,6 +79,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/user_profile_pic">
 
                     <TextView
+                        android:textColor="@color/colorSkyBlue"
                         android:id="@+id/tvReferralTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -107,6 +108,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/user_profile_pic">
 
                     <TextView
+                        android:textColor="@color/colorSkyBlue"
                         android:id="@+id/tvPointsTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -143,6 +145,7 @@
                         android:padding="@dimen/_2sdp">
 
                         <TextView
+                            android:textColor="@color/colorSkyBlue"
                             android:id="@+id/tvFirstName"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -166,6 +169,7 @@
                         android:padding="@dimen/_2sdp">
 
                         <TextView
+                            android:textColor="@color/colorSkyBlue"
                             android:id="@+id/tvLastName"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -199,6 +203,7 @@
                         android:padding="@dimen/_2sdp">
 
                         <TextView
+                            android:textColor="@color/colorSkyBlue"
                             android:id="@+id/tvMobile"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -249,6 +254,7 @@
                         android:padding="@dimen/_2sdp">
 
                         <TextView
+                            android:textColor="@color/colorSkyBlue"
                             android:id="@+id/tvEmail"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -289,6 +295,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/mobileEmailLayout">
 
                     <TextView
+                        android:textColor="@color/colorSkyBlue"
                         android:id="@+id/tvPassword"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -315,6 +322,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/passwordLayout">
 
                     <RadioButton
+                        android:textColor="@color/colorSkyBlue"
                         android:id="@+id/radioMale"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -322,6 +330,7 @@
                         android:text="@string/male" />
 
                     <RadioButton
+                        android:textColor="@color/colorSkyBlue"
                         android:id="@+id/radioFemale"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -329,6 +338,7 @@
                         android:text="@string/female" />
 
                     <RadioButton
+                        android:textColor="@color/colorSkyBlue"
                         android:id="@+id/radioOthers"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -345,6 +355,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/genderGrp">
 
                     <TextView
+                        android:textColor="@color/colorSkyBlue"
                         android:id="@+id/tvDob"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -372,6 +383,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/dobLayout">
 
                     <TextView
+                        android:textColor="@color/colorSkyBlue"
                         android:id="@+id/tvLanguage"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -402,6 +414,7 @@
                         android:text='@{userProfile.u_Hobby}' />-->
 
                     <com.google.android.material.button.MaterialButton
+                        android:backgroundTint="@color/color_red"
                         android:id="@+id/btnImportContacts"
                         android:textAllCaps="false"
                         android:text="Import Contacts"
@@ -418,6 +431,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/mobileEmailLayout">
 
                         <TextView
+                            android:textColor="@color/colorSkyBlue"
                             android:id="@+id/tvTagLine"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -434,6 +448,7 @@
                     </LinearLayout>
 
                     <TextView
+                        android:textColor="@color/colorSkyBlue"
                         android:id="@+id/tvNationality"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -448,6 +463,7 @@
                         android:text='@{userProfile.u_Nationality}' />
 
                     <TextView
+                        android:textColor="@color/colorSkyBlue"
                         android:id="@+id/tvState"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -462,6 +478,7 @@
                         android:text='@{userProfile.u_State}' />
 
                     <TextView
+                        android:textColor="@color/colorSkyBlue"
                         android:id="@+id/tvDivision"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -476,6 +493,7 @@
                         android:text='@{userProfile.u_District}' />
 
                     <TextView
+                        android:textColor="@color/colorSkyBlue"
                         android:id="@+id/tvCity"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -500,7 +518,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/_40sdp"
             android:layout_gravity="center_vertical"
-            android:background="@color/colorPrimaryDark"
+            android:background="@color/colorPrimary"
             android:gravity="center"
             android:text="Save"
             android:textAllCaps="false"

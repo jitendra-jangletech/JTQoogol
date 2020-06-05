@@ -181,6 +181,10 @@ public class UserProfile {
     @ColumnInfo
     private String u_BoardId;
 
+    public void setU_BoardId(String u_BoardId) {
+        this.u_BoardId = u_BoardId;
+    }
+
     @SerializedName(Constant.ubm_board_name)
     @ColumnInfo
     private String u_Board;
@@ -240,6 +244,14 @@ public class UserProfile {
     @SerializedName(Constant.dt_id)
     @ColumnInfo
     private String u_DistrictId;
+
+    public void setU_StateId(String u_StateId) {
+        this.u_StateId = u_StateId;
+    }
+
+    public void setU_DistrictId(String u_DistrictId) {
+        this.u_DistrictId = u_DistrictId;
+    }
 
     @SerializedName(Constant.dt_name)
     @ColumnInfo
@@ -315,17 +327,11 @@ public class UserProfile {
         return u_StateId;
     }
 
-    void setU_StateId(String u_StateId) {
-        this.u_StateId = u_StateId;
-    }
 
     public String getU_DistrictId() {
         return u_DistrictId!=null?u_DistrictId:"";
     }
 
-    void setU_DistrictId(String u_DistrictId) {
-        this.u_DistrictId = u_DistrictId;
-    }
 
     public String getLastName() {
         return lastName;
@@ -339,41 +345,10 @@ public class UserProfile {
         return u_BoardId;
     }
 
-    void setU_BoardId(String u_BoardId) {
-        this.u_BoardId = u_BoardId;
-    }
-
     public String getU_DegreeId() {
         return u_DegreeId;
     }
 
-    void setU_DegreeId(String u_DegreeId) {
-        this.u_DegreeId = u_DegreeId;
-    }
-
-    String getU_CourseId() {
-        return u_CourseId;
-    }
-
-    void setU_CourseId(String u_CourseId) {
-        this.u_CourseId = u_CourseId;
-    }
-
-    String getU_SocialCommunityId() {
-        return u_SocialCommunityId;
-    }
-
-    void setU_SocialCommunityId(String u_SocialCommunityId) {
-        this.u_SocialCommunityId = u_SocialCommunityId;
-    }
-
-    String getU_ReligionId() {
-        return u_ReligionId;
-    }
-
-    void setU_ReligionId(String u_ReligionId) {
-        this.u_ReligionId = u_ReligionId;
-    }
 
     public String getFirstName() {
         return firstName;
@@ -383,13 +358,10 @@ public class UserProfile {
         this.firstName = firstName;
     }
 
-    String getConnection_count() {
+    public String getConnection_count() {
         return connection_count == null ? "0" : connection_count;
     }
 
-    void setConnection_count(String connection_count) {
-        this.connection_count = connection_count;
-    }
 
     public String getStrGender() {
         return strGender == null ? "" : strGender;
@@ -399,9 +371,6 @@ public class UserProfile {
         this.strGender = strGender;
     }
 
-    public int getGenderVisibilty() {
-        return getStrGender().isEmpty() ? View.GONE : View.VISIBLE;
-    }
 
     public String getStrRelationShip() {
         return strRelationShip == null ? "" : strRelationShip;
@@ -411,72 +380,18 @@ public class UserProfile {
         this.strRelationShip = strRelationShip;
     }
 
-    public int getStrRelationShipView() {
-        return getStrRelationShip().isEmpty() ? View.GONE : View.VISIBLE;
-    }
 
-    String getU_PurposeId() {
-        return u_PurposeId;
-    }
 
     public void setU_PurposeId(String u_PurposeId) {
         this.u_PurposeId = u_PurposeId;
-    }
-
-    String getU_ProfessionId() {
-        return u_ProfessionId;
-    }
-
-    void setU_ProfessionId(String u_ProfessionId) {
-        this.u_ProfessionId = u_ProfessionId;
-    }
-
-    String getU_CompanyNameId() {
-        return u_CompanyNameId;
-    }
-
-    void setU_CompanyNameId(String u_CompanyNameId) {
-        this.u_CompanyNameId = u_CompanyNameId;
     }
 
     public String getU_CollegeId() {
         return u_CollegeId;
     }
 
-    void setU_CollegeId(String u_CollegeId) {
-        this.u_CollegeId = u_CollegeId;
-    }
-
-    String getU_languageId() {
-        return u_languageId;
-    }
-
-    void setU_languageId(String u_languageId) {
-        this.u_languageId = u_languageId;
-    }
-
     public String getU_Nationality() {
         return u_Nationality == null ? "" : u_Nationality;
-    }
-
-    void setU_Nationality(String u_Nationality) {
-        this.u_Nationality = u_Nationality;
-    }
-
-    public int getVisibiltyNationality() {
-        return getU_Nationality().isEmpty() ? View.GONE : View.VISIBLE;
-    }
-
-    String getStrCountry() {
-        return strCountry;
-    }
-
-    void setStrCountry(String strCountry) {
-        this.strCountry = strCountry;
-    }
-
-    String getU_CityId() {
-        return u_CityId;
     }
 
     public void setU_CityId(String u_CityId) {
@@ -491,129 +406,58 @@ public class UserProfile {
         this.dob = dob;
     }
 
-    String getU_HobbyId() {
-        return u_HobbyId;
-    }
-
     public void setU_HobbyId(String u_HobbyId) {
         this.u_HobbyId = u_HobbyId;
     }
 
-    String getU_IndustryId() {
-        return u_IndustryId;
-    }
-
-    void setU_IndustryId(String u_IndustryId) {
-        this.u_IndustryId = u_IndustryId;
-    }
 
     public String getStrCourseYear() {
         return strCourseYear == null ? "" : strCourseYear;
     }
 
-    void setStrCourseYear(String strCourseYear) {
-        this.strCourseYear = strCourseYear;
-    }
-
-    public int getCYVisibilty() {
-        return getStrCourseYear().isEmpty() ? View.GONE : View.VISIBLE;
-    }
 
     public String getStrTagLine() {
         return strTagLine == null ? "" : strTagLine;
     }
 
-    void setStrTagLine(String strTagLine) {
-        this.strTagLine = strTagLine;
-    }
 
-    public int getTaglineVisbilty() {
-        return getStrTagLine().isEmpty() ? View.GONE : View.VISIBLE;
-    }
 
     public String getStrProjectCode() {
         return strProjectCode == null ? "" : strProjectCode;
     }
 
-    void setStrProjectCode(String strProjectCode) {
-        this.strProjectCode = strProjectCode;
-    }
 
-    public int getProCodeVisibilty() {
-        return getStrProjectCode().isEmpty() ? View.GONE : View.VISIBLE;
-    }
 
-    public int professionalAllVisibility() {
-        return getU_CompanyName().isEmpty() && getStrProjectCode().isEmpty() ?
-                View.GONE : View.VISIBLE;
-    }
 
-    public int locationAllVisibility() {
-        return getU_State().isEmpty() && getU_District().isEmpty() && getU_City().isEmpty() ?
-                View.GONE : View.VISIBLE;
-    }
-
-    public int educationAllVisibility() {
-        return getU_Board().isEmpty() && getU_College().isEmpty() && getU_Degree().isEmpty()
-                && getU_Course().isEmpty() && getStrCourseYear().isEmpty() && getU_Batches().isEmpty() ?
-                View.GONE : View.VISIBLE;
-    }
 
     public String getU_District() {
         return u_District == null ? "" : u_District;
     }
 
-    void setU_District(String u_District) {
-        this.u_District = u_District;
-    }
 
-    public int getDistrictVisibilty() {
-        return getU_District().isEmpty() ? View.GONE : View.VISIBLE;
-    }
 
     public String getU_language() {
         return u_language == null ? "" : u_language;
     }
 
-    void setU_language(String u_language) {
-        this.u_language = u_language;
-    }
 
-    public int getLangVisibilty() {
-        return getU_language().isEmpty() ? View.GONE : View.VISIBLE;
-    }
 
     public String getU_NationalityId() {
         return u_NationalityId;
     }
 
-    void setU_NationalityId(String u_NationalityId) {
-        this.u_NationalityId = u_NationalityId;
-    }
 
     public String getU_Religion() {
         return u_Religion == null ? "" : u_Religion;
     }
 
-    void setU_Religion(String u_Religion) {
-        this.u_Religion = u_Religion;
-    }
 
-    public int getReligionVisibilty() {
-        return getU_Religion().isEmpty() ? View.GONE : View.VISIBLE;
-    }
+
 
     public String getU_SocialCommunity() {
         return u_SocialCommunity == null ? "" : u_SocialCommunity;
     }
 
-    void setU_SocialCommunity(String u_SocialCommunity) {
-        this.u_SocialCommunity = u_SocialCommunity;
-    }
-
-    public int getSocialComVisibilty() {
-        return getU_SocialCommunity().isEmpty() ? View.GONE : View.VISIBLE;
-    }
 
     public String getU_Hobby() {
         return u_Hobby == null ? "" : u_Hobby;
@@ -623,9 +467,6 @@ public class UserProfile {
         this.u_Hobby = u_Hobby;
     }
 
-    public int getHobbyVisibilty() {
-        return getU_Hobby().isEmpty() ? View.GONE : View.VISIBLE;
-    }
 
     public String getU_Purpose() {
         return u_Purpose == null ? "" : u_Purpose;
@@ -635,148 +476,69 @@ public class UserProfile {
         this.u_Purpose = u_Purpose;
     }
 
-    public int getPurposeVisibilty() {
-        return getU_Purpose().isEmpty() ? View.GONE : View.VISIBLE;
-    }
 
     public String getU_Industry() {
         return u_Industry == null ? "" : u_Industry;
     }
 
-    void setU_Industry(String u_Industry) {
-        this.u_Industry = u_Industry;
-    }
-
-    public int getIndustryVisibilty() {
-        return getU_Industry().isEmpty() ? View.GONE : View.VISIBLE;
-    }
 
     public String getU_Profession() {
         return u_Profession == null ? "" : u_Profession;
     }
 
-    void setU_Profession(String u_Profession) {
-        this.u_Profession = u_Profession;
-    }
-
-    public int getProfessionVisibilty() {
-        return getU_Profession().isEmpty() ? View.GONE : View.VISIBLE;
-    }
 
     public String getU_Board() {
         return u_Board == null ? "" : u_Board;
     }
 
-    void setU_Board(String u_Board) {
-        this.u_Board = u_Board;
-    }
 
-    public int getBoardVisibilty() {
-        return getU_Board().isEmpty() ? View.GONE : View.VISIBLE;
-    }
 
     public String getU_College() {
         return u_College == null ? "" : u_College;
     }
 
-    void setU_College(String u_College) {
-        this.u_College = u_College;
-    }
 
-    public int getCollegeVisibilty() {
-        return getU_College().isEmpty() ? View.GONE : View.VISIBLE;
-    }
 
     public String getU_Course() {
         return u_Course == null ? "" : u_Course;
     }
 
-    void setU_Course(String u_Course) {
-        this.u_Course = u_Course;
-    }
 
-    public int getCourseVisibilty() {
-        return getU_Course().isEmpty() ? View.GONE : View.VISIBLE;
-    }
 
     public String getU_State() {
         return u_State == null ? "" : u_State;
     }
 
-    void setU_State(String u_State) {
-        this.u_State = u_State;
-    }
 
-    public int getStateVisibilty() {
-        return getU_State().isEmpty() ? View.GONE : View.VISIBLE;
-    }
 
     public String getU_City() {
         return u_City == null ? "" : u_City;
     }
 
-    void setU_City(String u_City) {
-        this.u_City = u_City;
-    }
 
-    public int getCityVisibilty() {
-        return getU_City().isEmpty() ? View.GONE : View.VISIBLE;
-    }
 
     public String getU_Batches() {
         return u_Batches == null ? "" : u_Batches;
     }
 
-    void setU_Batches(String u_Batches) {
-        this.u_Batches = u_Batches;
-    }
 
-    public int getBatchesVisibilty() {
-        return getU_Batches().trim().isEmpty() ? View.GONE : View.VISIBLE;
-    }
+
 
     public String getU_Degree() {
         return u_Degree == null ? "" : u_Degree;
     }
 
-    void setU_Degree(String u_Degree) {
-        this.u_Degree = u_Degree;
-    }
-
-    public int getDegreeVisibilty() {
-        return getU_Degree().isEmpty() ? View.GONE : View.VISIBLE;
-    }
 
     public String getU_CompanyName() {
         return u_CompanyName == null ? "" : u_CompanyName;
-    }
-
-    void setU_CompanyName(String u_CompanyName) {
-        this.u_CompanyName = u_CompanyName;
-    }
-
-    public int getCompanyVisibility() {
-        return getU_CompanyName().isEmpty() ? View.GONE : View.VISIBLE;
     }
 
     public String getAge() {
         return age == null ? "" : age;
     }
 
-    void setAge(String age) {
-        this.age = age;
-    }
-
-    public int getAgeVisibilty() {
-        return getAge().isEmpty() ? View.GONE : View.VISIBLE;
-    }
-
     public String getNotificationCount() {
         return notificationCount;
-    }
-
-    void setNotificationCount(String notificationCount) {
-        this.notificationCount = notificationCount;
     }
 
     public String getOnlineStatus() {
@@ -803,61 +565,30 @@ public class UserProfile {
         this.endPathImage = endPathImage;
     }
 
-    String getMs_count() {
-        return ms_count;
-    }
-
-    void setMs_count(String ms_count) {
-        this.ms_count = ms_count;
-    }
-
-    boolean isAppLive() {
-        return isAppLive;
-    }
-
-    void setAppLive(boolean appLive) {
-        isAppLive = appLive;
-    }
-
     public boolean isConnected() {
         return isConnected;
     }
 
-    void setConnected(boolean connected) {
-        isConnected = connected;
-    }
 
     public boolean isRequestActive() {
         return isRequestActive;
     }
 
-    void setRequestActive(boolean requestActive) {
-        isRequestActive = requestActive;
-    }
 
     public boolean isInitiated_by_u1() {
         return isInitiated_by_u1;
     }
 
-    void setInitiated_by_u1(boolean initiated_by_u1) {
-        isInitiated_by_u1 = initiated_by_u1;
-    }
 
     public boolean isInitiated_by_u2() {
         return isInitiated_by_u2;
     }
 
-    void setInitiated_by_u2(boolean initiated_by_u2) {
-        isInitiated_by_u2 = initiated_by_u2;
-    }
 
     public String getStatusText() {
         return statusText != null && !statusText.trim().isEmpty() ? statusText : "";
     }
 
-    void setStatusText(String statusText) {
-        this.statusText = statusText;
-    }
 
     public int getIllegalAccessCode() {
         return illegalAccessCode;
@@ -867,17 +598,10 @@ public class UserProfile {
         this.illegalAccessCode = illegalAccessCode;
     }
 
-    public String getStrNumberOfConnection() {
-        return String.format(Locale.ENGLISH, "%s", getConnection_count());
-    }
-
     public String getTotalPointsEarned() {
         return totalPointsEarned == null ? "" : totalPointsEarned;
     }
 
-    void setTotalPointsEarned(String totalPointsEarned) {
-        this.totalPointsEarned = totalPointsEarned;
-    }
 
     public String getAppVersion() {
         return appVersion == null ? "" : appVersion.trim();
@@ -885,10 +609,6 @@ public class UserProfile {
 
     public void setAppVersion(String appVersion) {
         this.appVersion = appVersion;
-    }
-
-    public int getAcceptRejectVisibility() {
-        return (!isConnected() && isInitiated_by_u2()) ? View.VISIBLE : View.GONE;
     }
 
     public boolean isNotificationEnabled() {
@@ -953,5 +673,217 @@ public class UserProfile {
 
     public void setResponseCode(String responseCode) {
         this.responseCode = responseCode;
+    }
+
+    public void setStrTagLine(String strTagLine) {
+        this.strTagLine = strTagLine;
+    }
+
+    public void setStatusText(String statusText) {
+        this.statusText = statusText;
+    }
+
+    public void setAge(String age) {
+        this.age = age;
+    }
+
+    public void setConnection_count(String connection_count) {
+        this.connection_count = connection_count;
+    }
+
+    public void setNotificationCount(String notificationCount) {
+        this.notificationCount = notificationCount;
+    }
+
+    public String getMs_count() {
+        return ms_count;
+    }
+
+    public void setMs_count(String ms_count) {
+        this.ms_count = ms_count;
+    }
+
+    public String getU_languageId() {
+        return u_languageId;
+    }
+
+    public void setU_languageId(String u_languageId) {
+        this.u_languageId = u_languageId;
+    }
+
+    public void setU_language(String u_language) {
+        this.u_language = u_language;
+    }
+
+    public void setU_NationalityId(String u_NationalityId) {
+        this.u_NationalityId = u_NationalityId;
+    }
+
+    public void setU_Nationality(String u_Nationality) {
+        this.u_Nationality = u_Nationality;
+    }
+
+    public String getU_ReligionId() {
+        return u_ReligionId;
+    }
+
+    public void setU_ReligionId(String u_ReligionId) {
+        this.u_ReligionId = u_ReligionId;
+    }
+
+    public void setU_Religion(String u_Religion) {
+        this.u_Religion = u_Religion;
+    }
+
+    public String getU_SocialCommunityId() {
+        return u_SocialCommunityId;
+    }
+
+    public void setU_SocialCommunityId(String u_SocialCommunityId) {
+        this.u_SocialCommunityId = u_SocialCommunityId;
+    }
+
+    public void setU_SocialCommunity(String u_SocialCommunity) {
+        this.u_SocialCommunity = u_SocialCommunity;
+    }
+
+    public String getU_HobbyId() {
+        return u_HobbyId;
+    }
+
+    public String getU_PurposeId() {
+        return u_PurposeId;
+    }
+
+    public String getU_IndustryId() {
+        return u_IndustryId;
+    }
+
+    public void setU_IndustryId(String u_IndustryId) {
+        this.u_IndustryId = u_IndustryId;
+    }
+
+    public void setU_Industry(String u_Industry) {
+        this.u_Industry = u_Industry;
+    }
+
+    public String getU_ProfessionId() {
+        return u_ProfessionId;
+    }
+
+    public void setU_ProfessionId(String u_ProfessionId) {
+        this.u_ProfessionId = u_ProfessionId;
+    }
+
+    public void setU_Profession(String u_Profession) {
+        this.u_Profession = u_Profession;
+    }
+
+    public String getU_CompanyNameId() {
+        return u_CompanyNameId;
+    }
+
+    public void setU_CompanyNameId(String u_CompanyNameId) {
+        this.u_CompanyNameId = u_CompanyNameId;
+    }
+
+    public void setU_CompanyName(String u_CompanyName) {
+        this.u_CompanyName = u_CompanyName;
+    }
+
+    public void setStrProjectCode(String strProjectCode) {
+        this.strProjectCode = strProjectCode;
+    }
+
+    public void setU_Board(String u_Board) {
+        this.u_Board = u_Board;
+    }
+
+    public void setU_CollegeId(String u_CollegeId) {
+        this.u_CollegeId = u_CollegeId;
+    }
+
+    public void setU_College(String u_College) {
+        this.u_College = u_College;
+    }
+
+    public void setU_DegreeId(String u_DegreeId) {
+        this.u_DegreeId = u_DegreeId;
+    }
+
+    public void setU_Degree(String u_Degree) {
+        this.u_Degree = u_Degree;
+    }
+
+    public String getU_CourseId() {
+        return u_CourseId;
+    }
+
+    public void setU_CourseId(String u_CourseId) {
+        this.u_CourseId = u_CourseId;
+    }
+
+    public void setU_Course(String u_Course) {
+        this.u_Course = u_Course;
+    }
+
+    public void setU_Batches(String u_Batches) {
+        this.u_Batches = u_Batches;
+    }
+
+    public void setStrCourseYear(String strCourseYear) {
+        this.strCourseYear = strCourseYear;
+    }
+
+    public String getStrCountry() {
+        return strCountry;
+    }
+
+    public void setStrCountry(String strCountry) {
+        this.strCountry = strCountry;
+    }
+
+    public boolean isAppLive() {
+        return isAppLive;
+    }
+
+    public void setAppLive(boolean appLive) {
+        isAppLive = appLive;
+    }
+
+    public void setU_State(String u_State) {
+        this.u_State = u_State;
+    }
+
+    public void setU_District(String u_District) {
+        this.u_District = u_District;
+    }
+
+    public String getU_CityId() {
+        return u_CityId;
+    }
+
+    public void setU_City(String u_City) {
+        this.u_City = u_City;
+    }
+
+    public void setConnected(boolean connected) {
+        isConnected = connected;
+    }
+
+    public void setRequestActive(boolean requestActive) {
+        isRequestActive = requestActive;
+    }
+
+    public void setInitiated_by_u1(boolean initiated_by_u1) {
+        isInitiated_by_u1 = initiated_by_u1;
+    }
+
+    public void setInitiated_by_u2(boolean initiated_by_u2) {
+        isInitiated_by_u2 = initiated_by_u2;
+    }
+
+    public void setTotalPointsEarned(String totalPointsEarned) {
+        this.totalPointsEarned = totalPointsEarned;
     }
 }

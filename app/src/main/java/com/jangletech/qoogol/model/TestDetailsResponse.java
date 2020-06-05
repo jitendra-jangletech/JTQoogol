@@ -1,10 +1,17 @@
 package com.jangletech.qoogol.model;
 
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
+
 import com.google.gson.annotations.SerializedName;
+import com.jangletech.qoogol.database.converter.Converters;
 import com.jangletech.qoogol.util.Constant;
 
 import java.io.Serializable;
 import java.util.List;
+
 
 public class TestDetailsResponse implements Serializable {
 
@@ -61,7 +68,6 @@ public class TestDetailsResponse implements Serializable {
         this.test_description = test_description;
     }
 
-
     public String getCm_chapter_name() {
         return cm_chapter_name;
     }
@@ -70,13 +76,6 @@ public class TestDetailsResponse implements Serializable {
         this.cm_chapter_name = cm_chapter_name;
     }
 
-    public List<QSet> getqSetList() {
-        return qSetList;
-    }
-
-    public void setqSetList(List<QSet> qSetList) {
-        this.qSetList = qSetList;
-    }
 
     public String getResponseCode() {
         return responseCode;
@@ -84,5 +83,13 @@ public class TestDetailsResponse implements Serializable {
 
     public void setResponseCode(String responseCode) {
         this.responseCode = responseCode;
+    }
+
+    public List<QSet> getqSetList() {
+        return qSetList;
+    }
+
+    public void setqSetList(List<QSet> qSetList) {
+        this.qSetList = qSetList;
     }
 }

@@ -77,7 +77,7 @@ public class CommentFragment extends Fragment implements View.OnClickListener, C
         Call<ProcessQuestion> call;
 
         if (api_case.equalsIgnoreCase("L"))
-            call = apiService.fetchComments(user_id, que_id, api_case);
+            call = apiService.fetchComments(Integer.parseInt(user_id), que_id, api_case);
         else
             call = apiService.addCommentApi(user_id, que_id, api_case, comment_text);
 

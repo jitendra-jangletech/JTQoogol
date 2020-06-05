@@ -33,11 +33,12 @@
                 android:padding="@dimen/_2sdp"
                 android:text="Jawaharlal Nehru Technological University"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@color/colorBlack"
+                android:textColor="@color/colorSkyBlue"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:textColor="@color/colorSkyBlue"
                 android:id="@+id/tvInstitute"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -45,7 +46,6 @@
                 android:padding="@dimen/_2sdp"
                 android:text="Nalla Malla Raddy Engineering College"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textColor="@color/colorBlack"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvUniversity" />
 
@@ -58,7 +58,7 @@
                 android:padding="@dimen/_2sdp"
                 android:text="Bachelor of Technology"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textColor="@color/colorBlack"
+                android:textColor="@color/colorSkyBlue"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvInstitute" />
 
@@ -70,15 +70,27 @@
                 android:padding="@dimen/_2sdp"
                 android:text="Computer Science and Engineering"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textColor="@color/colorBlack"
+                android:textColor="@color/colorSkyBlue"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvDegree" />
+
+            <TextView
+                android:id="@+id/tvCourseYear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:padding="@dimen/_2sdp"
+                android:text="2nd Year"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="@color/colorSkyBlue"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvCourse" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvCourse">
+                app:layout_constraintTop_toBottomOf="@+id/tvCourseYear">
 
 
                 <TextView
@@ -89,7 +101,7 @@
                     android:padding="@dimen/_2sdp"
                     android:text="08 May 2010"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    android:textColor="@color/colorBlack"
+                    android:textColor="@color/colorSkyBlue"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -102,7 +114,7 @@
                     android:layout_marginTop="@dimen/_2sdp"
                     android:padding="@dimen/_2sdp"
                     android:text="To"
-                    android:textColor="@color/colorBlack"
+                    android:textColor="@color/colorSkyBlue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
@@ -115,7 +127,7 @@
                     android:padding="@dimen/_2sdp"
                     android:text="08 May 2010"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    android:textColor="@color/colorBlack"
+                    android:textColor="@color/colorSkyBlue"
                     app:layout_constraintLeft_toRightOf="@+id/tvToDate"
                     app:layout_constraintTop_toTopOf="parent" />
 

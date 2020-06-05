@@ -22,6 +22,8 @@ import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.AddEditEducationBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.model.AddElementResponse;
+import com.jangletech.qoogol.model.ClassList;
+import com.jangletech.qoogol.model.ClassResponse;
 import com.jangletech.qoogol.model.Course;
 import com.jangletech.qoogol.model.CourseResponse;
 import com.jangletech.qoogol.model.Degree;
@@ -75,7 +77,7 @@ public class AddEduDialog extends Dialog {
     private HashMap<String, String> params;
     private ApiCallListener apiCallListener;
 
-    public AddEduDialog(@NonNull Activity context, Education education,ApiCallListener apiCallListener) {
+    public AddEduDialog(@NonNull Activity context, Education education, ApiCallListener apiCallListener) {
         super(context, android.R.style.Theme_DeviceDefault_Light_DarkActionBar);
         this.context = context;
         this.education = education;
@@ -93,22 +95,30 @@ public class AddEduDialog extends Dialog {
         setContentView(addEditEducationBinding.getRoot());
         if (education != null) {
 
+            fetchClassList(education.getCo_id());
+            fetchInstituteData(0);
+            fetchUniversityData();
+            fetchDegreeData();
+            fetchCourseData(Integer.parseInt(education.getDm_id()));
+
             addEditEducationBinding.universityBoardAutocompleteView.setTag(education.getUbm_id());
             addEditEducationBinding.instituteAutocompleteView.setTag(education.getIom_id());
             addEditEducationBinding.degreeAutocompleteView.setTag(education.getDm_id());
             addEditEducationBinding.courseAutocompleteView.setTag(education.getCo_id());
-
+            addEditEducationBinding.courseYearAutocompleteView.setTag(education.getUe_cy_num());
             addEditEducationBinding.universityBoardAutocompleteView.setText(education.getUbm_board_name());
             addEditEducationBinding.instituteAutocompleteView.setText(education.getIom_name());
             addEditEducationBinding.degreeAutocompleteView.setText(education.getDm_degree_name());
             addEditEducationBinding.courseAutocompleteView.setText(education.getCo_name());
+            addEditEducationBinding.courseYearAutocompleteView.setText(education.getUe_cy_num());
             addEditEducationBinding.etstartdate.setText(DateUtils.getFormattedDate(education.getUe_startdate()));
             addEditEducationBinding.etenddate.setText(DateUtils.getFormattedDate(education.getUe_enddate()));
         }
-        fetchInstituteData(0);
-        fetchUniversityData();
-        fetchDegreeData();
         setListeners();
+    }
+
+    private String getSingleQuoteString(String text) {
+        return String.format("'%s'", text);
     }
 
 
@@ -134,6 +144,9 @@ public class AddEduDialog extends Dialog {
             } else if (addEditEducationBinding.courseAutocompleteView.getText().toString().trim().isEmpty()) {
                 addEditEducationBinding.courseAutocompleteView.setError("Please select course.");
                 return;
+            } else if (addEditEducationBinding.courseYearAutocompleteView.getText().toString().trim().isEmpty()) {
+                addEditEducationBinding.courseYearAutocompleteView.setError("Please select course year.");
+                return;
             } else if (addEditEducationBinding.etstartdate.getText().toString().trim().isEmpty()) {
                 addEditEducationBinding.tilStartdate.setError("Please select start date.");
                 return;
@@ -151,6 +164,7 @@ public class AddEduDialog extends Dialog {
             params.put(Constant.co_id, addEditEducationBinding.courseAutocompleteView.getTag().toString());
             params.put(Constant.ue_startdate, addEditEducationBinding.etstartdate.getText().toString());
             params.put(Constant.ue_enddate, addEditEducationBinding.etenddate.getText().toString());
+            params.put(Constant.ue_cy_num, addEditEducationBinding.courseYearAutocompleteView.getTag().toString());
 
             if (education != null) {
                 params.put(Constant.CASE, "U");
@@ -190,8 +204,8 @@ public class AddEduDialog extends Dialog {
                 addEditEducationBinding.degreeAutocompleteView.setTag(key);
                 fetchCourseData(key);
             }
-            Log.e(TAG, "Degree Id : "+key);
-            Log.e(TAG, "Degree : "+name);
+            Log.e(TAG, "Degree Id : " + key);
+            Log.e(TAG, "Degree : " + name);
         });
 
         addEditEducationBinding.courseAutocompleteView.setOnItemClickListener((parent, view, position, id) -> {
@@ -199,9 +213,15 @@ public class AddEduDialog extends Dialog {
             int key = UtilHelper.getKeyFromValue(mMapCourse, name);
             if (key != -1) {
                 addEditEducationBinding.courseAutocompleteView.setTag(key);
+                fetchClassList(String.valueOf(key));
             }
-            Log.e(TAG, "Course Id : "+key);
-            Log.e(TAG, "Course : "+name);
+            Log.e(TAG, "Course Id : " + key);
+            Log.e(TAG, "Course : " + name);
+        });
+
+        addEditEducationBinding.courseYearAutocompleteView.setOnItemClickListener((parent, view, position, id) -> {
+            final String name = ((TextView) view).getText().toString();
+            addEditEducationBinding.courseYearAutocompleteView.setTag(name);
         });
 
 
@@ -213,6 +233,34 @@ public class AddEduDialog extends Dialog {
         addEditEducationBinding.etenddate.setOnTouchListener((v, event) -> {
             getDate(event, 1);
             return true;
+        });
+    }
+
+    private void fetchClassList(String courseId) {
+        Log.d(TAG, "fetchClassList: " + courseId);
+        ProgressDialog.getInstance().show(context);
+        Call<ClassList> call = apiService.fetchClasses(courseId);
+        call.enqueue(new Callback<ClassList>() {
+            @Override
+            public void onResponse(Call<ClassList> call, Response<ClassList> response) {
+                ProgressDialog.getInstance().dismiss();
+                if (response.body() != null) {
+                    List<String> list = new ArrayList<>();
+                    for (int i = 0; i < response.body().getClassResponseList().size(); i++) {
+                        list.add(response.body().getClassResponseList().get(i).getClm_class_num());
+                    }
+                    populateClasses(list);
+                } else {
+                    Toast.makeText(context, "Something went wrong.", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ClassList> call, Throwable t) {
+                ProgressDialog.getInstance().dismiss();
+                Toast.makeText(context, "Something went wrong.", Toast.LENGTH_SHORT).show();
+                t.printStackTrace();
+            }
         });
     }
 
@@ -277,8 +325,8 @@ public class AddEduDialog extends Dialog {
             }
 
             Calendar newCalendar = Calendar.getInstance();
-            if(date!=null)
-            newCalendar.setTime(date);
+            if (date != null)
+                newCalendar.setTime(date);
             DatePickerDialog dialog = new DatePickerDialog(getContext(), android.R.style.Theme_Holo_Dialog, new DatePickerDialog.OnDateSetListener() {
                 @Override
                 public void onDateSet(DatePicker datePicker, int year, int month, int day) {
@@ -329,9 +377,16 @@ public class AddEduDialog extends Dialog {
         addEditEducationBinding.courseAutocompleteView.setAdapter(courseAdapter);
     }
 
+    private void populateClasses(List<String> list) {
+        Collections.sort(list);
+        ArrayAdapter<String> classAdapter = new ArrayAdapter<String>(context,
+                R.layout.autocomplete_list_item, list);
+        addEditEducationBinding.courseYearAutocompleteView.setAdapter(classAdapter);
+    }
+
     private void updateUserEducation(HashMap<String, String> params) {
         Log.d(TAG, "Params : " + params);
-        Log.e(TAG, "Save Degree Id : "+params.get(Constant.dm_id));
+        Log.e(TAG, "Save Degree Id : " + params.get(Constant.dm_id));
         ProgressDialog.getInstance().show(context);
         Call<VerifyResponse> call = apiService.updateUserEdu(
                 params.get(Constant.u_user_id),
@@ -346,7 +401,9 @@ public class AddEduDialog extends Dialog {
                 params.get(Constant.iom_id),
                 params.get(Constant.co_id),
                 params.get(Constant.dm_id),
-                params.get(Constant.ue_id));
+                params.get(Constant.ue_id),
+                params.get(Constant.ue_cy_num)
+                );
         call.enqueue(new Callback<VerifyResponse>() {
             @Override
             public void onResponse(Call<VerifyResponse> call, Response<VerifyResponse> response) {
@@ -549,7 +606,7 @@ public class AddEduDialog extends Dialog {
         });
     }
 
-    public interface ApiCallListener{
+    public interface ApiCallListener {
         void onSuccess();
     }
 }

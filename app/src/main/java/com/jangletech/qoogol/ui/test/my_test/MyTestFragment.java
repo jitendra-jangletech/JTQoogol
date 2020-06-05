@@ -1,5 +1,6 @@
 package com.jangletech.qoogol.ui.test.my_test;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -20,13 +21,13 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.activities.MainActivity;
 import com.jangletech.qoogol.activities.PracticeTestActivity;
-import com.jangletech.qoogol.activities.StartTestActivity;
 import com.jangletech.qoogol.adapter.TestListAdapter;
 import com.jangletech.qoogol.databinding.FragmentTestMyBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
@@ -39,18 +40,17 @@ import com.jangletech.qoogol.model.TestModelNew;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
-import com.jangletech.qoogol.ui.test.my_test.MyTestViewModel;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.jangletech.qoogol.util.Constant.learning;
 import static com.jangletech.qoogol.util.Constant.test;
 
 public class MyTestFragment extends BaseFragment implements TestListAdapter.TestClickListener, SearchView.OnQueryTextListener {
@@ -58,13 +58,20 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
     private static final String TAG = "MyTestFragment";
     private MyTestViewModel mViewModel;
     private FragmentTestMyBinding mBinding;
-    private TestListAdapter testAdapter;
+    private TestListAdapter mAdapter;
     private List<TestModelNew> testList;
+    private Context mContext;
     private int tmId;
     ApiInterface apiService = ApiClient.getInstance().getApi();
 
     public static MyTestFragment newInstance() {
         return new MyTestFragment();
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        mContext = context.getApplicationContext();
     }
 
     @Override
@@ -120,32 +127,43 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
 
     private void initViews() {
 
-        if (getArguments() != null && getArguments().getString(Constant.CALL_FROM) != null &&
-                getArguments().getString(Constant.CALL_FROM).equalsIgnoreCase("MY_TEST")) {
-            Log.d(TAG, "My Test Bundle : " + getArguments().getString(Constant.CALL_FROM));
-            mBinding.horizontalScrollView.setVisibility(View.VISIBLE);
-            fetchSubjectList();
-            mViewModel.getAllSubjects().observe(getActivity(), new Observer<List<FetchSubjectResponse>>() {
-                @Override
-                public void onChanged(@Nullable final List<FetchSubjectResponse> subjects) {
+        mBinding.swipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                fetchTestList("");
+            }
+        });
+
+        fetchSubjectList(new PreferenceManager(requireActivity()).getString(Constant.scr_co_id));
+        fetchTestList("");
+        mViewModel.getAllSubjects().observe(getViewLifecycleOwner(), new Observer<List<FetchSubjectResponse>>() {
+            @Override
+            public void onChanged(@Nullable final List<FetchSubjectResponse> subjects) {
+                if (subjects != null) {
                     Log.d(TAG, "onChanged Subjects Size : " + subjects.size());
-                    prepareSubjectChips(subjects);
-                    fetchTestList("");
+                    ArrayList<String> subjectList = new ArrayList<>();
+                    for(FetchSubjectResponse obj : subjects){
+                        if(!subjectList.contains(obj.getSm_sub_name()))
+                        subjectList.add(obj.getSm_sub_name());
+                    }
+                    prepareSubjectChips(subjectList);
                 }
-            });
+            }
+        });
 
-        } else {
-            fetchTestList("FV");
-            mBinding.horizontalScrollView.setVisibility(View.GONE);
-        }
+//        } else {
+//            fetchTestList("FV");
+//            mBinding.horizontalScrollView.setVisibility(View.GONE);
+//        }
 
-
-        mViewModel.getAllTestList().observe(getActivity(), new Observer<List<TestModelNew>>() {
+        mViewModel.getAllTests().observe(getViewLifecycleOwner(), new Observer<List<TestModelNew>>() {
             @Override
             public void onChanged(@Nullable final List<TestModelNew> tests) {
-                Log.d(TAG, "onChanged Size : " + tests.size());
-                testList = tests;
-                setMyTestList(tests);
+                if (tests != null) {
+                    Log.d(TAG, "onChanged Size : " + tests.size());
+                    testList = tests;
+                    setMyTestList(tests);
+                }
             }
         });
 
@@ -159,9 +177,9 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
                         List<TestModelNew> filteredModelList = filterBySubject(testList, chip.getText().toString());
                         if (filteredModelList.size() > 0) {
                             mBinding.tvNoTest.setVisibility(View.GONE);
-                            testAdapter.setSearchResult(filteredModelList);
+                            mAdapter.setSearchResult(filteredModelList);
                         } else {
-                            testAdapter.setSearchResult(filteredModelList);
+                            mAdapter.setSearchResult(filteredModelList);
                             mBinding.tvNoTest.setVisibility(View.VISIBLE);
                         }
                     }
@@ -170,32 +188,26 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
                 }
             }
         });
-        mBinding.fabFilter.setOnClickListener(v -> {
-            MainActivity.navController.navigate(R.id.nav_test_filter);
-        });
     }
 
     public void setMyTestList(List<TestModelNew> testList) {
-        testAdapter = new TestListAdapter(new MyTestFragment(), testList, this);
-        mBinding.testListRecyclerView.setHasFixedSize(true);
+        mAdapter = new TestListAdapter(requireActivity(), testList, this);
         mBinding.testListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mBinding.testListRecyclerView.setAdapter(testAdapter);
+        mBinding.testListRecyclerView.setAdapter(mAdapter);
     }
 
-    private void prepareSubjectChips(List<FetchSubjectResponse> subjectResponseList) {
-
+    private void prepareSubjectChips(ArrayList<String> subjects) {
         mBinding.subjectsChipGrp.removeAllViews();
-        for (int i = 0; i < subjectResponseList.size(); i++) {
+        int idCounter = 0;
+        for (String subject: subjects) {
             Chip chip = (Chip) LayoutInflater.from(mBinding.subjectsChipGrp.getContext()).inflate(R.layout.chip_layout, mBinding.subjectsChipGrp, false);
-            chip.setText(subjectResponseList.get(i).getSm_sub_name());
+            chip.setText(subject);
+            chip.setId(idCounter);
             chip.setTag("Subjects");
-            chip.setId(i);
-            if (i == 0) {
-                chip.setChecked(true);
-            }
             chip.setClickable(true);
             chip.setCheckable(true);
             mBinding.subjectsChipGrp.addView(chip);
+            idCounter++;
         }
     }
 
@@ -218,7 +230,7 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
     @Override
     public boolean onQueryTextChange(String newText) {
         final List<TestModelNew> filteredModelList = filter(testList, newText);
-        testAdapter.setSearchResult(filteredModelList);
+        mAdapter.setSearchResult(filteredModelList);
         return true;
     }
 
@@ -249,24 +261,22 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
         return filteredModelList;
     }
 
-    private void fetchSubjectList() {
-        ProgressDialog.getInstance().show(getActivity());
-        Call<FetchSubjectResponseList> call = apiService.fetchSubjectList("");
+    private void fetchSubjectList(String scrCoId) {
+        //ProgressDialog.getInstance().show(getActivity());
+        mBinding.swipeToRefresh.setRefreshing(true);
+        Call<FetchSubjectResponseList> call = apiService.fetchSubjectList(scrCoId);
         call.enqueue(new Callback<FetchSubjectResponseList>() {
             @Override
             public void onResponse(Call<FetchSubjectResponseList> call, Response<FetchSubjectResponseList> response) {
-                ProgressDialog.getInstance().dismiss();
-                // if (response.body() != null && response.body().getResponse().equals("200")) {
+                //ProgressDialog.getInstance().dismiss();
+                mBinding.swipeToRefresh.setRefreshing(false);
                 mViewModel.setAllSubjectList(response.body().getFetchSubjectResponseList());
-                //}
-                /*else {
-                    showErrorDialog(getActivity(), response.body().getResponse(), response.body().getMessage());
-                }*/
             }
 
             @Override
             public void onFailure(Call<FetchSubjectResponseList> call, Throwable t) {
-                ProgressDialog.getInstance().dismiss();
+                //ProgressDialog.getInstance().dismiss();
+                mBinding.swipeToRefresh.setRefreshing(false);
                 showToast("Something went wrong!!");
                 t.printStackTrace();
             }
@@ -274,15 +284,16 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
     }
 
     private void fetchTestList(String caseFav) {
-        ProgressDialog.getInstance().show(getActivity());
-        Call<TestListResponse> call = apiService.fetchTestList(new PreferenceManager(getActivity()).getInt(Constant.USER_ID),caseFav);//todo change userId
-//        Call<TestListResponse> call = apiService.fetchTestList(1003);//todo change userId
+        mBinding.swipeToRefresh.setRefreshing(true);
+        Call<TestListResponse> call = apiService.fetchTestList(new PreferenceManager(getActivity()).getInt(Constant.USER_ID), caseFav);//todo change userId
         call.enqueue(new Callback<TestListResponse>() {
             @Override
             public void onResponse(Call<TestListResponse> call, Response<TestListResponse> response) {
-                ProgressDialog.getInstance().dismiss();
+                //ProgressDialog.getInstance().dismiss();
+                mBinding.swipeToRefresh.setRefreshing(false);
                 if (response.body() != null && response.body().getResponse().equals("200")) {
-                    mViewModel.setAllTestList(response.body().getTestList());
+                    //mViewModel.setAllTestList(response.body().getTestList());
+                    mViewModel.insert(response.body().getTestList());
                     Log.d(TAG, "onResponse: " + response.body().getTestList());
                     Log.d(TAG, "onResponse: " + response.body().getTestList().size());
                 } else if (response.body().getResponse().equals("501")) {
@@ -294,7 +305,8 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
 
             @Override
             public void onFailure(Call<TestListResponse> call, Throwable t) {
-                ProgressDialog.getInstance().dismiss();
+                //ProgressDialog.getInstance().dismiss();
+                mBinding.swipeToRefresh.setRefreshing(false);
                 showToast("Something went wrong!!");
                 t.printStackTrace();
             }
@@ -335,19 +347,20 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
 
     @Override
     public void onLikeClick(TestModelNew testModel, int pos, boolean isChecked) {
-        if (isChecked) {
-            callLikeTestApi(0, pos);
-        } else {
-            callLikeTestApi(1, pos);
-        }
+        callApi(isChecked ? 1 : 0, pos);
     }
 
     @Override
-    public void onFavouriteClick(TestModelNew testModel, boolean isChecked) {
+    public void onFavouriteClick(TestModelNew testModel, boolean isChecked, int pos) {
+        HashMap<String, Integer> params = new HashMap<>();
         if (isChecked) {
-            showToast("Added to favourites");
+            params.put(Constant.isFavourite, 1);
+            params.put(Constant.tm_id, testModel.getTm_id());
+            favTest(params);
         } else {
-            showToast("Deleted from favourites");
+            params.put(Constant.isFavourite, 0);
+            params.put(Constant.tm_id, testModel.getTm_id());
+            favTest(params);
         }
     }
 
@@ -359,8 +372,40 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
         //MainActivity.navController.navigate(R.id.nav_test_attempt_history,bundle);
     }
 
-    private void callLikeTestApi(int like, int pos) {
+    private void callApi(int like, int pos) {
         doLikeTest(like, pos, testList.get(pos).getTm_id());
+    }
+
+    private void favTest(HashMap<String, Integer> map) {
+        Log.d(TAG, "favTest params : " + map);
+        ProgressDialog.getInstance().show(getActivity());
+        Call<ProcessQuestion> call = apiService.addFavTest(new PreferenceManager(getActivity()).getInt(Constant.USER_ID), map.get(Constant.tm_id), "I", map.get(Constant.isFavourite));
+        call.enqueue(new Callback<ProcessQuestion>() {
+            @Override
+            public void onResponse(Call<ProcessQuestion> call, Response<ProcessQuestion> response) {
+                ProgressDialog.getInstance().dismiss();
+                try {
+                    if (response.body() != null && response.body().getResponse().equals("200")) {
+                        if (map.get(Constant.isFavourite) == 0) {
+                            showToast("Removed from favourites");
+                        } else {
+                            showToast("Added to favourites");
+                        }
+                    } else {
+                        showErrorDialog(getActivity(), response.body().getResponse(), response.body().getMessage());
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ProcessQuestion> call, Throwable t) {
+                ProgressDialog.getInstance().dismiss();
+                showToast("Something went wrong!!");
+                t.printStackTrace();
+            }
+        });
     }
 
     private void doLikeTest(int like, int pos, int testId) {
@@ -372,34 +417,21 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
                 ProgressDialog.getInstance().dismiss();
                 try {
                     if (response.body() != null && response.body().getResponse().equals("200")) {
-                        Log.d(TAG, "onResponse Like : " + response.body().getResponse());
-                        Log.d(TAG, "onResponse Updated Like Count: " + response.body().getLikeCount());
-                        //testList.get(pos).setLikeCount();
-                        //testList.get(pos).setLike(false);
-                        TestModelNew testModelNew = testList.get(pos);
-                        int likeCount = Integer.parseInt(testModelNew.getLikeCount());
-                        if (like == 0) {
-                            Log.e(TAG, "like 0 ");
-                            testModelNew.setLike(false);
-                            if (likeCount <= 0)
-                                testModelNew.setLikeCount("0");
-                            else
-                                testModelNew.setLikeCount("" + (likeCount - 1));
-
-                            testList.set(pos, testModelNew);
-                            testAdapter.notifyItemChanged(pos, testModelNew);
-                        }
+                        int likeCount = Integer.parseInt(testList.get(pos).getLikeCount());
                         if (like == 1) {
-                            testModelNew.setLike(true);
-                            testModelNew.setLikeCount("" + (likeCount + 1));
-                            testList.set(pos, testModelNew);
-                            testAdapter.notifyItemChanged(pos, testModelNew);
-                            //testAdapter.updateList(testList, pos);
+                            Log.e(TAG, "like 0 ");
+                            testList.get(pos).setLike(false);
+                            if (likeCount <= 0)
+                                testList.get(pos).setLikeCount("0");
+                            else
+                                testList.get(pos).setLikeCount("" + (likeCount - 1));
                         }
-
-                        //Log.d(TAG, "id  " + testList.get(pos).getTm_id());
-                        //Log.d(TAG, "Like Count  " + testList.get(pos).getLikeCount());
-                        //Log.d(TAG, "IsLiked   " + testList.get(pos).isLike());
+                        if (like == 0) {
+                            testList.get(pos).setLike(true);
+                            testList.get(pos).setLikeCount("" + (likeCount + 1));
+                        }
+                        //testList.set(pos, testList.get(pos));
+                        mAdapter.updateList(testList);
 
                     } else {
                         showErrorDialog(getActivity(), response.body().getResponse(), response.body().getMessage());
@@ -416,5 +448,11 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
                 t.printStackTrace();
             }
         });
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mAdapter = null;
     }
 }

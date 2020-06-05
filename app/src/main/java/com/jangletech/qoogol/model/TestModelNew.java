@@ -1,9 +1,14 @@
 package com.jangletech.qoogol.model;
 
 import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
 
 import com.google.gson.annotations.SerializedName;
+import com.jangletech.qoogol.database.converter.Converters;
 import com.jangletech.qoogol.util.Constant;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.util.List;
@@ -14,6 +19,8 @@ public class TestModelNew implements Serializable {
     @SerializedName(Constant.test_description)
     private String test_description;
 
+    @NotNull
+    @PrimaryKey
     @SerializedName(Constant.tm_id)
     private int tm_id;
 
@@ -218,7 +225,8 @@ public class TestModelNew implements Serializable {
     @SerializedName(Constant.tm_attempted_by)
     private String tm_attempted_by;
 
-    @SerializedName(Constant._70E)
+    @TypeConverters(Converters.class)
+    @SerializedName(Constant.DataList)
     private List<AttemptedTest> attemptedTests;
 
     public List<AttemptedTest> getAttemptedTests() {

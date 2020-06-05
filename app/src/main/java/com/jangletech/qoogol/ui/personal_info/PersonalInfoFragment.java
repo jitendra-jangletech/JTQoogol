@@ -58,6 +58,7 @@ import com.mukesh.OtpView;
 import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.io.File;
+import java.net.UnknownHostException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -78,8 +79,6 @@ import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.http.Url;
-
 import static android.app.Activity.RESULT_OK;
 import static com.jangletech.qoogol.util.Constant.fetch_loged_in_user;
 import static com.jangletech.qoogol.util.Constant.fetch_other_user;
@@ -103,10 +102,9 @@ public class PersonalInfoFragment extends BaseFragment {
     private boolean isMailVerified = false;
     private boolean isMobileVerified = false;
     ApiInterface apiService = ApiClient.getInstance().getApi();
-    String userid="";
+    String userid = "";
     private PreferenceManager mSettings;
     Call<UserProfile> call;
-
 
     public static PersonalInfoFragment newInstance() {
         return new PersonalInfoFragment();
@@ -117,32 +115,63 @@ public class PersonalInfoFragment extends BaseFragment {
                              @Nullable Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_personal_info, container, false);
         mViewModel = new ViewModelProvider(this).get(PersonalInfoViewModel.class);
+        mBinding.setLifecycleOwner(this);
         initViews();
         return mBinding.getRoot();
     }
 
     public void initViews() {
+
+        //fetch data from localdb
+        //profile = mViewModel.getUserProfilePrev(getUserId());
+        //mBinding.setUserProfile(profile);
+
         mSettings = new PreferenceManager(getActivity());
         userid = mSettings.getProfileFetchId();
+        Log.d(TAG, "initViews UserId : "+mSettings.getUserId());
         if (userid.equalsIgnoreCase(mSettings.getUserId()))
             fetchUserProfile(fetch_loged_in_user);
         else
             fetchUserProfile(fetch_other_user);
 
-        mViewModel.getUserProfileInfo().observe(requireActivity(), userProfile -> {
-            mBinding.setUserProfile(userProfile);
-            Log.d(TAG, "First Name : " + userProfile.getFirstName());
-            profile = userProfile;
-            updateUi(userProfile);
-            if (!userid.equalsIgnoreCase(mSettings.getUserId()))
-                manageUnwantedFields(userProfile);
+        mViewModel.getUserProfile(userid).observe(getViewLifecycleOwner(), userProfile -> {
+            Log.d(TAG, "onChanged : "+userProfile);
+            if(userProfile!=null) {
+                mBinding.setUserProfile(userProfile);
+                updateUi(userProfile);
+                profile = userProfile;
+                if (!userid.equalsIgnoreCase(mSettings.getUserId()))
+                    manageUnwantedFields(userProfile);
+            }
         });
 
+        /*mViewModel.getInsertResult().observe(requireActivity(), new Observer<Integer>() {
+            @Override
+            public void onChanged(@Nullable Integer result) {
+                if (result == 1) {
+                    updateUi(mViewModel.getUserProfile(userid).getValue());
+                } else {
+                    showToast("Something went wrong!!");
+                }
+            }
+        });
+
+        mViewModel.getDeleteResult().observe(requireActivity(), new Observer<Integer>() {
+            @Override
+            public void onChanged(@Nullable Integer result) {
+                if (result == 1) {
+                    mViewModel.insert(mViewModel.getUserProfile(userid).getValue());
+                } else {
+                    showToast("Something went wrong!!");
+                }
+            }
+        });
+*/
         mBinding.userProfilePic.setOnClickListener(v -> {
             loadImage();
         });
 
-        mBinding.btnImportContacts.setOnClickListener(v->{
+        mBinding.btnImportContacts.setOnClickListener(v -> {
             MainActivity.navController.navigate(R.id.nav_import_contacts);
         });
 
@@ -152,7 +181,6 @@ public class PersonalInfoFragment extends BaseFragment {
         mBinding.tvMobile.setText(Html.fromHtml(getString(R.string.mobile_number)));
 
         mBinding.etDob.setOnClickListener(v -> {
-            //showToast("Cliked");
             showDatePicker();
         });
 
@@ -176,10 +204,9 @@ public class PersonalInfoFragment extends BaseFragment {
         });
 
 
-
         if (userid.equalsIgnoreCase(mSettings.getUserId())) {
             fetchLanguages();
-            mViewModel.getLanguages().observe(requireActivity(), new Observer<List<Language>>() {
+            mViewModel.getLanguages().observe(getViewLifecycleOwner(), new Observer<List<Language>>() {
                 @Override
                 public void onChanged(@Nullable final List<Language> languages) {
                     mMapLanguage = new HashMap<>();
@@ -191,7 +218,7 @@ public class PersonalInfoFragment extends BaseFragment {
             });
 
             fetchNationalities();
-            mViewModel.getCountries().observe(requireActivity(), new Observer<List<Country>>() {
+            mViewModel.getCountries().observe(getViewLifecycleOwner(), new Observer<List<Country>>() {
                 @Override
                 public void onChanged(@Nullable final List<Country> countries) {
                     mMapNationality = new HashMap<>();
@@ -202,7 +229,7 @@ public class PersonalInfoFragment extends BaseFragment {
                 }
             });
 
-            mViewModel.getStates().observe(requireActivity(), new Observer<List<State>>() {
+            mViewModel.getStates().observe(getViewLifecycleOwner(), new Observer<List<State>>() {
                 @Override
                 public void onChanged(@Nullable final List<State> states) {
                     mMapStates = new HashMap<>();
@@ -213,7 +240,7 @@ public class PersonalInfoFragment extends BaseFragment {
                 }
             });
 
-            mViewModel.getDistricts().observe(requireActivity(), new Observer<List<District>>() {
+            mViewModel.getDistricts().observe(getViewLifecycleOwner(), new Observer<List<District>>() {
                 @Override
                 public void onChanged(@Nullable final List<District> districts) {
                     mMapDistricts = new HashMap<>();
@@ -224,20 +251,23 @@ public class PersonalInfoFragment extends BaseFragment {
                 }
             });
 
-            mViewModel.getCities().observe(requireActivity(), cities -> {
-                mMapCities = new HashMap<>();
-                for (City city : cities) {
-                    mMapCities.put(Integer.valueOf(city.getCity_id()), city.getCityName());
+            mViewModel.getCities().observe(getViewLifecycleOwner(), new Observer<List<City>>() {
+                @Override
+                public void onChanged(@Nullable final List<City> cities) {
+                    mMapCities = new HashMap<>();
+                    for (City city : cities) {
+                        mMapCities.put(Integer.valueOf(city.getCity_id()), city.getCityName());
+                    }
+                    populateCity(mMapCities);
                 }
-                populateCity(mMapCities);
             });
 
         } else {
             manageLayoutForOtherUser();
         }
+
+
     }
-
-
 
     private void manageUnwantedFields(UserProfile userProfile) {
         if (userProfile.getStrTagLine().equalsIgnoreCase("")) {
@@ -280,9 +310,9 @@ public class PersonalInfoFragment extends BaseFragment {
 
         if (userProfile.getStrGender().equalsIgnoreCase("M"))
             mBinding.radioMale.setVisibility(View.VISIBLE);
-        else  if (userProfile.getStrGender().equalsIgnoreCase("F"))
+        else if (userProfile.getStrGender().equalsIgnoreCase("F"))
             mBinding.radioFemale.setVisibility(View.VISIBLE);
-        else  if (userProfile.getStrGender().equalsIgnoreCase("O"))
+        else if (userProfile.getStrGender().equalsIgnoreCase("O"))
             mBinding.radioOthers.setVisibility(View.VISIBLE);
 
     }
@@ -577,9 +607,9 @@ public class PersonalInfoFragment extends BaseFragment {
                 ProgressDialog.getInstance().dismiss();
                 if (response.body() != null && response.body().getResponseCode().equals("200")) {
                     showToast("Profile Updated Successfully.");
-                    String displayName = mBinding.etFirstName.getText().toString().trim()+" "+mBinding.etLastName.getText().toString().trim();
-                    new PreferenceManager(requireActivity()).saveString(Constant.DISPLAY_NAME,displayName);
-                    new PreferenceManager(requireActivity()).saveString(Constant.GENDER,userProfileMap.get(Constant.u_gender));
+                    String displayName = mBinding.etFirstName.getText().toString().trim() + " " + mBinding.etLastName.getText().toString().trim();
+                    new PreferenceManager(requireActivity()).saveString(Constant.DISPLAY_NAME, displayName);
+                    new PreferenceManager(requireActivity()).saveString(Constant.GENDER, userProfileMap.get(Constant.u_gender));
                     MainActivity.navController.navigate(R.id.nav_home);
                 } else {
                     showErrorDialog(requireActivity(), response.body().getResponseCode(), "");
@@ -589,6 +619,7 @@ public class PersonalInfoFragment extends BaseFragment {
             @Override
             public void onFailure(Call<UserProfileResponse> call, Throwable t) {
                 ProgressDialog.getInstance().dismiss();
+                Log.e(TAG, "onFailure updateUserProfile : "+t.getMessage());
                 showToast("Something went wrong!!");
                 t.printStackTrace();
             }
@@ -596,7 +627,8 @@ public class PersonalInfoFragment extends BaseFragment {
     }
 
     private void loadProfilePic(String url) {
-        Log.d(TAG, "loadProfilePic : "+ url);
+        Log.d(TAG, "loadProfilePic : " + url);
+        //new PreferenceManager(getActivity()).saveString(Constant.PROFILE_PIC,url);
         RequestOptions options = new RequestOptions()
                 .centerCrop()
                 .circleCrop()
@@ -609,29 +641,31 @@ public class PersonalInfoFragment extends BaseFragment {
     }
 
     private void fetchUserProfile(int call_from) {
-        ProgressDialog.getInstance().show(requireActivity());
-        if (call_from==fetch_loged_in_user)
-            call = apiService.fetchUserInfo(userid,getDeviceId(), Constant.APP_NAME, Constant.APP_VERSION);
+        //ProgressDialog.getInstance().show(requireActivity());
+        if (call_from == fetch_loged_in_user)
+            call = apiService.fetchUserInfo(userid, getDeviceId(), Constant.APP_NAME, Constant.APP_VERSION);
         else
-            call = apiService.fetchOtherUsersInfo(mSettings.getUserId(),getDeviceId(), Constant.APP_NAME, Constant.APP_VERSION,userid,"UP");
-
+            call = apiService.fetchOtherUsersInfo(mSettings.getUserId(), getDeviceId(), Constant.APP_NAME, Constant.APP_VERSION, userid, "UP");
 
         call.enqueue(new Callback<UserProfile>() {
             @Override
             public void onResponse(Call<UserProfile> call, Response<UserProfile> response) {
-                ProgressDialog.getInstance().dismiss();
+                //ProgressDialog.getInstance().dismiss();
                 if (response.body() != null && response.body().getResponseCode().equals("200")) {
-                    mViewModel.setUserProfileResponse(response.body());
-                } else  if(response.body().getResponseCode().equals("501")){
+                    //mViewModel.delete();
+                    mViewModel.insert(response.body());
+                } else if (response.body().getResponseCode().equals("501")) {
                     resetSettingAndLogout();
-                }else {
+                } else {
                     showErrorDialog(requireActivity(), response.body().getResponseCode(), "");
                 }
             }
 
             @Override
             public void onFailure(Call<UserProfile> call, Throwable t) {
-                ProgressDialog.getInstance().dismiss();
+                //ProgressDialog.getInstance().dismiss();
+                Log.e(TAG, "onFailure UserProfile: "+t.getMessage());
+                apiCallFailureDialog(t);
                 showToast("Something went wrong!!");
                 t.printStackTrace();
             }
@@ -656,6 +690,7 @@ public class PersonalInfoFragment extends BaseFragment {
             @Override
             public void onFailure(Call<Language> call, Throwable t) {
                 ProgressDialog.getInstance().dismiss();
+                Log.e(TAG, "onFailure Languages: "+t.getMessage());
                 showToast("Something went wrong!!");
                 t.printStackTrace();
             }
@@ -684,6 +719,7 @@ public class PersonalInfoFragment extends BaseFragment {
             @Override
             public void onFailure(Call<CountryResponse> call, Throwable t) {
                 ProgressDialog.getInstance().dismiss();
+                Log.e(TAG, "onFailure Nationalities: "+t.getMessage());
                 showToast("Something went wrong!!");
                 t.printStackTrace();
             }
@@ -707,6 +743,7 @@ public class PersonalInfoFragment extends BaseFragment {
             @Override
             public void onFailure(Call<StateResponse> call, Throwable t) {
                 ProgressDialog.getInstance().dismiss();
+                Log.e(TAG, "onFailure States: "+t.getMessage());
                 showToast("Something went wrong!!");
                 t.printStackTrace();
             }
@@ -731,6 +768,7 @@ public class PersonalInfoFragment extends BaseFragment {
             @Override
             public void onFailure(Call<DistrictResponse> call, Throwable t) {
                 ProgressDialog.getInstance().dismiss();
+                Log.e(TAG, "onFailure Districts: "+t.getMessage());
                 showToast("Something went wrong!!");
                 t.printStackTrace();
             }
@@ -754,6 +792,7 @@ public class PersonalInfoFragment extends BaseFragment {
             @Override
             public void onFailure(Call<CityResponse> call, Throwable t) {
                 ProgressDialog.getInstance().dismiss();
+                Log.e(TAG, "onFailure City : "+t.getMessage());
                 showToast("Something went wrong!!");
                 t.printStackTrace();
             }
@@ -781,10 +820,6 @@ public class PersonalInfoFragment extends BaseFragment {
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dialog.show();
 
-    }
-
-    private String getSingleQuoteString(String text) {
-        return String.format("'%s'", text);
     }
 
     private Integer getKeyFromValue(Map<Integer, String> map, String name) {
@@ -889,6 +924,7 @@ public class PersonalInfoFragment extends BaseFragment {
             @Override
             public void onFailure(Call<VerifyResponse> call, Throwable t) {
                 ProgressDialog.getInstance().dismiss();
+                Log.e(TAG, "onFailure Verify Mobile: "+t.getMessage());
                 showToast("Something went wrong!!");
                 t.printStackTrace();
             }
@@ -945,6 +981,7 @@ public class PersonalInfoFragment extends BaseFragment {
                         .start(requireActivity(), this);
             } catch (Exception e) {
                 e.printStackTrace();
+                Log.e(TAG, "onFailure onActivityResult: "+e.getMessage());
                 Toast.makeText(requireActivity(), "Something went wrong", Toast.LENGTH_LONG).show();
             }
         } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
@@ -1015,7 +1052,7 @@ public class PersonalInfoFragment extends BaseFragment {
                 ProgressDialog.getInstance().dismiss();
                 if (response.body() != null && response.body().getResponse().equals("200")) {
                     loadProfilePic(getProfileImageUrl(response.body().getW_user_profile_image_name()));
-                    new PreferenceManager(requireActivity()).saveString(Constant.PROFILE_PIC,getProfileImageUrl(response.body().getW_user_profile_image_name()));
+                    new PreferenceManager(requireActivity()).saveString(Constant.PROFILE_PIC, getProfileImageUrl(response.body().getW_user_profile_image_name()));
                 } else {
                     showErrorDialog(requireActivity(), response.body().getResponse(), "");
                 }
@@ -1025,8 +1062,7 @@ public class PersonalInfoFragment extends BaseFragment {
             public void onFailure(Call<VerifyResponse> call, Throwable t) {
                 ProgressDialog.getInstance().dismiss();
                 t.printStackTrace();
-                Log.d(TAG, "onFailure: " + t.getMessage());
-                Log.e(TAG, "onFailure: " + t.getStackTrace());
+                Log.e(TAG, "onFailure Upload Profile Pic: "+t.getMessage());
                 showToast("Something went wrong!!");
             }
         });

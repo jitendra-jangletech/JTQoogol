@@ -17,6 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
@@ -51,8 +52,10 @@ import com.jangletech.qoogol.util.UtilHelper;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -65,8 +68,10 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
 
     private static final String TAG = "SettingsFragment";
     private MyTestViewModel mViewModel;
+    private UserPreferences userSettings;
     private FragmentSettingsBinding mBinding;
     private Map<String, String> mMapClasses;
+    private Map<String, String> mMapScrCoId;
     private Map<Integer, String> mMapUniversity;
     private Map<Integer, String> mMapInstitute;
     private Map<Integer, String> mMapDegree;
@@ -90,7 +95,6 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
     }
 
     private void initViews(FragmentSettingsBinding mBinding) {
-
         fetchInstituteData(0);
         fetchUniversityData();
         fetchDegreeData();
@@ -124,8 +128,8 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
             mBinding.classAutocompleteView.setText("");
             mBinding.classAutocompleteView.setText("");
             mBinding.subjectsChipGrp.removeAllViews();
-            Log.e(TAG, "Degree Id : "+key);
-            Log.e(TAG, "Degree : "+name);
+            Log.e(TAG, "Degree Id : " + key);
+            Log.e(TAG, "Degree : " + name);
         });
 
         mBinding.courseAutocompleteView.setOnItemClickListener((parent, view, position, id) -> {
@@ -133,13 +137,13 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
             int key = UtilHelper.getKeyFromValue(mMapCourse, name);
             if (key != -1) {
                 mBinding.courseAutocompleteView.setTag(key);
-                fetchClassList(key);
+                fetchClassList(String.valueOf(key));
             }
             mBinding.classAutocompleteView.setText("");
             mBinding.classAutocompleteView.setTag("");
             mBinding.subjectsChipGrp.removeAllViews();
-            Log.e(TAG, "Course Id : "+key);
-            Log.e(TAG, "Course : "+name);
+            Log.e(TAG, "Course Id : " + key);
+            Log.e(TAG, "Course : " + name);
         });
 
         mBinding.classAutocompleteView.setOnItemClickListener((parent, view, position, id) -> {
@@ -149,7 +153,29 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
         });
 
         mBinding.btnApply.setOnClickListener(v -> {
-            MainActivity.navController.navigate(R.id.nav_test_my);
+            String ubmId = "", iomId = "", coId = "", dmId = "";
+            if (mBinding.boardAutocompleteView.getTag() != null)
+                ubmId = mBinding.boardAutocompleteView.getTag().toString();
+
+            if (mBinding.instituteAutocompleteView.getTag() != null)
+                iomId = mBinding.instituteAutocompleteView.getTag().toString();
+
+            if (mBinding.degreeAutocompleteView.getTag() != null)
+                dmId = mBinding.degreeAutocompleteView.getTag().toString();
+
+            if (mBinding.courseAutocompleteView.getTag() != null)
+                coId = mBinding.courseAutocompleteView.getTag().toString();
+
+            HashMap<String, String> params = new HashMap<>();
+            params.put(Constant.u_user_id, String.valueOf(new PreferenceManager(requireActivity()).getInt(Constant.USER_ID)));
+            params.put(Constant.device_id, getDeviceId());
+            params.put(Constant.appName, Constant.APP_NAME);
+            params.put(Constant.CASE, "I");
+            params.put(Constant.ubm_id, ubmId);
+            params.put(Constant.iom_id, iomId);
+            params.put(Constant.co_id, coId);
+            params.put(Constant.dm_id, dmId);
+            saveUserSettingsPreferences(params);
         });
 
         mBinding.addUniversity.setOnClickListener(v -> {
@@ -161,214 +187,95 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
         });
 
         fetchUserPreferences();
-        mViewModel.getPreferences().observe(getActivity(), new Observer<UserPreferences>() {
+        mViewModel.getPreferences().observe(getViewLifecycleOwner(), new Observer<UserPreferences>() {
             @Override
             public void onChanged(@Nullable final UserPreferences userPreferences) {
-                Log.d(TAG, "onChanged Board Name : " + userPreferences.getUbm_board_name());
-                Log.d(TAG, "onChanged Co Id : " + userPreferences.getCo_id());
-                mBinding.setPreference(userPreferences);
-                if(userPreferences.getDm_id()!=null)
-                fetchCourseData(Integer.parseInt(userPreferences.getDm_id()));
-                if(userPreferences.getCo_id()!=null)
-                fetchClassList(Integer.parseInt(userPreferences.getCo_id()));
-                setUserPreferences(userPreferences);
+                if (userPreferences != null) {
+                    userSettings = userPreferences;
+                    Log.d(TAG, "onChanged Board Name : " + userPreferences.getUbm_board_name());
+                    Log.d(TAG, "onChanged Co Id : " + userPreferences.getCo_id());
+                    mBinding.setPreference(userPreferences);
+                    if (userPreferences.getDm_id() != null)
+                        fetchCourseData(Integer.parseInt(userPreferences.getDm_id()));
+                    if (userPreferences.getCo_id() != null)
+                        fetchClassList(userPreferences.getCo_id());
+                    prepareExamChips(userPreferences.getExamList());
+                }
             }
         });
 
-
-        mViewModel.getClasses().observe(getActivity(), new Observer<List<ClassResponse>>() {
+        mViewModel.getClasses().observe(getViewLifecycleOwner(), new Observer<List<ClassResponse>>() {
             @Override
             public void onChanged(@Nullable final List<ClassResponse> classResponseList) {
                 Log.d(TAG, "onChanged Class List Size : " + classResponseList.size());
                 List<String> classDesc = new ArrayList<>();
                 mMapClasses = new HashMap<>();
-                for(ClassResponse classResponse:classResponseList){
-                    classDesc.add(classResponse.get_1297());
-                    mMapClasses.put(classResponse.get_1297(),classResponse.get_1296());
+                mMapScrCoId = new HashMap<>();
+                for (ClassResponse classResponse : classResponseList) {
+                    classDesc.add(classResponse.getClassName());
+                    mMapScrCoId.put(classResponse.getClm_cy(), classResponse.getClm_co_id());
+                    mMapClasses.put(classResponse.getClassName(), classResponse.getClm_co_id());
                 }
                 populateClasses(classDesc);
+                new PreferenceManager(requireActivity()).saveString(Constant.scr_co_id, mMapScrCoId.get(userSettings.getClassName().toString()));
+                fetchSubjectList(mMapScrCoId.get(userSettings.getClassName()));
             }
         });
 
 
-        mViewModel.getAllSubjects().observe(getActivity(), new Observer<List<FetchSubjectResponse>>() {
+        mViewModel.getAllSubjects().observe(getViewLifecycleOwner(), new Observer<List<FetchSubjectResponse>>() {
             @Override
             public void onChanged(@Nullable final List<FetchSubjectResponse> subjects) {
-                Log.d(TAG, "onChanged Subjects Size : " + subjects.size());
-                prepareSubjectChips(subjects);
+                if (subjects != null) {
+                    Log.d(TAG, "onChanged Subjects Size : " + subjects.size());
+                    ArrayList<String> subjectList = new ArrayList<>();
+                    for(FetchSubjectResponse obj:subjects){
+                        if(!subjectList.contains(obj.getSm_sub_name()))
+                        subjectList.add(obj.getSm_sub_name());
+                    }
+                    prepareSubjectChips(subjectList);
+                }
             }
         });
 
+    }
 
-//        mBinding.tvBoardEdit.setOnClickListener(v -> {
-//            MainActivity.navController.navigate(R.id.nav_board_fragment, Bundle.EMPTY);
-//        });
-//
-//        mBinding.boardChip.setOnClickListener(v -> {
-//            MainActivity.navController.navigate(R.id.nav_board_fragment, Bundle.EMPTY);
-//        });
-//
-//        mBinding.boardChipGrp.setOnCheckedChangeListener((chipGroup, id) -> {
-//            Chip chip = ((Chip) chipGroup.getChildAt(chipGroup.getCheckedChipId()));
-//            if (chip != null) {
-//                if (chip.isChecked()) {
-//                    setCheckedChip(mBinding.boardChipGrp);
-//                }
-//            }
-//        });
-//
-//        mBinding.classChipGrp.setOnCheckedChangeListener((chipGroup, id) -> {
-//            Chip chip = ((Chip) chipGroup.getChildAt(chipGroup.getCheckedChipId()));
-//            if (chip != null) {
-//                if (chip.isChecked()) {
-//                    setCheckedChip(mBinding.classChipGrp);
-//                    if (chip.getText().toString().contains("11")
-//                            || chip.getText().toString().contains("12")) {
-//                        mBinding.layoutStream.setVisibility(View.VISIBLE);
-//                        mBinding.layoutSubjects.setVisibility(View.VISIBLE);
-//                        mBinding.layoutExams.setVisibility(View.VISIBLE);
-//                    } else {
-//                        mBinding.layoutStream.setVisibility(View.GONE);
-//                        mBinding.layoutSubjects.setVisibility(View.VISIBLE);
-//                        mBinding.layoutExams.setVisibility(View.VISIBLE);
-//                    }
-//
-//                    if (chip.getText().toString().contains("Degree")) {
-//                        mBinding.layoutStream.setVisibility(View.GONE);
-//                        mBinding.layoutDegree.setVisibility(View.VISIBLE);
-//                        mBinding.layoutSubjects.setVisibility(View.GONE);
-//                        mBinding.layoutExams.setVisibility(View.GONE);
-//
-//                    } else {
-//                        mBinding.layoutDegree.setVisibility(View.GONE);
-//                        mBinding.layoutDegreeStream.setVisibility(View.GONE);
-//                        mBinding.layoutCourseYear.setVisibility(View.GONE);
-//                        mBinding.layoutSubjects.setVisibility(View.VISIBLE);
-//                        mBinding.layoutExams.setVisibility(View.VISIBLE);
-//
-//                    }
-//                    //showToast("Selected : " + chip.getText().toString());
-//                }
-//            }
-//        });
-//
-//        mBinding.hscChipGrp.setOnCheckedChangeListener((chipGroup, id) -> {
-//            //showToast("id : " + id);
-//            Chip chip = ((Chip) chipGroup.getChildAt(chipGroup.getCheckedChipId()));
-//            if (chip != null) {
-//                if (chip.isChecked()) {
-//                    setCheckedChip(mBinding.hscChipGrp);
-//                    mBinding.layoutSubjects.setVisibility(View.VISIBLE);
-//                    mBinding.layoutExams.setVisibility(View.VISIBLE);
-//                    //showToast("Selected : " + chip.getText().toString());
-//                }
-//            }
-//        });
-//
-//        mBinding.degreeChipGrp.setOnCheckedChangeListener((chipGroup, id) -> {
-//            //showToast("id : " + id);
-//            Chip chip = ((Chip) chipGroup.getChildAt(chipGroup.getCheckedChipId()));
-//            if (chip != null) {
-//                if (chip.isChecked()) {
-//                    setCheckedChip(mBinding.degreeChipGrp);
-//                    mBinding.layoutDegreeStream.setVisibility(View.VISIBLE);
-//                    mBinding.layoutSubjects.setVisibility(View.GONE);
-//                    mBinding.layoutExams.setVisibility(View.GONE);
-//                }
-//            }
-//        });
-//
-//        mBinding.degreeStreamChipGrp.setOnCheckedChangeListener((chipGroup, id) -> {
-//            //showToast("id : " + id);
-//            Chip chip = ((Chip) chipGroup.getChildAt(chipGroup.getCheckedChipId()));
-//            if (chip != null) {
-//                if (chip.isChecked()) {
-//                    setCheckedChip(mBinding.degreeStreamChipGrp);
-//                    mBinding.layoutCourseYear.setVisibility(View.VISIBLE);
-//                }
-//            }
-//        });
-//
-//        mBinding.CourseYearChipGrp.setOnCheckedChangeListener((chipGroup, id) -> {
-//            //showToast("id : " + id);
-//            Chip chip = ((Chip) chipGroup.getChildAt(chipGroup.getCheckedChipId()));
-//            if (chip != null) {
-//                if (chip.isChecked()) {
-//                    setCheckedChip(mBinding.CourseYearChipGrp);
-//                    mBinding.layoutSubjects.setVisibility(View.VISIBLE);
-//                    mBinding.layoutExams.setVisibility(View.VISIBLE);
-//                    //showToast("Selected : " + chip.getText().toString());
-//                }
-//            }
-//        });
+    private void saveUserSettingsPreferences(HashMap<String, String> params) {
+        Log.d(TAG, "saveUserSettingsPreferences: " + params);
+        ProgressDialog.getInstance().show(requireActivity());
+        Call<VerifyResponse> call = apiService.updateUserSettings(
+                params.get(Constant.u_user_id),
+                params.get(Constant.device_id),
+                params.get(Constant.appName),
+                params.get(Constant.CASE),
+                params.get(Constant.ubm_id),
+                params.get(Constant.iom_id),
+                params.get(Constant.co_id),
+                params.get(Constant.dm_id)
+        );
+        call.enqueue(new Callback<VerifyResponse>() {
+            @Override
+            public void onResponse(Call<VerifyResponse> call, Response<VerifyResponse> response) {
+                ProgressDialog.getInstance().dismiss();
+                if (response.body() != null && response.body().getResponse().equals("200")) {
+                    mViewModel.setUserPreference(response.body().getPreferencesList().get(0));
+                    MainActivity.navController.navigate(R.id.nav_test_my);
+                } else {
+                    showErrorDialog(requireActivity(), response.body().getResponse(), "");
+                }
+            }
 
-        List boardList = new ArrayList();
-        boardList.add("Maharashtra State Board");
-        boardList.add("ICSE");
-        boardList.add("CBSE");
-        //prepareBoardChips(boardList);
-
-        List classList = new ArrayList();
-        classList.add("5th Std.");
-        classList.add("6th Std");
-        classList.add("7th Std");
-        classList.add("8th Std.");
-        classList.add("9th Std");
-        classList.add("10th Std");
-        classList.add("11th Std.");
-        classList.add("12th Std");
-        classList.add("Degree");
-        //prepareClassesChips(classList);
-
-        List hscStreamList = new ArrayList();
-        hscStreamList.add("Science");
-        hscStreamList.add("Commerce");
-        //prepareHscStreamChips(hscStreamList);
-
-        List degreeList = new ArrayList();
-        degreeList.add("B-Tech");
-        degreeList.add("M-Tech");
-        degreeList.add("Bsc");
-        degreeList.add("Msc");
-        degreeList.add("MBBS");
-        //prepareDegreeChips(degreeList);
-
-        List degreeStreamList = new ArrayList();
-        degreeStreamList.add("Computer Science");
-        degreeStreamList.add("Mechanical");
-        degreeStreamList.add("Civil");
-        degreeStreamList.add("Electrical");
-        degreeStreamList.add("Instrumentation");
-        //prepareDegreeStreamChips(degreeStreamList);
-
-        List courseYearList = new ArrayList();
-        courseYearList.add("1st Year");
-        courseYearList.add("2nd Year");
-        courseYearList.add("3rd Year");
-        courseYearList.add("4th Year");
-        //prepareCourseYearList(courseYearList);
-
-        List examsList = new ArrayList();
-        examsList.add("MPSC");
-        examsList.add("UPSC");
-        examsList.add("GATE");
-        examsList.add("GRE");
-        //prepareExamList(examsList);
-
-        List subjectList = new ArrayList();
-        subjectList.add("Physics");
-        subjectList.add("Maths");
-        subjectList.add("Engineering Drawing");
-        subjectList.add("Chemistry");
-        subjectList.add("English");
-        subjectList.add("Networking");
-        subjectList.add("Database Management Systems");
-        subjectList.add("All");
-        //prepareSubjectChips(subjectList);
+            @Override
+            public void onFailure(Call<VerifyResponse> call, Throwable t) {
+                ProgressDialog.getInstance().dismiss();
+                showToast("Something went wrong!!");
+                t.printStackTrace();
+            }
+        });
     }
 
     private void showAddElementDialog(String title) {
-        final Dialog dialog = new Dialog(getActivity());
+        final Dialog dialog = new Dialog(requireActivity());
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -464,13 +371,10 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
         });
     }
 
-    private void setUserPreferences(UserPreferences userPreference) {
-        //todo update the ui
-    }
 
-    private void fetchClassList(int courseId) {
-        Log.d(TAG, "fetchClassList: "+courseId);
-        ProgressDialog.getInstance().show(getActivity());
+    private void fetchClassList(String courseId) {
+        Log.d(TAG, "fetchClassList: " + courseId);
+        ProgressDialog.getInstance().show(requireActivity());
         Call<ClassList> call = apiService.fetchClasses(courseId);
         call.enqueue(new Callback<ClassList>() {
             @Override
@@ -478,13 +382,9 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
                 ProgressDialog.getInstance().dismiss();
                 if (response.body() != null) {
                     mViewModel.setClassList(response.body().getClassResponseList());
-                    //List<String> list = new ArrayList<>();
-                    //                    //Log.d(TAG, "onResponse Size  : "+list.size());
-                    //                    //if (list != null && list.size() > 0) {
-                        ProgressDialog.getInstance().dismiss();
-                    //}
-                }else {
-                    showErrorDialog(getActivity(), response.body().getResponse(), "");
+                    ProgressDialog.getInstance().dismiss();
+                } else {
+                    showErrorDialog(requireActivity(), response.body().getResponse(), "");
                 }
             }
 
@@ -498,11 +398,13 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
     }
 
     private void fetchUserPreferences() {
-        ProgressDialog.getInstance().show(getActivity());
+        ProgressDialog.getInstance().show(requireActivity());
         Call<VerifyResponse> call = apiService.fetchUserSettings(
-                new PreferenceManager(requireActivity()).getInt(Constant.USER_ID),
+                getUserId(),
                 getDeviceId(),
-                Constant.APP_NAME);
+                Constant.APP_NAME,
+                "L"
+        );
         call.enqueue(new Callback<VerifyResponse>() {
             @Override
             public void onResponse(Call<VerifyResponse> call, Response<VerifyResponse> response) {
@@ -511,7 +413,7 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
                     mViewModel.setUserPreference(response.body().getPreferencesList().get(0));
                     Log.e(TAG, "Preference List Size: " + response.body().getPreferencesList().size());
                 } else {
-                    showErrorDialog(getActivity(), response.body().getResponse(), "");
+                    showErrorDialog(requireActivity(), response.body().getResponse(), "");
                 }
             }
 
@@ -644,7 +546,7 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
     }
 
     private void fetchSubjectList(String scr_co_id) {
-        ProgressDialog.getInstance().show(getActivity());
+        ProgressDialog.getInstance().show(requireActivity());
         Call<FetchSubjectResponseList> call = apiService.fetchSubjectList(scr_co_id);
         call.enqueue(new Callback<FetchSubjectResponseList>() {
             @Override
@@ -661,100 +563,37 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
         });
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        //mBinding.boardChip.setText(new PreferenceManager(getActivity()).getString(Constant.BOARD));
+    private void prepareExamChips(String exams) {
+        mBinding.examsChipGroup.removeAllViews();
+        ArrayList<String> examNames = new ArrayList<>();
+        HashMap<String, String> examMap = new HashMap<>();
+        String[] strExams = exams.split(",", -1);
+        for (int i = 0; i < strExams.length; i++) {
+            if (!strExams[i].isEmpty()) {
+                String key = strExams[i].split(":0:")[0];
+                String value = strExams[i].split(":0:")[1];
+                examNames.add(value);
+                examMap.put(value, key);
+                Chip chip = (Chip) LayoutInflater.from(mBinding.subjectsChipGrp.getContext()).inflate(R.layout.chip_layout, mBinding.subjectsChipGrp, false);
+                chip.setText(value);
+                chip.setTag(key);
+                chip.setId(i);
+                chip.setOnClickListener(this);
+                chip.setClickable(true);
+                chip.setCheckable(true);
+                mBinding.examsChipGroup.addView(chip);
+            }
+        }
+        if (mBinding.examsChipGroup.getChildCount() > 0) {
+            mBinding.examsLayout.setVisibility(View.VISIBLE);
+        }
     }
 
-
-//    private void prepareClassesChips(List classList) {
-//        mBinding.classChipGrp.removeAllViews();
-//        for (int i = 0; i < classList.size(); i++) {
-//            Chip chip = (Chip) LayoutInflater.from(mBinding.classChipGrp.getContext()).inflate(R.layout.chip_layout, mBinding.classChipGrp, false);
-//            //chip = new Chip(getActivity());
-//            chip.setText(classList.get(i).toString());
-//            chip.setTag(classList.get(i).toString());
-//            chip.setId(i);
-//           /* chip.setClickable(true);
-//            chip.setFocusable(true);
-//            chip.setCheckable(true);*/
-//            mBinding.classChipGrp.addView(chip);
-//        }
-//    }
-
-    /*private void prepareHscStreamChips(List classList) {
-        mBinding.hscChipGrp.removeAllViews();
-        for (int i = 0; i < classList.size(); i++) {
-            Chip chip = (Chip) LayoutInflater.from(mBinding.hscChipGrp.getContext()).inflate(R.layout.chip_layout, mBinding.hscChipGrp, false);
-            chip.setText(classList.get(i).toString());
-            chip.setTag(classList.get(i).toString());
-            chip.setId(i);
-            chip.setClickable(true);
-            chip.setCheckable(true);
-            mBinding.hscChipGrp.addView(chip);
-        }
-    }*/
-
-   /* private void prepareDegreeChips(List degreeList) {
-        mBinding.degreeChipGrp.removeAllViews();
-        for (int i = 0; i < degreeList.size(); i++) {
-            Chip chip = (Chip) LayoutInflater.from(mBinding.degreeChipGrp.getContext()).inflate(R.layout.chip_layout, mBinding.degreeChipGrp, false);
-            chip.setText(degreeList.get(i).toString());
-            chip.setTag(degreeList.get(i).toString());
-            chip.setId(i);
-            chip.setClickable(true);
-            chip.setCheckable(true);
-            mBinding.degreeChipGrp.addView(chip);
-        }
-    }*/
-
-   /* private void prepareDegreeStreamChips(List degreeStreamList) {
-        mBinding.degreeStreamChipGrp.removeAllViews();
-        for (int i = 0; i < degreeStreamList.size(); i++) {
-            Chip chip = (Chip) LayoutInflater.from(mBinding.degreeStreamChipGrp.getContext()).inflate(R.layout.chip_layout, mBinding.degreeStreamChipGrp, false);
-            chip.setText(degreeStreamList.get(i).toString());
-            chip.setTag(degreeStreamList.get(i).toString());
-            chip.setId(i);
-            chip.setClickable(true);
-            chip.setCheckable(true);
-            mBinding.degreeStreamChipGrp.addView(chip);
-        }
-    }*/
-
-    /*private void prepareCourseYearList(List degreeStreamList) {
-        mBinding.CourseYearChipGrp.removeAllViews();
-        for (int i = 0; i < degreeStreamList.size(); i++) {
-            Chip chip = (Chip) LayoutInflater.from(mBinding.CourseYearChipGrp.getContext()).inflate(R.layout.chip_layout, mBinding.CourseYearChipGrp, false);
-            chip.setText(degreeStreamList.get(i).toString());
-            chip.setTag(degreeStreamList.get(i).toString());
-            chip.setId(i);
-            chip.setClickable(true);
-            chip.setCheckable(true);
-            mBinding.CourseYearChipGrp.addView(chip);
-        }
-    }*/
-
-  /*  private void prepareExamList(List examsList) {
-        mBinding.examsChipGrp.removeAllViews();
-        for (int i = 0; i < examsList.size(); i++) {
-            Chip chip = (Chip) LayoutInflater.from(mBinding.examsChipGrp.getContext()).inflate(R.layout.chip_layout, mBinding.examsChipGrp, false);
-            chip.setText(examsList.get(i).toString());
-            chip.setTag("Exams");
-            chip.setId(i);
-            mapExamChips.put(i, chip);
-            chip.setOnClickListener(this);
-            chip.setClickable(true);
-            chip.setCheckable(true);
-            mBinding.examsChipGrp.addView(chip);
-        }
-    }*/
-
-    private void prepareSubjectChips(List<FetchSubjectResponse> subjectList) {
+    private void prepareSubjectChips(ArrayList<String> subjectList) {
         mBinding.subjectsChipGrp.removeAllViews();
         for (int i = 0; i < subjectList.size(); i++) {
             Chip chip = (Chip) LayoutInflater.from(mBinding.subjectsChipGrp.getContext()).inflate(R.layout.chip_layout, mBinding.subjectsChipGrp, false);
-            chip.setText(subjectList.get(i).getSm_sub_name());
+            chip.setText(subjectList.get(i));
             chip.setTag("Subjects");
             chip.setId(i);
             mapSubjectChips.put(i, chip);
@@ -809,7 +648,7 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
     }
 
     private void populateClasses(List<String> list) {
-        Log.d(TAG, "populateClasses list : "+list);
+        Log.d(TAG, "populateClasses list : " + list);
         ArrayAdapter<String> classAdapter = new ArrayAdapter<String>(requireActivity(),
                 R.layout.autocomplete_list_item, list);
         mBinding.classAutocompleteView.setAdapter(classAdapter);

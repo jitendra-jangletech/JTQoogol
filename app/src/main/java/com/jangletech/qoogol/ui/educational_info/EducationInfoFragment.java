@@ -1,5 +1,6 @@
 package com.jangletech.qoogol.ui.educational_info;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,7 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -19,9 +19,9 @@ import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.EducationAdapter;
 import com.jangletech.qoogol.databinding.FragmentEducationInfoBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
+import com.jangletech.qoogol.model.ClassList;
 import com.jangletech.qoogol.model.Education;
 import com.jangletech.qoogol.model.FetchEducationResponse;
-import com.jangletech.qoogol.model.UserProfile;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
@@ -48,7 +48,7 @@ public class EducationInfoFragment extends BaseFragment implements EducationAdap
     private List<Education> educationList;
     private List<FetchEducationResponse> fetchEducationResponseList = new ArrayList();
     ApiInterface apiService = ApiClient.getInstance().getApi();
-    String userid="";
+    String userid = "";
     private PreferenceManager mSettings;
     Call<FetchEducationResponse> call;
 
@@ -60,10 +60,17 @@ public class EducationInfoFragment extends BaseFragment implements EducationAdap
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        mViewModel = ViewModelProviders.of(this).get(EducationInfoViewModel.class);
+
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_education_info, container, false);
-        initViews();
+        mBinding.setLifecycleOwner(this);
         return mBinding.getRoot();
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mViewModel = ViewModelProviders.of(this).get(EducationInfoViewModel.class);
+        initViews();
     }
 
     private void initViews() {
@@ -77,28 +84,32 @@ public class EducationInfoFragment extends BaseFragment implements EducationAdap
             mBinding.addedu.setVisibility(View.GONE);
         }
 
-
-        mViewModel.getEducationList().observe(getActivity(), educations -> {
+        mViewModel.getAllEducations().observe(getViewLifecycleOwner(), educations -> {
             Log.d(TAG, "onChanged Education List Size : " + educations.size());
-            educationList  = educations;
-            if (userid.equalsIgnoreCase(mSettings.getUserId()))
+            if (educations != null) {
+                educationList = educations;
+                if (userid.equalsIgnoreCase(mSettings.getUserId()))
                     setEducationListAdapter(educations, fetch_loged_in_user);
-            else
-                setEducationListAdapter(educations, fetch_other_user);
+                else
+                    setEducationListAdapter(educations, fetch_other_user);
+            }
         });
     }
 
-    private void setEducationListAdapter(List<Education> educationList, int call_from){
-        educationAdapter = new EducationAdapter(requireActivity(),educationList,this, call_from);
+    private void setEducationListAdapter(List<Education> educationList, int call_from) {
+        Log.d(TAG, "setEducationListAdapter: " + educationList.size());
+        educationAdapter = new EducationAdapter(requireActivity(), educationList, this, call_from);
         mBinding.educationListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mBinding.educationListRecyclerView.setAdapter(educationAdapter);
+
     }
+
 
     private void fetchEducationDetails(int call_from) {
         ProgressDialog.getInstance().show(getActivity());
 
-        if (call_from==fetch_loged_in_user)
-             call = apiService.fetchUserEdu(userid, "L", getDeviceId(), Constant.APP_NAME);
+        if (call_from == fetch_loged_in_user)
+            call = apiService.fetchUserEdu(userid, "L", getDeviceId(), Constant.APP_NAME);
         else
             call = apiService.fetchOtherUSersUserEdu(mSettings.getUserId(), "L", getDeviceId(), Constant.APP_NAME, userid);
 
@@ -108,7 +119,9 @@ public class EducationInfoFragment extends BaseFragment implements EducationAdap
             public void onResponse(Call<FetchEducationResponse> call, Response<FetchEducationResponse> response) {
                 ProgressDialog.getInstance().dismiss();
                 if (response.body() != null && response.body().getResponseCode().equals("200")) {
-                    mViewModel.setEducationList(response.body().getEducationList());
+                    //mViewModel.delete();
+                    mViewModel.insert(response.body().getEducationList());
+                    //mViewModel.setEducationList(response.body().getEducationList());
                 } else {
                     showErrorDialog(requireActivity(), response.body().getResponseCode(), "");
                 }
@@ -116,15 +129,15 @@ public class EducationInfoFragment extends BaseFragment implements EducationAdap
 
             @Override
             public void onFailure(Call<FetchEducationResponse> call, Throwable t) {
-                ProgressDialog.getInstance().dismiss();
                 showToast("Something went wrong!!");
+                ProgressDialog.getInstance().dismiss();
                 t.printStackTrace();
             }
         });
     }
 
-    private void showEducationDialog(Education education){
-        AddEduDialog addEduDialog = new AddEduDialog(getActivity(), education,this);
+    private void showEducationDialog(Education education) {
+        AddEduDialog addEduDialog = new AddEduDialog(getActivity(), education, this);
         addEduDialog.show();
     }
 
