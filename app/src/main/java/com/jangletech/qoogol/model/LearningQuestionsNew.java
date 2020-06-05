@@ -314,7 +314,7 @@ public class LearningQuestionsNew {
     }
 
     public String getRecommended_time() {
-        return recommended_time!=null?"Time: " + recommended_time + " Sec":"";
+        return recommended_time!=null?recommended_time.contains("Time")?recommended_time:"Time: " + recommended_time + " Sec":"";
     }
 
     public void setRecommended_time(String recommended_time) {
