@@ -2,29 +2,23 @@ package com.jangletech.qoogol.ui.learning;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.Window;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.LikeAdapter;
 import com.jangletech.qoogol.databinding.LikeDialogBinding;
-import com.jangletech.qoogol.databinding.LikeitemBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.model.Like;
 import com.jangletech.qoogol.model.ProcessQuestion;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
-import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
 
@@ -34,13 +28,10 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 
-import static com.jangletech.qoogol.util.Constant.CALL_FROM;
-import static com.jangletech.qoogol.util.Constant.connectonId;
-
 /**
  * Created by Pritali on 6/4/2020.
  */
-public class LikeListingDialog  extends Dialog implements LikeAdapter.onItemClickListener {
+public class LikeListingDialog extends Dialog implements LikeAdapter.onItemClickListener {
     LikeDialogBinding likeDialogBinding;
     private Activity context;
     ApiInterface apiService = ApiClient.getInstance().getApi();
@@ -78,7 +69,7 @@ public class LikeListingDialog  extends Dialog implements LikeAdapter.onItemClic
     private void getData() {
         ProgressDialog.getInstance().show(context);
         Call<ProcessQuestion> call;
-            call = apiService.fetchComments(mSettings.getUserId(), questionId, "L");;
+        call = apiService.fetchComments(Integer.parseInt(mSettings.getUserId()), questionId, "L");
 
         call.enqueue(new Callback<ProcessQuestion>() {
             @Override
@@ -131,5 +122,4 @@ public class LikeListingDialog  extends Dialog implements LikeAdapter.onItemClic
     public interface onItemClickListener {
         void onItemCLick(String user_id);
     }
-
 }

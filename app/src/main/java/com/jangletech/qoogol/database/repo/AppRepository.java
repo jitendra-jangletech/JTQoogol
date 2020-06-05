@@ -7,15 +7,14 @@ import androidx.lifecycle.LiveData;
 import com.jangletech.qoogol.database.QoogolDatabase;
 import com.jangletech.qoogol.database.dao.DashboardDao;
 import com.jangletech.qoogol.database.dao.EducationDetailsDao;
+import com.jangletech.qoogol.database.dao.LearningQuestionDao;
 import com.jangletech.qoogol.database.dao.NotificationDao;
 import com.jangletech.qoogol.database.dao.TestDao;
-import com.jangletech.qoogol.database.dao.TestDetailsDao;
 import com.jangletech.qoogol.database.dao.UserProfileDao;
-import com.jangletech.qoogol.model.AttemptedTest;
 import com.jangletech.qoogol.model.DashBoard;
 import com.jangletech.qoogol.model.Education;
+import com.jangletech.qoogol.model.LearningQuestionsNew;
 import com.jangletech.qoogol.model.Notification;
-import com.jangletech.qoogol.model.TestDetailsResponse;
 import com.jangletech.qoogol.model.TestModelNew;
 import com.jangletech.qoogol.model.UserProfile;
 
@@ -29,6 +28,7 @@ public class AppRepository {
     private final NotificationDao notificationDao;
     private final DashboardDao dashboardDao;
     private final TestDao testDao;
+    private final LearningQuestionDao learningQuestionDao;
     //private final TestDetailsDao testDetailsDao;
 
     public AppRepository(Context context) {
@@ -38,6 +38,7 @@ public class AppRepository {
         notificationDao = db.notificationDao();
         dashboardDao = db.dashboardDao();
         testDao = db.testDao();
+        learningQuestionDao = db.learningQuestionDao();
         //testDetailsDao = db.testDetailsDao();
     }
 
@@ -302,5 +303,15 @@ public class AppRepository {
                 }
             }
         }).start();
+    }
+
+    public void insertQuestions(List<LearningQuestionsNew> learningQuestions) {
+        learningQuestionDao.upsertQuestions(learningQuestions);
+    }
+    public LiveData<List<LearningQuestionsNew>> getQuestionsFromDb(){
+        return learningQuestionDao.getAllQuestions();
+    }
+    public List<LearningQuestionsNew> getQuestions(){
+        return learningQuestionDao.getQuestions();
     }
 }

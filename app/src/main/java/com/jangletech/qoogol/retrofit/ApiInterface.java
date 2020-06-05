@@ -300,7 +300,7 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST(Constant.PROCESS_QUESTION)
-    Call<ProcessQuestion> fetchComments(@Field(Constant.u_user_id) String userid,
+    Call<ProcessQuestion> fetchComments(@Field(Constant.u_user_id) int userid,
                                         @Field(Constant.q_id) String queId,
                                         @Field(Constant.CASE) String caseL);
 

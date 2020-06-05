@@ -81,7 +81,7 @@ public class CommentDialog extends Dialog {
         if (api_case.equalsIgnoreCase("L"))
             call = apiService.fetchComments(user_id, que_id, api_case);
         else
-            call = apiService.addCommentApi(user_id, que_id, api_case, comment_text);
+            call = apiService.addCommentApi(String.valueOf(user_id), que_id, api_case, comment_text);
 
         call.enqueue(new Callback<ProcessQuestion>() {
             @Override
@@ -91,7 +91,7 @@ public class CommentDialog extends Dialog {
                     commentList.clear();
                     if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
                         commentList = response.body().getCommentList();
-                        setCommentAdapter();
+                        //setCommentAdapter();
                         emptyView();
                     } else {
                         Toast.makeText(mContext, UtilHelper.getAPIError(String.valueOf(response.body())), Toast.LENGTH_SHORT).show();
@@ -110,12 +110,12 @@ public class CommentDialog extends Dialog {
         });
     }
 
-    private void setCommentAdapter() {
+   /* private void setCommentAdapter() {
         commentAdapter = new CommentAdapter(mContext, commentList, Module.Learning.toString());
         mBinding.commentRecycler.setHasFixedSize(true);
         mBinding.commentRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         mBinding.commentRecycler.setAdapter(commentAdapter);
-    }
+    }*/
 
     private void emptyView() {
         mBinding.etComment.setText("");
