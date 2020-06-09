@@ -26,11 +26,6 @@
         <activity
             android:name=".activities.PracticeTestActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".activities.StartTestActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".activities.SignInActivity" />
 
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
@@ -52,9 +47,6 @@
             android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
-        <activity
-            android:name=".SignUpActivity"
-            android:windowSoftInputMode="adjustResize" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"

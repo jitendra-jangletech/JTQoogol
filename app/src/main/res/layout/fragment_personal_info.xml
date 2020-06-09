@@ -35,8 +35,9 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/_50sdp"
-            android:fillViewport="true">
+            android:fillViewport="true"
+            android:paddingBottom="@dimen/_50sdp"
+            app:layout_constraintTop_toTopOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/rlParent"
@@ -44,541 +45,771 @@
                 android:layout_height="wrap_content"
                 android:padding="@dimen/_10sdp">
 
-                <ImageView
-                    android:id="@+id/user_Back"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/profilePicLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:adjustViewBounds="true"
-                    android:contentDescription="@string/app_name"
-                    android:scaleType="fitXY"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/vector_edit_profile" />
+                    app:layout_constraintTop_toTopOf="parent">
 
-
-                <ImageView
-                    android:id="@+id/user_profile_pic"
-                    android:layout_width="135dp"
-                    android:layout_height="135dp"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="45dp"
-                    android:background="@drawable/image_border"
-                    android:contentDescription="@string/app_name"
-                    android:padding="2dp"
-                    android:src="@drawable/ic_profile_default"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <LinearLayout
-                    android:id="@+id/refferalLayout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/user_profile_pic">
-
-                    <TextView
-                        android:id="@+id/tvReferralTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        android:padding="@dimen/_5sdp"
-                        android:text="Referral Code : "
-                        android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                        android:textColor="@color/colorSkyBlue" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        android:padding="@dimen/_5sdp"
-                        android:text='@{userProfile.userId}'
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                        app:layout_constraintRight_toRightOf="parent" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/pointsLayout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/user_profile_pic">
-
-                    <TextView
-                        android:id="@+id/tvPointsTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        android:padding="@dimen/_5sdp"
-                        android:text="Points Earned :"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                        android:textColor="@color/colorSkyBlue" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        android:padding="@dimen/_5sdp"
-                        android:text='@{userProfile.totalPointsEarned}'
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                        app:layout_constraintRight_toRightOf="parent" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/nameLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_15sdp"
-                    android:orientation="horizontal"
-                    android:weightSum="2"
-                    app:layout_constraintTop_toBottomOf="@+id/pointsLayout">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:padding="@dimen/_2sdp">
-
-                        <TextView
-                            android:id="@+id/tvFirstName"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/first_name_"
-                            android:textColor="@color/colorSkyBlue" />
-
-                        <EditText
-                            android:id="@+id/etFirstName"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="First Name"
-                            android:text='@{userProfile.firstName}'
-                            android:textColor="@color/colorBlack" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:padding="@dimen/_2sdp">
-
-                        <TextView
-                            android:id="@+id/tvLastName"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/last_name_"
-                            android:textColor="@color/colorSkyBlue" />
-
-                        <EditText
-                            android:id="@+id/etLastName"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Last Name"
-                            android:text='@{userProfile.lastName}'
-                            android:textColor="@color/colorBlack" />
-
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/userNameLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_15sdp"
-                    android:orientation="horizontal"
-                    android:weightSum="2"
-                    app:layout_constraintTop_toBottomOf="@+id/nameLayout">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:padding="@dimen/_2sdp">
-
-                        <TextView
-                            android:id="@+id/tvUserName"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="UserName"
-                            android:textColor="@color/colorSkyBlue" />
-
-                        <com.jangletech.qoogol.view.CustomAutoCompleteTextView
-                        android:id="@+id/userNameAutoCompleteTextView"
-                        style="@style/AutoCompleteTextViewStyle"
-                        android:hint="UserName"
-                        android:tag="@{userProfile.userName}"
-                        android:text='@{userProfile.userName}' />
-
-
-                        <!--<EditText
-                            android:id="@+id/etUserName"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="UserName"
-                            android:inputType="number"
-                            android:maxLength="10"
-                            android:text='@{userProfile.mobileNumber}'
-                            android:textColor="@color/colorBlack" />-->
-
-                    </LinearLayout>
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnGenerate"
-                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_weight="0.5"
-                        android:layout_marginRight="@dimen/_5sdp"
-                        android:gravity="center"
-                        android:text="Generate"
-                        android:padding="@dimen/_2sdp"
-                        android:textAllCaps="false" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnCheckExist"
-                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_weight="0.5"
-                        android:gravity="center"
-                        android:text="Check if Exist"
-                        android:padding="@dimen/_2sdp"
-                        android:textAllCaps="false" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/mobileLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_15sdp"
-                    android:orientation="horizontal"
-                    android:weightSum="2"
-                    app:layout_constraintTop_toBottomOf="@+id/userNameLayout">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1.4"
-                        android:orientation="vertical"
-                        android:padding="@dimen/_2sdp">
-
-                        <TextView
-                            android:id="@+id/tvMobile"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/mobile"
-                            android:textColor="@color/colorSkyBlue" />
-
-                        <EditText
-                            android:id="@+id/etMobile"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:alpha="@{TextUtils.isEmpty(userProfile.mobileNumber)?1f:0.5f}"
-                            android:hint="Mobile Number"
-                            android:inputType="number"
-                            android:maxLength="10"
-                            android:text='@{userProfile.mobileNumber}'
-                            android:textColor="@color/colorBlack" />
-
-                    </LinearLayout>
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnMobileVerify"
-                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_weight="0.6"
-                        android:enabled="@{TextUtils.isEmpty(userProfile.mobileNumber)}"
-                        android:gravity="center"
-                        android:padding="@dimen/_2sdp"
-                        android:text="@{UserProfileBindingAdapter.getButtonText(userProfile.mobileNumber)}"
-                        android:textAllCaps="false" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/mobileEmailLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:orientation="horizontal"
-                    android:weightSum="2"
-                    app:layout_constraintTop_toBottomOf="@+id/mobileLayout">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1.4"
-                        android:orientation="vertical"
-                        android:padding="@dimen/_2sdp">
-
-                        <TextView
-                            android:id="@+id/tvEmail"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/email"
-                            android:textColor="@color/colorSkyBlue" />
-
-                        <EditText
-                            android:id="@+id/etEmail"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:alpha="@{TextUtils.isEmpty(userProfile.emailAddress)?1f:0.5f}"
-                            android:hint="Email"
-                            android:text='@{userProfile.emailAddress}'
-                            android:textColor="@color/colorBlack" />
-
-                    </LinearLayout>
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnEmailVerify"
-                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_weight="0.6"
-                        android:enabled="@{TextUtils.isEmpty(userProfile.emailAddress)}"
-                        android:gravity="center"
-                        android:padding="@dimen/_2sdp"
-                        android:text="@{UserProfileBindingAdapter.getButtonText(userProfile.emailAddress)}"
-                        android:textAllCaps="false" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/passwordLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_15sdp"
-                    android:orientation="vertical"
-                    app:layout_constraintTop_toBottomOf="@+id/mobileEmailLayout">
-
-                    <TextView
-                        android:id="@+id/tvPassword"
+                    <ImageView
+                        android:id="@+id/user_Back"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/password"
-                        android:textColor="@color/colorSkyBlue" />
+                        android:layout_centerHorizontal="true"
+                        android:adjustViewBounds="true"
+                        android:contentDescription="@string/app_name"
+                        android:scaleType="fitXY"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/vector_edit_profile" />
 
-                    <EditText
-                        android:id="@+id/etPassword"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Password"
-                        android:inputType="textPassword"
-                        android:text="@{userProfile.password}"
-                        android:textColor="@color/colorBlack" />
+                    <ImageView
+                        android:id="@+id/user_profile_pic"
+                        android:layout_width="135dp"
+                        android:layout_height="135dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="45dp"
+                        android:background="@drawable/image_border"
+                        android:contentDescription="@string/app_name"
+                        android:padding="2dp"
+                        android:src="@drawable/ic_profile_default"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                </LinearLayout>
-
-                <RadioGroup
-                    android:id="@+id/genderGrp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_15sdp"
-                    android:orientation="horizontal"
-                    android:weightSum="3"
-                    app:layout_constraintTop_toBottomOf="@+id/passwordLayout">
-
-                    <RadioButton
-                        android:id="@+id/radioMale"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/male"
-                        android:textColor="@color/colorSkyBlue" />
-
-                    <RadioButton
-                        android:id="@+id/radioFemale"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/female"
-                        android:textColor="@color/colorSkyBlue" />
-
-                    <RadioButton
-                        android:id="@+id/radioOthers"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/other"
-                        android:textColor="@color/colorSkyBlue" />
-                </RadioGroup>
-
-                <LinearLayout
-                    android:id="@+id/dobLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_15sdp"
-                    android:orientation="vertical"
-                    app:layout_constraintTop_toBottomOf="@+id/genderGrp">
-
-                    <TextView
-                        android:id="@+id/tvDob"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Date of Birth"
-                        android:textColor="@color/colorSkyBlue" />
-
-                    <EditText
-                        android:id="@+id/etDob"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:alpha="0.5"
-                        android:drawableRight="@drawable/ic_action_cal"
-                        android:drawablePadding="@dimen/_10sdp"
-                        android:focusable="false"
-                        android:hint="Date of Birth"
-                        android:text='@{DateUtils.getFormattedDate(userProfile.dob)}'
-                        android:textColor="@color/colorBlack" />
-
-                </LinearLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/dobLayout">
+                    app:layout_constraintTop_toBottomOf="@+id/profilePicLayout">
 
-                    <TextView
-                        android:id="@+id/tvLanguage"
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/userProfileLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_15sdp"
-                        android:text="@string/language"
-                        android:textColor="@color/colorSkyBlue" />
+                        android:visibility="gone"
+                        app:layout_constraintTop_toBottomOf="@+id/profilePicLayout">
 
-                    <com.jangletech.qoogol.view.CustomAutoCompleteTextView
-                        android:id="@+id/langAutocompleteView"
-                        style="@style/AutoCompleteTextViewStyle"
-                        android:layout_below="@+id/tvHobby"
-                        android:hint="@string/select_language"
-                        android:text='@{userProfile.u_language}' />
+                        <LinearLayout
+                            android:id="@+id/refferalLayout"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
 
-                    <!-- <TextView
-                         android:visibility="gone"
-                         android:id="@+id/tvHobby"
-                         android:layout_width="match_parent"
-                         android:layout_height="wrap_content"
-                         android:layout_marginTop="@dimen/_15sdp"
-                         android:text="@string/hobby" />
+                            <TextView
+                                android:id="@+id/tvReferralTitle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_10sdp"
+                                android:padding="@dimen/_5sdp"
+                                android:text="Referral Code : "
+                                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                                android:textColor="@color/colorSkyBlue" />
 
-                     <androidx.appcompat.widget.AppCompatMultiAutoCompleteTextView
-                         android:visibility="gone"
-                         android:id="@+id/hobbyAutocompleteView"
-                         style="@style/AutoCompleteTextViewStyle"
-                         android:layout_below="@+id/tvHobby"
-                         android:hint="@string/your_hobby"
-                         android:text='@{userProfile.u_Hobby}' />-->
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_10sdp"
+                                android:padding="@dimen/_5sdp"
+                                android:text='@{userProfile.userId}'
+                                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                app:layout_constraintRight_toRightOf="parent" />
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnImportContacts"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        android:backgroundTint="@color/color_red"
-                        android:text="Import Contacts"
-                        android:textAllCaps="false" />
+                        </LinearLayout>
 
-                    <LinearLayout
-                        android:id="@+id/taglineLayout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_15sdp"
-                        android:orientation="vertical"
-                        app:layout_constraintTop_toBottomOf="@+id/mobileEmailLayout">
+                        <LinearLayout
+                            android:id="@+id/pointsLayout"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
 
-                        <TextView
-                            android:id="@+id/tvTagLine"
+                            <TextView
+                                android:id="@+id/tvPointsTitle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_10sdp"
+                                android:padding="@dimen/_5sdp"
+                                android:text="Points Earned :"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                                android:textColor="@color/colorSkyBlue" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_10sdp"
+                                android:padding="@dimen/_5sdp"
+                                android:text='@{userProfile.totalPointsEarned}'
+                                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                app:layout_constraintRight_toRightOf="parent" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/nameLayout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/tag_lines"
-                            android:textColor="@color/colorSkyBlue" />
+                            android:layout_marginTop="@dimen/_15sdp"
+                            android:orientation="horizontal"
+                            android:weightSum="2"
+                            app:layout_constraintTop_toBottomOf="@+id/pointsLayout">
 
-                        <EditText
-                            android:id="@+id/etTagLine"
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:padding="@dimen/_2sdp">
+
+                                <TextView
+                                    android:id="@+id/tvFirstName"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/first_name_"
+                                    android:textColor="@color/colorSkyBlue" />
+
+                                <EditText
+                                    android:id="@+id/etFirstName"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="First Name"
+                                    android:text='@{userProfile.firstName}'
+                                    android:textColor="@color/colorBlack" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:padding="@dimen/_2sdp">
+
+                                <TextView
+                                    android:id="@+id/tvLastName"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/last_name_"
+                                    android:textColor="@color/colorSkyBlue" />
+
+                                <EditText
+                                    android:id="@+id/etLastName"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="Last Name"
+                                    android:text='@{userProfile.lastName}'
+                                    android:textColor="@color/colorBlack" />
+
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/userNameLayout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="TagLine"
-                            android:text="@{userProfile.strTagLine}"
-                            android:textColor="@color/colorBlack" />
+                            android:layout_marginTop="@dimen/_15sdp"
+                            android:orientation="horizontal"
+                            android:weightSum="2"
+                            app:layout_constraintTop_toBottomOf="@+id/nameLayout">
 
-                    </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:padding="@dimen/_2sdp">
 
-                    <TextView
-                        android:id="@+id/tvNationality"
+                                <TextView
+                                    android:id="@+id/tvUserName"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="UserName"
+                                    android:textColor="@color/colorSkyBlue" />
+
+                                <com.jangletech.qoogol.view.CustomAutoCompleteTextView
+                                    android:id="@+id/userNameAutoCompleteTextView"
+                                    style="@style/AutoCompleteTextViewStyle"
+                                    android:hint="UserName"
+                                    android:tag="@{userProfile.userName}"
+                                    android:text='@{userProfile.userName}' />
+
+
+                                <!--<EditText
+                                    android:id="@+id/etUserName"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="UserName"
+                                    android:inputType="number"
+                                    android:maxLength="10"
+                                    android:text='@{userProfile.mobileNumber}'
+                                    android:textColor="@color/colorBlack" />-->
+
+                            </LinearLayout>
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btnGenerate"
+                                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginRight="@dimen/_5sdp"
+                                android:layout_weight="0.5"
+                                android:gravity="center"
+                                android:padding="@dimen/_2sdp"
+                                android:text="Generate"
+                                android:textAllCaps="false" />
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btnCheckExist"
+                                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_weight="0.5"
+                                android:gravity="center"
+                                android:padding="@dimen/_2sdp"
+                                android:text="Check if Exist"
+                                android:textAllCaps="false" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/mobileLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_15sdp"
+                            android:orientation="horizontal"
+                            android:weightSum="2"
+                            app:layout_constraintTop_toBottomOf="@+id/userNameLayout">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1.4"
+                                android:orientation="vertical"
+                                android:padding="@dimen/_2sdp">
+
+                                <TextView
+                                    android:id="@+id/tvMobile"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/mobile"
+                                    android:textColor="@color/colorSkyBlue" />
+
+                                <EditText
+                                    android:id="@+id/etMobile"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:alpha="@{TextUtils.isEmpty(userProfile.mobileNumber)?1f:0.5f}"
+                                    android:hint="Mobile Number"
+                                    android:inputType="number"
+                                    android:maxLength="10"
+                                    android:text='@{userProfile.mobileNumber}'
+                                    android:textColor="@color/colorBlack" />
+
+                            </LinearLayout>
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btnMobileVerify"
+                                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_weight="0.6"
+                                android:enabled="@{TextUtils.isEmpty(userProfile.mobileNumber)}"
+                                android:gravity="center"
+                                android:padding="@dimen/_2sdp"
+                                android:text="@{UserProfileBindingAdapter.getButtonText(userProfile.mobileNumber)}"
+                                android:textAllCaps="false" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/mobileEmailLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_10sdp"
+                            android:orientation="horizontal"
+                            android:weightSum="2"
+                            app:layout_constraintTop_toBottomOf="@+id/mobileLayout">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1.4"
+                                android:orientation="vertical"
+                                android:padding="@dimen/_2sdp">
+
+                                <TextView
+                                    android:id="@+id/tvEmail"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/email"
+                                    android:textColor="@color/colorSkyBlue" />
+
+                                <EditText
+                                    android:id="@+id/etEmail"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:alpha="@{TextUtils.isEmpty(userProfile.emailAddress)?1f:0.5f}"
+                                    android:hint="Email"
+                                    android:text='@{userProfile.emailAddress}'
+                                    android:textColor="@color/colorBlack" />
+
+                            </LinearLayout>
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btnEmailVerify"
+                                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_weight="0.6"
+                                android:enabled="@{TextUtils.isEmpty(userProfile.emailAddress)}"
+                                android:gravity="center"
+                                android:padding="@dimen/_2sdp"
+                                android:text="@{UserProfileBindingAdapter.getButtonText(userProfile.emailAddress)}"
+                                android:textAllCaps="false" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/passwordLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_15sdp"
+                            android:orientation="vertical"
+                            app:layout_constraintTop_toBottomOf="@+id/mobileEmailLayout">
+
+                            <TextView
+                                android:id="@+id/tvPassword"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/password"
+                                android:textColor="@color/colorSkyBlue" />
+
+                            <EditText
+                                android:id="@+id/etPassword"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Password"
+                                android:inputType="textPassword"
+                                android:text="@{userProfile.password}"
+                                android:textColor="@color/colorBlack" />
+
+                        </LinearLayout>
+
+                        <RadioGroup
+                            android:id="@+id/genderGrp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_15sdp"
+                            android:orientation="horizontal"
+                            android:weightSum="3"
+                            app:layout_constraintTop_toBottomOf="@+id/passwordLayout">
+
+                            <RadioButton
+                                android:id="@+id/radioMale"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/male"
+                                android:textColor="@color/colorSkyBlue" />
+
+                            <RadioButton
+                                android:id="@+id/radioFemale"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/female"
+                                android:textColor="@color/colorSkyBlue" />
+
+                            <RadioButton
+                                android:id="@+id/radioOthers"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/other"
+                                android:textColor="@color/colorSkyBlue" />
+                        </RadioGroup>
+
+                        <LinearLayout
+                            android:id="@+id/dobLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_15sdp"
+                            android:orientation="vertical"
+                            app:layout_constraintTop_toBottomOf="@+id/genderGrp">
+
+                            <TextView
+                                android:id="@+id/tvDob"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Date of Birth"
+                                android:textColor="@color/colorSkyBlue" />
+
+                            <EditText
+                                android:id="@+id/etDob"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:alpha="0.5"
+                                android:drawableRight="@drawable/ic_action_cal"
+                                android:drawablePadding="@dimen/_10sdp"
+                                android:focusable="false"
+                                android:hint="Date of Birth"
+                                android:text='@{DateUtils.getFormattedDate(userProfile.dob)}'
+                                android:textColor="@color/colorBlack" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/dobLayout">
+
+                            <TextView
+                                android:id="@+id/tvLanguage"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_15sdp"
+                                android:text="@string/language"
+                                android:textColor="@color/colorSkyBlue" />
+
+                            <com.jangletech.qoogol.view.CustomAutoCompleteTextView
+                                android:id="@+id/langAutocompleteView"
+                                style="@style/AutoCompleteTextViewStyle"
+                                android:layout_below="@+id/tvHobby"
+                                android:hint="@string/select_language"
+                                android:text='@{userProfile.u_language}' />
+
+                            <!-- <TextView
+                                 android:visibility="gone"
+                                 android:id="@+id/tvHobby"
+                                 android:layout_width="match_parent"
+                                 android:layout_height="wrap_content"
+                                 android:layout_marginTop="@dimen/_15sdp"
+                                 android:text="@string/hobby" />
+
+                             <androidx.appcompat.widget.AppCompatMultiAutoCompleteTextView
+                                 android:visibility="gone"
+                                 android:id="@+id/hobbyAutocompleteView"
+                                 style="@style/AutoCompleteTextViewStyle"
+                                 android:layout_below="@+id/tvHobby"
+                                 android:hint="@string/your_hobby"
+                                 android:text='@{userProfile.u_Hobby}' />-->
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btnImportContacts"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_10sdp"
+                                android:backgroundTint="@color/color_red"
+                                android:text="Import Contacts"
+                                android:textAllCaps="false" />
+
+                            <LinearLayout
+                                android:id="@+id/taglineLayout"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_15sdp"
+                                android:orientation="vertical"
+                                app:layout_constraintTop_toBottomOf="@+id/mobileEmailLayout">
+
+                                <TextView
+                                    android:id="@+id/tvTagLine"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/tag_lines"
+                                    android:textColor="@color/colorSkyBlue" />
+
+                                <EditText
+                                    android:id="@+id/etTagLine"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="TagLine"
+                                    android:text="@{userProfile.strTagLine}"
+                                    android:textColor="@color/colorBlack" />
+
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/tvNationality"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_15sdp"
+                                android:text="@string/nationality"
+                                android:textColor="@color/colorSkyBlue" />
+
+                            <com.jangletech.qoogol.view.CustomAutoCompleteTextView
+                                android:id="@+id/nationalityAutocompleteView"
+                                style="@style/AutoCompleteTextViewStyle"
+                                android:hint="@string/select_nationality"
+                                android:tag="@{userProfile.u_NationalityId}"
+                                android:text='@{userProfile.u_Nationality}' />
+
+                            <TextView
+                                android:id="@+id/tvState"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_15sdp"
+                                android:text="@string/state"
+                                android:textColor="@color/colorSkyBlue" />
+
+                            <com.jangletech.qoogol.view.CustomAutoCompleteTextView
+                                android:id="@+id/stateAutocompleteView"
+                                style="@style/AutoCompleteTextViewStyle"
+                                android:hint="@string/select_native_state"
+                                android:tag="@{userProfile.u_StateId}"
+                                android:text='@{userProfile.u_State}' />
+
+                            <TextView
+                                android:id="@+id/tvDivision"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_15sdp"
+                                android:text="@string/district"
+                                android:textColor="@color/colorSkyBlue" />
+
+                            <com.jangletech.qoogol.view.CustomAutoCompleteTextView
+                                android:id="@+id/divisionAutocompleteView"
+                                style="@style/AutoCompleteTextViewStyle"
+                                android:hint="@string/select_native_district"
+                                android:tag="@{userProfile.u_DistrictId}"
+                                android:text='@{userProfile.u_District}' />
+
+                            <TextView
+                                android:id="@+id/tvCity"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_15sdp"
+                                android:text="@string/city"
+                                android:textColor="@color/colorSkyBlue" />
+
+                            <com.jangletech.qoogol.view.CustomAutoCompleteTextView
+                                android:id="@+id/cityAutocompleteView"
+                                style="@style/AutoCompleteTextViewStyle"
+                                android:hint="@string/select_native_city"
+                                android:tag="@{userProfile.cityId}"
+                                android:text="@{userProfile.u_City}" />
+
+                        </LinearLayout>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/publicProfileLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_15sdp"
-                        android:text="@string/nationality"
-                        android:textColor="@color/colorSkyBlue" />
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:visibility="visible">
 
-                    <com.jangletech.qoogol.view.CustomAutoCompleteTextView
-                        android:id="@+id/nationalityAutocompleteView"
-                        style="@style/AutoCompleteTextViewStyle"
-                        android:hint="@string/select_nationality"
-                        android:tag="@{userProfile.u_NationalityId}"
-                        android:text='@{userProfile.u_Nationality}' />
+                        <LinearLayout
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
 
-                    <TextView
-                        android:id="@+id/tvState"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_15sdp"
-                        android:text="@string/state"
-                        android:textColor="@color/colorSkyBlue" />
+                            <TextView
+                                android:textColor="@color/colorBlack"
+                                android:id="@+id/tvName"
+                                android:textSize="@dimen/_16ssp"
+                                android:textStyle="bold"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="@dimen/_10sdp"
+                                android:text="Jitendra Patil" />
 
-                    <com.jangletech.qoogol.view.CustomAutoCompleteTextView
-                        android:id="@+id/stateAutocompleteView"
-                        style="@style/AutoCompleteTextViewStyle"
-                        android:hint="@string/select_native_state"
-                        android:tag="@{userProfile.u_StateId}"
-                        android:text='@{userProfile.u_State}' />
 
-                    <TextView
-                        android:id="@+id/tvDivision"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_15sdp"
-                        android:text="@string/district"
-                        android:textColor="@color/colorSkyBlue" />
+                            <LinearLayout
+                                app:layout_constraintTop_toBottomOf="@+id/tvName"
+                                android:orientation="vertical"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
 
-                    <com.jangletech.qoogol.view.CustomAutoCompleteTextView
-                        android:id="@+id/divisionAutocompleteView"
-                        style="@style/AutoCompleteTextViewStyle"
-                        android:hint="@string/select_native_district"
-                        android:tag="@{userProfile.u_DistrictId}"
-                        android:text='@{userProfile.u_District}' />
+                                <TextView
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/_15sdp"
+                                    android:text="@string/gender"
+                                    android:textColor="@color/colorSkyBlue" />
 
-                    <TextView
-                        android:id="@+id/tvCity"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_15sdp"
-                        android:text="@string/city"
-                        android:textColor="@color/colorSkyBlue" />
+                                <TextView
+                                    android:textSize="@dimen/_12ssp"
+                                    android:id="@+id/tvGender"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text=""
+                                    android:textColor="@color/colorBlack"
+                                    app:layout_constraintTop_toBottomOf="@+id/tvGenderTitle" />
 
-                    <com.jangletech.qoogol.view.CustomAutoCompleteTextView
-                        android:id="@+id/cityAutocompleteView"
-                        style="@style/AutoCompleteTextViewStyle"
-                        android:hint="@string/select_native_city"
-                        android:tag="@{userProfile.cityId}"
-                        android:text="@{userProfile.u_City}" />
+                            </LinearLayout>
 
+                            <LinearLayout
+                                app:layout_constraintTop_toBottomOf="@+id/tvName"
+                                android:orientation="vertical"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/_15sdp"
+                                    android:text="@string/dob"
+                                    android:textColor="@color/colorSkyBlue" />
+
+                                <TextView
+                                    android:textSize="@dimen/_12ssp"
+                                    android:id="@+id/tvDobs"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                    app:layout_constraintTop_toBottomOf="@+id/tvGenderTitle"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@{DateUtils.getFormattedDate(userProfile.dob)}"
+                                    android:textColor="@color/colorBlack" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/languageLayout"
+                                app:layout_constraintTop_toBottomOf="@+id/tvName"
+                                android:orientation="vertical"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/_15sdp"
+                                    android:text="@string/language"
+                                    android:textColor="@color/colorSkyBlue" />
+
+                                <TextView
+                                    android:textSize="@dimen/_12ssp"
+                                    android:id="@+id/tvLanguages"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                    app:layout_constraintTop_toBottomOf="@+id/tvGenderTitle"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@{userProfile.u_language}"
+                                    android:textColor="@color/colorBlack" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/nationalityLayout"
+                                app:layout_constraintTop_toBottomOf="@+id/tvName"
+                                android:orientation="vertical"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/_15sdp"
+                                    android:text="@string/nationality"
+                                    android:textColor="@color/colorSkyBlue" />
+
+                                <TextView
+                                    android:textSize="@dimen/_12ssp"
+                                    android:id="@+id/tvNationalitys"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                    app:layout_constraintTop_toBottomOf="@+id/tvGenderTitle"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@{userProfile.u_Nationality}"
+                                    android:textColor="@color/colorBlack" />
+
+                            </LinearLayout>
+                            <LinearLayout
+                                android:id="@+id/stateLayout"
+                                app:layout_constraintTop_toBottomOf="@+id/tvName"
+                                android:orientation="vertical"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/_15sdp"
+                                    android:text="@string/state"
+                                    android:textColor="@color/colorSkyBlue" />
+
+                                <TextView
+                                    android:textSize="@dimen/_12ssp"
+                                    android:id="@+id/tvStates"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@{userProfile.u_State}"
+                                    android:textColor="@color/colorBlack" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/divisionLayout"
+                                android:orientation="vertical"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/_15sdp"
+                                    android:text="@string/district"
+                                    android:textColor="@color/colorSkyBlue" />
+
+                                <TextView
+                                    android:textSize="@dimen/_12ssp"
+                                    android:id="@+id/tvDivisions"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@{userProfile.u_District}"
+                                    android:textColor="@color/colorBlack" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/cityLayout"
+                                android:orientation="vertical"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/_15sdp"
+                                    android:text="@string/city"
+                                    android:textColor="@color/colorSkyBlue" />
+
+                                <TextView
+                                    android:id="@+id/tvCitys"
+                                    android:textSize="@dimen/_12ssp"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@{userProfile.u_City}"
+                                    android:textColor="@color/colorBlack" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
                 </LinearLayout>
-
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>

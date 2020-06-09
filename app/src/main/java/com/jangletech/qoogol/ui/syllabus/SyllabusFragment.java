@@ -1,4 +1,4 @@
-package com.jangletech.qoogol.ui.settings;
+package com.jangletech.qoogol.ui.syllabus;
 
 import android.app.Dialog;
 import android.graphics.Color;
@@ -18,13 +18,11 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputLayout;
 import com.jangletech.qoogol.R;
-import com.jangletech.qoogol.activities.MainActivity;
 import com.jangletech.qoogol.databinding.FragmentSettingsBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.model.AddElementResponse;
@@ -53,10 +51,8 @@ import com.jangletech.qoogol.util.UtilHelper;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -65,7 +61,7 @@ import retrofit2.Response;
 import static com.jangletech.qoogol.util.Constant.board_id;
 import static com.jangletech.qoogol.util.Constant.degree_id;
 
-public class SettingsFragment extends BaseFragment implements View.OnClickListener {
+public class SyllabusFragment extends BaseFragment implements View.OnClickListener {
 
     private static final String TAG = "SettingsFragment";
     private MyTestViewModel mViewModel;
@@ -82,8 +78,8 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
     ApiInterface apiService = ApiClient.getInstance().getApi();
     public static String strBoardName;
 
-    public static SettingsFragment newInstance() {
-        return new SettingsFragment();
+    public static SyllabusFragment newInstance() {
+        return new SyllabusFragment();
     }
 
     @Override

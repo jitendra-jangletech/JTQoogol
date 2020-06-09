@@ -84,6 +84,7 @@ import retrofit2.Response;
 import static android.app.Activity.RESULT_OK;
 import static com.jangletech.qoogol.util.Constant.fetch_loged_in_user;
 import static com.jangletech.qoogol.util.Constant.fetch_other_user;
+import static com.jangletech.qoogol.util.Constant.userName;
 
 public class PersonalInfoFragment extends BaseFragment {
 
@@ -130,7 +131,6 @@ public class PersonalInfoFragment extends BaseFragment {
     }
 
     public void initViews() {
-
         mSettings = new PreferenceManager(getActivity());
         userid = mSettings.getProfileFetchId();
         Log.d(TAG, "initViews UserId : " + mSettings.getUserId());
@@ -142,11 +142,20 @@ public class PersonalInfoFragment extends BaseFragment {
         mViewModel.getUserProfile(userid).observe(getViewLifecycleOwner(), userProfile -> {
             Log.d(TAG, "onChanged : " + userProfile);
             if (userProfile != null) {
-                mBinding.setUserProfile(userProfile);
-                updateUi(userProfile);
                 profile = userProfile;
-                if (!userid.equalsIgnoreCase(mSettings.getUserId()))
-                    manageUnwantedFields(userProfile);
+                mBinding.setUserProfile(userProfile);
+
+                if (!userid.equalsIgnoreCase(mSettings.getUserId())) {
+                    //manageUnwantedFields(userProfile);
+                    getActionBar().setTitle("User Profile");
+                    mBinding.userProfileLayout.setVisibility(View.GONE);
+                    mBinding.publicProfileLayout.setVisibility(View.VISIBLE);
+                    setPublicProfile(userProfile);
+                } else {
+                    mBinding.publicProfileLayout.setVisibility(View.GONE);
+                    mBinding.userProfileLayout.setVisibility(View.VISIBLE);
+                    updateUi(userProfile);
+                }
             }
         });
 
@@ -387,6 +396,43 @@ public class PersonalInfoFragment extends BaseFragment {
         verifyMobileEmail(map);
     }
 
+    /*private void setGenderProfilePic(UserProfile userProfile){
+        if(userProfile.getStrGender().equalsIgnoreCase("M")){
+            if (userProfile.getStrGender().equalsIgnoreCase("M")) {
+                loadProfilePic(Constant.PRODUCTION_MALE_PROFILE_API);
+            } else if (userProfile.getStrGender().equalsIgnoreCase("F")) {
+                loadProfilePic(Constant.PRODUCTION_FEMALE_PROFILE_API);
+            }
+        }
+    }*/
+
+    private void setPublicProfile(UserProfile userProfile) {
+        mBinding.tvName.setText(userProfile.getFirstName()+" "+userProfile.getLastName());
+        if (userProfile.getStrGender() != null && userProfile.getStrGender().equalsIgnoreCase("M")) {
+            mBinding.tvGender.setText("Male");
+        } else if(userProfile.getStrGender() != null && userProfile.getStrGender().equalsIgnoreCase("F")){
+            mBinding.tvGender.setText("Female");
+        }
+        if (userProfile.getEndPathImage() != null && !userProfile.getEndPathImage().isEmpty()) {
+            loadProfilePic(getProfileImageUrl(userProfile.getEndPathImage()));
+        } else if (userProfile.getStrGender() != null && userProfile.getStrGender().equalsIgnoreCase("M")) {
+            loadProfilePic(Constant.PRODUCTION_MALE_PROFILE_API);
+        } else if (userProfile.getStrGender() != null && userProfile.getStrGender().equalsIgnoreCase("F")) {
+            loadProfilePic(Constant.PRODUCTION_FEMALE_PROFILE_API);
+        }
+
+        if(userProfile.getU_Nationality()==null || userProfile.getU_Nationality().isEmpty()){
+            mBinding.nationalityLayout.setVisibility(View.GONE);
+        }else if(userProfile.getU_State()==null || userProfile.getU_State().isEmpty()){
+            mBinding.stateLayout.setVisibility(View.GONE);
+        }else if(userProfile.getU_District()==null || userProfile.getU_District().isEmpty()){
+            mBinding.divisionLayout.setVisibility(View.GONE);
+        }else if(userProfile.getU_City()==null || userProfile.getU_City().isEmpty()){
+            mBinding.cityLayout.setVisibility(View.GONE);
+        }else if(userProfile.getU_language()==null || userProfile.getU_language().isEmpty()){
+            mBinding.languageLayout.setVisibility(View.GONE);
+        }
+    }
 
     private void updateUi(UserProfile userProfile) {
         if (userProfile.getStrGender().equalsIgnoreCase("M")) {
@@ -483,7 +529,7 @@ public class PersonalInfoFragment extends BaseFragment {
             userProfileMap.put(Constant.u_nationality, mBinding.nationalityAutocompleteView.getTag());
             userProfileMap.put(Constant.w_lm_id_array, mBinding.langAutocompleteView.getTag());
             userProfileMap.put(Constant.u_gender, getSingleQuoteString(gender));
-            userProfileMap.put(Constant.userName,mBinding.userNameAutoCompleteTextView.getTag().toString());
+            userProfileMap.put(Constant.userName, mBinding.userNameAutoCompleteTextView.getTag().toString());
 
             updateUserProfile(userProfileMap);
 

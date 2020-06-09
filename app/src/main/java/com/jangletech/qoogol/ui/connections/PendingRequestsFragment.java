@@ -15,8 +15,6 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.FragmentPendingRequestsBinding;
-import com.jangletech.qoogol.listener.OnFraagmentChangeListener;
-
 import java.util.ArrayList;
 import java.util.List;
 

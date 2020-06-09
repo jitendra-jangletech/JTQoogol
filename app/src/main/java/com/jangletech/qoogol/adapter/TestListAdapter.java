@@ -10,30 +10,17 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.clearcut.ClearcutLogger;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.TestItemBinding;
-import com.jangletech.qoogol.dialog.ProgressDialog;
-import com.jangletech.qoogol.model.ProcessQuestion;
-import com.jangletech.qoogol.model.TestModel;
 import com.jangletech.qoogol.model.TestModelNew;
-import com.jangletech.qoogol.model.TestQuestionNew;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
-import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.DateUtils;
-import com.jangletech.qoogol.util.PreferenceManager;
-import com.karumi.dexter.listener.single.DialogOnDeniedPermissionListener;
 
 import java.util.HashMap;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class TestListAdapter extends RecyclerView.Adapter<TestListAdapter.ViewHolder> {
 

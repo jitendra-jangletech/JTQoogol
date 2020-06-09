@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.activities.PracticeTestActivity;
-import com.jangletech.qoogol.activities.StartTestActivity;
 import com.jangletech.qoogol.adapter.QuestionAdapter;
 import com.jangletech.qoogol.databinding.TestDetailsFragmentBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;

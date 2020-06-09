@@ -23,183 +23,188 @@
             android:fitsSystemWindows="true"
             app:itemTextColor="@color/colorBlack">
 
-            <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/marginLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <LinearLayout
-                    android:id="@+id/marginLayout"
+                <androidx.core.widget.NestedScrollView
+                    xmlns:android="http://schemas.android.com/apk/res/android"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <include
-                        android:id="@+id/nav_header"
-                        layout="@layout/nav_header_main"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-
-                    <TextView
-                        android:foreground="?attr/selectableItemBackground"
-                        android:id="@+id/nav_home"
-                        style="@style/menu_item_style"
-                        android:drawableLeft="@drawable/ic_learning"
-                        android:text="@string/menu_home" />
-
-                    <TextView
-                        android:foreground="?attr/selectableItemBackground"
-                        android:id="@+id/nav_learning"
-                        style="@style/menu_item_style"
-                        android:drawableLeft="@drawable/ic_learning"
-                        android:text="@string/learning" />
-
-<!--                    <TextView-->
-<!--                        android:id="@+id/nav_course"-->
-<!--                        style="@style/sub_menu_item_style"-->
-<!--                        android:text="@string/course" />-->
-
-<!--                    <TextView-->
-<!--                        android:id="@+id/nav_exam"-->
-<!--                        style="@style/sub_menu_item_style"-->
-<!--                        android:text="@string/exam" />-->
-
-
-                    <TextView
-                        android:id="@+id/nav_test"
-                        style="@style/menu_item_style"
-                        android:drawableLeft="@drawable/ic_test"
-                        android:text="@string/test" />
-
-                    <TextView
-                        android:visibility="gone"
-                        android:foreground="?attr/selectableItemBackground"
-                        android:id="@+id/nav_practice_test"
-                        style="@style/sub_menu_item_style"
-                        android:text="@string/practice_test" />
-
-                    <TextView
-                        android:foreground="?attr/selectableItemBackground"
-                        android:id="@+id/nav_test_my"
-                        style="@style/sub_menu_item_style"
-                        android:text="@string/my_test" />
-
-                    <TextView
-                        android:foreground="?attr/selectableItemBackground"
-                        android:id="@+id/nav_test_popular"
-                        style="@style/sub_menu_item_style"
-                        android:text="@string/popular_test" />
-
-                    <TextView
-                        android:foreground="?attr/selectableItemBackground"
-                        android:id="@+id/nav_attended_by_friends"
-                        style="@style/sub_menu_item_style"
-                        android:text="@string/attended_by_friends" />
-
-                    <TextView
-                        android:foreground="?attr/selectableItemBackground"
-                        android:id="@+id/nav_shared_with_you"
-                        style="@style/sub_menu_item_style"
-                        android:text="@string/shared_with_you" />
-
-                    <TextView
-                        android:foreground="?attr/selectableItemBackground"
-                        android:id="@+id/nav_shared_by_you"
-                        style="@style/sub_menu_item_style"
-                        android:text="@string/shared_by_you" />
-
-
-
-                    <TextView
-                        android:foreground="?attr/selectableItemBackground"
-                        android:id="@+id/nav_fav"
-                        style="@style/menu_item_style"
-                        android:drawableLeft="@drawable/ic_learning"
-                        android:text="@string/menu_fav" />
-
-                    <TextView
-                        android:foreground="?attr/selectableItemBackground"
-                        android:id="@+id/nav_saved"
-                        style="@style/menu_item_style"
-                        android:drawableLeft="@drawable/ic_questions"
-                        android:text="Saved" />
-
-                    <TextView
-                        android:id="@+id/nav_requests"
-                        style="@style/menu_item_style"
-                        android:drawableLeft="@drawable/ic_questions"
-                        android:text="@string/pending_req" />
-
-                    <TextView
-                        android:id="@+id/nav_blocked_connections"
-                        style="@style/menu_item_style"
-                        android:drawableLeft="@drawable/ic_block"
-                        android:text="@string/blockedconnection" />
-
-                    <TextView
-                        android:id="@+id/nav_import_contacts"
-                        style="@style/menu_item_style"
-                        android:drawableLeft="@drawable/ic_block"
-                        android:text="@string/importContacts" />
-
-
-                    <TextView
-                        android:foreground="?attr/selectableItemBackground"
-                        android:id="@+id/nav_notifications"
-                        style="@style/menu_item_style"
-                        android:drawableLeft="@drawable/ic_notifications"
-                        android:text="@string/notifications" />
-
-
-                    <TextView
-                        android:foreground="?attr/selectableItemBackground"
-                        android:id="@+id/nav_settings"
-                        style="@style/menu_item_style"
-                        android:drawableLeft="@drawable/ic_settings"
-                        android:text="@string/settings" />
-
-                    <TextView
-                        android:foreground="?attr/selectableItemBackground"
-                        android:id="@+id/nav_faq"
-                        style="@style/menu_item_style"
-                        android:drawableLeft="@drawable/ic_settings"
-                        android:text="@string/faq" />
-
-                    <TextView
-                        android:foreground="?attr/selectableItemBackground"
-                        android:id="@+id/nav_logout"
-                        style="@style/menu_item_style"
-                        android:layout_marginBottom="@dimen/_20sdp"
-                        android:drawableLeft="@drawable/ic_logout"
-                        android:text="@string/logout" />
+                    android:layout_height="match_parent">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/_10sdp"
+                        android:layout_height="match_parent"
                         android:orientation="vertical">
 
-                        <TextView
+                        <include
+                            android:id="@+id/nav_header"
+                            layout="@layout/nav_header_main"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="@dimen/_2sdp"
-                            android:gravity="center"
-                            android:text="@string/qoogol_version_1_0"
-                            android:textColor="@color/menu_item_text_color"
-                            android:textSize="@dimen/_9ssp" />
+                            app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
+                            android:id="@+id/nav_home"
+                            style="@style/menu_item_style"
+                            android:drawableLeft="@drawable/ic_learning"
+                            android:foreground="?attr/selectableItemBackground"
+                            android:text="@string/menu_home" />
+
+                        <TextView
+                            android:id="@+id/nav_learning"
+                            style="@style/menu_item_style"
+                            android:drawableLeft="@drawable/ic_learning"
+                            android:foreground="?attr/selectableItemBackground"
+                            android:text="@string/learning" />
+
+
+                        <TextView
+                            android:id="@+id/nav_test"
+                            style="@style/menu_item_style"
+                            android:drawableLeft="@drawable/ic_test"
+                            android:text="@string/test" />
+
+                        <TextView
+                            android:id="@+id/nav_practice_test"
+                            style="@style/sub_menu_item_style"
+                            android:foreground="?attr/selectableItemBackground"
+                            android:text="@string/practice_test"
+                            android:visibility="gone" />
+
+                        <TextView
+                            android:id="@+id/nav_test_my"
+                            style="@style/sub_menu_item_style"
+                            android:foreground="?attr/selectableItemBackground"
+                            android:text="@string/my_test" />
+
+                        <TextView
+                            android:id="@+id/nav_test_popular"
+                            style="@style/sub_menu_item_style"
+                            android:foreground="?attr/selectableItemBackground"
+                            android:text="@string/popular_test" />
+
+                        <TextView
+                            android:id="@+id/nav_attended_by_friends"
+                            style="@style/sub_menu_item_style"
+                            android:foreground="?attr/selectableItemBackground"
+                            android:text="@string/attended_by_friends" />
+
+                        <TextView
+                            android:id="@+id/nav_shared_with_you"
+                            style="@style/sub_menu_item_style"
+                            android:foreground="?attr/selectableItemBackground"
+                            android:text="@string/shared_with_you" />
+
+                        <TextView
+                            android:id="@+id/nav_shared_by_you"
+                            style="@style/sub_menu_item_style"
+                            android:foreground="?attr/selectableItemBackground"
+                            android:text="@string/shared_by_you" />
+
+
+                        <TextView
+                            android:id="@+id/nav_syllabus"
+                            style="@style/menu_item_style"
+                            android:drawableLeft="@drawable/ic_settings"
+                            android:foreground="?attr/selectableItemBackground"
+                            android:text="@string/syllabus" />
+
+                        <TextView
+                            android:id="@+id/nav_fav"
+                            style="@style/menu_item_style"
+                            android:drawableLeft="@drawable/ic_learning"
+                            android:foreground="?attr/selectableItemBackground"
+                            android:text="@string/menu_fav" />
+
+                        <TextView
+                            android:id="@+id/nav_saved"
+                            style="@style/menu_item_style"
+                            android:drawableLeft="@drawable/ic_questions"
+                            android:foreground="?attr/selectableItemBackground"
+                            android:text="Saved" />
+
+                        <TextView
+                            android:id="@+id/nav_requests"
+                            style="@style/menu_item_style"
+                            android:drawableLeft="@drawable/ic_questions"
+                            android:text="@string/pending_req" />
+
+                        <TextView
+                            android:id="@+id/nav_blocked_connections"
+                            style="@style/menu_item_style"
+                            android:drawableLeft="@drawable/ic_block"
+                            android:text="@string/blockedconnection" />
+
+                        <TextView
+                            android:id="@+id/nav_import_contacts"
+                            style="@style/menu_item_style"
+                            android:drawableLeft="@drawable/ic_block"
+                            android:text="@string/importContacts" />
+
+
+                        <TextView
+                            android:id="@+id/nav_notifications"
+                            style="@style/menu_item_style"
+                            android:drawableLeft="@drawable/ic_notifications"
+                            android:foreground="?attr/selectableItemBackground"
+                            android:text="@string/notifications" />
+
+
+                        <TextView
+                            android:id="@+id/nav_settings"
+                            style="@style/menu_item_style"
+                            android:drawableLeft="@drawable/ic_settings"
+                            android:foreground="?attr/selectableItemBackground"
+                            android:text="@string/settings" />
+
+                        <TextView
+                            android:id="@+id/nav_faq"
+                            style="@style/menu_item_style"
+                            android:drawableLeft="@drawable/ic_settings"
+                            android:foreground="?attr/selectableItemBackground"
+                            android:text="@string/faq" />
+
+                        <TextView
+                            android:id="@+id/nav_logout"
+                            style="@style/menu_item_style"
+                            android:layout_marginBottom="@dimen/_20sdp"
+                            android:drawableLeft="@drawable/ic_logout"
+                            android:foreground="?attr/selectableItemBackground"
+                            android:text="@string/logout" />
+
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="@string/copyrights"
-                            android:textColor="@color/menu_item_text_color"
-                            android:textSize="@dimen/_9ssp" />
+                            android:layout_marginBottom="@dimen/_10sdp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/_2sdp"
+                                android:gravity="center"
+                                android:text="@string/qoogol_version_1_0"
+                                android:textColor="@color/menu_item_text_color"
+                                android:textSize="@dimen/_9ssp" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="@string/copyrights"
+                                android:textColor="@color/menu_item_text_color"
+                                android:textSize="@dimen/_9ssp" />
+
+                        </LinearLayout>
 
                     </LinearLayout>
 
-                </LinearLayout>
+                </androidx.core.widget.NestedScrollView>
 
-            </ScrollView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         </com.google.android.material.navigation.NavigationView>
 

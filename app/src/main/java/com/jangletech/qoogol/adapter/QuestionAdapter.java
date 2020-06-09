@@ -3,14 +3,16 @@ package com.jangletech.qoogol.adapter;
 import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
-import com.jangletech.qoogol.activities.StartTestActivity;
+
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.ItemQuestionBinding;
 import com.jangletech.qoogol.databinding.TestDetailQuestionItemBinding;
 import com.jangletech.qoogol.model.QSet;
+
 import java.util.List;
 
 public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHolder> {
@@ -28,29 +30,18 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHo
     @NonNull
     @Override
     public QuestionAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if (activity instanceof StartTestActivity) {
-            itemQuestionBinding = DataBindingUtil.inflate(
-                    LayoutInflater.from(parent.getContext()),
-                    R.layout.item_question, parent, false);
-            return new QuestionAdapter.ViewHolder(itemQuestionBinding);
-        } else {
-            itemBinding = DataBindingUtil.inflate(
-                    LayoutInflater.from(parent.getContext()),
-                    R.layout.test_detail_question_item, parent, false);
-            return new QuestionAdapter.ViewHolder(itemBinding);
-        }
+        itemBinding = DataBindingUtil.inflate(
+                LayoutInflater.from(parent.getContext()),
+                R.layout.test_detail_question_item, parent, false);
+        return new QuestionAdapter.ViewHolder(itemBinding);
+
     }
 
     @Override
     public void onBindViewHolder(@NonNull QuestionAdapter.ViewHolder holder, int position) {
         QSet question = questionList.get(position);
-        if (activity instanceof StartTestActivity) {
-            holder.itemQuestionBindingForPalet.tvQuestNo.setText(String.valueOf(question.getQ_id()));
-            holder.itemQuestionBindingForPalet.tvQuestDesc.setText(question.getQ_quest());
-        } else {
-            holder.itemQuestionBinding.tvQuestNo.setText("" + question.getQ_id());
-            holder.itemQuestionBinding.tvQuestDesc.setText(question.getQ_quest());
-        }
+        holder.itemQuestionBinding.tvQuestNo.setText("" + question.getQ_id());
+        holder.itemQuestionBinding.tvQuestDesc.setText(question.getQ_quest());
     }
 
     @Override
