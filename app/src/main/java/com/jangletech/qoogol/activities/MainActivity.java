@@ -224,6 +224,14 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
             }
         });
 
+        findViewById(R.id.nav_syllabus).setOnClickListener(v -> {
+            mBinding.drawerLayout.closeDrawers();
+            if (navController.getCurrentDestination().getId() != R.id.nav_syllabus) {
+                navController.popBackStack();
+                navController.navigate(R.id.nav_syllabus);
+            }
+        });
+
         findViewById(R.id.nav_faq).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
             if (navController.getCurrentDestination().getId() != R.id.nav_faq) {
@@ -269,17 +277,13 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
         startActivity(intent);
     }
 
-    /*@Override
-    public void onBackPressed() {
-
-        super.onBackPressed();
-    }*/
 
     boolean doubleBackToExitPressedOnce = false;
 
     @Override
     public void onBackPressed() {
         navController.navigateUp();
+        drawerLayout.closeDrawer(Gravity.LEFT);
         if (doubleBackToExitPressedOnce) {
             super.onBackPressed();
             return;

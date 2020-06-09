@@ -23,7 +23,7 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputLayout;
 import com.jangletech.qoogol.R;
-import com.jangletech.qoogol.databinding.FragmentSettingsBinding;
+import com.jangletech.qoogol.databinding.FragmentSyllabusBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.model.AddElementResponse;
 import com.jangletech.qoogol.model.ClassList;
@@ -66,7 +66,7 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
     private static final String TAG = "SettingsFragment";
     private MyTestViewModel mViewModel;
     private UserPreferences userSettings;
-    private FragmentSettingsBinding mBinding;
+    private FragmentSyllabusBinding mBinding;
     private Map<String, String> mMapClasses;
     private Map<String, String> mMapScrCoId;
     private Map<Integer, String> mMapUniversity;
@@ -85,13 +85,13 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_settings, container, false);
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_syllabus, container, false);
         mViewModel = ViewModelProviders.of(this).get(MyTestViewModel.class);
-        initViews(mBinding);
+        initViews();
         return mBinding.getRoot();
     }
 
-    private void initViews(FragmentSettingsBinding mBinding) {
+    private void initViews() {
         fetchInstituteData(0);
         fetchUniversityData();
         fetchDegreeData();
@@ -234,7 +234,6 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
                 }
             }
         });
-
     }
 
     private void saveUserSettingsPreferences(HashMap<String, String> params) {

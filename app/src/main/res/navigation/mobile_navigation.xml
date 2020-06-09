@@ -109,12 +109,17 @@
         tools:layout="@layout/fragment_published" />
 
 
-    //Published Fragment
+    <fragment
+        android:id="@+id/nav_syllabus"
+        android:name="com.jangletech.qoogol.ui.syllabus.SyllabusFragment"
+        android:label="@string/syllabus"
+        tools:layout="@layout/fragment_syllabus" />
+
     <fragment
         android:id="@+id/nav_settings"
-        android:name="com.jangletech.qoogol.ui.syllabus.SyllabusFragment"
+        android:name="com.jangletech.qoogol.ui.settings.SettingsFragment"
         android:label="@string/menu_settings"
-        tools:layout="@layout/fragment_published" />
+        tools:layout="@layout/settings_fragment" />
 
     //Edit Profile
     <fragment
