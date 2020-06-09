@@ -17,6 +17,7 @@ import com.jangletech.qoogol.model.DistrictResponse;
 import com.jangletech.qoogol.model.FaqResponse;
 import com.jangletech.qoogol.model.FetchEducationResponse;
 import com.jangletech.qoogol.model.FetchSubjectResponseList;
+import com.jangletech.qoogol.model.FriendsResponse;
 import com.jangletech.qoogol.model.InstituteResponse;
 import com.jangletech.qoogol.model.Language;
 import com.jangletech.qoogol.model.LearningQuestResponse;
@@ -296,7 +297,7 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST(Constant.FETCH_QA)
-    Call<LearningQuestResponse> fetchQAApi(@Field(Constant.u_user_id) int userid, @Field(Constant.q_id) String question);
+    Call<LearningQuestResponse> fetchQAApi(@Field(Constant.u_user_id) String userid, @Field(Constant.q_id) String question);
 
     @FormUrlEncoded
     @POST(Constant.PROCESS_QUESTION)
@@ -362,6 +363,25 @@ public interface ApiInterface {
                                               @Field(Constant.device_id) String device_id,
                                               @Field("200Q") String app,
                                               @Field(Constant.pagestart) int pagestart);
+
+    @FormUrlEncoded
+    @POST(Constant.FETCH_CONNECTIONS)
+    Call<FriendsResponse> fetchFriends(@Field(Constant.u_user_id) String userid,
+                                       @Field("Case") String connectionCase,
+                                       @Field(Constant.device_id) String device_id,
+                                       @Field("200Q") String app,
+                                       @Field(Constant.pagestart) int pagestart);
+
+    @FormUrlEncoded
+    @POST(Constant.FETCH_CONNECTIONS)
+    Call<FriendsResponse> fetchRefreshedFriendss(@Field(Constant.u_user_id) String userid,
+                                                       @Field("Case") String connectionCase,
+                                                       @Field(Constant.device_id) String device_id,
+                                                       @Field("200Q") String app,
+                                                       @Field(Constant.pagestart) int pagestart,
+                                                       @Field("ForceRefresh") String refresh);
+
+
 
     @FormUrlEncoded
     @POST(Constant.FETCH_CONNECTIONS)

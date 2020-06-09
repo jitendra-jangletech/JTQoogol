@@ -137,12 +137,6 @@ public class FriendsFragment extends BaseFragment implements ConnectionAdapter.u
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         mBinding.connectionRecycler.setLayoutManager(linearLayoutManager);
         mBinding.connectionRecycler.setAdapter(mAdapter);
-
-//        if (connectionsList.size()>0) {
-//            mBinding.emptyview.setVisibility(View.VISIBLE);
-//            mBinding.emptyview.setText("There is no friends in your connection.");
-//        } else
-//            mBinding.emptyview.setVisibility(View.GONE);
     }
 
     @Override
