@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import com.jangletech.qoogol.R;
@@ -83,7 +84,8 @@ public class LearningFragment extends BaseFragment implements LearingAdapter.onI
             case R.id.action_filter:
                 Bundle bundle = new Bundle();
                 bundle.putString("call_from", "learning");
-                MainActivity.navController.navigate(R.id.nav_test_filter, bundle);
+                Navigation.findNavController(requireActivity(),R.id.nav_host_fragment).navigate(R.id.nav_test_filter,bundle);
+                //MainActivity.navController.navigate(R.id.nav_test_filter, bundle);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

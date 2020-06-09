@@ -3,6 +3,7 @@ package com.jangletech.qoogol.util;
 import android.util.Log;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 public class DateUtils {
 
@@ -23,6 +24,23 @@ public class DateUtils {
             formattedDate = simpleDateFormat.format(date);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+        return formattedDate;
+    }
+
+    public static String localeDateFormat(String strDate) {
+        String formattedDate = "";
+        try {
+            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            inputFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+            SimpleDateFormat outputFormat = new SimpleDateFormat("HH:mm MMM dd");
+            Date date = inputFormat.parse(strDate);
+            inputFormat.setTimeZone(TimeZone.getDefault());
+            assert date != null;
+            formattedDate = outputFormat.format(date);
+        } catch (Exception ex) {
+            Log.e(TAG, ex.getMessage());
         }
         return formattedDate;
     }

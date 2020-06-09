@@ -15,10 +15,12 @@ import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.MenuItemCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -118,7 +120,8 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
             case R.id.action_filter:
                 Bundle bundle = new Bundle();
                 bundle.putString("call_from", "test");
-                MainActivity.navController.navigate(R.id.nav_test_filter, bundle);
+                Navigation.findNavController(requireActivity(),R.id.nav_host_fragment).navigate(R.id.nav_test_filter,bundle);
+                //MainActivity.navController.navigate(R.id.nav_test_filter, bundle);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -126,6 +129,14 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
     }
 
     private void initViews() {
+
+        if(getArguments()!=null){
+            if(!getArguments().getString("CALL_FROM").equalsIgnoreCase("MY_TEST")){
+                getActionBar().setTitle(getArguments().getString("CALL_FROM"));
+                mBinding.horizontalScrollView.setVisibility(View.GONE);
+            }
+        }
+
 
         mBinding.swipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -305,7 +316,6 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
 
             @Override
             public void onFailure(Call<TestListResponse> call, Throwable t) {
-                //ProgressDialog.getInstance().dismiss();
                 mBinding.swipeToRefresh.setRefreshing(false);
                 showToast("Something went wrong!!");
                 t.printStackTrace();
@@ -317,7 +327,8 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
     public void onTestItemClick(TestModelNew testModel) {
         Bundle bundle = new Bundle();
         bundle.putSerializable(Constant.TEST_NAME, testModel);
-        MainActivity.navController.navigate(R.id.nav_test_details, bundle);
+        Navigation.findNavController(requireActivity(),R.id.nav_host_fragment).navigate(R.id.nav_test_details,bundle);
+        //MainActivity.navController.navigate(R.id.nav_test_details, bundle);
     }
 
     @Override

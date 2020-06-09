@@ -23,7 +23,6 @@ import com.jangletech.qoogol.databinding.AddEditEducationBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.model.AddElementResponse;
 import com.jangletech.qoogol.model.ClassList;
-import com.jangletech.qoogol.model.ClassResponse;
 import com.jangletech.qoogol.model.Course;
 import com.jangletech.qoogol.model.CourseResponse;
 import com.jangletech.qoogol.model.Degree;
@@ -61,7 +60,6 @@ import retrofit2.Response;
 import static com.jangletech.qoogol.util.Constant.board_id;
 import static com.jangletech.qoogol.util.Constant.degree_id;
 
-
 public class AddEduDialog extends Dialog {
 
     private static final String TAG = "AddEduDialog";
@@ -93,12 +91,11 @@ public class AddEduDialog extends Dialog {
         addEditEducationBinding = DataBindingUtil.inflate(LayoutInflater.from(getContext()),
                 R.layout.add_edit_education, null, false);
         setContentView(addEditEducationBinding.getRoot());
+        fetchUniversityData();
+        fetchDegreeData();
         if (education != null) {
-
             fetchClassList(education.getCo_id());
             fetchInstituteData(0);
-            fetchUniversityData();
-            fetchDegreeData();
             fetchCourseData(Integer.parseInt(education.getDm_id()));
 
             addEditEducationBinding.universityBoardAutocompleteView.setTag(education.getUbm_id());
@@ -403,7 +400,7 @@ public class AddEduDialog extends Dialog {
                 params.get(Constant.dm_id),
                 params.get(Constant.ue_id),
                 params.get(Constant.ue_cy_num)
-                );
+        );
         call.enqueue(new Callback<VerifyResponse>() {
             @Override
             public void onResponse(Call<VerifyResponse> call, Response<VerifyResponse> response) {

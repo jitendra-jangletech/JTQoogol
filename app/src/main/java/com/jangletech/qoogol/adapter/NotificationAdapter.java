@@ -43,7 +43,8 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         Notification notification = notifications.get(position);
         holder.itemBinding.notificationText.setText(notification.getW_notification_desc());
         if(notification.getN_cdatetime()!=null)
-        holder.itemBinding.tvDate.setText(DateUtils.getFormattedDate(notification.getN_cdatetime().substring(0,10)));
+        holder.itemBinding.tvDate.setText(DateUtils.localeDateFormat(notification.getN_cdatetime()));
+        //holder.itemBinding.tvDate.setText(DateUtils.getFormattedDate(notification.getN_cdatetime().substring(0,10)));
         Glide.with(mContext)
                 .load(getImageUrl(notification))
                 .apply(RequestOptions.circleCropTransform())

@@ -81,6 +81,10 @@ public class AppRepository {
         insertTestDetailsAsync(testDetailsResponse);
     }*/
 
+    public void deleteAllEducations() {
+        deleteAllEducationsAsync();
+    }
+
     public void deleteTests() {
         deleteTestsAsync();
     }
@@ -97,8 +101,8 @@ public class AppRepository {
         insertEducationAsync(educations);
     }
 
-    public void deleteEducationInfo() {
-        deleteEducationAsync();
+    public void deleteEducationInfo(String id) {
+        deleteEducationAsync(id);
     }
 
     public void insertPersonalInfo(UserProfile userProfile) {
@@ -234,13 +238,27 @@ public class AppRepository {
         }).start();
     }
 
-    private void deleteEducationAsync() {
+    private void deleteEducationAsync(String id) {
 
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    educationDetailsDao.deleteAllEducations();
+                    educationDetailsDao.deleteEducation(id);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    private void deleteAllEducationsAsync() {
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    educationDetailsDao.deleteAllEducation();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

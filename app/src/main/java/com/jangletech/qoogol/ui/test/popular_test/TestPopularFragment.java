@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.LayoutInflater;
@@ -80,7 +81,8 @@ public class TestPopularFragment extends BaseFragment implements TestAdapter.Tes
     @Override
     public void onTestItemClick(TestModel testModel) {
         Toast.makeText(getActivity(), ""+testModel.getName(), Toast.LENGTH_SHORT).show();
-        MainActivity.navController.navigate(R.id.nav_test_details);
+        Navigation.findNavController(requireActivity(),R.id.nav_host_fragment).navigate(R.id.nav_test_details);
+        //MainActivity.navController.navigate(R.id.nav_test_details);
     }
 
     @Override

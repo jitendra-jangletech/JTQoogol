@@ -1,6 +1,7 @@
 package com.jangletech.qoogol.ui.educational_info;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -22,6 +24,8 @@ import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.model.ClassList;
 import com.jangletech.qoogol.model.Education;
 import com.jangletech.qoogol.model.FetchEducationResponse;
+import com.jangletech.qoogol.model.TestListResponse;
+import com.jangletech.qoogol.model.VerifyResponse;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
@@ -29,6 +33,7 @@ import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -46,6 +51,7 @@ public class EducationInfoFragment extends BaseFragment implements EducationAdap
     private FragmentEducationInfoBinding mBinding;
     private EducationAdapter educationAdapter;
     private List<Education> educationList;
+    private Context mContext;
     private List<FetchEducationResponse> fetchEducationResponseList = new ArrayList();
     ApiInterface apiService = ApiClient.getInstance().getApi();
     String userid = "";
@@ -55,6 +61,12 @@ public class EducationInfoFragment extends BaseFragment implements EducationAdap
 
     public static EducationInfoFragment newInstance() {
         return new EducationInfoFragment();
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        mContext = context;
     }
 
     @Override
@@ -94,6 +106,15 @@ public class EducationInfoFragment extends BaseFragment implements EducationAdap
                     setEducationListAdapter(educations, fetch_other_user);
             }
         });
+
+        /*mViewModel.getDeleteResponse().observe(getViewLifecycleOwner(), new Observer<VerifyResponse>() {
+            @Override
+            public void onChanged(VerifyResponse verifyResponse) {
+                if(verifyResponse!=null){
+                    //todo delete edu from list
+                }
+            }
+        });*/
     }
 
     private void setEducationListAdapter(List<Education> educationList, int call_from) {
@@ -102,6 +123,37 @@ public class EducationInfoFragment extends BaseFragment implements EducationAdap
         mBinding.educationListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mBinding.educationListRecyclerView.setAdapter(educationAdapter);
 
+    }
+
+    private void deleteEdu(HashMap<String,String> params,int pos){
+        Log.d(TAG, "deleteEdu: "+params);
+        ProgressDialog.getInstance().show(mContext);
+        Call<VerifyResponse> call = apiService.deleteEdu(
+                params.get(Constant.u_user_id),
+                params.get(Constant.ue_id),
+                params.get(Constant.CASE)
+        );
+        call.enqueue(new Callback<VerifyResponse>() {
+            @Override
+            public void onResponse(Call<VerifyResponse> call, Response<VerifyResponse> response) {
+                ProgressDialog.getInstance().dismiss();
+                if (response.body() != null && response.body().getResponse().equals("200")) {
+                    //mViewModel.setDeleteResponse(response.body());
+                    mViewModel.delete(params.get(Constant.ue_id));
+                    educationAdapter.deleteEducation(pos);
+                } else if (response.body().getResponse().equals("501")) {
+                    resetSettingAndLogout();
+                } else {
+                    showErrorDialog(getActivity(), response.body().getResponse(),"");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<VerifyResponse> call, Throwable t) {
+                showToast("Something went wrong!!");
+                t.printStackTrace();
+            }
+        });
     }
 
 
@@ -163,17 +215,31 @@ public class EducationInfoFragment extends BaseFragment implements EducationAdap
     }
 
     @Override
-    public void onDeleteClick(Education education) {
+    public void onDeleteClick(Education education,int pos) {
         androidx.appcompat.app.AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity(), R.style.AlertDialogStyle);
         builder.setTitle("Confirm")
                 .setMessage("Are you sure you want to delete education?")
-                .setPositiveButton("YES", (dialog, which) -> dialog.dismiss())
-                .setNegativeButton("NO", null)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        HashMap<String,String> params = new HashMap<>();
+                        params.put(Constant.u_user_id,getUserId());
+                        params.put(Constant.ue_id,education.getUe_id());
+                        params.put(Constant.CASE,"D");
+                        deleteEdu(params,pos);
+                    }
+                }).setNegativeButton("No",null)
                 .show();
     }
 
     @Override
     public void onSuccess() {
         fetchEducationDetails(fetch_loged_in_user);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        educationAdapter = null;
     }
 }

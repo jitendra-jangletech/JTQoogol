@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.Navigation;
 
 import com.androidbuts.multispinnerfilter.KeyPairBoolData;
 import com.androidbuts.multispinnerfilter.SpinnerListener;
@@ -153,11 +154,13 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
                     mSettings.setRatingsFilter(ratingset);
 
                 if (call_from.equalsIgnoreCase("test")) {
-                    MainActivity.navController.navigate(R.id.nav_test_my);
+                    Navigation.findNavController(requireActivity(),R.id.nav_host_fragment).navigate(R.id.nav_test_my);
+                    //MainActivity.navController.navigate(R.id.nav_test_my);
                 } else  {
                     Bundle bundle = new Bundle();
                     bundle.putString("call_from", "learning");
-                    MainActivity.navController.navigate(R.id.nav_learning,bundle);
+                    Navigation.findNavController(requireActivity(),R.id.nav_host_fragment).navigate(R.id.nav_learning,bundle);
+                    //MainActivity.navController.navigate(R.id.nav_learning,bundle);
                 }
             } catch (Exception e) {
                 e.printStackTrace();

@@ -17,6 +17,7 @@ import com.jangletech.qoogol.model.DistrictResponse;
 import com.jangletech.qoogol.model.FaqResponse;
 import com.jangletech.qoogol.model.FetchEducationResponse;
 import com.jangletech.qoogol.model.FetchSubjectResponseList;
+import com.jangletech.qoogol.model.GenerateVerifyUserName;
 import com.jangletech.qoogol.model.InstituteResponse;
 import com.jangletech.qoogol.model.Language;
 import com.jangletech.qoogol.model.LearningQuestResponse;
@@ -205,7 +206,9 @@ public interface ApiInterface {
                                                 @Field(Constant.u_native_dt_id) String u_native_dt_id,
                                                 @Field(Constant.u_nationality) String u_nationality,
                                                 @Field(Constant.w_lm_id_array) String w_lm_id_array,
-                                                @Field(Constant.u_gender) String gender);
+                                                @Field(Constant.u_gender) String gender,
+                                                @Field(Constant.userName) String userName
+    );
 
     @FormUrlEncoded
     @POST(Constant.FETCH_USER_INFO)
@@ -227,6 +230,12 @@ public interface ApiInterface {
                                           @Field(Constant.u_app_version) String app_version,
                                           @Field(Constant.other_user) String other_user,
                                           @Field(Constant.CASE) String caseU);
+
+    @FormUrlEncoded
+    @POST(Constant.FETCH_USER_EDU)
+    Call<VerifyResponse> deleteEdu(@Field(Constant.u_user_id) String userId,
+                                         @Field(Constant.ue_id) String ueId,
+                                         @Field(Constant.CASE) String caseDel);
 
     @FormUrlEncoded
     @POST(Constant.FETCH_TEST_LIST)
@@ -296,7 +305,15 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST(Constant.FETCH_QA)
-    Call<LearningQuestResponse> fetchQAApi(@Field(Constant.u_user_id) int userid, @Field(Constant.q_id) String question);
+    Call<LearningQuestResponse> fetchQAApi(@Field(Constant.u_user_id) int userid,
+                                           @Field(Constant.q_id) String question);
+
+    @FormUrlEncoded
+    @POST(Constant.REFER)
+    Call<GenerateVerifyUserName> generateVerifyUserName(@Field(Constant.u_first_name) String fName,
+                                                        @Field(Constant.u_last_name) String lName,
+                                                        @Field(Constant.CASE) String caseG,
+                                                        @Field(Constant.userName) String userName);
 
     @FormUrlEncoded
     @POST(Constant.PROCESS_QUESTION)

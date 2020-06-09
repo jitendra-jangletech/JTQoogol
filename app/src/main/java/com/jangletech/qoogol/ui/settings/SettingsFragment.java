@@ -17,6 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.android.material.chip.Chip;
@@ -259,7 +260,8 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
                 ProgressDialog.getInstance().dismiss();
                 if (response.body() != null && response.body().getResponse().equals("200")) {
                     mViewModel.setUserPreference(response.body().getPreferencesList().get(0));
-                    MainActivity.navController.navigate(R.id.nav_test_my);
+                    Navigation.findNavController(requireActivity(),R.id.nav_host_fragment).navigate(R.id.nav_test_my);
+                    //MainActivity.navController.navigate(R.id.nav_test_my);
                 } else {
                     showErrorDialog(requireActivity(), response.body().getResponse(), "");
                 }

@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.jangletech.qoogol.activities.MainActivity;
@@ -78,7 +79,8 @@ public class TestSharedWithYouFragment extends BaseFragment implements TestAdapt
     @Override
     public void onTestItemClick(TestModel testModel) {
         Toast.makeText(getActivity(), ""+testModel.getName(), Toast.LENGTH_SHORT).show();
-        MainActivity.navController.navigate(R.id.nav_test_details);
+        Navigation.findNavController(requireActivity(),R.id.nav_host_fragment).navigate(R.id.nav_test_details);
+        //MainActivity.navController.navigate(R.id.nav_test_details);
     }
 
     @Override

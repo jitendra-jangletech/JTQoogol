@@ -37,12 +37,16 @@ public class RegisterLoginViewModel extends AndroidViewModel {
         appRepository.deleteNotifications();
     }
 
+    public void deleteEducations() {
+        appRepository.deleteAllEducations();
+    }
+
     public void deletePersonalInfo() {
         appRepository.deletePersonalInfo();
     }
 
-    public void deleteEducations() {
-        appRepository.deleteEducationInfo();
+    public void deleteEducation(String id) {
+        appRepository.deleteEducationInfo(id);
     }
 
     public void deleteDashboard() {

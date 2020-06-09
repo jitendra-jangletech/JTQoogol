@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -117,7 +118,8 @@ public class TestFavouriteFragment extends BaseFragment implements TestListAdapt
     public void onTestItemClick(TestModelNew testModel) {
         Bundle bundle = new Bundle();
         bundle.putSerializable(Constant.TEST_NAME, testModel);
-        MainActivity.navController.navigate(R.id.nav_test_details, bundle);
+        Navigation.findNavController(requireActivity(),R.id.nav_host_fragment).navigate(R.id.nav_test_details);
+        //MainActivity.navController.navigate(R.id.nav_test_details, bundle);
     }
 
     @Override

@@ -11,6 +11,7 @@ import com.jangletech.qoogol.database.repo.AppRepository;
 import com.jangletech.qoogol.model.City;
 import com.jangletech.qoogol.model.Country;
 import com.jangletech.qoogol.model.District;
+import com.jangletech.qoogol.model.GenerateVerifyUserName;
 import com.jangletech.qoogol.model.Language;
 import com.jangletech.qoogol.model.State;
 import com.jangletech.qoogol.model.UserProfile;
@@ -24,6 +25,7 @@ public class PersonalInfoViewModel extends AndroidViewModel {
     private MutableLiveData<List<City>> citylist;
     private MutableLiveData<List<District>> districtList;
     private MutableLiveData<List<Language>> languageList;
+    private MutableLiveData<GenerateVerifyUserName> generateVerifyUserNameMutableLiveData;
     private AppRepository appRepository;
 
     public void insert(UserProfile userProfile) {
@@ -40,6 +42,13 @@ public class PersonalInfoViewModel extends AndroidViewModel {
         return appRepository.getUserProfilePrev(userId);
     }
 
+    public LiveData<GenerateVerifyUserName> getUserNameData(){
+        return generateVerifyUserNameMutableLiveData;
+    }
+
+    public void setUserNameData(GenerateVerifyUserName generateVerifyUserName) {
+        this.generateVerifyUserNameMutableLiveData.setValue(generateVerifyUserName);
+    }
 
     public PersonalInfoViewModel(@NonNull Application application) {
         super(application);
@@ -48,6 +57,7 @@ public class PersonalInfoViewModel extends AndroidViewModel {
         citylist = new MutableLiveData<>();
         languageList = new MutableLiveData<>();
         districtList = new MutableLiveData<>();
+        generateVerifyUserNameMutableLiveData = new MutableLiveData<>();
         appRepository = new AppRepository(application);
     }
 
