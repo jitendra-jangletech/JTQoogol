@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -21,6 +22,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.textfield.TextInputLayout;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.activities.LaunchActivity;
+import com.jangletech.qoogol.activities.MainActivity;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 
@@ -48,6 +50,9 @@ public class BaseFragment extends Fragment {
         return result;
     }
 
+    public ActionBar getActionBar() {
+        return ((MainActivity) getActivity()).getSupportActionBar();
+    }
     public void loadProfilePic(String url, ImageView imageView) {
         RequestOptions options = new RequestOptions()
                 .centerCrop()

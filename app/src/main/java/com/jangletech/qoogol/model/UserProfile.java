@@ -35,6 +35,9 @@ public class UserProfile {
     @SerializedName(Constant.u_native_ct_id)
     private String cityId;
 
+    @SerializedName(Constant.userName)
+    private String userName;
+
     public String getCityId() {
         return cityId!=null?cityId:"";
     }
@@ -885,5 +888,13 @@ public class UserProfile {
 
     public void setTotalPointsEarned(String totalPointsEarned) {
         this.totalPointsEarned = totalPointsEarned;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }

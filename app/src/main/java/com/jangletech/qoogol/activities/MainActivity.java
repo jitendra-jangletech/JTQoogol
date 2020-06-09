@@ -3,16 +3,14 @@ package com.jangletech.qoogol.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.Gravity;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.Observer;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -20,36 +18,27 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.ActivityMainBinding;
 import com.jangletech.qoogol.dialog.UniversalDialog;
-import com.jangletech.qoogol.model.UserProfile;
-import com.jangletech.qoogol.retrofit.ApiClient;
-import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.personal_info.PersonalInfoViewModel;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 import static com.jangletech.qoogol.util.Constant.CALL_FROM;
 import static com.jangletech.qoogol.util.Constant.profile;
-import static com.jangletech.qoogol.util.Constant.user_id;
 
 public class MainActivity extends BaseActivity implements UniversalDialog.DialogButtonClickListener {
 
     private static final String TAG = "MainActivity";
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding mBinding;
-    public static NavController navController;
+    private DrawerLayout drawerLayout;
+    private NavController navController;
     private PersonalInfoViewModel mViewmodel;
     public static ImageView profileImage;
     public static TextView textViewDisplayName;
-    public static TextView tvNavConnections,tvNavFriends,tvNavFollowers,tvNavFollowing;
+    public static TextView tvNavConnections, tvNavFriends, tvNavFollowers, tvNavFollowing;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,41 +47,33 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
         mViewmodel = new ViewModelProvider(this).get(PersonalInfoViewModel.class);
         profileImage = findViewById(R.id.profilePic);
         textViewDisplayName = findViewById(R.id.tvName);
-
+        drawerLayout = findViewById(R.id.drawer_layout);
         tvNavConnections = findViewById(R.id.tvNavConn);
         tvNavFriends = findViewById(R.id.tvNavFriends);
         tvNavFollowing = findViewById(R.id.tvNavFollowing);
         tvNavFollowers = findViewById(R.id.tvNavFollowers);
-
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         //setMargins(mBinding.marginLayout);
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        Gson gson = gsonBuilder.create();
+        //GsonBuilder gsonBuilder = new GsonBuilder();
+        // Gson gson = gsonBuilder.create();
         NavigationView navigationView = findViewById(R.id.nav_view);
-        mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.edit_profile,
-                R.id.nav_home, R.id.nav_learning,
-                R.id.nav_home, /*R.id.nav_course, R.id.nav_exam, R.id.nav_questions*/
-                R.id.nav_practice_test, R.id.nav_test_my, R.id.nav_test_popular, R.id.nav_attended_by_friends,
-                R.id.nav_blocked_connections, R.id.nav_import_contacts,
-                R.id.nav_shared_with_you, R.id.nav_shared_by_you, R.id.nav_requests,
-                R.id.nav_reviews, R.id.nav_published, R.id.nav_notifications, R.id.nav_settings, R.id.nav_fav_test)
-                .setDrawerLayout(mBinding.drawerLayout)
+        mAppBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph())
+                .setDrawerLayout(drawerLayout)
                 .build();
-        navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
         mBinding.navHeader.tvName.setOnClickListener(v -> {
-            mBinding.drawerLayout.closeDrawer(Gravity.LEFT);
+            mBinding.drawerLayout.closeDrawers();
             Bundle bundle = new Bundle();
             bundle.putInt(CALL_FROM, profile);
             navController.navigate(R.id.nav_edit_profile, bundle);
         });
 
         mBinding.navHeader.profilePic.setOnClickListener(v -> {
-            mBinding.drawerLayout.closeDrawer(Gravity.LEFT);
+            mBinding.drawerLayout.closeDrawers();
             Bundle bundle = new Bundle();
             bundle.putInt(CALL_FROM, profile);
             navController.navigate(R.id.nav_edit_profile, bundle);
@@ -165,15 +146,6 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
         });
 
 
-        findViewById(R.id.nav_practice_test).setOnClickListener(v -> {
-            mBinding.drawerLayout.closeDrawers();
-            if (navController.getCurrentDestination().getId() != R.id.nav_practice_test) {
-                navController.popBackStack();
-                //navController.navigate(R.id.nav_practice_test);
-                startActivity(new Intent(this, PracticeTestActivity.class));
-            }
-        });
-
         findViewById(R.id.nav_saved).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
             if (navController.getCurrentDestination().getId() != R.id.nav_saved) {
@@ -199,7 +171,9 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
             mBinding.drawerLayout.closeDrawers();
             if (navController.getCurrentDestination().getId() != R.id.nav_test_popular) {
                 navController.popBackStack();
-                navController.navigate(R.id.nav_test_popular);
+                Bundle bundle =  new Bundle();
+                bundle.putString("CALL_FROM","Popular Test");
+                navController.navigate(R.id.nav_test_my,bundle);
             }
         });
 
@@ -208,7 +182,9 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
             mBinding.drawerLayout.closeDrawers();
             if (navController.getCurrentDestination().getId() != R.id.nav_attended_by_friends) {
                 navController.popBackStack();
-                navController.navigate(R.id.nav_attended_by_friends);
+                Bundle bundle =  new Bundle();
+                bundle.putString("CALL_FROM","Attended By Friends");
+                navController.navigate(R.id.nav_test_my,bundle);
             }
         });
 
@@ -216,7 +192,9 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
             mBinding.drawerLayout.closeDrawers();
             if (navController.getCurrentDestination().getId() != R.id.nav_shared_with_you) {
                 navController.popBackStack();
-                navController.navigate(R.id.nav_shared_with_you);
+                Bundle bundle =  new Bundle();
+                bundle.putString("CALL_FROM","Shared With You");
+                navController.navigate(R.id.nav_test_my,bundle);
             }
         });
 
@@ -224,23 +202,9 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
             mBinding.drawerLayout.closeDrawers();
             if (navController.getCurrentDestination().getId() != R.id.nav_shared_by_you) {
                 navController.popBackStack();
-                navController.navigate(R.id.nav_shared_by_you);
-            }
-        });
-
-        findViewById(R.id.nav_reviews).setOnClickListener(v -> {
-            mBinding.drawerLayout.closeDrawers();
-            if (navController.getCurrentDestination().getId() != R.id.nav_reviews) {
-                navController.popBackStack();
-                navController.navigate(R.id.nav_reviews);
-            }
-        });
-
-        findViewById(R.id.nav_published).setOnClickListener(v -> {
-            mBinding.drawerLayout.closeDrawers();
-            if (navController.getCurrentDestination().getId() != R.id.nav_published) {
-                navController.popBackStack();
-                navController.navigate(R.id.nav_published);
+                Bundle bundle =  new Bundle();
+                bundle.putString("CALL_FROM","Shared By You");
+                navController.navigate(R.id.nav_test_my,bundle);
             }
         });
 

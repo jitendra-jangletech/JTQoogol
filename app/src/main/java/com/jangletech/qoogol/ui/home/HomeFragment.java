@@ -1,19 +1,16 @@
 package com.jangletech.qoogol.ui.home;
-
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.fragment.NavHostFragment;
-
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.XAxis;
@@ -31,6 +28,7 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.activities.MainActivity;
 import com.jangletech.qoogol.databinding.FragmentHomeBinding;
+import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.model.DashBoard;
 import com.jangletech.qoogol.model.TestAnalytics;
 import com.jangletech.qoogol.retrofit.ApiClient;
@@ -38,10 +36,8 @@ import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
-
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -266,8 +262,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
         HashMap<String, String> params = new HashMap<>();
         params.put(Constant.u_user_id, getUserId());
         params.put(Constant.device_id, getDeviceId());
-        //ProgressDialog.getInstance().show(getActivity());
-        mBinding.swipeToRefresh.setRefreshing(true);
+        ProgressDialog.getInstance().show(getActivity());
+        //mBinding.swipeToRefresh.setRefreshing(true);
         Call<DashBoard> call = apiService.fetchDashBoardDetails(
                 params.get(Constant.u_user_id),
                 params.get(Constant.device_id)
@@ -275,8 +271,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
         call.enqueue(new Callback<DashBoard>() {
             @Override
             public void onResponse(Call<DashBoard> call, Response<DashBoard> response) {
-                //ProgressDialog.getInstance().dismiss();
-                mBinding.swipeToRefresh.setRefreshing(false);
+                ProgressDialog.getInstance().dismiss();
+                //mBinding.swipeToRefresh.setRefreshing(false);
                 if (response.body() != null) {
                     DashBoard dashBoard = response.body();
                     dashBoard.setUserId(getUserId());
@@ -286,7 +282,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
 
             @Override
             public void onFailure(Call<DashBoard> call, Throwable t) {
-                mBinding.swipeToRefresh.setRefreshing(false);
+                //mBinding.swipeToRefresh.setRefreshing(false);
+                ProgressDialog.getInstance().dismiss();
                 t.printStackTrace();
             }
         });

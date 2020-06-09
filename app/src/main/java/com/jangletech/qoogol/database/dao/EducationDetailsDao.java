@@ -23,10 +23,9 @@ public interface EducationDetailsDao {
     @Query("Select * from Education")
     LiveData<List<Education>> getAllUserEducations();
 
-    @Query("delete from Education")
-    void deleteAllEducations();
-
-    @Query("delete from Education where ue_id =:ueId")
+    @Query("delete from Education where ue_id=:ueId")
     void deleteEducation(String ueId);
 
+    @Query("delete from Education")
+    void deleteAllEducation();
 }

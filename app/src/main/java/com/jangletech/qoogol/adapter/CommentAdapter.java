@@ -17,7 +17,6 @@ import com.jangletech.qoogol.enums.Module;
 import com.jangletech.qoogol.model.Comments;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.DateUtils;
-
 import java.util.List;
 
 /**
@@ -32,7 +31,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     String callingFrom;
     onCommentItemClickListener commentItemClickListener;
 
-    public CommentAdapter(Activity activity, List<Comments> commentList, String callingFrom,onCommentItemClickListener commentItemClickListener) {
+    public CommentAdapter(Activity activity, List<Comments> commentList, String callingFrom, onCommentItemClickListener commentItemClickListener) {
         this.activity = activity;
         this.commentList = commentList;
         this.callingFrom = callingFrom;
@@ -55,15 +54,17 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         if (callingFrom.equals(Module.Learning.toString())) {
             commentItemBinding.tvSenderName.setText(comments.getUserFirstName() + " " + comments.getUserLastName());
             commentItemBinding.textCommentBody.setText(comments.getComment());
-            if(comments.getTime()!=null)
-            commentItemBinding.textCommentTime.setText(DateUtils.getFormattedDate(comments.getTime().substring(0, 10)));
+            if (comments.getTime() != null)
+                commentItemBinding.textCommentTime.setText(DateUtils.localeDateFormat(comments.getTlc_cdatetime()));
+            //commentItemBinding.textCommentTime.setText(DateUtils.getFormattedDate(comments.getTime().substring(0, 10)));
         }
 
         if (callingFrom.equals(Module.Test.toString())) {
             commentItemBinding.tvSenderName.setText(comments.getUserFirstName() + " " + comments.getUserLastName());
             commentItemBinding.textCommentBody.setText(comments.getTlc_comment_text());
             if (comments.getTlc_cdatetime() != null)
-            commentItemBinding.textCommentTime.setText(DateUtils.getFormattedDate(comments.getTlc_cdatetime().substring(0,10)));//todo change data & time format
+                commentItemBinding.textCommentTime.setText(DateUtils.localeDateFormat(comments.getTlc_cdatetime()));
+            //commentItemBinding.textCommentTime.setText(DateUtils.getFormattedDate(comments.getTlc_cdatetime().substring(0, 10)));//todo change data & time format
         }
 
         Glide.with(activity)
@@ -109,6 +110,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             return Constant.PRODUCTION_BASE_FILE_API + comments.getProfile_image();
 
         else
-            return Constant.PRODUCTION_BASE_FILE_API +comments.getProfile_image();
+            return Constant.PRODUCTION_BASE_FILE_API + comments.getProfile_image();
     }
 }

@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.jangletech.qoogol.R;
@@ -144,6 +145,7 @@ public class BoardFragment extends BaseFragment implements BoardAdapterNew.Board
     public void onBoardSelected(University university) {
         showToast(university.getName());
         new PreferenceManager(getActivity()).saveString(Constant.BOARD,university.getName());
-        MainActivity.navController.navigate(R.id.nav_settings, Bundle.EMPTY);
+        Navigation.findNavController(requireActivity(),R.id.nav_host_fragment).navigate(R.id.nav_settings);
+        //MainActivity.navController.navigate(R.id.nav_settings, Bundle.EMPTY);
     }
 }

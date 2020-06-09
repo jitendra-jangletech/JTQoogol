@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.jangletech.qoogol.database.repo.AppRepository;
 import com.jangletech.qoogol.model.Education;
 import com.jangletech.qoogol.model.UserProfile;
+import com.jangletech.qoogol.model.VerifyResponse;
 
 import java.util.List;
 
@@ -17,18 +18,21 @@ public class EducationInfoViewModel extends AndroidViewModel {
 
     private AppRepository appRepository;
     private MutableLiveData<List<Education>> educationList;
+    private MutableLiveData<VerifyResponse> deleteResponse;
 
-  /*  public LiveData<List<Education>> getEducationList(){
-        return educationList;
-    }*/
 
-    /*public void setEducationList(List<Education> educationList){
-        this.educationList.setValue(educationList);
-    }*/
+    public LiveData<VerifyResponse> getDeleteResponse(){
+        return deleteResponse;
+    }
+
+    public void setDeleteResponse(VerifyResponse verifyResponse){
+        this.deleteResponse.setValue(verifyResponse);
+    }
 
     public EducationInfoViewModel(@NonNull Application application) {
         super(application);
         this.educationList = new MutableLiveData<>();
+        this.deleteResponse = new MutableLiveData<>();
         appRepository = new AppRepository(application);
     }
 
@@ -36,6 +40,9 @@ public class EducationInfoViewModel extends AndroidViewModel {
         appRepository.insertEducationInfo(educations);
     }
 
+    public void delete(String id) {
+        appRepository.deleteEducationInfo(id);
+    }
 
     public LiveData<List<Education>> getAllEducations() {
         return appRepository.getUserEducations();

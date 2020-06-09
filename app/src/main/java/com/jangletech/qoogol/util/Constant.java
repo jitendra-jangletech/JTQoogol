@@ -79,6 +79,8 @@ public class Constant {
     public static final String u_last_name = "105";
     public static final String w_user_profile_image_name = "507";
     public static final String CASE = "Case";
+    public static final String userName = "143A";
+
 
     public static final String STATUS = "status";
     public static final String VERIFY = "Verify";
@@ -227,6 +229,7 @@ public class Constant {
     //learning
     public static final String QUESTION_IMAGES_API = "https://jtmobileappstorage.blob.core.windows.net/spotmeets/media/images/";
     public static final String FETCH_QA = "q151FetchQA";
+    public static final String REFER = "sm01SignupReferredBy";
     public static final String DASHBOARD = "q110FetchDashboard";
     public static final String PROCESS_QUESTION = "q141ProcessQuestion";
     public static final String PROCESS_TEST = "q133ProcessTest";

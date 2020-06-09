@@ -2,6 +2,7 @@ package com.jangletech.qoogol.ui.personal_info;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -28,12 +29,12 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.Navigation;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.jangletech.qoogol.R;
-import com.jangletech.qoogol.activities.MainActivity;
 import com.jangletech.qoogol.databinding.FragmentPersonalInfoBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.model.City;
@@ -42,6 +43,7 @@ import com.jangletech.qoogol.model.Country;
 import com.jangletech.qoogol.model.CountryResponse;
 import com.jangletech.qoogol.model.District;
 import com.jangletech.qoogol.model.DistrictResponse;
+import com.jangletech.qoogol.model.GenerateVerifyUserName;
 import com.jangletech.qoogol.model.Language;
 import com.jangletech.qoogol.model.State;
 import com.jangletech.qoogol.model.StateResponse;
@@ -58,7 +60,6 @@ import com.mukesh.OtpView;
 import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.io.File;
-import java.net.UnknownHostException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -79,6 +80,7 @@ import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
 import static android.app.Activity.RESULT_OK;
 import static com.jangletech.qoogol.util.Constant.fetch_loged_in_user;
 import static com.jangletech.qoogol.util.Constant.fetch_other_user;
@@ -91,6 +93,7 @@ public class PersonalInfoFragment extends BaseFragment {
     private android.app.ProgressDialog mDialog;
     private FragmentPersonalInfoBinding mBinding;
     private Dialog dialog;
+    private Context mContext;
     private String gender = "";
     private Map<Integer, String> mMapNationality;
     private Map<Integer, String> mMapLanguage;
@@ -111,6 +114,12 @@ public class PersonalInfoFragment extends BaseFragment {
     }
 
     @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        mContext = context.getApplicationContext();
+    }
+
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_personal_info, container, false);
@@ -122,21 +131,17 @@ public class PersonalInfoFragment extends BaseFragment {
 
     public void initViews() {
 
-        //fetch data from localdb
-        //profile = mViewModel.getUserProfilePrev(getUserId());
-        //mBinding.setUserProfile(profile);
-
         mSettings = new PreferenceManager(getActivity());
         userid = mSettings.getProfileFetchId();
-        Log.d(TAG, "initViews UserId : "+mSettings.getUserId());
+        Log.d(TAG, "initViews UserId : " + mSettings.getUserId());
         if (userid.equalsIgnoreCase(mSettings.getUserId()))
             fetchUserProfile(fetch_loged_in_user);
         else
             fetchUserProfile(fetch_other_user);
 
         mViewModel.getUserProfile(userid).observe(getViewLifecycleOwner(), userProfile -> {
-            Log.d(TAG, "onChanged : "+userProfile);
-            if(userProfile!=null) {
+            Log.d(TAG, "onChanged : " + userProfile);
+            if (userProfile != null) {
                 mBinding.setUserProfile(userProfile);
                 updateUi(userProfile);
                 profile = userProfile;
@@ -145,34 +150,50 @@ public class PersonalInfoFragment extends BaseFragment {
             }
         });
 
-        /*mViewModel.getInsertResult().observe(requireActivity(), new Observer<Integer>() {
+        mViewModel.getUserNameData().observe(getViewLifecycleOwner(), new Observer<GenerateVerifyUserName>() {
             @Override
-            public void onChanged(@Nullable Integer result) {
-                if (result == 1) {
-                    updateUi(mViewModel.getUserProfile(userid).getValue());
-                } else {
-                    showToast("Something went wrong!!");
+            public void onChanged(GenerateVerifyUserName generateVerifyUserName) {
+                if (generateVerifyUserName != null) {
+                    String[] names = generateVerifyUserName.getUserNames().split(",", -1);
+                    List<String> userNames = new ArrayList<>();
+                    for (int i = 0; i < names.length; i++) {
+                        userNames.add(names[i]);
+                    }
+                    populateUserNames(userNames);
                 }
             }
         });
 
-        mViewModel.getDeleteResult().observe(requireActivity(), new Observer<Integer>() {
-            @Override
-            public void onChanged(@Nullable Integer result) {
-                if (result == 1) {
-                    mViewModel.insert(mViewModel.getUserProfile(userid).getValue());
-                } else {
-                    showToast("Something went wrong!!");
-                }
-            }
-        });
-*/
         mBinding.userProfilePic.setOnClickListener(v -> {
             loadImage();
         });
 
+        mBinding.btnCheckExist.setOnClickListener(v -> {
+            HashMap<String, String> params = new HashMap<>();
+            params.put(Constant.u_first_name, mBinding.etFirstName.getText().toString());
+            params.put(Constant.u_last_name, mBinding.etLastName.getText().toString());
+            params.put(Constant.CASE, "V");
+            params.put(Constant.userName, mBinding.userNameAutoCompleteTextView.getTag().toString());
+            if (profile.getUserName().equals(mBinding.userNameAutoCompleteTextView.getTag().toString())) {
+                showToast("You have already taken this username.");
+                return;
+            } else {
+                generateVerifyUserName(params);
+            }
+        });
+
+        mBinding.btnGenerate.setOnClickListener(v -> {
+            HashMap<String, String> params = new HashMap<>();
+            params.put(Constant.u_first_name, mBinding.etFirstName.getText().toString());
+            params.put(Constant.u_last_name, mBinding.etLastName.getText().toString());
+            params.put(Constant.CASE, "G");
+            params.put(Constant.userName, "");
+            generateVerifyUserName(params);
+        });
+
         mBinding.btnImportContacts.setOnClickListener(v -> {
-            MainActivity.navController.navigate(R.id.nav_import_contacts);
+            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_import_contacts);
+            //MainActivity.navController.navigate(R.id.nav_import_contacts);
         });
 
         //set Mandatory Fields
@@ -202,7 +223,6 @@ public class PersonalInfoFragment extends BaseFragment {
             }
             verifyMobile(mBinding.etMobile.getText().toString().trim(), "M");
         });
-
 
         if (userid.equalsIgnoreCase(mSettings.getUserId())) {
             fetchLanguages();
@@ -267,6 +287,14 @@ public class PersonalInfoFragment extends BaseFragment {
         }
 
 
+    }
+
+    private void populateUserNames(List<String> userNames) {
+        Collections.sort(userNames);
+        Log.d(TAG, "populateUserNames: " + userNames.size());
+        ArrayAdapter<String> userNameAdapter = new ArrayAdapter(mContext, R.layout.textview_dropdown, userNames);
+        mBinding.userNameAutoCompleteTextView.setThreshold(0);
+        mBinding.userNameAutoCompleteTextView.setAdapter(userNameAdapter);
     }
 
     private void manageUnwantedFields(UserProfile userProfile) {
@@ -455,6 +483,7 @@ public class PersonalInfoFragment extends BaseFragment {
             userProfileMap.put(Constant.u_nationality, mBinding.nationalityAutocompleteView.getTag());
             userProfileMap.put(Constant.w_lm_id_array, mBinding.langAutocompleteView.getTag());
             userProfileMap.put(Constant.u_gender, getSingleQuoteString(gender));
+            userProfileMap.put(Constant.userName,mBinding.userNameAutoCompleteTextView.getTag().toString());
 
             updateUserProfile(userProfileMap);
 
@@ -469,6 +498,11 @@ public class PersonalInfoFragment extends BaseFragment {
                 fetchStates(String.valueOf(key));
                 //fetchMasterData(UtilHelper.getStateApi(), Constant.s_c_id, "" + key, Params.STATE.value);
             }
+        });
+
+        mBinding.userNameAutoCompleteTextView.setOnItemClickListener((parent, view, position, id) -> {
+            final String name = ((TextView) view).getText().toString();
+            mBinding.userNameAutoCompleteTextView.setTag(name);
         });
 
         mBinding.stateAutocompleteView.setOnItemClickListener((parent, view, position, id) -> {
@@ -599,7 +633,8 @@ public class PersonalInfoFragment extends BaseFragment {
                 String.valueOf(userProfileMap.get(Constant.u_native_dt_id)),
                 String.valueOf(userProfileMap.get(Constant.u_nationality)),
                 String.valueOf(userProfileMap.get(Constant.w_lm_id_array)),
-                userProfileMap.get(Constant.u_gender)
+                userProfileMap.get(Constant.u_gender),
+                userProfileMap.get(Constant.userName)
         );
         call.enqueue(new Callback<UserProfileResponse>() {
             @Override
@@ -610,7 +645,8 @@ public class PersonalInfoFragment extends BaseFragment {
                     String displayName = mBinding.etFirstName.getText().toString().trim() + " " + mBinding.etLastName.getText().toString().trim();
                     new PreferenceManager(requireActivity()).saveString(Constant.DISPLAY_NAME, displayName);
                     new PreferenceManager(requireActivity()).saveString(Constant.GENDER, userProfileMap.get(Constant.u_gender));
-                    MainActivity.navController.navigate(R.id.nav_home);
+                    Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_home);
+                    //MainActivity.navController.navigate(R.id.nav_home);
                 } else {
                     showErrorDialog(requireActivity(), response.body().getResponseCode(), "");
                 }
@@ -619,7 +655,7 @@ public class PersonalInfoFragment extends BaseFragment {
             @Override
             public void onFailure(Call<UserProfileResponse> call, Throwable t) {
                 ProgressDialog.getInstance().dismiss();
-                Log.e(TAG, "onFailure updateUserProfile : "+t.getMessage());
+                Log.e(TAG, "onFailure updateUserProfile : " + t.getMessage());
                 showToast("Something went wrong!!");
                 t.printStackTrace();
             }
@@ -664,7 +700,7 @@ public class PersonalInfoFragment extends BaseFragment {
             @Override
             public void onFailure(Call<UserProfile> call, Throwable t) {
                 //ProgressDialog.getInstance().dismiss();
-                Log.e(TAG, "onFailure UserProfile: "+t.getMessage());
+                Log.e(TAG, "onFailure UserProfile: " + t.getMessage());
                 apiCallFailureDialog(t);
                 showToast("Something went wrong!!");
                 t.printStackTrace();
@@ -690,7 +726,7 @@ public class PersonalInfoFragment extends BaseFragment {
             @Override
             public void onFailure(Call<Language> call, Throwable t) {
                 ProgressDialog.getInstance().dismiss();
-                Log.e(TAG, "onFailure Languages: "+t.getMessage());
+                Log.e(TAG, "onFailure Languages: " + t.getMessage());
                 showToast("Something went wrong!!");
                 t.printStackTrace();
             }
@@ -719,7 +755,7 @@ public class PersonalInfoFragment extends BaseFragment {
             @Override
             public void onFailure(Call<CountryResponse> call, Throwable t) {
                 ProgressDialog.getInstance().dismiss();
-                Log.e(TAG, "onFailure Nationalities: "+t.getMessage());
+                Log.e(TAG, "onFailure Nationalities: " + t.getMessage());
                 showToast("Something went wrong!!");
                 t.printStackTrace();
             }
@@ -743,7 +779,7 @@ public class PersonalInfoFragment extends BaseFragment {
             @Override
             public void onFailure(Call<StateResponse> call, Throwable t) {
                 ProgressDialog.getInstance().dismiss();
-                Log.e(TAG, "onFailure States: "+t.getMessage());
+                Log.e(TAG, "onFailure States: " + t.getMessage());
                 showToast("Something went wrong!!");
                 t.printStackTrace();
             }
@@ -768,7 +804,7 @@ public class PersonalInfoFragment extends BaseFragment {
             @Override
             public void onFailure(Call<DistrictResponse> call, Throwable t) {
                 ProgressDialog.getInstance().dismiss();
-                Log.e(TAG, "onFailure Districts: "+t.getMessage());
+                Log.e(TAG, "onFailure Districts: " + t.getMessage());
                 showToast("Something went wrong!!");
                 t.printStackTrace();
             }
@@ -792,7 +828,7 @@ public class PersonalInfoFragment extends BaseFragment {
             @Override
             public void onFailure(Call<CityResponse> call, Throwable t) {
                 ProgressDialog.getInstance().dismiss();
-                Log.e(TAG, "onFailure City : "+t.getMessage());
+                Log.e(TAG, "onFailure City : " + t.getMessage());
                 showToast("Something went wrong!!");
                 t.printStackTrace();
             }
@@ -839,7 +875,7 @@ public class PersonalInfoFragment extends BaseFragment {
         List<String> list = new ArrayList<>(mMapNationality.values());
         Collections.sort(list);
         Log.d(TAG, "populateCountries: " + list.size());
-        ArrayAdapter<String> nationalityAdapter = new ArrayAdapter<>(requireActivity(), R.layout.textview_dropdown, list);
+        ArrayAdapter<String> nationalityAdapter = new ArrayAdapter<>(mContext, R.layout.textview_dropdown, list);
         mBinding.nationalityAutocompleteView.setThreshold(0);
         mBinding.nationalityAutocompleteView.setAdapter(nationalityAdapter);
     }
@@ -866,7 +902,7 @@ public class PersonalInfoFragment extends BaseFragment {
         List<String> list = new ArrayList<>(stateMap.values());
         Collections.sort(list);
         Log.d(TAG, "populateState: " + list.size());
-        ArrayAdapter<String> stateAdapter = new ArrayAdapter<>(requireActivity(), R.layout.textview_dropdown, list);
+        ArrayAdapter<String> stateAdapter = new ArrayAdapter<>(mContext, R.layout.textview_dropdown, list);
         mBinding.stateAutocompleteView.setThreshold(0);
         mBinding.stateAutocompleteView.setAdapter(stateAdapter);
     }
@@ -895,7 +931,6 @@ public class PersonalInfoFragment extends BaseFragment {
 
     private boolean isValidMail(String email) {
         return Pattern.compile(Constant.EMAIL_STRING).matcher(email).matches();
-
     }
 
     private void verifyMobileEmail(HashMap<String, String> map) {
@@ -924,7 +959,7 @@ public class PersonalInfoFragment extends BaseFragment {
             @Override
             public void onFailure(Call<VerifyResponse> call, Throwable t) {
                 ProgressDialog.getInstance().dismiss();
-                Log.e(TAG, "onFailure Verify Mobile: "+t.getMessage());
+                Log.e(TAG, "onFailure Verify Mobile: " + t.getMessage());
                 showToast("Something went wrong!!");
                 t.printStackTrace();
             }
@@ -981,7 +1016,7 @@ public class PersonalInfoFragment extends BaseFragment {
                         .start(requireActivity(), this);
             } catch (Exception e) {
                 e.printStackTrace();
-                Log.e(TAG, "onFailure onActivityResult: "+e.getMessage());
+                Log.e(TAG, "onFailure onActivityResult: " + e.getMessage());
                 Toast.makeText(requireActivity(), "Something went wrong", Toast.LENGTH_LONG).show();
             }
         } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
@@ -1011,6 +1046,45 @@ public class PersonalInfoFragment extends BaseFragment {
                 Intent.ACTION_PICK,
                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(i, RESULT_REQUEST_LOAD_IMAGE_CODE);
+    }
+
+    private void generateVerifyUserName(HashMap<String, String> params) {
+        ProgressDialog.getInstance().show(requireActivity());
+        Log.d(TAG, "generateVerifyUserName: " + params);
+        String strCase = params.get(Constant.CASE);
+        Call<GenerateVerifyUserName> call = apiService.generateVerifyUserName(
+                params.get(Constant.u_first_name),
+                params.get(Constant.u_last_name),
+                params.get(Constant.CASE),
+                params.get(Constant.userName)
+        );
+        call.enqueue(new Callback<GenerateVerifyUserName>() {
+            @Override
+            public void onResponse(Call<GenerateVerifyUserName> call, Response<GenerateVerifyUserName> response) {
+                ProgressDialog.getInstance().dismiss();
+                if (response.body() != null && response.body().getResponse().equals("200")) {
+                    if (strCase.equals("G")) {
+                        mViewModel.setUserNameData(response.body());
+                    } else if (strCase.equals("V")) {
+
+                    }
+                } else {
+                    if (strCase.equals("V")) {
+                        mBinding.userNameAutoCompleteTextView.setTag("");
+                    }
+                    showErrorDialog(requireActivity(), response.body().getResponse(), "");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GenerateVerifyUserName> call, Throwable t) {
+                ProgressDialog.getInstance().dismiss();
+                Log.e(TAG, "onFailure Languages: " + t.getMessage());
+                showToast("Something went wrong!!");
+                t.printStackTrace();
+            }
+        });
+
     }
 
     private void updateProfileImage(File imageFile) {
@@ -1062,7 +1136,7 @@ public class PersonalInfoFragment extends BaseFragment {
             public void onFailure(Call<VerifyResponse> call, Throwable t) {
                 ProgressDialog.getInstance().dismiss();
                 t.printStackTrace();
-                Log.e(TAG, "onFailure Upload Profile Pic: "+t.getMessage());
+                Log.e(TAG, "onFailure Upload Profile Pic: " + t.getMessage());
                 showToast("Something went wrong!!");
             }
         });

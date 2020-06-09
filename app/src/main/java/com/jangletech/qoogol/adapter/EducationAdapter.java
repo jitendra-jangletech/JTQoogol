@@ -58,7 +58,7 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.View
                 educationItemClickListener.onItemClick(education);
             });
             holder.itemEducationBinding.delete.setOnClickListener(v->{
-                educationItemClickListener.onDeleteClick(education);
+                educationItemClickListener.onDeleteClick(education,position);
             });
         } else {
             itemEducationBinding.delete.setVisibility(View.GONE);
@@ -80,6 +80,11 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.View
 
     public interface EducationItemClickListener{
         void onItemClick(Education education);
-        void onDeleteClick(Education education);
+        void onDeleteClick(Education education,int position);
+    }
+
+    public void deleteEducation(int pos){
+        educationList.remove(pos);
+        notifyItemRemoved(pos);
     }
 }
