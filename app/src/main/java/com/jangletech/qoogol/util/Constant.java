@@ -109,6 +109,9 @@ public class Constant {
     public static final String TorQ = "TorQ";
     public static final String test_share = "T";
     public static final String question_share = "Q";
+    public static final String from_user = "U";
+    public static final String from_question = "Q";
+    public static final String fromTest = "T";
 
     //Preferences
     public static final String PREF_NAME = "qoogol";
@@ -387,6 +390,7 @@ public class Constant {
 
 
     //Fetch connections cases
+    public static final String connections = "CC";
     public static final String friends = "C";
     public static final String friends_and_groups = "A";
     public static final String followers = "FL";

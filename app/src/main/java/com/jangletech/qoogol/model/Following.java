@@ -1,11 +1,16 @@
 package com.jangletech.qoogol.model;
 
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import com.google.gson.annotations.SerializedName;
 import com.jangletech.qoogol.util.Constant;
 
 /**
  * Created by Pritali on 5/4/2020.
  */
+@Entity
 public class Following {
     @SerializedName(Constant.cn_id)
     private String cn_id;
@@ -19,6 +24,8 @@ public class Following {
     @SerializedName(Constant.cn_blocked_by_u1)
     private String cn_blocked_by_u1;
 
+    @PrimaryKey
+    @NonNull
     @SerializedName(Constant.cn_user_id_2)
     private String cn_user_id_2;
 

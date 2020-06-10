@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.jangletech.qoogol.R;
@@ -32,7 +33,13 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class NotificationsFragment extends BaseFragment {
+import static com.jangletech.qoogol.util.Constant.CALL_FROM;
+import static com.jangletech.qoogol.util.Constant.connectonId;
+import static com.jangletech.qoogol.util.Constant.fromTest;
+import static com.jangletech.qoogol.util.Constant.from_question;
+import static com.jangletech.qoogol.util.Constant.from_user;
+
+public class NotificationsFragment extends BaseFragment implements NotificationAdapter.onItemClickListener {
 
     private static final String TAG = "NotificationsFragment";
     private NotificationsViewModel mViewModel;
@@ -40,6 +47,7 @@ public class NotificationsFragment extends BaseFragment {
     private Context mContext;
     private NotificationAdapter notificationAdapter;
     ApiInterface apiService = ApiClient.getInstance().getApi();
+    NotificationAdapter.onItemClickListener onItemClickListener;
 
 
     public static NotificationsFragment newInstance() {
@@ -65,6 +73,7 @@ public class NotificationsFragment extends BaseFragment {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(NotificationsViewModel.class);
         fetchNotifications();
+        onItemClickListener = this;
         mViewModel.getAllNotifications().observe(getViewLifecycleOwner(), new Observer<List<Notification>>() {
             @Override
             public void onChanged(@Nullable final List<Notification> notifications) {
@@ -73,7 +82,7 @@ public class NotificationsFragment extends BaseFragment {
                     //showToast("Data Updated");
                     mBinding.notificationRecyclerView.setHasFixedSize(true);
                     mBinding.notificationRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                    notificationAdapter = new NotificationAdapter(getActivity(), notifications);
+                    notificationAdapter = new NotificationAdapter(getActivity(), notifications, onItemClickListener);
                     mBinding.notificationRecyclerView.setAdapter(notificationAdapter);
                 }
             }
@@ -113,5 +122,21 @@ public class NotificationsFragment extends BaseFragment {
     public void onDetach() {
         super.onDetach();
         notificationAdapter = null;
+    }
+
+    @Override
+    public void onItemClick(Notification notification) {
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("fromNotification",true);
+        bundle.putString(Constant.FB_MS_ID, notification.getN_ref_id());
+        if (notification.getN_ref_type().equalsIgnoreCase(from_user)) {
+            bundle.putInt(CALL_FROM, connectonId);
+            bundle.putString(Constant.fetch_profile_id,notification.getN_ref_id());
+            NavHostFragment.findNavController(this).navigate(R.id.nav_edit_profile,bundle);
+        } else if (notification.getN_ref_type().equalsIgnoreCase(from_question)) {
+            NavHostFragment.findNavController(this).navigate(R.id.nav_learning,bundle);
+        } else if (notification.getN_ref_type().equalsIgnoreCase(fromTest)) {
+            NavHostFragment.findNavController(this).navigate(R.id.nav_test,bundle);
+        }
     }
 }

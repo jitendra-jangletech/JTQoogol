@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -17,11 +18,14 @@ import android.widget.Toast;
 
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.ConnectionAdapter;
+import com.jangletech.qoogol.adapter.FollowingsAdapter;
 import com.jangletech.qoogol.databinding.FragmentFollowingBinding;
 import com.jangletech.qoogol.databinding.FragmentFriendsBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.model.ConnectionResponse;
 import com.jangletech.qoogol.model.Connections;
+import com.jangletech.qoogol.model.Following;
+import com.jangletech.qoogol.model.FollowingResponse;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
@@ -44,38 +48,43 @@ import static com.jangletech.qoogol.util.Constant.qoogol;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FollowingFragment extends BaseFragment implements ConnectionAdapter.updateConnectionListener{
+public class FollowingFragment extends BaseFragment implements FollowingsAdapter.updateConnectionListener{
 
     FragmentFriendsBinding mBinding;
-    List<Connections> connectionsList = new ArrayList<>();;
+    List<Following> connectionsList = new ArrayList<>();;
     private static final String TAG = "FollowingFragment";
-    ApiInterface apiService = ApiClient.getInstance().getApi();
-    ConnectionAdapter mAdapter;
+    FollowingsAdapter mAdapter;
     Boolean isVisible = false;
     String userId="";
-    Call<ConnectionResponse> call;
+    FollowingViewModel mViewModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_friends, container, false);
-       init();
         return  mBinding.getRoot();
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mViewModel = ViewModelProviders.of(this).get(FollowingViewModel.class);
+        init();
+        mViewModel.getFollowingList().observe(getViewLifecycleOwner(), followingList -> {
+            connectionsList.clear();
+            connectionsList.addAll(followingList);
+            initView();
+            checkRefresh();
+        });
     }
 
     private void init() {
         userId = String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));
         if (!isVisible) {
             isVisible = true;
-            getData(0,"init");
+           mViewModel.fetchFollowingsData(false);
         }
-        mBinding.connectionSwiperefresh.setOnRefreshListener(() -> getData(0,"refresh"));
+        mBinding.connectionSwiperefresh.setOnRefreshListener(() -> mViewModel.fetchFollowingsData(true));
     }
 
     public void checkRefresh() {
@@ -90,75 +99,31 @@ public class FollowingFragment extends BaseFragment implements ConnectionAdapter
 
     }
 
-    private void getData(int pagestart, String call_from) {
-        ProgressDialog.getInstance().show(getActivity());
-        if (!call_from.equalsIgnoreCase("refresh"))
-            call = apiService.fetchConnections(userId,following, getDeviceId(), qoogol,pagestart);
-        else
-            call = apiService.fetchRefreshedConnections(userId,following, getDeviceId(), qoogol,pagestart, forcerefresh);
-
-
-        call.enqueue(new Callback<ConnectionResponse>() {
-            @Override
-            public void onResponse(Call<ConnectionResponse> call, retrofit2.Response<ConnectionResponse> response) {
-                try {
-                    ProgressDialog.getInstance().dismiss();
-                    connectionsList.clear();
-                    if (response.body()!=null && response.body().getResponse().equalsIgnoreCase("200")){
-                        connectionsList = response.body().getConnection_list();
-                        initView();
-                        checkRefresh();
-                    } else {
-                        checkRefresh();
-                        Toast.makeText(getActivity(), UtilHelper.getAPIError(String.valueOf(response.body())),Toast.LENGTH_SHORT).show();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    checkRefresh();
-                    ProgressDialog.getInstance().dismiss();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ConnectionResponse> call, Throwable t) {
-                t.printStackTrace();
-                checkRefresh();
-                ProgressDialog.getInstance().dismiss();
-            }
-        });
-    }
-
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser && isVisible)
-            getData(0,"init");
+            mViewModel.fetchFollowingsData(false);
     }
 
 
     private void initView() {
-        mAdapter = new ConnectionAdapter(getActivity(), connectionsList,following, this);
+        mAdapter = new FollowingsAdapter(getActivity(), connectionsList,following, this);
         mBinding.connectionRecycler.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         mBinding.connectionRecycler.setLayoutManager(linearLayoutManager);
         mBinding.connectionRecycler.setAdapter(mAdapter);
-//        if (connectionsList.size()>0) {
-//            mBinding.emptyview.setText("There is no followings in your connection.");
-//            mBinding.emptyview.setVisibility(View.VISIBLE);
-//
-//        } else
-//            mBinding.emptyview.setVisibility(View.GONE);
     }
 
 
     @Override
     public void onUpdateConnection() {
-        getData(0,"refresh");
+        mViewModel.fetchFollowingsData(true);
     }
 
     @Override
     public void onBottomReached(int size) {
-        getData(size,"init");
+        mViewModel.fetchFollowingsData(false);
     }
 
     @Override

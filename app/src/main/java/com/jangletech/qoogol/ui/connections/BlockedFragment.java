@@ -23,6 +23,8 @@ import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.BlockedConnectionAdapter;
 import com.jangletech.qoogol.databinding.FragmentBlockedBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
+import com.jangletech.qoogol.model.BlockedConnResp;
+import com.jangletech.qoogol.model.BlockedConnections;
 import com.jangletech.qoogol.model.ConnectionResponse;
 import com.jangletech.qoogol.model.Connections;
 import com.jangletech.qoogol.model.ResponseObj;
@@ -49,7 +51,7 @@ import static com.jangletech.qoogol.util.Constant.unblock;
 public class BlockedFragment extends BaseFragment implements BlockedConnectionAdapter.BlockedItemClick {
 
     FragmentBlockedBinding mBinding;
-    List<Connections> connectionsList = new ArrayList<>();;
+    List<BlockedConnections> connectionsList = new ArrayList<>();;
     private static final String TAG = "FriendsFragment";
     ApiInterface apiService = ApiClient.getInstance().getApi();
     BlockedConnectionAdapter mAdapter;
@@ -86,15 +88,15 @@ public class BlockedFragment extends BaseFragment implements BlockedConnectionAd
 
     private void getData(int pagestart) {
         ProgressDialog.getInstance().show(getActivity());
-        Call<ConnectionResponse> call = apiService.fetchConnections(userId,block, getDeviceId(), qoogol,pagestart);
-        call.enqueue(new Callback<ConnectionResponse>() {
+        Call<BlockedConnResp> call = apiService.fetchBlockedConnections(userId,block, getDeviceId(), qoogol,pagestart);
+        call.enqueue(new Callback<BlockedConnResp>() {
             @Override
-            public void onResponse(Call<ConnectionResponse> call, retrofit2.Response<ConnectionResponse> response) {
+            public void onResponse(Call<BlockedConnResp> call, retrofit2.Response<BlockedConnResp> response) {
                 try {
                     ProgressDialog.getInstance().dismiss();
                     connectionsList.clear();
                     if (response.body()!=null && response.body().getResponse().equalsIgnoreCase("200")){
-                        connectionsList = response.body().getConnection_list();
+                        connectionsList = response.body().getBlocked_list();
                         initView();
                     } else {
                         Toast.makeText(getActivity(), UtilHelper.getAPIError(String.valueOf(response.body())),Toast.LENGTH_SHORT).show();
@@ -108,7 +110,7 @@ public class BlockedFragment extends BaseFragment implements BlockedConnectionAd
             }
 
             @Override
-            public void onFailure(Call<ConnectionResponse> call, Throwable t) {
+            public void onFailure(Call<BlockedConnResp> call, Throwable t) {
                 t.printStackTrace();
                 checkRefresh();
                 ProgressDialog.getInstance().dismiss();

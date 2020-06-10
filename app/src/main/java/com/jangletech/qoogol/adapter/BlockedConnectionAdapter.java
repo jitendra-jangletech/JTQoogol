@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.BlockedItemBinding;
+import com.jangletech.qoogol.model.BlockedConnections;
 import com.jangletech.qoogol.model.Connections;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.UtilHelper;
@@ -31,12 +32,12 @@ import static com.jangletech.qoogol.util.Constant.connectonId;
 public class BlockedConnectionAdapter extends RecyclerView.Adapter<BlockedConnectionAdapter.ViewHolder> implements Filterable {
 
     Activity activity;
-    List<Connections> connectionsList;
-    List<Connections> filteredConnectionsList;
+    List<BlockedConnections> connectionsList;
+    List<BlockedConnections> filteredConnectionsList;
     BlockedItemBinding blockedItemBinding;
     BlockedItemClick blockedItemClick;
 
-    public BlockedConnectionAdapter(Activity activity, List<Connections> connectionsList, BlockedItemClick blockedItemClick) {
+    public BlockedConnectionAdapter(Activity activity, List<BlockedConnections> connectionsList, BlockedItemClick blockedItemClick) {
         this.activity = activity;
         this.connectionsList = connectionsList;
         this.filteredConnectionsList = connectionsList;
@@ -54,7 +55,7 @@ public class BlockedConnectionAdapter extends RecyclerView.Adapter<BlockedConnec
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Connections connections = connectionsList.get(position);
+        BlockedConnections connections = connectionsList.get(position);
         blockedItemBinding.tvUserName.setText(connections.getU_first_name() + " " + connections.getU_last_name());
         try {
             Glide.with(activity).load(UtilHelper.getProfilePath(connections.getCn_user_id_2(),connections.getProf_pic().trim())).circleCrop().placeholder(R.drawable.profile).into(blockedItemBinding.userProfileImage);
@@ -92,8 +93,8 @@ public class BlockedConnectionAdapter extends RecyclerView.Adapter<BlockedConnec
                 if (charString.isEmpty()) {
                     connectionsList = filteredConnectionsList;
                 } else {
-                    List<Connections> filteredList = new ArrayList<>();
-                    for (Connections row : filteredConnectionsList) {
+                    List<BlockedConnections> filteredList = new ArrayList<>();
+                    for (BlockedConnections row : filteredConnectionsList) {
                         if (row.getU_first_name().toLowerCase().contains(charString.toLowerCase()) || row.getU_last_name().toLowerCase().contains(charString.toLowerCase())) {
                             filteredList.add(row);
                         }
@@ -108,7 +109,7 @@ public class BlockedConnectionAdapter extends RecyclerView.Adapter<BlockedConnec
 
             @Override
             protected void publishResults(CharSequence constraint, FilterResults filterResults) {
-                connectionsList = (ArrayList<Connections>) filterResults.values;
+                connectionsList = (ArrayList<BlockedConnections>) filterResults.values;
                 notifyDataSetChanged();
             }
         };

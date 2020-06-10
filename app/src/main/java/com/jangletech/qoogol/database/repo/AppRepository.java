@@ -7,6 +7,11 @@ import androidx.lifecycle.LiveData;
 import com.jangletech.qoogol.database.QoogolDatabase;
 import com.jangletech.qoogol.database.dao.DashboardDao;
 import com.jangletech.qoogol.database.dao.EducationDetailsDao;
+import com.jangletech.qoogol.database.dao.FollowReqDao;
+import com.jangletech.qoogol.database.dao.FollowersDao;
+import com.jangletech.qoogol.database.dao.FollowingsDao;
+import com.jangletech.qoogol.database.dao.FriendReqDao;
+import com.jangletech.qoogol.database.dao.FriendsDao;
 import com.jangletech.qoogol.database.dao.LearningQuestionDao;
 import com.jangletech.qoogol.database.dao.NotificationDao;
 import com.jangletech.qoogol.database.dao.TestDao;
@@ -14,6 +19,11 @@ import com.jangletech.qoogol.database.dao.UserProfileDao;
 import com.jangletech.qoogol.model.Connections;
 import com.jangletech.qoogol.model.DashBoard;
 import com.jangletech.qoogol.model.Education;
+import com.jangletech.qoogol.model.FollowRequest;
+import com.jangletech.qoogol.model.Followers;
+import com.jangletech.qoogol.model.Following;
+import com.jangletech.qoogol.model.FriendRequest;
+import com.jangletech.qoogol.model.Friends;
 import com.jangletech.qoogol.model.LearningQuestionsNew;
 import com.jangletech.qoogol.model.Notification;
 import com.jangletech.qoogol.model.TestModelNew;
@@ -30,6 +40,11 @@ public class AppRepository {
     private final DashboardDao dashboardDao;
     private final TestDao testDao;
     private final LearningQuestionDao learningQuestionDao;
+    private final FriendsDao friendsDao;
+    private final FollowersDao followersDao;
+    private final FollowingsDao followingsDao;
+    private final FriendReqDao friendReqDao;
+    private final FollowReqDao followReqDao;
     //private final TestDetailsDao testDetailsDao;
 
     public AppRepository(Context context) {
@@ -40,6 +55,11 @@ public class AppRepository {
         dashboardDao = db.dashboardDao();
         testDao = db.testDao();
         learningQuestionDao = db.learningQuestionDao();
+        friendsDao = db.friendsDao();
+        followersDao = db.followersDao();
+        followingsDao = db.followingsDao();
+        friendReqDao = db.friendReqDao();
+        followReqDao = db.followReqDao();
         //testDetailsDao = db.testDetailsDao();
     }
 
@@ -327,9 +347,55 @@ public class AppRepository {
     public void insertQuestions(List<LearningQuestionsNew> learningQuestions) {
         learningQuestionDao.upsertQuestions(learningQuestions);
     }
+
+    public void insertFriends(List<Friends> friendsList) {
+        friendsDao.upsertFriends(friendsList);
+    }
+
+    public void insertFriendReq(List<FriendRequest> friendRequests) {
+        friendReqDao.insertFriendReq(friendRequests);
+    }
+
+    public void insertFollowdReq(List<FollowRequest> followRequestList) {
+        followReqDao.insertFollowdReq(followRequestList);
+    }
+
+
+    public void insertFollowings(List<Following> followingList) {
+        followingsDao.upsertFollowings(followingList);
+    }
+
+    public void insertFollowers(List<Followers> followersList) {
+        followersDao.upsertFollowers(followersList);
+    }
+
+    public LiveData<List<Friends>> getFriendsFromDb(){
+        return friendsDao.getAllFriends();
+    }
+
+    public LiveData<List<FriendRequest>> getFriendReqFromDb(){
+        return friendReqDao.getAllFriendReq();
+    }
+
+    public LiveData<List<FollowRequest>> getFollowReqFromDb(){
+        return followReqDao.getAllFollowReq();
+    }
+
+    public LiveData<List<Followers>> getFollowersFromDb(){
+        return followersDao.getAllFollowers();
+    }
+
+    public LiveData<List<Following>> getFollowingFromDb(){
+        return followingsDao.getAllFollowings();
+    }
+
+
+
     public LiveData<List<LearningQuestionsNew>> getQuestionsFromDb(){
         return learningQuestionDao.getAllQuestions();
     }
+
+
     public List<LearningQuestionsNew> getQuestions(){
         return learningQuestionDao.getQuestions();
     }

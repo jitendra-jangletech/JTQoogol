@@ -1,69 +1,75 @@
 package com.jangletech.qoogol.ui.connections;
 
 import android.app.Application;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+
 import com.jangletech.qoogol.database.repo.AppRepository;
 import com.jangletech.qoogol.dialog.ProgressDialog;
-import com.jangletech.qoogol.model.Friends;
-import com.jangletech.qoogol.model.FriendsResponse;
+import com.jangletech.qoogol.model.ConnectionResponse;
+import com.jangletech.qoogol.model.FollowRequest;
+import com.jangletech.qoogol.model.FollowRequestResponse;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.util.PreferenceManager;
+import com.jangletech.qoogol.util.UtilHelper;
+
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
 import retrofit2.Call;
 import retrofit2.Callback;
+
 import static com.facebook.FacebookSdk.getApplicationContext;
 import static com.jangletech.qoogol.ui.BaseFragment.getDeviceId;
+import static com.jangletech.qoogol.util.Constant.followrequests;
 import static com.jangletech.qoogol.util.Constant.forcerefresh;
-import static com.jangletech.qoogol.util.Constant.friends;
 import static com.jangletech.qoogol.util.Constant.qoogol;
 
 /**
- * Created by Pritali on 6/8/2020.
+ * Created by Pritali on 6/10/2020.
  */
-public class FriendsViewModel extends AndroidViewModel {
+public class FollowReqViewModel extends AndroidViewModel {
     ApiInterface apiService;
     public final AppRepository mAppRepository;
-    Call<FriendsResponse> call;
+    Call<FollowRequestResponse> call;
     String userId;
     String pagestart;
 
-    public FriendsViewModel(@NonNull Application application) {
+    public FollowReqViewModel(@NonNull Application application) {
         super(application);
         apiService = ApiClient.getInstance().getApi();
         mAppRepository = new AppRepository(application);
         userId = new PreferenceManager(getApplicationContext()).getUserId();
         pagestart = "0";
+
     }
 
-    LiveData<List<Friends>> getFriendList() {
-        return mAppRepository.getFriendsFromDb();
+    LiveData<List<FollowRequest>> getFollowReqdList() {
+        return mAppRepository.getFollowReqFromDb();
     }
 
-
-    void fetchFriendsData(boolean isRefresh) {
+    void fetchFollowReqData(boolean isRefresh) {
         getData(isRefresh);
     }
 
-
     private void getData(boolean isRefresh) {
         if (isRefresh)
-            call = apiService.fetchRefreshedFriendss(userId, friends, getDeviceId(), qoogol, pagestart, forcerefresh);
+            call = apiService.fetchFollowRequests(userId,followrequests, getDeviceId(), qoogol,pagestart);
         else
-            call = apiService.fetchFriends(userId, friends, getDeviceId(), qoogol, pagestart);
-        call.enqueue(new Callback<FriendsResponse>() {
+            call = apiService.fetchRefreshedFollowReq(userId,followrequests, getDeviceId(), qoogol,pagestart, forcerefresh);
+
+        call.enqueue(new Callback<FollowRequestResponse>() {
             @Override
-            public void onResponse(Call<FriendsResponse> call, retrofit2.Response<FriendsResponse> response) {
+            public void onResponse(Call<FollowRequestResponse> call, retrofit2.Response<FollowRequestResponse> response) {
                 try {
-                    ProgressDialog.getInstance().dismiss();
-                    if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
+                    if (response.body()!=null && response.body().getResponse().equalsIgnoreCase("200")){
                         ExecutorService executor = Executors.newSingleThreadExecutor();
-                        executor.execute(() -> mAppRepository.insertFriends(response.body().getFriends_list()));
-//                        pagestart = response.body().getRow_count();
+                        executor.execute(() -> mAppRepository.insertFollowdReq(response.body().getFollowreq_list()));
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -71,9 +77,11 @@ public class FriendsViewModel extends AndroidViewModel {
             }
 
             @Override
-            public void onFailure(Call<FriendsResponse> call, Throwable t) {
+            public void onFailure(Call<FollowRequestResponse> call, Throwable t) {
                 t.printStackTrace();
             }
         });
     }
+
+
 }

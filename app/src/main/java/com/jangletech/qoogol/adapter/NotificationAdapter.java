@@ -3,6 +3,7 @@ package com.jangletech.qoogol.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -24,10 +25,12 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     private List<Notification> notifications;
     private Context mContext;
     private NotificationItemBinding itemBinding;
+    onItemClickListener onItemClickListener;
 
-    public NotificationAdapter(Context context,List<Notification> notifications){
+    public NotificationAdapter(Context context,List<Notification> notifications, onItemClickListener onItemClickListener){
         this.mContext = context;
         this.notifications = notifications;
+        this.onItemClickListener = onItemClickListener;
     }
 
     @NonNull
@@ -49,6 +52,12 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                 .load(getImageUrl(notification))
                 .apply(RequestOptions.circleCropTransform())
                 .into(holder.itemBinding.profilePic);
+
+    }
+
+
+    public interface onItemClickListener {
+        void onItemClick(Notification notification);
     }
 
     @Override
@@ -61,6 +70,8 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         public ViewHolder(@NonNull NotificationItemBinding itemView) {
             super(itemView.getRoot());
             this.itemBinding = itemView;
+
+            itemBinding.getRoot().setOnClickListener(v -> onItemClickListener.onItemClick(notifications.get(getAdapterPosition())));
         }
     }
 
