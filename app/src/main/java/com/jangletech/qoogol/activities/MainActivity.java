@@ -55,7 +55,7 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        //setMargins(mBinding.marginLayout);
+        setMargins(mBinding.marginLayout);
         //GsonBuilder gsonBuilder = new GsonBuilder();
         // Gson gson = gsonBuilder.create();
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -78,7 +78,7 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
             bundle.putInt(CALL_FROM, profile);
             navController.navigate(R.id.nav_edit_profile, bundle);
         });
-        Intent intent = getIntent();
+        /*Intent intent = getIntent();
         if (intent.hasExtra("bundle")) {
             Bundle bundle = intent.getBundleExtra("bundle");
             if (bundle != null && bundle.getBoolean("fromNotification")) {
@@ -88,7 +88,7 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
                     navController.navigate(R.id.nav_test, bundle);
             }
 
-        }
+        }*/
 
 
         /***
@@ -224,6 +224,14 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
             }
         });
 
+        findViewById(R.id.nav_syllabus).setOnClickListener(v -> {
+            mBinding.drawerLayout.closeDrawers();
+            if (navController.getCurrentDestination().getId() != R.id.nav_syllabus) {
+                navController.popBackStack();
+                navController.navigate(R.id.nav_syllabus);
+            }
+        });
+
         findViewById(R.id.nav_faq).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
             if (navController.getCurrentDestination().getId() != R.id.nav_faq) {
@@ -232,8 +240,7 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
             }
         });
 
-
-        findViewById(R.id.edit_profile).setOnClickListener(v -> {
+        findViewById(R.id.profilePicLayout).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
             if (navController.getCurrentDestination().getId() != R.id.nav_edit_profile) {
                 navController.popBackStack();
@@ -275,6 +282,8 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
 
     @Override
     public void onBackPressed() {
+        navController.navigateUp();
+        drawerLayout.closeDrawer(Gravity.LEFT);
         if (doubleBackToExitPressedOnce) {
             super.onBackPressed();
             return;

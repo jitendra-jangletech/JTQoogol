@@ -21,7 +21,8 @@
     <string name="menu_rating">Rating</string>
 
     <string name="menu_diff_level">Difficulty Level</string>
-    <string name="menu_edit_profile">Edit Profile</string>
+    <string name="menu_edit_profile">Profile</string>
+    <string name="user_profile">User Profile</string>
     <string name="menu_test_details">Test Details</string>
 
     //Test Menu
@@ -265,6 +266,7 @@
 
 
     <string name="register">Login or Register</string>
+    <string name="dob">Dob:</string>
     <string name="date_of_birth"><![CDATA[Date of Birth <font color=\'#cc0029\'><b>*</b></font>]]></string>
     <string name="mobile_number"><![CDATA[Mobile number <font color=\'#cc0029\'><b>*</b></font>]]></string>
     <string name="ok">OK</string>
@@ -321,6 +323,7 @@
     <string name="choose_industry_type">Select industry</string>
 
     <string name="account">Account</string>
+
     <string name="notification">Notifications</string>
     <string name="theme">Color Themes</string>
     <string name="sound">Mute All Groups</string>
@@ -339,7 +342,7 @@
     <string name="search">Search</string>
     <string name="search_hint">Search by name</string>
     <string name="deactivate_my_account">Deactivate My Account</string>
-    <string name="blocked_list">Blocked list</string>
+    <string name="blocked_list">Blocked List</string>
     <string name="yes">Yes</string>
     <string name="type_message">Type message</string>
     <string name="fetching_your_connections">Fetching your friends.</string>
@@ -351,6 +354,7 @@
     <string name="pending_request">Friend request</string>
     <string name="search_criteria">Filter</string>
     <string name="settings">Settings</string>
+    <string name="syllabus">Modify Syllabus</string>
     <string name="faq">FAQ</string>
     <string name="about_spotmeet">About Spotmeets</string>
     <string name="session_timeout">Check your internet connection and try again.</string>

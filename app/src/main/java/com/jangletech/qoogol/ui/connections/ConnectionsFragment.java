@@ -14,8 +14,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.material.tabs.TabLayout;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.FragmentConnectionsBinding;
+import com.jangletech.qoogol.ui.BaseFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +25,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ConnectionsFragment extends Fragment {
+public class ConnectionsFragment extends BaseFragment {
 
     FragmentConnectionsBinding mbinding;
     int position;
@@ -46,9 +48,34 @@ public class ConnectionsFragment extends Fragment {
         }
         mbinding.resultTabs.setupWithViewPager(mbinding.viewpager);
 
+        mbinding.resultTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                if (tab.getPosition() == 0)
+                    getActionBar().setTitle("Friends");
+
+                if (tab.getPosition() == 1)
+                    getActionBar().setTitle("Followers");
+
+                if (tab.getPosition() == 2)
+                    getActionBar().setTitle("Following");
+
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
     }
 
-    private void setupViewPager(ViewPager viewPager){
+    private void setupViewPager(ViewPager viewPager) {
         Adapter adapter = new Adapter(getChildFragmentManager());
         adapter.addFragment(new FriendsFragment(), getContext().getString(R.string.friends));
         adapter.addFragment(new FollowersFragment(), getContext().getString(R.string.followers));
@@ -84,5 +111,4 @@ public class ConnectionsFragment extends Fragment {
             return mFragmentTitleList.get(position);
         }
     }
-
 }

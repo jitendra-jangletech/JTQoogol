@@ -52,13 +52,6 @@
         tools:layout="@layout/saved_fragment" >
     </fragment>
 
-   <!-- <fragment
-        android:id="@+id/nav_course"
-        android:name="com.jangletech.qoogol.ui.learning.course.CourseFragment"
-        android:label="@string/menu_course"
-        app:enterAnim="@anim/enter_from_left"
-        tools:layout="@layout/fragment_course" >
-    </fragment>-->
 
     <fragment
         android:id="@+id/nav_test_attempt_history"
@@ -73,14 +66,6 @@
         android:label="@string/menu_exam"
         tools:layout="@layout/fragment_exam" >
     </fragment>
-
-    //Test Section Fragments
-    <!--<fragment
-        android:id="@+id/nav_practice_test"
-        android:name="com.jangletech.qoogol.ui.test.practice_test.TestPracticeFragment"
-        android:label="@string/menu_test_practice"
-        tools:layout="@layout/fragment_test_practice" >
-    </fragment>-->
 
     <fragment
         android:id="@+id/nav_test_my"
@@ -116,47 +101,7 @@
         android:label="@string/menu_test_shared_by_you"
         tools:layout="@layout/fragment_test_shared_by_you" />
 
-    //Question Section Fragments
-    <fragment
-        android:id="@+id/nav_quest_trending"
-        android:name="com.jangletech.qoogol.ui.questions.trending_quesions.TrendingQuestFragment"
-        android:label="@string/menu_quest_trending"
-        tools:layout="@layout/fragment_quest_trending" />
 
-    <fragment
-        android:id="@+id/nav_quest_popular"
-        android:name="com.jangletech.qoogol.ui.questions.popular_questions.PopularQuestFragment"
-        android:label="@string/menu_quest_popular"
-        tools:layout="@layout/fragment_quest_popular" />
-
-    <fragment
-        android:id="@+id/nav_quest_recent"
-        android:name="com.jangletech.qoogol.ui.questions.recent_questions.RecentQuestFragment"
-        android:label="@string/menu_quest_recent"
-        tools:layout="@layout/fragment_quest_recent" />
-
-    <fragment
-        android:id="@+id/nav_saved_drafts"
-        android:name="com.jangletech.qoogol.ui.questions.questions.QuestionsFragment"
-        android:label="@string/menu_quest_saved_drafts"
-        tools:layout="@layout/fragment_questions" />
-
-    //Review Fragment
-    <fragment
-        android:id="@+id/nav_reviews"
-        android:name="com.jangletech.qoogol.ui.reviews.ReviewFragment"
-        android:label="@string/menu_review"
-        tools:layout="@layout/fragment_review" />
-
-    //Published Fragment
-    <fragment
-        android:id="@+id/nav_published"
-        android:name="com.jangletech.qoogol.ui.published.PublishedFragment"
-        android:label="@string/menu_published"
-        tools:layout="@layout/fragment_published" >
-    </fragment>
-
-    //Published Fragment
     <fragment
         android:id="@+id/nav_notifications"
         android:name="com.jangletech.qoogol.ui.notifications.NotificationsFragment"
@@ -164,12 +109,17 @@
         tools:layout="@layout/fragment_published" />
 
 
-    //Published Fragment
+    <fragment
+        android:id="@+id/nav_syllabus"
+        android:name="com.jangletech.qoogol.ui.syllabus.SyllabusFragment"
+        android:label="@string/syllabus"
+        tools:layout="@layout/fragment_syllabus" />
+
     <fragment
         android:id="@+id/nav_settings"
         android:name="com.jangletech.qoogol.ui.settings.SettingsFragment"
         android:label="@string/menu_settings"
-        tools:layout="@layout/fragment_published" />
+        tools:layout="@layout/settings_fragment" />
 
     //Edit Profile
     <fragment
@@ -205,22 +155,11 @@
         tools:layout="@layout/favourite_fragment" />
 
     <fragment
-        android:id="@+id/nav_questions"
-        android:name="com.jangletech.qoogol.ui.questions.questions.QuestionsFragment"
-        android:label="@string/questions"
-        tools:layout="@layout/test_favourite_fragment" />
-
-    <fragment
         android:id="@+id/nav_test_filter"
         android:name="com.jangletech.qoogol.ui.test.filter.TestFilterFragment"
         android:label="@string/filters"
         tools:layout="@layout/test_filter_fragment" />
 
-    <fragment
-        android:id="@+id/nav_board_fragment"
-        android:name="com.jangletech.qoogol.ui.syllabus.board.BoardFragment"
-        android:label="@string/select_board"
-        tools:layout="@layout/board_fragment" />
 
     <fragment
         android:id="@+id/nav_share"

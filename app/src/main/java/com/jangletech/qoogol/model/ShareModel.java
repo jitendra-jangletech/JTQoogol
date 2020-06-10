@@ -3,7 +3,6 @@ package com.jangletech.qoogol.model;
 import androidx.annotation.NonNull;
 
 import com.google.gson.annotations.SerializedName;
-import com.jangletech.qoogol.model.enums.Gender;
 import com.jangletech.qoogol.util.Constant;
 
 /*
