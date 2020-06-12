@@ -11,7 +11,7 @@ import com.jangletech.qoogol.util.Constant;
  * Created by Pritali on 5/4/2020.
  */
 @Entity
-public class Connections {
+public class Following {
     @SerializedName(Constant.cn_id)
     private String cn_id;
 

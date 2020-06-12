@@ -2,14 +2,6 @@ package com.jangletech.qoogol.ui.connections;
 
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.widget.SearchView;
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,12 +11,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SearchView;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.BlockedConnectionAdapter;
 import com.jangletech.qoogol.databinding.FragmentBlockedBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
-import com.jangletech.qoogol.model.ConnectionResponse;
-import com.jangletech.qoogol.model.Connections;
+import com.jangletech.qoogol.model.BlockedConnResp;
+import com.jangletech.qoogol.model.BlockedConnections;
 import com.jangletech.qoogol.model.ResponseObj;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
@@ -49,7 +48,8 @@ import static com.jangletech.qoogol.util.Constant.unblock;
 public class BlockedFragment extends BaseFragment implements BlockedConnectionAdapter.BlockedItemClick {
 
     FragmentBlockedBinding mBinding;
-    List<Connections> connectionsList = new ArrayList<>();;
+    List<BlockedConnections> connectionsList = new ArrayList<>();
+    ;
     private static final String TAG = "FriendsFragment";
     ApiInterface apiService = ApiClient.getInstance().getApi();
     BlockedConnectionAdapter mAdapter;
@@ -63,7 +63,7 @@ public class BlockedFragment extends BaseFragment implements BlockedConnectionAd
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_blocked, container, false);
         setHasOptionsMenu(true);
         init();
-        return  mBinding.getRoot();
+        return mBinding.getRoot();
     }
 
     private void init() {
@@ -72,7 +72,7 @@ public class BlockedFragment extends BaseFragment implements BlockedConnectionAd
     }
 
     public void checkRefresh() {
-        if ( mBinding.blockedSwiperefresh.isRefreshing()) {
+        if (mBinding.blockedSwiperefresh.isRefreshing()) {
             mBinding.blockedSwiperefresh.setRefreshing(false);
         }
     }
@@ -86,18 +86,18 @@ public class BlockedFragment extends BaseFragment implements BlockedConnectionAd
 
     private void getData(int pagestart) {
         ProgressDialog.getInstance().show(getActivity());
-        Call<ConnectionResponse> call = apiService.fetchConnections(userId,block, getDeviceId(), qoogol,pagestart);
-        call.enqueue(new Callback<ConnectionResponse>() {
+        Call<BlockedConnResp> call = apiService.fetchBlockedConnections(userId, block, getDeviceId(), qoogol, pagestart);
+        call.enqueue(new Callback<BlockedConnResp>() {
             @Override
-            public void onResponse(Call<ConnectionResponse> call, retrofit2.Response<ConnectionResponse> response) {
+            public void onResponse(Call<BlockedConnResp> call, retrofit2.Response<BlockedConnResp> response) {
                 try {
                     ProgressDialog.getInstance().dismiss();
                     connectionsList.clear();
-                    if (response.body()!=null && response.body().getResponse().equalsIgnoreCase("200")){
-                        connectionsList = response.body().getConnection_list();
+                    if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
+                        connectionsList = response.body().getBlocked_list();
                         initView();
                     } else {
-                        Toast.makeText(getActivity(), UtilHelper.getAPIError(String.valueOf(response.body())),Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), UtilHelper.getAPIError(String.valueOf(response.body())), Toast.LENGTH_SHORT).show();
                     }
                     checkRefresh();
                 } catch (Exception e) {
@@ -108,13 +108,14 @@ public class BlockedFragment extends BaseFragment implements BlockedConnectionAd
             }
 
             @Override
-            public void onFailure(Call<ConnectionResponse> call, Throwable t) {
+            public void onFailure(Call<BlockedConnResp> call, Throwable t) {
                 t.printStackTrace();
                 checkRefresh();
                 ProgressDialog.getInstance().dismiss();
             }
         });
     }
+
     private void initView() {
         mAdapter = new BlockedConnectionAdapter(getActivity(), connectionsList, this);
         mBinding.blockedRecycler.setHasFixedSize(true);
@@ -159,16 +160,16 @@ public class BlockedFragment extends BaseFragment implements BlockedConnectionAd
     private void updateConnection(String user, String Processcase) {
         ApiInterface apiService = ApiClient.getInstance().getApi();
         ProgressDialog.getInstance().show(getActivity());
-        Call<ResponseObj> call = apiService.updateConnections(userId,Processcase, getDeviceId(), qoogol,user);
+        Call<ResponseObj> call = apiService.updateConnections(userId, Processcase, getDeviceId(), qoogol, user);
         call.enqueue(new Callback<ResponseObj>() {
             @Override
             public void onResponse(Call<ResponseObj> call, retrofit2.Response<ResponseObj> response) {
                 try {
                     ProgressDialog.getInstance().dismiss();
-                    if (response.body()!=null && response.body().getResponse().equalsIgnoreCase("200")){
+                    if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
                         getData(0);
                     } else {
-                        Toast.makeText(getActivity(), UtilHelper.getAPIError(String.valueOf(response.body())),Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), UtilHelper.getAPIError(String.valueOf(response.body())), Toast.LENGTH_SHORT).show();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -191,6 +192,6 @@ public class BlockedFragment extends BaseFragment implements BlockedConnectionAd
 
     @Override
     public void showProfileClick(Bundle bundle) {
-        NavHostFragment.findNavController(this).navigate(R.id.nav_edit_profile,bundle);
+        NavHostFragment.findNavController(this).navigate(R.id.nav_edit_profile, bundle);
     }
 }

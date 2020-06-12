@@ -67,10 +67,7 @@ public class Constant {
     public static final String MCQ = "MCQ";
     public static final String FILL_THE_BLANKS = "FILL_THE_BLANKS";
     public static final String TRUE_FALSE = "TRUE_FALSE";
-
-
 */
-
 
     //User table
     public static final String qoogol = "Q";
@@ -109,6 +106,9 @@ public class Constant {
     public static final String TorQ = "TorQ";
     public static final String test_share = "T";
     public static final String question_share = "Q";
+    public static final String from_user = "U";
+    public static final String from_question = "Q";
+    public static final String fromTest = "T";
 
     //Preferences
     public static final String PREF_NAME = "qoogol";
@@ -387,6 +387,7 @@ public class Constant {
 
 
     //Fetch connections cases
+    public static final String connections = "CC";
     public static final String friends = "C";
     public static final String friends_and_groups = "A";
     public static final String followers = "FL";
@@ -511,8 +512,6 @@ public class Constant {
     public static final String q_solved_by = "1360";
     public static final String q_media_type = "1361";
     public static final String q_option_type = "1362";
-    public static final String friend_req_sent = "311";
-    public static final String friend_req_received = "312";
     public static final String follow_req_sent = "316E";
     public static final String follow_req_received = "316F";
     public static final String solved_right = "1394";

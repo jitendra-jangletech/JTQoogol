@@ -41,35 +41,35 @@ public class ConnectionsFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        setupViewPager(mbinding.viewpager);
         Bundle bundle = getArguments();
         if (bundle != null) {
-            position = bundle.getInt("QuestionId");
+            position = bundle.getInt("position");
         }
+        setupViewPager(mbinding.viewpager);
         mbinding.resultTabs.setupWithViewPager(mbinding.viewpager);
 
         mbinding.resultTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 if (tab.getPosition() == 0)
-                    getActionBar().setTitle("Friends");
+                    getActionBar().setTitle( getContext().getString(R.string.connections_list));
 
                 if (tab.getPosition() == 1)
-                    getActionBar().setTitle("Followers");
+                    getActionBar().setTitle( getContext().getString(R.string.friends));
 
                 if (tab.getPosition() == 2)
-                    getActionBar().setTitle("Following");
+                    getActionBar().setTitle( getContext().getString(R.string.followers));
 
+                if (tab.getPosition() == 3)
+                    getActionBar().setTitle( getContext().getString(R.string.following));
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-
             }
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-
             }
         });
 
@@ -77,10 +77,13 @@ public class ConnectionsFragment extends BaseFragment {
 
     private void setupViewPager(ViewPager viewPager) {
         Adapter adapter = new Adapter(getChildFragmentManager());
+        adapter.addFragment(new ConnectionListFragment(), getContext().getString(R.string.connections_list));
         adapter.addFragment(new FriendsFragment(), getContext().getString(R.string.friends));
         adapter.addFragment(new FollowersFragment(), getContext().getString(R.string.followers));
         adapter.addFragment(new FollowingFragment(), getString(R.string.following));
         viewPager.setAdapter(adapter);
+
+        viewPager.setCurrentItem(position);
     }
 
     public static class Adapter extends FragmentPagerAdapter {

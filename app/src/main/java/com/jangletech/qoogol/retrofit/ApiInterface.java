@@ -3,6 +3,7 @@ package com.jangletech.qoogol.retrofit;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.jangletech.qoogol.model.AddElementResponse;
+import com.jangletech.qoogol.model.BlockedConnResp;
 import com.jangletech.qoogol.model.ChangePassword;
 import com.jangletech.qoogol.model.ChapterResponse;
 import com.jangletech.qoogol.model.CityResponse;
@@ -17,6 +18,11 @@ import com.jangletech.qoogol.model.DistrictResponse;
 import com.jangletech.qoogol.model.FaqResponse;
 import com.jangletech.qoogol.model.FetchEducationResponse;
 import com.jangletech.qoogol.model.FetchSubjectResponseList;
+import com.jangletech.qoogol.model.FollowRequestResponse;
+import com.jangletech.qoogol.model.FollowersResponse;
+import com.jangletech.qoogol.model.FollowingResponse;
+import com.jangletech.qoogol.model.FriendRequestResponse;
+import com.jangletech.qoogol.model.FriendsResponse;
 import com.jangletech.qoogol.model.GenerateVerifyUserName;
 import com.jangletech.qoogol.model.InstituteResponse;
 import com.jangletech.qoogol.model.Language;
@@ -306,6 +312,7 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST(Constant.FETCH_QA)
+    Call<LearningQuestResponse> fetchQAApi(@Field(Constant.u_user_id) String userid, @Field(Constant.q_id) String question);
     Call<LearningQuestResponse> fetchQAApi(@Field(Constant.u_user_id) int userid,
                                            @Field(Constant.q_id) String question);
 
@@ -379,7 +386,104 @@ public interface ApiInterface {
                                               @Field("Case") String connectionCase,
                                               @Field(Constant.device_id) String device_id,
                                               @Field("200Q") String app,
-                                              @Field(Constant.pagestart) int pagestart);
+                                              @Field(Constant.pagestart) String pagestart);
+
+    @FormUrlEncoded
+    @POST(Constant.FETCH_CONNECTIONS)
+    Call<BlockedConnResp> fetchBlockedConnections(@Field(Constant.u_user_id) String userid,
+                                           @Field("Case") String connectionCase,
+                                           @Field(Constant.device_id) String device_id,
+                                           @Field("200Q") String app,
+                                           @Field(Constant.pagestart) int pagestart);
+
+    @FormUrlEncoded
+    @POST(Constant.FETCH_CONNECTIONS)
+    Call<FriendsResponse> fetchFriends(@Field(Constant.u_user_id) String userid,
+                                       @Field("Case") String connectionCase,
+                                       @Field(Constant.device_id) String device_id,
+                                       @Field("200Q") String app,
+                                       @Field(Constant.pagestart) String pagestart);
+
+    @FormUrlEncoded
+    @POST(Constant.FETCH_CONNECTIONS)
+    Call<FriendsResponse> fetchRefreshedFriendss(@Field(Constant.u_user_id) String userid,
+                                                       @Field("Case") String connectionCase,
+                                                       @Field(Constant.device_id) String device_id,
+                                                       @Field("200Q") String app,
+                                                       @Field(Constant.pagestart) String pagestart,
+                                                       @Field("ForceRefresh") String refresh);
+
+    @FormUrlEncoded
+    @POST(Constant.FETCH_CONNECTIONS)
+    Call<FollowersResponse> fetchFollowers(@Field(Constant.u_user_id) String userid,
+                                       @Field("Case") String connectionCase,
+                                       @Field(Constant.device_id) String device_id,
+                                       @Field("200Q") String app,
+                                       @Field(Constant.pagestart) String pagestart);
+
+    @FormUrlEncoded
+    @POST(Constant.FETCH_CONNECTIONS)
+    Call<FollowersResponse> fetchRefreshedFollowers(@Field(Constant.u_user_id) String userid,
+                                                    @Field("Case") String connectionCase,
+                                                    @Field(Constant.device_id) String device_id,
+                                                    @Field("200Q") String app,
+                                                    @Field(Constant.pagestart) String pagestart,
+                                                    @Field("ForceRefresh") String refresh);
+
+    @FormUrlEncoded
+    @POST(Constant.FETCH_CONNECTIONS)
+    Call<FollowingResponse> fetchFollowings(@Field(Constant.u_user_id) String userid,
+                                            @Field("Case") String connectionCase,
+                                            @Field(Constant.device_id) String device_id,
+                                            @Field("200Q") String app,
+                                            @Field(Constant.pagestart) String pagestart);
+
+    @FormUrlEncoded
+    @POST(Constant.FETCH_CONNECTIONS)
+    Call<FollowingResponse> fetchRefreshedFollowings(@Field(Constant.u_user_id) String userid,
+                                                    @Field("Case") String connectionCase,
+                                                    @Field(Constant.device_id) String device_id,
+                                                    @Field("200Q") String app,
+                                                    @Field(Constant.pagestart) String pagestart,
+                                                    @Field("ForceRefresh") String refresh);
+
+
+    @FormUrlEncoded
+    @POST(Constant.FETCH_CONNECTIONS)
+    Call<FriendRequestResponse> fetchFriendRequests(@Field(Constant.u_user_id) String userid,
+                                                @Field("Case") String connectionCase,
+                                                @Field(Constant.device_id) String device_id,
+                                                @Field("200Q") String app,
+                                                @Field(Constant.pagestart) String pagestart);
+
+    @FormUrlEncoded
+    @POST(Constant.FETCH_CONNECTIONS)
+    Call<FriendRequestResponse> fetchRefreshedFriendReq(@Field(Constant.u_user_id) String userid,
+                                                     @Field("Case") String connectionCase,
+                                                     @Field(Constant.device_id) String device_id,
+                                                     @Field("200Q") String app,
+                                                     @Field(Constant.pagestart) String pagestart,
+                                                     @Field("ForceRefresh") String refresh);
+
+
+
+    @FormUrlEncoded
+    @POST(Constant.FETCH_CONNECTIONS)
+    Call<FollowRequestResponse> fetchFollowRequests(@Field(Constant.u_user_id) String userid,
+                                                    @Field("Case") String connectionCase,
+                                                    @Field(Constant.device_id) String device_id,
+                                                    @Field("200Q") String app,
+                                                    @Field(Constant.pagestart) String pagestart);
+
+    @FormUrlEncoded
+    @POST(Constant.FETCH_CONNECTIONS)
+    Call<FollowRequestResponse> fetchRefreshedFollowReq(@Field(Constant.u_user_id) String userid,
+                                                        @Field("Case") String connectionCase,
+                                                        @Field(Constant.device_id) String device_id,
+                                                        @Field("200Q") String app,
+                                                        @Field(Constant.pagestart) String pagestart,
+                                                        @Field("ForceRefresh") String refresh);
+
 
     @FormUrlEncoded
     @POST(Constant.FETCH_CONNECTIONS)
@@ -396,7 +500,7 @@ public interface ApiInterface {
                                                        @Field("Case") String connectionCase,
                                                        @Field(Constant.device_id) String device_id,
                                                        @Field("200Q") String app,
-                                                       @Field(Constant.pagestart) int pagestart,
+                                                       @Field(Constant.pagestart) String pagestart,
                                                        @Field("ForceRefresh") String refresh);
 
 

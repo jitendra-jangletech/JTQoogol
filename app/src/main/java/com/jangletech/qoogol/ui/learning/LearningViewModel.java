@@ -53,7 +53,7 @@ public class LearningViewModel extends AndroidViewModel {
     }
 
     private void getDataFromApi(String q_id) {
-        Call<LearningQuestResponse> call = apiService.fetchQAApi(new PreferenceManager(getApplicationContext()).getInt(Constant.USER_ID),q_id);
+        Call<LearningQuestResponse> call = apiService.fetchQAApi(new PreferenceManager(getApplicationContext()).getUserId(),q_id);
         call.enqueue(new Callback<LearningQuestResponse>() {
             @Override
             public void onResponse(Call<LearningQuestResponse> call, retrofit2.Response<LearningQuestResponse> response) {

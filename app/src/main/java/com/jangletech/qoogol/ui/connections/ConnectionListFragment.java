@@ -14,9 +14,11 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.jangletech.qoogol.R;
-import com.jangletech.qoogol.adapter.FollowingsAdapter;
+import com.jangletech.qoogol.adapter.ConnectionAdapter;
+import com.jangletech.qoogol.adapter.FriendsAdapter;
 import com.jangletech.qoogol.databinding.FragmentFriendsBinding;
-import com.jangletech.qoogol.model.Following;
+import com.jangletech.qoogol.model.Connections;
+import com.jangletech.qoogol.model.Friends;
 import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
@@ -24,21 +26,20 @@ import com.jangletech.qoogol.util.PreferenceManager;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.jangletech.qoogol.util.Constant.following;
+import static com.jangletech.qoogol.util.Constant.friends;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FollowingFragment extends BaseFragment implements FollowingsAdapter.updateConnectionListener {
+public class ConnectionListFragment extends BaseFragment implements ConnectionAdapter.updateConnectionListener {
 
     FragmentFriendsBinding mBinding;
-    List<Following> connectionsList = new ArrayList<>();
-    ;
-    private static final String TAG = "FollowingFragment";
-    FollowingsAdapter mAdapter;
+    List<Connections> connectionsList = new ArrayList<>();
+    private static final String TAG = "FriendsFragment";
+    ConnectionAdapter mAdapter;
     Boolean isVisible = false;
     String userId = "";
-    FollowingViewModel mViewModel;
+    ConnectionsViewModel mViewModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,26 +48,32 @@ public class FollowingFragment extends BaseFragment implements FollowingsAdapter
         return mBinding.getRoot();
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(FollowingViewModel.class);
-        init();
-        mViewModel.getFollowingList().observe(getViewLifecycleOwner(), followingList -> {
-            connectionsList.clear();
-            connectionsList.addAll(followingList);
-            initView();
-            checkRefresh();
-        });
-    }
-
     private void init() {
         userId = String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));
         if (!isVisible) {
             isVisible = true;
-            mViewModel.fetchFollowingsData(false);
+            mViewModel.fetchConnectionsData(false);
         }
-        mBinding.connectionSwiperefresh.setOnRefreshListener(() -> mViewModel.fetchFollowingsData(true));
+        mBinding.connectionSwiperefresh.setOnRefreshListener(() -> mViewModel.fetchConnectionsData(true));
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mViewModel = ViewModelProviders.of(this).get(ConnectionsViewModel.class);
+        init();
+        mViewModel.getConnectionsList().observe(getViewLifecycleOwner(), connectionsList -> {
+            connectionsList.clear();
+            connectionsList.addAll(connectionsList);
+            initView();
+            checkRefresh();
+        });
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     public void checkRefresh() {
@@ -76,36 +83,29 @@ public class FollowingFragment extends BaseFragment implements FollowingsAdapter
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-
-    }
-
-    @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser && isVisible)
-            mViewModel.fetchFollowingsData(false);
+            mViewModel.fetchConnectionsData(false);
     }
 
 
     private void initView() {
-        mAdapter = new FollowingsAdapter(getActivity(), connectionsList, following, this);
+        mAdapter = new ConnectionAdapter(getActivity(), connectionsList, friends, this);
         mBinding.connectionRecycler.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         mBinding.connectionRecycler.setLayoutManager(linearLayoutManager);
         mBinding.connectionRecycler.setAdapter(mAdapter);
     }
 
-
     @Override
     public void onUpdateConnection() {
-        mViewModel.fetchFollowingsData(true);
+        mViewModel.fetchConnectionsData(true);
     }
 
     @Override
     public void onBottomReached(int size) {
-        mViewModel.fetchFollowingsData(false);
+        mViewModel.fetchConnectionsData(false);
     }
 
     @Override

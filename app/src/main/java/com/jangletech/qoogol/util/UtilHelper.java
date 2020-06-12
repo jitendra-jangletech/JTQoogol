@@ -52,6 +52,10 @@ public class UtilHelper {
     }
 
 
+    public static String getProfileImageUrl(String imageName) {
+        return Constant.PRODUCTION_BASE_FILE_API + imageName;
+    }
+
 
     public static String signIn() {
         return getBaseApi() + SIGN_IN_API;

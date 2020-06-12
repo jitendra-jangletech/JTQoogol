@@ -6,12 +6,11 @@ import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
 import com.jangletech.qoogol.util.Constant;
-
 /**
  * Created by Pritali on 5/4/2020.
  */
 @Entity
-public class Connections {
+public class Followers {
     @SerializedName(Constant.cn_id)
     private String cn_id;
 

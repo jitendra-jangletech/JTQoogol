@@ -23,7 +23,6 @@ import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.ShareAdapter;
 import com.jangletech.qoogol.databinding.FragmentShareBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
-import com.jangletech.qoogol.model.Connections;
 import com.jangletech.qoogol.model.ResponseObj;
 import com.jangletech.qoogol.model.ShareModel;
 import com.jangletech.qoogol.model.ShareResponse;
@@ -60,7 +59,7 @@ public class ShareFragment extends BaseFragment implements ShareAdapter.OnItemCl
     List<ShareModel> selectedconnectionsList;
     private static final String TAG = "ShareFragment";
     ApiInterface apiService = ApiClient.getInstance().getApi();
-    String userId = "", question_id = "", testId="";
+    String userId = "", question_id = "", testId = "";
     int call_from;
     Call<ResponseObj> call;
 
@@ -111,7 +110,7 @@ public class ShareFragment extends BaseFragment implements ShareAdapter.OnItemCl
         selectedconnectionsList = new ArrayList<>();
         Bundle bundle = getArguments();
         if (bundle != null) {
-            if (bundle.getInt("call_from")==learning) {
+            if (bundle.getInt("call_from") == learning) {
                 question_id = bundle.getString("QuestionId");
             } else {
                 call_from = test;
@@ -187,10 +186,10 @@ public class ShareFragment extends BaseFragment implements ShareAdapter.OnItemCl
 
         ProgressDialog.getInstance().show(getActivity());
 
-        if (call_from==learning)
+        if (call_from == learning)
             call = apiService.shareAPI(question_id, question_share, "F", getDeviceId(), userId, modelAction, "1.68", qoogol);
         else
-            call = apiService.shareAPI(testId, test_share  , "F", getDeviceId(), userId, modelAction, "1.68", qoogol);
+            call = apiService.shareAPI(testId, test_share, "F", getDeviceId(), userId, modelAction, "1.68", qoogol);
 
         call.enqueue(new Callback<ResponseObj>() {
             @Override
@@ -206,7 +205,7 @@ public class ShareFragment extends BaseFragment implements ShareAdapter.OnItemCl
                     }
                     Bundle bundle = new Bundle();
                     bundle.putString("call_from", "share");
-                    if (call_from==learning)
+                    if (call_from == learning)
                         NavHostFragment.findNavController(ShareFragment.this).navigate(R.id.nav_learning, bundle);
                     else
                         NavHostFragment.findNavController(ShareFragment.this).navigate(R.id.nav_test_my, bundle);
@@ -224,8 +223,5 @@ public class ShareFragment extends BaseFragment implements ShareAdapter.OnItemCl
         });
     }
 
-    @Override
-    public void viewProfile(Connections connections, int position) {
 
-    }
 }

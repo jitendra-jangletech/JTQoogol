@@ -242,6 +242,7 @@
     <string name="mark_and_next">Previous</string>
 
     <!--Connections-->
+    <string name="connections_list">Connections</string>
     <string name="friends">Friends</string>
     <string name="followers">Followers</string>
     <string name="following">Following</string>
@@ -249,6 +250,8 @@
 
     <string name="block">Block</string>
     <string name="add_friend">Add Friend</string>
+    <string name="accept_friend_req">Accept Friend Req</string>
+    <string name="unfriend">Unfriend</string>
     <string name="unblock">Unblock</string>
     <string name="follow">Follow</string>
     <string name="unfollow">Unfollow</string>

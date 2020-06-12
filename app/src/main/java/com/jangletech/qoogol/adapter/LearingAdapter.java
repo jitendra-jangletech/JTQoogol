@@ -2072,7 +2072,7 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
             ProgressDialog.getInstance().show(activity);
             ApiInterface apiService = ApiClient.getInstance().getApi();
             Call<ProcessQuestion> call;
-            int user_id = new PreferenceManager(getApplicationContext()).getInt(Constant.USER_ID);
+            int user_id = Integer.parseInt(new PreferenceManager(getApplicationContext()).getUserId());
 
             if (call_from.equalsIgnoreCase("like"))
                 call = apiService.likeApi(user_id, que_id, "I", flag);

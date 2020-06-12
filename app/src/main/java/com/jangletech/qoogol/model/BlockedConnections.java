@@ -1,17 +1,12 @@
 package com.jangletech.qoogol.model;
 
-import androidx.annotation.NonNull;
-import androidx.room.Entity;
-import androidx.room.PrimaryKey;
-
 import com.google.gson.annotations.SerializedName;
 import com.jangletech.qoogol.util.Constant;
 
 /**
- * Created by Pritali on 5/4/2020.
+ * Created by Pritali on 6/9/2020.
  */
-@Entity
-public class Connections {
+public class BlockedConnections {
     @SerializedName(Constant.cn_id)
     private String cn_id;
 
@@ -24,8 +19,6 @@ public class Connections {
     @SerializedName(Constant.cn_blocked_by_u1)
     private String cn_blocked_by_u1;
 
-    @PrimaryKey
-    @NonNull
     @SerializedName(Constant.cn_user_id_2)
     private String cn_user_id_2;
 
@@ -82,7 +75,6 @@ public class Connections {
 
     @SerializedName(Constant.w_distance)
     private String w_distance;
-
 
 
     @SerializedName(Constant.w_user_profile_image_name)
@@ -150,7 +142,7 @@ public class Connections {
     }
 
     public String getCn_blocked_by_u1() {
-        return cn_blocked_by_u1!=null?cn_blocked_by_u1:"";
+        return cn_blocked_by_u1 != null ? cn_blocked_by_u1 : "";
     }
 
     public void setCn_blocked_by_u1(String cn_blocked_by_u1) {
@@ -166,7 +158,7 @@ public class Connections {
     }
 
     public String getCn_connected() {
-        return cn_connected!=null?cn_connected:"";
+        return cn_connected != null ? cn_connected : "";
     }
 
     public void setCn_connected(String cn_connected) {
@@ -302,7 +294,7 @@ public class Connections {
     }
 
     public String getProf_pic() {
-        return prof_pic!=null?prof_pic:"";
+        return prof_pic != null ? prof_pic : "";
     }
 
     public void setProf_pic(String prof_pic) {
@@ -319,7 +311,7 @@ public class Connections {
 
 
     public String getFriend_req_sent() {
-        return friend_req_sent!=null?friend_req_sent:"";
+        return friend_req_sent != null ? friend_req_sent : "";
     }
 
     public void setFriend_req_sent(String friend_req_sent) {
@@ -335,7 +327,7 @@ public class Connections {
     }
 
     public String getFollow_req_sent() {
-        return follow_req_sent!=null?follow_req_sent:"";
+        return follow_req_sent != null ? follow_req_sent : "";
     }
 
     public void setFollow_req_sent(String follow_req_sent) {

@@ -45,6 +45,7 @@ import com.jangletech.qoogol.model.District;
 import com.jangletech.qoogol.model.DistrictResponse;
 import com.jangletech.qoogol.model.GenerateVerifyUserName;
 import com.jangletech.qoogol.model.Language;
+import com.jangletech.qoogol.model.ResponseObj;
 import com.jangletech.qoogol.model.State;
 import com.jangletech.qoogol.model.StateResponse;
 import com.jangletech.qoogol.model.UserProfile;
@@ -56,6 +57,7 @@ import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.DateUtils;
 import com.jangletech.qoogol.util.PreferenceManager;
+import com.jangletech.qoogol.util.UtilHelper;
 import com.mukesh.OtpView;
 import com.theartofdev.edmodo.cropper.CropImage;
 
@@ -82,8 +84,15 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.app.Activity.RESULT_OK;
+import static com.jangletech.qoogol.util.Constant.accept_friend_requests;
 import static com.jangletech.qoogol.util.Constant.fetch_loged_in_user;
 import static com.jangletech.qoogol.util.Constant.fetch_other_user;
+import static com.jangletech.qoogol.util.Constant.follow;
+import static com.jangletech.qoogol.util.Constant.qoogol;
+import static com.jangletech.qoogol.util.Constant.reject_friend_requests;
+import static com.jangletech.qoogol.util.Constant.remove_connection;
+import static com.jangletech.qoogol.util.Constant.sent_friend_req;
+import static com.jangletech.qoogol.util.Constant.unfollow;
 import static com.jangletech.qoogol.util.Constant.userName;
 
 public class PersonalInfoFragment extends BaseFragment {
@@ -119,6 +128,7 @@ public class PersonalInfoFragment extends BaseFragment {
         super.onAttach(context);
         mContext = context.getApplicationContext();
     }
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -351,7 +361,6 @@ public class PersonalInfoFragment extends BaseFragment {
             mBinding.radioFemale.setVisibility(View.VISIBLE);
         else if (userProfile.getStrGender().equalsIgnoreCase("O"))
             mBinding.radioOthers.setVisibility(View.VISIBLE);
-
     }
 
     private void manageLayoutForOtherUser() {
@@ -407,31 +416,102 @@ public class PersonalInfoFragment extends BaseFragment {
     }*/
 
     private void setPublicProfile(UserProfile userProfile) {
-        mBinding.tvName.setText(userProfile.getFirstName()+" "+userProfile.getLastName());
-        if (userProfile.getStrGender() != null && userProfile.getStrGender().equalsIgnoreCase("M")) {
-            mBinding.tvGender.setText("Male");
-        } else if(userProfile.getStrGender() != null && userProfile.getStrGender().equalsIgnoreCase("F")){
-            mBinding.tvGender.setText("Female");
-        }
-        if (userProfile.getEndPathImage() != null && !userProfile.getEndPathImage().isEmpty()) {
-            loadProfilePic(getProfileImageUrl(userProfile.getEndPathImage()));
-        } else if (userProfile.getStrGender() != null && userProfile.getStrGender().equalsIgnoreCase("M")) {
-            loadProfilePic(Constant.PRODUCTION_MALE_PROFILE_API);
-        } else if (userProfile.getStrGender() != null && userProfile.getStrGender().equalsIgnoreCase("F")) {
-            loadProfilePic(Constant.PRODUCTION_FEMALE_PROFILE_API);
-        }
+       try {
+           if(userProfile!=null && userProfile.getIsConnected().equalsIgnoreCase("true")) {
+               mBinding.addFriend.setText(getActivity().getResources().getString(R.string.unfriend));
+           } else if(userProfile!=null && userProfile.getIsInitiated_by_u1().equalsIgnoreCase("true")) {
+               mBinding.addFriend.setText(getActivity().getResources().getString(R.string.cancel));
+           }
+           else if(userProfile!=null && userProfile.getIsInitiated_by_u2().equalsIgnoreCase("true")) {
+               mBinding.addFriend.setText(getActivity().getResources().getString(R.string.accept_friend_req));
+           } else {
+               mBinding.addFriend.setText(getActivity().getResources().getString(R.string.add_friend));
+           }
 
-        if(userProfile.getU_Nationality()==null || userProfile.getU_Nationality().isEmpty()){
-            mBinding.nationalityLayout.setVisibility(View.GONE);
-        }else if(userProfile.getU_State()==null || userProfile.getU_State().isEmpty()){
-            mBinding.stateLayout.setVisibility(View.GONE);
-        }else if(userProfile.getU_District()==null || userProfile.getU_District().isEmpty()){
-            mBinding.divisionLayout.setVisibility(View.GONE);
-        }else if(userProfile.getU_City()==null || userProfile.getU_City().isEmpty()){
-            mBinding.cityLayout.setVisibility(View.GONE);
-        }else if(userProfile.getU_language()==null || userProfile.getU_language().isEmpty()){
-            mBinding.languageLayout.setVisibility(View.GONE);
-        }
+           if(userProfile!=null && userProfile.getU1FollowsU2().equalsIgnoreCase("true")) {
+               mBinding.follow.setText(getActivity().getResources().getString(R.string.unfollow));
+           } else {
+               mBinding.follow.setText(getActivity().getResources().getString(R.string.follow));
+           }
+
+           mBinding.tvName.setText(userProfile.getFirstName()+" "+userProfile.getLastName());
+           if (userProfile.getStrGender() != null && userProfile.getStrGender().equalsIgnoreCase("M")) {
+               mBinding.tvGender.setText("Male");
+           } else if(userProfile.getStrGender() != null && userProfile.getStrGender().equalsIgnoreCase("F")){
+               mBinding.tvGender.setText("Female");
+           }
+           if (userProfile.getEndPathImage() != null && !userProfile.getEndPathImage().isEmpty()) {
+               loadProfilePic(getProfileImageUrl(userProfile.getEndPathImage()));
+           } else if (userProfile.getStrGender() != null && userProfile.getStrGender().equalsIgnoreCase("M")) {
+               loadProfilePic(Constant.PRODUCTION_MALE_PROFILE_API);
+           } else if (userProfile.getStrGender() != null && userProfile.getStrGender().equalsIgnoreCase("F")) {
+               loadProfilePic(Constant.PRODUCTION_FEMALE_PROFILE_API);
+           }
+
+           if(userProfile.getU_Nationality()==null || userProfile.getU_Nationality().isEmpty()){
+               mBinding.nationalityLayout.setVisibility(View.GONE);
+           }else if(userProfile.getU_State()==null || userProfile.getU_State().isEmpty()){
+               mBinding.stateLayout.setVisibility(View.GONE);
+           }else if(userProfile.getU_District()==null || userProfile.getU_District().isEmpty()){
+               mBinding.divisionLayout.setVisibility(View.GONE);
+           }else if(userProfile.getU_City()==null || userProfile.getU_City().isEmpty()){
+               mBinding.cityLayout.setVisibility(View.GONE);
+           }else if(userProfile.getU_language()==null || userProfile.getU_language().isEmpty()){
+               mBinding.languageLayout.setVisibility(View.GONE);
+           }
+
+           mBinding.addFriend.setOnClickListener(v -> {
+               if(userProfile.getIsConnected().equalsIgnoreCase("true")) {
+                   updateConnection(userProfile.getUserId(),remove_connection);
+               } else if(userProfile.getIsInitiated_by_u1().equalsIgnoreCase("true")) {
+                   updateConnection(userProfile.getUserId(),reject_friend_requests);
+               } else if(userProfile.getIsInitiated_by_u2().equalsIgnoreCase("true")) {
+                   updateConnection(userProfile.getUserId(),accept_friend_requests);
+               } else {
+                   updateConnection(userProfile.getUserId(),sent_friend_req);
+               }
+           });
+
+           mBinding.follow.setOnClickListener(v -> {
+               if(userProfile.getU1FollowsU2().equalsIgnoreCase("true")) {
+                   updateConnection(userProfile.getUserId(),unfollow);
+               } else {
+                   updateConnection(userProfile.getUserId(),follow);
+               }
+           });
+
+       } catch (Exception e) {
+           e.printStackTrace();
+       }
+    }
+
+
+    private void updateConnection(String user, String Processcase) {
+        ApiInterface apiService = ApiClient.getInstance().getApi();
+        ProgressDialog.getInstance().show(getActivity());
+        Call<ResponseObj> call = apiService.updateConnections(String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID)), Processcase, getDeviceId(), qoogol, user);
+        call.enqueue(new Callback<ResponseObj>() {
+            @Override
+            public void onResponse(Call<ResponseObj> call, retrofit2.Response<ResponseObj> response) {
+                try {
+                    ProgressDialog.getInstance().dismiss();
+                    if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
+                        fetchUserProfile(fetch_other_user);
+                    } else {
+                        Toast.makeText(getActivity(), UtilHelper.getAPIError(String.valueOf(response.body())), Toast.LENGTH_SHORT).show();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    ProgressDialog.getInstance().dismiss();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseObj> call, Throwable t) {
+                t.printStackTrace();
+                ProgressDialog.getInstance().dismiss();
+            }
+        });
     }
 
     private void updateUi(UserProfile userProfile) {
@@ -656,6 +736,7 @@ public class PersonalInfoFragment extends BaseFragment {
         });
     }
 
+
     private void updateUserProfile(HashMap<String, String> userProfileMap) {
         Log.d(TAG, "updateUserProfile: " + userProfileMap);
         ProgressDialog.getInstance().show(requireActivity());
@@ -682,6 +763,7 @@ public class PersonalInfoFragment extends BaseFragment {
                 userProfileMap.get(Constant.u_gender),
                 userProfileMap.get(Constant.userName)
         );
+
         call.enqueue(new Callback<UserProfileResponse>() {
             @Override
             public void onResponse(Call<UserProfileResponse> call, Response<UserProfileResponse> response) {
@@ -721,6 +803,7 @@ public class PersonalInfoFragment extends BaseFragment {
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(mBinding.userProfilePic);
     }
+
 
     private void fetchUserProfile(int call_from) {
         //ProgressDialog.getInstance().show(requireActivity());

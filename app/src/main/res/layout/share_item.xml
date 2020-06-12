@@ -56,7 +56,6 @@
                 android:layout_centerVertical="true"
                 android:layout_marginStart="5dp"
                 android:layout_marginLeft="5dp"
-                android:text="Add"
                 android:checked="@={connection.checkedItem}"
                 android:textColor="@color/white"
                 android:textSize="@dimen/textSizexSmall"

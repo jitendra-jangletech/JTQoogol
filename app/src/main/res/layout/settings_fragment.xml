@@ -32,11 +32,29 @@
             app:layout_constraintStart_toStartOf="parent"
             android:drawableStart="@drawable/ic_account" />
 
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/profile_privacy"
+            style="@style/SettingTextViewStyle"
+            app:layout_constraintTop_toBottomOf="@+id/tvDeactivateAccount"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:text="Public"
+            android:textColor="@color/black"
+            android:layout_marginLeft="@dimen/_8sdp"
+            app:switchPadding="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_10sdp"
+            android:theme="@style/GroupSwitch"
+            android:visibility="visible"/>
+
         <TextView
             app:layout_constraintTop_toBottomOf="@+id/tvDeactivateAccount"
             android:id="@+id/tvLogout"
             style="@style/SettingTextViewStyle"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_marginTop="@dimen/_30sdp"
             android:text="@string/logout"
             android:drawablePadding="5dp"
             android:gravity="center_vertical"

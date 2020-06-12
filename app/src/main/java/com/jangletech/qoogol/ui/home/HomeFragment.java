@@ -162,6 +162,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
     }
 
     private void initViews() {
+        mBinding.connectionLayout.setOnClickListener(this);
         mBinding.friendsLayout.setOnClickListener(this);
         mBinding.followersLayout.setOnClickListener(this);
         mBinding.followingLayout.setOnClickListener(this);
@@ -291,16 +292,17 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.friends_layout:
+            case R.id.connectionLayout:
                 openConnections(0);
                 break;
-            case R.id.followers_layout:
+            case R.id.friends_layout:
                 openConnections(1);
                 break;
-            case R.id.following_layout:
+            case R.id.followers_layout:
                 openConnections(2);
                 break;
-            case R.id.connectionLayout:
+            case R.id.following_layout:
+                openConnections(3);
                 break;
         }
     }
