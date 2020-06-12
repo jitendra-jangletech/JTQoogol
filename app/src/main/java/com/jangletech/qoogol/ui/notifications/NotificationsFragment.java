@@ -16,6 +16,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.NotificationAdapter;
@@ -95,6 +96,7 @@ public class NotificationsFragment extends BaseFragment implements NotificationA
                 }
             }
         });
+        mBinding.swipeToRefresh.setOnRefreshListener(() -> fetchNotifications());
 
         enableSwipe();
     }
@@ -129,6 +131,7 @@ public class NotificationsFragment extends BaseFragment implements NotificationA
                 //ProgressDialog.getInstance().dismiss();
                 mBinding.swipeToRefresh.setRefreshing(false);
                 if (response.body() != null && response.body().getResponse().equals("200")) {
+                    deleteFromdb(n_id);
                    fetchNotifications();
                 }
             }
@@ -144,10 +147,13 @@ public class NotificationsFragment extends BaseFragment implements NotificationA
         });
     }
 
+    private void deleteFromdb(String n_id) {
+    }
+
     private void fetchNotifications() {
         //ProgressDialog.getInstance().show(getActivity());
         mBinding.swipeToRefresh.setRefreshing(true);
-        Call<NotificationResponse> call = apiService.fetchNotifications(new PreferenceManager(getActivity()).getInt(Constant.USER_ID), getDeviceId(), "Q");//todo change userId
+        Call<NotificationResponse> call = apiService.fetchNotifications(new PreferenceManager(getActivity()).getUserId(), getDeviceId(), "Q");
         call.enqueue(new Callback<NotificationResponse>() {
             @Override
             public void onResponse(Call<NotificationResponse> call, Response<NotificationResponse> response) {
@@ -160,6 +166,8 @@ public class NotificationsFragment extends BaseFragment implements NotificationA
                 } else {
                     showErrorDialog(getActivity(), response.body().getResponse(), response.body().getMessage());
                 }
+                if (mBinding.swipeToRefresh.isRefreshing())
+                    mBinding.swipeToRefresh.setRefreshing(false);
             }
 
             @Override

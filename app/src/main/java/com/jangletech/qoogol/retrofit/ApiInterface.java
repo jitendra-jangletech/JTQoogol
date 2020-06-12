@@ -250,7 +250,7 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST(Constant.FETCH_NOTIFICATIONS)
-    Call<NotificationResponse> fetchNotifications(@Field(Constant.u_user_id) int userId,
+    Call<NotificationResponse> fetchNotifications(@Field(Constant.u_user_id) String userId,
                                                   @Field(Constant.device_id) String deviceId,
                                                   @Field(Constant.appName) String appName);
 
