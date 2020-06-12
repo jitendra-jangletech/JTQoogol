@@ -8,18 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bogdwellers.pinchtozoom.ImageMatrixTouchHandler;
@@ -27,8 +20,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.FAQListAdapter;
-import com.jangletech.qoogol.adapter.FAQTilesAdapter;
-import com.jangletech.qoogol.databinding.FaqFragmentBinding;
+import com.jangletech.qoogol.databinding.FragmentFaqTopicDetailsBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.model.FAQModel;
 import com.jangletech.qoogol.model.FaqResponse;
@@ -36,46 +28,37 @@ import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.util.Constant;
-import com.jangletech.qoogol.util.ItemOffsetDecoration;
-import com.jangletech.qoogol.util.PreferenceManager;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class FaqFragment extends BaseFragment implements
-        FAQTilesAdapter.TilesClickListener {
 
-    private static final String TAG = "FaqFragment";
+public class FaqTopicDetailsFragment extends BaseFragment implements FAQListAdapter.OnItemClickListener {
+
+    private static final String TAG = "FaqTopicDetailsFragment";
     private FaqViewModel mViewModel;
-    private FaqFragmentBinding mBinding;
-    private ArrayAdapter<String> adapter;
-    private Map<String, String> topicsMap;
     private FAQListAdapter faqListAdapter;
-    private List<String> topics;
-    private FAQTilesAdapter faqTilesAdapter;
-    private GridLayoutManager gridLayoutManager;
-    private ItemOffsetDecoration itemDecoration;
+    private FragmentFaqTopicDetailsBinding mBinding;
+    private FAQModel faqModel;
     ApiInterface apiService = ApiClient.getInstance().getApi();
 
-    public static FaqFragment newInstance() {
-        return new FaqFragment();
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_faq_topic_details, container, false);
+        return mBinding.getRoot();
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.faq_fragment, container, false);
-        topicsMap = new HashMap<>();
-        topics = new ArrayList<>();
-        itemDecoration = new ItemOffsetDecoration(requireActivity(), R.dimen.item_offset);
-        return mBinding.getRoot();
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            faqModel = (FAQModel) getArguments().getSerializable("PARAMS");
+        }
     }
 
     @Override
@@ -86,29 +69,21 @@ public class FaqFragment extends BaseFragment implements
     }
 
     private void initViews() {
-        getActionBar().setTitle("FAQ Topics");
+        getActionBar().setTitle(faqModel.getFaqt_name());
         HashMap<String, String> params = new HashMap<>();
-        params.put(Constant.u_user_id, String.valueOf(new PreferenceManager(requireActivity()).getInt(Constant.USER_ID)));
-        params.put(Constant.CASE, "T");
+        params.put(Constant.u_user_id, getUserId());
+        params.put(Constant.CASE, "");
         params.put(Constant.faq_app, Constant.APP_NAME);
-        if (mViewModel.getFaqTopics().getValue() == null) {
-            fetchFaq(params);
-        }
-        mViewModel.getFaqTopics().observe(requireActivity(), faqModels -> {
-            if (faqModels != null) {
-                setFaqTiles(faqModels);
+        params.put(Constant.faqt_id, faqModel.getFaqt_id());
+        fetchFaq(params);
+        mViewModel.getFaqQuestions().observe(requireActivity(), faqModels -> {
+            if(faqModels!=null) {
+                faqListAdapter = new FAQListAdapter(faqModels, requireActivity(), this);
+                mBinding.faqDetailsRecyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
+                mBinding.faqDetailsRecyclerView.setAdapter(faqListAdapter);
             }
         });
     }
-
-    private void setFaqTiles(List<FAQModel> faqModels) {
-        faqTilesAdapter = new FAQTilesAdapter(faqModels, getActivity(), this);
-        gridLayoutManager = new GridLayoutManager(getActivity(), 3);
-        mBinding.faqRecyclerView.setLayoutManager(gridLayoutManager);
-        mBinding.faqRecyclerView.addItemDecoration(itemDecoration);
-        mBinding.faqRecyclerView.setAdapter(faqTilesAdapter);
-    }
-
 
     private void fetchFaq(HashMap<String, String> params) {
         Log.d(TAG, "fetchFaq Params : " + params);
@@ -144,11 +119,28 @@ public class FaqFragment extends BaseFragment implements
     }
 
     @Override
-    public void onItemClick(FAQModel faqModel) {
-        //showToast(""+faqModel.getFaqt_name());
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("PARAMS", faqModel);
-        NavController navController = Navigation.findNavController(mBinding.getRoot());
-        navController.navigate(R.id.nav_faq_details, bundle);
+    public void onViewImage(String path) {
+        showFullScreen(path);
     }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private void showFullScreen(final String profilePath) {
+        final Dialog dialog = new Dialog(requireActivity(), android.R.style.Theme_Light);
+        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawableResource(android.R.color.transparent);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.image_fullscreen_preview);
+        ImageView imageView = dialog.findViewById(R.id.image_preview);
+        imageView.setOnTouchListener(new ImageMatrixTouchHandler(dialog.getWindow().getContext()));
+
+        Glide.with(requireActivity()).load(profilePath)
+                .thumbnail(0.5f)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .dontTransform()
+                .dontAnimate()
+                .into(imageView);
+
+        dialog.show();
+    }
+
 }

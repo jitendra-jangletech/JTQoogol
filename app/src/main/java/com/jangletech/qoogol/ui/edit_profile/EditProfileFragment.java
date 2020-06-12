@@ -36,12 +36,12 @@ import static com.jangletech.qoogol.util.Constant.profile;
  */
 public class EditProfileFragment extends Fragment {
 
-    FragmentEditProfileBinding fragmentEditProfileBinding;
+    private FragmentEditProfileBinding fragmentEditProfileBinding;
     private AddEducationBinding addEducationBinding;
-    AlertDialog educationDialog;
-    ApiInterface apiService = ApiClient.getInstance().getApi();
+    private ApiInterface apiService = ApiClient.getInstance().getApi();
     private static final String TAG = "EditProfileFragment";
     private PreferenceManager mSettings;
+    private Adapter mAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -109,5 +109,11 @@ public class EditProfileFragment extends Fragment {
         public CharSequence getPageTitle(int position) {
             return mFragmentTitleList.get(position);
         }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mAdapter = null;
     }
 }

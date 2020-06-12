@@ -10,6 +10,7 @@
         android:orientation="vertical">
 
         <TextView
+            android:foreground="?attr/selectableItemBackground"
             android:id="@+id/tv_quest_no"
             android:layout_width="@dimen/_25sdp"
             android:layout_height="@dimen/_25sdp"

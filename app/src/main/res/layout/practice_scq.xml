@@ -143,7 +143,6 @@
                         android:textSize="@dimen/_10ssp" />
 
                     <TextView
-                        android:visibility="gone"
                         android:id="@+id/category_textview"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -154,7 +153,8 @@
                         android:text="Category"
                         android:textAlignment="textEnd"
                         android:textColor="@color/colorSkyBlue"
-                        android:textSize="@dimen/_10ssp" />
+                        android:textSize="@dimen/_10ssp"
+                        android:visibility="gone" />
                 </LinearLayout>
 
                 <View
@@ -437,6 +437,35 @@
                                 app:layout_constraintBottom_toBottomOf="@+id/scq4_layout"
                                 app:layout_constraintRight_toRightOf="@+id/scq4_layout"
                                 app:layout_constraintTop_toTopOf="@+id/scq4_layout" />
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/scq5_layout"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_10sdp"
+                                android:background="@drawable/grey_round_order"
+                                app:layout_constraintLeft_toLeftOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/scq4_layout">
+
+                                <TextView
+                                    android:id="@+id/scq5"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="mcq5"
+                                    android:textColor="@color/colorSkyBlue"
+                                    app:layout_constraintLeft_toLeftOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <ImageView
+                                android:id="@+id/scq5_img"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_right"
+                                android:visibility="gone"
+                                app:layout_constraintBottom_toBottomOf="@+id/scq5_layout"
+                                app:layout_constraintRight_toRightOf="@+id/scq5_layout"
+                                app:layout_constraintTop_toTopOf="@+id/scq5_layout" />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
 

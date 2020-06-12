@@ -15,6 +15,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.FragmentPendingRequestsBinding;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,22 +40,6 @@ public class PendingRequestsFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         setupViewPager(mbinding.requestsViewpager);
         mbinding.requestsTab.setupWithViewPager(mbinding.requestsViewpager);
-
-        mbinding.requestsViewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
-
     }
 
     private void setupViewPager(ViewPager viewPager) {

@@ -26,6 +26,8 @@ import com.jangletech.qoogol.activities.MainActivity;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 
+import org.apache.commons.collections4.functors.ExceptionTransformer;
+
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -50,9 +52,14 @@ public class BaseFragment extends Fragment {
         return result;
     }
 
+    public String getStringValue(Object object) {
+        return String.valueOf(object);
+    }
+
     public ActionBar getActionBar() {
         return ((MainActivity) getActivity()).getSupportActionBar();
     }
+
     public void loadProfilePic(String url, ImageView imageView) {
         RequestOptions options = new RequestOptions()
                 .centerCrop()
@@ -65,7 +72,7 @@ public class BaseFragment extends Fragment {
                 .into(imageView);
     }
 
-    public void loadImages(String url,ImageView imageView){
+    public void loadImages(String url, ImageView imageView) {
         RequestOptions options = new RequestOptions()
                 .placeholder(R.drawable.load);
         Glide.with(this).load(url)
@@ -75,7 +82,7 @@ public class BaseFragment extends Fragment {
     }
 
     public void resetSettingAndLogout() {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(requireActivity(),R.style.AlertDialogStyle);
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(requireActivity(), R.style.AlertDialogStyle);
         alertDialog.setTitle(getActivity().getResources().getString(R.string.warning));
         alertDialog.setMessage("You have signed-in from another device. Logging out.");
         alertDialog.setPositiveButton("Ok", (dialog, which) -> {
@@ -91,11 +98,11 @@ public class BaseFragment extends Fragment {
         alertDialog.show();
     }
 
-    public String getTempImageUrl(String path){
-        return Constant.QUESTION_IMAGES_API+path.split("/")[1].split(":")[0];
+    public String getTempImageUrl(String path) {
+        return Constant.QUESTION_IMAGES_API + path.split("/")[1].split(":")[0];
     }
 
-    public void setFragmentTitle(String title){
+    public void setFragmentTitle(String title) {
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(title);
     }
 
@@ -159,7 +166,11 @@ public class BaseFragment extends Fragment {
     }*/
 
     public void showToast(String msg) {
-        Toast.makeText(requireActivity(), msg, Toast.LENGTH_SHORT).show();
+        try {
+            Toast.makeText(requireActivity(), msg, Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void apiCallFailureDialog(Throwable t) {

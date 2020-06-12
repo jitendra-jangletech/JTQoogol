@@ -1,26 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/navigation_home"
+        app:showAsAction="always"
+        android:id="@+id/nav_home"
         android:icon="@drawable/ic_home"
         android:title="Home" />
     <item
-        android:id="@+id/navigation_learning"
+        app:showAsAction="always"
+        android:id="@+id/nav_learning"
         android:icon="@drawable/ic_learning"
         android:title="@string/menu_learning" />
     <item
-        android:id="@+id/navigation_test"
+        app:showAsAction="always"
+        android:id="@+id/nav_test_my"
         android:icon="@drawable/ic_test"
         android:title="@string/menu_test" />
 
     <item
-        android:id="@+id/navigation_Questions"
-        android:icon="@drawable/ic_questions"
-        android:title="@string/menu_questions" />
-
-    <item
-        android:id="@+id/navigation_saved_drafts"
+        app:showAsAction="always"
+        android:id="@+id/nav_doubts"
         android:icon="@drawable/ic_saved_drafts"
-        android:title="@string/menu_quest_saved_drafts" />
-
+        android:title="@string/menu_ask_doubts" />
 </menu>

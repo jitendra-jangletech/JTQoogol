@@ -31,11 +31,8 @@ import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.NetworkUtil;
 import com.jangletech.qoogol.util.PreferenceManager;
-
-import java.net.UnknownHostException;
 import java.util.Objects;
 
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 
 public class BaseActivity extends AppCompatActivity {

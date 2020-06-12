@@ -87,11 +87,16 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_test_my, container, false);
-        mViewModel = new ViewModelProvider(this).get(MyTestViewModel.class);
-        initViews();
+
         return mBinding.getRoot();
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mViewModel = new ViewModelProvider(this).get(MyTestViewModel.class);
+        initViews();
+    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

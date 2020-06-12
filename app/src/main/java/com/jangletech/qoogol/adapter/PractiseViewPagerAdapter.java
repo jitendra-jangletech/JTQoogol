@@ -22,23 +22,28 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.viewpager.widget.PagerAdapter;
 
+import com.google.gson.Gson;
 import com.jangletech.qoogol.R;
+import com.jangletech.qoogol.activities.PracticeTestActivity;
 import com.jangletech.qoogol.dialog.CommentDialog;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.model.ProcessQuestion;
+import com.jangletech.qoogol.model.SubmitTest;
 import com.jangletech.qoogol.model.TestQuestionNew;
+import com.jangletech.qoogol.model.VerifyResponse;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
-
-import static com.facebook.FacebookSdk.getApplicationContext;
+import retrofit2.Response;
 
 public class PractiseViewPagerAdapter extends PagerAdapter {
     private static final String TAG = "PractiseViewPagerAdapte";
@@ -46,21 +51,28 @@ public class PractiseViewPagerAdapter extends PagerAdapter {
     private List<TestQuestionNew> testModelNewList;
     private ViewPagerClickListener viewPagerClickListener;
     private CommentDialog commentDialog;
-    ApiInterface apiService = ApiClient.getInstance().getApi();
+    private ApiInterface apiService = ApiClient.getInstance().getApi();
     private int isSolvedRight, isAttempted = 0;
     private CountDownTimer countDownTimer;
+    private String tmId;
+    private Gson gson;
+    private String flag;
     public static String scq_ans = "", scqimgtext_ans = "";
 
     public PractiseViewPagerAdapter(Activity context, List<TestQuestionNew> testModelNewList,
-                                    ViewPagerClickListener viewPagerClickListener) {
+                                    ViewPagerClickListener viewPagerClickListener, String tmId, String flag) {
         this.context = context;
-        this.testModelNewList = testModelNewList;
+        this.testModelNewList = PracticeTestActivity.questionsNewList;
         this.viewPagerClickListener = viewPagerClickListener;
+        this.tmId = tmId;
+        this.flag = flag;
+        gson = new Gson();
     }
 
     @Override
     public Object instantiateItem(@NonNull ViewGroup collection, int position) {
         LayoutInflater inflater = LayoutInflater.from(context);
+        Log.d(TAG, "instantiateItem Position : " + position);
         TestQuestionNew testQuestionNew = testModelNewList.get(position);
         if (testQuestionNew.getType().equalsIgnoreCase(Constant.LONG_ANSWER) ||
                 testQuestionNew.getType().equalsIgnoreCase(Constant.SHORT_ANSWER) ||
@@ -130,7 +142,7 @@ public class PractiseViewPagerAdapter extends PagerAdapter {
     private void ProcessQuestionAPI(String que_id, int flag, String call_from, int prevLikes) {
         ProgressDialog.getInstance().show(context);
         Call<ProcessQuestion> call;
-        int user_id = new PreferenceManager(getApplicationContext()).getInt(Constant.USER_ID);
+        int user_id = new PreferenceManager(context).getInt(Constant.USER_ID);
 
         if (call_from.equalsIgnoreCase("like"))
             call = apiService.likeApi(user_id, que_id, "I", flag);
@@ -159,10 +171,6 @@ public class PractiseViewPagerAdapter extends PagerAdapter {
                             Log.d(TAG, "onResponse Like Flag : 0");
                             int likeCount = prevLikes - 1;
                             viewPagerClickListener.onLikeClick(false, likeCount);
-                            //labelValue.setText(likeCount);
-                            //testQuestionNew.setLikes(String.valueOf(likeCount));
-                            //testQuestionNew.setQlc_like_flag(false);
-                            //notifyDataSetChanged();
                         }
                     } else {
                         Toast.makeText(context, UtilHelper.getAPIError(String.valueOf(response.body())), Toast.LENGTH_SHORT).show();
@@ -182,23 +190,33 @@ public class PractiseViewPagerAdapter extends PagerAdapter {
         });
     }
 
-    private void initScq(ViewGroup layout, TestQuestionNew testModelNew) {
-        //AtomicReference<String> scq_ans = new AtomicReference<>("");
+    private void setScqRightAns(ImageView img){
+        img.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_right));
+    }
 
+    private void setScqWrongAns(ImageView img){
+        img.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_wrong));
+    }
+
+    private void initScq(ViewGroup layout, TestQuestionNew testModelNew) {
+        Log.d(TAG, "initScq Item Position : " + getItemPosition(testModelNew));
         TextView scq1 = layout.findViewById(R.id.scq1);
         TextView scq2 = layout.findViewById(R.id.scq2);
         TextView scq3 = layout.findViewById(R.id.scq3);
         TextView scq4 = layout.findViewById(R.id.scq4);
+        TextView scq5 = layout.findViewById(R.id.scq5);
 
         ImageView img1 = layout.findViewById(R.id.scq1_img);
         ImageView img2 = layout.findViewById(R.id.scq2_img);
         ImageView img3 = layout.findViewById(R.id.scq3_img);
         ImageView img4 = layout.findViewById(R.id.scq4_img);
+        ImageView img5 = layout.findViewById(R.id.scq5_img);
 
         ConstraintLayout scq1Layout = layout.findViewById(R.id.scq1_layout);
         ConstraintLayout scq2Layout = layout.findViewById(R.id.scq2_layout);
         ConstraintLayout scq3Layout = layout.findViewById(R.id.scq3_layout);
         ConstraintLayout scq4Layout = layout.findViewById(R.id.scq4_layout);
+        ConstraintLayout scq5Layout = layout.findViewById(R.id.scq5_layout);
 
         ConstraintLayout solutionLayout = layout.findViewById(R.id.solution_layout);
 
@@ -206,12 +224,60 @@ public class PractiseViewPagerAdapter extends PagerAdapter {
         scq2.setText(testModelNew.getQ_mcq_op_2());
         scq3.setText(testModelNew.getQ_mcq_op_3());
         scq4.setText(testModelNew.getQ_mcq_op_4());
+        scq5.setText(testModelNew.getQ_mcq_op_5());
+
+        if (flag.equalsIgnoreCase("ATTEMPTED")) {
+            solutionLayout.setVisibility(View.VISIBLE);
+
+            if(testModelNew.isTtqa_mcq_ans_1()){
+                img1.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_wrong));
+                img1.setVisibility(View.VISIBLE);
+            }
+            if(testModelNew.isTtqa_mcq_ans_2()){
+                img2.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_wrong));
+                img2.setVisibility(View.VISIBLE);
+            }
+            if(testModelNew.isTtqa_mcq_ans_3()){
+                img3.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_wrong));
+                img3.setVisibility(View.VISIBLE);
+            }
+            if(testModelNew.isTtqa_mcq_ans_4()){
+                img4.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_wrong));
+                img4.setVisibility(View.VISIBLE);
+            }
+            if(testModelNew.isTtqa_mcq_ans_5()){
+                img5.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_wrong));
+                img5.setVisibility(View.VISIBLE);
+            }
+
+
+            if (testModelNew.getA_sub_ans().equalsIgnoreCase("A")) {
+                img1.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_right));
+                img1.setVisibility(View.VISIBLE);
+            }
+            else if (testModelNew.getA_sub_ans().equalsIgnoreCase("B")) {
+                img2.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_right));
+                img2.setVisibility(View.VISIBLE);
+            }
+            else if (testModelNew.getA_sub_ans().equalsIgnoreCase("C")) {
+                img3.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_right));
+                img3.setVisibility(View.VISIBLE);
+            }
+            else if (testModelNew.getA_sub_ans().equalsIgnoreCase("D")) {
+                img4.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_right));
+                img4.setVisibility(View.VISIBLE);
+            }
+            else if (testModelNew.getA_sub_ans().equalsIgnoreCase("E")) {
+                img5.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_right));
+                img5.setVisibility(View.VISIBLE);
+            }
+        }
 
         scq1Layout.setOnClickListener(v -> {
             setSCQAnsIndicator(img1, img2, img3, img4);
             setLayoutBg(scq1Layout, scq2Layout, scq3Layout, scq4Layout);
             scq_ans = "A";
-            showToast(scq_ans.toString());
+            //showToast(scq_ans.toString());
             scq1Layout.setBackground(context.getResources().getDrawable(R.drawable.grey_border_grey_bg));
         });
 
@@ -270,14 +336,75 @@ public class PractiseViewPagerAdapter extends PagerAdapter {
                     isSolvedRight = 0;
                     setRightSCQ(testModelNew.getA_sub_ans(), img1, img2, img3, img4);
                     setWrongSCQ(scq_ans, img1, img2, img3, img4);
-
                 }
                 solutionLayout.setVisibility(View.VISIBLE);
+                testModelNew.setTtqa_attempted(true);
+                submitSubjectiveAnsToServer(testModelNew, scq_ans, "SCQ");
             } else {
                 showToast("Please select atleast one option.");
                 //Toast.makeText(activity, "Please select atleast one option.", Toast.LENGTH_SHORT).show();
             }
+        });
+    }
 
+    private void submitSubjectiveAnsToServer(TestQuestionNew question, String scq_ans, String flag) {
+        SubmitTest submitTest = new SubmitTest();
+        List<TestQuestionNew> submitTestQuestionList = new ArrayList<>();
+        submitTest.setTm_id(tmId);
+        if (flag.equalsIgnoreCase("SCQ")) {
+            Log.d(TAG, "submitSubjectiveAnsToServer SCQ Ans : " + scq_ans);
+            question.setTtqa_marked(false);
+            question.setTtqa_mcq_ans_1(false);
+            question.setTtqa_mcq_ans_2(false);
+            question.setTtqa_mcq_ans_3(false);
+            question.setTtqa_mcq_ans_4(false);
+            question.setTtqa_mcq_ans_5(false);
+
+            if (scq_ans.equalsIgnoreCase("A"))
+                question.setTtqa_mcq_ans_1(true);
+
+            if (scq_ans.equalsIgnoreCase("B"))
+                question.setTtqa_mcq_ans_2(true);
+
+            if (scq_ans.equalsIgnoreCase("C"))
+                question.setTtqa_mcq_ans_3(true);
+
+            if (scq_ans.equalsIgnoreCase("D"))
+                question.setTtqa_mcq_ans_4(true);
+        }
+
+        submitTestQuestionList.add(question);
+        submitTest.setTestQuestionNewList(submitTestQuestionList);
+        String json = gson.toJson(submitTest);
+
+        Log.d(TAG, "submitSubjectiveAnsToServer JSON : " + json);
+
+        HashMap<String, String> params = new HashMap<>();
+        params.put(Constant.u_user_id, String.valueOf(new PreferenceManager(context).getInt(Constant.USER_ID)));
+        params.put(Constant.DataList, json);
+
+        Log.d(TAG, "submitSubjectiveAnsToServer Params : " + params);
+        ProgressDialog.getInstance().show(context);
+        Call<VerifyResponse> call = apiService.submitTestQuestion(
+                params.get(Constant.DataList),
+                params.get(Constant.u_user_id));
+        call.enqueue(new Callback<VerifyResponse>() {
+            @Override
+            public void onResponse(Call<VerifyResponse> call, Response<VerifyResponse> response) {
+                ProgressDialog.getInstance().dismiss();
+                if (response.body() != null && response.body().getResponse().equals("200")) {
+                    showToast("Answer Submitted");
+                    viewPagerClickListener.onSubmitClick();
+                } else {
+                    Log.e(TAG, "onResponse Error : " + response.body().getResponse());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<VerifyResponse> call, Throwable t) {
+                showToast("Something went wrong!!");
+                t.printStackTrace();
+            }
         });
     }
 
@@ -379,6 +506,8 @@ public class PractiseViewPagerAdapter extends PagerAdapter {
     }
 
     private void initSubjective(ViewGroup layout, TestQuestionNew testModelNew) {
+        SubmitTest submitTest = new SubmitTest();
+        List<TestQuestionNew> submitTestQuestionList = new ArrayList<>();
         TextView tvWordCounter = layout.findViewById(R.id.tvWordCounter);
         TextView multi_lineCounter = layout.findViewById(R.id.multi_lineCounter);
         Button btnSubmit = layout.findViewById(R.id.submit);
@@ -400,12 +529,22 @@ public class PractiseViewPagerAdapter extends PagerAdapter {
             etMultiLineAns.setText(testModelNew.getTtqa_sub_ans());
         }
 
+        if(flag.equalsIgnoreCase("ATTEMPTED")){
+
+        }
+
         btnSubmit.setOnClickListener(v -> {
             if (multiLineAnswerLayout.getVisibility() == View.VISIBLE) {
                 if (etMultiLineAns.getText().toString().isEmpty()) {
                     showToast("Please Enter Answer");
                 } else {
+                    testModelNew.setTtqa_saved(false);
+                    testModelNew.setTtqa_marked(false);
+                    testModelNew.setTtqa_attempted(true);
                     testModelNew.setTtqa_sub_ans(etMultiLineAns.getText().toString());
+                    //submitTestQuestionList.add(testModelNew);
+                    //submitTest.setTestQuestionNewList(submitTestQuestionList);
+                    submitSubjectiveAnsToServer(testModelNew, "", "SUBJECTIVE");
                 }
             }
         });
@@ -481,7 +620,6 @@ public class PractiseViewPagerAdapter extends PagerAdapter {
         TextView tvtimer = layout.findViewById(R.id.tvtimer);
         TextView tvQuestion = layout.findViewById(R.id.question_textview);
         TextView tvMarks = layout.findViewById(R.id.marks_textview);
-        //Button btnSubmit = layout.findViewById(R.id.submit);
         ImageView imgComment = layout.findViewById(R.id.comment);
         ImageView imgQueDownload = layout.findViewById(R.id.save_que);
         TextView tvDiffLevel = layout.findViewById(R.id.difflevel_value);
@@ -500,7 +638,7 @@ public class PractiseViewPagerAdapter extends PagerAdapter {
 
         //set the values
         tvQuestion.setText(testModelNew.getQ_quest());
-        tvQuestNo.setText(testModelNew.getTq_quest_seq_num());
+        tvQuestNo.setText(String.valueOf(testModelNew.getTq_quest_seq_num()));
         tvMarks.setText("Marks : " + testModelNew.getTq_marks());
         tvCategory.setText(testModelNew.getTq_quest_catg());
         tvDiffLevel.setText(testModelNew.getQ_diff_level());
@@ -522,8 +660,8 @@ public class PractiseViewPagerAdapter extends PagerAdapter {
             showToast("Added to saved questions List.");
         });
 
-        imgComment.setOnClickListener(v->{
-            commentDialog = new CommentDialog(context,testModelNew);
+        imgComment.setOnClickListener(v -> {
+            commentDialog = new CommentDialog(context, testModelNew);
             commentDialog.show();
         });
 
@@ -668,6 +806,8 @@ public class PractiseViewPagerAdapter extends PagerAdapter {
         void onCommentClick();
 
         void onShareClick();
+
+        void onSubmitClick();
 
         void onFavouriteClick(boolean isChecked);
     }
