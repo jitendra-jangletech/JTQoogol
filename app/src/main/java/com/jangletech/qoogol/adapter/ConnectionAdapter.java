@@ -87,8 +87,9 @@ public class ConnectionAdapter extends RecyclerView.Adapter<ConnectionAdapter.Vi
         Connections connections = connectionsList.get(position);
         connectionItemBinding.tvUserName.setText(connections.getU_first_name() + " " + connections.getU_last_name());
         try {
-            Glide.with(activity).load(UtilHelper.getProfilePath(connections.getCn_user_id_2(),connections.getProf_pic().trim())).circleCrop().placeholder(R.drawable.profile).into(connectionItemBinding.userProfileImage);
-
+            if (connections.getProf_pic() != null && !connections.getProf_pic().isEmpty()) {
+                Glide.with(activity).load(UtilHelper.getProfileImageUrl(connections.getProf_pic().trim())).circleCrop().placeholder(R.drawable.profile).into(connectionItemBinding.userProfileImage);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

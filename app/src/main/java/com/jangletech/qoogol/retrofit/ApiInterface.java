@@ -255,6 +255,14 @@ public interface ApiInterface {
                                                   @Field(Constant.appName) String appName);
 
     @FormUrlEncoded
+    @POST(Constant.UPDATE_NOTIFICATIONS)
+    Call<ResponseObj> updateNotifications(@Field(Constant.u_user_id) String userId,
+                                                  @Field(Constant.device_id) String deviceId,
+                                                  @Field(Constant.appName) String appName,
+                                                   @Field(Constant.n_id) String nid,
+                                                    @Field(Constant.CASE) String update_case);
+
+    @FormUrlEncoded
     @POST(Constant.FETCH_SUBJECTS)
     Call<FetchSubjectResponseList> fetchSubjectList(@Field(Constant.scr_co_id) String scr_co_id);
 

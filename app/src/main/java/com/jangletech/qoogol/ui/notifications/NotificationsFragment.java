@@ -13,20 +13,23 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.NotificationAdapter;
 import com.jangletech.qoogol.databinding.FragmentNotificationsBinding;
-import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.model.Notification;
 import com.jangletech.qoogol.model.NotificationResponse;
+import com.jangletech.qoogol.model.ResponseObj;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -48,6 +51,7 @@ public class NotificationsFragment extends BaseFragment implements NotificationA
     private NotificationAdapter notificationAdapter;
     ApiInterface apiService = ApiClient.getInstance().getApi();
     NotificationAdapter.onItemClickListener onItemClickListener;
+    List<Notification> notificationList = new ArrayList<>();
 
 
     public static NotificationsFragment newInstance() {
@@ -80,11 +84,62 @@ public class NotificationsFragment extends BaseFragment implements NotificationA
                 Log.d(TAG, "onChanged: " + notifications.size());
                 if (notifications != null) {
                     //showToast("Data Updated");
+                    if (mBinding.swipeToRefresh.isRefreshing())
+                        mBinding.swipeToRefresh.setRefreshing(false);
+                    notificationList.clear();
+                    notificationList.addAll(notifications);
                     mBinding.notificationRecyclerView.setHasFixedSize(true);
                     mBinding.notificationRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                     notificationAdapter = new NotificationAdapter(getActivity(), notifications, onItemClickListener);
                     mBinding.notificationRecyclerView.setAdapter(notificationAdapter);
                 }
+            }
+        });
+
+        enableSwipe();
+    }
+
+    private void enableSwipe() {
+
+
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder viewHolder1) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                if (direction == ItemTouchHelper.RIGHT) {
+                    int position = viewHolder.getAdapterPosition();
+                    Notification notification = notificationList.get(position);
+                    deleteNotification(notification.getN_id());
+                }
+            }
+        }).attachToRecyclerView(mBinding.notificationRecyclerView);
+
+
+    }
+
+    private void deleteNotification(String n_id) {
+        Call<ResponseObj> call = apiService.updateNotifications(new PreferenceManager(getActivity()).getUserId(), getDeviceId(), "Q",n_id,"D");
+        call.enqueue(new Callback<ResponseObj>() {
+            @Override
+            public void onResponse(Call<ResponseObj> call, Response<ResponseObj> response) {
+                //ProgressDialog.getInstance().dismiss();
+                mBinding.swipeToRefresh.setRefreshing(false);
+                if (response.body() != null && response.body().getResponse().equals("200")) {
+                   fetchNotifications();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseObj> call, Throwable t) {
+                //ProgressDialog.getInstance().dismiss();
+                mBinding.swipeToRefresh.setRefreshing(false);
+                apiCallFailureDialog(t);
+                Log.e(TAG, "onFailure NOtifications : " + t.getMessage());
+                t.printStackTrace();
             }
         });
     }
@@ -127,16 +182,16 @@ public class NotificationsFragment extends BaseFragment implements NotificationA
     @Override
     public void onItemClick(Notification notification) {
         Bundle bundle = new Bundle();
-        bundle.putBoolean("fromNotification",true);
+        bundle.putBoolean("fromNotification", true);
         bundle.putString(Constant.FB_MS_ID, notification.getN_ref_id());
         if (notification.getN_ref_type().equalsIgnoreCase(from_user)) {
             bundle.putInt(CALL_FROM, connectonId);
-            bundle.putString(Constant.fetch_profile_id,notification.getN_ref_id());
-            NavHostFragment.findNavController(this).navigate(R.id.nav_edit_profile,bundle);
+            bundle.putString(Constant.fetch_profile_id, notification.getN_ref_id());
+            NavHostFragment.findNavController(this).navigate(R.id.nav_edit_profile, bundle);
         } else if (notification.getN_ref_type().equalsIgnoreCase(from_question)) {
-            NavHostFragment.findNavController(this).navigate(R.id.nav_learning,bundle);
+            NavHostFragment.findNavController(this).navigate(R.id.nav_learning, bundle);
         } else if (notification.getN_ref_type().equalsIgnoreCase(fromTest)) {
-            NavHostFragment.findNavController(this).navigate(R.id.nav_test,bundle);
+            NavHostFragment.findNavController(this).navigate(R.id.nav_test, bundle);
         }
     }
 }

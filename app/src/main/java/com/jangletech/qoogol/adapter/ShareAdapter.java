@@ -55,7 +55,6 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
                 if (connections.getProf_pic() != null && !connections.getProf_pic().isEmpty()) {
                     Glide.with(activity).load(UtilHelper.getProfileImageUrl(connections.getProf_pic().trim())).circleCrop().placeholder(R.drawable.profile).into(shareItemBinding.userProfileImage);
                 }
-
             } else {
                 shareItemBinding.tvUserName.setText(connections.getU_first_name() + " " + connections.getU_last_name());
                 if (connections.getProf_pic() != null && !connections.getProf_pic().isEmpty()) {

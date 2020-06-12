@@ -247,6 +247,7 @@ public class Constant {
     public static final String FETCH_SUBJECTS = "q111FetchSubjectMaster";
     public static final String FETCH_CHAPTERS = "q114FetchChapterMaster";
     public static final String FETCH_NOTIFICATIONS = "sm28FetchNotifications";
+    public static final String UPDATE_NOTIFICATIONS = "sm27UpdateNotifications";
     public static final String COUNTRY = "sm05CountryData";
     public static final String STATE = "sm06StateData";
     public static final String CITY = "sm09CityData";
