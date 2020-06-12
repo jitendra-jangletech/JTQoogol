@@ -4,25 +4,37 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Window;
+
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 
 import com.jangletech.qoogol.R;
+import com.jangletech.qoogol.activities.PracticeTestActivity;
 import com.jangletech.qoogol.databinding.DialogSubmitTestBinding;
+import com.jangletech.qoogol.model.TestQuestionNew;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SubmitTestDialog extends Dialog {
 
+    private static final String TAG = "SubmitTestDialog";
     private DialogSubmitTestBinding mBinding;
     private SubmitDialogClickListener submitDialogClickListener;
-    Long milliLeft, min, sec,hrs;
-    CountDownTimer timer;
+    private Long milliLeft, min, sec, hrs;
+    private CountDownTimer timer;
+    private List<TestQuestionNew> questionList;
+    private int totalQuest, attemptedQuest, unAttemptedQuest, markedQuest;
 
-    public SubmitTestDialog(@NonNull Context context,SubmitDialogClickListener submitDialogClickListener,long milliesLeft) {
+
+    public SubmitTestDialog(@NonNull Context context, SubmitDialogClickListener submitDialogClickListener, long milliesLeft) {
         super(context);
         this.submitDialogClickListener = submitDialogClickListener;
         this.milliLeft = milliesLeft;
+        this.questionList = PracticeTestActivity.questionsNewList;
     }
 
     @Override
@@ -33,13 +45,58 @@ public class SubmitTestDialog extends Dialog {
         setContentView(mBinding.getRoot());
         startTimer(milliLeft);
 
-        mBinding.tvYes.setOnClickListener(v->{
+        mBinding.tvYes.setOnClickListener(v -> {
             submitDialogClickListener.onYesClick();
         });
 
-        mBinding.tvNo.setOnClickListener(v->{
+        mBinding.tvNo.setOnClickListener(v -> {
             submitDialogClickListener.onNoClick();
         });
+
+        mBinding.attemptedLayout.setOnClickListener(v -> {
+            submitDialogClickListener.onAttemptedClick();
+            dismiss();
+        });
+
+        mBinding.unattemptedLayout.setOnClickListener(v -> {
+            submitDialogClickListener.onUnAttemptedClick();
+            dismiss();
+        });
+
+        mBinding.markedLayout.setOnClickListener(v -> {
+            submitDialogClickListener.onMarkedClick();
+            dismiss();
+        });
+
+        setQuestCounts();
+    }
+
+    private void setQuestCounts() {
+        totalQuest = questionList.size();
+        markedQuest = 0;
+        attemptedQuest = 0;
+        unAttemptedQuest = 0;
+        for (int i = 0; i < questionList.size(); i++) {
+            TestQuestionNew testQuestionNew = questionList.get(i);
+            if (testQuestionNew.isTtqa_attempted()) {
+                attemptedQuest++;
+            }
+            if (testQuestionNew.isTtqa_marked()) {
+                markedQuest++;
+            }
+
+            if (!testQuestionNew.isTtqa_attempted()) {
+                unAttemptedQuest++;
+            }
+        }
+
+        Log.d(TAG, "setQuestCounts Attempted : " + attemptedQuest);
+        Log.d(TAG, "setQuestCounts UnAttempted : " + unAttemptedQuest);
+        Log.d(TAG, "setQuestCounts Marked : " + markedQuest);
+
+        mBinding.tvAttemptedCount.setText(String.valueOf(attemptedQuest));
+        mBinding.tvUnAttemptedCount.setText(String.valueOf(unAttemptedQuest));
+        mBinding.tvMarkedCount.setText(String.valueOf(markedQuest));
     }
 
 
@@ -62,8 +119,11 @@ public class SubmitTestDialog extends Dialog {
         }.start();
     }
 
-    public interface SubmitDialogClickListener{
+    public interface SubmitDialogClickListener {
         void onYesClick();
         void onNoClick();
+        void onAttemptedClick();
+        void onUnAttemptedClick();
+        void onMarkedClick();
     }
 }

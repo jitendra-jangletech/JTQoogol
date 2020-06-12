@@ -43,7 +43,7 @@ import java.util.concurrent.Executors;
 @Database(entities = {LearningQuestionsNew.class, DashBoard.class, TestModelNew.class,
         TestQuestion.class, UserProfile.class, Education.class, Friends.class, Followers.class, Following.class,
         FriendRequest.class, FollowRequest.class, Connections.class,
-        Notification.class}, version = 1, exportSchema = false)
+        Notification.class}, version = 2, exportSchema = false)
 @TypeConverters(Converters.class)
 public abstract class QoogolDatabase extends RoomDatabase {
 
@@ -82,6 +82,7 @@ public abstract class QoogolDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             QoogolDatabase.class, DB_NAME)
+                            .fallbackToDestructiveMigration()
                             .build();
                 }
             }

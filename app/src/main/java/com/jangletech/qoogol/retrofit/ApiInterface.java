@@ -274,12 +274,13 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST(Constant.TEST_DETAILS)
-    Call<TestDetailsResponse> fetchTestDetails(@Field(Constant.u_user_id) int userId,
-                                               @Field(Constant.tm_id) int tmId);
+    Call<TestDetailsResponse> fetchTestDetails(@Field(Constant.u_user_id) String userId,
+                                               @Field(Constant.tm_id) String tmId);
 
     @FormUrlEncoded
     @POST(Constant.SUBMIT_TEST)
-    Call<TestDetailsResponse> submitTestQuestion(@Field(Constant.DataList) TestListResponse testListResponse);
+    Call<VerifyResponse> submitTestQuestion(@Field(Constant.DataList) String json,
+                                            @Field(Constant.u_user_id) String uId);
 
 
     @FormUrlEncoded

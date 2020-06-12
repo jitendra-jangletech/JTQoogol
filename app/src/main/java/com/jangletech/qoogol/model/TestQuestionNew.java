@@ -443,11 +443,11 @@ public class TestQuestionNew implements Serializable {
         this.tq_marks = tq_marks;
     }
 
-    public String getTq_quest_seq_num() {
+    public int getTq_quest_seq_num() {
         return tq_quest_seq_num;
     }
 
-    public void setTq_quest_seq_num(String tq_quest_seq_num) {
+    public void setTq_quest_seq_num(int tq_quest_seq_num) {
         this.tq_quest_seq_num = tq_quest_seq_num;
     }
 
@@ -631,7 +631,7 @@ public class TestQuestionNew implements Serializable {
     private String tq_marks;
 
     @SerializedName(Constant.tq_quest_seq_num)
-    private String tq_quest_seq_num;
+    private int tq_quest_seq_num;
 
     @SerializedName(Constant.tq_compulsory_quest)
     private boolean tq_compulsory_quest;

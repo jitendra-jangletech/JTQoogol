@@ -6,11 +6,15 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
+import com.jangletech.qoogol.model.StartResumeTestResponse;
 import com.jangletech.qoogol.model.TestQuestionNew;
 
 import java.util.List;
 
 public class StartTestViewModel extends AndroidViewModel {
+
+    private MutableLiveData<List<TestQuestionNew>> testQuestAnsList;
+    private MutableLiveData<StartResumeTestResponse> startResumeTestObj;
 
     public MutableLiveData<List<TestQuestionNew>> getTestQuestAnsList() {
         return testQuestAnsList;
@@ -20,12 +24,18 @@ public class StartTestViewModel extends AndroidViewModel {
         this.testQuestAnsList.setValue(testQuestAnsList);
     }
 
-    //private TestQuestionRepository mRepository;
-    private MutableLiveData<List<TestQuestionNew>> testQuestAnsList;
+    public MutableLiveData<StartResumeTestResponse> getStartResumeTestResponse() {
+        return startResumeTestObj;
+    }
+
+    public void setStartResumeTestResponse(StartResumeTestResponse startResumeTestResponse) {
+        this.startResumeTestObj.setValue(startResumeTestResponse);
+    }
+
 
     public StartTestViewModel(@NonNull Application application) {
         super(application);
-        //mRepository = new TestQuestionRepository(application);
+        startResumeTestObj = new MutableLiveData<>();
         testQuestAnsList = new MutableLiveData<>();
     }
 }

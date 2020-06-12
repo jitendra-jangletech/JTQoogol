@@ -3,10 +3,12 @@ package com.jangletech.qoogol.model;
 import com.google.gson.annotations.SerializedName;
 import com.jangletech.qoogol.util.Constant;
 
-public class AttemptedTest {
+import java.io.Serializable;
+
+public class AttemptedTest implements Serializable {
 
     @SerializedName(Constant.tt_id)
-    private String tt_id;
+    private int tt_id;
 
     @SerializedName(Constant.tt_cdatetime)
     private String tt_cdatetime;
@@ -23,11 +25,11 @@ public class AttemptedTest {
     @SerializedName(Constant.tt_status)
     private String tt_status;
 
-    public String getTt_id() {
+    public int getTt_id() {
         return tt_id;
     }
 
-    public void setTt_id(String tt_id) {
+    public void setTt_id(int tt_id) {
         this.tt_id = tt_id;
     }
 

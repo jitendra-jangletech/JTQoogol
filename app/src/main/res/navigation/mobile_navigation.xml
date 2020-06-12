@@ -12,8 +12,6 @@
         tools:layout="@layout/fragment_home" >
     </fragment>
 
-    //Learning Section Fragments
-
     <fragment
         android:id="@+id/nav_learning"
         android:name="com.jangletech.qoogol.ui.learning.LearningFragment"
@@ -61,10 +59,10 @@
     </fragment>
 
     <fragment
-        android:id="@+id/nav_exam"
-        android:name="com.jangletech.qoogol.ui.learning.exam.ExamFragment"
-        android:label="@string/menu_exam"
-        tools:layout="@layout/fragment_exam" >
+        android:id="@+id/nav_doubts"
+        android:name="com.jangletech.qoogol.ui.doubts.DoubtsFragment"
+        android:label="@string/menu_ask_doubts"
+        tools:layout="@layout/doubts_fragment" >
     </fragment>
 
     <fragment
@@ -106,7 +104,7 @@
         android:id="@+id/nav_notifications"
         android:name="com.jangletech.qoogol.ui.notifications.NotificationsFragment"
         android:label="@string/menu_notifications"
-        tools:layout="@layout/fragment_published" />
+        tools:layout="@layout/fragment_notifications" />
 
 
     <fragment
@@ -134,6 +132,12 @@
         android:label="@string/faq"
         tools:layout="@layout/faq_fragment" />
 
+    <fragment
+        android:id="@+id/nav_faq_details"
+        android:name="com.jangletech.qoogol.ui.faq.FaqTopicDetailsFragment"
+        android:label="@string/faq"
+        tools:layout="@layout/fragment_faq_topic_details" />
+
     //Test Details
     <fragment
         android:id="@+id/nav_test_details"
@@ -159,7 +163,6 @@
         android:name="com.jangletech.qoogol.ui.test.filter.TestFilterFragment"
         android:label="@string/filters"
         tools:layout="@layout/test_filter_fragment" />
-
 
     <fragment
         android:id="@+id/nav_share"

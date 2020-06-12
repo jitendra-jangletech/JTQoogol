@@ -523,7 +523,6 @@ public class Constant {
     public static final String attmpted_count = "1355B";
     public static final String right_solved_count = "1355C";
 
-
     //Answers
     public static final String a_id = "1363";
     public static final String a_q_id = "1364";
@@ -572,8 +571,6 @@ public class Constant {
     public static final String scr_ex_id = "1428";
     public static final String scr_sem_id = "1429";
     public static final String scr_cy_num = "1430";
-//    public static final String cm_id = "1315";
-//    public static final String cm_chapter_name = "1316";
 
 
     //TestQuestion Api Start/Resume Test Constants

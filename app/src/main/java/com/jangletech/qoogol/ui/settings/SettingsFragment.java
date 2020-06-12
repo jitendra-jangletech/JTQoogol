@@ -43,7 +43,6 @@ public class SettingsFragment extends BaseFragment implements UniversalDialog.Di
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.settings_fragment, container, false);
-        ;
         return mBinding.getRoot();
     }
 
@@ -64,7 +63,7 @@ public class SettingsFragment extends BaseFragment implements UniversalDialog.Di
         });
 
         mBinding.tvDeactivateAccount.setOnClickListener(v -> {
-            AlertDialog.Builder builder = new AlertDialog.Builder(mContext,R.style.AlertDialogStyle);
+            AlertDialog.Builder builder = new AlertDialog.Builder(mContext, R.style.AlertDialogStyle);
             builder.setTitle("Deactivate Account")
                     .setMessage("Are you sure, you want to deactivate account?")
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {

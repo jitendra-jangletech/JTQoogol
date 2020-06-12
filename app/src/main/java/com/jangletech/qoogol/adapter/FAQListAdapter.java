@@ -30,7 +30,6 @@ import com.bumptech.glide.request.RequestOptions;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.model.FAQModel;
 import com.jangletech.qoogol.util.Constant;
-import com.jangletech.qoogol.util.UtilHelper;
 
 import java.util.List;
 

@@ -2,6 +2,7 @@ package com.jangletech.qoogol.ui.test_attempt_history;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import java.util.List;
 
 public class TestAttemptHistoryFragment extends BaseFragment implements AttemptHistoryAdapter.AttemptedTestClickListener {
 
+    private static final String TAG = "TestAttemptHistoryFragm";
     private FragmentTestAttemptHistoryBinding mBinding;
     private AttemptHistoryAdapter attemptHistoryAdapter;
     private List<AttemptedTest> attemptedTests;
@@ -42,6 +44,7 @@ public class TestAttemptHistoryFragment extends BaseFragment implements AttemptH
             testModelNew = (TestModelNew) getArguments().getSerializable("PARAMS");
             attemptedTests = testModelNew.getAttemptedTests();
             if (attemptedTests != null && attemptedTests.size() > 0) {
+                Log.d(TAG, "initViews: ");
                 attemptHistoryAdapter = new AttemptHistoryAdapter(requireActivity(), attemptedTests, this);
                 mBinding.attemptTestRecyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
                 mBinding.attemptTestRecyclerView.setAdapter(attemptHistoryAdapter);
@@ -55,7 +58,7 @@ public class TestAttemptHistoryFragment extends BaseFragment implements AttemptH
     public void onItemClick(AttemptedTest attemptedTest) {
         Intent intent = new Intent(getActivity(), PracticeTestActivity.class);
         intent.putExtra("FLAG","ATTEMPTED");
-        intent.putExtra(Constant.TM_ID,Integer.parseInt(attemptedTest.getTt_id()));
+        intent.putExtra(Constant.TM_ID,attemptedTest.getTt_id());
         startActivity(intent);
     }
 }

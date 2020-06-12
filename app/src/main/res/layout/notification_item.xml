@@ -5,13 +5,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="true"
-        android:foreground="?attr/selectableItemBackground"
         android:padding="@dimen/_5sdp">
 
         <LinearLayout
             android:id="@+id/notificationLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:foreground="?attr/selectableItemBackground"
             android:orientation="horizontal"
             android:weightSum="2"
             app:layout_constraintTop_toTopOf="parent">
@@ -46,6 +46,7 @@
                     android:layout_height="wrap_content"
                     android:padding="@dimen/_2sdp"
                     android:text="19 March 2020"
+                    android:textSize="@dimen/_9ssp"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/notificationText" />
 

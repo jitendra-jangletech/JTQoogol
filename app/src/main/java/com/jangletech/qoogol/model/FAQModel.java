@@ -14,8 +14,9 @@ package com.jangletech.qoogol.model;
 import com.google.gson.annotations.SerializedName;
 import com.jangletech.qoogol.util.Constant;
 
+import java.io.Serializable;
 
-public class FAQModel {
+public class FAQModel implements Serializable {
 
     @SerializedName(Constant.faqt_name)
     private String faqt_name;

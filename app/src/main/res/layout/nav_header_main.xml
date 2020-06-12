@@ -110,7 +110,7 @@
 
 
                     <TextView
-                        android:id="@+id/tvNavConn"
+                        android:id="@+id/tvNavCredits"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
@@ -123,7 +123,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_2sdp"
-                        android:text="Connections"
+                        android:text="Credits"
                         android:textColor="@color/colorWhite"
                         android:textSize="@dimen/_8ssp" />
                 </LinearLayout>
@@ -142,7 +142,7 @@
 
 
                     <TextView
-                        android:id="@+id/tvNavFriends"
+                        android:id="@+id/tvNavConnections"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
@@ -155,7 +155,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_2sdp"
-                        android:text="Friends"
+                        android:text="Connections"
                         android:textColor="@color/colorWhite"
                         android:textSize="@dimen/_8ssp" />
                 </LinearLayout>
@@ -175,7 +175,7 @@
 
 
                     <TextView
-                        android:id="@+id/tvNavFollowers"
+                        android:id="@+id/tvNavFollowing"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
@@ -188,12 +188,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_2sdp"
-                        android:text="Followers"
+                        android:text="Following"
                         android:textColor="@color/colorWhite"
                         android:textSize="@dimen/_8ssp" />
                 </LinearLayout>
 
                 <LinearLayout
+                    android:visibility="gone"
                     android:id="@+id/following_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -207,7 +208,6 @@
 
 
                     <TextView
-                        android:id="@+id/tvNavFollowing"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"

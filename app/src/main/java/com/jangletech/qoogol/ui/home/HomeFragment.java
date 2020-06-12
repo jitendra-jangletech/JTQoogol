@@ -182,12 +182,12 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    showToast("Pie Chart");
+                    //showToast("Pie Chart");
                     mBinding.barChart.setVisibility(View.GONE);
                     mBinding.pieChart.setVisibility(View.VISIBLE);
                     setPieChartData();
                 } else {
-                    showToast("Bar Chart");
+                    //showToast("Bar Chart");
                     mBinding.barChart.setVisibility(View.VISIBLE);
                     mBinding.pieChart.setVisibility(View.GONE);
                     mBinding.pieChartDetailed.setVisibility(View.GONE);
@@ -236,9 +236,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
 
         //Nav values
         MainActivity.tvNavConnections.setText(dashBoard.getConnectionCount());
-        MainActivity.tvNavFollowers.setText(dashBoard.getFollowers());
+        MainActivity.tvNavCredits.setText(dashBoard.getUp_credits());
         MainActivity.tvNavFollowing.setText(dashBoard.getFollowings());
-        MainActivity.tvNavFriends.setText(dashBoard.getU_friends());
 
 
         if (dashBoard.getFirstName() != null || dashBoard.getLastName() != null) {
@@ -263,8 +262,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
         HashMap<String, String> params = new HashMap<>();
         params.put(Constant.u_user_id, getUserId());
         params.put(Constant.device_id, getDeviceId());
-//        ProgressDialog.getInstance().show(getActivity());
-        //mBinding.swipeToRefresh.setRefreshing(true);
+        //ProgressDialog.getInstance().show(getActivity());
+        mBinding.swipeToRefresh.setRefreshing(true);
         Call<DashBoard> call = apiService.fetchDashBoardDetails(
                 params.get(Constant.u_user_id),
                 params.get(Constant.device_id)
@@ -272,8 +271,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
         call.enqueue(new Callback<DashBoard>() {
             @Override
             public void onResponse(Call<DashBoard> call, Response<DashBoard> response) {
-//                ProgressDialog.getInstance().dismiss();
-                //mBinding.swipeToRefresh.setRefreshing(false);
+                //ProgressDialog.getInstance().dismiss();
+                mBinding.swipeToRefresh.setRefreshing(false);
                 if (response.body() != null) {
                     DashBoard dashBoard = response.body();
                     dashBoard.setUserId(getUserId());
@@ -283,8 +282,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
 
             @Override
             public void onFailure(Call<DashBoard> call, Throwable t) {
-                //mBinding.swipeToRefresh.setRefreshing(false);
-                ProgressDialog.getInstance().dismiss();
+                mBinding.swipeToRefresh.setRefreshing(false);
+                //ProgressDialog.getInstance().dismiss();
                 t.printStackTrace();
             }
         });

@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.SavedFragmentBinding;
+import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.ui.favourite.FavouriteFragment;
 import com.jangletech.qoogol.ui.learning.LearningFragment;
 import com.jangletech.qoogol.ui.test.my_test.MyTestFragment;
@@ -25,7 +26,7 @@ import com.jangletech.qoogol.ui.test.my_test.MyTestFragment;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SavedFragment extends Fragment {
+public class SavedFragment extends BaseFragment {
 
     private SavedViewModel mViewModel;
     private SavedFragmentBinding mBinding;
@@ -38,7 +39,6 @@ public class SavedFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater,R.layout.saved_fragment, container, false);
-        initViews();
         return mBinding.getRoot();
     }
 
@@ -73,11 +73,6 @@ public class SavedFragment extends Fragment {
             return mFragmentList.size();
         }
 
-        public void addFragment(Fragment fragment, String title) {
-            mFragmentList.add(fragment);
-            mFragmentTitleList.add(title);
-        }
-
         @Override
         public CharSequence getPageTitle(int position) {
             return mFragmentTitleList.get(position);
@@ -88,5 +83,6 @@ public class SavedFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(SavedViewModel.class);
+        initViews();
     }
 }

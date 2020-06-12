@@ -1,10 +1,8 @@
 package com.jangletech.qoogol.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,7 +29,6 @@ import com.jangletech.qoogol.enums.QuestionFilterType;
 import com.jangletech.qoogol.enums.QuestionSortType;
 import com.jangletech.qoogol.model.ProcessQuestion;
 import com.jangletech.qoogol.model.StartResumeTestResponse;
-import com.jangletech.qoogol.model.TestQuestion;
 import com.jangletech.qoogol.model.TestQuestionNew;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
@@ -66,8 +63,11 @@ public class PracticeTestActivity extends BaseActivity implements
     private PractiseViewPagerAdapter practiseViewPagerAdapter;
     private int currentPos = 0;
     private int tmId = 0;
+    private int questPos = 0;
     private boolean isQuestionSelected = false;
     private StartResumeTestResponse startResumeTestResponse;
+    private String flag = "";
+    private boolean isDialogItemClicked = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,14 +80,52 @@ public class PracticeTestActivity extends BaseActivity implements
         setupNavigationDrawer();
         setMargins(mBinding.marginLayout);
         setTitle("Practice Test");
-        Log.d(TAG, "onCreate: " + getIntent().getIntExtra(Constant.TM_ID, 0));
+
+        if (getIntent() != null && getIntent().getStringExtra("FLAG") != null
+                && getIntent().getStringExtra("FLAG").equalsIgnoreCase("ATTEMPTED")) {
+            flag = "ATTEMPTED";
+        }
+
         fetchTestQA();
         mViewModel.getTestQuestAnsList().observe(this, new Observer<List<TestQuestionNew>>() {
             @Override
             public void onChanged(@Nullable final List<TestQuestionNew> practiceQAList) {
-                questionsNewList = practiceQAList;
-                practiceViewPager.setOffscreenPageLimit(practiceQAList.size());
-                setQuestPaletAdapter();
+                if (practiceQAList != null) {
+                    Log.d(TAG, "onChanged: ");
+                    questionsNewList = practiceQAList;
+                    practiceViewPager.setOffscreenPageLimit(practiceQAList.size());
+                    setQuestPaletAdapter();
+                }
+            }
+        });
+
+        practiceViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                Log.d(TAG, "onPageSelected: " + position);
+                questionsNewList.get(position).setTtqa_visited(true);
+                questionGridAdapter.notifyItemChanged(position);
+                questionListAdapter.notifyItemChanged(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+        mViewModel.getStartResumeTestResponse().observe(this, new Observer<StartResumeTestResponse>() {
+            @Override
+            public void onChanged(StartResumeTestResponse startResumeTestResponse) {
+                if (startResumeTestResponse != null) {
+                    questionsNewList = startResumeTestResponse.getTestQuestionNewList();
+                    setupViewPager(startResumeTestResponse);
+                }
             }
         });
 
@@ -121,22 +159,22 @@ public class PracticeTestActivity extends BaseActivity implements
             }
         });
 
-        //        mBinding.chipAll.setOnClickListener(v -> {
-        //            setFilterRadio(QuestionFilterType.ALL.toString());
-        //        });
-        //        mBinding.chipAttempted.setOnClickListener(v -> {
-        //            setFilterRadio(QuestionFilterType.ATTEMPTED.toString());
-        //        });
-        //        mBinding.chipMarked.setOnClickListener(v -> {
-        //            setFilterRadio(QuestionFilterType.MARKED.toString());
-        //        });
-        //
-        //        mBinding.chipUnattempted.setOnClickListener(v -> {
-        //            setFilterRadio(QuestionFilterType.UNATTEMPTED.toString());
-        //        });
-        //        mBinding.chipUnseen.setOnClickListener(v -> {
-        //            setFilterRadio(QuestionFilterType.UNSEEN.toString());
-        //        });
+        mBinding.chipAll.setOnClickListener(v -> {
+            sortQuestListByFilter(QuestionFilterType.ALL.toString());
+        });
+        mBinding.chipAttempted.setOnClickListener(v -> {
+            sortQuestListByFilter(QuestionFilterType.ATTEMPTED.toString());
+        });
+        mBinding.chipMarked.setOnClickListener(v -> {
+            sortQuestListByFilter(QuestionFilterType.MARKED.toString());
+        });
+
+        mBinding.chipUnattempted.setOnClickListener(v -> {
+            sortQuestListByFilter(QuestionFilterType.UNATTEMPTED.toString());
+        });
+        mBinding.chipUnseen.setOnClickListener(v -> {
+            sortQuestListByFilter(QuestionFilterType.UNSEEN.toString());
+        });
 
         mBinding.btnSubmitTest.setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawer(Gravity.RIGHT);
@@ -145,12 +183,12 @@ public class PracticeTestActivity extends BaseActivity implements
         });
 
 
-        practiceViewPager.setOnTouchListener(new View.OnTouchListener() {
+        /*practiceViewPager.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 return false;
             }
-        });
+        });*/
 
         mBinding.drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
@@ -160,12 +198,25 @@ public class PracticeTestActivity extends BaseActivity implements
 
             @Override
             public void onDrawerOpened(@NonNull View drawerView) {
-                hideSoftKeyboard();
+                if(isDialogItemClicked){
+                    isDialogItemClicked = false;
+                    switch (flag){
+                        case "ATTEMPTED":
+                            mBinding.chipAttempted.performClick();
+                            break;
+                        case "UNATTEMPTED":
+                            mBinding.chipUnattempted.performClick();
+                            break;
+                        case "MARKED":
+                            mBinding.chipMarked.performClick();
+                            break;
+                    }
+                }
             }
 
             @Override
             public void onDrawerClosed(@NonNull View drawerView) {
-
+                practiceViewPager.setCurrentItem(questPos, true);
             }
 
             @Override
@@ -177,10 +228,7 @@ public class PracticeTestActivity extends BaseActivity implements
 
     private void fetchTestQA() {
         ProgressDialog.getInstance().show(this);
-        Log.e(TAG, "fetchTestQA UserId : " + new PreferenceManager(getApplicationContext()).getInt(Constant.USER_ID));
-        Log.e(TAG, "fetchTestQA TmId : " + getIntent().getIntExtra(Constant.TM_ID, 2));
         tmId = getIntent().getIntExtra(Constant.TM_ID, 0);
-
         Call<StartResumeTestResponse> call;
         if (getIntent() != null && getIntent().getStringExtra("FLAG") != null &&
                 getIntent().getStringExtra("FLAG").equalsIgnoreCase("ATTEMPTED"))
@@ -191,13 +239,11 @@ public class PracticeTestActivity extends BaseActivity implements
         call.enqueue(new Callback<StartResumeTestResponse>() {
             @Override
             public void onResponse(Call<StartResumeTestResponse> call, Response<StartResumeTestResponse> response) {
-
+                ProgressDialog.getInstance().dismiss();
                 if (response.body() != null && response.body().getResponseCode() != null
                         && response.body().getResponseCode().equals("200")) {
-                    startResumeTestResponse = response.body();
-                    setupViewPager(startResumeTestResponse);
+                    mViewModel.setStartResumeTestResponse(response.body());
                     mViewModel.setTestQuestAnsList(response.body().getTestQuestionNewList());
-                    ProgressDialog.getInstance().dismiss();
                 } else {
                     Log.e(TAG, "onResponse Error : " + response.body().getResponseCode());
                 }
@@ -213,33 +259,23 @@ public class PracticeTestActivity extends BaseActivity implements
 
     private void setupViewPager(StartResumeTestResponse startResumeTestResponse) {
         practiseViewPagerAdapter = new PractiseViewPagerAdapter(PracticeTestActivity.this,
-                startResumeTestResponse.getTestQuestionNewList(), this);
+                startResumeTestResponse.getTestQuestionNewList(), this, startResumeTestResponse.getTm_id(), flag);
         practiceViewPager.setAdapter(practiseViewPagerAdapter);
     }
 
-    //    private void prepareQuestPaletList() {
-    //        mBinding.questionsPaletListRecyclerView.setVisibility(View.VISIBLE);
-    //        mBinding.questionsPaletGridRecyclerView.setVisibility(View.GONE);
-    //        adapter = new PracticeTestQuestPaletAdapter(this, questionsNewList, this, QuestionSortType.LIST.toString());
-    //        mBinding.questionsPaletListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-    //        mBinding.questionsPaletListRecyclerView.setAdapter(adapter);
-    //    }
-
     private void setQuestPaletAdapter() {
-
+        ProgressDialog.getInstance().show(this);
         mBinding.questionsPaletGridRecyclerView.setLayoutManager(new GridLayoutManager(this, 5));
         questionGridAdapter = new PracticeTestQuestPaletAdapter(this, questionsNewList, this, QuestionSortType.GRID.toString());
         mBinding.questionsPaletGridRecyclerView.setAdapter(questionGridAdapter);
         questionGridAdapter.notifyDataSetChanged();
 
-            /*questionListAdapter = new PracticeTestQuestPaletAdapter(this, questionsNewList, this, QuestionSortType.LIST.toString());
-            mBinding.questionsPaletListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-            mBinding.questionsPaletListRecyclerView.setAdapter(questionListAdapter);*/
-
         questionListAdapter = new PracticeTestQuestPaletAdapter(this, questionsNewList, this, QuestionSortType.LIST.toString());
         mBinding.questionsPaletListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mBinding.questionsPaletListRecyclerView.setAdapter(questionListAdapter);
         questionListAdapter.notifyDataSetChanged();
+
+        ProgressDialog.getInstance().dismiss();
     }
 
     //    private void prepareQuestPaletGridList() {
@@ -276,9 +312,9 @@ public class PracticeTestActivity extends BaseActivity implements
     ////        }
     ////    }
 
-    private List<TestQuestionNew> sortQuestListByFilter(List<TestQuestionNew> questions, String questFilterType) {
+    private void sortQuestListByFilter(String questFilterType) {
         List<TestQuestionNew> questFilterList = new ArrayList<>();
-        for (TestQuestionNew question : questions) {
+        for (TestQuestionNew question : questionsNewList) {
 
             if (questFilterType.equals(QuestionFilterType.ATTEMPTED.toString()) && question.isTtqa_attempted()) {
                 questFilterList.add(question);
@@ -295,7 +331,7 @@ public class PracticeTestActivity extends BaseActivity implements
                 questFilterList.add(question);
             }
             if (questFilterType.equals(QuestionFilterType.ALL.toString())) {
-                questFilterList = questions;
+                questFilterList = questionsNewList;
             }
         }
         if (questFilterList.size() > 0) {
@@ -303,8 +339,8 @@ public class PracticeTestActivity extends BaseActivity implements
         } else {
             mBinding.tvNoQuestions.setVisibility(View.VISIBLE);
         }
-
-        return questFilterList;
+        questionListAdapter.setSortedQuestList(questFilterList);
+        questionGridAdapter.setSortedQuestList(questFilterList);
     }
 
     private void setupNavigationDrawer() {
@@ -319,7 +355,7 @@ public class PracticeTestActivity extends BaseActivity implements
 
     @Override
     public boolean onSupportNavigateUp() {
-        onBackPressed();
+        finish();
         return true;
     }
 
@@ -330,14 +366,14 @@ public class PracticeTestActivity extends BaseActivity implements
         } else {
             super.onBackPressed();
             finish();
-            startActivity(new Intent(this, MainActivity.class));
+            //startActivity(new Intent(this, MainActivity.class));
         }
     }
 
     @Override
-    public void onQuestionSelected(int position) {
-        mBinding.drawerLayout.closeDrawer(Gravity.RIGHT);
-        practiceViewPager.setCurrentItem(position);
+    public void onQuestionSelected(TestQuestionNew selectedQuest, int position) {
+        mBinding.drawerLayout.closeDrawers();
+        questPos = selectedQuest.getTq_quest_seq_num() - 1;
     }
 
     @Override
@@ -351,16 +387,32 @@ public class PracticeTestActivity extends BaseActivity implements
     }
 
     @Override
+    public void onAttemptedClick() {
+        mBinding.drawerLayout.openDrawer(Gravity.RIGHT);
+        flag = "ATTEMPTED";
+        isDialogItemClicked = true;
+    }
+
+    @Override
+    public void onUnAttemptedClick() {
+        flag = "UNATTEMPTED";
+        isDialogItemClicked = true;
+    }
+
+    @Override
+    public void onMarkedClick() {
+        flag = "MARKED";
+        isDialogItemClicked = true;
+    }
+
+    @Override
     public void onLikeClick(boolean isChecked, int likeCount) {
         int currentPos = practiceViewPager.getCurrentItem();
         TestQuestionNew testQuestion = questionsNewList.get(currentPos);
         HashMap<String, Integer> params = new HashMap<>();
         params.put(Constant.u_user_id, new PreferenceManager(getApplicationContext()).getInt(Constant.USER_ID));
         params.put(Constant.q_id, testQuestion.getTtqa_id());
-        //params.put("Flag", isChecked ? 1 : 0);
-        //params.put("CALL_FROM", Constant.LIKE);
         updatePage(isChecked ? 1 : 0, likeCount);
-        //processQuestionAPI(params);;
     }
 
     @Override
@@ -371,6 +423,12 @@ public class PracticeTestActivity extends BaseActivity implements
     @Override
     public void onShareClick() {
 
+    }
+
+    @Override
+    public void onSubmitClick() {
+        questionGridAdapter.notifyDataSetChanged();
+        questionListAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -417,7 +475,6 @@ public class PracticeTestActivity extends BaseActivity implements
 
     private void updatePage(int flag, int likeCount) {
         int currentPos = practiceViewPager.getCurrentItem();
-        TestQuestionNew testQuestionNew = questionsNewList.get(currentPos);
         View view = practiceViewPager.findViewWithTag(currentPos);
         TextView tvLikeCount = view.findViewById(R.id.like_value);
         tvLikeCount.setText(String.valueOf(likeCount));

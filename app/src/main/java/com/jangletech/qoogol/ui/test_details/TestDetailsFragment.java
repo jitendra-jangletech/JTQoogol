@@ -30,6 +30,7 @@ import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -59,23 +60,30 @@ public class TestDetailsFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if(getArguments()!=null){
+        if (getArguments() != null) {
             testModelNew = (TestModelNew) getArguments().getSerializable(Constant.TEST_NAME);
         }
         mViewModel = ViewModelProviders.of(this).get(TestDetailsViewModel.class);
-        fetchTestDetails();
+        HashMap<String, String> params = new HashMap<>();
+        params.put(Constant.u_user_id, getUserId());
+        if(testModelNew!=null)
+        params.put(Constant.tm_id, getStringValue(testModelNew.getTm_id()));
+        fetchTestDetails(params);
         mViewModel.getQsetList().observe(getActivity(), new Observer<List<QSet>>() {
             @Override
             public void onChanged(@Nullable final List<QSet> qSetList) {
-                Log.d(TAG, "onChanged Size : " + qSetList.size());
-                qSets = qSetList;
-                sortQSetList(qSetList);
+                if (qSetList != null) {
+                    Log.d(TAG, "onChanged Size : " + qSetList.size());
+                    qSets = qSetList;
+                    sortQSetList(qSetList);
+                }
             }
         });
 
         mBinding.btnStartTest.setOnClickListener(v -> {
+            Log.d(TAG, "onActivityCreated : " + testModelNew.getTm_id());
             Intent intent = new Intent(getActivity(), PracticeTestActivity.class);
-            intent.putExtra(Constant.TM_ID,testModelNew.getTm_id());
+            intent.putExtra(Constant.TM_ID, testModelNew.getTm_id());
             startActivity(intent);
         });
     }
@@ -92,16 +100,16 @@ public class TestDetailsFragment extends BaseFragment {
         qsetRecentList.clear();
         qsetTopScoreList.clear();
         qsetLowScoreList.clear();
-        for (QSet qset: qSetList) {
-            if(qset.getqSet().equals(QsetType.Recent.toString())){
+        for (QSet qset : qSetList) {
+            if (qset.getqSet().equals(QsetType.Recent.toString())) {
                 qsetRecentList.add(qset);
             }
 
-            if(qset.getqSet().equals(QsetType.LowScore.toString())){
+            if (qset.getqSet().equals(QsetType.LowScore.toString())) {
                 qsetLowScoreList.add(qset);
             }
 
-            if(qset.getqSet().equals(QsetType.TopScore.toString())){
+            if (qset.getqSet().equals(QsetType.TopScore.toString())) {
                 qsetTopScoreList.add(qset);
             }
         }
@@ -112,42 +120,44 @@ public class TestDetailsFragment extends BaseFragment {
 
     }
 
-    private void setRecentQsetAdapter(List<QSet> qSets){
+    private void setRecentQsetAdapter(List<QSet> qSets) {
         QuestionAdapter adapter = new QuestionAdapter(getActivity(), qSets);
         mBinding.recentlyAddedQuestRecyclerView.setHasFixedSize(true);
         mBinding.recentlyAddedQuestRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mBinding.recentlyAddedQuestRecyclerView.setAdapter(adapter);
     }
 
-    private void setTopScoredQsetAdapter(List<QSet> qSets){
+    private void setTopScoredQsetAdapter(List<QSet> qSets) {
         QuestionAdapter adapter = new QuestionAdapter(getActivity(), qSets);
         mBinding.topScoredQuestRecyclerView.setHasFixedSize(true);
         mBinding.topScoredQuestRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mBinding.topScoredQuestRecyclerView.setAdapter(adapter);
     }
 
-    private void setLeastScoredQsetAdapter(List<QSet> qSets){
+    private void setLeastScoredQsetAdapter(List<QSet> qSets) {
         QuestionAdapter adapter = new QuestionAdapter(getActivity(), qSets);
         mBinding.leastScoredQuestRecyclerView.setHasFixedSize(true);
         mBinding.leastScoredQuestRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mBinding.leastScoredQuestRecyclerView.setAdapter(adapter);
     }
 
-    private void fetchTestDetails() {
+    private void fetchTestDetails(HashMap<String, String> params) {
+        Log.d(TAG, "fetchTestDetails PARAMS : " + params);
         ProgressDialog.getInstance().show(getActivity());
-        Call<TestDetailsResponse> call = apiService.fetchTestDetails(new PreferenceManager(getActivity()).getInt(Constant.USER_ID), testModelNew.getTm_id());//todo change userId and tmIdd
+        Call<TestDetailsResponse> call = apiService.fetchTestDetails(
+                params.get(Constant.u_user_id),
+                params.get(Constant.tm_id)
+        );
         call.enqueue(new Callback<TestDetailsResponse>() {
             @Override
             public void onResponse(Call<TestDetailsResponse> call, Response<TestDetailsResponse> response) {
                 ProgressDialog.getInstance().dismiss();
-                if(response.body()!=null && response.body().getResponseCode().equals("200")){
+                if (response.body() != null && response.body().getResponseCode().equals("200")) {
                     mViewModel.setQsetList(response.body().getqSetList());
-                    Log.d(TAG, "onResponse: " + response.body().getqSetList());
-                    Log.d(TAG, "onResponse: " + response.body().getqSetList().size());
-                }else if(response.body().getResponseCode().equals("501")){
+                } else if (response.body().getResponseCode().equals("501")) {
                     resetSettingAndLogout();
-                }else{
-                    showErrorDialog(requireActivity(),response.body().getResponseCode(),"");
+                } else {
+                    showErrorDialog(requireActivity(), response.body().getResponseCode(), "");
                 }
 
             }
@@ -160,5 +170,4 @@ public class TestDetailsFragment extends BaseFragment {
             }
         });
     }
-
 }

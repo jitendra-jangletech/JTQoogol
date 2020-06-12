@@ -191,7 +191,7 @@ public class NotificationsFragment extends BaseFragment implements NotificationA
         } else if (notification.getN_ref_type().equalsIgnoreCase(from_question)) {
             NavHostFragment.findNavController(this).navigate(R.id.nav_learning, bundle);
         } else if (notification.getN_ref_type().equalsIgnoreCase(fromTest)) {
-            NavHostFragment.findNavController(this).navigate(R.id.nav_test, bundle);
+            NavHostFragment.findNavController(this).navigate(R.id.nav_test_my,bundle);
         }
     }
 }
