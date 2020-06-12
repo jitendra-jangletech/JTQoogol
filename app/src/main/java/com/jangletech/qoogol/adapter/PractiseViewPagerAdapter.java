@@ -212,6 +212,8 @@ public class PractiseViewPagerAdapter extends PagerAdapter {
         ImageView img4 = layout.findViewById(R.id.scq4_img);
         ImageView img5 = layout.findViewById(R.id.scq5_img);
 
+        Button btnSubmit = layout.findViewById(R.id.submit);
+
         ConstraintLayout scq1Layout = layout.findViewById(R.id.scq1_layout);
         ConstraintLayout scq2Layout = layout.findViewById(R.id.scq2_layout);
         ConstraintLayout scq3Layout = layout.findViewById(R.id.scq3_layout);
@@ -228,6 +230,8 @@ public class PractiseViewPagerAdapter extends PagerAdapter {
 
         if (flag.equalsIgnoreCase("ATTEMPTED")) {
             solutionLayout.setVisibility(View.VISIBLE);
+            btnSubmit.setEnabled(false);
+            btnSubmit.setAlpha(0.5f);
 
             if(testModelNew.isTtqa_mcq_ans_1()){
                 img1.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_wrong));
@@ -302,7 +306,7 @@ public class PractiseViewPagerAdapter extends PagerAdapter {
             scq4Layout.setBackground(context.getResources().getDrawable(R.drawable.grey_border_grey_bg));
         });
 
-        layout.findViewById(R.id.submit).setOnClickListener(v -> {
+        btnSubmit.setOnClickListener(v -> {
             if (!scq_ans.trim().equalsIgnoreCase("")) {
                 isAttempted = 1;
                 setSCQAnsIndicator(img1, img2, img3, img4);
@@ -513,6 +517,7 @@ public class PractiseViewPagerAdapter extends PagerAdapter {
         Button btnSubmit = layout.findViewById(R.id.submit);
         ConstraintLayout multiLineAnswerLayout = layout.findViewById(R.id.multi_line_answer);
         ConstraintLayout fillTheBlanksLayout = layout.findViewById(R.id.fill_in_the_blanks_layout);
+        ConstraintLayout solutionLayout = layout.findViewById(R.id.solution_layout);
 
         EditText etMultiLineAns = layout.findViewById(R.id.multi_line);
         EditText etSinlgeineAns = layout.findViewById(R.id.fill_in_the_blanks);
@@ -530,7 +535,9 @@ public class PractiseViewPagerAdapter extends PagerAdapter {
         }
 
         if(flag.equalsIgnoreCase("ATTEMPTED")){
-
+            solutionLayout.setVisibility(View.VISIBLE);
+            btnSubmit.setEnabled(false);
+            btnSubmit.setAlpha(0.5f);
         }
 
         btnSubmit.setOnClickListener(v -> {

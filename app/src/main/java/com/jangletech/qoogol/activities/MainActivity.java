@@ -116,9 +116,7 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
                     }
                 }
                 if (item.getItemId() == R.id.nav_doubts) {
-                    showToast("Hello");
                     if (navController.getCurrentDestination().getId() != R.id.nav_doubts) {
-                        showToast("Inside");
                         navController.navigate(R.id.nav_doubts);
                     }
                 }

@@ -124,7 +124,7 @@ public class NotificationsFragment extends BaseFragment implements NotificationA
     }
 
     private void deleteNotification(String n_id) {
-        Call<ResponseObj> call = apiService.updateNotifications(new PreferenceManager(getActivity()).getUserId(), getDeviceId(), "Q",n_id,"D");
+        Call<ResponseObj> call = apiService.updateNotifications(new PreferenceManager(getActivity()).getUserId(), getDeviceId(), "Q", n_id, "D");
         call.enqueue(new Callback<ResponseObj>() {
             @Override
             public void onResponse(Call<ResponseObj> call, Response<ResponseObj> response) {
@@ -132,7 +132,7 @@ public class NotificationsFragment extends BaseFragment implements NotificationA
                 mBinding.swipeToRefresh.setRefreshing(false);
                 if (response.body() != null && response.body().getResponse().equals("200")) {
                     deleteFromdb(n_id);
-                   fetchNotifications();
+                    fetchNotifications();
                 }
             }
 
@@ -148,6 +148,7 @@ public class NotificationsFragment extends BaseFragment implements NotificationA
     }
 
     private void deleteFromdb(String n_id) {
+        deleteNotification(n_id);
     }
 
     private void fetchNotifications() {
@@ -199,7 +200,7 @@ public class NotificationsFragment extends BaseFragment implements NotificationA
         } else if (notification.getN_ref_type().equalsIgnoreCase(from_question)) {
             NavHostFragment.findNavController(this).navigate(R.id.nav_learning, bundle);
         } else if (notification.getN_ref_type().equalsIgnoreCase(fromTest)) {
-            NavHostFragment.findNavController(this).navigate(R.id.nav_test_my,bundle);
+            NavHostFragment.findNavController(this).navigate(R.id.nav_test_my, bundle);
         }
     }
 }

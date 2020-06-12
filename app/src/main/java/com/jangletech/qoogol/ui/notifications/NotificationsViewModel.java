@@ -39,6 +39,11 @@ public class NotificationsViewModel extends AndroidViewModel {
         appRepository.insertNotifications(notifications);
     }
 
+    public void deleteNotification(String nId) {
+        appRepository.deleteNotification(nId);
+    }
+
+
 
 
     public LiveData<List<Notification>> getAllNotifications() {

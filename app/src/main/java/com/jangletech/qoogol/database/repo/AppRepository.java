@@ -134,7 +134,10 @@ public class AppRepository {
     }
 
     public void deleteNotifications() {
-        deleteNotificationAsync();
+        deleteNotificationAsync("");
+    }
+    public void deleteNotification(String nId) {
+        deleteNotificationAsync(nId);
     }
 
     public void deleteDashboardData() {
@@ -304,13 +307,17 @@ public class AppRepository {
     }*/
 
 
-    private void deleteNotificationAsync() {
+    private void deleteNotificationAsync(String nId) {
 
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    notificationDao.deleteAllNotifications();
+                    if(nId.isEmpty()) {
+                        notificationDao.deleteAllNotifications();
+                    }else{
+                        notificationDao.deleteNotification(nId);
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
