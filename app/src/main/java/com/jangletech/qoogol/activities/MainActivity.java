@@ -69,8 +69,8 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
         NavigationView navigationView = findViewById(R.id.nav_view);
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_test_popular, R.id.nav_attended_by_friends, R.id.nav_shared_with_you,
-                R.id.nav_shared_by_you,
-                R.id.nav_notifications, R.id.nav_faq, R.id.nav_fav, R.id.nav_syllabus,
+                R.id.nav_shared_by_you,R.id.nav_notifications,
+                R.id.nav_faq, R.id.nav_fav, R.id.nav_syllabus,
                 R.id.nav_settings, R.id.nav_saved, R.id.nav_requests, R.id.nav_import_contacts,
                 R.id.nav_home, R.id.nav_learning, R.id.nav_test_my, R.id.nav_doubts)
                 .setDrawerLayout(drawerLayout)
@@ -120,6 +120,11 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
                     if (navController.getCurrentDestination().getId() != R.id.nav_doubts) {
                         showToast("Inside");
                         navController.navigate(R.id.nav_doubts);
+                    }
+                }
+                if (item.getItemId() == R.id.nav_notifications) {
+                    if (navController.getCurrentDestination().getId() != R.id.nav_notifications) {
+                        navController.navigate(R.id.nav_notifications);
                     }
                 }
                 return true;
@@ -187,9 +192,9 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
                 if (navigateFlag.equals(Nav.FAQ.toString())) {
                     navToFragment(R.id.nav_faq, Bundle.EMPTY);
                 }
-                if (navigateFlag.equals(Nav.NOTIFICATIONS.toString())) {
+                /*if (navigateFlag.equals(Nav.NOTIFICATIONS.toString())) {
                     navToFragment(R.id.nav_notifications, Bundle.EMPTY);
-                }
+                }*/
                 if (navigateFlag.equals(Nav.LOGOUT.toString())) {
                     showLogoutDialog();
                 }
@@ -315,12 +320,12 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
             }
         });
 
-        findViewById(R.id.nav_notifications).setOnClickListener(v -> {
+        /*findViewById(R.id.nav_notifications).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
             if (navController.getCurrentDestination().getId() != R.id.nav_notifications) {
                 navigateFlag = Nav.NOTIFICATIONS.toString();
             }
-        });
+        });*/
 
         findViewById(R.id.nav_settings).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
@@ -350,12 +355,12 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
             }
         });
 
-        findViewById(R.id.nav_doubts).setOnClickListener(v -> {
+        /*findViewById(R.id.nav_doubts).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
             if (navController.getCurrentDestination().getId() != R.id.nav_doubts) {
                 navigateFlag = Nav.ASK_DOUBTS.toString();
             }
-        });
+        });*/
 
         findViewById(R.id.nav_logout).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();

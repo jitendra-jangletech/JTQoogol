@@ -22,4 +22,10 @@
         android:id="@+id/nav_doubts"
         android:icon="@drawable/ic_saved_drafts"
         android:title="@string/menu_ask_doubts" />
+
+    <item
+        app:showAsAction="always"
+        android:id="@+id/nav_notifications"
+        android:icon="@drawable/ic_notifications"
+        android:title="@string/menu_notifications" />
 </menu>

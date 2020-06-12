@@ -51,10 +51,15 @@ public abstract class QoogolDatabase extends RoomDatabase {
     public abstract UserProfileDao userProfileDao();
 
     public abstract FriendsDao friendsDao();
+
     public abstract FollowersDao followersDao();
+
     public abstract FollowingsDao followingsDao();
+
     public abstract FriendReqDao friendReqDao();
+
     public abstract FollowReqDao followReqDao();
+
     public abstract ConnectionsDao connectionsDao();
 
     public abstract EducationDetailsDao educationDetailsDao();
@@ -89,7 +94,6 @@ public abstract class QoogolDatabase extends RoomDatabase {
         }
         return INSTANCE;
     }
-
 
     private static RoomDatabase.Callback sRoomDatabaseCallback = new RoomDatabase.Callback() {
         @Override

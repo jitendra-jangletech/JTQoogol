@@ -152,12 +152,12 @@
                             android:text="@string/importContacts" />
 
 
-                        <TextView
+                        <!--<TextView
                             android:id="@+id/nav_notifications"
                             style="@style/menu_item_style"
                             android:drawableLeft="@drawable/ic_notifications"
                             android:foreground="?attr/selectableItemBackground"
-                            android:text="@string/notifications" />
+                            android:text="@string/notifications" />-->
 
 
                         <TextView

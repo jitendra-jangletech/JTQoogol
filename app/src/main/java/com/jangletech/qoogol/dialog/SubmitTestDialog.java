@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Window;
@@ -16,7 +17,6 @@ import com.jangletech.qoogol.activities.PracticeTestActivity;
 import com.jangletech.qoogol.databinding.DialogSubmitTestBinding;
 import com.jangletech.qoogol.model.TestQuestionNew;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class SubmitTestDialog extends Dialog {
@@ -94,9 +94,9 @@ public class SubmitTestDialog extends Dialog {
         Log.d(TAG, "setQuestCounts UnAttempted : " + unAttemptedQuest);
         Log.d(TAG, "setQuestCounts Marked : " + markedQuest);
 
-        mBinding.tvAttemptedCount.setText(String.valueOf(attemptedQuest));
-        mBinding.tvUnAttemptedCount.setText(String.valueOf(unAttemptedQuest));
-        mBinding.tvMarkedCount.setText(String.valueOf(markedQuest));
+        mBinding.tvAttemptedCount.setText(Html.fromHtml("<u>" + String.valueOf(attemptedQuest) + "</u>"));
+        mBinding.tvUnAttemptedCount.setText(Html.fromHtml("<u>" + String.valueOf(unAttemptedQuest) + "</u>"));
+        mBinding.tvMarkedCount.setText(Html.fromHtml("<u>" + String.valueOf(markedQuest) + "</u>"));
     }
 
 
@@ -121,9 +121,13 @@ public class SubmitTestDialog extends Dialog {
 
     public interface SubmitDialogClickListener {
         void onYesClick();
+
         void onNoClick();
+
         void onAttemptedClick();
+
         void onUnAttemptedClick();
+
         void onMarkedClick();
     }
 }

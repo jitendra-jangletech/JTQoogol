@@ -132,13 +132,13 @@ public class PracticeTestActivity extends BaseActivity implements
         mBinding.gridView.setOnClickListener(v -> {
             mBinding.questionsPaletListRecyclerView.setVisibility(View.GONE);
             mBinding.questionsPaletGridRecyclerView.setVisibility(View.VISIBLE);
-            questionGridAdapter.notifyDataSetChanged();
+            //questionGridAdapter.notifyDataSetChanged();
         });
 
         mBinding.listView.setOnClickListener(v -> {
             mBinding.questionsPaletListRecyclerView.setVisibility(View.VISIBLE);
             mBinding.questionsPaletGridRecyclerView.setVisibility(View.GONE);
-            questionListAdapter.notifyDataSetChanged();
+            //questionListAdapter.notifyDataSetChanged();
         });
 
         mBinding.appBarTest.btnNext.setOnClickListener(v -> {
@@ -200,6 +200,7 @@ public class PracticeTestActivity extends BaseActivity implements
             public void onDrawerOpened(@NonNull View drawerView) {
                 if(isDialogItemClicked){
                     isDialogItemClicked = false;
+                    mBinding.listView.performClick();
                     switch (flag){
                         case "ATTEMPTED":
                             mBinding.chipAttempted.performClick();
@@ -395,12 +396,14 @@ public class PracticeTestActivity extends BaseActivity implements
 
     @Override
     public void onUnAttemptedClick() {
+        mBinding.drawerLayout.openDrawer(Gravity.RIGHT);
         flag = "UNATTEMPTED";
         isDialogItemClicked = true;
     }
 
     @Override
     public void onMarkedClick() {
+        mBinding.drawerLayout.openDrawer(Gravity.RIGHT);
         flag = "MARKED";
         isDialogItemClicked = true;
     }
