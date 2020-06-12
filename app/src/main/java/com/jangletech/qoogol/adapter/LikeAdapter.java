@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.LikeitemBinding;
 import com.jangletech.qoogol.model.Like;
+import com.jangletech.qoogol.util.UtilHelper;
 
 import java.net.URL;
 import java.util.List;
@@ -46,7 +47,9 @@ public class LikeAdapter  extends RecyclerView.Adapter<LikeAdapter.ViewHolder> {
         try {
             Like like = likeList.get(position);
             likeitemBinding.setLike(like);
-            Glide.with(activity).load(new URL(like.getProfile_image())).into(likeitemBinding.userProfileImage);
+            if (like.getProfile_image() != null && !like.getProfile_image().isEmpty()) {
+                Glide.with(activity).load(UtilHelper.getProfileImageUrl(like.getProfile_image().trim())).circleCrop().placeholder(R.drawable.profile).into(likeitemBinding.userProfileImage);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

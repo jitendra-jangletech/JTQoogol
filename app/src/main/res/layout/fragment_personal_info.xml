@@ -10,8 +10,7 @@
   -->
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -610,199 +609,236 @@
                         android:visibility="visible">
 
                         <LinearLayout
-                            app:layout_constraintTop_toTopOf="parent"
-                            android:orientation="vertical"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            app:layout_constraintTop_toTopOf="parent">
 
                             <TextView
-                                android:textColor="@color/colorBlack"
                                 android:id="@+id/tvName"
-                                android:textSize="@dimen/_16ssp"
-                                android:textStyle="bold"
-                                android:layout_gravity="center_horizontal"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
                                 android:padding="@dimen/_10sdp"
-                                android:text="Qoogol User" />
+                                android:text="Qoogol User"
+                                android:textColor="@color/colorBlack"
+                                android:textSize="@dimen/_16ssp"
+                                android:textStyle="bold" />
 
-
-                            <LinearLayout
-                                app:layout_constraintTop_toBottomOf="@+id/tvName"
-                                android:orientation="vertical"
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/connection_layout"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
 
+                                <Button
+                                    android:minWidth="@dimen/_85sdp"
+                                    android:id="@+id/add_friend"
+                                    style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:backgroundTint="@color/colorSkyBlue"
+                                    android:text="@string/add_friend"
+                                    android:textAllCaps="false"
+                                    android:textColor="@color/colorWhite"
+                                    app:cornerRadius="@dimen/_5sdp"
+                                    android:layout_marginRight="@dimen/_10sdp"
+                                    app:layout_constraintEnd_toStartOf="@+id/follow"
+                                    app:layout_constraintHorizontal_chainStyle="packed"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:layout_constraintVertical_chainStyle="packed" />
+
+                                <Button
+                                    android:minWidth="@dimen/_85sdp"
+                                    android:id="@+id/follow"
+                                    style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="@dimen/_10sdp"
+                                    android:backgroundTint="@color/colorSkyBlue"
+                                    android:text="@string/follow"
+                                    android:textAllCaps="false"
+                                    android:textColor="@color/colorWhite"
+                                    app:cornerRadius="@dimen/_5sdp"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toEndOf="@id/add_friend"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                app:layout_constraintTop_toBottomOf="@+id/tvName">
+
                                 <TextView
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="@dimen/_15sdp"
                                     android:text="@string/gender"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
                                     android:textColor="@color/colorSkyBlue" />
 
                                 <TextView
-                                    android:textSize="@dimen/_12ssp"
                                     android:id="@+id/tvGender"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text=""
                                     android:textColor="@color/colorBlack"
-                                    app:layout_constraintTop_toBottomOf="@+id/tvGenderTitle" />
+                                    android:textSize="@dimen/_12ssp" />
 
                             </LinearLayout>
 
                             <LinearLayout
-                                app:layout_constraintTop_toBottomOf="@+id/tvName"
-                                android:orientation="vertical"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                app:layout_constraintTop_toBottomOf="@+id/tvName">
 
                                 <TextView
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="@dimen/_15sdp"
                                     android:text="@string/dob"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
                                     android:textColor="@color/colorSkyBlue" />
 
                                 <TextView
-                                    android:textSize="@dimen/_12ssp"
                                     android:id="@+id/tvDobs"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                                    app:layout_constraintTop_toBottomOf="@+id/tvGenderTitle"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="@{DateUtils.getFormattedDate(userProfile.dob)}"
-                                    android:textColor="@color/colorBlack" />
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                    android:textColor="@color/colorBlack"
+                                    android:textSize="@dimen/_12ssp" />
 
                             </LinearLayout>
 
                             <LinearLayout
                                 android:id="@+id/languageLayout"
-                                app:layout_constraintTop_toBottomOf="@+id/tvName"
-                                android:orientation="vertical"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                app:layout_constraintTop_toBottomOf="@+id/tvName">
 
                                 <TextView
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="@dimen/_15sdp"
                                     android:text="@string/language"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
                                     android:textColor="@color/colorSkyBlue" />
 
                                 <TextView
-                                    android:textSize="@dimen/_12ssp"
                                     android:id="@+id/tvLanguages"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                                    app:layout_constraintTop_toBottomOf="@+id/tvGenderTitle"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="@{userProfile.u_language}"
-                                    android:textColor="@color/colorBlack" />
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                    android:textColor="@color/colorBlack"
+                                    android:textSize="@dimen/_12ssp" />
 
                             </LinearLayout>
 
                             <LinearLayout
                                 android:id="@+id/nationalityLayout"
-                                app:layout_constraintTop_toBottomOf="@+id/tvName"
-                                android:orientation="vertical"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                app:layout_constraintTop_toBottomOf="@+id/tvName">
 
                                 <TextView
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="@dimen/_15sdp"
                                     android:text="@string/nationality"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
                                     android:textColor="@color/colorSkyBlue" />
 
                                 <TextView
-                                    android:textSize="@dimen/_12ssp"
                                     android:id="@+id/tvNationalitys"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                                    app:layout_constraintTop_toBottomOf="@+id/tvGenderTitle"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="@{userProfile.u_Nationality}"
-                                    android:textColor="@color/colorBlack" />
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                    android:textColor="@color/colorBlack"
+                                    android:textSize="@dimen/_12ssp" />
 
                             </LinearLayout>
+
                             <LinearLayout
                                 android:id="@+id/stateLayout"
-                                app:layout_constraintTop_toBottomOf="@+id/tvName"
-                                android:orientation="vertical"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                app:layout_constraintTop_toBottomOf="@+id/tvName">
 
                                 <TextView
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="@dimen/_15sdp"
                                     android:text="@string/state"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
                                     android:textColor="@color/colorSkyBlue" />
 
                                 <TextView
-                                    android:textSize="@dimen/_12ssp"
                                     android:id="@+id/tvStates"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="@{userProfile.u_State}"
-                                    android:textColor="@color/colorBlack" />
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                    android:textColor="@color/colorBlack"
+                                    android:textSize="@dimen/_12ssp" />
 
                             </LinearLayout>
 
                             <LinearLayout
                                 android:id="@+id/divisionLayout"
-                                android:orientation="vertical"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
 
                                 <TextView
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="@dimen/_15sdp"
                                     android:text="@string/district"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
                                     android:textColor="@color/colorSkyBlue" />
 
                                 <TextView
-                                    android:textSize="@dimen/_12ssp"
                                     android:id="@+id/tvDivisions"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="@{userProfile.u_District}"
-                                    android:textColor="@color/colorBlack" />
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                    android:textColor="@color/colorBlack"
+                                    android:textSize="@dimen/_12ssp" />
 
                             </LinearLayout>
 
                             <LinearLayout
                                 android:id="@+id/cityLayout"
-                                android:orientation="vertical"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
 
                                 <TextView
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="@dimen/_15sdp"
                                     android:text="@string/city"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
                                     android:textColor="@color/colorSkyBlue" />
 
                                 <TextView
                                     android:id="@+id/tvCitys"
-                                    android:textSize="@dimen/_12ssp"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="@{userProfile.u_City}"
-                                    android:textColor="@color/colorBlack" />
+                                    android:textColor="@color/colorBlack"
+                                    android:textSize="@dimen/_12ssp" />
 
                             </LinearLayout>
 

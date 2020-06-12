@@ -16,7 +16,6 @@ import com.bumptech.glide.Glide;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.BlockedItemBinding;
 import com.jangletech.qoogol.model.BlockedConnections;
-import com.jangletech.qoogol.model.Connections;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.UtilHelper;
 
@@ -58,7 +57,7 @@ public class BlockedConnectionAdapter extends RecyclerView.Adapter<BlockedConnec
         BlockedConnections connections = connectionsList.get(position);
         blockedItemBinding.tvUserName.setText(connections.getU_first_name() + " " + connections.getU_last_name());
         try {
-            Glide.with(activity).load(UtilHelper.getProfilePath(connections.getCn_user_id_2(),connections.getProf_pic().trim())).circleCrop().placeholder(R.drawable.profile).into(blockedItemBinding.userProfileImage);
+            Glide.with(activity).load(UtilHelper.getProfilePath(connections.getCn_user_id_2(), connections.getProf_pic().trim())).circleCrop().placeholder(R.drawable.profile).into(blockedItemBinding.userProfileImage);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -67,7 +66,7 @@ public class BlockedConnectionAdapter extends RecyclerView.Adapter<BlockedConnec
         blockedItemBinding.getRoot().setOnClickListener(v -> {
             Bundle bundle = new Bundle();
             bundle.putInt(CALL_FROM, connectonId);
-            bundle.putString(Constant.fetch_profile_id,connections.getCn_user_id_2());
+            bundle.putString(Constant.fetch_profile_id, connections.getCn_user_id_2());
             blockedItemClick.showProfileClick(bundle);
         });
 
@@ -76,6 +75,7 @@ public class BlockedConnectionAdapter extends RecyclerView.Adapter<BlockedConnec
 
     public interface BlockedItemClick {
         void unblockUser(String userId);
+
         void showProfileClick(Bundle bundle);
     }
 

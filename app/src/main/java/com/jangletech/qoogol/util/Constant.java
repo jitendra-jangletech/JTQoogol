@@ -67,10 +67,7 @@ public class Constant {
     public static final String MCQ = "MCQ";
     public static final String FILL_THE_BLANKS = "FILL_THE_BLANKS";
     public static final String TRUE_FALSE = "TRUE_FALSE";
-
-
 */
-
 
     //User table
     public static final String qoogol = "Q";
@@ -515,8 +512,6 @@ public class Constant {
     public static final String q_solved_by = "1360";
     public static final String q_media_type = "1361";
     public static final String q_option_type = "1362";
-    public static final String friend_req_sent = "311";
-    public static final String friend_req_received = "312";
     public static final String follow_req_sent = "316E";
     public static final String follow_req_received = "316F";
     public static final String solved_right = "1394";

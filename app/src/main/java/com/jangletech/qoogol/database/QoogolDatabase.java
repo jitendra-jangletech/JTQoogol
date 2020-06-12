@@ -11,6 +11,7 @@ import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.jangletech.qoogol.database.converter.Converters;
+import com.jangletech.qoogol.database.dao.ConnectionsDao;
 import com.jangletech.qoogol.database.dao.DashboardDao;
 import com.jangletech.qoogol.database.dao.EducationDetailsDao;
 import com.jangletech.qoogol.database.dao.FollowReqDao;
@@ -22,6 +23,7 @@ import com.jangletech.qoogol.database.dao.LearningQuestionDao;
 import com.jangletech.qoogol.database.dao.NotificationDao;
 import com.jangletech.qoogol.database.dao.TestDao;
 import com.jangletech.qoogol.database.dao.UserProfileDao;
+import com.jangletech.qoogol.model.Connections;
 import com.jangletech.qoogol.model.DashBoard;
 import com.jangletech.qoogol.model.Education;
 import com.jangletech.qoogol.model.FollowRequest;
@@ -40,7 +42,7 @@ import java.util.concurrent.Executors;
 
 @Database(entities = {LearningQuestionsNew.class, DashBoard.class, TestModelNew.class,
         TestQuestion.class, UserProfile.class, Education.class, Friends.class, Followers.class, Following.class,
-        FriendRequest.class, FollowRequest.class,
+        FriendRequest.class, FollowRequest.class, Connections.class,
         Notification.class}, version = 1, exportSchema = false)
 @TypeConverters(Converters.class)
 public abstract class QoogolDatabase extends RoomDatabase {
@@ -53,6 +55,7 @@ public abstract class QoogolDatabase extends RoomDatabase {
     public abstract FollowingsDao followingsDao();
     public abstract FriendReqDao friendReqDao();
     public abstract FollowReqDao followReqDao();
+    public abstract ConnectionsDao connectionsDao();
 
     public abstract EducationDetailsDao educationDetailsDao();
 

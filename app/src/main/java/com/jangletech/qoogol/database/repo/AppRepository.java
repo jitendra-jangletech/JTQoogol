@@ -5,6 +5,7 @@ import android.content.Context;
 import androidx.lifecycle.LiveData;
 
 import com.jangletech.qoogol.database.QoogolDatabase;
+import com.jangletech.qoogol.database.dao.ConnectionsDao;
 import com.jangletech.qoogol.database.dao.DashboardDao;
 import com.jangletech.qoogol.database.dao.EducationDetailsDao;
 import com.jangletech.qoogol.database.dao.FollowReqDao;
@@ -45,6 +46,7 @@ public class AppRepository {
     private final FollowingsDao followingsDao;
     private final FriendReqDao friendReqDao;
     private final FollowReqDao followReqDao;
+    private final ConnectionsDao connectionsDao;
     //private final TestDetailsDao testDetailsDao;
 
     public AppRepository(Context context) {
@@ -60,6 +62,7 @@ public class AppRepository {
         followingsDao = db.followingsDao();
         friendReqDao = db.friendReqDao();
         followReqDao = db.followReqDao();
+        connectionsDao = db.connectionsDao();
         //testDetailsDao = db.testDetailsDao();
     }
 
@@ -203,7 +206,6 @@ public class AppRepository {
     }*/
 
 
-
     private void insertNotificationAsync(final List<Notification> notifications) {
         new Thread(new Runnable() {
             @Override
@@ -302,7 +304,6 @@ public class AppRepository {
     }*/
 
 
-
     private void deleteNotificationAsync() {
 
         new Thread(new Runnable() {
@@ -348,6 +349,9 @@ public class AppRepository {
         learningQuestionDao.upsertQuestions(learningQuestions);
     }
 
+    public void insertConnections(List<Connections> connectionsList) {
+        connectionsDao.upsertConnections(connectionsList);
+    }
     public void insertFriends(List<Friends> friendsList) {
         friendsDao.upsertFriends(friendsList);
     }
@@ -369,34 +373,37 @@ public class AppRepository {
         followersDao.upsertFollowers(followersList);
     }
 
-    public LiveData<List<Friends>> getFriendsFromDb(){
+    public LiveData<List<Connections>> getConnectionsFromDb() {
+        return connectionsDao.getAllConnections();
+    }
+
+    public LiveData<List<Friends>> getFriendsFromDb() {
         return friendsDao.getAllFriends();
     }
 
-    public LiveData<List<FriendRequest>> getFriendReqFromDb(){
+    public LiveData<List<FriendRequest>> getFriendReqFromDb() {
         return friendReqDao.getAllFriendReq();
     }
 
-    public LiveData<List<FollowRequest>> getFollowReqFromDb(){
+    public LiveData<List<FollowRequest>> getFollowReqFromDb() {
         return followReqDao.getAllFollowReq();
     }
 
-    public LiveData<List<Followers>> getFollowersFromDb(){
+    public LiveData<List<Followers>> getFollowersFromDb() {
         return followersDao.getAllFollowers();
     }
 
-    public LiveData<List<Following>> getFollowingFromDb(){
+    public LiveData<List<Following>> getFollowingFromDb() {
         return followingsDao.getAllFollowings();
     }
 
 
-
-    public LiveData<List<LearningQuestionsNew>> getQuestionsFromDb(){
+    public LiveData<List<LearningQuestionsNew>> getQuestionsFromDb() {
         return learningQuestionDao.getAllQuestions();
     }
 
 
-    public List<LearningQuestionsNew> getQuestions(){
+    public List<LearningQuestionsNew> getQuestions() {
         return learningQuestionDao.getQuestions();
     }
 

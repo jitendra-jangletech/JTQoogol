@@ -1,7 +1,5 @@
 package com.jangletech.qoogol.model;
 
-import android.view.View;
-
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -10,8 +8,6 @@ import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
 import com.jangletech.qoogol.util.Constant;
-
-import java.util.Locale;
 
 import static com.jangletech.qoogol.util.Constant.cn_initiated_by_u1;
 import static com.jangletech.qoogol.util.Constant.cn_initiated_by_u2;
@@ -39,7 +35,7 @@ public class UserProfile {
     private String userName;
 
     public String getCityId() {
-        return cityId!=null?cityId:"";
+        return cityId != null ? cityId : "";
     }
 
     public void setCityId(String cityId) {
@@ -271,17 +267,15 @@ public class UserProfile {
     @SerializedName(Constant.contact_from_phone)
     private boolean contactFromPhone;
 
-    @SerializedName(Constant.cn_connected)
-    private boolean isConnected;
 
     @SerializedName(cn_request_active)
-    private boolean isRequestActive;
+    private String isRequestActive;
 
     @SerializedName(cn_initiated_by_u1)
-    private boolean isInitiated_by_u1;
+    private String isInitiated_by_u1;
 
     @SerializedName(cn_initiated_by_u2)
-    private boolean isInitiated_by_u2;
+    private String isInitiated_by_u2;
 
     @ColumnInfo(name = "total_points")
     @SerializedName(Constant.u_total_points)
@@ -293,15 +287,15 @@ public class UserProfile {
 
     @ColumnInfo(name = "u_notification_alerts")
     @SerializedName(Constant.u_notification_alerts)
-    private boolean notificationEnabled;
+    private String notificationEnabled;
 
     @ColumnInfo(name = "u_AV_alerts")
     @SerializedName(Constant.u_AV_alerts)
-    private boolean isAVCallEnabled;
+    private String isAVCallEnabled;
 
     @ColumnInfo(name = "u_message_alerts")
     @SerializedName(Constant.u_Message_alerts)
-    private boolean messageAlertsEnabled;
+    private String messageAlertsEnabled;
 
     @SerializedName(Constant.u_mob_1)
     @ColumnInfo(name = "mobileNumber")
@@ -315,7 +309,33 @@ public class UserProfile {
     @ColumnInfo(name = "email")
     private String emailAddress;
 
+
+    @SerializedName(Constant.cn_connected)
+    private String isConnected;
+
+
+    @SerializedName(Constant.cn_u1_follows_u2)
+    private String u1FollowsU2;
+
+
+    public String getU1FollowsU2() {
+        return u1FollowsU2!=null?u1FollowsU2:"";
+    }
+
+    public void setU1FollowsU2(String u1FollowsU2) {
+        this.u1FollowsU2 = u1FollowsU2;
+    }
+
     private int illegalAccessCode;
+
+
+    public String getIsConnected() {
+        return isConnected!=null?isConnected:"";
+    }
+
+    public void setIsConnected(String isConnected) {
+        this.isConnected = isConnected;
+    }
 
     @NonNull
     public String getUserId() {
@@ -332,7 +352,7 @@ public class UserProfile {
 
 
     public String getU_DistrictId() {
-        return u_DistrictId!=null?u_DistrictId:"";
+        return u_DistrictId != null ? u_DistrictId : "";
     }
 
 
@@ -384,7 +404,6 @@ public class UserProfile {
     }
 
 
-
     public void setU_PurposeId(String u_PurposeId) {
         this.u_PurposeId = u_PurposeId;
     }
@@ -424,13 +443,9 @@ public class UserProfile {
     }
 
 
-
     public String getStrProjectCode() {
         return strProjectCode == null ? "" : strProjectCode;
     }
-
-
-
 
 
     public String getU_District() {
@@ -438,11 +453,9 @@ public class UserProfile {
     }
 
 
-
     public String getU_language() {
         return u_language == null ? "" : u_language;
     }
-
 
 
     public String getU_NationalityId() {
@@ -453,8 +466,6 @@ public class UserProfile {
     public String getU_Religion() {
         return u_Religion == null ? "" : u_Religion;
     }
-
-
 
 
     public String getU_SocialCommunity() {
@@ -495,11 +506,9 @@ public class UserProfile {
     }
 
 
-
     public String getU_College() {
         return u_College == null ? "" : u_College;
     }
-
 
 
     public String getU_Course() {
@@ -507,11 +516,9 @@ public class UserProfile {
     }
 
 
-
     public String getU_State() {
         return u_State == null ? "" : u_State;
     }
-
 
 
     public String getU_City() {
@@ -519,12 +526,9 @@ public class UserProfile {
     }
 
 
-
     public String getU_Batches() {
         return u_Batches == null ? "" : u_Batches;
     }
-
-
 
 
     public String getU_Degree() {
@@ -568,25 +572,6 @@ public class UserProfile {
         this.endPathImage = endPathImage;
     }
 
-    public boolean isConnected() {
-        return isConnected;
-    }
-
-
-    public boolean isRequestActive() {
-        return isRequestActive;
-    }
-
-
-    public boolean isInitiated_by_u1() {
-        return isInitiated_by_u1;
-    }
-
-
-    public boolean isInitiated_by_u2() {
-        return isInitiated_by_u2;
-    }
-
 
     public String getStatusText() {
         return statusText != null && !statusText.trim().isEmpty() ? statusText : "";
@@ -614,21 +599,6 @@ public class UserProfile {
         this.appVersion = appVersion;
     }
 
-    public boolean isNotificationEnabled() {
-        return notificationEnabled;
-    }
-
-    public void setNotificationEnabled(boolean notificationEnabled) {
-        this.notificationEnabled = notificationEnabled;
-    }
-
-    public boolean isAVCallEnabled() {
-        return isAVCallEnabled;
-    }
-
-    public void setAVCallEnabled(boolean AVCallEnabled) {
-        isAVCallEnabled = AVCallEnabled;
-    }
 
     public boolean isContactFromPhone() {
         return contactFromPhone;
@@ -638,13 +608,6 @@ public class UserProfile {
         this.contactFromPhone = contactFromPhone;
     }
 
-    public void setMessageAlertsEnabled(boolean messageAlertsEnabled) {
-        this.messageAlertsEnabled = messageAlertsEnabled;
-    }
-
-    public boolean isMessageAlertsEnabled() {
-        return messageAlertsEnabled;
-    }
 
     public String getMobileNumber() {
         return mobileNumber == null ? "" : mobileNumber;
@@ -870,21 +833,6 @@ public class UserProfile {
         this.u_City = u_City;
     }
 
-    public void setConnected(boolean connected) {
-        isConnected = connected;
-    }
-
-    public void setRequestActive(boolean requestActive) {
-        isRequestActive = requestActive;
-    }
-
-    public void setInitiated_by_u1(boolean initiated_by_u1) {
-        isInitiated_by_u1 = initiated_by_u1;
-    }
-
-    public void setInitiated_by_u2(boolean initiated_by_u2) {
-        isInitiated_by_u2 = initiated_by_u2;
-    }
 
     public void setTotalPointsEarned(String totalPointsEarned) {
         this.totalPointsEarned = totalPointsEarned;
@@ -896,5 +844,54 @@ public class UserProfile {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+
+    public String getIsRequestActive() {
+        return isRequestActive;
+    }
+
+    public void setIsRequestActive(String isRequestActive) {
+        this.isRequestActive = isRequestActive;
+    }
+
+    public String getIsInitiated_by_u1() {
+        return isInitiated_by_u1!=null?isInitiated_by_u1:"";
+    }
+
+    public void setIsInitiated_by_u1(String isInitiated_by_u1) {
+        this.isInitiated_by_u1 = isInitiated_by_u1;
+    }
+
+    public String getIsInitiated_by_u2() {
+        return isInitiated_by_u2!=null?isInitiated_by_u2:"";
+    }
+
+    public void setIsInitiated_by_u2(String isInitiated_by_u2) {
+        this.isInitiated_by_u2 = isInitiated_by_u2;
+    }
+
+    public String getNotificationEnabled() {
+        return notificationEnabled;
+    }
+
+    public void setNotificationEnabled(String notificationEnabled) {
+        this.notificationEnabled = notificationEnabled;
+    }
+
+    public String getIsAVCallEnabled() {
+        return isAVCallEnabled;
+    }
+
+    public void setIsAVCallEnabled(String isAVCallEnabled) {
+        this.isAVCallEnabled = isAVCallEnabled;
+    }
+
+    public String getMessageAlertsEnabled() {
+        return messageAlertsEnabled;
+    }
+
+    public void setMessageAlertsEnabled(String messageAlertsEnabled) {
+        this.messageAlertsEnabled = messageAlertsEnabled;
     }
 }

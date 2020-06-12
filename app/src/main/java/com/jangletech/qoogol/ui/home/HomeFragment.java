@@ -162,6 +162,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
     }
 
     private void initViews() {
+        mBinding.connectionLayout.setOnClickListener(this);
         mBinding.friendsLayout.setOnClickListener(this);
         mBinding.followersLayout.setOnClickListener(this);
         mBinding.followingLayout.setOnClickListener(this);
@@ -262,7 +263,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
         HashMap<String, String> params = new HashMap<>();
         params.put(Constant.u_user_id, getUserId());
         params.put(Constant.device_id, getDeviceId());
-        ProgressDialog.getInstance().show(getActivity());
+//        ProgressDialog.getInstance().show(getActivity());
         //mBinding.swipeToRefresh.setRefreshing(true);
         Call<DashBoard> call = apiService.fetchDashBoardDetails(
                 params.get(Constant.u_user_id),
@@ -271,7 +272,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
         call.enqueue(new Callback<DashBoard>() {
             @Override
             public void onResponse(Call<DashBoard> call, Response<DashBoard> response) {
-                ProgressDialog.getInstance().dismiss();
+//                ProgressDialog.getInstance().dismiss();
                 //mBinding.swipeToRefresh.setRefreshing(false);
                 if (response.body() != null) {
                     DashBoard dashBoard = response.body();
@@ -292,16 +293,17 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.friends_layout:
+            case R.id.connectionLayout:
                 openConnections(0);
                 break;
-            case R.id.followers_layout:
+            case R.id.friends_layout:
                 openConnections(1);
                 break;
-            case R.id.following_layout:
+            case R.id.followers_layout:
                 openConnections(2);
                 break;
-            case R.id.connectionLayout:
+            case R.id.following_layout:
+                openConnections(3);
                 break;
         }
     }

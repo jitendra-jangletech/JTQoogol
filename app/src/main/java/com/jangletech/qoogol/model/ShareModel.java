@@ -102,10 +102,10 @@ public class ShareModel {
     @SerializedName(Constant.u_user_id)
     private String user_id;
 
-    @SerializedName(Constant.friend_req_sent)
+    @SerializedName(Constant.cn_initiated_by_u1)
     private String friend_req_sent;
 
-    @SerializedName(Constant.friend_req_received)
+    @SerializedName(Constant.cn_initiated_by_u2)
     private String friend_req_received;
 
     @SerializedName(Constant.follow_req_sent)

@@ -126,6 +126,8 @@ public class FriendRequestFragment extends BaseFragment implements FriendReqAdap
     }
 
     private void initView() {
+        if (mBinding.requestsSwiperefresh.isRefreshing())
+            mBinding.requestsSwiperefresh.setRefreshing(false);
         mAdapter = new FriendReqAdapter(getActivity(), connectionsList, friendrequests, this);
         mBinding.requestRecycler.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());

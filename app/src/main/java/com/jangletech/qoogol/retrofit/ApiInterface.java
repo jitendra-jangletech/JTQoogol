@@ -385,7 +385,7 @@ public interface ApiInterface {
                                               @Field("Case") String connectionCase,
                                               @Field(Constant.device_id) String device_id,
                                               @Field("200Q") String app,
-                                              @Field(Constant.pagestart) int pagestart);
+                                              @Field(Constant.pagestart) String pagestart);
 
     @FormUrlEncoded
     @POST(Constant.FETCH_CONNECTIONS)
@@ -499,7 +499,7 @@ public interface ApiInterface {
                                                        @Field("Case") String connectionCase,
                                                        @Field(Constant.device_id) String device_id,
                                                        @Field("200Q") String app,
-                                                       @Field(Constant.pagestart) int pagestart,
+                                                       @Field(Constant.pagestart) String pagestart,
                                                        @Field("ForceRefresh") String refresh);
 
 
