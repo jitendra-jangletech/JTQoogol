@@ -50,7 +50,7 @@ public class FollowingViewModel extends AndroidViewModel {
 
 
     LiveData<List<Following>> getFollowingList() {
-        return mAppRepository.getFollowingFromDb();
+        return mAppRepository.getFollowingFromDb(userId);
     }
 
     void fetchFollowingsData(boolean isRefresh) {

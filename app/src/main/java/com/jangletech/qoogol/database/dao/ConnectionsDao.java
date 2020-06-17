@@ -20,8 +20,8 @@ import java.util.List;
 @Dao
 public interface ConnectionsDao {
 
-    @Query("SELECT * FROM Connections")
-    LiveData<List<Connections>> getAllConnections();
+    @Query("SELECT * FROM Connections where user_id=:userID")
+    LiveData<List<Connections>> getAllConnections(String userID);
 
     @Query("SELECT * FROM Connections")
     List<Connections> getConnections();

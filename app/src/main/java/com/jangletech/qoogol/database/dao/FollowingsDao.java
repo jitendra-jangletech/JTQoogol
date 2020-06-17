@@ -19,8 +19,8 @@ import java.util.List;
 @Dao
 public interface FollowingsDao {
 
-    @Query("SELECT * FROM Following")
-    LiveData<List<Following>> getAllFollowings();
+    @Query("SELECT * FROM Following where user_id=:userID")
+    LiveData<List<Following>> getAllFollowings(String userID);
 
     @Query("SELECT * FROM Following")
     List<Following> getFollowings();

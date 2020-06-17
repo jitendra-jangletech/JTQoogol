@@ -5,324 +5,204 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.google.gson.annotations.SerializedName;
+import com.jangletech.qoogol.util.Constant;
+import com.jangletech.qoogol.util.UtilHelper;
+
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
+
+import static com.jangletech.qoogol.util.Constant.FILL_THE_BLANKS;
+import static com.jangletech.qoogol.util.Constant.LONG_ANSWER;
+import static com.jangletech.qoogol.util.Constant.MATCH_PAIR;
+import static com.jangletech.qoogol.util.Constant.MATCH_PAIR_IMAGE;
+import static com.jangletech.qoogol.util.Constant.MCQ;
+import static com.jangletech.qoogol.util.Constant.MCQ_IMAGE;
+import static com.jangletech.qoogol.util.Constant.MCQ_IMAGE_WITH_TEXT;
+import static com.jangletech.qoogol.util.Constant.ONE_LINE_ANSWER;
+import static com.jangletech.qoogol.util.Constant.SCQ;
+import static com.jangletech.qoogol.util.Constant.SCQ_IMAGE;
+import static com.jangletech.qoogol.util.Constant.SCQ_IMAGE_WITH_TEXT;
+import static com.jangletech.qoogol.util.Constant.SHORT_ANSWER;
+import static com.jangletech.qoogol.util.Constant.TRUE_FALSE;
 
 /**
  * Created by Pritali on 3/18/2020.
  */
 @Entity
 public class LearningQuestions implements Serializable {
+
+    public boolean isAttempted() {
+        return isAttempted;
+    }
+
+    public void setAttempted(boolean attempted) {
+        isAttempted = attempted;
+    }
+
+    public boolean isMarked() {
+        return isMarked;
+    }
+
+    public void setMarked(boolean marked) {
+        isMarked = marked;
+    }
+
+    public boolean isVisited() {
+        return isVisited;
+    }
+
+    public void setVisited(boolean visited) {
+        isVisited = visited;
+    }
+
+    private boolean isAttempted;
+    private boolean isMarked;
+    private boolean isVisited;
+
     @PrimaryKey
     @NonNull
-    @ColumnInfo(name = "question_id")
+    @SerializedName(Constant.q_id)
     private String question_id;
 
-    @ColumnInfo(name = "question")
+    @SerializedName(Constant.q_quest)
     private String question;
 
-    @ColumnInfo(name = "questiondesc")
+    @SerializedName(Constant.q_quest_desc)
     private String questiondesc;
 
-    @ColumnInfo(name = "answer")
-    private String answer;
-
-    @ColumnInfo(name = "category")
+    @SerializedName(Constant.q_category)
     private String category;
 
-    @ColumnInfo(name = "subject")
+    @SerializedName(Constant.sm_id)
+    private String subject_id;
+
+    @SerializedName(Constant.sm_sub_name)
     private String subject;
 
-    @ColumnInfo(name = "chapter")
+    @SerializedName(Constant.cm_id)
+    private String chapter_id;
+
+    @SerializedName(Constant.cm_chapter_name)
     private String chapter;
 
-    @ColumnInfo(name = "rating")
+    @SerializedName(Constant.q_avg_ratings)
     private String rating;
 
-    @ColumnInfo(name = "difficulty_level")
+    @SerializedName(Constant.qlc_feedback)
+    private String feedback;
+
+    @SerializedName(Constant.q_diff_level)
     private String difficulty_level;
 
-    @ColumnInfo(name = "topic")
+    @SerializedName(Constant.q_topic_id)
     private String topic;
 
-    @ColumnInfo(name = "posted_on")
+    @SerializedName(Constant.q_cdatetime)
     private String posted_on;
 
-    @ColumnInfo(name = "lastused_on")
+    @SerializedName(Constant.q_last_used)
     private String lastused_on;
 
-    @ColumnInfo(name = "likes")
+    @SerializedName(Constant.q_likes)
     private String likes;
 
-    @ColumnInfo(name = "comments")
+    @SerializedName(Constant.q_comments)
     private String comments;
 
-    @ColumnInfo(name = "shares")
+    @SerializedName(Constant.q_shares)
     private String shares;
 
-    @ColumnInfo(name = "recommended_time")
+    @SerializedName(Constant.q_duration)
     private String recommended_time;
 
-    @ColumnInfo(name = "answerDesc")
+    @SerializedName(Constant.a_ans_desc)
     private String answerDesc;
 
-    @ColumnInfo(name = "marks")
+    @SerializedName(Constant.q_marks)
     private String marks;
 
-    @ColumnInfo(name = "mcq1")
+    @SerializedName(Constant.q_mcq_op_1)
     private String mcq1;
 
-    @ColumnInfo(name = "mcq2")
+    @SerializedName(Constant.q_mcq_op_2)
     private String mcq2;
 
-    @ColumnInfo(name = "mcq3")
+    @SerializedName(Constant.q_mcq_op_3)
     private String mcq3;
 
-    @ColumnInfo(name = "mcq4")
+    @SerializedName(Constant.q_mcq_op_4)
     private String mcq4;
 
-    @ColumnInfo(name = "a1")
-    private String a1;
+    @SerializedName(Constant.q_mcq_op_5)
+    private String mcq5;
 
-    @ColumnInfo(name = "a2")
-    private String a2;
+    @SerializedName(Constant.q_attempted_by)
+    private String attended_by;
 
-    @ColumnInfo(name = "a3")
-    private String a3;
+    @SerializedName(Constant.q_solved_by)
+    private String solve_right;
 
-    @ColumnInfo(name = "a4")
-    private String a4;
+    @SerializedName(Constant.qlc_like_flag)
+    private String is_liked;
 
-    @ColumnInfo(name = "b1")
-    private String b1;
+    @SerializedName(Constant.qlc_fav_flag)
+    private String is_fav;
 
-    @ColumnInfo(name = "b2")
-    private String b2;
+    @SerializedName(Constant.q_type)
+    private String type;
 
-    @ColumnInfo(name = "b3")
-    private String b3;
+    @SerializedName(Constant.a_sub_ans)
+    private String answer;
 
-    @ColumnInfo(name = "b4")
-    private String b4;
+    @SerializedName(Constant.w_media_names)
+    private String que_images;
 
-    @ColumnInfo(name = "attended_by")
-    private int attended_by;
+    @SerializedName(Constant.q_media_type)
+    private String que_media_typs;
 
-    @ColumnInfo(name = "solve_right")
-    private int solve_right;
+    @SerializedName(Constant.q_option_type)
+    private String que_option_type;
 
-    @ColumnInfo(name = "is_liked")
-    private boolean is_liked;
+    @SerializedName(Constant.a_md_id)
+    private String ans_mediaId;
 
-    @ColumnInfo(name = "is_fav")
-    private boolean is_fav;
+    @SerializedName(Constant.w_ans_text)
+    private String ans_media_names;
 
+    @SerializedName(Constant.qlc_save_flag)
+    private String isSave;
 
-    @ColumnInfo(name = "attchment")
-    ArrayList<String> attchment;
-
-    public String getA1() {
-        return a1;
+    public String getIsSave() {
+        return isSave!=null?isSave:"";
     }
 
-    public void setA1(String a1) {
-        this.a1 = a1;
+    public void setIsSave(String isSave) {
+        this.isSave = isSave;
     }
 
-    public String getA2() {
-        return a2;
+    public String getFeedback() {
+        return feedback!=null?feedback:"";
     }
 
-    public void setA2(String a2) {
-        this.a2 = a2;
+    public void setFeedback(String feedback) {
+        this.feedback = feedback;
     }
 
-    public String getA3() {
-        return a3;
-    }
-
-    public void setA3(String a3) {
-        this.a3 = a3;
-    }
-
-    public String getA4() {
-        return a4;
-    }
-
-    public void setA4(String a4) {
-        this.a4 = a4;
-    }
-
-    public String getB1() {
-        return b1;
-    }
-
-    public void setB1(String b1) {
-        this.b1 = b1;
-    }
-
-    public String getB2() {
-        return b2;
-    }
-
-    public void setB2(String b2) {
-        this.b2 = b2;
-    }
-
-    public String getB3() {
-        return b3;
-    }
-
-    public void setB3(String b3) {
-        this.b3 = b3;
-    }
-
-    public String getB4() {
-        return b4;
-    }
-
-    public void setB4(String b4) {
-        this.b4 = b4;
-    }
-
-    public String getAnswerDesc() {
-        return answerDesc;
-    }
-
-    public void setAnswerDesc(String answerDesc) {
-        this.answerDesc = answerDesc;
-    }
-
-    public String getMarks() {
-        return marks;
-    }
-
-    public void setMarks(String marks) {
-        this.marks = marks;
-    }
-
-    public String getMcq1() {
-        return mcq1;
-    }
-
-    public void setMcq1(String mcq1) {
-        this.mcq1 = mcq1;
-    }
-
-    public String getMcq2() {
-        return mcq2;
-    }
-
-    public void setMcq2(String mcq2) {
-        this.mcq2 = mcq2;
-    }
-
-    public String getMcq3() {
-        return mcq3;
-    }
-
-    public void setMcq3(String mcq3) {
-        this.mcq3 = mcq3;
-    }
-
-    public String getMcq4() {
-        return mcq4;
-    }
-
-    public void setMcq4(String mcq4) {
-        this.mcq4 = mcq4;
-    }
-
-    public String getRecommended_time() {
-        return recommended_time;
-    }
-
-    public void setRecommended_time(String recommended_time) {
-        this.recommended_time = recommended_time;
-    }
-
-    public ArrayList<String> getAttchment() {
-        return attchment;
-    }
-
-    public void setAttchment(ArrayList<String> attchment) {
-        this.attchment = attchment;
-    }
-
-    public boolean isIs_liked() {
-        return is_liked;
-    }
-
-    public void setIs_liked(boolean is_liked) {
-        this.is_liked = is_liked;
-    }
-
-    public boolean isIs_fav() {
-        return is_fav;
-    }
-
-    public void setIs_fav(boolean is_fav) {
-        this.is_fav = is_fav;
-    }
-
-    public String getLikes() {
-        return likes;
-    }
-
-    public void setLikes(String likes) {
-        this.likes = likes;
-    }
-
-    public String getComments() {
-        return comments;
-    }
-
-    public void setComments(String comments) {
-        this.comments = comments;
-    }
-
-    public String getShares() {
-        return shares;
-    }
-
-    public void setShares(String shares) {
-        this.shares = shares;
-    }
-
+    @NonNull
     public String getQuestion_id() {
-        return question_id;
+        return question_id!=null?question_id:"";
     }
 
-    public String getTopic() {
-        return topic;
-    }
-
-    public void setTopic(String topic) {
-        this.topic = topic;
-    }
-
-    public String getPosted_on() {
-        return posted_on;
-    }
-
-    public void setPosted_on(String posted_on) {
-        this.posted_on = posted_on;
-    }
-
-    public String getLastused_on() {
-        return lastused_on;
-    }
-
-    public void setLastused_on(String lastused_on) {
-        this.lastused_on = lastused_on;
-    }
-
-    public void setQuestion_id(String question_id) {
+    public void setQuestion_id(@NonNull String question_id) {
         this.question_id = question_id;
     }
 
     public String getQuestion() {
-        return question;
+        return question!=null?question:"";
     }
 
     public void setQuestion(String question) {
@@ -337,16 +217,27 @@ public class LearningQuestions implements Serializable {
         this.questiondesc = questiondesc;
     }
 
-    public String getAnswer() {
-        return answer;
-    }
-
-    public void setAnswer(String answer) {
-        this.answer = answer;
-    }
-
     public String getCategory() {
-        return category;
+        if (getType().equalsIgnoreCase(FILL_THE_BLANKS)) {
+            return "Fill in the Blanks";
+        } else if (getType().equalsIgnoreCase(ONE_LINE_ANSWER) || getType().equalsIgnoreCase(SHORT_ANSWER)) {
+            return "Short Answer";
+        } else if (getType().equalsIgnoreCase(LONG_ANSWER)) {
+            return "Long Answer";
+        } else {
+            if (getQue_option_type().equalsIgnoreCase(SCQ) || getQue_option_type().equalsIgnoreCase(SCQ_IMAGE) ||getQue_option_type().equalsIgnoreCase(SCQ_IMAGE_WITH_TEXT)) {
+                return "SCQ";
+            }   else if (getQue_option_type().equalsIgnoreCase(MCQ_IMAGE_WITH_TEXT) || getQue_option_type().equalsIgnoreCase(MCQ_IMAGE) || getQue_option_type().equalsIgnoreCase(MCQ)) {
+                return "MCQ";
+            }  else if (getQue_option_type().equalsIgnoreCase(TRUE_FALSE)) {
+                return "True False" ;
+            } else if (getQue_option_type().equalsIgnoreCase(MATCH_PAIR)) {
+                return "Match the Pairs" ;
+            } else if (getQue_option_type().equalsIgnoreCase(MATCH_PAIR_IMAGE)) {
+                return "Match the Pairs";
+            } else
+                return "Category";
+        }
     }
 
     public void setCategory(String category) {
@@ -354,7 +245,7 @@ public class LearningQuestions implements Serializable {
     }
 
     public String getSubject() {
-        return subject;
+        return subject!=null?subject:"";
     }
 
     public void setSubject(String subject) {
@@ -362,7 +253,7 @@ public class LearningQuestions implements Serializable {
     }
 
     public String getChapter() {
-        return chapter;
+        return chapter!=null?chapter:"";
     }
 
     public void setChapter(String chapter) {
@@ -370,7 +261,7 @@ public class LearningQuestions implements Serializable {
     }
 
     public String getRating() {
-        return rating;
+        return rating!=null? UtilHelper.roundAvoid(rating):"0";
     }
 
     public void setRating(String rating) {
@@ -378,26 +269,271 @@ public class LearningQuestions implements Serializable {
     }
 
     public String getDifficulty_level() {
-        return difficulty_level;
+        return difficulty_level!=null?difficulty_level:"";
     }
 
     public void setDifficulty_level(String difficulty_level) {
         this.difficulty_level = difficulty_level;
     }
 
-    public int getAttended_by() {
-        return attended_by;
+    public String getTopic() {
+        return topic!=null?topic:"";
     }
 
-    public void setAttended_by(int attended_by) {
+    public void setTopic(String topic) {
+        this.topic = topic;
+    }
+
+    public String getPosted_on() {
+        return posted_on!=null?posted_on.substring(0, 10):"";
+    }
+
+    public void setPosted_on(String posted_on) {
+        this.posted_on = posted_on;
+    }
+
+    public String getLastused_on() {
+        return lastused_on!=null&&!lastused_on.equalsIgnoreCase("")?lastused_on.substring(0, 10):"";
+    }
+
+    public void setLastused_on(String lastused_on) {
+        this.lastused_on = lastused_on;
+    }
+
+    public String getLikes() {
+        return likes!=null?likes:"0";
+    }
+
+    public void setLikes(String likes) {
+        this.likes = likes;
+    }
+
+    public String getComments() {
+        return comments!=null?comments:"0";
+    }
+
+    public void setComments(String comments) {
+        this.comments = comments;
+    }
+
+    public String getShares() {
+        return shares!=null?shares:"0";
+    }
+
+    public void setShares(String shares) {
+        this.shares = shares;
+    }
+
+    public String getRecommended_time() {
+        return recommended_time!=null?recommended_time.contains("Time")?recommended_time:"Time: " + recommended_time + " Sec":"";
+    }
+
+    public void setRecommended_time(String recommended_time) {
+        this.recommended_time = recommended_time;
+    }
+
+    public String getAnswerDesc() {
+        return answerDesc;
+    }
+
+    public void setAnswerDesc(String answerDesc) {
+        this.answerDesc = answerDesc;
+    }
+
+    public String getMarks() {
+        return marks;
+    }
+
+    public String getFormatedMarks() {
+        return marks!=null?"Marks : " + UtilHelper.formatMarks(Float.parseFloat(marks)):"";
+    }
+
+    public void setMarks(String marks) {
+        this.marks = marks;
+    }
+
+    public String getMcq1() {
+        return mcq1!=null?mcq1:"";
+    }
+
+    public void setMcq1(String mcq1) {
+        this.mcq1 = mcq1;
+    }
+
+    public String getMcq2() {
+        return mcq2!=null?mcq2:"";
+    }
+
+    public void setMcq2(String mcq2) {
+        this.mcq2 = mcq2;
+    }
+
+    public String getMcq3() {
+        return mcq3!=null?mcq3:"";
+    }
+
+    public void setMcq3(String mcq3) {
+        this.mcq3 = mcq3;
+    }
+
+    public String getMcq4() {
+        return mcq4!=null?mcq4:"";
+    }
+
+    public void setMcq4(String mcq4) {
+        this.mcq4 = mcq4;
+    }
+
+    public String getMcq5() {
+        return mcq5!=null?mcq5:"";
+    }
+
+    public void setMcq5(String mcq5) {
+        this.mcq5 = mcq5;
+    }
+
+    public String getAttended_by() {
+        return attended_by!=null?attended_by:"0";
+    }
+
+    public void setAttended_by(String attended_by) {
         this.attended_by = attended_by;
     }
 
-    public int getSolve_right() {
-        return solve_right;
+    public String getSolve_right() {
+        return solve_right!=null?solve_right:"";
     }
 
-    public void setSolve_right(int solve_right) {
+    public void setSolve_right(String solve_right) {
         this.solve_right = solve_right;
+    }
+
+    public String getIs_liked() {
+        return is_liked!=null?is_liked:"";
+    }
+
+    public void setIs_liked(String is_liked) {
+        this.is_liked = is_liked;
+    }
+
+    public String getIs_fav() {
+        return is_fav!=null?is_fav:"";
+    }
+
+    public void setIs_fav(String is_fav) {
+        this.is_fav = is_fav;
+    }
+
+    public String getType() {
+        return type!=null?type:"";
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getAnswer() {
+        return answer!=null?answer:"";
+    }
+
+    public void setAnswer(String answer) {
+        this.answer = answer;
+    }
+
+
+
+    public String getQue_media_typs() {
+        return que_media_typs!=null?que_media_typs:"";
+    }
+
+    public void setQue_media_typs(String que_media_typs) {
+        this.que_media_typs = que_media_typs;
+    }
+
+    public String getQue_option_type() {
+        return que_option_type!=null?que_option_type:"";
+    }
+
+    public void setQue_option_type(String que_option_type) {
+        this.que_option_type = que_option_type;
+    }
+
+    public String getQue_images() {
+        return que_images;
+    }
+
+    public void setQue_images(String que_images) {
+        this.que_images = que_images;
+    }
+
+    public String getAns_mediaId() {
+        return ans_mediaId!=null?ans_mediaId:"";
+    }
+
+    public void setAns_mediaId(String ans_mediaId) {
+        this.ans_mediaId = ans_mediaId;
+    }
+
+    public String getAns_media_names() {
+        return ans_media_names;
+    }
+
+    public void setAns_media_names(String ans_media_names) {
+        this.ans_media_names = ans_media_names;
+    }
+
+    public String getSubject_id() {
+        return subject_id;
+    }
+
+    public void setSubject_id(String subject_id) {
+        this.subject_id = subject_id;
+    }
+
+    public String getChapter_id() {
+        return chapter_id;
+    }
+
+    public void setChapter_id(String chapter_id) {
+        this.chapter_id = chapter_id;
+    }
+
+
+    public int getQueTextviwVisibility() {
+        return getQuestion().contains("$") ? 2 :0;
+    }
+
+    public int getQueMathviwVisibility() {
+        return getQuestion().contains("$") ? 0 :2;
+    }
+
+    public String getImageList() {
+        String imglist="";
+
+
+        List<String> img = new ArrayList<>();
+
+        if (!getType().equalsIgnoreCase(FILL_THE_BLANKS) || !getType().equalsIgnoreCase(LONG_ANSWER) || !getType().equalsIgnoreCase(ONE_LINE_ANSWER)) {
+            if (getQue_option_type().equalsIgnoreCase(SCQ_IMAGE) || getQue_option_type().equalsIgnoreCase(MCQ_IMAGE)) {
+                img.add(mcq1);
+                img.add(mcq2);
+                img.add(mcq3);
+                img.add(mcq4);
+            }
+            if (getQue_option_type().equalsIgnoreCase(SCQ_IMAGE_WITH_TEXT) || getQue_option_type().equalsIgnoreCase(MCQ_IMAGE_WITH_TEXT)) {
+                img.add(getMcq1().split(":")[0]);
+                img.add(getMcq2().split(":")[0]);
+                img.add(getMcq3().split(":")[0]);
+                img.add(getMcq4().split(":")[0]);
+            }
+        }
+
+        if (img.size()>0)
+            imglist = StringUtils.join(img,",");
+
+        if (que_images!=null)
+            imglist = imglist + que_images;
+
+        return imglist;
     }
 }

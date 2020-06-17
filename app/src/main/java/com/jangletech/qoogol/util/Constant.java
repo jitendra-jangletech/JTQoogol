@@ -109,6 +109,7 @@ public class Constant {
     public static final String from_user = "U";
     public static final String from_question = "Q";
     public static final String fromTest = "T";
+    public static final String share_comment = "370";
 
     //Preferences
     public static final String PREF_NAME = "qoogol";
@@ -555,6 +556,7 @@ public class Constant {
     public static final String qlc_rating = "1391";
     public static final String qlc_feedback = "1392";
     public static final String tt_pause_datetime = "1250";
+    public static final String qlc_save_flag = "1397";
 
     // SubjectMaster
     public static final String sm_id = "1300";

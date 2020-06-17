@@ -25,6 +25,7 @@ import com.jangletech.qoogol.model.Followers;
 import com.jangletech.qoogol.model.Following;
 import com.jangletech.qoogol.model.FriendRequest;
 import com.jangletech.qoogol.model.Friends;
+import com.jangletech.qoogol.model.LearningQuestions;
 import com.jangletech.qoogol.model.LearningQuestionsNew;
 import com.jangletech.qoogol.model.Notification;
 import com.jangletech.qoogol.model.TestModelNew;
@@ -292,19 +293,7 @@ public class AppRepository {
         }).start();
     }
 
-   /* private void deleteAttemptedTestAsync() {
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    attemptedTestDao.deleteAttemptedTests();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-    }*/
 
 
     private void deleteNotificationAsync(String nId) {
@@ -356,6 +345,14 @@ public class AppRepository {
         learningQuestionDao.upsertQuestions(learningQuestions);
     }
 
+    public void insertQuestion(LearningQuestions learningQuestions) {
+        learningQuestionDao.insertQuestion(learningQuestions);
+    }
+
+    public void deleteQuestion(String questionId) {
+        learningQuestionDao.deleteQuestion(questionId);
+    }
+
     public void insertConnections(List<Connections> connectionsList) {
         connectionsDao.upsertConnections(connectionsList);
     }
@@ -380,33 +377,37 @@ public class AppRepository {
         followersDao.upsertFollowers(followersList);
     }
 
-    public LiveData<List<Connections>> getConnectionsFromDb() {
-        return connectionsDao.getAllConnections();
+    public LiveData<List<Connections>> getConnectionsFromDb(String userID) {
+        return connectionsDao.getAllConnections(userID);
     }
 
-    public LiveData<List<Friends>> getFriendsFromDb() {
-        return friendsDao.getAllFriends();
+    public LiveData<List<Friends>> getFriendsFromDb(String userID) {
+        return friendsDao.getAllFriends(userID);
     }
 
-    public LiveData<List<FriendRequest>> getFriendReqFromDb() {
-        return friendReqDao.getAllFriendReq();
+    public LiveData<List<FriendRequest>> getFriendReqFromDb(String userID) {
+        return friendReqDao.getAllFriendReq(userID);
     }
 
-    public LiveData<List<FollowRequest>> getFollowReqFromDb() {
-        return followReqDao.getAllFollowReq();
+    public LiveData<List<FollowRequest>> getFollowReqFromDb(String userID) {
+        return followReqDao.getAllFollowReq(userID);
     }
 
-    public LiveData<List<Followers>> getFollowersFromDb() {
-        return followersDao.getAllFollowers();
+    public LiveData<List<Followers>> getFollowersFromDb(String userID) {
+        return followersDao.getAllFollowers(userID);
     }
 
-    public LiveData<List<Following>> getFollowingFromDb() {
-        return followingsDao.getAllFollowings();
+    public LiveData<List<Following>> getFollowingFromDb(String userID) {
+        return followingsDao.getAllFollowings(userID);
     }
 
 
     public LiveData<List<LearningQuestionsNew>> getQuestionsFromDb() {
         return learningQuestionDao.getAllQuestions();
+    }
+
+    public LiveData<List<LearningQuestions>> getSavedQuestionsFromDb() {
+        return learningQuestionDao.getAllSavedQuestions();
     }
 
 

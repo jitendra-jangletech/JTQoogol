@@ -48,7 +48,7 @@ public class ConnectionsViewModel extends AndroidViewModel {
     }
 
     LiveData<List<Connections>> getConnectionsList() {
-        return mAppRepository.getConnectionsFromDb();
+        return mAppRepository.getConnectionsFromDb(userId);
     }
 
 

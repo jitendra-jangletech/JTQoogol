@@ -183,13 +183,14 @@ public class ShareFragment extends BaseFragment implements ShareAdapter.OnItemCl
         String modelAction = TextUtils.join(",", selectedconnectionsList).replace(",,", ",");
         modelAction = modelAction.replace("D", "U");
         modelAction = modelAction.replace("A", "U");
+        String comment = shareBinding.shareComment.getText().toString();
 
         ProgressDialog.getInstance().show(getActivity());
 
         if (call_from == learning)
-            call = apiService.shareAPI(question_id, question_share, "F", getDeviceId(), userId, modelAction, "1.68", qoogol);
+            call = apiService.shareAPI(question_id, question_share, "F", getDeviceId(), userId, modelAction, "1.68", qoogol, comment);
         else
-            call = apiService.shareAPI(testId, test_share, "F", getDeviceId(), userId, modelAction, "1.68", qoogol);
+            call = apiService.shareAPI(testId, test_share, "F", getDeviceId(), userId, modelAction, "1.68", qoogol, comment);
 
         call.enqueue(new Callback<ResponseObj>() {
             @Override

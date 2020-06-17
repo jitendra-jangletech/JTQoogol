@@ -20,8 +20,8 @@ import java.util.List;
 @Dao
 public interface FriendReqDao {
 
-    @Query("SELECT * FROM FriendRequest")
-    LiveData<List<FriendRequest>> getAllFriendReq();
+    @Query("SELECT * FROM FriendRequest where user_id=:userID")
+    LiveData<List<FriendRequest>> getAllFriendReq(String userID);
 
     @Query("SELECT * FROM FriendRequest")
     List<FriendRequest> getFriendReq();

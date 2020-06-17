@@ -23,11 +23,20 @@ public interface LearningQuestionDao {
     @Query("SELECT * FROM LearningQuestionsNew")
     LiveData<List<LearningQuestionsNew>> getAllQuestions();
 
+    @Query("SELECT * FROM LearningQuestions")
+    LiveData<List<LearningQuestions>> getAllSavedQuestions();
+
     @Query("SELECT * FROM LearningQuestionsNew")
     List<LearningQuestionsNew> getQuestions();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertQuestions(List<LearningQuestionsNew> learningQuestions);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertQuestion(LearningQuestions learningQuestions);
+
+    @Query("delete from LearningQuestions where question_id=:questionId")
+    void deleteQuestion(String questionId);
 
     @Delete
     void delete(List<LearningQuestionsNew> learningQuestions);

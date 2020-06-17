@@ -21,6 +21,7 @@ import com.jangletech.qoogol.databinding.SavedFragmentBinding;
 import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.ui.favourite.FavouriteFragment;
 import com.jangletech.qoogol.ui.learning.LearningFragment;
+import com.jangletech.qoogol.ui.learning.SavedQueFragment;
 import com.jangletech.qoogol.ui.test.my_test.MyTestFragment;
 
 import java.util.ArrayList;
@@ -49,7 +50,7 @@ public class SavedFragment extends BaseFragment {
 
     private void setupViewPager(ViewPager viewPager) {
         FavouriteFragment.Adapter adapter = new FavouriteFragment.Adapter(getChildFragmentManager());
-        adapter.addFragment(new LearningFragment(), "Questions");
+        adapter.addFragment(new SavedQueFragment(), "Questions");
         adapter.addFragment(new MyTestFragment(),"Test");
         viewPager.setAdapter(adapter);
     }

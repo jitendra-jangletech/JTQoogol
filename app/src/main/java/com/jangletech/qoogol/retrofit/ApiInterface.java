@@ -352,6 +352,13 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST(Constant.PROCESS_QUESTION)
+    Call<ProcessQuestion> saveQueApi(@Field(Constant.u_user_id) int userid,
+                                  @Field(Constant.q_id) String queId,
+                                  @Field(Constant.CASE) String caseL,
+                                  @Field(Constant.qlc_save_flag) int save);
+
+    @FormUrlEncoded
+    @POST(Constant.PROCESS_QUESTION)
     Call<ProcessQuestion> favApi(@Field(Constant.u_user_id) int userid,
                                  @Field(Constant.q_id) String queId,
                                  @Field(Constant.CASE) String caseL,
@@ -500,7 +507,9 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST(Constant.SHARE_QUESTION_TEST)
-    Call<ResponseObj> shareAPI(@Field(Constant.q_T_list) String q_t_list, @Field(Constant.TorQ) String t_or_q, @Field("Case") String connectionCase, @Field(Constant.device_id) String device_id, @Field("SentBy") String user, @Field(Constant.GroupMembersList) String list, @Field(Constant.u_app_version) String version, @Field("200Q") String app);
+    Call<ResponseObj> shareAPI(@Field(Constant.q_T_list) String q_t_list, @Field(Constant.TorQ) String t_or_q, @Field("Case") String connectionCase, @Field(Constant.device_id) String device_id, @Field("SentBy") String user,
+                               @Field(Constant.GroupMembersList) String list, @Field(Constant.u_app_version) String version,
+                               @Field("200Q") String app, @Field(Constant.share_comment) String comment);
 
     @FormUrlEncoded
     @POST(Constant.FETCH_CONNECTIONS)

@@ -50,7 +50,7 @@ public class FriendReqViewModel extends AndroidViewModel {
 
 
     LiveData<List<FriendRequest>> getFrienReqdList() {
-        return mAppRepository.getFriendReqFromDb();
+        return mAppRepository.getFriendReqFromDb(userId);
     }
 
 

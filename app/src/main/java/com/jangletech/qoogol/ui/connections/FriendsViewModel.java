@@ -41,7 +41,7 @@ public class FriendsViewModel extends AndroidViewModel {
     }
 
     LiveData<List<Friends>> getFriendList() {
-        return mAppRepository.getFriendsFromDb();
+        return mAppRepository.getFriendsFromDb(userId);
     }
 
 
