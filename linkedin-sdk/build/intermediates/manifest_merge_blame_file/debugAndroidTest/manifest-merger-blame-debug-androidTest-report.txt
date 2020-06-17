@@ -5,38 +5,38 @@
 5    android:versionName="1.0" >
 6
 7    <uses-sdk
-7-->E:\Project\JTQoogol\JTQoogol\linkedin-sdk\build\intermediates\tmp\manifest\androidTest\debug\manifestMerger5785743396039908058.xml:7:5-9:41
+7-->E:\Project\JTQoogol\JTQoogol\linkedin-sdk\build\intermediates\tmp\manifest\androidTest\debug\manifestMerger4547862943161171148.xml:7:5-9:41
 8        android:minSdkVersion="19"
-8-->E:\Project\JTQoogol\JTQoogol\linkedin-sdk\build\intermediates\tmp\manifest\androidTest\debug\manifestMerger5785743396039908058.xml:8:9-35
+8-->E:\Project\JTQoogol\JTQoogol\linkedin-sdk\build\intermediates\tmp\manifest\androidTest\debug\manifestMerger4547862943161171148.xml:8:9-35
 9        android:targetSdkVersion="29" />
-9-->E:\Project\JTQoogol\JTQoogol\linkedin-sdk\build\intermediates\tmp\manifest\androidTest\debug\manifestMerger5785743396039908058.xml:9:9-38
+9-->E:\Project\JTQoogol\JTQoogol\linkedin-sdk\build\intermediates\tmp\manifest\androidTest\debug\manifestMerger4547862943161171148.xml:9:9-38
 10
 11    <uses-permission android:name="android.permission.INTERNET" />
-11-->E:\Project\JTQoogol\JTQoogol\linkedin-sdk\build\intermediates\tmp\manifest\androidTest\debug\manifestMerger5785743396039908058.xml:11:5-67
-11-->E:\Project\JTQoogol\JTQoogol\linkedin-sdk\build\intermediates\tmp\manifest\androidTest\debug\manifestMerger5785743396039908058.xml:11:22-64
+11-->E:\Project\JTQoogol\JTQoogol\linkedin-sdk\build\intermediates\tmp\manifest\androidTest\debug\manifestMerger4547862943161171148.xml:11:5-67
+11-->E:\Project\JTQoogol\JTQoogol\linkedin-sdk\build\intermediates\tmp\manifest\androidTest\debug\manifestMerger4547862943161171148.xml:11:22-64
 12
 13    <instrumentation
-13-->E:\Project\JTQoogol\JTQoogol\linkedin-sdk\build\intermediates\tmp\manifest\androidTest\debug\manifestMerger5785743396039908058.xml:13:5-18:71
+13-->E:\Project\JTQoogol\JTQoogol\linkedin-sdk\build\intermediates\tmp\manifest\androidTest\debug\manifestMerger4547862943161171148.xml:13:5-18:71
 14        android:name="android.test.InstrumentationTestRunner"
-14-->E:\Project\JTQoogol\JTQoogol\linkedin-sdk\build\intermediates\tmp\manifest\androidTest\debug\manifestMerger5785743396039908058.xml:14:9-62
+14-->E:\Project\JTQoogol\JTQoogol\linkedin-sdk\build\intermediates\tmp\manifest\androidTest\debug\manifestMerger4547862943161171148.xml:14:9-62
 15        android:functionalTest="false"
-15-->E:\Project\JTQoogol\JTQoogol\linkedin-sdk\build\intermediates\tmp\manifest\androidTest\debug\manifestMerger5785743396039908058.xml:15:9-39
+15-->E:\Project\JTQoogol\JTQoogol\linkedin-sdk\build\intermediates\tmp\manifest\androidTest\debug\manifestMerger4547862943161171148.xml:15:9-39
 16        android:handleProfiling="false"
-16-->E:\Project\JTQoogol\JTQoogol\linkedin-sdk\build\intermediates\tmp\manifest\androidTest\debug\manifestMerger5785743396039908058.xml:16:9-40
+16-->E:\Project\JTQoogol\JTQoogol\linkedin-sdk\build\intermediates\tmp\manifest\androidTest\debug\manifestMerger4547862943161171148.xml:16:9-40
 17        android:label="Tests for com.linkedin.android.mobilesdk.test"
-17-->E:\Project\JTQoogol\JTQoogol\linkedin-sdk\build\intermediates\tmp\manifest\androidTest\debug\manifestMerger5785743396039908058.xml:17:9-70
+17-->E:\Project\JTQoogol\JTQoogol\linkedin-sdk\build\intermediates\tmp\manifest\androidTest\debug\manifestMerger4547862943161171148.xml:17:9-70
 18        android:targetPackage="com.linkedin.android.mobilesdk.test" />
-18-->E:\Project\JTQoogol\JTQoogol\linkedin-sdk\build\intermediates\tmp\manifest\androidTest\debug\manifestMerger5785743396039908058.xml:18:9-68
+18-->E:\Project\JTQoogol\JTQoogol\linkedin-sdk\build\intermediates\tmp\manifest\androidTest\debug\manifestMerger4547862943161171148.xml:18:9-68
 19
 20    <application
-20-->E:\Project\JTQoogol\JTQoogol\linkedin-sdk\build\intermediates\tmp\manifest\androidTest\debug\manifestMerger5785743396039908058.xml:20:5-22:19
+20-->E:\Project\JTQoogol\JTQoogol\linkedin-sdk\build\intermediates\tmp\manifest\androidTest\debug\manifestMerger4547862943161171148.xml:20:5-22:19
 21        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
-21-->[androidx.core:core:1.0.0] C:\Users\Admin\.gradle\caches\transforms-2\files-2.1\552ff474404b3b329ae6b532f4d629d8\core-1.0.0\AndroidManifest.xml:22:18-86
+21-->[androidx.core:core:1.0.0] C:\Users\Admin\.gradle\caches\transforms-2\files-2.1\4c388d1bfa1201a9c0c273c1eb64b130\core-1.0.0\AndroidManifest.xml:22:18-86
 22        android:debuggable="true" >
-22-->E:\Project\JTQoogol\JTQoogol\linkedin-sdk\build\intermediates\tmp\manifest\androidTest\debug\manifestMerger5785743396039908058.xml:20:18-43
+22-->E:\Project\JTQoogol\JTQoogol\linkedin-sdk\build\intermediates\tmp\manifest\androidTest\debug\manifestMerger4547862943161171148.xml:20:18-43
 23        <uses-library android:name="android.test.runner" />
-23-->E:\Project\JTQoogol\JTQoogol\linkedin-sdk\build\intermediates\tmp\manifest\androidTest\debug\manifestMerger5785743396039908058.xml:21:9-60
-23-->E:\Project\JTQoogol\JTQoogol\linkedin-sdk\build\intermediates\tmp\manifest\androidTest\debug\manifestMerger5785743396039908058.xml:21:23-57
+23-->E:\Project\JTQoogol\JTQoogol\linkedin-sdk\build\intermediates\tmp\manifest\androidTest\debug\manifestMerger4547862943161171148.xml:21:9-60
+23-->E:\Project\JTQoogol\JTQoogol\linkedin-sdk\build\intermediates\tmp\manifest\androidTest\debug\manifestMerger4547862943161171148.xml:21:23-57
 24    </application>
 25
 26</manifest>
