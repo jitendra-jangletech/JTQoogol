@@ -10,8 +10,6 @@ import com.jangletech.qoogol.database.repo.AppRepository;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.model.BlockedConnResp;
 import com.jangletech.qoogol.model.BlockedConnections;
-import com.jangletech.qoogol.model.Friends;
-import com.jangletech.qoogol.model.FriendsResponse;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.util.PreferenceManager;
@@ -27,7 +25,6 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 import static com.jangletech.qoogol.ui.BaseFragment.getDeviceId;
 import static com.jangletech.qoogol.util.Constant.block;
 import static com.jangletech.qoogol.util.Constant.forcerefresh;
-import static com.jangletech.qoogol.util.Constant.friends;
 import static com.jangletech.qoogol.util.Constant.qoogol;
 
 /**
@@ -62,7 +59,7 @@ public class BlockedViewModel extends AndroidViewModel {
         if (isRefresh)
             call = apiService.fetchRefreshedBlockedConn(userId, block, getDeviceId(), qoogol, pagestart, forcerefresh);
         else
-            call = apiService.fetchBlockedConnections(userId, block, getDeviceId(), qoogol, pagestart);
+            call = apiService.fetchBlockedConnections(userId, block, getDeviceId(), qoogol, Integer.parseInt(pagestart));
         call.enqueue(new Callback<BlockedConnResp>() {
             @Override
             public void onResponse(Call<BlockedConnResp> call, retrofit2.Response<BlockedConnResp> response) {

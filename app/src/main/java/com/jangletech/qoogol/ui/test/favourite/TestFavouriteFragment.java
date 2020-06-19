@@ -41,6 +41,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.jangletech.qoogol.util.Constant.CASE;
 import static com.jangletech.qoogol.util.Constant.test;
 
 public class TestFavouriteFragment extends BaseFragment implements TestListAdapter.TestClickListener {
@@ -67,7 +68,12 @@ public class TestFavouriteFragment extends BaseFragment implements TestListAdapt
             NavHostFragment.findNavController(this).navigate(R.id.nav_test_my);
         });
 
-        fetchTestList("FV");
+        HashMap<String,String> params = new HashMap<>();
+        params.put(Constant.u_user_id,getUserId());
+        params.put(Constant.CASE,"FV");
+        params.put(Constant.tm_recent_test,"");
+        params.put(Constant.tm_popular_test,"");
+        fetchTestList(params);
         mViewModel.getAllTestList().observe(getActivity(), new Observer<List<TestModelNew>>() {
             @Override
             public void onChanged(@Nullable final List<TestModelNew> favTests) {
@@ -82,9 +88,17 @@ public class TestFavouriteFragment extends BaseFragment implements TestListAdapt
         });
     }
 
-    private void fetchTestList(String caseFav) {
+    private void fetchTestList(HashMap<String,String> params) {
+        Log.d(TAG, "fetchTestList PARAMS : "+params);
         ProgressDialog.getInstance().show(getActivity());
-        Call<TestListResponse> call = apiService.fetchTestList(new PreferenceManager(getActivity()).getInt(Constant.USER_ID), caseFav);
+        Call<TestListResponse> call = apiService.fetchTestList(
+                params.get(Constant.u_user_id),
+                params.get(Constant.CASE),
+                params.get(Constant.tm_recent_test),
+                params.get(Constant.tm_popular_test),
+                params.get(Constant.tm_diff_level),
+                params.get(Constant.tm_avg_rating)
+        );
         call.enqueue(new Callback<TestListResponse>() {
             @Override
             public void onResponse(Call<TestListResponse> call, Response<TestListResponse> response) {
@@ -118,7 +132,7 @@ public class TestFavouriteFragment extends BaseFragment implements TestListAdapt
     public void onTestItemClick(TestModelNew testModel) {
         Bundle bundle = new Bundle();
         bundle.putSerializable(Constant.TEST_NAME, testModel);
-        Navigation.findNavController(requireActivity(),R.id.nav_host_fragment).navigate(R.id.nav_test_details);
+        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_test_details, bundle);
         //MainActivity.navController.navigate(R.id.nav_test_details, bundle);
     }
 

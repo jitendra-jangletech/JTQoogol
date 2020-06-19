@@ -28,6 +28,9 @@ import static com.jangletech.qoogol.util.Constant.cn_request_active;
 @Entity(tableName = "userprofile", indices = @Index(value = {"userId"}, unique = true))
 public class UserProfile {
 
+    @SerializedName(Constant.userBadge)
+    private String badge;
+
     @SerializedName(Constant.u_native_ct_id)
     private String cityId;
 
@@ -317,6 +320,13 @@ public class UserProfile {
     @SerializedName(Constant.cn_u1_follows_u2)
     private String u1FollowsU2;
 
+    public String getBadge() {
+        return badge;
+    }
+
+    public void setBadge(String badge) {
+        this.badge = badge;
+    }
 
     public String getU1FollowsU2() {
         return u1FollowsU2!=null?u1FollowsU2:"";

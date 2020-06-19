@@ -1,4 +1,4 @@
-package com.jangletech.qoogol.ui.learning;
+package com.jangletech.qoogol.dialog;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -115,7 +115,7 @@ public class LikeListingDialog extends Dialog implements LikeAdapter.onItemClick
     @Override
     public void onItemCLick(String user_id) {
         onItemClickListener.onItemCLick(user_id);
-        dismiss();
+//        dismiss();
     }
 
 

@@ -39,7 +39,6 @@ public class FavouriteViewModel extends AndroidViewModel {
         return mAppRepository.getFavQuestionsFromDb();
     }
 
-
    public void fetchFavQuestionData() {
         getDataFromApi();
     }
@@ -97,10 +96,7 @@ public class FavouriteViewModel extends AndroidViewModel {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
     }
-
 
     private String createMediaPathDownloaded(String img) {
         String mediaPaths = "";
@@ -111,5 +107,4 @@ public class FavouriteViewModel extends AndroidViewModel {
         }
         return mediaPaths;
     }
-
 }

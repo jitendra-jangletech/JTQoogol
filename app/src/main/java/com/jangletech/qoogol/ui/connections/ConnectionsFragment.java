@@ -43,6 +43,7 @@ public class ConnectionsFragment extends BaseFragment {
         Bundle bundle = getArguments();
         if (bundle != null) {
             position = bundle.getInt("position");
+            setTitle(position);
         }
         setupViewPager(mbinding.viewpager);
         mbinding.resultTabs.setupWithViewPager(mbinding.viewpager);
@@ -50,17 +51,7 @@ public class ConnectionsFragment extends BaseFragment {
         mbinding.resultTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                if (tab.getPosition() == 0)
-                    getActionBar().setTitle( getContext().getString(R.string.connections_list));
-
-                if (tab.getPosition() == 1)
-                    getActionBar().setTitle( getContext().getString(R.string.friends));
-
-                if (tab.getPosition() == 2)
-                    getActionBar().setTitle( getContext().getString(R.string.followers));
-
-                if (tab.getPosition() == 3)
-                    getActionBar().setTitle( getContext().getString(R.string.following));
+                setTitle(tab.getPosition());
             }
 
             @Override
@@ -72,6 +63,17 @@ public class ConnectionsFragment extends BaseFragment {
             }
         });
 
+    }
+
+    private void setTitle(int position) {
+        if (position == 0)
+            getActionBar().setTitle("Connections");
+        if (position == 1)
+            getActionBar().setTitle("Friends");
+        if (position == 2)
+            getActionBar().setTitle("Followers");
+        if (position == 3)
+            getActionBar().setTitle("Following");
     }
 
     private void setupViewPager(ViewPager viewPager) {

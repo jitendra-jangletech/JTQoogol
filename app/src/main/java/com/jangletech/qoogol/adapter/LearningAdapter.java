@@ -6,12 +6,10 @@ import android.app.Dialog;
 import android.content.ClipData;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.InputFilter;
-import android.text.Spanned;
 import android.text.TextWatcher;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
@@ -45,10 +43,8 @@ import com.jangletech.qoogol.model.LearningQuestionsNew;
 import com.jangletech.qoogol.model.ProcessQuestion;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
-import com.jangletech.qoogol.ui.learning.LearningFragment;
-import com.jangletech.qoogol.ui.learning.LikeListingDialog;
+import com.jangletech.qoogol.dialog.LikeListingDialog;
 import com.jangletech.qoogol.ui.learning.SlideshowDialogFragment;
-import com.jangletech.qoogol.ui.test.my_test.MyTestFragment;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
@@ -90,7 +86,7 @@ import static com.jangletech.qoogol.util.Constant.test;
 /**
  * Created by Pritali on 3/18/2020.
  */
-public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHolder> {
+public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHolder> {
     List<LearningQuestionsNew> learningQuestionsList;
     Activity activity;
     LearningItemBinding learningItemBinding;
@@ -98,7 +94,7 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
     int call_from;
     MaterialCardView.LayoutParams params;
 
-    public LearingAdapter(Activity activity, List<LearningQuestionsNew> learningQuestionsList, onIconClick onIconClick, int call_from) {
+    public LearningAdapter(Activity activity, List<LearningQuestionsNew> learningQuestionsList, onIconClick onIconClick, int call_from) {
         this.activity = activity;
         this.learningQuestionsList = learningQuestionsList;
         this.onIconClick = onIconClick;
@@ -1481,7 +1477,6 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
         @Override
         public void onItemCLick(String user_id) {
             onIconClick.onLikeClick(user_id);
-
         }
 
         private final class ChoiceTouchListener implements View.OnTouchListener {

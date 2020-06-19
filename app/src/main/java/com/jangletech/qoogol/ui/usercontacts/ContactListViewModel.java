@@ -1,28 +1,16 @@
 package com.jangletech.qoogol.ui.usercontacts;
 
 import android.app.Application;
-import android.content.Context;
-import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.jangletech.qoogol.model.Contacts;
 import com.jangletech.qoogol.util.PreferenceManager;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import static com.jangletech.qoogol.ui.BaseFragment.getDeviceId;
 
 /*
  *

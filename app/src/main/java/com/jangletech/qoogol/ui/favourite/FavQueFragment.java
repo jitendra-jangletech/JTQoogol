@@ -15,7 +15,8 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.jangletech.qoogol.R;
-import com.jangletech.qoogol.adapter.LearingAdapter;
+
+import com.jangletech.qoogol.adapter.LearningAdapter;
 import com.jangletech.qoogol.databinding.LearningFragmentBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.enums.Module;
@@ -43,16 +44,15 @@ import static com.jangletech.qoogol.util.Constant.profile;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FavQueFragment extends Fragment implements LearingAdapter.onIconClick {
+public class FavQueFragment extends Fragment implements LearningAdapter.onIconClick {
 
     LearningFragmentBinding learningFragmentBinding;
-    LearingAdapter learingAdapter;
+    LearningAdapter learingAdapter;
     List<LearningQuestionsNew> learningQuestionsList;
     List<LearningQuestionsNew> questionsNewList;
     ApiInterface apiService = ApiClient.getInstance().getApi();
     String userId = "";
     FavouriteViewModel mViewModel;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -83,7 +83,6 @@ public class FavQueFragment extends Fragment implements LearingAdapter.onIconCli
             initRecycler();
         });
 
-
         learningFragmentBinding.learningSwiperefresh.setOnRefreshListener(() -> mViewModel.fetchFavQuestionData());
     }
 
@@ -111,7 +110,7 @@ public class FavQueFragment extends Fragment implements LearingAdapter.onIconCli
 
 
     private void initRecycler() {
-        learingAdapter = new LearingAdapter(getActivity(), questionsNewList, this, learning);
+        learingAdapter = new LearningAdapter(getActivity(), questionsNewList, this, learning);
         learningFragmentBinding.learningRecycler.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setAutoMeasureEnabled(false);

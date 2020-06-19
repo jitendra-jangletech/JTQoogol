@@ -39,8 +39,4 @@ public class TestDetailsViewModel extends AndroidViewModel {
         appRepository.insertTestDetails(testDetailsResponse);
     }*/
 
-    public LiveData<List<TestModelNew>> getAllTests() {
-        return appRepository.getAllTests();
-    }
-
 }

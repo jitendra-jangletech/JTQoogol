@@ -34,7 +34,6 @@ public class PracticeTestQuestPaletAdapter extends RecyclerView.Adapter<Practice
         this.strSortType = sortType;
     }
 
-
     @NonNull
     @Override
     public PracticeTestQuestPaletAdapter.PracticeQuestionViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

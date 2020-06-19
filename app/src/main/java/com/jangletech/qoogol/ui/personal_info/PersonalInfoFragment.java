@@ -93,7 +93,6 @@ import static com.jangletech.qoogol.util.Constant.reject_friend_requests;
 import static com.jangletech.qoogol.util.Constant.remove_connection;
 import static com.jangletech.qoogol.util.Constant.sent_friend_req;
 import static com.jangletech.qoogol.util.Constant.unfollow;
-import static com.jangletech.qoogol.util.Constant.userName;
 
 public class PersonalInfoFragment extends BaseFragment {
 
@@ -114,6 +113,7 @@ public class PersonalInfoFragment extends BaseFragment {
     private boolean isMail = false;
     private boolean isMailVerified = false;
     private boolean isMobileVerified = false;
+    private HashMap<String, String> userProfileMap;
     ApiInterface apiService = ApiClient.getInstance().getApi();
     String userid = "";
     private PreferenceManager mSettings;
@@ -127,6 +127,7 @@ public class PersonalInfoFragment extends BaseFragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         mContext = context.getApplicationContext();
+        userProfileMap = new HashMap();
     }
 
 
@@ -154,6 +155,8 @@ public class PersonalInfoFragment extends BaseFragment {
             if (userProfile != null) {
                 profile = userProfile;
                 mBinding.setUserProfile(userProfile);
+                //save User Badge Info
+                new PreferenceManager(getActivity()).saveString("BADGE", userProfile.getBadge());
 
                 if (!userid.equalsIgnoreCase(mSettings.getUserId())) {
                     //manageUnwantedFields(userProfile);
@@ -304,11 +307,11 @@ public class PersonalInfoFragment extends BaseFragment {
         } else {
             manageLayoutForOtherUser();
         }
-
-
     }
 
     private void populateUserNames(List<String> userNames) {
+        mBinding.userNameAutoCompleteTextView.setText("");
+        mBinding.userNameAutoCompleteTextView.requestFocus();
         Collections.sort(userNames);
         Log.d(TAG, "populateUserNames: " + userNames.size());
         ArrayAdapter<String> userNameAdapter = new ArrayAdapter(mContext, R.layout.textview_dropdown, userNames);
@@ -416,75 +419,84 @@ public class PersonalInfoFragment extends BaseFragment {
     }*/
 
     private void setPublicProfile(UserProfile userProfile) {
-       try {
-           if(userProfile!=null && userProfile.getIsConnected().equalsIgnoreCase("true")) {
-               mBinding.addFriend.setText(getActivity().getResources().getString(R.string.unfriend));
-           } else if(userProfile!=null && userProfile.getIsInitiated_by_u1().equalsIgnoreCase("true")) {
-               mBinding.addFriend.setText(getActivity().getResources().getString(R.string.cancel));
-           }
-           else if(userProfile!=null && userProfile.getIsInitiated_by_u2().equalsIgnoreCase("true")) {
-               mBinding.addFriend.setText(getActivity().getResources().getString(R.string.accept_friend_req));
-           } else {
-               mBinding.addFriend.setText(getActivity().getResources().getString(R.string.add_friend));
-           }
+        try {
+            if (userProfile != null && userProfile.getIsConnected().equalsIgnoreCase("true")) {
+                mBinding.addFriend.setText(getActivity().getResources().getString(R.string.unfriend));
+            } else if (userProfile != null && userProfile.getIsInitiated_by_u1().equalsIgnoreCase("true")) {
+                mBinding.addFriend.setText(getActivity().getResources().getString(R.string.cancel));
+            } else if (userProfile != null && userProfile.getIsInitiated_by_u2().equalsIgnoreCase("true")) {
+                mBinding.addFriend.setText(getActivity().getResources().getString(R.string.accept_friend_req));
+            } else {
+                mBinding.addFriend.setText(getActivity().getResources().getString(R.string.add_friend));
+            }
 
-           if(userProfile!=null && userProfile.getU1FollowsU2().equalsIgnoreCase("true")) {
-               mBinding.follow.setText(getActivity().getResources().getString(R.string.unfollow));
-           } else {
-               mBinding.follow.setText(getActivity().getResources().getString(R.string.follow));
-           }
+            if (userProfile != null && userProfile.getU1FollowsU2().equalsIgnoreCase("true")) {
+                mBinding.follow.setText(getActivity().getResources().getString(R.string.unfollow));
+            } else {
+                mBinding.follow.setText(getActivity().getResources().getString(R.string.follow));
+            }
 
-           mBinding.tvName.setText(userProfile.getFirstName()+" "+userProfile.getLastName());
-           if (userProfile.getStrGender() != null && userProfile.getStrGender().equalsIgnoreCase("M")) {
-               mBinding.tvGender.setText("Male");
-           } else if(userProfile.getStrGender() != null && userProfile.getStrGender().equalsIgnoreCase("F")){
-               mBinding.tvGender.setText("Female");
-           }
-           if (userProfile.getEndPathImage() != null && !userProfile.getEndPathImage().isEmpty()) {
-               loadProfilePic(getProfileImageUrl(userProfile.getEndPathImage()));
-           } else if (userProfile.getStrGender() != null && userProfile.getStrGender().equalsIgnoreCase("M")) {
-               loadProfilePic(Constant.PRODUCTION_MALE_PROFILE_API);
-           } else if (userProfile.getStrGender() != null && userProfile.getStrGender().equalsIgnoreCase("F")) {
-               loadProfilePic(Constant.PRODUCTION_FEMALE_PROFILE_API);
-           }
+            //set user badge
+            if (userProfile.getBadge() != null && userProfile.getBadge().equalsIgnoreCase("B"))
+                mBinding.imgBadge.setImageDrawable(getActivity().getDrawable(R.drawable.bronze));
+            if (userProfile.getBadge() != null && userProfile.getBadge().equalsIgnoreCase("S"))
+                mBinding.imgBadge.setImageDrawable(getActivity().getDrawable(R.drawable.silver));
+            if (userProfile.getBadge() != null && userProfile.getBadge().equalsIgnoreCase("G"))
+                mBinding.imgBadge.setImageDrawable(getActivity().getDrawable(R.drawable.gold));
+            if (userProfile.getBadge() != null && userProfile.getBadge().equalsIgnoreCase("P"))
+                mBinding.imgBadge.setImageDrawable(getActivity().getDrawable(R.drawable.platinum));
 
-           if(userProfile.getU_Nationality()==null || userProfile.getU_Nationality().isEmpty()){
-               mBinding.nationalityLayout.setVisibility(View.GONE);
-           }else if(userProfile.getU_State()==null || userProfile.getU_State().isEmpty()){
-               mBinding.stateLayout.setVisibility(View.GONE);
-           }else if(userProfile.getU_District()==null || userProfile.getU_District().isEmpty()){
-               mBinding.divisionLayout.setVisibility(View.GONE);
-           }else if(userProfile.getU_City()==null || userProfile.getU_City().isEmpty()){
-               mBinding.cityLayout.setVisibility(View.GONE);
-           }else if(userProfile.getU_language()==null || userProfile.getU_language().isEmpty()){
-               mBinding.languageLayout.setVisibility(View.GONE);
-           }
 
-           mBinding.addFriend.setOnClickListener(v -> {
-               if(userProfile.getIsConnected().equalsIgnoreCase("true")) {
-                   updateConnection(userProfile.getUserId(),remove_connection);
-               } else if(userProfile.getIsInitiated_by_u1().equalsIgnoreCase("true")) {
-                   updateConnection(userProfile.getUserId(),reject_friend_requests);
-               } else if(userProfile.getIsInitiated_by_u2().equalsIgnoreCase("true")) {
-                   updateConnection(userProfile.getUserId(),accept_friend_requests);
-               } else {
-                   updateConnection(userProfile.getUserId(),sent_friend_req);
-               }
-           });
+            mBinding.tvName.setText(userProfile.getFirstName() + " " + userProfile.getLastName());
+            if (userProfile.getStrGender() != null && userProfile.getStrGender().equalsIgnoreCase("M")) {
+                mBinding.tvGender.setText("Male");
+            } else if (userProfile.getStrGender() != null && userProfile.getStrGender().equalsIgnoreCase("F")) {
+                mBinding.tvGender.setText("Female");
+            }
+            if (userProfile.getEndPathImage() != null && !userProfile.getEndPathImage().isEmpty()) {
+                loadProfilePic(getProfileImageUrl(userProfile.getEndPathImage()));
+            } else if (userProfile.getStrGender() != null && userProfile.getStrGender().equalsIgnoreCase("M")) {
+                loadProfilePic(Constant.PRODUCTION_MALE_PROFILE_API);
+            } else if (userProfile.getStrGender() != null && userProfile.getStrGender().equalsIgnoreCase("F")) {
+                loadProfilePic(Constant.PRODUCTION_FEMALE_PROFILE_API);
+            }
 
-           mBinding.follow.setOnClickListener(v -> {
-               if(userProfile.getU1FollowsU2().equalsIgnoreCase("true")) {
-                   updateConnection(userProfile.getUserId(),unfollow);
-               } else {
-                   updateConnection(userProfile.getUserId(),follow);
-               }
-           });
+            if (userProfile.getU_Nationality() == null || userProfile.getU_Nationality().isEmpty()) {
+                mBinding.nationalityLayout.setVisibility(View.GONE);
+            } else if (userProfile.getU_State() == null || userProfile.getU_State().isEmpty()) {
+                mBinding.stateLayout.setVisibility(View.GONE);
+            } else if (userProfile.getU_District() == null || userProfile.getU_District().isEmpty()) {
+                mBinding.divisionLayout.setVisibility(View.GONE);
+            } else if (userProfile.getU_City() == null || userProfile.getU_City().isEmpty()) {
+                mBinding.cityLayout.setVisibility(View.GONE);
+            } else if (userProfile.getU_language() == null || userProfile.getU_language().isEmpty()) {
+                mBinding.languageLayout.setVisibility(View.GONE);
+            }
 
-       } catch (Exception e) {
-           e.printStackTrace();
-       }
+            mBinding.addFriend.setOnClickListener(v -> {
+                if (userProfile.getIsConnected().equalsIgnoreCase("true")) {
+                    updateConnection(userProfile.getUserId(), remove_connection);
+                } else if (userProfile.getIsInitiated_by_u1().equalsIgnoreCase("true")) {
+                    updateConnection(userProfile.getUserId(), reject_friend_requests);
+                } else if (userProfile.getIsInitiated_by_u2().equalsIgnoreCase("true")) {
+                    updateConnection(userProfile.getUserId(), accept_friend_requests);
+                } else {
+                    updateConnection(userProfile.getUserId(), sent_friend_req);
+                }
+            });
+
+            mBinding.follow.setOnClickListener(v -> {
+                if (userProfile.getU1FollowsU2().equalsIgnoreCase("true")) {
+                    updateConnection(userProfile.getUserId(), unfollow);
+                } else {
+                    updateConnection(userProfile.getUserId(), follow);
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-
 
     private void updateConnection(String user, String Processcase) {
         ApiInterface apiService = ApiClient.getInstance().getApi();
@@ -515,14 +527,28 @@ public class PersonalInfoFragment extends BaseFragment {
     }
 
     private void updateUi(UserProfile userProfile) {
-        if (userProfile.getStrGender().equalsIgnoreCase("M")) {
-            loadProfilePic(Constant.PRODUCTION_MALE_PROFILE_API);
-            mBinding.radioMale.setChecked(true);
-        } else if (userProfile.getStrGender().equalsIgnoreCase("F")) {
-            loadProfilePic(Constant.PRODUCTION_FEMALE_PROFILE_API);
-            mBinding.radioFemale.setChecked(true);
-        } else if (userProfile.getStrGender().equalsIgnoreCase("O")) {
-            mBinding.radioOthers.setChecked(true);
+        if (userProfile.getEndPathImage() != null) {
+            //display actual profile pic
+            Log.d(TAG, "updateUi : " + userProfile.getUserId());
+            Log.d(TAG, "updateUi: " + getProfileImageUrl(userProfile.getEndPathImage()));
+            Log.d(TAG, "updateUi Gender : " + userProfile.getStrGender());
+            loadProfilePic(getProfileImageUrl(userProfile.getEndPathImage()));
+            if (userProfile.getStrGender().equalsIgnoreCase("M"))
+                mBinding.radioMale.setChecked(true);
+            if (userProfile.getStrGender().equalsIgnoreCase("F"))
+                mBinding.radioFemale.setChecked(true);
+            if (userProfile.getStrGender().equalsIgnoreCase("O"))
+                mBinding.radioOthers.setChecked(true);
+        } else {
+            if (userProfile.getStrGender().equalsIgnoreCase("M")) {
+                loadProfilePic(Constant.PRODUCTION_MALE_PROFILE_API);
+                mBinding.radioMale.setChecked(true);
+            } else if (userProfile.getStrGender().equalsIgnoreCase("F")) {
+                loadProfilePic(Constant.PRODUCTION_FEMALE_PROFILE_API);
+                mBinding.radioFemale.setChecked(true);
+            } else if (userProfile.getStrGender().equalsIgnoreCase("O")) {
+                mBinding.radioOthers.setChecked(true);
+            }
         }
 
         Log.d(TAG, "Nationality Id: " + userProfile.getU_NationalityId());
@@ -535,10 +561,6 @@ public class PersonalInfoFragment extends BaseFragment {
         fetchCities(userProfile.getU_DistrictId());
 
         gender = userProfile.getStrGender();
-
-        //display actual profile pic
-        Log.d(TAG, "updateUi: " + getProfileImageUrl(userProfile.getEndPathImage()));
-        loadProfilePic(getProfileImageUrl(userProfile.getEndPathImage()));
 
         mBinding.genderGrp.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -587,31 +609,13 @@ public class PersonalInfoFragment extends BaseFragment {
                 return;
             }
 
-
-            HashMap userProfileMap = new HashMap();
-            userProfileMap.put(Constant.u_user_id, getSingleQuoteString(String.valueOf(userid)));
-            userProfileMap.put(Constant.u_app_version, Constant.APP_VERSION);
-            userProfileMap.put(Constant.device_id, getSingleQuoteString(getDeviceId()));
-            userProfileMap.put(Constant.appName, getSingleQuoteString(Constant.APP_NAME));
-            userProfileMap.put(Constant.u_first_name, getSingleQuoteString(mBinding.etFirstName.getText().toString().trim()));
-            userProfileMap.put(Constant.u_last_name, getSingleQuoteString(mBinding.etLastName.getText().toString().trim()));
-            userProfileMap.put(Constant.CASE, getSingleQuoteString("n"));
-            userProfileMap.put(Constant.STATUS, getSingleQuoteString("i"));
             userProfileMap.put(Constant.u_mob_1, mBinding.etMobile.getText().toString().trim());
             userProfileMap.put(Constant.u_Email, mBinding.etEmail.getText().toString().trim());
             userProfileMap.put(Constant.u_birth_date, convertDateToDataBaseFormat(mBinding.etDob.getText().toString()));
             userProfileMap.put(Constant.u_Password, mBinding.etPassword.getText().toString().trim());
-            userProfileMap.put(Constant.u_tagline, getSingleQuoteString(mBinding.etTagLine.getText().toString().trim()));
-
-            userProfileMap.put(Constant.u_native_ct_id, mBinding.cityAutocompleteView.getTag().toString());
-            userProfileMap.put(Constant.u_native_s_id, mBinding.stateAutocompleteView.getTag());
-            userProfileMap.put(Constant.u_native_dt_id, mBinding.divisionAutocompleteView.getTag());
-            userProfileMap.put(Constant.u_nationality, mBinding.nationalityAutocompleteView.getTag());
-            userProfileMap.put(Constant.w_lm_id_array, mBinding.langAutocompleteView.getTag());
-            userProfileMap.put(Constant.u_gender, getSingleQuoteString(gender));
             userProfileMap.put(Constant.userName, mBinding.userNameAutoCompleteTextView.getTag().toString());
 
-            updateUserProfile(userProfileMap);
+            userInfo();
 
         });
 
@@ -736,6 +740,27 @@ public class PersonalInfoFragment extends BaseFragment {
         });
     }
 
+    private void userInfo() {
+        userProfileMap.put(Constant.u_user_id, String.valueOf(userid));
+        userProfileMap.put(Constant.u_app_version, Constant.APP_VERSION);
+        userProfileMap.put(Constant.device_id, getSingleQuoteString(getDeviceId()));
+        userProfileMap.put(Constant.appName, getSingleQuoteString(Constant.APP_NAME));
+        userProfileMap.put(Constant.u_first_name, getSingleQuoteString(mBinding.etFirstName.getText().toString().trim()));
+        userProfileMap.put(Constant.u_last_name, getSingleQuoteString(mBinding.etLastName.getText().toString().trim()));
+        userProfileMap.put(Constant.CASE, getSingleQuoteString("n"));
+        userProfileMap.put(Constant.STATUS, getSingleQuoteString("i"));
+        userProfileMap.put(Constant.u_tagline, getSingleQuoteString(mBinding.etTagLine.getText().toString().trim()));
+        userProfileMap.put(Constant.u_native_ct_id, mBinding.cityAutocompleteView.getTag().toString());
+        userProfileMap.put(Constant.u_native_s_id, mBinding.stateAutocompleteView.getTag().toString());
+        userProfileMap.put(Constant.u_native_dt_id, mBinding.divisionAutocompleteView.getTag().toString());
+        userProfileMap.put(Constant.u_nationality, mBinding.nationalityAutocompleteView.getTag().toString());
+        if (mBinding.langAutocompleteView.getTag() != null)
+            userProfileMap.put(Constant.w_lm_id_array, mBinding.langAutocompleteView.getTag().toString());
+        userProfileMap.put(Constant.u_gender, getSingleQuoteString(gender));
+
+        updateUserProfile(userProfileMap);
+    }
+
 
     private void updateUserProfile(HashMap<String, String> userProfileMap) {
         Log.d(TAG, "updateUserProfile: " + userProfileMap);
@@ -769,7 +794,7 @@ public class PersonalInfoFragment extends BaseFragment {
             public void onResponse(Call<UserProfileResponse> call, Response<UserProfileResponse> response) {
                 ProgressDialog.getInstance().dismiss();
                 if (response.body() != null && response.body().getResponseCode().equals("200")) {
-                    showToast("Profile Updated Successfully.");
+                    //showToast("Profile Updated Successfully.");
                     String displayName = mBinding.etFirstName.getText().toString().trim() + " " + mBinding.etLastName.getText().toString().trim();
                     new PreferenceManager(requireActivity()).saveString(Constant.DISPLAY_NAME, displayName);
                     new PreferenceManager(requireActivity()).saveString(Constant.GENDER, userProfileMap.get(Constant.u_gender));
@@ -817,7 +842,6 @@ public class PersonalInfoFragment extends BaseFragment {
             public void onResponse(Call<UserProfile> call, Response<UserProfile> response) {
                 //ProgressDialog.getInstance().dismiss();
                 if (response.body() != null && response.body().getResponseCode().equals("200")) {
-                    //mViewModel.delete();
                     mViewModel.insert(response.body());
                 } else if (response.body().getResponseCode().equals("501")) {
                     resetSettingAndLogout();
@@ -839,27 +863,31 @@ public class PersonalInfoFragment extends BaseFragment {
 
 
     private void fetchLanguages() {
-        ProgressDialog.getInstance().show(requireActivity());
-        Call<Language> call = apiService.fetchLanguages(userid);
-        call.enqueue(new Callback<Language>() {
-            @Override
-            public void onResponse(Call<Language> call, Response<Language> response) {
-                ProgressDialog.getInstance().dismiss();
-                if (response.body() != null) {
-                    mViewModel.setLanguageList(response.body().getLanguageList());
-                } else {
-                    showErrorDialog(requireActivity(), response.body().getResponseCode(), "");
+        try {
+            ProgressDialog.getInstance().show(requireActivity());
+            Call<Language> call = apiService.fetchLanguages(userid);
+            call.enqueue(new Callback<Language>() {
+                @Override
+                public void onResponse(Call<Language> call, Response<Language> response) {
+                    ProgressDialog.getInstance().dismiss();
+                    if (response.body() != null) {
+                        mViewModel.setLanguageList(response.body().getLanguageList());
+                    } else {
+                        showErrorDialog(requireActivity(), response.body().getResponseCode(), "");
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<Language> call, Throwable t) {
-                ProgressDialog.getInstance().dismiss();
-                Log.e(TAG, "onFailure Languages: " + t.getMessage());
-                showToast("Something went wrong!!");
-                t.printStackTrace();
-            }
-        });
+                @Override
+                public void onFailure(Call<Language> call, Throwable t) {
+                    ProgressDialog.getInstance().dismiss();
+                    Log.e(TAG, "onFailure Languages: " + t.getMessage());
+                    showToast("Something went wrong!!");
+                    t.printStackTrace();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void fetchNationalities() {
@@ -1270,4 +1298,11 @@ public class PersonalInfoFragment extends BaseFragment {
             }
         });
     }
+
+   /* @Override
+    public void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause Called: ");
+        userInfo();
+    }*/
 }

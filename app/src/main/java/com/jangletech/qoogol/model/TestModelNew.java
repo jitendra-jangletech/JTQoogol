@@ -16,6 +16,8 @@ import java.util.List;
 @Entity
 public class TestModelNew implements Serializable {
 
+    private String flag;
+
     @SerializedName(Constant.test_description)
     private String test_description;
 
@@ -188,6 +190,14 @@ public class TestModelNew implements Serializable {
 
     @SerializedName(Constant.sm_sub_name)
     private String sm_sub_name;
+
+    public String getFlag() {
+        return flag;
+    }
+
+    public void setFlag(String flag) {
+        this.flag = flag;
+    }
 
     public String getSm_sub_name() {
         return sm_sub_name;

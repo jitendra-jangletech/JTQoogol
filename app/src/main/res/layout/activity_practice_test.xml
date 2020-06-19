@@ -244,6 +244,28 @@
                                         app:chipCornerRadius="@dimen/_1sdp"
                                         app:chipStrokeColor="@color/icon_color"
                                         app:chipStrokeWidth="@dimen/_2sdp" />
+
+                                    <com.google.android.material.chip.Chip
+                                        android:id="@+id/chipWrong"
+                                        style="@style/Widget.MaterialComponents.Chip.Filter"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:checkable="true"
+                                        android:clickable="true"
+                                        android:focusable="true"
+                                        android:foreground="?attr/selectableItemBackground"
+                                        android:gravity="center_vertical"
+                                        android:minWidth="@dimen/_60sdp"
+                                        android:minHeight="@dimen/_40sdp"
+                                        android:text="Wrong"
+                                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                        android:textColor="@color/colorBlack"
+                                        android:textStyle="bold"
+                                        app:chipBackgroundColor="@drawable/chip_background"
+                                        app:chipCornerRadius="@dimen/_1sdp"
+                                        app:chipStrokeColor="@color/icon_color"
+                                        app:chipStrokeWidth="@dimen/_2sdp" />
+
                                 </com.google.android.material.chip.ChipGroup>
 
                             </LinearLayout>

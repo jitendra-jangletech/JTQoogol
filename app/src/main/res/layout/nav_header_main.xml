@@ -47,19 +47,20 @@
                 app:srcCompat="@drawable/ic_profile_default" />
 
             <ImageView
-                android:src="@drawable/ic_edit_profile"
-                android:layout_gravity="bottom|right"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|right"
+                android:src="@drawable/ic_edit_profile" />
         </FrameLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            app:layout_constraintTop_toTopOf="parent"
             android:id="@+id/header_text_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/_10sdp"
-            app:layout_constraintLeft_toRightOf="@+id/profilePicLayout">
+            app:layout_constraintLeft_toRightOf="@+id/profilePicLayout"
+            app:layout_constraintTop_toTopOf="parent">
+
 
             <TextView
                 android:id="@+id/tvName"
@@ -71,6 +72,13 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <ImageView
+                android:id="@+id/imgBadge"
+                android:layout_width="@dimen/_18sdp"
+                android:layout_height="@dimen/_18sdp"
+                android:layout_marginLeft="@dimen/_5sdp"
+                app:layout_constraintLeft_toRightOf="@+id/tvName"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatRatingBar
                 android:id="@+id/rating"
@@ -94,7 +102,6 @@
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/rating">
-
 
                 <LinearLayout
                     android:id="@+id/creditpotints_layout"
@@ -194,13 +201,13 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:visibility="gone"
                     android:id="@+id/following_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:orientation="vertical"
+                    android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toEndOf="@+id/followers_layout"

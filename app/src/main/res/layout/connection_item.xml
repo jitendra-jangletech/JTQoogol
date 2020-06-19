@@ -11,20 +11,21 @@
         app:cardCornerRadius="@dimen/_5sdp"
         app:cardElevation="@dimen/_5sdp">
 
-
-        <RelativeLayout
-            android:padding="@dimen/_10sdp"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/rlProfile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="@dimen/_10sdp">
 
             <ImageView
                 android:id="@+id/userProfileImage"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_profile_default" />
+                android:src="@drawable/ic_profile_default"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tvUserName"
@@ -35,23 +36,39 @@
                 android:layout_toEndOf="@+id/userProfileImage"
                 android:ellipsize="end"
                 android:fontFamily="sans-serif-black"
+                android:text="Qoogol User"
                 android:textAlignment="viewStart"
                 android:textColor="@color/colorBlack"
                 android:textSize="@dimen/textSizexSmall"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@+id/userProfileImage"
+                app:layout_constraintTop_toTopOf="parent" />
 
+            <ImageView
+                android:id="@+id/imgBadge"
+                android:layout_width="@dimen/_15sdp"
+                android:layout_height="@dimen/_15sdp"
+                android:layout_marginLeft="@dimen/_5sdp"
+                android:src="@drawable/bronze"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@+id/tvUserName"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:textColor="@color/grey"
                 android:id="@+id/textViewOptions"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:text="&#8942;"
-                android:textAppearance="?android:textAppearanceLarge" />
-        </RelativeLayout>
+                android:textAppearance="?android:textAppearanceLarge"
+                android:textColor="@color/grey"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.card.MaterialCardView>
 

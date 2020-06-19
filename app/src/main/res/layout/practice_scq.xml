@@ -35,7 +35,7 @@
                         android:layout_marginRight="@dimen/_10sdp"
                         android:ellipsize="end"
                         android:singleLine="true"
-                        android:text="Id"
+                        android:text="1"
                         android:textColor="@color/colorWhite"
                         android:textSize="@dimen/_10ssp"
                         android:textStyle="bold"
@@ -43,129 +43,31 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/time_textview"
+                        android:id="@+id/marks_textview"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:singleLine="true"
-                        android:text="Recommended time : "
-                        android:textAlignment="textEnd"
+                        android:text="Marks :"
                         android:textColor="@color/colorWhite"
                         android:textSize="@dimen/_10ssp"
-                        android:visibility="gone"
+                        app:layout_constraintLeft_toRightOf="@+id/id_textview"
+                        app:layout_constraintRight_toLeftOf="@id/markToggle"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ToggleButton
+                        android:id="@+id/markToggle"
+                        android:layout_width="@dimen/_16sdp"
+                        android:layout_height="@dimen/_16sdp"
+                        android:layout_marginRight="@dimen/_10sdp"
+                        android:background="@drawable/button_marked"
+                        android:checked="false"
+                        android:text=""
+                        android:textOff=""
+                        android:textOn=""
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-                <LinearLayout
-                    android:id="@+id/header_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingLeft="@dimen/_10sdp"
-                    android:paddingRight="@dimen/_10sdp"
-                    android:visibility="gone"
-                    android:weightSum="3"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/header">
-
-                    <TextView
-                        android:id="@+id/subject_textview"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:ellipsize="end"
-                        android:singleLine="true"
-                        android:text="Subject"
-                        android:textColor="@color/colorSkyBlue"
-                        android:textSize="@dimen/_10ssp" />
-
-                    <TextView
-                        android:id="@+id/topic_textview"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:ellipsize="end"
-                        android:singleLine="true"
-                        android:text="Topic"
-                        android:textAlignment="center"
-                        android:textColor="@color/colorSkyBlue"
-                        android:textSize="@dimen/_10ssp" />
-
-                    <TextView
-                        android:id="@+id/chapter_textview"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/_5sdp"
-                        android:layout_weight="1"
-                        android:ellipsize="end"
-                        android:singleLine="true"
-                        android:text="Subject"
-                        android:textAlignment="textEnd"
-                        android:textColor="@color/colorSkyBlue"
-                        android:textSize="@dimen/_10ssp" />
-
-                </LinearLayout>
-
-                <View
-                    android:id="@+id/header_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:layout_marginBottom="@dimen/_10sdp"
-                    android:background="@color/colorLightGrey"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/header_layout" />
-
-                <LinearLayout
-                    android:id="@+id/subheader_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:orientation="horizontal"
-                    android:paddingStart="@dimen/_10sdp"
-                    android:paddingRight="@dimen/_10sdp"
-                    android:weightSum="2"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/header_view">
-
-                    <TextView
-                        android:id="@+id/marks_textview"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:ellipsize="end"
-                        android:singleLine="true"
-                        android:text="Marks"
-                        android:textColor="@color/colorSkyBlue"
-                        android:textSize="@dimen/_10ssp" />
-
-                    <TextView
-                        android:id="@+id/category_textview"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/_5sdp"
-                        android:layout_weight="1"
-                        android:ellipsize="end"
-                        android:singleLine="true"
-                        android:text="Category"
-                        android:textAlignment="textEnd"
-                        android:textColor="@color/colorSkyBlue"
-                        android:textSize="@dimen/_10ssp"
-                        android:visibility="gone" />
-                </LinearLayout>
-
-                <View
-                    android:id="@+id/subheader_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:layout_marginBottom="@dimen/_10sdp"
-                    android:background="@color/colorLightGrey"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/subheader_layout" />
 
                 <TextView
                     android:id="@+id/question_textview"
@@ -179,44 +81,8 @@
                     android:textSize="@dimen/_12ssp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toLeftOf="@+id/reset"
-                    app:layout_constraintTop_toBottomOf="@+id/subheader_view" />
+                    app:layout_constraintTop_toBottomOf="@+id/header" />
 
-                <ImageView
-                    android:id="@+id/reset"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/_2sdp"
-                    android:src="@drawable/ic_reset"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="@+id/question_textview"
-                    app:layout_constraintRight_toLeftOf="@+id/reset_label"
-                    app:layout_constraintTop_toTopOf="@+id/question_textview" />
-
-                <TextView
-                    android:id="@+id/reset_label"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/_10sdp"
-                    android:text="Reset"
-                    android:textColor="@color/black"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="@+id/question_textview"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/question_textview" />
-
-                <com.skyhope.showmoretextview.ShowMoreTextView
-                    android:id="@+id/questiondesc_textview"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/_10sdp"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:layout_marginEnd="@dimen/_10sdp"
-                    android:text="question desc"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="@dimen/_10ssp"
-                    android:visibility="gone"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/question_textview" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/timer_layout"
@@ -226,7 +92,7 @@
                     android:padding="@dimen/_10sdp"
                     android:visibility="visible"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/questiondesc_textview">
+                    app:layout_constraintTop_toBottomOf="@+id/question_textview">
 
                     <TextView
                         android:id="@+id/tvtimer"
@@ -263,41 +129,13 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-                <ImageView
-                    android:id="@+id/que_img1"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_180sdp"
-                    android:layout_marginLeft="@dimen/_10sdp"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:layout_marginEnd="@dimen/_10sdp"
-                    android:maxHeight="@dimen/_180sdp"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/ic_menu_share"
-                    android:visibility="gone"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/timer_layout" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/img_recycler"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginLeft="@dimen/_10sdp"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:layout_marginEnd="@dimen/_10sdp"
-                    android:visibility="gone"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/que_img1" />
-
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/expandable_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:visibility="visible"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/img_recycler">
+                    app:layout_constraintTop_toBottomOf="@+id/timer_layout">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/answer_layout"
@@ -325,16 +163,17 @@
                                 app:layout_constraintLeft_toLeftOf="parent"
                                 app:layout_constraintTop_toTopOf="parent">
 
-                                <TextView
+                                <io.github.kexanie.library.MathView
                                     android:id="@+id/scq1"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="mcq1"
                                     android:textColor="@color/colorSkyBlue"
+                                    app:engine="KaTeX"
                                     app:layout_constraintLeft_toLeftOf="parent"
                                     app:layout_constraintTop_toTopOf="parent" />
-                            </androidx.constraintlayout.widget.ConstraintLayout>
 
+                            </androidx.constraintlayout.widget.ConstraintLayout>
 
                             <ImageView
                                 android:id="@+id/scq1_img"
@@ -356,14 +195,16 @@
                                 app:layout_constraintLeft_toLeftOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/scq1_layout">
 
-                                <TextView
+                                <io.github.kexanie.library.MathView
                                     android:id="@+id/scq2"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="mcq2"
                                     android:textColor="@color/colorSkyBlue"
+                                    app:engine="KaTeX"
                                     app:layout_constraintLeft_toLeftOf="parent"
                                     app:layout_constraintTop_toTopOf="parent" />
+
                             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -387,14 +228,16 @@
                                 app:layout_constraintLeft_toLeftOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/scq2_layout">
 
-                                <TextView
+                                <io.github.kexanie.library.MathView
                                     android:id="@+id/scq3"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="mcq3"
                                     android:textColor="@color/colorSkyBlue"
+                                    app:engine="KaTeX"
                                     app:layout_constraintLeft_toLeftOf="parent"
                                     app:layout_constraintTop_toTopOf="parent" />
+
                             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -417,14 +260,16 @@
                                 app:layout_constraintLeft_toLeftOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/scq3_layout">
 
-                                <TextView
+                                <io.github.kexanie.library.MathView
                                     android:id="@+id/scq4"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="mcq4"
                                     android:textColor="@color/colorSkyBlue"
+                                    app:engine="KaTeX"
                                     app:layout_constraintLeft_toLeftOf="parent"
                                     app:layout_constraintTop_toTopOf="parent" />
+
                             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -447,14 +292,16 @@
                                 app:layout_constraintLeft_toLeftOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/scq4_layout">
 
-                                <TextView
+                                <io.github.kexanie.library.MathView
                                     android:id="@+id/scq5"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="mcq5"
                                     android:textColor="@color/colorSkyBlue"
+                                    app:engine="KaTeX"
                                     app:layout_constraintLeft_toLeftOf="parent"
                                     app:layout_constraintTop_toTopOf="parent" />
+
                             </androidx.constraintlayout.widget.ConstraintLayout>
 
                             <ImageView
@@ -567,6 +414,7 @@
                             android:layout_marginTop="@dimen/_5sdp"
                             android:text="Answer desc"
                             android:textColor="@color/colorBlack"
+                            android:visibility="gone"
                             app:layout_constraintLeft_toLeftOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/ans_img1" />
 
@@ -591,6 +439,7 @@
                         android:text="Level : "
                         android:textColor="@color/colorSkyBlue"
                         android:textSize="@dimen/_10ssp"
+                        android:visibility="visible"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/answer_bottom_view" />
 
@@ -603,31 +452,10 @@
                         android:text=""
                         android:textColor="@color/colorBlack"
                         android:textSize="@dimen/_10ssp"
+                        android:visibility="visible"
                         app:layout_constraintLeft_toRightOf="@+id/difflevel_textview"
                         app:layout_constraintTop_toBottomOf="@+id/solution_layout" />
 
-                    <TextView
-                        android:id="@+id/posted_textview"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:text="Posted : "
-                        android:textColor="@color/colorSkyBlue"
-                        android:textSize="@dimen/_10ssp"
-                        android:visibility="gone"
-                        app:layout_constraintRight_toLeftOf="@+id/posted_value"
-                        app:layout_constraintTop_toBottomOf="@+id/solution_layout" />
-
-                    <TextView
-                        android:id="@+id/posted_value"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:layout_marginEnd="@dimen/_10sdp"
-                        android:textColor="@color/colorBlack"
-                        android:textSize="@dimen/_10ssp"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/solution_layout" />
 
                     <TextView
                         android:id="@+id/attended_count_textview"
@@ -638,8 +466,8 @@
                         android:text="Users attempted : "
                         android:textColor="@color/colorSkyBlue"
                         android:textSize="@dimen/_10ssp"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/difflevel_textview" />
+                        app:layout_constraintRight_toLeftOf="@+id/attempted_value"
+                        app:layout_constraintTop_toBottomOf="@+id/answer_bottom_view" />
 
                     <TextView
                         android:id="@+id/attempted_value"
@@ -647,34 +475,12 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_5sdp"
                         android:layout_marginRight="@dimen/_10sdp"
-                        android:text=""
-                        android:textColor="@color/colorBlack"
-                        android:textSize="@dimen/_10ssp"
-                        app:layout_constraintLeft_toRightOf="@+id/attended_count_textview"
-                        app:layout_constraintTop_toBottomOf="@+id/difflevel_textview" />
-
-                    <TextView
-                        android:id="@+id/last_used_textview"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:text="Last used : "
-                        android:textColor="@color/colorSkyBlue"
-                        android:textSize="@dimen/_10ssp"
-                        android:visibility="gone"
-                        app:layout_constraintRight_toLeftOf="@+id/posted_value"
-                        app:layout_constraintTop_toBottomOf="@+id/difflevel_textview" />
-
-                    <TextView
-                        android:id="@+id/last_used_value"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:text="0"
                         android:textColor="@color/colorBlack"
                         android:textSize="@dimen/_10ssp"
                         app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/difflevel_textview" />
+                        app:layout_constraintTop_toBottomOf="@+id/answer_bottom_view" />
+
 
                     <View
                         android:id="@+id/upper_bottom_view"
@@ -684,7 +490,7 @@
                         android:layout_marginBottom="@dimen/_10sdp"
                         android:background="@color/colorLightGrey"
                         app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/last_used_value" />
+                        app:layout_constraintTop_toBottomOf="@+id/attempted_value" />
 
                     <LinearLayout
                         android:id="@+id/bottom_layout"
@@ -766,6 +572,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/_5sdp"
+                                android:padding="@dimen/_5sdp"
                                 android:text="5"
                                 android:textAlignment="textStart"
                                 android:textColor="@color/colorBlack"

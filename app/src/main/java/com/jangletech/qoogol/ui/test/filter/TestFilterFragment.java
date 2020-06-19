@@ -6,7 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.RatingBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,7 +16,6 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 
 import com.androidbuts.multispinnerfilter.KeyPairBoolData;
-import com.androidbuts.multispinnerfilter.SpinnerListener;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.jangletech.qoogol.R;
@@ -51,8 +50,12 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
     private HashMap<Integer, Chip> mapSubjectChips = new HashMap();
     private HashMap<Integer, Chip> mapChapterChips = new HashMap();
     private HashMap<Integer, Chip> mapRatingsChips = new HashMap();
-    ApiInterface apiService = ApiClient.getInstance().getApi();
+    private ApiInterface apiService = ApiClient.getInstance().getApi();
     private PreferenceManager mSettings;
+    private String diffLevel = "";
+    private HashMap<String, String> params;
+    private HashMap<String, String> mDiffMap = new HashMap<>();
+    private HashMap<String, String> mCategoryMap = new HashMap<>();
     Set subjectset = new HashSet<String>();
     Set chapterset = new HashSet<String>();
     Set ratingset = new HashSet<String>();
@@ -66,8 +69,22 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-    }
+        params = new HashMap<>();
 
+        //Difficulty Map
+        mDiffMap.put("Hard", "H");
+        mDiffMap.put("Medium", "M");
+        mDiffMap.put("Easy", "E");
+
+        //CategoryMap
+        mCategoryMap.put("Unit Test-Practice", "");
+        mCategoryMap.put("Semester-Practice", "");
+        mCategoryMap.put("Annual-Practice", "");
+        mCategoryMap.put("Unit Test-Final", "");
+        mCategoryMap.put("Semester-Final", "");
+        mCategoryMap.put("Annual-Final", "");
+
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -86,13 +103,15 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
                 mBinding.ratingLayout.setVisibility(View.VISIBLE);
                 call_from = "learning";
             } else if (bundle.getString("call_from").equalsIgnoreCase("test")) {
-                mBinding.autherLayout.setVisibility(View.VISIBLE);
+                //mBinding.autherLayout.setVisibility(View.VISIBLE);
                 mBinding.testcatLayout.setVisibility(View.VISIBLE);
-                mBinding.durationLayout.setVisibility(View.VISIBLE);
-                mBinding.totalMarksLayout.setVisibility(View.VISIBLE);
+                //mBinding.durationLayout.setVisibility(View.VISIBLE);
+                //mBinding.totalMarksLayout.setVisibility(View.VISIBLE);
                 call_from = "test";
             }
         }
+        if (getString(Constant.tm_avg_rating) != null && !getString(Constant.tm_avg_rating).isEmpty())
+            mBinding.rating.setRating(Float.parseFloat(getString(Constant.tm_avg_rating)));
     }
 
     private void fetchSubjectList(String scrCoId) {
@@ -114,7 +133,6 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
                 t.printStackTrace();
             }
         });
-
     }
 
     @Override
@@ -122,19 +140,18 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(MyTestViewModel.class);
 
-        if(mViewModel.getAllSubjects().getValue() == null) {
-            fetchSubjectList(new PreferenceManager(requireActivity()).getString(Constant.scr_co_id));
-        }else{
-            fetchchapterList();
+        if (mViewModel.getAllSubjects().getValue() == null) {
+            fetchSubjectList(getString(Constant.scr_co_id));
         }
+        fetchchapterList();
         mViewModel.getAllSubjects().observe(getViewLifecycleOwner(), new Observer<List<FetchSubjectResponse>>() {
             @Override
             public void onChanged(@Nullable final List<FetchSubjectResponse> subjects) {
                 if (subjects != null) {
                     Log.d(TAG, "onChanged Subjects Size : " + subjects.size());
                     ArrayList<String> subjectList = new ArrayList<>();
-                    for(FetchSubjectResponse obj:subjects){
-                        if(!subjectList.contains(obj.getSm_sub_name()))
+                    for (FetchSubjectResponse obj : subjects) {
+                        if (!subjectList.contains(obj.getSm_sub_name()))
                             subjectList.add(obj.getSm_sub_name());
                     }
                     prepareSubjectChips(subjectList);
@@ -151,9 +168,17 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
         prepareTestCategoryChips();
         prepareDiffLevelChips();
 
+        mBinding.rating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            public void onRatingChanged(RatingBar ratingBar, float rating,
+                                        boolean fromUser) {
+                params.put(Constant.tm_avg_rating, String.valueOf(rating));
+                saveString(Constant.tm_avg_rating, String.valueOf(rating));
+            }
+        });
+
         mBinding.btnApply.setOnClickListener(v -> {
             try {
-                Toast.makeText(getActivity(), "Filters Applied", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), "Filters Applied", Toast.LENGTH_SHORT).show();
                 if (subjectset != null && subjectset.size() > 0)
                     mSettings.setSubjectFilter(subjectset);
 
@@ -162,12 +187,14 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
 
                 if (ratingset != null && ratingset.size() > 0)
                     mSettings.setRatingsFilter(ratingset);
+                Bundle bundle = new Bundle();
 
                 if (call_from.equalsIgnoreCase("test")) {
-                    Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_test_my);
+                    bundle.putSerializable("PARAMS", params);
+                    //bundle.putString(Constant.tm_diff_level, diffLevel);
+                    Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_test_my, bundle);
                     //MainActivity.navController.navigate(R.id.nav_test_my);
                 } else {
-                    Bundle bundle = new Bundle();
                     bundle.putString("call_from", "learning");
                     Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_learning, bundle);
                     //MainActivity.navController.navigate(R.id.nav_learning,bundle);
@@ -175,7 +202,6 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
         });
 
         List<String> list = Arrays.asList(getResources().getStringArray(R.array.author));
@@ -189,23 +215,27 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
             listArray0.add(h);
         }
 
-        mBinding.spinnerSearchAuthor.setItems(listArray0, -1, new SpinnerListener() {
-
-            @Override
-            public void onItemsSelected(List<KeyPairBoolData> items) {
-
-                for (int i = 0; i < items.size(); i++) {
-                    if (items.get(i).isSelected()) {
-                        Log.i(TAG, i + " : " + items.get(i).getName() + " : " + items.get(i).isSelected());
-                    }
-                }
-            }
-        });
+//        mBinding.spinnerSearchAuthor.setItems(listArray0, -1, new SpinnerListener() {
+//
+//            @Override
+//            public void onItemsSelected(List<KeyPairBoolData> items) {
+//
+//                for (int i = 0; i < items.size(); i++) {
+//                    if (items.get(i).isSelected()) {
+//                        Log.i(TAG, i + " : " + items.get(i).getName() + " : " + items.get(i).isSelected());
+//                    }
+//                }
+//            }
+//        });
 
         mBinding.testCategoryChipGrp.setOnCheckedChangeListener((chipGroup, id) -> {
             Chip chip = ((Chip) chipGroup.getChildAt(chipGroup.getCheckedChipId()));
             if (chip != null) {
                 if (chip.isChecked()) {
+                    setCheckedChip(mBinding.testCategoryChipGrp);
+                    saveString(Constant.tm_catg, mCategoryMap.get(chip.getText()));
+                } else {
+                    saveString(Constant.tm_catg, "");
                     setCheckedChip(mBinding.testCategoryChipGrp);
                 }
             }
@@ -214,9 +244,22 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
         mBinding.testDifficultyLevelChipGrp.setOnCheckedChangeListener((chipGroup, id) -> {
             Chip chip = ((Chip) chipGroup.getChildAt(chipGroup.getCheckedChipId()));
             if (chip != null) {
+                //showToast(chip.getText().toString());
                 if (chip.isChecked()) {
+                    if (chip.getText().equals("Easy"))
+                        diffLevel = "E";
+                    if (chip.getText().equals("Hard"))
+                        diffLevel = "H";
+                    if (chip.getText().equals("Medium"))
+                        diffLevel = "M";
+
+                    params.put(Constant.tm_diff_level, diffLevel);
+                    saveString(Constant.tm_diff_level, diffLevel);
                     setCheckedChip(mBinding.testDifficultyLevelChipGrp);
                 }
+            } else {
+                saveString(Constant.tm_diff_level, "");
+                setCheckedChip(mBinding.testDifficultyLevelChipGrp);
             }
         });
     }
@@ -238,6 +281,16 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
             }
         });
     }
+
+    /*private void setFilters(){
+        if(getString(Constant.tm_diff_level)!=null
+                && !getString(Constant.tm_diff_level).isEmpty()){
+            String strDiff = getString(Constant.tm_diff_level);
+            for (int i = 0; i <mBinding.testDifficultyLevelChipGrp.getChildCount() ; i++) {
+                Chip chip = mBinding.
+            }
+        }
+    }*/
 
 
     private void prepareRatingChips() {
@@ -274,7 +327,6 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
 
     private void prepareTestCategoryChips() {
         List subjectList = new ArrayList();
-        subjectList.add("All");
         subjectList.add("Unit Test-Practice");
         subjectList.add("Semester-Practice");
         subjectList.add("Annual-Practice");
@@ -286,11 +338,8 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
         for (int i = 0; i < subjectList.size(); i++) {
             Chip chip = (Chip) LayoutInflater.from(mBinding.testCategoryChipGrp.getContext()).inflate(R.layout.chip_layout, mBinding.testCategoryChipGrp, false);
             chip.setText(subjectList.get(i).toString());
-            chip.setTag("Subjects");
+            chip.setTag("Categories");
             chip.setId(i);
-            if (i == 0) {
-                chip.setChecked(true);
-            }
             chip.setClickable(true);
             chip.setCheckable(true);
             mBinding.testCategoryChipGrp.addView(chip);
@@ -303,19 +352,27 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
         diffLevelList.add("Medium");
         diffLevelList.add("Hard");
 
+        String strDiffLevel = getString(Constant.tm_diff_level);
+
         mBinding.testDifficultyLevelChipGrp.removeAllViews();
         for (int i = 0; i < diffLevelList.size(); i++) {
             Chip chip = (Chip) LayoutInflater.from(mBinding.testDifficultyLevelChipGrp.getContext()).inflate(R.layout.chip_layout, mBinding.testDifficultyLevelChipGrp, false);
             chip.setText(diffLevelList.get(i).toString());
+            chip.setId(i);
             chip.setTag("Difficulty");
-            chip.setChecked(true);
             chip.setClickable(true);
             chip.setCheckable(true);
+            if (strDiffLevel != null && strDiffLevel.equalsIgnoreCase("E") && i == 0)
+                chip.setChecked(true);
+            if (strDiffLevel != null && strDiffLevel.equalsIgnoreCase("M") && i == 1)
+                chip.setChecked(true);
+            if (strDiffLevel != null && strDiffLevel.equalsIgnoreCase("H") && i == 2)
+                chip.setChecked(true);
             mBinding.testDifficultyLevelChipGrp.addView(chip);
         }
     }
 
-    private void prepareSubjectChips(List<String> subjectList){
+    private void prepareSubjectChips(List<String> subjectList) {
         mBinding.subjectsChipGrp.removeAllViews();
         for (int i = 0; i < subjectList.size(); i++) {
             Chip chip = (Chip) LayoutInflater.from(mBinding.subjectsChipGrp.getContext()).inflate(R.layout.chip_layout, mBinding.subjectsChipGrp, false);
@@ -340,11 +397,8 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
             for (int i = 0; i < chapters.size(); i++) {
                 Chip chip = (Chip) LayoutInflater.from(mBinding.chapterChipGrp.getContext()).inflate(R.layout.chip_layout, mBinding.chapterChipGrp, false);
                 chip.setText(chapters.get(i).getChapter_name());
-                chip.setTag("Chapters");
-                chip.setId(Integer.parseInt(chapters.get(i).getChapter_id()));
-                if (chapterset.contains(chapters.get(i).getChapter_id()))
-                    chip.setChecked(true);
-                mapChapterChips.put(i, chip);
+                chip.setTag(chapters.get(i).getChapter_id());
+                chip.setId(i);
                 chip.setOnClickListener(this);
                 chip.setClickable(true);
                 chip.setCheckable(true);

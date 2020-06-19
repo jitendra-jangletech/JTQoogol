@@ -1,10 +1,9 @@
-package com.jangletech.qoogol.ui.Saved;
+package com.jangletech.qoogol.ui.saved;
 
 import android.app.Application;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModel;
 
 import com.jangletech.qoogol.database.repo.AppRepository;
 import com.jangletech.qoogol.model.LearningQuestions;
@@ -34,7 +33,6 @@ public class SavedViewModel extends AndroidViewModel {
         apiService = ApiClient.getInstance().getApi();
         mAppRepository = new AppRepository(application);
     }
-
 
     public void fetchQuestionData() {
         getDataFromApi();

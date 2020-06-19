@@ -1,4 +1,4 @@
-package com.jangletech.qoogol.ui.learning;
+package com.jangletech.qoogol.ui.saved;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -23,7 +23,6 @@ import com.jangletech.qoogol.model.ProcessQuestion;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
-import com.jangletech.qoogol.ui.Saved.SavedViewModel;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;

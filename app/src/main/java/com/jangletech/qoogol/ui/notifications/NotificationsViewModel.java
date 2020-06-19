@@ -9,7 +9,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.jangletech.qoogol.database.repo.AppRepository;
-import com.jangletech.qoogol.model.Education;
 import com.jangletech.qoogol.model.Notification;
 
 import java.util.List;
@@ -43,13 +42,9 @@ public class NotificationsViewModel extends AndroidViewModel {
         appRepository.deleteNotification(nId);
     }
 
-
-
-
     public LiveData<List<Notification>> getAllNotifications() {
         return appRepository.getAllNotifications();
     }
-
 
     @Override
     protected void onCleared() {

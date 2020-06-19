@@ -33,9 +33,9 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             android:fillViewport="true"
-            android:paddingBottom="@dimen/_50sdp"
+            app:layout_constraintBottom_toTopOf="@+id/btnSave"
             app:layout_constraintTop_toTopOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -614,16 +614,34 @@
                             android:orientation="vertical"
                             app:layout_constraintTop_toTopOf="parent">
 
-                            <TextView
-                                android:id="@+id/tvName"
+                            <androidx.constraintlayout.widget.ConstraintLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="center_horizontal"
-                                android:padding="@dimen/_10sdp"
-                                android:text="Qoogol User"
-                                android:textColor="@color/colorBlack"
-                                android:textSize="@dimen/_16ssp"
-                                android:textStyle="bold" />
+                                android:layout_gravity="center">
+
+                                <TextView
+                                    android:id="@+id/tvName"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal"
+                                    android:padding="@dimen/_10sdp"
+                                    android:text="Qoogol User"
+                                    android:textColor="@color/colorBlack"
+                                    android:textSize="@dimen/_16ssp"
+                                    android:textStyle="bold"
+                                    app:layout_constraintLeft_toLeftOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <ImageView
+                                    android:padding="@dimen/_10sdp"
+                                    android:id="@+id/imgBadge"
+                                    android:layout_width="@dimen/_40sdp"
+                                    android:layout_height="@dimen/_40sdp"
+                                    app:layout_constraintLeft_toRightOf="@+id/tvName"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
 
                             <androidx.constraintlayout.widget.ConstraintLayout
                                 android:id="@+id/connection_layout"
@@ -631,17 +649,17 @@
                                 android:layout_height="wrap_content">
 
                                 <Button
-                                    android:minWidth="@dimen/_85sdp"
                                     android:id="@+id/add_friend"
                                     style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_marginRight="@dimen/_10sdp"
                                     android:backgroundTint="@color/colorSkyBlue"
+                                    android:minWidth="@dimen/_85sdp"
                                     android:text="@string/add_friend"
                                     android:textAllCaps="false"
                                     android:textColor="@color/colorWhite"
                                     app:cornerRadius="@dimen/_5sdp"
-                                    android:layout_marginRight="@dimen/_10sdp"
                                     app:layout_constraintEnd_toStartOf="@+id/follow"
                                     app:layout_constraintHorizontal_chainStyle="packed"
                                     app:layout_constraintStart_toStartOf="parent"
@@ -649,13 +667,13 @@
                                     app:layout_constraintVertical_chainStyle="packed" />
 
                                 <Button
-                                    android:minWidth="@dimen/_85sdp"
                                     android:id="@+id/follow"
                                     style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="@dimen/_10sdp"
                                     android:backgroundTint="@color/colorSkyBlue"
+                                    android:minWidth="@dimen/_85sdp"
                                     android:text="@string/follow"
                                     android:textAllCaps="false"
                                     android:textColor="@color/colorWhite"
@@ -853,7 +871,7 @@
         <TextView
             android:id="@+id/btnSave"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_40sdp"
+            android:layout_height="@dimen/_35sdp"
             android:layout_gravity="center_vertical"
             android:background="@color/colorPrimary"
             android:gravity="center"

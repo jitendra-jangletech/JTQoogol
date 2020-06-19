@@ -208,7 +208,7 @@ public class CommentFragment extends Fragment implements View.OnClickListener, C
     @Override
     public void onItemClick(String userId) {
         Bundle bundle = new Bundle();
-        if (userId.equalsIgnoreCase(new PreferenceManager(getActivity()).getUserId())) {
+        if (userId!=null && userId.equalsIgnoreCase(new PreferenceManager(getActivity()).getUserId())) {
             bundle.putInt(CALL_FROM, profile);
         } else {
             bundle.putInt(CALL_FROM, connectonId);
