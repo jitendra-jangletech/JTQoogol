@@ -193,6 +193,14 @@ public class BaseFragment extends Fragment {
         return Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
     }
 
+    public String getString(String key){
+        return new PreferenceManager(getApplicationContext()).getString(key);
+    }
+
+    public static void saveString(String key,String value){
+        new PreferenceManager(getApplicationContext()).saveString(key,value);
+    }
+
     public static String getUserId() {
         return String.valueOf(new PreferenceManager(getApplicationContext()).getInt(Constant.USER_ID));
     }

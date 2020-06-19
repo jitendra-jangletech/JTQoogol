@@ -12,10 +12,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.MenuItemCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
@@ -28,7 +26,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.jangletech.qoogol.R;
-import com.jangletech.qoogol.activities.MainActivity;
 import com.jangletech.qoogol.activities.PracticeTestActivity;
 import com.jangletech.qoogol.adapter.TestListAdapter;
 import com.jangletech.qoogol.databinding.FragmentTestMyBinding;
@@ -53,9 +50,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.jangletech.qoogol.util.Constant.CASE;
 import static com.jangletech.qoogol.util.Constant.test;
 
-public class MyTestFragment extends BaseFragment implements TestListAdapter.TestClickListener, SearchView.OnQueryTextListener {
+public class MyTestFragment extends BaseFragment
+        implements TestListAdapter.TestClickListener, SearchView.OnQueryTextListener {
 
     private static final String TAG = "MyTestFragment";
     private MyTestViewModel mViewModel;
@@ -63,8 +62,11 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
     private TestListAdapter mAdapter;
     private List<TestModelNew> testList;
     private Context mContext;
+    private HashMap<String, String> params;
     private int tmId;
-    ApiInterface apiService = ApiClient.getInstance().getApi();
+    private String flag = "";
+    private String diffLevel = "";
+    private ApiInterface apiService = ApiClient.getInstance().getApi();
 
     public static MyTestFragment newInstance() {
         return new MyTestFragment();
@@ -74,6 +76,7 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         mContext = context.getApplicationContext();
+        params = new HashMap<>();
     }
 
     @Override
@@ -87,7 +90,6 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_test_my, container, false);
-
         return mBinding.getRoot();
     }
 
@@ -101,7 +103,6 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.action_search, menu);
-
         final MenuItem item = menu.findItem(R.id.action_search);
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
         searchView.setOnQueryTextListener(this);
@@ -125,8 +126,7 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
             case R.id.action_filter:
                 Bundle bundle = new Bundle();
                 bundle.putString("call_from", "test");
-                Navigation.findNavController(requireActivity(),R.id.nav_host_fragment).navigate(R.id.nav_test_filter,bundle);
-                //MainActivity.navController.navigate(R.id.nav_test_filter, bundle);
+                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_test_filter, bundle);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -134,45 +134,49 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
     }
 
     private void initViews() {
-
-        if(getArguments()!=null){
-            if(!getArguments().getString("CALL_FROM").equalsIgnoreCase("MY_TEST")){
-                getActionBar().setTitle(getArguments().getString("CALL_FROM"));
-                mBinding.horizontalScrollView.setVisibility(View.GONE);
-            }
+        if (getArguments() != null && getArguments().getSerializable("PARAMS") != null) {
+            HashMap<String, String> filterArgs = new HashMap<>();
+            filterArgs = (HashMap<String, String>) getArguments().getSerializable("PARAMS");
+            diffLevel = filterArgs.get(Constant.tm_diff_level);
+            Log.d(TAG, "Filter DiffLevel : " + diffLevel);
+            Log.d(TAG, "Filter Avg Rating : " + filterArgs.get(Constant.tm_avg_rating));
         }
-
-
         mBinding.swipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                fetchTestList("");
+                fetchTestList(params);
             }
         });
 
+        params.put(Constant.u_user_id, getUserId());
+        params.put(CASE, "");
+        params.put(Constant.tm_popular_test, "");
+        params.put(Constant.tm_recent_test, "");
+
+        if (getString(Constant.tm_diff_level) != null && !getString(Constant.tm_diff_level).isEmpty())
+            params.put(Constant.tm_diff_level, getString(Constant.tm_diff_level));
+
+        if (getString(Constant.tm_avg_rating) != null && !getString(Constant.tm_avg_rating).isEmpty())
+            params.put(Constant.tm_avg_rating, getString(Constant.tm_avg_rating));
+
         fetchSubjectList(new PreferenceManager(requireActivity()).getString(Constant.scr_co_id));
-        fetchTestList("");
+        fetchTestList(params);
         mViewModel.getAllSubjects().observe(getViewLifecycleOwner(), new Observer<List<FetchSubjectResponse>>() {
             @Override
             public void onChanged(@Nullable final List<FetchSubjectResponse> subjects) {
                 if (subjects != null) {
                     Log.d(TAG, "onChanged Subjects Size : " + subjects.size());
                     ArrayList<String> subjectList = new ArrayList<>();
-                    for(FetchSubjectResponse obj : subjects){
-                        if(!subjectList.contains(obj.getSm_sub_name()))
-                        subjectList.add(obj.getSm_sub_name());
+                    for (FetchSubjectResponse obj : subjects) {
+                        if (!subjectList.contains(obj.getSm_sub_name()))
+                            subjectList.add(obj.getSm_sub_name());
                     }
                     prepareSubjectChips(subjectList);
                 }
             }
         });
 
-//        } else {
-//            fetchTestList("FV");
-//            mBinding.horizontalScrollView.setVisibility(View.GONE);
-//        }
-
-        mViewModel.getAllTests().observe(getViewLifecycleOwner(), new Observer<List<TestModelNew>>() {
+        mViewModel.getAllTestList().observe(getViewLifecycleOwner(), new Observer<List<TestModelNew>>() {
             @Override
             public void onChanged(@Nullable final List<TestModelNew> tests) {
                 if (tests != null) {
@@ -207,15 +211,20 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
     }
 
     public void setMyTestList(List<TestModelNew> testList) {
-        mAdapter = new TestListAdapter(requireActivity(), testList, this);
-        mBinding.testListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mBinding.testListRecyclerView.setAdapter(mAdapter);
+        if (testList.size() > 0) {
+            mAdapter = new TestListAdapter(requireActivity(), testList, this);
+            mBinding.testListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            mBinding.testListRecyclerView.setAdapter(mAdapter);
+        } else {
+            Log.d(TAG, "setMyTestList size : " + testList.size());
+            mBinding.tvNoTest.setVisibility(View.VISIBLE);
+        }
     }
 
     private void prepareSubjectChips(ArrayList<String> subjects) {
         mBinding.subjectsChipGrp.removeAllViews();
         int idCounter = 0;
-        for (String subject: subjects) {
+        for (String subject : subjects) {
             Chip chip = (Chip) LayoutInflater.from(mBinding.subjectsChipGrp.getContext()).inflate(R.layout.chip_layout, mBinding.subjectsChipGrp, false);
             chip.setText(subject);
             chip.setId(idCounter);
@@ -236,6 +245,10 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
                 chip.setTextColor(Color.BLACK);
             }
         }
+    }
+
+    private String getTestType(String key) {
+        return new PreferenceManager(getActivity()).getString(key);
     }
 
     @Override
@@ -278,15 +291,17 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
     }
 
     private void fetchSubjectList(String scrCoId) {
-        //ProgressDialog.getInstance().show(getActivity());
+        Log.d(TAG, "fetchSubjectList ScrCoId : " + scrCoId);
         mBinding.swipeToRefresh.setRefreshing(true);
         Call<FetchSubjectResponseList> call = apiService.fetchSubjectList(scrCoId);
         call.enqueue(new Callback<FetchSubjectResponseList>() {
             @Override
             public void onResponse(Call<FetchSubjectResponseList> call, Response<FetchSubjectResponseList> response) {
                 //ProgressDialog.getInstance().dismiss();
-                mBinding.swipeToRefresh.setRefreshing(false);
-                mViewModel.setAllSubjectList(response.body().getFetchSubjectResponseList());
+                if (response.body() != null) {
+                    mBinding.swipeToRefresh.setRefreshing(false);
+                    mViewModel.setAllSubjectList(response.body().getFetchSubjectResponseList());
+                }
             }
 
             @Override
@@ -299,19 +314,30 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
         });
     }
 
-    private void fetchTestList(String caseFav) {
+    private void fetchTestList(HashMap<String, String> params) {
+        Log.d(TAG, "fetchTestList Params : " + params);
+        Log.d(TAG, "initViews Flag : " + flag);
         mBinding.swipeToRefresh.setRefreshing(true);
-        Call<TestListResponse> call = apiService.fetchTestList(new PreferenceManager(getActivity()).getInt(Constant.USER_ID), caseFav);//todo change userId
+        Call<TestListResponse> call = apiService.fetchTestList(
+                params.get(Constant.u_user_id),
+                params.get(CASE),
+                params.get(Constant.tm_recent_test),
+                params.get(Constant.tm_popular_test),
+                params.get(Constant.tm_diff_level),
+                params.get(Constant.tm_avg_rating)
+        );
         call.enqueue(new Callback<TestListResponse>() {
             @Override
             public void onResponse(Call<TestListResponse> call, Response<TestListResponse> response) {
                 //ProgressDialog.getInstance().dismiss();
                 mBinding.swipeToRefresh.setRefreshing(false);
                 if (response.body() != null && response.body().getResponse().equals("200")) {
-                    //mViewModel.setAllTestList(response.body().getTestList());
-                    mViewModel.insert(response.body().getTestList());
-                    Log.d(TAG, "onResponse: " + response.body().getTestList());
-                    Log.d(TAG, "onResponse: " + response.body().getTestList().size());
+                    mViewModel.setAllTestList(response.body().getTestList());
+                    /*List<TestModelNew> testList = response.body().getTestList();
+                    for (TestModelNew testModelNew : testList) {
+                        testModelNew.setFlag("");
+                    }
+                    mViewModel.insert(testList);*/
                 } else if (response.body().getResponse().equals("501")) {
                     resetSettingAndLogout();
                 } else {
@@ -332,7 +358,7 @@ public class MyTestFragment extends BaseFragment implements TestListAdapter.Test
     public void onTestItemClick(TestModelNew testModel) {
         Bundle bundle = new Bundle();
         bundle.putSerializable(Constant.TEST_NAME, testModel);
-        Navigation.findNavController(requireActivity(),R.id.nav_host_fragment).navigate(R.id.nav_test_details,bundle);
+        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_test_details, bundle);
         //MainActivity.navController.navigate(R.id.nav_test_details, bundle);
     }
 

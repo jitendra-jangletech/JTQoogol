@@ -1,10 +1,7 @@
 package com.jangletech.qoogol.retrofit;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
-
 import com.jangletech.qoogol.model.AddElementResponse;
 import com.jangletech.qoogol.model.BlockedConnResp;
-import com.jangletech.qoogol.model.ChangePassword;
 import com.jangletech.qoogol.model.ChapterResponse;
 import com.jangletech.qoogol.model.CityResponse;
 import com.jangletech.qoogol.model.ClassList;
@@ -33,7 +30,6 @@ import com.jangletech.qoogol.model.RegisterLoginModel;
 import com.jangletech.qoogol.model.ResponseObj;
 import com.jangletech.qoogol.model.SendInviteResponse;
 import com.jangletech.qoogol.model.ShareResponse;
-import com.jangletech.qoogol.model.SignInModel;
 import com.jangletech.qoogol.model.StartResumeTestResponse;
 import com.jangletech.qoogol.model.StateResponse;
 import com.jangletech.qoogol.model.TestDetailsResponse;
@@ -44,8 +40,6 @@ import com.jangletech.qoogol.model.UserProfileResponse;
 import com.jangletech.qoogol.model.VerifyResponse;
 import com.jangletech.qoogol.util.Constant;
 
-import java.util.Map;
-
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -54,21 +48,8 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
-import retrofit2.http.QueryMap;
 
 public interface ApiInterface {
-
-    @POST("auth/signInNew")
-    Call<SignInModel> signCall(@QueryMap Map<String, String> request);
-
-    @POST(Constant.COUNTRY)
-    Call<CountryResponse> getCountries();
-
-    @POST(Constant.STATE)
-    Call<StateResponse> getStates();
-
-    @POST(Constant.CITY)
-    Call<CityResponse> getCities();
 
     @POST(Constant.UNIVERSITY)
     Call<UniversityResponse> getUniversity();
@@ -240,13 +221,17 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST(Constant.FETCH_USER_EDU)
     Call<VerifyResponse> deleteEdu(@Field(Constant.u_user_id) String userId,
-                                         @Field(Constant.ue_id) String ueId,
-                                         @Field(Constant.CASE) String caseDel);
+                                   @Field(Constant.ue_id) String ueId,
+                                   @Field(Constant.CASE) String caseDel);
 
     @FormUrlEncoded
     @POST(Constant.FETCH_TEST_LIST)
-    Call<TestListResponse> fetchTestList(@Field(Constant.u_user_id) int userId,
-                                         @Field(Constant.CASE) String caseFav);
+    Call<TestListResponse> fetchTestList(@Field(Constant.u_user_id) String userId,
+                                         @Field(Constant.CASE) String caseFav,
+                                         @Field(Constant.tm_recent_test) String recentTest,
+                                         @Field(Constant.tm_popular_test) String popularTest,
+                                         @Field(Constant.tm_diff_level) String diffLevel,
+                                         @Field(Constant.tm_avg_rating) String avgRating);
 
     @FormUrlEncoded
     @POST(Constant.FETCH_NOTIFICATIONS)
@@ -257,10 +242,10 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST(Constant.UPDATE_NOTIFICATIONS)
     Call<ResponseObj> updateNotifications(@Field(Constant.u_user_id) String userId,
-                                                  @Field(Constant.device_id) String deviceId,
-                                                  @Field(Constant.appName) String appName,
-                                                   @Field(Constant.n_id) String nid,
-                                                    @Field(Constant.CASE) String update_case);
+                                          @Field(Constant.device_id) String deviceId,
+                                          @Field(Constant.appName) String appName,
+                                          @Field(Constant.n_id) String nid,
+                                          @Field(Constant.CASE) String update_case);
 
     @FormUrlEncoded
     @POST(Constant.FETCH_SUBJECTS)
@@ -321,6 +306,7 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST(Constant.FETCH_QA)
     Call<LearningQuestResponse> fetchQAApi(@Field(Constant.u_user_id) String userid, @Field(Constant.q_id) String question);
+
     Call<LearningQuestResponse> fetchQAApi(@Field(Constant.u_user_id) int userid,
                                            @Field(Constant.q_id) String question);
 
@@ -399,10 +385,10 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST(Constant.FETCH_CONNECTIONS)
     Call<BlockedConnResp> fetchBlockedConnections(@Field(Constant.u_user_id) String userid,
-                                           @Field("Case") String connectionCase,
-                                           @Field(Constant.device_id) String device_id,
-                                           @Field("200Q") String app,
-                                           @Field(Constant.pagestart) int pagestart);
+                                                  @Field("Case") String connectionCase,
+                                                  @Field(Constant.device_id) String device_id,
+                                                  @Field("200Q") String app,
+                                                  @Field(Constant.pagestart) int pagestart);
 
     @FormUrlEncoded
     @POST(Constant.FETCH_CONNECTIONS)
@@ -415,19 +401,19 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST(Constant.FETCH_CONNECTIONS)
     Call<FriendsResponse> fetchRefreshedFriendss(@Field(Constant.u_user_id) String userid,
-                                                       @Field("Case") String connectionCase,
-                                                       @Field(Constant.device_id) String device_id,
-                                                       @Field("200Q") String app,
-                                                       @Field(Constant.pagestart) String pagestart,
-                                                       @Field("ForceRefresh") String refresh);
+                                                 @Field("Case") String connectionCase,
+                                                 @Field(Constant.device_id) String device_id,
+                                                 @Field("200Q") String app,
+                                                 @Field(Constant.pagestart) String pagestart,
+                                                 @Field("ForceRefresh") String refresh);
 
     @FormUrlEncoded
     @POST(Constant.FETCH_CONNECTIONS)
     Call<FollowersResponse> fetchFollowers(@Field(Constant.u_user_id) String userid,
-                                       @Field("Case") String connectionCase,
-                                       @Field(Constant.device_id) String device_id,
-                                       @Field("200Q") String app,
-                                       @Field(Constant.pagestart) String pagestart);
+                                           @Field("Case") String connectionCase,
+                                           @Field(Constant.device_id) String device_id,
+                                           @Field("200Q") String app,
+                                           @Field(Constant.pagestart) String pagestart);
 
     @FormUrlEncoded
     @POST(Constant.FETCH_CONNECTIONS)
@@ -449,30 +435,29 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST(Constant.FETCH_CONNECTIONS)
     Call<FollowingResponse> fetchRefreshedFollowings(@Field(Constant.u_user_id) String userid,
-                                                    @Field("Case") String connectionCase,
-                                                    @Field(Constant.device_id) String device_id,
-                                                    @Field("200Q") String app,
-                                                    @Field(Constant.pagestart) String pagestart,
-                                                    @Field("ForceRefresh") String refresh);
-
-
-    @FormUrlEncoded
-    @POST(Constant.FETCH_CONNECTIONS)
-    Call<FriendRequestResponse> fetchFriendRequests(@Field(Constant.u_user_id) String userid,
-                                                @Field("Case") String connectionCase,
-                                                @Field(Constant.device_id) String device_id,
-                                                @Field("200Q") String app,
-                                                @Field(Constant.pagestart) String pagestart);
-
-    @FormUrlEncoded
-    @POST(Constant.FETCH_CONNECTIONS)
-    Call<FriendRequestResponse> fetchRefreshedFriendReq(@Field(Constant.u_user_id) String userid,
                                                      @Field("Case") String connectionCase,
                                                      @Field(Constant.device_id) String device_id,
                                                      @Field("200Q") String app,
                                                      @Field(Constant.pagestart) String pagestart,
                                                      @Field("ForceRefresh") String refresh);
 
+
+    @FormUrlEncoded
+    @POST(Constant.FETCH_CONNECTIONS)
+    Call<FriendRequestResponse> fetchFriendRequests(@Field(Constant.u_user_id) String userid,
+                                                    @Field("Case") String connectionCase,
+                                                    @Field(Constant.device_id) String device_id,
+                                                    @Field("200Q") String app,
+                                                    @Field(Constant.pagestart) String pagestart);
+
+    @FormUrlEncoded
+    @POST(Constant.FETCH_CONNECTIONS)
+    Call<FriendRequestResponse> fetchRefreshedFriendReq(@Field(Constant.u_user_id) String userid,
+                                                        @Field("Case") String connectionCase,
+                                                        @Field(Constant.device_id) String device_id,
+                                                        @Field("200Q") String app,
+                                                        @Field(Constant.pagestart) String pagestart,
+                                                        @Field("ForceRefresh") String refresh);
 
 
     @FormUrlEncoded

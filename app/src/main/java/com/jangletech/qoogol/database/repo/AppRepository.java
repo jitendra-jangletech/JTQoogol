@@ -93,8 +93,8 @@ public class AppRepository {
         return attemptedTestDao.getAllAttemptedTests();
     }*/
 
-    public LiveData<List<TestModelNew>> getAllTests() {
-        return testDao.getAllTests();
+    public LiveData<List<TestModelNew>> getAllTests(String flag) {
+        return testDao.getAllTests(flag);
     }
 
     public void insertTests(List<TestModelNew> testModelNewList) {

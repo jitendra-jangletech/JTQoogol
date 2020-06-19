@@ -3,12 +3,10 @@ package com.jangletech.qoogol.database;
 import android.content.Context;
 import android.os.Environment;
 
-import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
-import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.jangletech.qoogol.database.converter.Converters;
 import com.jangletech.qoogol.database.dao.ConnectionsDao;
@@ -43,7 +41,7 @@ import java.util.concurrent.Executors;
 @Database(entities = {LearningQuestionsNew.class, DashBoard.class, TestModelNew.class,
         TestQuestion.class, UserProfile.class, Education.class, Friends.class, Followers.class, Following.class,
         FriendRequest.class, FollowRequest.class, Connections.class,
-        Notification.class}, version = 2, exportSchema = false)
+        Notification.class}, version = 3, exportSchema = false)
 @TypeConverters(Converters.class)
 public abstract class QoogolDatabase extends RoomDatabase {
 
@@ -94,16 +92,4 @@ public abstract class QoogolDatabase extends RoomDatabase {
         }
         return INSTANCE;
     }
-
-    private static RoomDatabase.Callback sRoomDatabaseCallback = new RoomDatabase.Callback() {
-        @Override
-        public void onOpen(@NonNull SupportSQLiteDatabase db) {
-            super.onOpen(db);
-            databaseWriteExecutor.execute(() -> {
-                TestDao dao = INSTANCE.testDao();
-                //TestQuestionDao testQuestionDao = INSTANCE.testQuestionDao();
-
-            });
-        }
-    };
 }

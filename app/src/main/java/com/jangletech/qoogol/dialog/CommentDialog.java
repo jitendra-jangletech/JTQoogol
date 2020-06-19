@@ -4,6 +4,7 @@ package com.jangletech.qoogol.dialog;
 import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -33,20 +34,23 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 
-public class CommentDialog extends Dialog {
+public class CommentDialog extends Dialog implements CommentAdapter.onCommentItemClickListener {
 
+    private static final String TAG = "CommentDialog";
     private CommentDialogBinding mBinding;
     private Activity mContext;
     private List<Comments> commentList;
     private CommentAdapter commentAdapter;
     private CommentViewModel mViewModel;
     private TestQuestionNew testQuestionNew;
+    private CommentClickListener commentClickListener;
     ApiInterface apiService = ApiClient.getInstance().getApi();
 
-    public CommentDialog(@NonNull Activity mContext, TestQuestionNew testQuestionNew) {
+    public CommentDialog(@NonNull Activity mContext, TestQuestionNew testQuestionNew,CommentClickListener commentClickListener) {
         super(mContext, android.R.style.Theme_DeviceDefault_Light_DarkActionBar);
         this.mContext = mContext;
         this.testQuestionNew = testQuestionNew;
+        this.commentClickListener = commentClickListener;
     }
 
     @Override
@@ -78,6 +82,9 @@ public class CommentDialog extends Dialog {
         ProgressDialog.getInstance().show(mContext);
         Call<ProcessQuestion> call;
 
+        Log.d(TAG, "fetchCommentsAPI userId : " + user_id);
+        Log.d(TAG, "fetchCommentsAPI Case : " + api_case);
+
         if (api_case.equalsIgnoreCase("L"))
             call = apiService.fetchComments(user_id, que_id, api_case);
         else
@@ -91,7 +98,7 @@ public class CommentDialog extends Dialog {
                     commentList.clear();
                     if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
                         commentList = response.body().getCommentList();
-                        //setCommentAdapter();
+                        Log.d(TAG, "onResponse commentList : " + commentList.size());
                         emptyView();
                     } else {
                         Toast.makeText(mContext, UtilHelper.getAPIError(String.valueOf(response.body())), Toast.LENGTH_SHORT).show();
@@ -110,14 +117,15 @@ public class CommentDialog extends Dialog {
         });
     }
 
-   /* private void setCommentAdapter() {
-        commentAdapter = new CommentAdapter(mContext, commentList, Module.Learning.toString());
+    private void setCommentAdapter() {
+        commentAdapter = new CommentAdapter(mContext, commentList, Module.Learning.toString(), this);
         mBinding.commentRecycler.setHasFixedSize(true);
         mBinding.commentRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         mBinding.commentRecycler.setAdapter(commentAdapter);
-    }*/
+    }
 
     private void emptyView() {
+        setCommentAdapter();
         mBinding.etComment.setText("");
         if (commentList.size() == 0)
             mBinding.emptytv.setVisibility(View.VISIBLE);
@@ -125,4 +133,12 @@ public class CommentDialog extends Dialog {
             mBinding.emptytv.setVisibility(View.GONE);
     }
 
+    public interface CommentClickListener{
+        void onCommentClick(String userId);
+    }
+
+    @Override
+    public void onItemClick(String userId) {
+        commentClickListener.onCommentClick(userId);
+    }
 }

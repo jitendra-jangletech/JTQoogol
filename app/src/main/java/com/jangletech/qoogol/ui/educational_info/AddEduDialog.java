@@ -161,6 +161,7 @@ public class AddEduDialog extends Dialog {
             params.put(Constant.co_id, addEditEducationBinding.courseAutocompleteView.getTag().toString());
             params.put(Constant.ue_startdate, addEditEducationBinding.etstartdate.getText().toString());
             params.put(Constant.ue_enddate, addEditEducationBinding.etenddate.getText().toString());
+            if(addEditEducationBinding.courseYearAutocompleteView.getTag()!=null)
             params.put(Constant.ue_cy_num, addEditEducationBinding.courseYearAutocompleteView.getTag().toString());
 
             if (education != null) {

@@ -3,7 +3,10 @@ package com.jangletech.qoogol.activities;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.VectorDrawable;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
@@ -33,6 +36,7 @@ import com.jangletech.qoogol.util.NetworkUtil;
 import com.jangletech.qoogol.util.PreferenceManager;
 import java.util.Objects;
 
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 
 public class BaseActivity extends AppCompatActivity {
@@ -43,6 +47,15 @@ public class BaseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
+    }
+
+    public void saveString(String key,String value){
+        new PreferenceManager(getApplicationContext()).saveString(key,value);
+    }
+
+    public void clearFilters(){
+        saveString(Constant.tm_diff_level,"");
+        saveString(Constant.tm_avg_rating,"");
     }
 
     public String getSingleQuoteString(String text) {
@@ -206,4 +219,16 @@ public class BaseActivity extends AppCompatActivity {
         return status;
     }
 
+    public String getString(String key){
+        return new PreferenceManager(getApplicationContext()).getString(key);
+    }
+
+    public static Bitmap getBitmap(VectorDrawable vectorDrawable) {
+        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(),
+                vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        vectorDrawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        vectorDrawable.draw(canvas);
+        return bitmap;
+    }
 }

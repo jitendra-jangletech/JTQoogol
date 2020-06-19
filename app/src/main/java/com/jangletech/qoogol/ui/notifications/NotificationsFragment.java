@@ -148,7 +148,7 @@ public class NotificationsFragment extends BaseFragment implements NotificationA
     }
 
     private void deleteFromdb(String n_id) {
-        deleteNotification(n_id);
+        mViewModel.deleteNotification(n_id);
     }
 
     private void fetchNotifications() {

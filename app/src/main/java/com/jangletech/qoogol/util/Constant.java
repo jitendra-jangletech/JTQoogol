@@ -212,7 +212,7 @@ public class Constant {
     public static final String u_referred_by = "143";
 
     public static final String APP_NAME ="Q";
-    public static final String APP_VERSION = "1.28";
+    public static final String APP_VERSION = "1.0";
 
     // QLikesComments
     public static final String tlc_id = "1401";
@@ -328,6 +328,7 @@ public class Constant {
     public static final String group_id = "384";
     public static final String un_count = "72"; /// count of connections
 
+    public static final String userBadge = "100";
     public static final String u_native_ct_id = "159";
     public static final String u_native_s_id = "160";
     public static final String u_native_dt_id = "103";
@@ -572,7 +573,6 @@ public class Constant {
     public static final String scr_sem_id = "1429";
     public static final String scr_cy_num = "1430";
 
-
     //TestQuestion Api Start/Resume Test Constants
     public static final String tm_id = "1200";
     public static final String tm_sm_id = "1201";
@@ -661,6 +661,10 @@ public class Constant {
     public static final String isFavourite = "1410";
     public static final String _1223G = "1223G";
 
+    //Test Filters Fields
+    public static final String tm_popular_test = "1221";
+    public static final String tm_recent_test = "1222";
+
 
     //Notification Fields
     //public static final String cn_connected = "309";
@@ -677,6 +681,11 @@ public class Constant {
 
 
     public static final String CALL_FROM = "CALL_FROM";
+    public static final String POPULAR_TEST = "POPULAR_TEST";
+    public static final String RECENT_TEST = "RECENT_TEST";
+    public static final String SHARED_BY_YOU = "SHARED_BY_YOU";
+    public static final String MY_TEST = "MY_TEST";
+    public static final String FAV = "FAV";
 
 
 //    //Start Resume missing Parameter

@@ -208,10 +208,6 @@ public class TestListAdapter extends RecyclerView.Adapter<TestListAdapter.ViewHo
     public void setSearchResult(List<TestModelNew> result) {
         testModelList = result;
         notifyDataSetChanged();
-        for (TestModelNew testModelNew : testModelList) {
-            Log.d(TAG, "isLike " + testModelNew.isLike());
-            Log.d(TAG, "Like Count " + testModelNew.getLikeCount());
-        }
     }
 
     public void deleteFav(int pos){

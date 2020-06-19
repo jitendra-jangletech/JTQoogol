@@ -17,8 +17,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import com.jangletech.qoogol.R;
-import com.jangletech.qoogol.activities.MainActivity;
-import com.jangletech.qoogol.adapter.LearingAdapter;
+import com.jangletech.qoogol.adapter.LearningAdapter;
 import com.jangletech.qoogol.databinding.LearningFragmentBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.enums.Module;
@@ -40,11 +39,11 @@ import static com.jangletech.qoogol.util.Constant.connectonId;
 import static com.jangletech.qoogol.util.Constant.profile;
 import static com.jangletech.qoogol.util.Constant.learning;
 
-public class LearningFragment extends BaseFragment implements LearingAdapter.onIconClick {
+public class LearningFragment extends BaseFragment implements LearningAdapter.onIconClick {
 
     private LearningViewModel mViewModel;
     LearningFragmentBinding learningFragmentBinding;
-    LearingAdapter learingAdapter;
+    LearningAdapter learningAdapter;
     List<LearningQuestionsNew> learningQuestionsList;
     List<LearningQuestionsNew> questionsNewList;
     ApiInterface apiService = ApiClient.getInstance().getApi();
@@ -131,12 +130,12 @@ public class LearningFragment extends BaseFragment implements LearingAdapter.onI
 
 
     private void initRecycler() {
-        learingAdapter = new LearingAdapter(getActivity(), questionsNewList, this, learning);
+        learningAdapter = new LearningAdapter(getActivity(), questionsNewList, this, learning);
         learningFragmentBinding.learningRecycler.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setAutoMeasureEnabled(false);
         learningFragmentBinding.learningRecycler.setLayoutManager(linearLayoutManager);
-        learningFragmentBinding.learningRecycler.setAdapter(learingAdapter);
+        learningFragmentBinding.learningRecycler.setAdapter(learningAdapter);
         learningFragmentBinding.learningRecycler.setNestedScrollingEnabled(false);
         learningFragmentBinding.learningRecycler.setItemViewCacheSize(20);
         learningFragmentBinding.learningRecycler.setDrawingCacheEnabled(true);

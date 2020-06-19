@@ -2,7 +2,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -30,12 +29,11 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
+                        android:textStyle="bold"
                         android:id="@+id/id_textview"
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="@dimen/_10sdp"
-                        android:ellipsize="end"
-                        android:singleLine="true"
                         android:text="Id"
                         android:textColor="@color/colorWhite"
                         android:textSize="@dimen/_10ssp"
@@ -43,141 +41,33 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/time_textview"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintRight_toLeftOf="@+id/markToggle"
+                        app:layout_constraintLeft_toRightOf="@+id/id_textview"
+                        android:id="@+id/marks_textview"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:singleLine="true"
-                        android:text="Recommended time : "
-                        android:textAlignment="textEnd"
+                        android:text="Marks"
                         android:textColor="@color/colorWhite"
-                        android:textSize="@dimen/_10ssp"
+                        android:textSize="@dimen/_10ssp" />
+
+                    <ToggleButton
+                        android:id="@+id/markToggle"
+                        android:layout_width="@dimen/_16sdp"
+                        android:layout_height="@dimen/_16sdp"
+                        android:layout_marginRight="@dimen/_10sdp"
+                        android:background="@drawable/button_marked"
+                        android:checked="false"
+                        android:text=""
+                        android:textOff=""
+                        android:textOn=""
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <LinearLayout
-                    android:id="@+id/header_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:orientation="horizontal"
-                    android:paddingLeft="@dimen/_10sdp"
-                    android:paddingRight="@dimen/_10sdp"
-                    android:weightSum="3"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/header">
 
-                    <TextView
-                        android:id="@+id/subject_textview"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:ellipsize="end"
-                        android:singleLine="true"
-                        android:text="Subject"
-                        android:textColor="@color/colorSkyBlue"
-                        android:textSize="@dimen/_10ssp" />
-
-                    <TextView
-                        android:id="@+id/topic_textview"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:ellipsize="end"
-                        android:singleLine="true"
-                        android:text="Topic"
-                        android:textAlignment="center"
-                        android:textColor="@color/colorSkyBlue"
-                        android:textSize="@dimen/_10ssp" />
-
-                    <TextView
-                        android:id="@+id/chapter_textview"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/_5sdp"
-                        android:layout_weight="1"
-                        android:ellipsize="end"
-                        android:singleLine="true"
-                        android:text="Subject"
-                        android:textAlignment="textEnd"
-                        android:textColor="@color/colorSkyBlue"
-                        android:textSize="@dimen/_10ssp" />
-
-                </LinearLayout>
-
-                <View
-                    android:id="@+id/header_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:layout_marginBottom="@dimen/_10sdp"
-                    android:background="@color/colorLightGrey"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/header_layout" />
-
-                <LinearLayout
-                    android:id="@+id/subheader_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:orientation="horizontal"
-                    android:paddingStart="@dimen/_10sdp"
-                    android:paddingRight="@dimen/_10sdp"
-                    android:weightSum="2"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/header_view">
-
-
-                    <TextView
-                        android:id="@+id/marks_textview"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:ellipsize="end"
-                        android:singleLine="true"
-                        android:text="Marks"
-                        android:textColor="@color/colorSkyBlue"
-                        android:textSize="@dimen/_10ssp" />
-
-                    <TextView
-                        android:id="@+id/category_textview"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/_5sdp"
-                        android:layout_weight="1"
-                        android:ellipsize="end"
-                        android:singleLine="true"
-                        android:text="Category"
-                        android:textAlignment="textEnd"
-                        android:textColor="@color/colorSkyBlue"
-                        android:textSize="@dimen/_10ssp" />
-                </LinearLayout>
-
-                <View
-                    android:id="@+id/subheader_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:layout_marginBottom="@dimen/_10sdp"
-                    android:background="@color/colorLightGrey"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/subheader_layout" />
-
-                <io.github.kexanie.library.MathView
-                    android:id="@+id/tvMathQuestion"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_10sdp"
-                    android:layout_marginRight="@dimen/_10sdp"
-                    android:padding="@dimen/_10sdp"
-                    android:text="question"
-                    android:textColor="@color/colorSkyBlue"
-                    android:visibility="gone"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toLeftOf="@+id/reset"
-                    app:layout_constraintTop_toBottomOf="@+id/subheader_view" />
 
                 <TextView
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
@@ -191,8 +81,7 @@
                     android:textColor="@color/colorBlack"
                     android:visibility="visible"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toLeftOf="@+id/reset"
-                    app:layout_constraintTop_toBottomOf="@+id/subheader_view" />
+                    app:layout_constraintTop_toBottomOf="@+id/header" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/timer_layout"
@@ -242,7 +131,7 @@
                     android:id="@+id/answerLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_20sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
                     android:orientation="vertical"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/timer_layout">
@@ -498,27 +387,6 @@
                     app:layout_constraintLeft_toRightOf="@+id/difflevel_textview"
                     app:layout_constraintTop_toBottomOf="@+id/solution_layout" />
 
-                <TextView
-                    android:id="@+id/posted_textview"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:text="Posted : "
-                    android:textColor="@color/colorSkyBlue"
-                    android:textSize="@dimen/_10ssp"
-                    app:layout_constraintRight_toLeftOf="@+id/posted_value"
-                    app:layout_constraintTop_toBottomOf="@+id/solution_layout" />
-
-                <TextView
-                    android:id="@+id/posted_value"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:layout_marginEnd="@dimen/_10sdp"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="@dimen/_10ssp"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/solution_layout" />
 
                 <TextView
                     android:id="@+id/attended_count_textview"
@@ -544,28 +412,6 @@
                     app:layout_constraintLeft_toRightOf="@+id/attended_count_textview"
                     app:layout_constraintTop_toBottomOf="@+id/difflevel_textview" />
 
-                <TextView
-                    android:id="@+id/last_used_textview"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:text="Last used : "
-                    android:textColor="@color/colorSkyBlue"
-                    android:textSize="@dimen/_10ssp"
-                    app:layout_constraintRight_toLeftOf="@+id/posted_value"
-                    app:layout_constraintTop_toBottomOf="@+id/difflevel_textview" />
-
-                <TextView
-                    android:id="@+id/last_used_value"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:layout_marginEnd="@dimen/_10sdp"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="@dimen/_10ssp"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/difflevel_textview" />
-
 
                 <View
                     android:id="@+id/upper_bottom_view"
@@ -575,7 +421,7 @@
                     android:layout_marginBottom="@dimen/_10sdp"
                     android:background="@color/colorLightGrey"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/last_used_value" />
+                    app:layout_constraintTop_toBottomOf="@+id/attended_count_textview" />
 
                 <LinearLayout
                     android:id="@+id/bottom_layout"

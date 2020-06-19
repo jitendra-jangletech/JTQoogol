@@ -4,56 +4,75 @@
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fillViewport="true">
+        android:layout_height="wrap_content">
 
         <LinearLayout
-            android:minWidth="@dimen/_400sdp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:minWidth="@dimen/_400sdp"
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/tvTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/_10sdp"
-                android:text="Demo Test"
+                android:text="Test Name"
                 android:textColor="@color/colorBlack"
-                android:textSize="@dimen/_20ssp" />
+                android:textSize="@dimen/_15ssp" />
 
-            <RelativeLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/_15sdp"
-                android:visibility="gone">
+                android:layout_height="wrap_content">
 
                 <TextView
-                    android:id="@+id/timeLeft"
+                    android:id="@+id/tvTotalMarks"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/ic_time_left" />
-
-                <TextView
-                    android:id="@+id/tvTimer"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/_12sdp"
-                    android:layout_toRightOf="@+id/timeLeft"
                     android:gravity="center_horizontal"
-                    android:text="Time Left"
-                    android:textSize="@dimen/_12ssp" />
+                    android:padding="@dimen/_5sdp"
+                    android:text="Total Marks : "
+                    android:textSize="@dimen/_12ssp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/tvTimerCount"
+                    android:id="@+id/tvTotalMarksValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="@dimen/_20sdp"
-                    android:text="00:01:44"
-                    android:textColor="@color/colorSkyBlue"
-                    android:textSize="@dimen/_12ssp" />
+                    android:gravity="center_horizontal"
+                    android:padding="@dimen/_5sdp"
+                    android:text="0"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/_12ssp"
+                    app:layout_constraintLeft_toRightOf="@+id/tvTotalMarks"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            </RelativeLayout>
+                <TextView
+                    android:id="@+id/tvObtainMarks"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:padding="@dimen/_5sdp"
+                    android:text="Obtain Marks : "
+                    android:textSize="@dimen/_12ssp"
+                    app:layout_constraintRight_toLeftOf="@+id/tvObtainMarksValue"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvObtainMarksValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:padding="@dimen/_5sdp"
+                    android:text="0"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/_12ssp"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <View
                 android:layout_width="match_parent"
@@ -63,30 +82,30 @@
                 android:background="@color/colorLightGrey" />
 
             <RelativeLayout
-                android:foreground="?attr/selectableItemBackground"
-                android:id="@+id/attemptedLayout"
+                android:id="@+id/wrongLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:foreground="?attr/selectableItemBackground"
                 android:padding="@dimen/_15sdp">
 
                 <TextView
-                    android:id="@+id/attempted"
+                    android:id="@+id/wrong"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/ic_attempted" />
+                    android:background="@drawable/ic_wrong_mtp" />
 
                 <TextView
                     android:id="@+id/tvAttempted"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/_12sdp"
-                    android:layout_toRightOf="@+id/attempted"
+                    android:layout_toRightOf="@+id/wrong"
                     android:gravity="center_horizontal"
-                    android:text="Attempted"
+                    android:text="Wrong"
                     android:textSize="@dimen/_12ssp" />
 
                 <TextView
-                    android:id="@+id/tvAttemptedCount"
+                    android:id="@+id/tvWrongCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
@@ -105,10 +124,10 @@
                 android:background="@color/colorLightGrey" />
 
             <RelativeLayout
-                android:foreground="?attr/selectableItemBackground"
                 android:id="@+id/unattemptedLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:foreground="?attr/selectableItemBackground"
                 android:padding="@dimen/_15sdp">
 
                 <TextView
@@ -147,17 +166,17 @@
                 android:background="@color/colorLightGrey" />
 
             <RelativeLayout
-                android:foreground="?attr/selectableItemBackground"
                 android:id="@+id/markedLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:foreground="?attr/selectableItemBackground"
                 android:padding="@dimen/_15sdp">
 
                 <TextView
                     android:id="@+id/marked"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/ic_marked" />
+                    android:background="@drawable/button_marked" />
 
                 <TextView
                     android:id="@+id/tvMarked"
@@ -225,22 +244,22 @@
 
                 <TextView
                     android:id="@+id/tvConfirmMsg"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/feedback"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/_15sdp"
                     android:text="Are you sure want to submit the test?"
                     android:textColor="@color/colorBlack"
-                    android:textSize="@dimen/_14ssp" />
+                    android:textSize="@dimen/_14ssp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/feedback" />
 
                 <RelativeLayout
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvConfirmMsg"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/_20sdp"
-                    android:padding="@dimen/_5sdp">
+                    android:padding="@dimen/_5sdp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvConfirmMsg">
 
                     <TextView
                         android:id="@+id/tvYes"

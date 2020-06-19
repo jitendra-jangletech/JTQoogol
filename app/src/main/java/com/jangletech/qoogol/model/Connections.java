@@ -12,6 +12,10 @@ import com.jangletech.qoogol.util.Constant;
  */
 @Entity
 public class Connections {
+
+    @SerializedName(Constant.userBadge)
+    private String badge;
+
     @SerializedName(Constant.cn_id)
     private String cn_id;
 
@@ -71,19 +75,14 @@ public class Connections {
     @SerializedName(Constant.u_followings)
     private String u_followings;
 
-
     @SerializedName(Constant.ucn_count)
     private String ucn_count;
-
 
     @SerializedName(Constant.w_u_ms_count)
     private String w_u_ms_count;
 
-
     @SerializedName(Constant.w_distance)
     private String w_distance;
-
-
 
     @SerializedName(Constant.w_user_profile_image_name)
     private String prof_pic;
@@ -108,6 +107,14 @@ public class Connections {
 
     @SerializedName(Constant.group_id)
     private String group_id;
+
+    public String getBadge() {
+        return badge;
+    }
+
+    public void setBadge(String badge) {
+        this.badge = badge;
+    }
 
     public String getGroup_id() {
         return group_id;

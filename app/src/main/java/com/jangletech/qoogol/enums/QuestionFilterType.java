@@ -5,5 +5,6 @@ public enum QuestionFilterType {
     ATTEMPTED,
     UNATTEMPTED,
     UNSEEN,
-    MARKED
+    MARKED,
+    WRONG
 }

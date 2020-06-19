@@ -4,6 +4,7 @@ public enum Nav {
     HOME,
     LEARNING,
     MY_TEST,
+    RECENT_TEST,
     POPULAR_TEST,
     ATTENDED_BY_FRIENDS,
     SHARED_WITH_YOU,
@@ -19,5 +20,9 @@ public enum Nav {
     FAQ,
     LOGOUT,
     USER_PROFILE,
-    ASK_DOUBTS
+    ASK_DOUBTS,
+    SHARE_APP,
+    ABOUT,
+    CONNECTIONS,
+    CONNECTIONS_FOLLOWING
 }

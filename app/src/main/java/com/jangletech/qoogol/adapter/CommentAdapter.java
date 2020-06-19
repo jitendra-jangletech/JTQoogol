@@ -1,6 +1,7 @@
 package com.jangletech.qoogol.adapter;
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import com.jangletech.qoogol.enums.Module;
 import com.jangletech.qoogol.model.Comments;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.DateUtils;
+
 import java.util.List;
 
 /**
@@ -55,7 +57,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             commentItemBinding.tvSenderName.setText(comments.getUserFirstName() + " " + comments.getUserLastName());
             commentItemBinding.textCommentBody.setText(comments.getComment());
             if (comments.getTime() != null)
-                commentItemBinding.textCommentTime.setText(DateUtils.localeDateFormat(comments.getTlc_cdatetime()));
+                commentItemBinding.textCommentTime.setText(DateUtils.localeDateFormat(comments.getTime()));
             //commentItemBinding.textCommentTime.setText(DateUtils.getFormattedDate(comments.getTime().substring(0, 10)));
         }
 
@@ -98,17 +100,20 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
                 @Override
                 public void onClick(View v) {
                     Comments comments = commentList.get(getAdapterPosition());
-                    commentItemClickListener.onItemClick(comments.getUserId());
+                    if (callingFrom.equals(Module.Learning.toString())) {
+                        commentItemClickListener.onItemClick(comments.getUserId());
+                    }
+                    if (callingFrom.equals(Module.Test.toString())) {
+                        commentItemClickListener.onItemClick(comments.getTlc_user_id());
+                    }
                 }
             });
-
         }
     }
 
     private String getProfileImageUrl(Comments comments) {
         if (callingFrom.equals(Module.Test.toString()))
             return Constant.PRODUCTION_BASE_FILE_API + comments.getProfile_image();
-
         else
             return Constant.PRODUCTION_BASE_FILE_API + comments.getProfile_image();
     }

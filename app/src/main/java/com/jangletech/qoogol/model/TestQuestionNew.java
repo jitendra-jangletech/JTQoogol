@@ -2,10 +2,11 @@ package com.jangletech.qoogol.model;
 
 import com.google.gson.annotations.SerializedName;
 import com.jangletech.qoogol.util.Constant;
-
 import java.io.Serializable;
 
 public class TestQuestionNew implements Serializable {
+
+    private boolean isAnsweredRight;
 
     @SerializedName(Constant.ttqa_id)
     private int ttqa_id;
@@ -167,9 +168,19 @@ public class TestQuestionNew implements Serializable {
         this.q_solved_by = q_solved_by;
     }
 
+    public boolean isAnsweredRight() {
+        return isAnsweredRight;
+    }
+
+    public void setAnsweredRight(boolean answeredRight) {
+        isAnsweredRight = answeredRight;
+    }
 
     public String getRating() {
-        return rating;
+        if (rating == null)
+            return "0";
+        else
+            return rating;
     }
 
     public void setRating(String rating) {
@@ -177,7 +188,10 @@ public class TestQuestionNew implements Serializable {
     }
 
     public String getAttended_by() {
-        return attended_by;
+        if (attended_by == null)
+            return "0";
+        else
+            return attended_by;
     }
 
     public void setAttended_by(String attended_by) {
@@ -281,7 +295,10 @@ public class TestQuestionNew implements Serializable {
     }
 
     public String getQ_mcq_op_4() {
-        return q_mcq_op_4;
+        if (q_mcq_op_4 == null)
+            return "";
+        else
+            return q_mcq_op_4;
     }
 
     public void setQ_mcq_op_4(String q_mcq_op_4) {
@@ -289,7 +306,10 @@ public class TestQuestionNew implements Serializable {
     }
 
     public String getQ_mcq_op_5() {
-        return q_mcq_op_5;
+        if (q_mcq_op_5 == null)
+            return "";
+        else
+            return q_mcq_op_5;
     }
 
     public void setQ_mcq_op_5(String q_mcq_op_5) {
@@ -335,7 +355,6 @@ public class TestQuestionNew implements Serializable {
     public void setTtqa_marked(boolean ttqa_marked) {
         this.ttqa_marked = ttqa_marked;
     }
-
 
 
     public boolean isTtqa_mcq_ans_5() {
@@ -435,11 +454,11 @@ public class TestQuestionNew implements Serializable {
         this.tq_q_id = tq_q_id;
     }
 
-    public String getTq_marks() {
+    public double getTq_marks() {
         return tq_marks;
     }
 
-    public void setTq_marks(String tq_marks) {
+    public void setTq_marks(double tq_marks) {
         this.tq_marks = tq_marks;
     }
 
@@ -506,7 +525,6 @@ public class TestQuestionNew implements Serializable {
     public void setQ_quest_desc(String q_quest_desc) {
         this.q_quest_desc = q_quest_desc;
     }
-
 
 
     public String getQ_diff_level() {
@@ -628,7 +646,7 @@ public class TestQuestionNew implements Serializable {
     private String tq_q_id;
 
     @SerializedName(Constant.tq_marks)
-    private String tq_marks;
+    private double tq_marks;
 
     @SerializedName(Constant.tq_quest_seq_num)
     private int tq_quest_seq_num;

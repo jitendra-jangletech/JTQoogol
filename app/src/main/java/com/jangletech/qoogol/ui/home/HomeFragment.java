@@ -1,16 +1,20 @@
 package com.jangletech.qoogol.ui.home;
+
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.fragment.NavHostFragment;
+
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.XAxis;
@@ -28,7 +32,6 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.activities.MainActivity;
 import com.jangletech.qoogol.databinding.FragmentHomeBinding;
-import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.model.DashBoard;
 import com.jangletech.qoogol.model.TestAnalytics;
 import com.jangletech.qoogol.retrofit.ApiClient;
@@ -36,8 +39,10 @@ import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
+
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -90,7 +95,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
         return barDataSets;
     }
 
-    private void setDynamicPieChartData(String label){
+    private void setDynamicPieChartData(String label) {
         mBinding.pieChartDetailed.setVisibility(View.VISIBLE);
         mBinding.tvLabel.setVisibility(View.VISIBLE);
         mBinding.tvLabel.setText(label);
@@ -239,16 +244,21 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
         MainActivity.tvNavCredits.setText(dashBoard.getUp_credits());
         MainActivity.tvNavFollowing.setText(dashBoard.getFollowings());
 
-
         if (dashBoard.getFirstName() != null || dashBoard.getLastName() != null) {
+            saveString(Constant.u_first_name,dashBoard.getFirstName());
             MainActivity.textViewDisplayName.setText(dashBoard.getFirstName() + " " + dashBoard.getLastName());
         } else {
             MainActivity.textViewDisplayName.setText("Qoogol User");
         }
-        String gender = new PreferenceManager(requireActivity()).getString(Constant.GENDER);
+
+        String gender = new PreferenceManager(requireActivity()).getString(Constant.GENDER).replace("'","");
+        Log.d(TAG, "setDashBoardData Img Url : "+dashBoard.getProfilePicUrl());
+        Log.d(TAG, "setDashBoardData Gender : "+gender);
         if (dashBoard.getProfilePicUrl() != null && !dashBoard.getProfilePicUrl().isEmpty()) {
+            new PreferenceManager(requireActivity()).saveString("PROF_IMG", getProfileImageUrl(dashBoard.getProfilePicUrl()));
             loadProfilePic(getProfileImageUrl(dashBoard.getProfilePicUrl()), MainActivity.profileImage);
         } else {
+            new PreferenceManager(requireActivity()).saveString("PROF_IMG","");
             if (gender.equalsIgnoreCase("F")) {
                 loadProfilePic(Constant.PRODUCTION_FEMALE_PROFILE_API, MainActivity.profileImage);
             }
@@ -262,6 +272,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
         HashMap<String, String> params = new HashMap<>();
         params.put(Constant.u_user_id, getUserId());
         params.put(Constant.device_id, getDeviceId());
+        Log.d(TAG, "fetchDashboardDetails UserId : "+getUserId());
         //ProgressDialog.getInstance().show(getActivity());
         mBinding.swipeToRefresh.setRefreshing(true);
         Call<DashBoard> call = apiService.fetchDashBoardDetails(

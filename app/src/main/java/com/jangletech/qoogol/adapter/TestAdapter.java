@@ -41,7 +41,6 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull TestAdapter.ViewHolder holder, int position) {
-
         TestModel testModel = testModelList.get(position);
         holder.itemBinding.tvTestNameSubject.setText(testModel.getName() + " (" + testModel.getSubject() + ")");
         holder.itemBinding.tvQuestCount.setText(testModel.getQuestionCount());
@@ -53,8 +52,8 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.ViewHolder> {
         holder.itemBinding.tvAttendedBy.setText(testModel.getAttendedBy());
 
         holder.itemBinding.tvPublishedDate.setText(testModel.getPublishedDate());
-        holder.itemBinding.tvRatingStartCount.setText(testModel.getRatingStarCount());
-        holder.itemBinding.tvRatingCount.setText("(" + testModel.getRatingCount() + ")");
+        //holder.itemBinding.tvRatingStartCount.setText(testModel.getRatingStarCount());
+        //holder.itemBinding.tvRatingCount.setText("(" + testModel.getRatingCount() + ")");
         holder.itemBinding.likeValue.setText(String.valueOf(testModel.getLikeCount()));
 
         if (testModel.isLiked()) {

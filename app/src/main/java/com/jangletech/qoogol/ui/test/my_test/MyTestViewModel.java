@@ -113,8 +113,8 @@ public class MyTestViewModel extends AndroidViewModel {
         appRepository.insertTests(testModelNewList);
     }
 
-    public LiveData<List<TestModelNew>> getAllTests() {
-        return appRepository.getAllTests();
+    public LiveData<List<TestModelNew>> getAllTests(String flag) {
+        return appRepository.getAllTests(flag);
     }
 
     /*public void insertAttemptedTest(List<AttemptedTest> attemptedTests) {

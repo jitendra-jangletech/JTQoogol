@@ -12,7 +12,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.databinding.DataBindingUtil;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -46,7 +45,6 @@ import static com.jangletech.qoogol.util.Constant.following;
 import static com.jangletech.qoogol.util.Constant.followrequests;
 import static com.jangletech.qoogol.util.Constant.friendrequests;
 import static com.jangletech.qoogol.util.Constant.friends;
-import static com.jangletech.qoogol.util.Constant.profile;
 import static com.jangletech.qoogol.util.Constant.qoogol;
 import static com.jangletech.qoogol.util.Constant.reject_follow_requests;
 import static com.jangletech.qoogol.util.Constant.reject_friend_requests;
@@ -86,6 +84,17 @@ public class ConnectionAdapter extends RecyclerView.Adapter<ConnectionAdapter.Vi
     public void onBindViewHolder(@NonNull ConnectionAdapter.ViewHolder holder, int position) {
         Connections connections = connectionsList.get(position);
         connectionItemBinding.tvUserName.setText(connections.getU_first_name() + " " + connections.getU_last_name());
+        if (connections.getBadge() != null && !connections.getBadge().isEmpty()) {
+            String badge = connections.getBadge();
+            if (badge.equalsIgnoreCase("B")) ;
+            connectionItemBinding.imgBadge.setImageDrawable(activity.getDrawable(R.drawable.bronze));
+            if (badge.equalsIgnoreCase("G")) ;
+            connectionItemBinding.imgBadge.setImageDrawable(activity.getDrawable(R.drawable.gold));
+            if (badge.equalsIgnoreCase("S")) ;
+            connectionItemBinding.imgBadge.setImageDrawable(activity.getDrawable(R.drawable.silver));
+            if (badge.equalsIgnoreCase("P")) ;
+            connectionItemBinding.imgBadge.setImageDrawable(activity.getDrawable(R.drawable.platinum));
+        }
         try {
             if (connections.getProf_pic() != null && !connections.getProf_pic().isEmpty()) {
                 Glide.with(activity).load(UtilHelper.getProfileImageUrl(connections.getProf_pic().trim())).circleCrop().placeholder(R.drawable.profile).into(connectionItemBinding.userProfileImage);
@@ -95,10 +104,7 @@ public class ConnectionAdapter extends RecyclerView.Adapter<ConnectionAdapter.Vi
         }
 
 
-
-
-
-        PopupMenu popup = new PopupMenu(activity, connectionItemBinding.textViewOptions,END);
+        PopupMenu popup = new PopupMenu(activity, connectionItemBinding.textViewOptions, END);
         popup.setGravity(END);
         popup.inflate(R.menu.connection_options);
         Menu popupMenu = popup.getMenu();
@@ -126,7 +132,6 @@ public class ConnectionAdapter extends RecyclerView.Adapter<ConnectionAdapter.Vi
                 e.printStackTrace();
             }
 
-
         } else if (call_from.equalsIgnoreCase(followrequests)) {
             try {
                 if (connections.getFollow_req_sent().equalsIgnoreCase("true")) {
@@ -145,39 +150,39 @@ public class ConnectionAdapter extends RecyclerView.Adapter<ConnectionAdapter.Vi
         popup.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
                 case R.id.action_remove_connection:
-                    updateConnection(connections.getCn_user_id_2(),remove_connection);
+                    updateConnection(connections.getCn_user_id_2(), remove_connection);
                     break;
                 case R.id.action_block:
-                    updateConnection(connections.getCn_user_id_2(),block);
+                    updateConnection(connections.getCn_user_id_2(), block);
                     break;
                 case R.id.action_unblock:
-                    updateConnection(connections.getCn_user_id_2(),unblock);
+                    updateConnection(connections.getCn_user_id_2(), unblock);
                     break;
                 case R.id.action_follow:
-                    updateConnection(connections.getCn_user_id_2(),follow);
+                    updateConnection(connections.getCn_user_id_2(), follow);
                     break;
                 case R.id.action_unfollow:
-                    updateConnection(connections.getCn_user_id_2(),unfollow);
+                    updateConnection(connections.getCn_user_id_2(), unfollow);
                     break;
-                    case R.id.accept_follow:
-                    updateConnection(connections.getCn_user_id_2(),accept_follow_requests);
+                case R.id.accept_follow:
+                    updateConnection(connections.getCn_user_id_2(), accept_follow_requests);
                     break;
                 case R.id.reject_follow:
                 case R.id.cancel_follow:
-                    updateConnection(connections.getCn_user_id_2(),reject_follow_requests);
+                    updateConnection(connections.getCn_user_id_2(), reject_follow_requests);
                     break;
                 case R.id.accept_friend:
-                    updateConnection(connections.getCn_user_id_2(),accept_friend_requests);
+                    updateConnection(connections.getCn_user_id_2(), accept_friend_requests);
                     break;
                 case R.id.reject_friend:
                 case R.id.cancel_friend:
-                    updateConnection(connections.getCn_user_id_2(),reject_friend_requests);
+                    updateConnection(connections.getCn_user_id_2(), reject_friend_requests);
                     break;
 
-                case  R.id.action_view_profile:
+                case R.id.action_view_profile:
                     Bundle bundle = new Bundle();
                     bundle.putInt(CALL_FROM, connectonId);
-                    bundle.putString(Constant.fetch_profile_id,connections.getCn_user_id_2());
+                    bundle.putString(Constant.fetch_profile_id, connections.getCn_user_id_2());
                     listener.showProfileClick(bundle);
 //                    NavHostFragment.findNavController(this).navigate(R.id.nav_edit_profile,bundle);
                     break;
@@ -189,7 +194,7 @@ public class ConnectionAdapter extends RecyclerView.Adapter<ConnectionAdapter.Vi
             popup.show();
         });
 
-        if (position == connectionsList.size() && connectionsList.size()>=25) {
+        if (position == connectionsList.size() && connectionsList.size() >= 25) {
             listener.onBottomReached(connectionsList.size());
         }
 
@@ -228,23 +233,25 @@ public class ConnectionAdapter extends RecyclerView.Adapter<ConnectionAdapter.Vi
 
     public interface updateConnectionListener {
         void onUpdateConnection();
+
         void onBottomReached(int size);
+
         void showProfileClick(Bundle bundle);
     }
 
     private void updateConnection(String user, String Processcase) {
         ApiInterface apiService = ApiClient.getInstance().getApi();
         ProgressDialog.getInstance().show(activity);
-        Call<ResponseObj> call = apiService.updateConnections(String.valueOf(new PreferenceManager(activity).getInt(Constant.USER_ID)),Processcase, getDeviceId(), qoogol,user);
+        Call<ResponseObj> call = apiService.updateConnections(String.valueOf(new PreferenceManager(activity).getInt(Constant.USER_ID)), Processcase, getDeviceId(), qoogol, user);
         call.enqueue(new Callback<ResponseObj>() {
             @Override
             public void onResponse(Call<ResponseObj> call, retrofit2.Response<ResponseObj> response) {
                 try {
                     ProgressDialog.getInstance().dismiss();
-                    if (response.body()!=null && response.body().getResponse().equalsIgnoreCase("200")){
+                    if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
                         listener.onUpdateConnection();
                     } else {
-                        Toast.makeText(activity, UtilHelper.getAPIError(String.valueOf(response.body())),Toast.LENGTH_SHORT).show();
+                        Toast.makeText(activity, UtilHelper.getAPIError(String.valueOf(response.body())), Toast.LENGTH_SHORT).show();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -269,8 +276,6 @@ public class ConnectionAdapter extends RecyclerView.Adapter<ConnectionAdapter.Vi
     public class ViewHolder extends RecyclerView.ViewHolder {
         public ViewHolder(@NonNull ConnectionItemBinding itemView) {
             super(itemView.getRoot());
-
-
         }
     }
 }

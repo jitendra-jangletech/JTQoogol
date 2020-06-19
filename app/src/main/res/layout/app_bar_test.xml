@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -24,33 +24,37 @@
         </com.google.android.material.appbar.AppBarLayout>
 
         <!--<include layout="@layout/content_main" />-->
-        <RelativeLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="@dimen/_50sdp"
+                android:layout_height="0dp"
                 android:fillViewport="true"
-                android:scrollbars="none">
+                android:scrollbars="none"
+                app:layout_constraintBottom_toTopOf="@+id/bottomLayout"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0"
+                tools:layout_editor_absoluteX="0dp">
 
-               <!-- <androidx.viewpager2.widget.ViewPager2
+                <!-- <androidx.viewpager2.widget.ViewPager2
                     android:id="@+id/practice_viewpager"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:padding="@dimen/_10sdp" />-->
 
                 <androidx.viewpager.widget.ViewPager
-                    android:padding="@dimen/_10sdp"
                     android:id="@+id/practice_viewpager"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="match_parent"
+                    android:padding="@dimen/_5sdp" />
 
             </androidx.core.widget.NestedScrollView>
 
             <LinearLayout
-                android:layout_alignParentBottom="true"
+                android:id="@+id/bottomLayout"
+                app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -81,7 +85,7 @@
 
             </LinearLayout>
 
-        </RelativeLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>
 </layout>

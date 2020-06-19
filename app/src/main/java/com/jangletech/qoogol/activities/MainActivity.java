@@ -2,17 +2,26 @@ package com.jangletech.qoogol.activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.VectorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.databinding.DataBindingUtil;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProvider;
@@ -24,26 +33,32 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.jangletech.qoogol.BuildConfig;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.ActivityMainBinding;
-import com.jangletech.qoogol.dialog.UniversalDialog;
 import com.jangletech.qoogol.enums.Nav;
 import com.jangletech.qoogol.ui.personal_info.PersonalInfoViewModel;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.Locale;
+
+import static com.jangletech.qoogol.ui.BaseFragment.getUserId;
 import static com.jangletech.qoogol.util.Constant.CALL_FROM;
 import static com.jangletech.qoogol.util.Constant.profile;
 
-public class MainActivity extends BaseActivity implements UniversalDialog.DialogButtonClickListener {
+public class MainActivity extends BaseActivity {
 
     private static final String TAG = "MainActivity";
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding mBinding;
     private DrawerLayout drawerLayout;
     private NavController navController;
+    private LinearLayout friendsLayout, followersLayout;
     private PersonalInfoViewModel mViewmodel;
-    public static ImageView profileImage;
+    public static ImageView profileImage, badgeImg;
     public static TextView textViewDisplayName;
     public static TextView tvNavConnections, tvNavCredits, tvNavFollowers, tvNavFollowing;
     private String navigateFlag = "";
@@ -55,6 +70,7 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         mViewmodel = new ViewModelProvider(this).get(PersonalInfoViewModel.class);
         profileImage = findViewById(R.id.profilePic);
+        badgeImg = findViewById(R.id.imgBadge);
         textViewDisplayName = findViewById(R.id.tvName);
         drawerLayout = findViewById(R.id.drawer_layout);
         tvNavConnections = findViewById(R.id.tvNavConnections);
@@ -69,8 +85,9 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
         NavigationView navigationView = findViewById(R.id.nav_view);
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_test_popular, R.id.nav_attended_by_friends, R.id.nav_shared_with_you,
-                R.id.nav_shared_by_you,R.id.nav_notifications,
-                R.id.nav_faq, R.id.nav_fav, R.id.nav_syllabus,
+                R.id.nav_shared_by_you, R.id.nav_notifications,
+                R.id.nav_test_popular, R.id.nav_recent_test, R.id.nav_share_app, R.id.nav_about,
+                R.id.nav_faq, R.id.nav_fav, R.id.nav_syllabus, R.id.nav_edit_profile,
                 R.id.nav_settings, R.id.nav_saved, R.id.nav_requests, R.id.nav_import_contacts,
                 R.id.nav_home, R.id.nav_learning, R.id.nav_test_my, R.id.nav_doubts)
                 .setDrawerLayout(drawerLayout)
@@ -99,6 +116,7 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 if (item.getItemId() == R.id.nav_home) {
                     if (navController.getCurrentDestination().getId() != R.id.nav_home) {
+                        navigateFlag = Nav.HOME.toString();
                         if (navController.popBackStack(R.id.nav_home, false)) {
                         } else {
                             navController.navigate(R.id.nav_home);
@@ -106,21 +124,29 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
                     }
                 }
                 if (item.getItemId() == R.id.nav_learning) {
+                    navigateFlag = Nav.LEARNING.toString();
                     if (navController.getCurrentDestination().getId() != R.id.nav_learning) {
-                        navController.navigate(R.id.nav_learning);
+                        Bundle bundle = new Bundle();
+                        bundle.putString("call_from", "learning");
+                        navToFragment(R.id.nav_learning, bundle);
                     }
                 }
                 if (item.getItemId() == R.id.nav_test_my) {
+                    navigateFlag = Nav.MY_TEST.toString();
+                    //saveTestType(Nav.MY_TEST.toString());
                     if (navController.getCurrentDestination().getId() != R.id.nav_test_my) {
+                        clearFilters();
                         navController.navigate(R.id.nav_test_my);
                     }
                 }
                 if (item.getItemId() == R.id.nav_doubts) {
+                    navigateFlag = Nav.ASK_DOUBTS.toString();
                     if (navController.getCurrentDestination().getId() != R.id.nav_doubts) {
                         navController.navigate(R.id.nav_doubts);
                     }
                 }
                 if (item.getItemId() == R.id.nav_notifications) {
+                    navigateFlag = Nav.NOTIFICATIONS.toString();
                     if (navController.getCurrentDestination().getId() != R.id.nav_notifications) {
                         navController.navigate(R.id.nav_notifications);
                     }
@@ -148,78 +174,122 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
 
             @Override
             public void onDrawerOpened(@NonNull View drawerView) {
-
+                loadProfileImage();
             }
 
             @Override
             public void onDrawerClosed(@NonNull View drawerView) {
                 if (navigateFlag.equals(Nav.LEARNING.toString())) {
+                    navigateFlag = "";
                     Bundle bundle = new Bundle();
                     bundle.putString("call_from", "learning");
                     navToFragment(R.id.nav_learning, bundle);
                 }
                 if (navigateFlag.equals(Nav.USER_PROFILE.toString())) {
+                    navigateFlag = "";
                     Bundle bundle = new Bundle();
                     bundle.putInt(CALL_FROM, profile);
                     navToFragment(R.id.nav_edit_profile, bundle);
                 }
+                if (navigateFlag.equals(Nav.RECENT_TEST.toString())) {
+                    navigateFlag = "";
+                    clearFilters();
+                    saveTestType(Nav.RECENT_TEST.toString());
+                    Bundle bundle = new Bundle();
+                    bundle.putString(CALL_FROM, Nav.RECENT_TEST.toString());
+                    navToFragment(R.id.nav_recent_test, bundle);
+                }
                 if (navigateFlag.equals(Nav.FAVOURITE.toString())) {
+                    navigateFlag = "";
                     navToFragment(R.id.nav_fav, Bundle.EMPTY);
                 }
                 if (navigateFlag.equals(Nav.HOME.toString())) {
+                    navigateFlag = "";
                     navToFragment(R.id.nav_home, Bundle.EMPTY);
                 }
                 if (navigateFlag.equals(Nav.PENDING_REQ.toString())) {
+                    navigateFlag = "";
                     navToFragment(R.id.nav_requests, Bundle.EMPTY);
                 }
                 if (navigateFlag.equals(Nav.BLOCKED_CONN.toString())) {
+                    navigateFlag = "";
                     navToFragment(R.id.nav_blocked_connections, Bundle.EMPTY);
                 }
                 if (navigateFlag.equals(Nav.IMPORT_CONTACTS.toString())) {
+                    navigateFlag = "";
                     navToFragment(R.id.nav_import_contacts, Bundle.EMPTY);
                 }
                 if (navigateFlag.equals(Nav.SAVED.toString())) {
+                    navigateFlag = "";
                     navToFragment(R.id.nav_saved, Bundle.EMPTY);
                 }
                 if (navigateFlag.equals(Nav.MODIFY_SYLLABUS.toString())) {
+                    navigateFlag = "";
                     navToFragment(R.id.nav_syllabus, Bundle.EMPTY);
                 }
                 if (navigateFlag.equals(Nav.SETTINGS.toString())) {
+                    navigateFlag = "";
                     navToFragment(R.id.nav_settings, Bundle.EMPTY);
                 }
                 if (navigateFlag.equals(Nav.FAQ.toString())) {
+                    navigateFlag = "";
                     navToFragment(R.id.nav_faq, Bundle.EMPTY);
                 }
-                /*if (navigateFlag.equals(Nav.NOTIFICATIONS.toString())) {
-                    navToFragment(R.id.nav_notifications, Bundle.EMPTY);
-                }*/
-                if (navigateFlag.equals(Nav.LOGOUT.toString())) {
-                    showLogoutDialog();
+                if (navigateFlag.equals(Nav.SHARE_APP.toString())) {
+                    //navToFragment(R.id.nav_share_app, Bundle.EMPTY);
+                    shareAction();
+                }
+                if (navigateFlag.equals(Nav.ABOUT.toString())) {
+                    navToFragment(R.id.nav_about, Bundle.EMPTY);
                 }
                 if (navigateFlag.equals(Nav.MY_TEST.toString())) {
+                    navigateFlag = "";
+                    clearFilters();
+                    saveTestType(Nav.MY_TEST.toString());
                     Bundle bundle = new Bundle();
                     bundle.putString(CALL_FROM, Nav.MY_TEST.toString());
                     navToFragment(R.id.nav_test_my, bundle);
                 }
                 if (navigateFlag.equals(Nav.POPULAR_TEST.toString())) {
+                    navigateFlag = "";
+                    clearFilters();
+                    saveTestType(Nav.POPULAR_TEST.toString());
                     Bundle bundle = new Bundle();
                     bundle.putString("CALL_FROM", Nav.POPULAR_TEST.toString());
                     navToFragment(R.id.nav_test_popular, bundle);
                 }
                 if (navigateFlag.equals(Nav.SHARED_BY_YOU.toString())) {
+                    navigateFlag = "";
+                    clearFilters();
+                    saveTestType(Nav.SHARED_BY_YOU.toString());
                     Bundle bundle = new Bundle();
-                    bundle.putString("CALL_FROM", Nav.SHARED_BY_YOU.toString());
+                    bundle.putString(CALL_FROM, Nav.SHARED_BY_YOU.toString());
                     navToFragment(R.id.nav_shared_by_you, bundle);
                 }
                 if (navigateFlag.equals(Nav.SHARED_WITH_YOU.toString())) {
+                    navigateFlag = "";
+                    saveTestType(Nav.SHARED_WITH_YOU.toString());
                     Bundle bundle = new Bundle();
                     bundle.putString("CALL_FROM", Nav.SHARED_WITH_YOU.toString());
                     navToFragment(R.id.nav_shared_with_you, bundle);
                 }
                 if (navigateFlag.equals(Nav.ATTENDED_BY_FRIENDS.toString())) {
+                    navigateFlag = "";
                     Bundle bundle = new Bundle();
                     bundle.putString("CALL_FROM", Nav.ATTENDED_BY_FRIENDS.toString());
                     navToFragment(R.id.nav_attended_by_friends, bundle);
+                }
+                if (navigateFlag.equals(Nav.CONNECTIONS.toString())) {
+                    navigateFlag = "";
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("position", 0);
+                    navToFragment(R.id.nav_connections, bundle);
+                }
+                if (navigateFlag.equals(Nav.CONNECTIONS_FOLLOWING.toString())) {
+                    navigateFlag = "";
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("position", 3);
+                    navToFragment(R.id.nav_connections, bundle);
                 }
             }
 
@@ -229,6 +299,19 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
             }
         });
 
+        mBinding.navHeader.friendsLayout.setOnClickListener(v -> {
+            mBinding.drawerLayout.closeDrawers();
+            if (navController.getCurrentDestination().getId() != R.id.nav_connections) {
+                navigateFlag = Nav.CONNECTIONS.toString();
+            }
+        });
+
+        mBinding.navHeader.followersLayout.setOnClickListener(v -> {
+            mBinding.drawerLayout.closeDrawers();
+            if (navController.getCurrentDestination().getId() != R.id.nav_connections) {
+                navigateFlag = Nav.CONNECTIONS_FOLLOWING.toString();
+            }
+        });
 
         mBinding.tvNavHome.setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
@@ -249,6 +332,13 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
             mBinding.drawerLayout.closeDrawers();
             if (navController.getCurrentDestination().getId() != R.id.nav_learning) {
                 navigateFlag = Nav.LEARNING.toString();
+            }
+        });
+
+        findViewById(R.id.nav_recent_test).setOnClickListener(v -> {
+            mBinding.drawerLayout.closeDrawers();
+            if (navController.getCurrentDestination().getId() != R.id.nav_recent_test) {
+                navigateFlag = Nav.RECENT_TEST.toString();
             }
         });
 
@@ -288,7 +378,6 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
             }
         });
 
-
         findViewById(R.id.nav_test_popular).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
             if (navController.getCurrentDestination().getId() != R.id.nav_test_popular) {
@@ -318,12 +407,6 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
             }
         });
 
-        /*findViewById(R.id.nav_notifications).setOnClickListener(v -> {
-            mBinding.drawerLayout.closeDrawers();
-            if (navController.getCurrentDestination().getId() != R.id.nav_notifications) {
-                navigateFlag = Nav.NOTIFICATIONS.toString();
-            }
-        });*/
 
         findViewById(R.id.nav_settings).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
@@ -353,24 +436,19 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
             }
         });
 
-        /*findViewById(R.id.nav_doubts).setOnClickListener(v -> {
+        findViewById(R.id.nav_share_app).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
-            if (navController.getCurrentDestination().getId() != R.id.nav_doubts) {
-                navigateFlag = Nav.ASK_DOUBTS.toString();
+            if (navController.getCurrentDestination().getId() != R.id.nav_share_app) {
+                navigateFlag = Nav.SHARE_APP.toString();
             }
-        });*/
-
-        findViewById(R.id.nav_logout).setOnClickListener(v -> {
-            mBinding.drawerLayout.closeDrawers();
-            navigateFlag = Nav.LOGOUT.toString();
         });
-    }
 
-    private void showLogoutDialog() {
-        UniversalDialog universalDialog = new UniversalDialog(this, "Confirm Log Out",
-                "you are signing out of your Qoogol app on this device",
-                "Logout", "Cancel", this);
-        universalDialog.show();
+        findViewById(R.id.nav_about).setOnClickListener(v -> {
+            mBinding.drawerLayout.closeDrawers();
+            if (navController.getCurrentDestination().getId() != R.id.nav_about) {
+                navigateFlag = Nav.ABOUT.toString();
+            }
+        });
     }
 
     private void navToFragment(int resId, Bundle bundle) {
@@ -386,7 +464,7 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
                 || super.onSupportNavigateUp();
     }
 
-    @Override
+  /*  @Override
     public void onPositiveButtonClick() {
         new PreferenceManager(getApplicationContext()).setIsLoggedIn(false);
         new PreferenceManager(getApplicationContext()).saveString(Constant.MOBILE, "");
@@ -394,7 +472,7 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
         Intent intent = new Intent(this, LaunchActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
-    }
+    }*/
 
     @Override
     public void onBackPressed() {
@@ -421,11 +499,88 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
         }
     }
 
+    private void saveTestType(String type) {
+        new PreferenceManager(getApplicationContext()).saveString(CALL_FROM, type);
+    }
+
     private void showBottomNav() {
         bottomNavigationView.setVisibility(View.VISIBLE);
     }
 
     private void hideBottomNav() {
         bottomNavigationView.setVisibility(View.GONE);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume MainActivity: ");
+    }
+
+    private void loadProfileImage() {
+        String badge = new PreferenceManager(getApplicationContext()).getString("BADGE");
+        String imgUrl = new PreferenceManager(getApplicationContext()).getString("PROF_IMG");
+        String gender = new PreferenceManager(getApplicationContext()).getString(Constant.GENDER).replace("'", "");
+        Log.d(TAG, "loadProfileImage Img Url : " + imgUrl);
+        Log.d(TAG, "loadProfileImage Gender : " + gender);
+        Log.d(TAG, "loadProfileImage Badge : " + badge);
+        if (imgUrl != null && !imgUrl.isEmpty()) {
+            loadProfilePic(imgUrl, MainActivity.profileImage);
+        } else {
+            if (gender.equalsIgnoreCase("F")) {
+                loadProfilePic(Constant.PRODUCTION_FEMALE_PROFILE_API, MainActivity.profileImage);
+            }
+            if (gender.equalsIgnoreCase("M")) {
+                loadProfilePic(Constant.PRODUCTION_MALE_PROFILE_API, MainActivity.profileImage);
+            }
+        }
+
+        if (badge != null && !badge.isEmpty()) {
+            if (badge.equalsIgnoreCase("B")) ;
+            badgeImg.setImageDrawable(getDrawable(R.drawable.bronze));
+            if (badge.equalsIgnoreCase("G")) ;
+            badgeImg.setImageDrawable(getDrawable(R.drawable.gold));
+            if (badge.equalsIgnoreCase("S")) ;
+            badgeImg.setImageDrawable(getDrawable(R.drawable.silver));
+            if (badge.equalsIgnoreCase("P")) ;
+            badgeImg.setImageDrawable(getDrawable(R.drawable.platinum));
+        }
+    }
+
+    private void shareAction() {
+        try {
+            Bitmap bitmap;
+            Drawable drawable = ContextCompat.getDrawable(this, R.drawable.qoogol);
+            if (drawable instanceof BitmapDrawable) {
+                bitmap = ((BitmapDrawable) drawable).getBitmap();
+            } else if (drawable instanceof VectorDrawable) {
+                bitmap = getBitmap((VectorDrawable) drawable);
+            } else {
+                throw new IllegalArgumentException("unsupported drawable type");
+            }
+            File cachePath = new File(getExternalCacheDir(), "images");
+            cachePath.mkdirs(); // don't forget to make the directory
+            FileOutputStream stream = new FileOutputStream(cachePath + "/image.png"); // overwrites this image every time
+            bitmap.compress(Bitmap.CompressFormat.PNG, 50, stream);
+            stream.close();
+
+            File newFile = new File(cachePath, "image.png");
+            Uri contentUri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".provider", newFile);
+
+            Intent sendIntent = new Intent(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
+            sendIntent.setType("image/*");
+
+            String shareMessage = String.format(Locale.ENGLISH,
+                    "Install Qoogol android app for free academic tests, prepare for competitive exams & post doubts. %s %s", getString(Constant.u_first_name), getUserId() + "\n");
+            shareMessage = shareMessage + "https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID + "\n";
+            sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Qoogol");
+            sendIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
+
+            startActivity(Intent.createChooser(sendIntent, "Share app link via..."));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

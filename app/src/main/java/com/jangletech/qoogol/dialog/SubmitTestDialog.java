@@ -26,14 +26,15 @@ public class SubmitTestDialog extends Dialog {
     private SubmitDialogClickListener submitDialogClickListener;
     private Long milliLeft, min, sec, hrs;
     private CountDownTimer timer;
+    private String testName;
     private List<TestQuestionNew> questionList;
-    private int totalQuest, attemptedQuest, unAttemptedQuest, markedQuest;
+    private int totalQuest, wrongQuest, unAttemptedQuest, markedQuest;
 
 
-    public SubmitTestDialog(@NonNull Context context, SubmitDialogClickListener submitDialogClickListener, long milliesLeft) {
+    public SubmitTestDialog(@NonNull Context context, SubmitDialogClickListener submitDialogClickListener, String testName) {
         super(context);
         this.submitDialogClickListener = submitDialogClickListener;
-        this.milliLeft = milliesLeft;
+        this.testName = testName;
         this.questionList = PracticeTestActivity.questionsNewList;
     }
 
@@ -43,18 +44,19 @@ public class SubmitTestDialog extends Dialog {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         mBinding = DataBindingUtil.inflate(LayoutInflater.from(getContext()), R.layout.dialog_submit_test, null, false);
         setContentView(mBinding.getRoot());
-        startTimer(milliLeft);
 
         mBinding.tvYes.setOnClickListener(v -> {
+            dismiss();
             submitDialogClickListener.onYesClick();
         });
 
         mBinding.tvNo.setOnClickListener(v -> {
+            dismiss();
             submitDialogClickListener.onNoClick();
         });
 
-        mBinding.attemptedLayout.setOnClickListener(v -> {
-            submitDialogClickListener.onAttemptedClick();
+        mBinding.wrongLayout.setOnClickListener(v -> {
+            submitDialogClickListener.onWrongClick();
             dismiss();
         });
 
@@ -72,59 +74,77 @@ public class SubmitTestDialog extends Dialog {
     }
 
     private void setQuestCounts() {
+        double totalMarks = 0;
+        double obtainMarks = 0;
         totalQuest = questionList.size();
         markedQuest = 0;
-        attemptedQuest = 0;
+        wrongQuest = 0;
         unAttemptedQuest = 0;
-        for (int i = 0; i < questionList.size(); i++) {
-            TestQuestionNew testQuestionNew = questionList.get(i);
-            if (testQuestionNew.isTtqa_attempted()) {
-                attemptedQuest++;
+
+
+        for (TestQuestionNew testQuestionNew : questionList) {
+            totalMarks = totalMarks + testQuestionNew.getTq_marks();
+            if (testQuestionNew.isTtqa_attempted() && !testQuestionNew.isAnsweredRight()) {
+                wrongQuest++;
             }
             if (testQuestionNew.isTtqa_marked()) {
                 markedQuest++;
             }
-
             if (!testQuestionNew.isTtqa_attempted()) {
                 unAttemptedQuest++;
             }
+
+            if (testQuestionNew.isAnsweredRight()) {
+                obtainMarks = obtainMarks + testQuestionNew.getTq_marks();
+                Log.d(TAG, "marksCalculation Right Answer : " + testQuestionNew.getTq_quest_seq_num());
+            } else {
+                Log.d(TAG, "marksCalculation Wrong Answer : " + testQuestionNew.getTq_quest_seq_num());
+            }
+
         }
 
-        Log.d(TAG, "setQuestCounts Attempted : " + attemptedQuest);
+        Log.d(TAG, "setQuestCounts Wrong : " + wrongQuest);
         Log.d(TAG, "setQuestCounts UnAttempted : " + unAttemptedQuest);
         Log.d(TAG, "setQuestCounts Marked : " + markedQuest);
 
-        mBinding.tvAttemptedCount.setText(Html.fromHtml("<u>" + String.valueOf(attemptedQuest) + "</u>"));
+        //Dialog Title Test name
+        mBinding.tvTitle.setText(testName);
+
+        //set obtain Marks & Total Marks
+        mBinding.tvTotalMarksValue.setText(String.valueOf(totalMarks));
+        mBinding.tvObtainMarksValue.setText(String.valueOf(obtainMarks));
+
+        mBinding.tvWrongCount.setText(Html.fromHtml("<u>" + String.valueOf(wrongQuest) + "</u>"));
         mBinding.tvUnAttemptedCount.setText(Html.fromHtml("<u>" + String.valueOf(unAttemptedQuest) + "</u>"));
         mBinding.tvMarkedCount.setText(Html.fromHtml("<u>" + String.valueOf(markedQuest) + "</u>"));
     }
 
 
-    public void startTimer(long timeLengthMilli) {
-        timer = new CountDownTimer(timeLengthMilli, 1000) {
-            @Override
-            public void onTick(long milliTillFinish) {
-                milliLeft = milliTillFinish;
-                hrs = (milliTillFinish / (1000 * 60 * 60));
-                min = ((milliTillFinish / (1000 * 60)) - hrs * 60);
-                sec = ((milliTillFinish / 1000) - min * 60);
-                String time = String.format("%02d:%02d:%02d", hrs, min, sec);
-                mBinding.tvTimerCount.setText(time);
-            }
-
-            @Override
-            public void onFinish() {
-
-            }
-        }.start();
-    }
+//    public void startTimer(long timeLengthMilli) {
+//        timer = new CountDownTimer(timeLengthMilli, 1000) {
+//            @Override
+//            public void onTick(long milliTillFinish) {
+//                milliLeft = milliTillFinish;
+//                hrs = (milliTillFinish / (1000 * 60 * 60));
+//                min = ((milliTillFinish / (1000 * 60)) - hrs * 60);
+//                sec = ((milliTillFinish / 1000) - min * 60);
+//                String time = String.format("%02d:%02d:%02d", hrs, min, sec);
+//                mBinding.tvTimerCount.setText(time);
+//            }
+//
+//            @Override
+//            public void onFinish() {
+//
+//            }
+//        }.start();
+//    }
 
     public interface SubmitDialogClickListener {
         void onYesClick();
 
         void onNoClick();
 
-        void onAttemptedClick();
+        void onWrongClick();
 
         void onUnAttemptedClick();
 
