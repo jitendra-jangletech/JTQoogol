@@ -229,7 +229,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="@dimen/_5sdp"
-                        android:src="@drawable/ic_save"
+                        android:src="@drawable/ic_save_grey"
                         app:layout_constraintBottom_toBottomOf="@id/timer"
                         app:layout_constraintRight_toLeftOf="@+id/timer"
                         app:layout_constraintTop_toTopOf="@id/timer" />

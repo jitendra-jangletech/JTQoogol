@@ -1,4 +1,5 @@
-package com.jangletech.qoogol.ui.learning;
+package com.jangletech.qoogol.ui.favourite;
+
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -6,24 +7,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.jangletech.qoogol.R;
-import com.jangletech.qoogol.adapter.SavedQueAdapter;
+import com.jangletech.qoogol.adapter.LearingAdapter;
 import com.jangletech.qoogol.databinding.LearningFragmentBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.enums.Module;
-import com.jangletech.qoogol.model.LearningQuestions;
+import com.jangletech.qoogol.model.LearningQuestResponse;
+import com.jangletech.qoogol.model.LearningQuestionsNew;
 import com.jangletech.qoogol.model.ProcessQuestion;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
-import com.jangletech.qoogol.ui.BaseFragment;
-import com.jangletech.qoogol.ui.Saved.SavedViewModel;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
@@ -40,62 +40,78 @@ import static com.jangletech.qoogol.util.Constant.connectonId;
 import static com.jangletech.qoogol.util.Constant.learning;
 import static com.jangletech.qoogol.util.Constant.profile;
 
-public class SavedQueFragment extends BaseFragment implements SavedQueAdapter.onIconClick {
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class FavQueFragment extends Fragment implements LearingAdapter.onIconClick {
 
-    private SavedViewModel mViewModel;
     LearningFragmentBinding learningFragmentBinding;
-    SavedQueAdapter learingAdapter;
-    List<LearningQuestions> learningQuestionsList;
-    List<LearningQuestions> questionsNewList;
+    LearingAdapter learingAdapter;
+    List<LearningQuestionsNew> learningQuestionsList;
+    List<LearningQuestionsNew> questionsNewList;
     ApiInterface apiService = ApiClient.getInstance().getApi();
+    String userId = "";
+    FavouriteViewModel mViewModel;
 
-
-    public static SavedQueFragment newInstance() {
-        return new SavedQueFragment();
-    }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         learningFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.learning_fragment, container, false);
-        setHasOptionsMenu(true);
         return learningFragmentBinding.getRoot();
     }
+
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(SavedViewModel.class);
+        mViewModel = ViewModelProviders.of(this).get(FavouriteViewModel.class);
         initView();
     }
 
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
 
     private void initView() {
         learningFragmentBinding.learningSwiperefresh.setRefreshing(true);
         learningQuestionsList = new ArrayList<>();
         questionsNewList = new ArrayList<>();
+        userId = String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));
+        mViewModel.fetchFavQuestionData();
 
-        mViewModel.fetchQuestionData();
-
-        mViewModel.getQuestionList().observe(getViewLifecycleOwner(), questionsList -> {
+        mViewModel.geFavtQuestionList().observe(getViewLifecycleOwner(), questionsList -> {
             questionsNewList.clear();
             questionsNewList.addAll(questionsList);
             initRecycler();
         });
 
-        SavedQueFragment savedQueFragment = this;
-        learningFragmentBinding.learningSwiperefresh.setOnRefreshListener(() -> getFragmentManager().beginTransaction().detach(savedQueFragment).attach(savedQueFragment).commit());
+
+        learningFragmentBinding.learningSwiperefresh.setOnRefreshListener(() -> mViewModel.fetchFavQuestionData());
     }
+
+//    private void getDataFromApi() {
+//        Call<LearningQuestResponse> call = apiService.fetchFavQAApi(new PreferenceManager(getApplicationContext()).getUserId(), "FV");
+//        call.enqueue(new Callback<LearningQuestResponse>() {
+//            @Override
+//            public void onResponse(Call<LearningQuestResponse> call, retrofit2.Response<LearningQuestResponse> response) {
+//                try {
+//                    if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
+//                        learningQuestionsList.addAll(response.body().getQuestion_list());
+//                        initRecycler();
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<LearningQuestResponse> call, Throwable t) {
+//                t.printStackTrace();
+//            }
+//        });
+//    }
 
 
     private void initRecycler() {
-        learingAdapter = new SavedQueAdapter(getActivity(), questionsNewList, this, learning);
+        learingAdapter = new LearingAdapter(getActivity(), questionsNewList, this, learning);
         learningFragmentBinding.learningRecycler.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setAutoMeasureEnabled(false);
@@ -148,7 +164,6 @@ public class SavedQueFragment extends BaseFragment implements SavedQueAdapter.on
         });
     }
 
-
     @Override
     public void onCommentClick(String questionId) {
         Bundle bundle = new Bundle();
@@ -157,7 +172,6 @@ public class SavedQueFragment extends BaseFragment implements SavedQueAdapter.on
         NavHostFragment.findNavController(this).navigate(R.id.nav_comments, bundle);
     }
 
-
     @Override
     public void onShareClick(String questionId) {
         Bundle bundle = new Bundle();
@@ -165,7 +179,6 @@ public class SavedQueFragment extends BaseFragment implements SavedQueAdapter.on
         bundle.putInt("call_from", learning);
         NavHostFragment.findNavController(this).navigate(R.id.nav_share, bundle);
     }
-
 
     @Override
     public void onSubmitClick(String questionId, int isRight) {
@@ -184,6 +197,4 @@ public class SavedQueFragment extends BaseFragment implements SavedQueAdapter.on
 
         NavHostFragment.findNavController(this).navigate(R.id.nav_edit_profile, bundle);
     }
-
-
 }

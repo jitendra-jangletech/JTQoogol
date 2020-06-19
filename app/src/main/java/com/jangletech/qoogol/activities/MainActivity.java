@@ -71,7 +71,7 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
                 R.id.nav_test_popular, R.id.nav_attended_by_friends, R.id.nav_shared_with_you,
                 R.id.nav_shared_by_you,R.id.nav_notifications,
                 R.id.nav_faq, R.id.nav_fav, R.id.nav_syllabus,
-                R.id.nav_settings, R.id.nav_saved, R.id.nav_requests, R.id.nav_import_contacts,
+                R.id.nav_settings, R.id.saved_questions, R.id.nav_requests, R.id.nav_import_contacts,
                 R.id.nav_home, R.id.nav_learning, R.id.nav_test_my, R.id.nav_doubts)
                 .setDrawerLayout(drawerLayout)
                 .build();
@@ -179,7 +179,7 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
                     navToFragment(R.id.nav_import_contacts, Bundle.EMPTY);
                 }
                 if (navigateFlag.equals(Nav.SAVED.toString())) {
-                    navToFragment(R.id.nav_saved, Bundle.EMPTY);
+                    navToFragment(R.id.saved_questions, Bundle.EMPTY);
                 }
                 if (navigateFlag.equals(Nav.MODIFY_SYLLABUS.toString())) {
                     navToFragment(R.id.nav_syllabus, Bundle.EMPTY);
@@ -266,6 +266,7 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
             }
         });
 
+
         findViewById(R.id.nav_import_contacts).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
             if (navController.getCurrentDestination().getId() != R.id.nav_import_contacts) {
@@ -274,9 +275,9 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
         });
 
 
-        findViewById(R.id.nav_saved).setOnClickListener(v -> {
+        findViewById(R.id.saved_questions).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
-            if (navController.getCurrentDestination().getId() != R.id.nav_saved) {
+            if (navController.getCurrentDestination().getId() != R.id.saved_questions) {
                 navigateFlag = Nav.SAVED.toString();
             }
         });

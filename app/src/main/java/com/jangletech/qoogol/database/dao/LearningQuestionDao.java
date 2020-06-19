@@ -23,14 +23,23 @@ public interface LearningQuestionDao {
     @Query("SELECT * FROM LearningQuestionsNew")
     LiveData<List<LearningQuestionsNew>> getAllQuestions();
 
+    @Query("SELECT * FROM LearningQuestionsNew where is_fav=:fav")
+    LiveData<List<LearningQuestionsNew>> getFavQuestions(String fav);
+
     @Query("SELECT * FROM LearningQuestions")
     LiveData<List<LearningQuestions>> getAllSavedQuestions();
 
     @Query("SELECT * FROM LearningQuestionsNew")
     List<LearningQuestionsNew> getQuestions();
 
+    @Query("SELECT * FROM LearningQuestions")
+    List<LearningQuestions> getSavedQuestions();
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertQuestions(List<LearningQuestionsNew> learningQuestions);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertSavedQuestions(List<LearningQuestions> learningQuestions);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertQuestion(LearningQuestions learningQuestions);

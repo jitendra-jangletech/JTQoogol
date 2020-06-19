@@ -64,7 +64,7 @@ public class LearningFragment extends BaseFragment implements LearingAdapter.onI
         return learningFragmentBinding.getRoot();
     }
 
-    @Override
+       @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(LearningViewModel.class);

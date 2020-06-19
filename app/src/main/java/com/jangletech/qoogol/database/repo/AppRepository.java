@@ -5,6 +5,7 @@ import android.content.Context;
 import androidx.lifecycle.LiveData;
 
 import com.jangletech.qoogol.database.QoogolDatabase;
+import com.jangletech.qoogol.database.dao.BlockedDao;
 import com.jangletech.qoogol.database.dao.ConnectionsDao;
 import com.jangletech.qoogol.database.dao.DashboardDao;
 import com.jangletech.qoogol.database.dao.EducationDetailsDao;
@@ -17,6 +18,7 @@ import com.jangletech.qoogol.database.dao.LearningQuestionDao;
 import com.jangletech.qoogol.database.dao.NotificationDao;
 import com.jangletech.qoogol.database.dao.TestDao;
 import com.jangletech.qoogol.database.dao.UserProfileDao;
+import com.jangletech.qoogol.model.BlockedConnections;
 import com.jangletech.qoogol.model.Connections;
 import com.jangletech.qoogol.model.DashBoard;
 import com.jangletech.qoogol.model.Education;
@@ -48,6 +50,7 @@ public class AppRepository {
     private final FriendReqDao friendReqDao;
     private final FollowReqDao followReqDao;
     private final ConnectionsDao connectionsDao;
+    private final BlockedDao blockedDao;
     //private final TestDetailsDao testDetailsDao;
 
     public AppRepository(Context context) {
@@ -64,6 +67,7 @@ public class AppRepository {
         friendReqDao = db.friendReqDao();
         followReqDao = db.followReqDao();
         connectionsDao = db.connectionsDao();
+        blockedDao = db.blockedDao();
         //testDetailsDao = db.testDetailsDao();
     }
 
@@ -345,6 +349,10 @@ public class AppRepository {
         learningQuestionDao.upsertQuestions(learningQuestions);
     }
 
+    public void insertSavedQuestions(List<LearningQuestions> learningQuestions) {
+        learningQuestionDao.insertSavedQuestions(learningQuestions);
+    }
+
     public void insertQuestion(LearningQuestions learningQuestions) {
         learningQuestionDao.insertQuestion(learningQuestions);
     }
@@ -358,6 +366,10 @@ public class AppRepository {
     }
     public void insertFriends(List<Friends> friendsList) {
         friendsDao.upsertFriends(friendsList);
+    }
+
+    public void insertBlockedList(List<BlockedConnections> blockedConnections) {
+        blockedDao.upsertBlockedConn(blockedConnections);
     }
 
     public void insertFriendReq(List<FriendRequest> friendRequests) {
@@ -385,6 +397,10 @@ public class AppRepository {
         return friendsDao.getAllFriends(userID);
     }
 
+    public LiveData<List<BlockedConnections>> getBlockListFromDb(String userID) {
+        return blockedDao.getAllBlockedConn(userID);
+    }
+
     public LiveData<List<FriendRequest>> getFriendReqFromDb(String userID) {
         return friendReqDao.getAllFriendReq(userID);
     }
@@ -406,6 +422,11 @@ public class AppRepository {
         return learningQuestionDao.getAllQuestions();
     }
 
+
+    public LiveData<List<LearningQuestionsNew>> getFavQuestionsFromDb() {
+        return learningQuestionDao.getFavQuestions("true");
+    }
+
     public LiveData<List<LearningQuestions>> getSavedQuestionsFromDb() {
         return learningQuestionDao.getAllSavedQuestions();
     }
@@ -415,5 +436,8 @@ public class AppRepository {
         return learningQuestionDao.getQuestions();
     }
 
+    public List<LearningQuestions> getSavedQuestions() {
+        return learningQuestionDao.getSavedQuestions();
+    }
 
 }

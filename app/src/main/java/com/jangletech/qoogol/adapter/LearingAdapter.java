@@ -151,7 +151,7 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
                 learningItemBinding.questionTextview.setVisibility(View.VISIBLE);
             }
 
-            learningItemBinding.saveQue.setImageDrawable(learningQuestions.getIsSave().equalsIgnoreCase("true") ? activity.getResources().getDrawable(R.drawable.ic_favorite_black_24dp) : activity.getResources().getDrawable(R.drawable.ic_save));
+            learningItemBinding.saveQue.setImageDrawable(learningQuestions.getIsSave().equalsIgnoreCase("true") ? activity.getResources().getDrawable(R.drawable.ic_save_black) : activity.getResources().getDrawable(R.drawable.ic_save_grey));
             learningItemBinding.favorite.setImageDrawable(learningQuestions.getIs_fav().equalsIgnoreCase("true") ? activity.getResources().getDrawable(R.drawable.ic_favorite_black_24dp) : activity.getResources().getDrawable(R.drawable.ic_fav));
             learningItemBinding.like.setImageDrawable(learningQuestions.getIs_liked().equalsIgnoreCase("true") ? activity.getResources().getDrawable(R.drawable.ic_thumb_up_black_24dp) : activity.getResources().getDrawable(R.drawable.ic_like));
 
@@ -337,9 +337,6 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
                     learningQuestionsNew.setIs_fav("true");
                     ProcessQuestionAPI(learningQuestionsNew.getQuestion_id(), 1, "save","","",getAdapterPosition(),"");
                 }
-
-
-
             });
 
 
@@ -2138,12 +2135,12 @@ public class LearingAdapter extends RecyclerView.Adapter<LearingAdapter.ViewHold
                                 ExecutorService executor = Executors.newSingleThreadExecutor();
                                 if (flag==0) {
                                     learningQuestionsNew.setIsSave("false");
-                                    Glide.with(activity).load(activity.getResources().getDrawable(R.drawable.ic_save)).into(learningItemBinding.saveQue);
+                                    Glide.with(activity).load(activity.getResources().getDrawable(R.drawable.ic_save_grey)).into(learningItemBinding.saveQue);
                                     executor.execute(() -> new AppRepository(getApplicationContext()).deleteQuestion(learningQuestionsNew.getQuestion_id()));
 
                                 } else {
                                     learningQuestionsNew.setIsSave("true");
-                                    Glide.with(activity).load(activity.getResources().getDrawable(R.drawable.ic_favorite_black_24dp)).into(learningItemBinding.saveQue);
+                                    Glide.with(activity).load(activity.getResources().getDrawable(R.drawable.ic_save_black)).into(learningItemBinding.saveQue);
                                     executor.execute(() -> new AppRepository(getApplicationContext()).insertQuestion(copyFields(learningQuestionsNew)));
 
                                 }

@@ -27,10 +27,12 @@ import com.jangletech.qoogol.model.GenerateVerifyUserName;
 import com.jangletech.qoogol.model.InstituteResponse;
 import com.jangletech.qoogol.model.Language;
 import com.jangletech.qoogol.model.LearningQuestResponse;
+import com.jangletech.qoogol.model.LearningQuestions;
 import com.jangletech.qoogol.model.NotificationResponse;
 import com.jangletech.qoogol.model.ProcessQuestion;
 import com.jangletech.qoogol.model.RegisterLoginModel;
 import com.jangletech.qoogol.model.ResponseObj;
+import com.jangletech.qoogol.model.SaveQuestResponse;
 import com.jangletech.qoogol.model.SendInviteResponse;
 import com.jangletech.qoogol.model.ShareResponse;
 import com.jangletech.qoogol.model.SignInModel;
@@ -321,8 +323,19 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST(Constant.FETCH_QA)
     Call<LearningQuestResponse> fetchQAApi(@Field(Constant.u_user_id) String userid, @Field(Constant.q_id) String question);
-    Call<LearningQuestResponse> fetchQAApi(@Field(Constant.u_user_id) int userid,
-                                           @Field(Constant.q_id) String question);
+
+
+    @FormUrlEncoded
+    @POST(Constant.FETCH_QA)
+    Call<SaveQuestResponse> fetchSavedQAApi(@Field(Constant.u_user_id) String userid,
+                                            @Field(Constant.CASE) String caseR);
+
+    @FormUrlEncoded
+    @POST(Constant.FETCH_QA)
+    Call<LearningQuestResponse> fetchFavQAApi(@Field(Constant.u_user_id) String userid,
+                                            @Field(Constant.CASE) String caseR);
+
+
 
     @FormUrlEncoded
     @POST(Constant.REFER)
@@ -409,7 +422,16 @@ public interface ApiInterface {
                                            @Field("Case") String connectionCase,
                                            @Field(Constant.device_id) String device_id,
                                            @Field("200Q") String app,
-                                           @Field(Constant.pagestart) int pagestart);
+                                           @Field(Constant.pagestart) String pagestart);
+
+    @FormUrlEncoded
+    @POST(Constant.FETCH_CONNECTIONS)
+    Call<BlockedConnResp> fetchRefreshedBlockedConn(@Field(Constant.u_user_id) String userid,
+                                                 @Field("Case") String connectionCase,
+                                                 @Field(Constant.device_id) String device_id,
+                                                 @Field("200Q") String app,
+                                                 @Field(Constant.pagestart) String pagestart,
+                                                 @Field("ForceRefresh") String refresh);
 
     @FormUrlEncoded
     @POST(Constant.FETCH_CONNECTIONS)
