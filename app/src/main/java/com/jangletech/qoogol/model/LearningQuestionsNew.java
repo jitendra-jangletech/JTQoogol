@@ -33,7 +33,11 @@ import static com.jangletech.qoogol.util.Constant.TRUE_FALSE;
  * Created by Pritali on 4/24/2020.
  */
 @Entity
-public class LearningQuestionsNew {
+public class LearningQuestionsNew  implements Cloneable{
+
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 
     public boolean isAttempted() {
         return isAttempted;
@@ -172,6 +176,17 @@ public class LearningQuestionsNew {
 
     @SerializedName(Constant.w_ans_text)
     private String ans_media_names;
+
+    @SerializedName(Constant.qlc_save_flag)
+    private String isSave;
+
+    public String getIsSave() {
+        return isSave!=null?isSave:"";
+    }
+
+    public void setIsSave(String isSave) {
+        this.isSave = isSave;
+    }
 
     public String getFeedback() {
         return feedback!=null?feedback:"";

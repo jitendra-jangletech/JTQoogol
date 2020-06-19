@@ -49,7 +49,7 @@ public class FollowersViewModel  extends AndroidViewModel {
     }
 
     LiveData<List<Followers>> getFollowersList() {
-        return mAppRepository.getFollowersFromDb();
+        return mAppRepository.getFollowersFromDb(userId);
     }
 
 

@@ -24,10 +24,12 @@ import com.jangletech.qoogol.model.GenerateVerifyUserName;
 import com.jangletech.qoogol.model.InstituteResponse;
 import com.jangletech.qoogol.model.Language;
 import com.jangletech.qoogol.model.LearningQuestResponse;
+import com.jangletech.qoogol.model.LearningQuestions;
 import com.jangletech.qoogol.model.NotificationResponse;
 import com.jangletech.qoogol.model.ProcessQuestion;
 import com.jangletech.qoogol.model.RegisterLoginModel;
 import com.jangletech.qoogol.model.ResponseObj;
+import com.jangletech.qoogol.model.SaveQuestResponse;
 import com.jangletech.qoogol.model.SendInviteResponse;
 import com.jangletech.qoogol.model.ShareResponse;
 import com.jangletech.qoogol.model.StartResumeTestResponse;
@@ -307,6 +309,19 @@ public interface ApiInterface {
     @POST(Constant.FETCH_QA)
     Call<LearningQuestResponse> fetchQAApi(@Field(Constant.u_user_id) String userid, @Field(Constant.q_id) String question);
 
+
+    @FormUrlEncoded
+    @POST(Constant.FETCH_QA)
+    Call<SaveQuestResponse> fetchSavedQAApi(@Field(Constant.u_user_id) String userid,
+                                            @Field(Constant.CASE) String caseR);
+
+    @FormUrlEncoded
+    @POST(Constant.FETCH_QA)
+    Call<LearningQuestResponse> fetchFavQAApi(@Field(Constant.u_user_id) String userid,
+                                            @Field(Constant.CASE) String caseR);
+
+
+
     Call<LearningQuestResponse> fetchQAApi(@Field(Constant.u_user_id) int userid,
                                            @Field(Constant.q_id) String question);
 
@@ -335,6 +350,13 @@ public interface ApiInterface {
                                   @Field(Constant.q_id) String queId,
                                   @Field(Constant.CASE) String caseL,
                                   @Field(Constant.qlc_like_flag) int like);
+
+    @FormUrlEncoded
+    @POST(Constant.PROCESS_QUESTION)
+    Call<ProcessQuestion> saveQueApi(@Field(Constant.u_user_id) int userid,
+                                  @Field(Constant.q_id) String queId,
+                                  @Field(Constant.CASE) String caseL,
+                                  @Field(Constant.qlc_save_flag) int save);
 
     @FormUrlEncoded
     @POST(Constant.PROCESS_QUESTION)
@@ -389,6 +411,19 @@ public interface ApiInterface {
                                                   @Field(Constant.device_id) String device_id,
                                                   @Field("200Q") String app,
                                                   @Field(Constant.pagestart) int pagestart);
+                                           @Field("Case") String connectionCase,
+                                           @Field(Constant.device_id) String device_id,
+                                           @Field("200Q") String app,
+                                           @Field(Constant.pagestart) String pagestart);
+
+    @FormUrlEncoded
+    @POST(Constant.FETCH_CONNECTIONS)
+    Call<BlockedConnResp> fetchRefreshedBlockedConn(@Field(Constant.u_user_id) String userid,
+                                                 @Field("Case") String connectionCase,
+                                                 @Field(Constant.device_id) String device_id,
+                                                 @Field("200Q") String app,
+                                                 @Field(Constant.pagestart) String pagestart,
+                                                 @Field("ForceRefresh") String refresh);
 
     @FormUrlEncoded
     @POST(Constant.FETCH_CONNECTIONS)
@@ -485,7 +520,9 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST(Constant.SHARE_QUESTION_TEST)
-    Call<ResponseObj> shareAPI(@Field(Constant.q_T_list) String q_t_list, @Field(Constant.TorQ) String t_or_q, @Field("Case") String connectionCase, @Field(Constant.device_id) String device_id, @Field("SentBy") String user, @Field(Constant.GroupMembersList) String list, @Field(Constant.u_app_version) String version, @Field("200Q") String app);
+    Call<ResponseObj> shareAPI(@Field(Constant.q_T_list) String q_t_list, @Field(Constant.TorQ) String t_or_q, @Field("Case") String connectionCase, @Field(Constant.device_id) String device_id, @Field("SentBy") String user,
+                               @Field(Constant.GroupMembersList) String list, @Field(Constant.u_app_version) String version,
+                               @Field("200Q") String app, @Field(Constant.share_comment) String comment);
 
     @FormUrlEncoded
     @POST(Constant.FETCH_CONNECTIONS)

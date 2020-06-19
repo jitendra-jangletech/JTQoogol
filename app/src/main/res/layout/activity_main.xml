@@ -135,11 +135,11 @@
                             android:text="@string/menu_fav" />
 
                         <TextView
-                            android:id="@+id/nav_saved"
+                            android:id="@+id/saved_questions"
                             style="@style/menu_item_style"
                             android:drawableLeft="@drawable/ic_questions"
                             android:foreground="?attr/selectableItemBackground"
-                            android:text="Saved" />
+                            android:text="@string/saved_questions" />
 
                         <TextView
                             android:id="@+id/nav_requests"

@@ -1,140 +1,122 @@
-package com.jangletech.qoogol.ui.learning;
+package com.jangletech.qoogol.ui.favourite;
+
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-import androidx.annotation.NonNull;
+
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.jangletech.qoogol.R;
-import com.jangletech.qoogol.adapter.LearningAdapter;
+import com.jangletech.qoogol.adapter.LearingAdapter;
 import com.jangletech.qoogol.databinding.LearningFragmentBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.enums.Module;
+import com.jangletech.qoogol.model.LearningQuestResponse;
 import com.jangletech.qoogol.model.LearningQuestionsNew;
 import com.jangletech.qoogol.model.ProcessQuestion;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
-import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
+
 import static com.facebook.FacebookSdk.getApplicationContext;
 import static com.jangletech.qoogol.util.Constant.CALL_FROM;
 import static com.jangletech.qoogol.util.Constant.connectonId;
-import static com.jangletech.qoogol.util.Constant.profile;
 import static com.jangletech.qoogol.util.Constant.learning;
+import static com.jangletech.qoogol.util.Constant.profile;
 
-public class LearningFragment extends BaseFragment implements LearningAdapter.onIconClick {
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class FavQueFragment extends Fragment implements LearingAdapter.onIconClick {
 
-    private LearningViewModel mViewModel;
     LearningFragmentBinding learningFragmentBinding;
-    LearningAdapter learningAdapter;
+    LearingAdapter learingAdapter;
     List<LearningQuestionsNew> learningQuestionsList;
     List<LearningQuestionsNew> questionsNewList;
     ApiInterface apiService = ApiClient.getInstance().getApi();
     String userId = "";
+    FavouriteViewModel mViewModel;
 
-
-    public static LearningFragment newInstance() {
-        return new LearningFragment();
-    }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         learningFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.learning_fragment, container, false);
-        setHasOptionsMenu(true);
         return learningFragmentBinding.getRoot();
     }
 
-       @Override
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(LearningViewModel.class);
+        mViewModel = ViewModelProviders.of(this).get(FavouriteViewModel.class);
         initView();
     }
 
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.action_search, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_filter:
-                Bundle bundle = new Bundle();
-                bundle.putString("call_from", "learning");
-                Navigation.findNavController(requireActivity(),R.id.nav_host_fragment).navigate(R.id.nav_test_filter,bundle);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
 
     private void initView() {
         learningFragmentBinding.learningSwiperefresh.setRefreshing(true);
         learningQuestionsList = new ArrayList<>();
         questionsNewList = new ArrayList<>();
         userId = String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));
+        mViewModel.fetchFavQuestionData();
 
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            if (bundle.getBoolean("fromNotification")) {
-                ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Learning");
-                if (bundle.getString(Constant.FB_MS_ID) != null)
-                    mViewModel.fetchQuestionData(bundle.getString(Constant.FB_MS_ID));
-            } else {
-                if (bundle.getString("call_from").equalsIgnoreCase("saved_questions")) {
-                    ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Saved Questions");
-                } else {
-                    ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Learning");
-                }
-                mViewModel.fetchQuestionData("");
-            }
-        }
-
-        mViewModel.getQuestionList().observe(getViewLifecycleOwner(), questionsList -> {
+        mViewModel.geFavtQuestionList().observe(getViewLifecycleOwner(), questionsList -> {
             questionsNewList.clear();
             questionsNewList.addAll(questionsList);
             initRecycler();
         });
 
-        learningFragmentBinding.learningSwiperefresh.setOnRefreshListener(() -> mViewModel.fetchQuestionData(""));
+
+        learningFragmentBinding.learningSwiperefresh.setOnRefreshListener(() -> mViewModel.fetchFavQuestionData());
     }
+
+//    private void getDataFromApi() {
+//        Call<LearningQuestResponse> call = apiService.fetchFavQAApi(new PreferenceManager(getApplicationContext()).getUserId(), "FV");
+//        call.enqueue(new Callback<LearningQuestResponse>() {
+//            @Override
+//            public void onResponse(Call<LearningQuestResponse> call, retrofit2.Response<LearningQuestResponse> response) {
+//                try {
+//                    if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
+//                        learningQuestionsList.addAll(response.body().getQuestion_list());
+//                        initRecycler();
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<LearningQuestResponse> call, Throwable t) {
+//                t.printStackTrace();
+//            }
+//        });
+//    }
 
 
     private void initRecycler() {
-        learningAdapter = new LearningAdapter(getActivity(), questionsNewList, this, learning);
+        learingAdapter = new LearingAdapter(getActivity(), questionsNewList, this, learning);
         learningFragmentBinding.learningRecycler.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setAutoMeasureEnabled(false);
         learningFragmentBinding.learningRecycler.setLayoutManager(linearLayoutManager);
-        learningFragmentBinding.learningRecycler.setAdapter(learningAdapter);
+        learningFragmentBinding.learningRecycler.setAdapter(learingAdapter);
         learningFragmentBinding.learningRecycler.setNestedScrollingEnabled(false);
         learningFragmentBinding.learningRecycler.setItemViewCacheSize(20);
         learningFragmentBinding.learningRecycler.setDrawingCacheEnabled(true);
@@ -182,7 +164,6 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
         });
     }
 
-
     @Override
     public void onCommentClick(String questionId) {
         Bundle bundle = new Bundle();
@@ -191,7 +172,6 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
         NavHostFragment.findNavController(this).navigate(R.id.nav_comments, bundle);
     }
 
-
     @Override
     public void onShareClick(String questionId) {
         Bundle bundle = new Bundle();
@@ -199,7 +179,6 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
         bundle.putInt("call_from", learning);
         NavHostFragment.findNavController(this).navigate(R.id.nav_share, bundle);
     }
-
 
     @Override
     public void onSubmitClick(String questionId, int isRight) {
@@ -213,11 +192,9 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
             bundle.putInt(CALL_FROM, profile);
         } else {
             bundle.putInt(CALL_FROM, connectonId);
-            bundle.putString(Constant.fetch_profile_id,userId);
+            bundle.putString(Constant.fetch_profile_id, userId);
         }
 
-        NavHostFragment.findNavController(this).navigate(R.id.nav_edit_profile,bundle);
+        NavHostFragment.findNavController(this).navigate(R.id.nav_edit_profile, bundle);
     }
-
-
 }

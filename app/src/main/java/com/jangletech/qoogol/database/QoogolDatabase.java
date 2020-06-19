@@ -9,6 +9,7 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
 import com.jangletech.qoogol.database.converter.Converters;
+import com.jangletech.qoogol.database.dao.BlockedDao;
 import com.jangletech.qoogol.database.dao.ConnectionsDao;
 import com.jangletech.qoogol.database.dao.DashboardDao;
 import com.jangletech.qoogol.database.dao.EducationDetailsDao;
@@ -21,6 +22,7 @@ import com.jangletech.qoogol.database.dao.LearningQuestionDao;
 import com.jangletech.qoogol.database.dao.NotificationDao;
 import com.jangletech.qoogol.database.dao.TestDao;
 import com.jangletech.qoogol.database.dao.UserProfileDao;
+import com.jangletech.qoogol.model.BlockedConnections;
 import com.jangletech.qoogol.model.Connections;
 import com.jangletech.qoogol.model.DashBoard;
 import com.jangletech.qoogol.model.Education;
@@ -29,6 +31,7 @@ import com.jangletech.qoogol.model.Followers;
 import com.jangletech.qoogol.model.Following;
 import com.jangletech.qoogol.model.FriendRequest;
 import com.jangletech.qoogol.model.Friends;
+import com.jangletech.qoogol.model.LearningQuestions;
 import com.jangletech.qoogol.model.LearningQuestionsNew;
 import com.jangletech.qoogol.model.Notification;
 import com.jangletech.qoogol.model.TestModelNew;
@@ -40,6 +43,8 @@ import java.util.concurrent.Executors;
 
 @Database(entities = {LearningQuestionsNew.class, DashBoard.class, TestModelNew.class,
         TestQuestion.class, UserProfile.class, Education.class, Friends.class, Followers.class, Following.class,
+        FriendRequest.class, FollowRequest.class, Connections.class, LearningQuestions.class, BlockedConnections.class,
+        Notification.class}, version = 2, exportSchema = false)
         FriendRequest.class, FollowRequest.class, Connections.class,
         Notification.class}, version = 3, exportSchema = false)
 @TypeConverters(Converters.class)
@@ -57,6 +62,7 @@ public abstract class QoogolDatabase extends RoomDatabase {
     public abstract FriendReqDao friendReqDao();
 
     public abstract FollowReqDao followReqDao();
+    public abstract BlockedDao blockedDao();
 
     public abstract ConnectionsDao connectionsDao();
 

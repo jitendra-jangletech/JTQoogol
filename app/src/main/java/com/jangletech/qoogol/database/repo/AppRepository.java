@@ -5,6 +5,7 @@ import android.content.Context;
 import androidx.lifecycle.LiveData;
 
 import com.jangletech.qoogol.database.QoogolDatabase;
+import com.jangletech.qoogol.database.dao.BlockedDao;
 import com.jangletech.qoogol.database.dao.ConnectionsDao;
 import com.jangletech.qoogol.database.dao.DashboardDao;
 import com.jangletech.qoogol.database.dao.EducationDetailsDao;
@@ -17,6 +18,7 @@ import com.jangletech.qoogol.database.dao.LearningQuestionDao;
 import com.jangletech.qoogol.database.dao.NotificationDao;
 import com.jangletech.qoogol.database.dao.TestDao;
 import com.jangletech.qoogol.database.dao.UserProfileDao;
+import com.jangletech.qoogol.model.BlockedConnections;
 import com.jangletech.qoogol.model.Connections;
 import com.jangletech.qoogol.model.DashBoard;
 import com.jangletech.qoogol.model.Education;
@@ -25,6 +27,7 @@ import com.jangletech.qoogol.model.Followers;
 import com.jangletech.qoogol.model.Following;
 import com.jangletech.qoogol.model.FriendRequest;
 import com.jangletech.qoogol.model.Friends;
+import com.jangletech.qoogol.model.LearningQuestions;
 import com.jangletech.qoogol.model.LearningQuestionsNew;
 import com.jangletech.qoogol.model.Notification;
 import com.jangletech.qoogol.model.TestModelNew;
@@ -47,6 +50,7 @@ public class AppRepository {
     private final FriendReqDao friendReqDao;
     private final FollowReqDao followReqDao;
     private final ConnectionsDao connectionsDao;
+    private final BlockedDao blockedDao;
     //private final TestDetailsDao testDetailsDao;
 
     public AppRepository(Context context) {
@@ -63,6 +67,7 @@ public class AppRepository {
         friendReqDao = db.friendReqDao();
         followReqDao = db.followReqDao();
         connectionsDao = db.connectionsDao();
+        blockedDao = db.blockedDao();
         //testDetailsDao = db.testDetailsDao();
     }
 
@@ -292,19 +297,7 @@ public class AppRepository {
         }).start();
     }
 
-   /* private void deleteAttemptedTestAsync() {
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    attemptedTestDao.deleteAttemptedTests();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-    }*/
 
 
     private void deleteNotificationAsync(String nId) {
@@ -356,11 +349,27 @@ public class AppRepository {
         learningQuestionDao.upsertQuestions(learningQuestions);
     }
 
+    public void insertSavedQuestions(List<LearningQuestions> learningQuestions) {
+        learningQuestionDao.insertSavedQuestions(learningQuestions);
+    }
+
+    public void insertQuestion(LearningQuestions learningQuestions) {
+        learningQuestionDao.insertQuestion(learningQuestions);
+    }
+
+    public void deleteQuestion(String questionId) {
+        learningQuestionDao.deleteQuestion(questionId);
+    }
+
     public void insertConnections(List<Connections> connectionsList) {
         connectionsDao.upsertConnections(connectionsList);
     }
     public void insertFriends(List<Friends> friendsList) {
         friendsDao.upsertFriends(friendsList);
+    }
+
+    public void insertBlockedList(List<BlockedConnections> blockedConnections) {
+        blockedDao.upsertBlockedConn(blockedConnections);
     }
 
     public void insertFriendReq(List<FriendRequest> friendRequests) {
@@ -380,28 +389,32 @@ public class AppRepository {
         followersDao.upsertFollowers(followersList);
     }
 
-    public LiveData<List<Connections>> getConnectionsFromDb() {
-        return connectionsDao.getAllConnections();
+    public LiveData<List<Connections>> getConnectionsFromDb(String userID) {
+        return connectionsDao.getAllConnections(userID);
     }
 
-    public LiveData<List<Friends>> getFriendsFromDb() {
-        return friendsDao.getAllFriends();
+    public LiveData<List<Friends>> getFriendsFromDb(String userID) {
+        return friendsDao.getAllFriends(userID);
     }
 
-    public LiveData<List<FriendRequest>> getFriendReqFromDb() {
-        return friendReqDao.getAllFriendReq();
+    public LiveData<List<BlockedConnections>> getBlockListFromDb(String userID) {
+        return blockedDao.getAllBlockedConn(userID);
     }
 
-    public LiveData<List<FollowRequest>> getFollowReqFromDb() {
-        return followReqDao.getAllFollowReq();
+    public LiveData<List<FriendRequest>> getFriendReqFromDb(String userID) {
+        return friendReqDao.getAllFriendReq(userID);
     }
 
-    public LiveData<List<Followers>> getFollowersFromDb() {
-        return followersDao.getAllFollowers();
+    public LiveData<List<FollowRequest>> getFollowReqFromDb(String userID) {
+        return followReqDao.getAllFollowReq(userID);
     }
 
-    public LiveData<List<Following>> getFollowingFromDb() {
-        return followingsDao.getAllFollowings();
+    public LiveData<List<Followers>> getFollowersFromDb(String userID) {
+        return followersDao.getAllFollowers(userID);
+    }
+
+    public LiveData<List<Following>> getFollowingFromDb(String userID) {
+        return followingsDao.getAllFollowings(userID);
     }
 
 
@@ -410,9 +423,21 @@ public class AppRepository {
     }
 
 
+    public LiveData<List<LearningQuestionsNew>> getFavQuestionsFromDb() {
+        return learningQuestionDao.getFavQuestions("true");
+    }
+
+    public LiveData<List<LearningQuestions>> getSavedQuestionsFromDb() {
+        return learningQuestionDao.getAllSavedQuestions();
+    }
+
+
     public List<LearningQuestionsNew> getQuestions() {
         return learningQuestionDao.getQuestions();
     }
 
+    public List<LearningQuestions> getSavedQuestions() {
+        return learningQuestionDao.getSavedQuestions();
+    }
 
 }

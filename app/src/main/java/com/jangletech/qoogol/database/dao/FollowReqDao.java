@@ -20,8 +20,8 @@ import java.util.List;
 @Dao
 public interface FollowReqDao {
 
-    @Query("SELECT * FROM FollowRequest")
-    LiveData<List<FollowRequest>> getAllFollowReq();
+    @Query("SELECT * FROM FollowRequest where user_id=:userID")
+    LiveData<List<FollowRequest>> getAllFollowReq(String userID);
 
     @Query("SELECT * FROM FollowRequest")
     List<FollowRequest> getFollowdReq();

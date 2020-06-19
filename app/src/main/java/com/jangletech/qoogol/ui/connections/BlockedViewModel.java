@@ -1,7 +1,6 @@
 package com.jangletech.qoogol.ui.connections;
 
 import android.app.Application;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -9,12 +8,13 @@ import androidx.lifecycle.LiveData;
 
 import com.jangletech.qoogol.database.repo.AppRepository;
 import com.jangletech.qoogol.dialog.ProgressDialog;
-import com.jangletech.qoogol.model.Following;
-import com.jangletech.qoogol.model.FollowingResponse;
+import com.jangletech.qoogol.model.BlockedConnResp;
+import com.jangletech.qoogol.model.BlockedConnections;
+import com.jangletech.qoogol.model.Friends;
+import com.jangletech.qoogol.model.FriendsResponse;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.util.PreferenceManager;
-import com.jangletech.qoogol.util.UtilHelper;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -25,22 +25,22 @@ import retrofit2.Callback;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 import static com.jangletech.qoogol.ui.BaseFragment.getDeviceId;
-import static com.jangletech.qoogol.util.Constant.following;
+import static com.jangletech.qoogol.util.Constant.block;
 import static com.jangletech.qoogol.util.Constant.forcerefresh;
+import static com.jangletech.qoogol.util.Constant.friends;
 import static com.jangletech.qoogol.util.Constant.qoogol;
 
 /**
- * Created by Pritali on 6/10/2020.
+ * Created by Pritali on 6/8/2020.
  */
-public class FollowingViewModel extends AndroidViewModel {
+public class BlockedViewModel extends AndroidViewModel {
     ApiInterface apiService;
     public final AppRepository mAppRepository;
-    Call<FollowingResponse> call;
+    Call<BlockedConnResp> call;
     String userId;
     String pagestart;
 
-
-    public FollowingViewModel(@NonNull Application application) {
+    public BlockedViewModel(@NonNull Application application) {
         super(application);
         apiService = ApiClient.getInstance().getApi();
         mAppRepository = new AppRepository(application);
@@ -48,30 +48,30 @@ public class FollowingViewModel extends AndroidViewModel {
         pagestart = "0";
     }
 
-
-    LiveData<List<Following>> getFollowingList() {
-        return mAppRepository.getFollowingFromDb(userId);
+    LiveData<List<BlockedConnections>> getBlockList() {
+        return mAppRepository.getBlockListFromDb(userId);
     }
 
-    void fetchFollowingsData(boolean isRefresh) {
+
+    void fetchBlockConnData(boolean isRefresh) {
         getData(isRefresh);
     }
 
 
-
     private void getData(boolean isRefresh) {
         if (isRefresh)
-            call = apiService.fetchRefreshedFollowings(userId,following, getDeviceId(), qoogol,pagestart, forcerefresh);
+            call = apiService.fetchRefreshedBlockedConn(userId, block, getDeviceId(), qoogol, pagestart, forcerefresh);
         else
-            call = apiService.fetchFollowings(userId,following, getDeviceId(), qoogol,pagestart);
-
-        call.enqueue(new Callback<FollowingResponse>() {
+            call = apiService.fetchBlockedConnections(userId, block, getDeviceId(), qoogol, pagestart);
+        call.enqueue(new Callback<BlockedConnResp>() {
             @Override
-            public void onResponse(Call<FollowingResponse> call, retrofit2.Response<FollowingResponse> response) {
+            public void onResponse(Call<BlockedConnResp> call, retrofit2.Response<BlockedConnResp> response) {
                 try {
-                    if (response.body()!=null && response.body().getResponse().equalsIgnoreCase("200")){
+                    ProgressDialog.getInstance().dismiss();
+                    if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
                         ExecutorService executor = Executors.newSingleThreadExecutor();
-                        executor.execute(() -> mAppRepository.insertFollowings(response.body().getFollowing_list()));
+                        executor.execute(() -> mAppRepository.insertBlockedList(response.body().getBlocked_list()));
+//                        pagestart = response.body().getRow_count();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -79,7 +79,7 @@ public class FollowingViewModel extends AndroidViewModel {
             }
 
             @Override
-            public void onFailure(Call<FollowingResponse> call, Throwable t) {
+            public void onFailure(Call<BlockedConnResp> call, Throwable t) {
                 t.printStackTrace();
             }
         });

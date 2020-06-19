@@ -19,8 +19,8 @@ import java.util.List;
 @Dao
 public interface FriendsDao {
 
-    @Query("SELECT * FROM Friends")
-    LiveData<List<Friends>> getAllFriends();
+    @Query("SELECT * FROM Friends where user_id=:userID")
+    LiveData<List<Friends>> getAllFriends(String userID);
 
     @Query("SELECT * FROM Friends")
     List<Friends> getFriends();

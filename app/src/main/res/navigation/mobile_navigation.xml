@@ -66,13 +66,6 @@
         tools:layout="@layout/comment_view" >
     </fragment>
 
-    <fragment
-        android:id="@+id/nav_saved"
-        android:name="com.jangletech.qoogol.ui.Saved.SavedFragment"
-        android:label="@string/saved"
-        app:enterAnim="@anim/enter_from_left"
-        tools:layout="@layout/saved_fragment" >
-    </fragment>
 
 
     <fragment
@@ -217,5 +210,17 @@
         android:name="com.jangletech.qoogol.ui.usercontacts.ContactListFragment"
         android:label="@string/importContacts"
         tools:layout="@layout/contact_list_fragment" />
+
+    <fragment
+        android:id="@+id/saved_questions"
+        android:name="com.jangletech.qoogol.ui.learning.SavedQueFragment"
+        android:label="@string/saved_questions"
+        tools:layout="@layout/learning_fragment" />
+
+    <fragment
+        android:id="@+id/fav_questions"
+        android:name="com.jangletech.qoogol.ui.favourite.FavQueFragment"
+        android:label="@string/questions"
+        tools:layout="@layout/learning_fragment" />
 
 </navigation>
