@@ -82,6 +82,7 @@ public class MainActivity extends BaseActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setMargins(mBinding.marginLayout);
+
         NavigationView navigationView = findViewById(R.id.nav_view);
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_test_popular, R.id.nav_attended_by_friends, R.id.nav_shared_with_you,
