@@ -88,7 +88,7 @@ public class MainActivity extends BaseActivity {
                 R.id.nav_shared_by_you, R.id.nav_notifications,
                 R.id.nav_test_popular, R.id.nav_recent_test, R.id.nav_share_app, R.id.nav_about,
                 R.id.nav_faq, R.id.nav_fav, R.id.nav_syllabus, R.id.nav_edit_profile,
-                R.id.nav_settings, R.id.nav_saved, R.id.nav_requests, R.id.nav_import_contacts,
+                R.id.nav_settings, R.id.nav_requests, R.id.nav_import_contacts,
                 R.id.nav_home, R.id.nav_learning, R.id.nav_test_my, R.id.nav_doubts)
                 .setDrawerLayout(drawerLayout)
                 .build();
@@ -221,7 +221,7 @@ public class MainActivity extends BaseActivity {
                 }
                 if (navigateFlag.equals(Nav.SAVED.toString())) {
                     navigateFlag = "";
-                    navToFragment(R.id.nav_saved, Bundle.EMPTY);
+                    //navToFragment(R.id., Bundle.EMPTY);
                 }
                 if (navigateFlag.equals(Nav.MODIFY_SYLLABUS.toString())) {
                     navigateFlag = "";
@@ -364,12 +364,12 @@ public class MainActivity extends BaseActivity {
         });
 
 
-        findViewById(R.id.nav_saved).setOnClickListener(v -> {
+       /* findViewById(R.id.nav_).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
             if (navController.getCurrentDestination().getId() != R.id.nav_saved) {
                 navigateFlag = Nav.SAVED.toString();
             }
-        });
+        });*/
 
         findViewById(R.id.tvNavTest).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();

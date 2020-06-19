@@ -411,10 +411,6 @@ public interface ApiInterface {
                                                   @Field(Constant.device_id) String device_id,
                                                   @Field("200Q") String app,
                                                   @Field(Constant.pagestart) int pagestart);
-                                           @Field("Case") String connectionCase,
-                                           @Field(Constant.device_id) String device_id,
-                                           @Field("200Q") String app,
-                                           @Field(Constant.pagestart) String pagestart);
 
     @FormUrlEncoded
     @POST(Constant.FETCH_CONNECTIONS)
