@@ -57,7 +57,7 @@ public class FavouriteFragment extends BaseFragment {
     private void setupViewPager(ViewPager viewPager) {
         Adapter adapter = new Adapter(getChildFragmentManager());
         adapter.addFragment(new TestFavouriteFragment(),"Test");
-        adapter.addFragment(new LearningFragment(), "Questions");
+        adapter.addFragment(new FavQueFragment(), "Questions");
         viewPager.setAdapter(adapter);
     }
 
