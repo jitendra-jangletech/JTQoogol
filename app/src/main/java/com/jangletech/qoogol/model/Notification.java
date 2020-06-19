@@ -144,7 +144,10 @@ public class Notification {
     }
 
     public String getN_ref_type() {
-        return n_ref_type;
+        if (n_ref_type == null)
+            return "";
+        else
+            return n_ref_type;
     }
 
     public void setN_ref_type(String n_ref_type) {
