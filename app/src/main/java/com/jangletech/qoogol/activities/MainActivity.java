@@ -80,18 +80,15 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
         NavigationUI.setupWithNavController(navigationView, navController);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
 
-        navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
-            @Override
-            public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
-                if (destination.getId() == R.id.nav_syllabus
-                        || destination.getId() == R.id.nav_edit_profile
-                        || destination.getId() == R.id.nav_test_filter
-                        || destination.getId() == R.id.nav_blocked_connections
-                        || destination.getId() == R.id.nav_test_details) {
-                    hideBottomNav();
-                } else {
-                    showBottomNav();
-                }
+        navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
+            if (destination.getId() == R.id.nav_syllabus
+                    || destination.getId() == R.id.nav_edit_profile
+                    || destination.getId() == R.id.nav_test_filter
+                    || destination.getId() == R.id.nav_blocked_connections
+                    || destination.getId() == R.id.nav_test_details) {
+                hideBottomNav();
+            } else {
+                showBottomNav();
             }
         });
 
@@ -182,6 +179,7 @@ public class MainActivity extends BaseActivity implements UniversalDialog.Dialog
                 if (navigateFlag.equals(Nav.SAVED.toString())) {
                     navToFragment(R.id.saved_questions, Bundle.EMPTY);
                 }
+
                 if (navigateFlag.equals(Nav.MODIFY_SYLLABUS.toString())) {
                     navToFragment(R.id.nav_syllabus, Bundle.EMPTY);
                 }

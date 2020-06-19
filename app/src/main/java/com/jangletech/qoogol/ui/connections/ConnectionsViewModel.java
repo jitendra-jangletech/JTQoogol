@@ -25,6 +25,7 @@ import retrofit2.Callback;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 import static com.jangletech.qoogol.ui.BaseFragment.getDeviceId;
+import static com.jangletech.qoogol.util.Constant.connections;
 import static com.jangletech.qoogol.util.Constant.forcerefresh;
 import static com.jangletech.qoogol.util.Constant.friends;
 import static com.jangletech.qoogol.util.Constant.qoogol;
@@ -59,9 +60,9 @@ public class ConnectionsViewModel extends AndroidViewModel {
 
     private void getData(boolean isRefresh) {
         if (isRefresh)
-            call = apiService.fetchRefreshedConnections(userId, friends, getDeviceId(), qoogol, pagestart, forcerefresh);
+            call = apiService.fetchRefreshedConnections(userId, connections, getDeviceId(), qoogol, pagestart, forcerefresh);
         else
-            call = apiService.fetchConnections(userId, friends, getDeviceId(), qoogol, pagestart);
+            call = apiService.fetchConnections(userId, connections, getDeviceId(), qoogol, pagestart);
         call.enqueue(new Callback<ConnectionResponse>() {
             @Override
             public void onResponse(Call<ConnectionResponse> call, retrofit2.Response<ConnectionResponse> response) {
