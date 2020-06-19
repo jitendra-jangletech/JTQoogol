@@ -85,6 +85,7 @@
                             android:foreground="?attr/selectableItemBackground"
                             android:text="@string/popular_test" />
 
+
                         <TextView
                             android:id="@+id/nav_attended_by_friends"
                             style="@style/sub_menu_item_style"
