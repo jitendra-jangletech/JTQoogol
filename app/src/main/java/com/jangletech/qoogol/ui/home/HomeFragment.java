@@ -4,12 +4,17 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.MenuItemCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -48,7 +53,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class HomeFragment extends BaseFragment implements View.OnClickListener,
-        OnChartValueSelectedListener {
+        OnChartValueSelectedListener, SearchView.OnQueryTextListener {
 
     private HomeViewModel mViewModel;
     private FragmentHomeBinding mBinding;
@@ -245,20 +250,20 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
         MainActivity.tvNavFollowing.setText(dashBoard.getFollowings());
 
         if (dashBoard.getFirstName() != null || dashBoard.getLastName() != null) {
-            saveString(Constant.u_first_name,dashBoard.getFirstName());
+            saveString(Constant.u_first_name, dashBoard.getFirstName());
             MainActivity.textViewDisplayName.setText(dashBoard.getFirstName() + " " + dashBoard.getLastName());
         } else {
             MainActivity.textViewDisplayName.setText("Qoogol User");
         }
 
-        String gender = new PreferenceManager(requireActivity()).getString(Constant.GENDER).replace("'","");
-        Log.d(TAG, "setDashBoardData Img Url : "+dashBoard.getProfilePicUrl());
-        Log.d(TAG, "setDashBoardData Gender : "+gender);
+        String gender = new PreferenceManager(requireActivity()).getString(Constant.GENDER).replace("'", "");
+        Log.d(TAG, "setDashBoardData Img Url : " + dashBoard.getProfilePicUrl());
+        Log.d(TAG, "setDashBoardData Gender : " + gender);
         if (dashBoard.getProfilePicUrl() != null && !dashBoard.getProfilePicUrl().isEmpty()) {
             new PreferenceManager(requireActivity()).saveString("PROF_IMG", getProfileImageUrl(dashBoard.getProfilePicUrl()));
             loadProfilePic(getProfileImageUrl(dashBoard.getProfilePicUrl()), MainActivity.profileImage);
         } else {
-            new PreferenceManager(requireActivity()).saveString("PROF_IMG","");
+            new PreferenceManager(requireActivity()).saveString("PROF_IMG", "");
             if (gender.equalsIgnoreCase("F")) {
                 loadProfilePic(Constant.PRODUCTION_FEMALE_PROFILE_API, MainActivity.profileImage);
             }
@@ -272,7 +277,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
         HashMap<String, String> params = new HashMap<>();
         params.put(Constant.u_user_id, getUserId());
         params.put(Constant.device_id, getDeviceId());
-        Log.d(TAG, "fetchDashboardDetails UserId : "+getUserId());
+        Log.d(TAG, "fetchDashboardDetails UserId : " + getUserId());
         //ProgressDialog.getInstance().show(getActivity());
         mBinding.swipeToRefresh.setRefreshing(true);
         Call<DashBoard> call = apiService.fetchDashBoardDetails(
@@ -295,6 +300,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
             public void onFailure(Call<DashBoard> call, Throwable t) {
                 mBinding.swipeToRefresh.setRefreshing(false);
                 //ProgressDialog.getInstance().dismiss();
+                apiCallFailureDialog(t);
                 t.printStackTrace();
             }
         });
@@ -331,7 +337,45 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //setHasOptionsMenu(true);
+        //String timeAgo = DateUtils.getTimeAgo("");
+        //Log.d(TAG, "Time Ago : "+timeAgo);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.action_search, menu);
+        final MenuItem item = menu.findItem(R.id.action_search);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
+        searchView.setOnQueryTextListener(this);
+
+        item.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                return true;
+            }
+        });
+    }
+
+    @Override
     public void onNothingSelected() {
 
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return false;
     }
 }

@@ -78,7 +78,6 @@ public class Constant {
     public static final String CASE = "Case";
     public static final String userName = "143A";
 
-
     public static final String STATUS = "status";
     public static final String VERIFY = "Verify";
     public static final String u_imei_num = "126";
@@ -107,6 +106,8 @@ public class Constant {
     public static final String test_share = "T";
     public static final String question_share = "Q";
     public static final String from_user = "U";
+    public static final String from_close_friend = "C";
+    public static final String from_friend = "F";
     public static final String from_question = "Q";
     public static final String fromTest = "T";
     public static final String share_comment = "370";
@@ -181,7 +182,6 @@ public class Constant {
 
 
     //Question type
-    public static String Fill_THE_BLANKS_TEST = "3";
     public static String ONE_LINE_ANSWER = "4";
     public static String SHORT_ANSWER = "5";
     public static String LONG_ANSWER = "6";
@@ -387,8 +387,6 @@ public class Constant {
     public static final String dt_id = "229";
     public static final String dt_name = "231";
 
-
-
     //Fetch connections cases
     public static final String connections = "CC";
     public static final String friends = "C";
@@ -436,7 +434,6 @@ public class Constant {
     public static final String clm_class_name = "1297";
     public static final String clm_class_num = "1298";
     public static final String clm_cy = "1299";
-
 
     //Country
     public static final String c_id = "200";
@@ -663,10 +660,13 @@ public class Constant {
     public static final String isFavourite = "1410";
     public static final String _1223G = "1223G";
 
+    //TEst Rating & feedback
+    public static final String tlc_rating = "1411";
+    public static final String tlc_feedback = "1412";
+
     //Test Filters Fields
     public static final String tm_popular_test = "1221";
     public static final String tm_recent_test = "1222";
-
 
     //Notification Fields
     //public static final String cn_connected = "309";
@@ -680,7 +680,6 @@ public class Constant {
     public static final String n_ref_type = "303";
     public static final String n_cdatetime = "305";
     //public static final String w_user_profile_image_name = "507";
-
 
     public static final String CALL_FROM = "CALL_FROM";
     public static final String POPULAR_TEST = "POPULAR_TEST";

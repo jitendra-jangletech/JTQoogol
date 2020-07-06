@@ -23,11 +23,11 @@ import java.util.List;
  * Created by Pritali on 5/4/2020.
  */
 public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> implements Filterable {
-    ShareItemBinding shareItemBinding;
-    List<ShareModel> connectionsList;
-    List<ShareModel> filteredConnectionsList;
-    Activity activity;
-    OnItemClickListener onItemClickListener;
+    private ShareItemBinding shareItemBinding;
+    private List<ShareModel> connectionsList;
+    private List<ShareModel> filteredConnectionsList;
+    private Activity activity;
+    private OnItemClickListener onItemClickListener;
 
     public ShareAdapter(Activity activity, List<ShareModel> connectionsList, OnItemClickListener onItemClickListener) {
         this.activity = activity;

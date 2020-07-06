@@ -58,7 +58,7 @@ public class AttemptedTest implements Serializable {
     }
 
     public String getTt_pause_datetime() {
-        return tt_pause_datetime;
+        return tt_pause_datetime!=null?tt_pause_datetime:"";
     }
 
     public void setTt_pause_datetime(String tt_pause_datetime) {

@@ -1,6 +1,5 @@
 package com.jangletech.qoogol.ui.learning;
 
-
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -52,17 +51,15 @@ import static com.jangletech.qoogol.util.Constant.test_share;
  */
 public class ShareFragment extends BaseFragment implements ShareAdapter.OnItemClickListener {
 
-
-    FragmentShareBinding shareBinding;
-    ShareAdapter mAdapter;
-    List<ShareModel> connectionsList;
-    List<ShareModel> selectedconnectionsList;
     private static final String TAG = "ShareFragment";
-    ApiInterface apiService = ApiClient.getInstance().getApi();
-    String userId = "", question_id = "", testId = "";
-    int call_from;
-    Call<ResponseObj> call;
-
+    private FragmentShareBinding shareBinding;
+    private ShareAdapter mAdapter;
+    private List<ShareModel> connectionsList;
+    private List<ShareModel> selectedconnectionsList;
+    private ApiInterface apiService = ApiClient.getInstance().getApi();
+    private String userId = "", question_id = "", testId = "";
+    private int call_from;
+    private Call<ResponseObj> call;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

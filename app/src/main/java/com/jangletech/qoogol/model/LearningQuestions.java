@@ -66,7 +66,7 @@ public class LearningQuestions implements Serializable {
     @PrimaryKey
     @NonNull
     @SerializedName(Constant.q_id)
-    private String question_id;
+    private int question_id;
 
     @SerializedName(Constant.q_quest)
     private String question;
@@ -192,14 +192,22 @@ public class LearningQuestions implements Serializable {
         this.feedback = feedback;
     }
 
-    @NonNull
+    public int getQuestion_id() {
+        return question_id;
+    }
+
+    public void setQuestion_id(int question_id) {
+        this.question_id = question_id;
+    }
+
+    /* @NonNull
     public String getQuestion_id() {
         return question_id!=null?question_id:"";
     }
 
-    public void setQuestion_id(@NonNull String question_id) {
+    public void setQuestion_id(@NonNull int question_id) {
         this.question_id = question_id;
-    }
+    }*/
 
     public String getQuestion() {
         return question!=null?question:"";

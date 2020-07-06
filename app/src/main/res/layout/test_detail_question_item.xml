@@ -35,7 +35,7 @@
                     android:textColor="@color/icon_color"
                     android:textStyle="bold" />
 
-                <TextView
+                <io.github.kexanie.library.MathView
                     android:textSize="@dimen/_12ssp"
                     android:layout_weight="1.8"
                     android:id="@+id/tv_quest_desc"

@@ -9,6 +9,10 @@
         tools:context=".ui.learning.ShareFragment">
 
         <TextView
+            android:visibility="gone"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="@color/colorSkyBlue"
+            android:text="No Friends Added."
             android:id="@+id/emptyview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -18,9 +22,9 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/connection_swiperefresh"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/connection_swiperefresh"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -31,8 +35,6 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

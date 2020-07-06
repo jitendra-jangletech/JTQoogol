@@ -14,6 +14,11 @@
     <color name="colorOrangePeel">#FFA000</color>
     <color name="color_red">#FF0000</color>
 
+    <color name="right_ans">#39ba62</color>
+    <color name="wrong_ans">#f46a79</color>
+
+    <color name="background">#dddddd</color>
+
     <color name="color_green">#FFA2E9A2</color>
     <color name="colorLightGray">#e2e2e2</color>
 

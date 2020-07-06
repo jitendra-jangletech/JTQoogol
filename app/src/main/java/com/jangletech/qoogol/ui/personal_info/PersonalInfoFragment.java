@@ -146,9 +146,9 @@ public class PersonalInfoFragment extends BaseFragment {
         userid = mSettings.getProfileFetchId();
         Log.d(TAG, "initViews UserId : " + mSettings.getUserId());
         if (userid.equalsIgnoreCase(mSettings.getUserId()))
-            fetchUserProfile(fetch_loged_in_user);
+            fetchUserProfile(fetch_loged_in_user, "");
         else
-            fetchUserProfile(fetch_other_user);
+            fetchUserProfile(fetch_other_user, "");
 
         mViewModel.getUserProfile(userid).observe(getViewLifecycleOwner(), userProfile -> {
             Log.d(TAG, "onChanged : " + userProfile);
@@ -508,7 +508,7 @@ public class PersonalInfoFragment extends BaseFragment {
                 try {
                     ProgressDialog.getInstance().dismiss();
                     if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
-                        fetchUserProfile(fetch_other_user);
+                        fetchUserProfile(fetch_other_user, "");
                     } else {
                         Toast.makeText(getActivity(), UtilHelper.getAPIError(String.valueOf(response.body())), Toast.LENGTH_SHORT).show();
                     }
@@ -608,12 +608,6 @@ public class PersonalInfoFragment extends BaseFragment {
                 mBinding.etPassword.setError("Password should be 8 characters long");
                 return;
             }
-
-            userProfileMap.put(Constant.u_mob_1, mBinding.etMobile.getText().toString().trim());
-            userProfileMap.put(Constant.u_Email, mBinding.etEmail.getText().toString().trim());
-            userProfileMap.put(Constant.u_birth_date, convertDateToDataBaseFormat(mBinding.etDob.getText().toString()));
-            userProfileMap.put(Constant.u_Password, mBinding.etPassword.getText().toString().trim());
-            userProfileMap.put(Constant.userName, mBinding.userNameAutoCompleteTextView.getTag().toString());
 
             userInfo();
 
@@ -741,6 +735,17 @@ public class PersonalInfoFragment extends BaseFragment {
     }
 
     private void userInfo() {
+
+        UserProfile userProfile = new UserProfile();
+
+
+        userProfileMap.put(Constant.u_mob_1, mBinding.etMobile.getText().toString().trim());
+        userProfileMap.put(Constant.u_Email, mBinding.etEmail.getText().toString().trim());
+        userProfileMap.put(Constant.u_birth_date, convertDateToDataBaseFormat(mBinding.etDob.getText().toString()));
+        userProfileMap.put(Constant.u_Password, mBinding.etPassword.getText().toString().trim());
+
+        userProfileMap.put(Constant.userName, getEmptyStringIfNull(String.valueOf(mBinding.userNameAutoCompleteTextView.getTag())));
+
         userProfileMap.put(Constant.u_user_id, String.valueOf(userid));
         userProfileMap.put(Constant.u_app_version, Constant.APP_VERSION);
         userProfileMap.put(Constant.device_id, getSingleQuoteString(getDeviceId()));
@@ -750,12 +755,12 @@ public class PersonalInfoFragment extends BaseFragment {
         userProfileMap.put(Constant.CASE, getSingleQuoteString("n"));
         userProfileMap.put(Constant.STATUS, getSingleQuoteString("i"));
         userProfileMap.put(Constant.u_tagline, getSingleQuoteString(mBinding.etTagLine.getText().toString().trim()));
-        userProfileMap.put(Constant.u_native_ct_id, mBinding.cityAutocompleteView.getTag().toString());
-        userProfileMap.put(Constant.u_native_s_id, mBinding.stateAutocompleteView.getTag().toString());
-        userProfileMap.put(Constant.u_native_dt_id, mBinding.divisionAutocompleteView.getTag().toString());
-        userProfileMap.put(Constant.u_nationality, mBinding.nationalityAutocompleteView.getTag().toString());
-        if (mBinding.langAutocompleteView.getTag() != null)
-            userProfileMap.put(Constant.w_lm_id_array, mBinding.langAutocompleteView.getTag().toString());
+
+        userProfileMap.put(Constant.u_native_ct_id, getEmptyStringIfNull(String.valueOf(mBinding.cityAutocompleteView.getTag())));
+        userProfileMap.put(Constant.u_native_s_id, getEmptyStringIfNull(String.valueOf(mBinding.stateAutocompleteView.getTag())));
+        userProfileMap.put(Constant.u_native_dt_id, getEmptyStringIfNull(String.valueOf(mBinding.divisionAutocompleteView.getTag())));
+        userProfileMap.put(Constant.u_nationality, getEmptyStringIfNull(String.valueOf(mBinding.nationalityAutocompleteView.getTag())));
+        userProfileMap.put(Constant.w_lm_id_array, getEmptyStringIfNull(String.valueOf(mBinding.langAutocompleteView.getTag())));
         userProfileMap.put(Constant.u_gender, getSingleQuoteString(gender));
 
         updateUserProfile(userProfileMap);
@@ -798,7 +803,9 @@ public class PersonalInfoFragment extends BaseFragment {
                     String displayName = mBinding.etFirstName.getText().toString().trim() + " " + mBinding.etLastName.getText().toString().trim();
                     new PreferenceManager(requireActivity()).saveString(Constant.DISPLAY_NAME, displayName);
                     new PreferenceManager(requireActivity()).saveString(Constant.GENDER, userProfileMap.get(Constant.u_gender));
-                    Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_home);
+                    //todo update Local db
+                    fetchUserProfile(0, "FINISH");
+                    //Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_home);
                     //MainActivity.navController.navigate(R.id.nav_home);
                 } else {
                     showErrorDialog(requireActivity(), response.body().getResponseCode(), "");
@@ -815,6 +822,7 @@ public class PersonalInfoFragment extends BaseFragment {
         });
     }
 
+
     private void loadProfilePic(String url) {
         Log.d(TAG, "loadProfilePic : " + url);
         //new PreferenceManager(getActivity()).saveString(Constant.PROFILE_PIC,url);
@@ -830,7 +838,7 @@ public class PersonalInfoFragment extends BaseFragment {
     }
 
 
-    private void fetchUserProfile(int call_from) {
+    private void fetchUserProfile(int call_from, String flag) {
         //ProgressDialog.getInstance().show(requireActivity());
         if (call_from == fetch_loged_in_user)
             call = apiService.fetchUserInfo(userid, getDeviceId(), Constant.APP_NAME, Constant.APP_VERSION);
@@ -843,6 +851,8 @@ public class PersonalInfoFragment extends BaseFragment {
                 //ProgressDialog.getInstance().dismiss();
                 if (response.body() != null && response.body().getResponseCode().equals("200")) {
                     mViewModel.insert(response.body());
+                    if (flag.equalsIgnoreCase("FINISH"))
+                        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_home);
                 } else if (response.body().getResponseCode().equals("501")) {
                     resetSettingAndLogout();
                 } else {
@@ -1241,7 +1251,6 @@ public class PersonalInfoFragment extends BaseFragment {
                 t.printStackTrace();
             }
         });
-
     }
 
     private void updateProfileImage(File imageFile) {

@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData;
 
 import com.jangletech.qoogol.database.repo.AppRepository;
 import com.jangletech.qoogol.dialog.ProgressDialog;
+import com.jangletech.qoogol.model.Connections;
 import com.jangletech.qoogol.model.FriendRequest;
 import com.jangletech.qoogol.model.FriendRequestResponse;
 import com.jangletech.qoogol.retrofit.ApiClient;
@@ -49,10 +50,13 @@ public class FriendReqViewModel extends AndroidViewModel {
     }
 
 
-    LiveData<List<FriendRequest>> getFrienReqdList() {
-        return mAppRepository.getFriendReqFromDb(userId);
+    LiveData<List<FriendRequest>> getFrienReqdList(String uId) {
+        return mAppRepository.getFriendReqFromDb(uId);
     }
 
+    public void insert(List<FriendRequest> friendRequests) {
+        mAppRepository.insertFriendRequests(friendRequests);
+    }
 
     void fetchFriendReqData(boolean isRefresh) {
         getData(isRefresh);

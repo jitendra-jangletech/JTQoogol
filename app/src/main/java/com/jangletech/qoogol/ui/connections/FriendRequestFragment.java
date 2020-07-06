@@ -23,32 +23,39 @@ import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.FriendReqAdapter;
 import com.jangletech.qoogol.databinding.FragmentFriendRequestBinding;
 import com.jangletech.qoogol.model.FriendRequest;
+import com.jangletech.qoogol.model.FriendRequestResponse;
+import com.jangletech.qoogol.retrofit.ApiClient;
+import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
-import com.jangletech.qoogol.util.Constant;
-import com.jangletech.qoogol.util.PreferenceManager;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+
 import static com.jangletech.qoogol.util.Constant.friendrequests;
+import static com.jangletech.qoogol.util.Constant.qoogol;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class FriendRequestFragment extends BaseFragment implements FriendReqAdapter.updateConnectionListener {
 
-    FragmentFriendRequestBinding mBinding;
-    List<FriendRequest> connectionsList = new ArrayList<>();
-    private static final String TAG = "FriendsFragment";
-    FriendReqAdapter mAdapter;
-    Boolean isVisible = false;
-    String userId = "";
-    FriendReqViewModel mViewModel;
+    private static final String TAG = "FriendRequestFragment";
+    private FragmentFriendRequestBinding mBinding;
+    //private List<FriendRequest> connectionsList = new ArrayList<>();
+    private FriendReqAdapter mAdapter;
+    private Boolean isVisible = false;
+    private String userId = "";
+    private FriendReqViewModel mViewModel;
+    private LinearLayoutManager linearLayoutManager;
+    private ApiInterface apiService = ApiClient.getInstance().getApi();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_friend_request, container, false);
+        linearLayoutManager = new LinearLayoutManager(getContext());
         setHasOptionsMenu(true);
         return mBinding.getRoot();
     }
@@ -57,33 +64,59 @@ public class FriendRequestFragment extends BaseFragment implements FriendReqAdap
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(FriendReqViewModel.class);
-        init();
-        mViewModel.getFrienReqdList().observe(getViewLifecycleOwner(), friendRequestList -> {
-            connectionsList.clear();
-            connectionsList.addAll(friendRequestList);
-            initView();
-            checkRefresh();
+        fetchFriendRequests();
+        mViewModel.getFrienReqdList(getUserId()).observe(getViewLifecycleOwner(), friendRequestList -> {
+            if (friendRequestList != null) {
+                initView(friendRequestList);
+            }
         });
     }
 
-    private void init() {
-        userId = String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));
-        if (!isVisible) {
-            isVisible = true;
-            mViewModel.fetchFriendReqData(false);
-        }
-        mBinding.requestsSwiperefresh.setOnRefreshListener(() -> mViewModel.fetchFriendReqData(true));
+    private void fetchFriendRequests() {
+        Call<FriendRequestResponse> call = apiService.fetchFriendRequests(userId, friendrequests, getDeviceId(), qoogol, "0");
+        call.enqueue(new Callback<FriendRequestResponse>() {
+            @Override
+            public void onResponse(Call<FriendRequestResponse> call, retrofit2.Response<FriendRequestResponse> response) {
+                dismissRefresh(mBinding.requestsSwiperefresh);
+                if (response.body() != null &&
+                        response.body().getResponse().equalsIgnoreCase("200")) {
+                    Log.d(TAG, "onResponse: ");
+                    mViewModel.insert(response.body().getFriend_req_list());
+                }else{
+                    if(response.body()!=null)
+                    showToast("Error : "+response.body().getResponse());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<FriendRequestResponse> call, Throwable t) {
+                t.printStackTrace();
+                dismissRefresh(mBinding.requestsSwiperefresh);
+                showToast("Something went wrong!!");
+                apiCallFailureDialog(t);
+            }
+        });
     }
 
-    public void checkRefresh() {
-        if (mBinding.requestsSwiperefresh.isRefreshing()) {
-            mBinding.requestsSwiperefresh.setRefreshing(false);
-        }
-    }
+//    private void init() {
+//        //userId = String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));
+//        if (!isVisible) {
+//            isVisible = true;
+//            mViewModel.fetchFriendReqData(false);
+//        }
+//        mBinding.requestsSwiperefresh.setOnRefreshListener(() -> mViewModel.fetchFriendReqData(true));
+//    }
+
+//    public void checkRefresh() {
+////        if (mBinding.requestsSwiperefresh.isRefreshing()) {
+////            mBinding.requestsSwiperefresh.setRefreshing(false);
+////        }
+////    }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onDetach() {
+        super.onDetach();
+        mAdapter = null;
     }
 
     @Override
@@ -118,19 +151,18 @@ public class FriendRequestFragment extends BaseFragment implements FriendReqAdap
         });
     }
 
-    @Override
+   /* @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser && isVisible)
             mViewModel.fetchFriendReqData(false);
-    }
+    }*/
 
-    private void initView() {
+    private void initView(List<FriendRequest> friendRequests) {
         if (mBinding.requestsSwiperefresh.isRefreshing())
             mBinding.requestsSwiperefresh.setRefreshing(false);
-        mAdapter = new FriendReqAdapter(getActivity(), connectionsList, friendrequests, this);
+        mAdapter = new FriendReqAdapter(getActivity(), friendRequests, friendrequests, this);
         mBinding.requestRecycler.setHasFixedSize(true);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         mBinding.requestRecycler.setLayoutManager(linearLayoutManager);
         mBinding.requestRecycler.setAdapter(mAdapter);
     }

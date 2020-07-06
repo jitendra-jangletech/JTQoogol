@@ -37,6 +37,8 @@
                         app:layout_constraintTop_toTopOf="parent">
 
                         <LinearLayout
+                            android:clickable="true"
+                            android:foreground="?attr/selectableItemBackground"
                             android:id="@+id/connectionLayout"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -74,6 +76,8 @@
                         </LinearLayout>
 
                         <LinearLayout
+                            android:clickable="true"
+                            android:foreground="?attr/selectableItemBackground"
                             android:id="@+id/friends_layout"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -111,7 +115,8 @@
                         </LinearLayout>
 
                         <LinearLayout
-
+                            android:clickable="true"
+                            android:foreground="?attr/selectableItemBackground"
                             android:id="@+id/followers_layout"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -148,6 +153,8 @@
                         </LinearLayout>
 
                         <LinearLayout
+                            android:clickable="true"
+                            android:foreground="?attr/selectableItemBackground"
                             android:id="@+id/following_layout"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -212,6 +219,8 @@
                             android:layout_height="wrap_content">
 
                             <ToggleButton
+                                android:clickable="true"
+                                android:foreground="?attr/selectableItemBackground"
                                 android:id="@+id/toggleChart"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"

@@ -17,14 +17,12 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.jangletech.qoogol.R;
-import com.jangletech.qoogol.activities.MainActivity;
 import com.jangletech.qoogol.activities.PracticeTestActivity;
 import com.jangletech.qoogol.adapter.TestListAdapter;
 import com.jangletech.qoogol.databinding.TestFavouriteFragmentBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.enums.Module;
 import com.jangletech.qoogol.model.ProcessQuestion;
-import com.jangletech.qoogol.model.StartResumeTestResponse;
 import com.jangletech.qoogol.model.TestListResponse;
 import com.jangletech.qoogol.model.TestModelNew;
 import com.jangletech.qoogol.retrofit.ApiClient;
@@ -41,7 +39,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.jangletech.qoogol.util.Constant.CASE;
 import static com.jangletech.qoogol.util.Constant.test;
 
 public class TestFavouriteFragment extends BaseFragment implements TestListAdapter.TestClickListener {
@@ -51,7 +48,7 @@ public class TestFavouriteFragment extends BaseFragment implements TestListAdapt
     private TestFavouriteFragmentBinding mBinding;
     private List<TestModelNew> testModelNewList;
     private TestListAdapter testListAdapter;
-    ApiInterface apiService = ApiClient.getInstance().getApi();
+    private ApiInterface apiService = ApiClient.getInstance().getApi();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -64,32 +61,32 @@ public class TestFavouriteFragment extends BaseFragment implements TestListAdapt
 
     private void initViews() {
 
-        mBinding.btnCheckNewTest.setOnClickListener(v->{
+        mBinding.btnCheckNewTest.setOnClickListener(v -> {
             NavHostFragment.findNavController(this).navigate(R.id.nav_test_my);
         });
 
-        HashMap<String,String> params = new HashMap<>();
-        params.put(Constant.u_user_id,getUserId());
-        params.put(Constant.CASE,"FV");
-        params.put(Constant.tm_recent_test,"");
-        params.put(Constant.tm_popular_test,"");
+        HashMap<String, String> params = new HashMap<>();
+        params.put(Constant.u_user_id, getUserId());
+        params.put(Constant.CASE, "FV");
+        params.put(Constant.tm_recent_test, "");
+        params.put(Constant.tm_popular_test, "");
         fetchTestList(params);
         mViewModel.getAllTestList().observe(getActivity(), new Observer<List<TestModelNew>>() {
             @Override
             public void onChanged(@Nullable final List<TestModelNew> favTests) {
                 testModelNewList = favTests;
                 Log.d(TAG, "onChanged Fav Tests : " + testModelNewList);
-                if(testModelNewList.size() > 0) {
+                if (testModelNewList.size() > 0) {
                     setFavTestList();
-                }else{
+                } else {
                     mBinding.tvNoFavTest.setVisibility(View.VISIBLE);
                 }
             }
         });
     }
 
-    private void fetchTestList(HashMap<String,String> params) {
-        Log.d(TAG, "fetchTestList PARAMS : "+params);
+    private void fetchTestList(HashMap<String, String> params) {
+        Log.d(TAG, "fetchTestList PARAMS : " + params);
         ProgressDialog.getInstance().show(getActivity());
         Call<TestListResponse> call = apiService.fetchTestList(
                 params.get(Constant.u_user_id),
@@ -117,12 +114,13 @@ public class TestFavouriteFragment extends BaseFragment implements TestListAdapt
                 ProgressDialog.getInstance().dismiss();
                 showToast("Something went wrong!!");
                 t.printStackTrace();
+                apiCallFailureDialog(t);
             }
         });
     }
 
     private void setFavTestList() {
-        testListAdapter = new TestListAdapter(requireActivity(), testModelNewList, this);
+        testListAdapter = new TestListAdapter(requireActivity(), testModelNewList, this,"FAV");
         mBinding.favTestListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mBinding.favTestListRecyclerView.setAdapter(testListAdapter);
     }
@@ -133,7 +131,6 @@ public class TestFavouriteFragment extends BaseFragment implements TestListAdapt
         Bundle bundle = new Bundle();
         bundle.putSerializable(Constant.TEST_NAME, testModel);
         Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_test_details, bundle);
-        //MainActivity.navController.navigate(R.id.nav_test_details, bundle);
     }
 
     @Override
@@ -161,29 +158,10 @@ public class TestFavouriteFragment extends BaseFragment implements TestListAdapt
     }
 
     @Override
-    public void onLikeClick(TestModelNew testModel, int pos, boolean isChecked) {
-        if (isChecked) {
-            //callApi(1, pos);
-        } else {
-            //callApi(0, pos);
-        }
-    }
-
-    @Override
-    public void onFavouriteClick(TestModelNew testModel, boolean isChecked,int pos) {
-        HashMap<String, Integer> params = new HashMap<>();
-        params.put(Constant.tm_id, testModel.getTm_id());
-        params.put(Constant.isFavourite,0);
-        params.put("POS",pos);
-        if (isChecked)
-            removeFavTest(params);
-        else
-            removeFavTest(params);
-    }
-
-    @Override
     public void onAttemptsClick(TestModelNew testModel) {
-
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("PARAMS", testModel);
+        NavHostFragment.findNavController(this).navigate(R.id.nav_test_attempt_history, bundle);
     }
 
     private void removeFavTest(HashMap<String, Integer> map) {
@@ -195,19 +173,20 @@ public class TestFavouriteFragment extends BaseFragment implements TestListAdapt
             public void onResponse(Call<ProcessQuestion> call, Response<ProcessQuestion> response) {
                 ProgressDialog.getInstance().dismiss();
                 if (response.body() != null && response.body().getResponse().equals("200")) {
-                    if(testModelNewList.size() == 1)
+                    if (testModelNewList.size() == 1)
                         mBinding.tvNoFavTest.setVisibility(View.VISIBLE);
                     testListAdapter.deleteFav(map.get("POS"));
                 } else {
                     showErrorDialog(getActivity(), response.body().getResponse(), response.body().getMessage());
                 }
             }
-        @Override
-        public void onFailure (Call < ProcessQuestion > call, Throwable t){
-            ProgressDialog.getInstance().dismiss();
-            showToast("Something went wrong!!");
-            t.printStackTrace();
-        }
-    });
-}
+
+            @Override
+            public void onFailure(Call<ProcessQuestion> call, Throwable t) {
+                ProgressDialog.getInstance().dismiss();
+                showToast("Something went wrong!!");
+                t.printStackTrace();
+            }
+        });
+    }
 }

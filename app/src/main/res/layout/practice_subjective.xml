@@ -53,9 +53,10 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <ToggleButton
+                        android:foreground="?attr/selectableItemBackground"
                         android:id="@+id/markToggle"
-                        android:layout_width="@dimen/_16sdp"
-                        android:layout_height="@dimen/_16sdp"
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
                         android:layout_marginRight="@dimen/_10sdp"
                         android:background="@drawable/button_marked"
                         android:checked="false"
@@ -67,18 +68,39 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <TextView
-                    android:id="@+id/question_textview"
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:id="@+id/questLayout"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_10sdp"
-                    android:layout_marginRight="@dimen/_10sdp"
-                    android:padding="@dimen/_5sdp"
-                    android:text="question"
-                    android:textColor="@color/colorSkyBlue"
-                    android:textSize="@dimen/_12ssp"
+                    android:orientation="vertical"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/header" />
+                    app:layout_constraintRight_toLeftOf="@+id/reset"
+                    app:layout_constraintTop_toBottomOf="@+id/header">
+
+                    <TextView
+                        android:id="@+id/question_textview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/_10sdp"
+                        android:layout_marginRight="@dimen/_10sdp"
+                        android:padding="@dimen/_10sdp"
+                        android:text="question"
+                        android:textColor="@color/colorSkyBlue"
+                        android:textSize="@dimen/_12ssp"
+                        android:visibility="visible" />
+
+                    <io.github.kexanie.library.MathView
+                        android:id="@+id/questMathView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/_10sdp"
+                        android:layout_marginRight="@dimen/_10sdp"
+                        android:padding="@dimen/_10sdp"
+                        android:text="question"
+                        android:textColor="@color/colorSkyBlue"
+                        android:textSize="@dimen/_12ssp"
+                        android:visibility="gone" />
+                </LinearLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/timer_layout"
@@ -87,7 +109,7 @@
                     android:orientation="horizontal"
                     android:padding="@dimen/_10sdp"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/question_textview">
+                    app:layout_constraintTop_toBottomOf="@+id/questLayout">
 
                     <TextView
                         android:id="@+id/tvtimer"
@@ -111,6 +133,8 @@
                         app:layout_constraintTop_toTopOf="@id/tvtimer" />
 
                     <ImageView
+                        android:foreground="?attr/selectableItemBackground"
+                        android:padding="@dimen/_10sdp"
                         android:id="@+id/save_que"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -125,8 +149,8 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@id/answerLayout"
                     android:layout_width="match_parent"
-                    android:padding="@dimen/_10sdp"
                     android:layout_height="wrap_content"
+                    android:padding="@dimen/_10sdp"
                     app:layout_constraintTop_toBottomOf="@+id/timer_layout">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -158,35 +182,6 @@
                             android:textColor="@color/colorSkyBlue"
                             app:layout_constraintRight_toRightOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/multi_line" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/fill_in_the_blanks_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:visibility="gone"
-                        app:layout_constraintTop_toBottomOf="@+id/multi_line_answer">
-
-                        <EditText
-                            android:id="@+id/fill_in_the_blanks"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/grey_border"
-                            android:maxLines="2"
-                            android:textColor="@color/colorBlack"
-                            android:visibility="visible"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <ImageView
-                            android:id="@+id/fib_img"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/ic_right"
-                            android:visibility="gone"
-                            app:layout_constraintBottom_toBottomOf="@+id/fill_in_the_blanks"
-                            app:layout_constraintRight_toRightOf="@+id/fill_in_the_blanks"
-                            app:layout_constraintTop_toTopOf="@+id/fill_in_the_blanks" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -225,7 +220,6 @@
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/button_below_view">
 
-
                     <TextView
                         android:id="@+id/solution"
                         android:layout_width="wrap_content"
@@ -240,37 +234,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_5sdp"
-                        android:text="Answer"
+                        android:text=""
                         android:textColor="@color/colorBlack"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/solution" />
-
-                    <ImageView
-                        android:id="@+id/ans_img1"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/_150sdp"
-                        android:layout_marginLeft="@dimen/_10sdp"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:layout_marginEnd="@dimen/_10sdp"
-                        android:maxHeight="@dimen/_180sdp"
-                        android:scaleType="fitStart"
-                        android:src="@drawable/ic_menu_share"
-                        android:visibility="gone"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/solution_option" />
-
-
-                    <TextView
-                        android:id="@+id/solution_desc"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:text="Answer desc"
-                        android:textColor="@color/colorBlack"
-                        android:visibility="gone"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/ans_img1" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -376,7 +343,7 @@
                             android:id="@+id/ratingvalue"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/_5sdp"
+                            android:padding="@dimen/_10sdp"
                             android:text="0"
                             android:textAlignment="textStart"
                             android:textColor="@color/colorBlack"
@@ -396,21 +363,21 @@
                         app:layout_constraintLeft_toRightOf="@+id/rating"
                         app:layout_constraintTop_toTopOf="parent">
 
-                        <!-- <ImageView
-                             android:id="@+id/like"
-                             android:layout_width="wrap_content"
-                             android:layout_height="wrap_content"
-                             android:src="@drawable/ic_like"
-                             app:layout_constraintBottom_toBottomOf="parent"
-                             app:layout_constraintLeft_toLeftOf="parent"
-                             app:layout_constraintTop_toTopOf="parent" />-->
-
+                        <!--<ImageView
+                            android:id="@+id/like"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_like"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />-->
                         <ToggleButton
                             android:id="@+id/like"
                             android:layout_width="@dimen/_20sdp"
                             android:layout_height="@dimen/_20sdp"
                             android:background="@drawable/button_like"
                             android:checked="false"
+                            android:padding="@dimen/_10sdp"
                             android:text=""
                             android:textOff=""
                             android:textOn=""
@@ -418,12 +385,12 @@
                             app:layout_constraintLeft_toLeftOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
-
                         <TextView
                             android:id="@+id/like_value"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/_5sdp"
+                            android:padding="@dimen/_10sdp"
                             android:text="0"
                             android:textAlignment="textStart"
                             android:textColor="@color/colorBlack"
@@ -456,7 +423,7 @@
                             android:id="@+id/comment_value"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/_5sdp"
+                            android:padding="@dimen/_10sdp"
                             android:text="0"
                             android:textAlignment="textStart"
                             android:textColor="@color/colorBlack"
@@ -464,7 +431,6 @@
                             app:layout_constraintLeft_toRightOf="@+id/comment"
                             app:layout_constraintTop_toTopOf="@+id/comment" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/share_layout"
@@ -480,6 +446,7 @@
                             android:id="@+id/share"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:padding="@dimen/_10sdp"
                             android:src="@drawable/ic_share"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintLeft_toLeftOf="parent"
@@ -489,7 +456,7 @@
                             android:id="@+id/share_value"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/_5sdp"
+                            android:padding="@dimen/_10sdp"
                             android:text="0"
                             android:textAlignment="textStart"
                             android:textColor="@color/colorBlack"
@@ -498,22 +465,14 @@
                             app:layout_constraintTop_toTopOf="@+id/share" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <!--  <ImageView
-                          android:id="@+id/favorite"
-                          android:layout_width="wrap_content"
-                          android:layout_height="wrap_content"
-                          android:layout_weight="1"
-                          android:src="@drawable/ic_favorite"
-                          app:layout_constraintBottom_toBottomOf="parent"
-                          app:layout_constraintLeft_toLeftOf="parent"
-                          app:layout_constraintTop_toTopOf="parent" />-->
-
                     <ToggleButton
                         android:id="@+id/favorite"
                         android:layout_width="@dimen/_20sdp"
                         android:layout_height="@dimen/_20sdp"
+                        android:layout_marginTop="@dimen/_10sdp"
                         android:background="@drawable/button_favorite"
                         android:checked="false"
+                        android:padding="@dimen/_10sdp"
                         android:text=""
                         android:textOff=""
                         android:textOn=""
@@ -521,6 +480,16 @@
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
+                    <!--<ImageView
+                        android:padding="@dimen/_10sdp"
+                        android:id="@+id/favorite"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:src="@drawable/ic_favorite"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />-->
                 </LinearLayout>
 
                 <View

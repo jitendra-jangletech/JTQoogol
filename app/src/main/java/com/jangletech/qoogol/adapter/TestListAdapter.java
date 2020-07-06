@@ -5,8 +5,8 @@ import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
@@ -14,29 +14,39 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.TestItemBinding;
+import com.jangletech.qoogol.dialog.ProgressDialog;
+import com.jangletech.qoogol.model.ProcessQuestion;
 import com.jangletech.qoogol.model.TestModelNew;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
+import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.DateUtils;
+import com.jangletech.qoogol.util.PreferenceManager;
 
 import java.util.HashMap;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class TestListAdapter extends RecyclerView.Adapter<TestListAdapter.ViewHolder> {
 
     private static final String TAG = "TestListAdapter";
-    Activity activity;
-    HashMap<Integer, TextView> map;
-    List<TestModelNew> testModelList;
-    ApiInterface apiService = ApiClient.getInstance().getApi();
-    TestItemBinding itemBinding;
-    TestListAdapter.TestClickListener testClickListener;
+    private Activity activity;
+    private HashMap<Integer, TextView> map;
+    private List<TestModelNew> testModelList;
+    private ApiInterface apiService = ApiClient.getInstance().getApi();
+    private TestItemBinding itemBinding;
+    private TestListAdapter.TestClickListener testClickListener;
+    private String flag="";
     private HashMap<String, String> mapDiffLevel = new HashMap<>();
 
-    public TestListAdapter(Activity activity, List<TestModelNew> itemlist, TestListAdapter.TestClickListener testClickListener) {
+    public TestListAdapter(Activity activity, List<TestModelNew> itemlist, TestListAdapter.TestClickListener testClickListener,String flag) {
         this.activity = activity;
         this.testModelList = itemlist;
         this.testClickListener = testClickListener;
+        this.flag = flag;
         setMapValues();
     }
 
@@ -58,115 +68,92 @@ public class TestListAdapter extends RecyclerView.Adapter<TestListAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull TestListAdapter.ViewHolder holder, int position) {
-        //TestModelNew testModel = testModelList.get(position);
+        Log.e(TAG, "onBindViewHolder Position : " + position);
+        TestModelNew testModelNew = testModelList.get(position);
         //map.put(position, itemBinding.likeValue);
-        itemBinding.tvTestNameSubject.setText(testModelList.get(holder.getAdapterPosition()).getTm_name() + "(" + testModelList.get(holder.getAdapterPosition()).getSm_sub_name() + ")");
-        itemBinding.tvCategory.setText(testModelList.get(holder.getAdapterPosition()).getTm_catg());
-        itemBinding.tvDuration.setText(testModelList.get(holder.getAdapterPosition()).getTm_duration() + " Min.");
-        itemBinding.tvTotalMarks.setText(testModelList.get(holder.getAdapterPosition()).getTm_tot_marks());
-        itemBinding.tvDifficultyLevel.setText(mapDiffLevel.get(testModelList.get(holder.getAdapterPosition()).getTm_diff_level()));
-        itemBinding.ratingvalue.setText(testModelList.get(holder.getAdapterPosition()).getTm_rating_count());
-        itemBinding.tvAttendedBy.setText(testModelList.get(holder.getAdapterPosition()).getTm_attempted_by());
-        itemBinding.tvRanking.setText(testModelList.get(holder.getAdapterPosition()).getTm_ranking());
-        itemBinding.tvQuestCount.setText(testModelList.get(holder.getAdapterPosition()).getQuest_count());
+        holder.itemBinding.tvTestNameSubject.setText(testModelNew.getTm_name() + "(" + testModelNew.getSm_sub_name() + ")");
+        holder.itemBinding.tvCategory.setText(testModelNew.getTm_catg());
+        holder.itemBinding.tvDuration.setText(testModelNew.getTm_duration() + " Min.");
+        holder.itemBinding.tvTotalMarks.setText(testModelNew.getTm_tot_marks());
+        holder.itemBinding.tvDifficultyLevel.setText(mapDiffLevel.get(testModelNew.getTm_diff_level()));
+        holder.itemBinding.ratingvalue.setText(testModelNew.getTm_rating_count());
+        holder.itemBinding.tvAttendedBy.setText(testModelNew.getTm_attempted_by());
+        holder.itemBinding.tvRanking.setText(testModelNew.getTm_ranking());
+        holder.itemBinding.tvQuestCount.setText(testModelNew.getQuest_count());
 
-        if (testModelList.get(holder.getAdapterPosition()).getAttemptedTests() != null)
-            itemBinding.tvNoOfAttempts.setText(Html.fromHtml("<h>Attempts : " + testModelList.get(holder.getAdapterPosition()).getAttemptedTests().size() + "</h>"));
+        if (testModelNew.getAttemptedTests() != null)
+            holder.itemBinding.tvNoOfAttempts.setText(Html.fromHtml("<h>Attempts : " + testModelNew.getAttemptedTests().size() + "</h>"));
 
-        itemBinding.tvNoOfAttempts.setOnClickListener(v -> {
-            testClickListener.onAttemptsClick(testModelList.get(holder.getAdapterPosition()));
+        holder.itemBinding.tvNoOfAttempts.setOnClickListener(v -> {
+            testClickListener.onAttemptsClick(testModelNew);
         });
 
-        Log.e(TAG, "Like Count : " + testModelList.get(holder.getAdapterPosition()).getLikeCount());
-
-        if (testModelList.get(holder.getAdapterPosition()).getLikeCount() != null) {
-            itemBinding.likeValue.setText(testModelList.get(holder.getAdapterPosition()).getLikeCount());
-        } else {
-            itemBinding.likeValue.setText("0");
-        }
+        Log.e(TAG, "Like Count : " + testModelNew.getLikeCount());
+        holder.itemBinding.likeValue.setText("" + testModelNew.getLikeCount());
 
         if (testModelList.get(holder.getAdapterPosition()).getShareCount() != null) {
-            itemBinding.shareValue.setText(testModelList.get(holder.getAdapterPosition()).getShareCount());
+            holder.itemBinding.shareValue.setText(testModelNew.getShareCount());
         } else {
-            itemBinding.shareValue.setText("0");
+            holder.itemBinding.shareValue.setText("0");
         }
 
-        if (testModelList.get(holder.getAdapterPosition()).getCommentsCount() != null) {
-            itemBinding.commentValue.setText(testModelList.get(holder.getAdapterPosition()).getCommentsCount());
+        if (testModelNew.getCommentsCount() != null) {
+            holder.itemBinding.commentValue.setText(testModelNew.getCommentsCount());
         } else {
-            itemBinding.commentValue.setText("0");
+            holder.itemBinding.commentValue.setText("0");
         }
 
-        // Log.d(TAG, "Share Count : "+testModel.getShareCount());
-        //Log.d(TAG, "Comment Count : "+testModel.getCommentsCount());
-
-        itemBinding.shareValue.setText(testModelList.get(holder.getAdapterPosition()).getShareCount());
-        itemBinding.commentValue.setText(testModelList.get(holder.getAdapterPosition()).getCommentsCount());
-
-        if (testModelList.get(holder.getAdapterPosition()).getPublishedDate() != null)
-            itemBinding.tvPublishedDate.setText(DateUtils.getFormattedDate(testModelList.get(holder.getAdapterPosition()).getPublishedDate().substring(0, 10)));
-
-        itemBinding.tvAuthorName.setText(testModelList.get(holder.getAdapterPosition()).getAuthor());
-
-        if (testModelList.get(holder.getAdapterPosition()).isFavourite()) {
-            itemBinding.favorite.setChecked(true);
+        if (testModelNew.isFavourite()) {
+            //itemBinding.favorite.setChecked(true);
+            holder.itemBinding.favorite.setImageDrawable(activity.getDrawable(R.drawable.ic_favorite_filled));
         } else {
-            itemBinding.favorite.setChecked(false);
+            holder.itemBinding.favorite.setImageDrawable(activity.getDrawable(R.drawable.ic_fav));
         }
 
-        if (testModelList.get(holder.getAdapterPosition()).isLike()) {
+       /* if (testModelList.get(getAdapterPosition()).isLike()) {
             itemBinding.like.setChecked(true);
         } else {
-            itemBinding.like.setChecked(false);
+            holder.itemBinding.like.setChecked(false);
+        }*/
+
+        if (testModelNew.isLike()) {
+            holder.itemBinding.like.setBackgroundDrawable(activity.getDrawable(R.drawable.ic_like_filled));
+        } else {
+            holder.itemBinding.like.setBackgroundDrawable(activity.getDrawable(R.drawable.ic_like));
         }
 
+        holder.itemBinding.shareValue.setText(testModelNew.getShareCount());
+        holder.itemBinding.commentValue.setText(testModelNew.getCommentsCount());
+
+        if (testModelNew.getPublishedDate() != null)
+            holder.itemBinding.tvPublishedDate.setText(DateUtils.getFormattedDate(testModelNew.getPublishedDate().substring(0, 10)));
+
+        holder.itemBinding.tvAuthorName.setText(testModelNew.getAuthor());
+
         holder.itemBinding.testItemCard.setOnClickListener(v -> {
-            testClickListener.onTestItemClick(testModelList.get(holder.getAdapterPosition()));
+            testClickListener.onTestItemClick(testModelNew);
         });
 
         holder.itemBinding.btnStartTest.setOnClickListener(v -> {
-            testClickListener.onStartTestClick(testModelList.get(holder.getAdapterPosition()));
+            testClickListener.onStartTestClick(testModelNew);
         });
-
-        holder.itemBinding.like.setOnClickListener(v->{
-            testClickListener.onLikeClick(testModelList.get(holder.getAdapterPosition()),holder.getAdapterPosition(),testModelList.get(holder.getAdapterPosition()).isLike());
-        });
-
-        /*holder.itemBinding.like.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                testClickListener.onLikeClick(testModel,holder.getAdapterPosition(), isChecked);
-            }
-        });*/
-
-        /*holder.itemBinding.like.setOnClickListener(v -> {
-            boolean isChecked = testModel.isLike();
-            if (isChecked) {
-                doLikeTest(1, position, testModel);
-            } else {
-                doLikeTest(0, position, testModel);
-            }
-            //testClickListener.onLikeClick(testModel, position,isChecked);
-        });*/
 
         holder.itemBinding.commentLayout.setOnClickListener(v -> {
-            testClickListener.onCommentClick(testModelList.get(holder.getAdapterPosition()));
+            testClickListener.onCommentClick(testModelNew);
         });
 
         holder.itemBinding.shareLayout.setOnClickListener(v -> {
-            testClickListener.onShareClick(testModelList.get(holder.getAdapterPosition()).getTm_id());
+            testClickListener.onShareClick(testModelNew.getTm_id());
         });
 
-       /* holder.itemBinding.favorite.setOnClickListener(v -> {
-            //Toast.makeText(fragment.getContext(), ""+isSelected, Toast.LENGTH_SHORT).show();
-            //testClickListener.onFavouriteClick(testModel, isSelected[0]);
-        });*/
+        holder.itemBinding.favorite.setOnClickListener(v -> {
+            favTest(position, testModelNew);
+            //testClickListener.onFavouriteClick(testModelNew, testModelNew.isFavourite(), position);
+        });
 
-        holder.itemBinding.favorite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                testClickListener.onFavouriteClick(testModelList.get(holder.getAdapterPosition()), isChecked,holder.getAdapterPosition());
-            }
+        holder.itemBinding.like.setOnClickListener(v -> {
+            doLikeTest(position, testModelNew);
+            //testClickListener.onLikeClick(testModelNew, position, testModelNew.isLike());
         });
     }
 
@@ -193,16 +180,11 @@ public class TestListAdapter extends RecyclerView.Adapter<TestListAdapter.ViewHo
 
         void onShareClick(int testid);
 
-        void onLikeClick(TestModelNew testModel, int pos, boolean isChecked);
+        //void onLikeClick(TestModelNew testModel, int pos, boolean isChecked);
 
-        void onFavouriteClick(TestModelNew testModel, boolean isChecked,int position);
+        //void onFavouriteClick(TestModelNew testModel, boolean isChecked, int position);
 
         void onAttemptsClick(TestModelNew testModel);
-    }
-
-    public void updateList(List<TestModelNew> list) {
-        this.testModelList = list;
-        notifyDataSetChanged();
     }
 
     public void setSearchResult(List<TestModelNew> result) {
@@ -210,8 +192,94 @@ public class TestListAdapter extends RecyclerView.Adapter<TestListAdapter.ViewHo
         notifyDataSetChanged();
     }
 
-    public void deleteFav(int pos){
+    public void deleteFav(int pos) {
         testModelList.remove(pos);
         notifyItemRemoved(pos);
+        showToast("Deleted from favourites");
+    }
+
+    private void doLikeTest(int pos, TestModelNew testModelNew) {
+        ProgressDialog.getInstance().show(activity);
+        Call<ProcessQuestion> call = apiService.addTestLike(new PreferenceManager(activity).getInt(Constant.USER_ID),
+                testModelNew.getTm_id(), "I", testModelNew.isLike() ? 0 : 1);
+        call.enqueue(new Callback<ProcessQuestion>() {
+            @Override
+            public void onResponse(Call<ProcessQuestion> call, Response<ProcessQuestion> response) {
+                ProgressDialog.getInstance().dismiss();
+                try {
+                    if (response.body() != null && response.body().getResponse().equals("200")) {
+                        int likeCount = testModelNew.getLikeCount();
+                        if (testModelNew.isLike()) {
+                            Log.e(TAG, "like 0 ");
+                            testModelNew.setLike(false);
+                            if (likeCount <= 0)
+                                testModelNew.setLikeCount(0);
+                            else
+                                testModelNew.setLikeCount((likeCount - 1));
+                        } else {
+                            testModelNew.setLike(true);
+                            testModelNew.setLikeCount((likeCount + 1));
+                        }
+                        //testModelList.set(pos,testModelNew);
+                        notifyItemChanged(pos,testModelNew);
+
+                    } else {
+                        // showErrorDialog(getActivity(), response.body().getResponse(), response.body().getMessage());
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ProcessQuestion> call, Throwable t) {
+                ProgressDialog.getInstance().dismiss();
+                showToast("Something went wrong!!");
+                t.printStackTrace();
+            }
+        });
+    }
+
+    private void favTest(int pos, TestModelNew testModelNew) {
+        ProgressDialog.getInstance().show(activity);
+        Call<ProcessQuestion> call = apiService.addFavTest(new PreferenceManager(activity).getInt(Constant.USER_ID),
+                testModelNew.getTm_id(), "I", testModelNew.isFavourite() ? 0 : 1);
+        call.enqueue(new Callback<ProcessQuestion>() {
+            @Override
+            public void onResponse(Call<ProcessQuestion> call, Response<ProcessQuestion> response) {
+                ProgressDialog.getInstance().dismiss();
+                try {
+                    if (response.body() != null && response.body().getResponse().equals("200")) {
+                        if (!flag.equalsIgnoreCase("FAV")) {
+                            if (testModelNew.isFavourite()) {
+                                showToast("Removed from favourites");
+                                testModelNew.setFavourite(false);
+                            } else {
+                                showToast("Added to favourites");
+                                testModelNew.setFavourite(true);
+                            }
+                            //testModelList.set(pos,testModelNew);
+                            notifyItemChanged(pos, testModelNew);
+                            //notifyDataSetChanged();
+                        }else{
+                            deleteFav(pos);
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ProcessQuestion> call, Throwable t) {
+                ProgressDialog.getInstance().dismiss();
+                showToast("Something went wrong!!");
+                t.printStackTrace();
+            }
+        });
+    }
+
+    public void showToast(String msg) {
+        Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show();
     }
 }

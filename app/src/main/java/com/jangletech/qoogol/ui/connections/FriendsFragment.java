@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.FriendsAdapter;
 import com.jangletech.qoogol.databinding.FragmentFriendsBinding;
+import com.jangletech.qoogol.dialog.PublicProfileDialog;
 import com.jangletech.qoogol.model.Friends;
 import com.jangletech.qoogol.model.FriendsResponse;
 import com.jangletech.qoogol.retrofit.ApiClient;
@@ -34,21 +35,27 @@ import static com.jangletech.qoogol.util.Constant.friends;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FriendsFragment extends BaseFragment implements FriendsAdapter.updateConnectionListener {
+public class FriendsFragment extends BaseFragment implements FriendsAdapter.updateConnectionListener, PublicProfileDialog.PublicProfileClickListener {
 
-    FragmentFriendsBinding mBinding;
-    List<Friends> connectionsList = new ArrayList<>();
     private static final String TAG = "FriendsFragment";
-    FriendsAdapter mAdapter;
-    Boolean isVisible = false;
-    String userId = "";
-    FriendsViewModel mViewModel;
+    private FragmentFriendsBinding mBinding;
+    private List<Friends> connectionsList = new ArrayList<>();
+    private FriendsAdapter mAdapter;
+    private Boolean isVisible = false;
+    private String userId = "";
+    private FriendsViewModel mViewModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_friends, container, false);
         return mBinding.getRoot();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mAdapter = null;
     }
 
     private void init() {
@@ -72,11 +79,6 @@ public class FriendsFragment extends BaseFragment implements FriendsAdapter.upda
             checkRefresh();
         });
 
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
     }
 
     public void checkRefresh() {
@@ -113,6 +115,14 @@ public class FriendsFragment extends BaseFragment implements FriendsAdapter.upda
 
     @Override
     public void showProfileClick(Bundle bundle) {
-        NavHostFragment.findNavController(this).navigate(R.id.nav_edit_profile, bundle);
+        String otherUserId = bundle.getString(Constant.fetch_profile_id);
+        PublicProfileDialog publicProfileDialog = new PublicProfileDialog(getActivity(),otherUserId,this);
+        publicProfileDialog.show();
+        //NavHostFragment.findNavController(this).navigate(R.id.nav_edit_profile, bundle);
+    }
+
+    @Override
+    public void onViewImage(String path) {
+        showFullScreen(path);
     }
 }

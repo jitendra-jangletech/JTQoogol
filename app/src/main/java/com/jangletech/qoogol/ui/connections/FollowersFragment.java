@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.FollowersAdapter;
 import com.jangletech.qoogol.databinding.FragmentFriendsBinding;
+import com.jangletech.qoogol.dialog.PublicProfileDialog;
 import com.jangletech.qoogol.model.Followers;
 import com.jangletech.qoogol.model.FollowersResponse;
 import com.jangletech.qoogol.retrofit.ApiClient;
@@ -34,16 +35,15 @@ import static com.jangletech.qoogol.util.Constant.followers;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FollowersFragment extends BaseFragment implements FollowersAdapter.updateConnectionListener {
+public class FollowersFragment extends BaseFragment implements FollowersAdapter.updateConnectionListener, PublicProfileDialog.PublicProfileClickListener {
 
-    FragmentFriendsBinding mBinding;
-    List<Followers> connectionsList = new ArrayList<>();
-    ;
     private static final String TAG = "FollowersFragment";
-    FollowersAdapter mAdapter;
-    Boolean isVisible = false;
-    String userId = "";
-    FollowersViewModel mViewModel;
+    private FragmentFriendsBinding mBinding;
+    private List<Followers> connectionsList = new ArrayList<>();
+    private FollowersAdapter mAdapter;
+    private Boolean isVisible = false;
+    private String userId = "";
+    private FollowersViewModel mViewModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -75,16 +75,18 @@ public class FollowersFragment extends BaseFragment implements FollowersAdapter.
         });
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser && isVisible)
             mViewModel.fetchFollowersData(false);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mAdapter = null;
     }
 
     public void checkRefresh() {
@@ -113,6 +115,14 @@ public class FollowersFragment extends BaseFragment implements FollowersAdapter.
 
     @Override
     public void showProfileClick(Bundle bundle) {
-        NavHostFragment.findNavController(this).navigate(R.id.nav_edit_profile, bundle);
+        String otherUserId = bundle.getString(Constant.fetch_profile_id);
+        PublicProfileDialog publicProfileDialog = new PublicProfileDialog(getActivity(),otherUserId,this);
+        publicProfileDialog.show();
+        //NavHostFragment.findNavController(this).navigate(R.id.nav_edit_profile, bundle);
+    }
+
+    @Override
+    public void onViewImage(String path) {
+        showFullScreen(path);
     }
 }

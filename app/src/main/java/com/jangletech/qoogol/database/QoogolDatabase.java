@@ -44,11 +44,9 @@ import java.util.concurrent.Executors;
 @Database(entities = {LearningQuestionsNew.class, DashBoard.class, TestModelNew.class,
         TestQuestion.class, UserProfile.class, Education.class, Friends.class, Followers.class, Following.class,
         FriendRequest.class, FollowRequest.class, Connections.class, LearningQuestions.class, BlockedConnections.class,
-        Notification.class}, version = 4, exportSchema = false)
+        Notification.class}, version = 6, exportSchema = false)
 @TypeConverters(Converters.class)
 public abstract class QoogolDatabase extends RoomDatabase {
-
-
     public abstract UserProfileDao userProfileDao();
 
     public abstract FriendsDao friendsDao();
@@ -60,6 +58,7 @@ public abstract class QoogolDatabase extends RoomDatabase {
     public abstract FriendReqDao friendReqDao();
 
     public abstract FollowReqDao followReqDao();
+
     public abstract BlockedDao blockedDao();
 
     public abstract ConnectionsDao connectionsDao();

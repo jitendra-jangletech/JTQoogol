@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.Window;
 import android.widget.Toast;
 
@@ -37,11 +38,11 @@ public class LikeListingDialog extends Dialog implements LikeAdapter.onItemClick
     ApiInterface apiService = ApiClient.getInstance().getApi();
     List<Like> likeList;
     private PreferenceManager mSettings;
-    String questionId;
+    int questionId;
     LikeAdapter likeAdapter;
     onItemClickListener onItemClickListener;
 
-    public LikeListingDialog(@NonNull Activity context, String questionId, onItemClickListener onItemClickListener) {
+    public LikeListingDialog(@NonNull Activity context, int questionId, onItemClickListener onItemClickListener) {
         super(context, android.R.style.Theme_DeviceDefault_Light_DarkActionBar);
         this.questionId = questionId;
         this.context = context;
@@ -67,7 +68,8 @@ public class LikeListingDialog extends Dialog implements LikeAdapter.onItemClick
     }
 
     private void getData() {
-        ProgressDialog.getInstance().show(context);
+        //ProgressDialog.getInstance().show(context);
+
         Call<ProcessQuestion> call;
         call = apiService.fetchComments(Integer.parseInt(mSettings.getUserId()), questionId, "L");
 
@@ -85,9 +87,13 @@ public class LikeListingDialog extends Dialog implements LikeAdapter.onItemClick
                     }
                     if (likeDialogBinding.likeSwiperefresh.isRefreshing())
                         likeDialogBinding.likeSwiperefresh.setRefreshing(false);
+
+                    likeDialogBinding.shimmerViewContainer.hideShimmer();
+                    likeDialogBinding.likeRecycler.setVisibility(View.VISIBLE);
                 } catch (Exception e) {
                     e.printStackTrace();
-                    ProgressDialog.getInstance().dismiss();
+                    //ProgressDialog.getInstance().dismiss();
+                    likeDialogBinding.shimmerViewContainer.hideShimmer();
                     if (likeDialogBinding.likeSwiperefresh.isRefreshing())
                         likeDialogBinding.likeSwiperefresh.setRefreshing(false);
                 }
@@ -110,6 +116,7 @@ public class LikeListingDialog extends Dialog implements LikeAdapter.onItemClick
         linearLayoutManager.setAutoMeasureEnabled(false);
         likeDialogBinding.likeRecycler.setLayoutManager(linearLayoutManager);
         likeDialogBinding.likeRecycler.setAdapter(likeAdapter);
+        likeDialogBinding.shimmerViewContainer.hideShimmer();
     }
 
     @Override

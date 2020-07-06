@@ -17,7 +17,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
@@ -26,13 +25,13 @@ import androidx.databinding.DataBindingUtil;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
-import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.jangletech.qoogol.BuildConfig;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.ActivityMainBinding;
@@ -82,7 +81,6 @@ public class MainActivity extends BaseActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setMargins(mBinding.marginLayout);
-
         NavigationView navigationView = findViewById(R.id.nav_view);
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_test_popular, R.id.nav_attended_by_friends, R.id.nav_shared_with_you,
@@ -101,6 +99,8 @@ public class MainActivity extends BaseActivity {
             if (destination.getId() == R.id.nav_syllabus
                     || destination.getId() == R.id.nav_edit_profile
                     || destination.getId() == R.id.nav_test_filter
+                    || destination.getId() == R.id.nav_comments
+                    || destination.getId() == R.id.nav_share
                     || destination.getId() == R.id.nav_blocked_connections
                     || destination.getId() == R.id.nav_test_details) {
                 hideBottomNav();
@@ -112,9 +112,10 @@ public class MainActivity extends BaseActivity {
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                navigateFlag = "";
                 if (item.getItemId() == R.id.nav_home) {
                     if (navController.getCurrentDestination().getId() != R.id.nav_home) {
-                        navigateFlag = Nav.HOME.toString();
+                        //navigateFlag = Nav.HOME.toString();
                         if (navController.popBackStack(R.id.nav_home, false)) {
                         } else {
                             navController.navigate(R.id.nav_home);
@@ -122,7 +123,7 @@ public class MainActivity extends BaseActivity {
                     }
                 }
                 if (item.getItemId() == R.id.nav_learning) {
-                    navigateFlag = Nav.LEARNING.toString();
+                    //navigateFlag = Nav.LEARNING.toString();
                     if (navController.getCurrentDestination().getId() != R.id.nav_learning) {
                         Bundle bundle = new Bundle();
                         bundle.putString("call_from", "learning");
@@ -130,7 +131,7 @@ public class MainActivity extends BaseActivity {
                     }
                 }
                 if (item.getItemId() == R.id.nav_test_my) {
-                    navigateFlag = Nav.MY_TEST.toString();
+                    //navigateFlag = Nav.MY_TEST.toString();
                     //saveTestType(Nav.MY_TEST.toString());
                     if (navController.getCurrentDestination().getId() != R.id.nav_test_my) {
                         clearFilters();
@@ -138,13 +139,13 @@ public class MainActivity extends BaseActivity {
                     }
                 }
                 if (item.getItemId() == R.id.nav_doubts) {
-                    navigateFlag = Nav.ASK_DOUBTS.toString();
+                    //navigateFlag = Nav.ASK_DOUBTS.toString();
                     if (navController.getCurrentDestination().getId() != R.id.nav_doubts) {
                         navController.navigate(R.id.nav_doubts);
                     }
                 }
                 if (item.getItemId() == R.id.nav_notifications) {
-                    navigateFlag = Nav.NOTIFICATIONS.toString();
+                    //navigateFlag = Nav.NOTIFICATIONS.toString();
                     if (navController.getCurrentDestination().getId() != R.id.nav_notifications) {
                         navController.navigate(R.id.nav_notifications);
                     }

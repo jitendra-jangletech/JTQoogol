@@ -10,21 +10,20 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.CommentAdapter;
 import com.jangletech.qoogol.databinding.CommentViewBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
+import com.jangletech.qoogol.dialog.PublicProfileDialog;
 import com.jangletech.qoogol.enums.Module;
 import com.jangletech.qoogol.model.Comments;
 import com.jangletech.qoogol.model.ProcessQuestion;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
+import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
@@ -35,12 +34,8 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 
-import static com.jangletech.qoogol.util.Constant.CALL_FROM;
-import static com.jangletech.qoogol.util.Constant.connectonId;
-import static com.jangletech.qoogol.util.Constant.profile;
 
-
-public class CommentFragment extends Fragment implements View.OnClickListener, CommentAdapter.onCommentItemClickListener {
+public class CommentFragment extends BaseFragment implements View.OnClickListener, CommentAdapter.onCommentItemClickListener, PublicProfileDialog.PublicProfileClickListener {
 
     private static final String TAG = "CommentFragment";
     private CommentViewModel mViewModel;
@@ -51,7 +46,7 @@ public class CommentFragment extends Fragment implements View.OnClickListener, C
 
     CommentViewBinding commentViewBinding;
     Bundle bundle;
-    String questionId;
+    int questionId;
     int tmId;
     List<Comments> commentList;
     CommentAdapter commentAdapter;
@@ -72,7 +67,7 @@ public class CommentFragment extends Fragment implements View.OnClickListener, C
     }
 
 
-    private void fetchCommentsAPI(String user_id, String que_id, String api_case, String comment_text) {
+    private void fetchCommentsAPI(String user_id, int que_id, String api_case, String comment_text) {
         ProgressDialog.getInstance().show(getActivity());
         Call<ProcessQuestion> call;
 
@@ -151,7 +146,7 @@ public class CommentFragment extends Fragment implements View.OnClickListener, C
         commentItemClickListener = this::onItemClick;
         emptyView();
         if (bundle != null && bundle.getString(Constant.CALL_FROM).equals(Module.Learning.toString())) {
-            questionId = bundle.getString("QuestionId");
+            questionId = bundle.getInt("QuestionId");
             fetchCommentsAPI(new PreferenceManager(getActivity()).getUserId(), questionId, "L", "");
         }
 
@@ -207,14 +202,21 @@ public class CommentFragment extends Fragment implements View.OnClickListener, C
 
     @Override
     public void onItemClick(String userId) {
-        Bundle bundle = new Bundle();
+        /*Bundle bundle = new Bundle();
         if (userId!=null && userId.equalsIgnoreCase(new PreferenceManager(getActivity()).getUserId())) {
             bundle.putInt(CALL_FROM, profile);
         } else {
             bundle.putInt(CALL_FROM, connectonId);
             bundle.putString(Constant.fetch_profile_id,userId);
         }
+        NavHostFragment.findNavController(this).navigate(R.id.nav_edit_profile,bundle);*/
+        Log.d(TAG, "onItemClick Comment : ");
+        PublicProfileDialog publicProfileDialog = new PublicProfileDialog(getActivity(),userId,this);
+        publicProfileDialog.show();
+    }
 
-        NavHostFragment.findNavController(this).navigate(R.id.nav_edit_profile,bundle);
+    @Override
+    public void onViewImage(String path) {
+        showFullScreen(path);
     }
 }

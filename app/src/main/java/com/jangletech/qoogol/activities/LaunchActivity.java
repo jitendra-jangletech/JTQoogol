@@ -43,7 +43,7 @@ public class LaunchActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_launch);
         mViewModel = new ViewModelProvider(this).get(RegisterLoginViewModel.class);
-        performAutoLogin();
+        //performAutoLogin();
         mViewModel.getRegisterLoginData().observe(this, new Observer<RegisterLoginModel>() {
             @Override
             public void onChanged(@Nullable final RegisterLoginModel loginResponseModel) {
@@ -104,14 +104,14 @@ public class LaunchActivity extends BaseActivity {
         });
     }
 
-    private void performAutoLogin() {
+    /*private void performAutoLogin() {
         boolean isLoggedIn = new PreferenceManager(LaunchActivity.this).isLoggedIn();
         if (isLoggedIn) {
             Intent i = new Intent(LaunchActivity.this, MainActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(i);
         }
-    }
+    }*/
 
     private void deleteOfflineData(){
         mViewModel.deleteDashboard();
@@ -137,7 +137,7 @@ public class LaunchActivity extends BaseActivity {
                         setTimer();
                     } else {
                         if (!response.body().getU_user_id().isEmpty()) {
-                            deleteOfflineData();
+                            //deleteOfflineData();
                             Log.d(TAG, "onResponse Launch UserId : "+response.body().getU_user_id());
                             new PreferenceManager(LaunchActivity.this).saveInt(Constant.USER_ID, Integer.parseInt(response.body().getU_user_id()));
                             new PreferenceManager(LaunchActivity.this).saveUserId(response.body().getU_user_id());

@@ -6,6 +6,7 @@ import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +23,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.gson.Gson;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.PracticeTestQuestPaletAdapter;
 import com.jangletech.qoogol.adapter.PractiseViewPagerAdapter;
@@ -32,7 +34,9 @@ import com.jangletech.qoogol.enums.QuestionFilterType;
 import com.jangletech.qoogol.enums.QuestionSortType;
 import com.jangletech.qoogol.model.ProcessQuestion;
 import com.jangletech.qoogol.model.StartResumeTestResponse;
+import com.jangletech.qoogol.model.SubmitTest;
 import com.jangletech.qoogol.model.TestQuestionNew;
+import com.jangletech.qoogol.model.VerifyResponse;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.util.Constant;
@@ -60,6 +64,7 @@ public class PracticeTestActivity extends BaseActivity implements
     private ApiInterface apiService = ApiClient.getInstance().getApi();
     private EndDrawerToggle endDrawerToggle;
     private Toolbar toolbar;
+    private Gson gson;
     private ViewPager practiceViewPager;
     private SubmitTestDialog submitTestDialog;
     private PracticeTestQuestPaletAdapter questionListAdapter, questionGridAdapter;
@@ -69,7 +74,7 @@ public class PracticeTestActivity extends BaseActivity implements
     private int pageSelectedPos = 0;
     private int questPos = 0;
     private boolean isQuestionSelected = false;
-    private StartResumeTestResponse startResumeTestResponse;
+    private StartResumeTestResponse startTestResponse;
     private String flag = "";
     private boolean isDialogItemClicked = false;
     private String testName = "";
@@ -82,7 +87,8 @@ public class PracticeTestActivity extends BaseActivity implements
         mViewModel = new ViewModelProvider(this).get(StartTestViewModel.class);
         toolbar = findViewById(R.id.toolbar);
         practiceViewPager = findViewById(R.id.practice_viewpager);
-        questionsNewList = new ArrayList<>();
+        //questionsNewList = new ArrayList<>();
+        gson = new Gson();
         setupNavigationDrawer();
         setMargins(mBinding.marginLayout);
         setTitle("Practice Test");
@@ -99,7 +105,7 @@ public class PracticeTestActivity extends BaseActivity implements
                 if (practiceQAList != null) {
                     Log.d(TAG, "onChanged: ");
                     questionsNewList = practiceQAList;
-                    practiceViewPager.setOffscreenPageLimit(practiceQAList.size());
+                    practiceViewPager.setOffscreenPageLimit(1);
                     setQuestPaletAdapter();
                 }
             }
@@ -131,7 +137,7 @@ public class PracticeTestActivity extends BaseActivity implements
             @Override
             public void onChanged(StartResumeTestResponse startResumeTestResponse) {
                 if (startResumeTestResponse != null) {
-                    testName = startResumeTestResponse.getTm_name();
+                    startTestResponse = startResumeTestResponse;
                     questionsNewList = startResumeTestResponse.getTestQuestionNewList();
                     setupViewPager(startResumeTestResponse);
                 }
@@ -184,16 +190,15 @@ public class PracticeTestActivity extends BaseActivity implements
         mBinding.chipUnseen.setOnClickListener(v -> {
             sortQuestListByFilter(QuestionFilterType.UNSEEN.toString());
         });
-        mBinding.chipUnseen.setOnClickListener(v -> {
+        mBinding.chipWrong.setOnClickListener(v -> {
             sortQuestListByFilter(QuestionFilterType.WRONG.toString());
         });
 
         mBinding.btnSubmitTest.setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawer(Gravity.RIGHT);
-            submitTestDialog = new SubmitTestDialog(this, this,testName);
+            submitTestDialog = new SubmitTestDialog(this,this, this, startTestResponse);
             submitTestDialog.show();
         });
-
 
 
         mBinding.drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
@@ -207,6 +212,7 @@ public class PracticeTestActivity extends BaseActivity implements
                 if (isDialogItemClicked) {
                     isDialogItemClicked = false;
                     mBinding.listView.performClick();
+                    mBinding.scrollView.fullScroll(ScrollView.FOCUS_UP);
                     switch (flag) {
                         case "WRONG":
                             mBinding.chipWrong.performClick();
@@ -223,10 +229,10 @@ public class PracticeTestActivity extends BaseActivity implements
 
             @Override
             public void onDrawerClosed(@NonNull View drawerView) {
-                if (isQuestionSelected) {
+               /* if (isQuestionSelected) {
                     isQuestionSelected = false;
                     practiceViewPager.setCurrentItem(questPos, true);
-                }
+                }*/
             }
 
             @Override
@@ -254,6 +260,7 @@ public class PracticeTestActivity extends BaseActivity implements
                     mViewModel.setStartResumeTestResponse(response.body());
                     mViewModel.setTestQuestAnsList(response.body().getTestQuestionNewList());
                 } else {
+                    showErrorDialog(PracticeTestActivity.this,response.body().getResponseCode(),"Something went wrong");
                     Log.e(TAG, "onResponse Error : " + response.body().getResponseCode());
                 }
             }
@@ -267,8 +274,13 @@ public class PracticeTestActivity extends BaseActivity implements
     }
 
     private void setupViewPager(StartResumeTestResponse startResumeTestResponse) {
-        practiseViewPagerAdapter = new PractiseViewPagerAdapter(PracticeTestActivity.this,
-                startResumeTestResponse.getTestQuestionNewList(), this, startResumeTestResponse.getTm_id(), flag);
+        for (TestQuestionNew testQuestionNew : startResumeTestResponse.getTestQuestionNewList()) {
+            if (testQuestionNew.getA_sub_ans().trim().equalsIgnoreCase(testQuestionNew.getTtqa_sub_ans().trim())
+                    || testQuestionNew.getType().equals("5") || testQuestionNew.getType().equals("6")) {
+                testQuestionNew.setAnsweredRight(true);
+            }
+        }
+        practiseViewPagerAdapter = new PractiseViewPagerAdapter(PracticeTestActivity.this, this, startResumeTestResponse, flag);
         practiceViewPager.setAdapter(practiseViewPagerAdapter);
     }
 
@@ -309,13 +321,14 @@ public class PracticeTestActivity extends BaseActivity implements
                 questFilterList.add(question);
             }
             if (questFilterType.equals(QuestionFilterType.WRONG.toString())
-                    && question.isTtqa_attempted() && !question.isAnsweredRight()) {
-                questFilterList.add(question);
+                    && question.isTtqa_attempted()) {
+                if (!question.getTtqa_sub_ans().equalsIgnoreCase(question.getA_sub_ans())) {
+                    questFilterList.add(question);
+                }
             }
             if (questFilterType.equals(QuestionFilterType.ALL.toString())) {
                 questFilterList = questionsNewList;
             }
-
         }
         if (questFilterList.size() > 0) {
             mBinding.tvNoQuestions.setVisibility(View.GONE);
@@ -380,14 +393,59 @@ public class PracticeTestActivity extends BaseActivity implements
     public void onQuestionSelected(TestQuestionNew selectedQuest, int position) {
         mBinding.drawerLayout.closeDrawers();
         questPos = selectedQuest.getTq_quest_seq_num() - 1;
-        isQuestionSelected = true;
+        practiceViewPager.setCurrentItem(questPos, true);
     }
 
     @Override
     public void onYesClick() {
+        //submitTestQuestions();
         finish();
-        //submitTestDialog.dismiss();
     }
+
+
+   /* private void submitTestQuestions() {
+        SubmitTest submitTest = new SubmitTest();
+        List<TestQuestionNew> submitTestQuestionList = new ArrayList<>();
+        submitTest.setTm_id(startTestResponse.getTm_id());
+        submitTest.setTt_id(String.valueOf(startTestResponse.getTtId()));
+        for (TestQuestionNew question : questionsNewList) {
+            submitTestQuestionList.add(question);
+        }
+        submitTest.setTestQuestionNewList(submitTestQuestionList);
+        String json = gson.toJson(submitTest);
+        Log.d(TAG, "submitTestQuestions JSON : " + json);
+
+        HashMap<String, String> params = new HashMap<>();
+        params.put(Constant.tt_id, String.valueOf(startTestResponse.getTtId()));
+        params.put(Constant.u_user_id, String.valueOf(new PreferenceManager(this).getInt(Constant.USER_ID)));
+        params.put(Constant.DataList, json);
+
+        Log.d(TAG, "submitSubjectiveAnsToServer Params : " + params);
+        ProgressDialog.getInstance().show(this);
+        Call<VerifyResponse> call = apiService.submitTestQuestion(
+                params.get(Constant.DataList),
+                params.get(Constant.u_user_id));
+        call.enqueue(new Callback<VerifyResponse>() {
+            @Override
+            public void onResponse(Call<VerifyResponse> call, Response<VerifyResponse> response) {
+                ProgressDialog.getInstance().dismiss();
+                if (response.body() != null && response.body().getResponse().equals("200")) {
+                    showToast("Answer Submitted");
+                    finish();
+                } else {
+                    Log.e(TAG, "onResponse Error : " + response.body().getResponse());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<VerifyResponse> call, Throwable t) {
+                showToast("Something went wrong!!");
+                t.printStackTrace();
+                apiCallFailureDialog(t);
+            }
+        });
+
+    }*/
 
     @Override
     public void onNoClick() {
@@ -453,83 +511,56 @@ public class PracticeTestActivity extends BaseActivity implements
 
     }
 
-    private void processQuestionAPI(HashMap<String, Integer> params) {
-        Log.d(TAG, "processQuestionAPI Params : " + params);
-        ProgressDialog.getInstance().show(this);
-        Call<ProcessQuestion> call;
-
-        if (params.get("CALL_FROM") == 1)
-            call = apiService.likeApi(params.get(Constant.u_user_id), String.valueOf(params.get(Constant.ttqa_id))
-                    , "I", params.get("Flag"));
-        else
-            call = apiService.favApi(params.get(Constant.u_user_id), String.valueOf(params.get(Constant.ttqa_id))
-                    , "I", params.get("Flag"));
-
-        call.enqueue(new Callback<ProcessQuestion>() {
-            @Override
-            public void onResponse(Call<ProcessQuestion> call, retrofit2.Response<ProcessQuestion> response) {
-                try {
-                    questionsNewList.clear();
-                    if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
-                        //updatePage(params.get("Flag"));
-                    } else {
-                        Toast.makeText(getApplicationContext(), UtilHelper.getAPIError(String.valueOf(response.body())), Toast.LENGTH_SHORT).show();
-                    }
-                    ProgressDialog.getInstance().dismiss();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    ProgressDialog.getInstance().dismiss();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ProcessQuestion> call, Throwable t) {
-                t.printStackTrace();
-                ProgressDialog.getInstance().dismiss();
-            }
-        });
-    }
-
     private void setTimerToSelectedPage(int pos) {
         if (countDownTimer != null)
             countDownTimer.cancel();
 
         View view = practiceViewPager.findViewWithTag(pos);
-        TextView tvTimer = view.findViewById(R.id.tvtimer);
+        if (view != null) {
+            TextView tvTimer = view.findViewById(R.id.tvtimer);
 
-        countDownTimer = new CountDownTimer(60 * 1000 * 60, 1000) {
-            int timerCountSeconds = 0;
-            int timerCountMinutes = 0;
+            countDownTimer = new CountDownTimer(60 * 1000 * 60, 1000) {
+                int timerCountSeconds = 0;
+                int timerCountMinutes = 0;
 
-            public void onTick(long millisUntilFinished) {
-                // timer.setText(new SimpleDateFormat("mm:ss").format(new Date( millisUntilFinished)));
-                if (timerCountSeconds < 59) {
-                    timerCountSeconds++;
-                } else {
-                    timerCountSeconds = 0;
-                    timerCountMinutes++;
-                }
-                if (timerCountMinutes < 10) {
-                    if (timerCountSeconds < 10) {
-                        tvTimer.setText(String.valueOf("0" + timerCountMinutes + ":0" + timerCountSeconds));
+                public void onTick(long millisUntilFinished) {
+                    // timer.setText(new SimpleDateFormat("mm:ss").format(new Date( millisUntilFinished)));
+                    if (timerCountSeconds < 59) {
+                        timerCountSeconds++;
                     } else {
-                        tvTimer.setText(String.valueOf("0" + timerCountMinutes + ":" + timerCountSeconds));
+                        timerCountSeconds = 0;
+                        timerCountMinutes++;
                     }
-                } else {
-                    if (timerCountSeconds < 10) {
-                        tvTimer.setText(String.valueOf(timerCountMinutes + ":0" + timerCountSeconds));
+                    if (timerCountMinutes < 10) {
+                        if (timerCountSeconds < 10) {
+                            tvTimer.setText(String.valueOf("0" + timerCountMinutes + ":0" + timerCountSeconds));
+                        } else {
+                            tvTimer.setText(String.valueOf("0" + timerCountMinutes + ":" + timerCountSeconds));
+                        }
                     } else {
-                        tvTimer.setText(String.valueOf(timerCountMinutes + ":" + timerCountSeconds));
+                        if (timerCountSeconds < 10) {
+                            tvTimer.setText(String.valueOf(timerCountMinutes + ":0" + timerCountSeconds));
+                        } else {
+                            tvTimer.setText(String.valueOf(timerCountMinutes + ":" + timerCountSeconds));
+                        }
                     }
                 }
-            }
 
-            public void onFinish() {
-                tvTimer.setText("00:00");
-            }
-        }.start();
+                public void onFinish() {
+                    tvTimer.setText("00:00");
+                }
+            }.start();
+        }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        questionsNewList = null;
+        questionGridAdapter = null;
+        questionListAdapter = null;
+        practiseViewPagerAdapter = null;
+    }
 
     private void updatePage(int flag, int likeCount) {
         View view = practiceViewPager.findViewWithTag(pageSelectedPos);

@@ -122,25 +122,4 @@ public class FaqTopicDetailsFragment extends BaseFragment implements FAQListAdap
     public void onViewImage(String path) {
         showFullScreen(path);
     }
-
-    @SuppressLint("ClickableViewAccessibility")
-    private void showFullScreen(final String profilePath) {
-        final Dialog dialog = new Dialog(requireActivity(), android.R.style.Theme_Light);
-        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawableResource(android.R.color.transparent);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setCancelable(true);
-        dialog.setContentView(R.layout.image_fullscreen_preview);
-        ImageView imageView = dialog.findViewById(R.id.image_preview);
-        imageView.setOnTouchListener(new ImageMatrixTouchHandler(dialog.getWindow().getContext()));
-
-        Glide.with(requireActivity()).load(profilePath)
-                .thumbnail(0.5f)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .dontTransform()
-                .dontAnimate()
-                .into(imageView);
-
-        dialog.show();
-    }
-
 }

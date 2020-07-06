@@ -83,27 +83,45 @@ public class AppRepository {
         return userProfileDao.getUserProfilePrev(userId);
     }
 
-    public LiveData<List<Education>> getUserEducations() {
-        return educationDetailsDao.getAllUserEducations();
+    public LiveData<List<Education>> getUserEducations(String uid) {
+        return educationDetailsDao.getAllUserEducations(uid);
     }
     /*public LiveData<TestDetailsResponse> getTestDetails() {
         return testDetailsDao.getTestDetails();
     }*/
 
-    public LiveData<List<Notification>> getAllNotifications() {
-        return notificationDao.getAllNotifications();
+    public LiveData<List<Notification>> getAllNotifications(String uid) {
+        return notificationDao.getAllNotifications(uid);
     }
 
    /* public LiveData<List<AttemptedTest>> getAllAttemptedTests() {
         return attemptedTestDao.getAllAttemptedTests();
     }*/
 
-    public LiveData<List<TestModelNew>> getAllTests(String flag) {
-        return testDao.getAllTests(flag);
+    public LiveData<List<TestModelNew>> getAllTests(String flag,String uId) {
+        return testDao.getAllTests(flag,uId);
+    }
+
+    public LiveData<List<TestModelNew>> getAllTestsFiltered(String flag,String uId,String diffLevel) {
+        return testDao.getAllTestsDiffLevel(flag,uId,diffLevel);
+    }
+    public LiveData<List<TestModelNew>> getAllTestsAvgRating(String flag,String uId,String rating) {
+        return testDao.getAllTestsAvgRating(flag,uId,rating);
     }
 
     public void insertTests(List<TestModelNew> testModelNewList) {
         insertTestsAsync(testModelNewList);
+    }
+
+    public void insertConnections(List<Connections> connections){
+        insertAllConnectionsAsync(connections);
+    }
+    public void insertFriendRequests(List<FriendRequest> friendRequests){
+        insertAllFriendReqAsync(friendRequests);
+    }
+
+    public void insertFollowRequests(List<FollowRequest> followRequests){
+        insertAllFollowReqAsync(followRequests);
     }
 
     /*public void insertTestDetails(TestDetailsResponse testDetailsResponse) {
@@ -141,6 +159,7 @@ public class AppRepository {
     public void deleteNotifications() {
         deleteNotificationAsync("");
     }
+
     public void deleteNotification(String nId) {
         deleteNotificationAsync(nId);
     }
@@ -220,6 +239,45 @@ public class AppRepository {
             public void run() {
                 try {
                     notificationDao.insertAll(notifications);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    private void insertAllConnectionsAsync(final List<Connections> connections) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    connectionsDao.insertConnections(connections);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    private void insertAllFriendReqAsync(final List<FriendRequest> friendRequests) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    friendReqDao.insertFriendReq(friendRequests);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    private void insertAllFollowReqAsync(final List<FollowRequest> followRequests) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    followReqDao.insertFollowdReq(followRequests);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -345,6 +403,20 @@ public class AppRepository {
         }).start();
     }
 
+    private void updatePersonalInfoAsync(final UserProfile userProfile) {
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    userProfileDao.insert(userProfile);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
     public void insertQuestions(List<LearningQuestionsNew> learningQuestions) {
         learningQuestionDao.upsertQuestions(learningQuestions);
     }
@@ -357,13 +429,10 @@ public class AppRepository {
         learningQuestionDao.insertQuestion(learningQuestions);
     }
 
-    public void deleteQuestion(String questionId) {
+    public void deleteQuestion(int questionId) {
         learningQuestionDao.deleteQuestion(questionId);
     }
 
-    public void insertConnections(List<Connections> connectionsList) {
-        connectionsDao.upsertConnections(connectionsList);
-    }
     public void insertFriends(List<Friends> friendsList) {
         friendsDao.upsertFriends(friendsList);
     }

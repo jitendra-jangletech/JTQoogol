@@ -34,13 +34,25 @@
                     android:layout_height="wrap_content">
 
                     <TextView
+                        app:layout_constraintLeft_toLeftOf="parent"
                         android:textColor="@color/colorSkyBlue"
                         android:id="@+id/tvBoard"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_15sdp"
                         android:text="University/Board"
                         app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:id="@+id/addUniversity"
+                        android:layout_width="wrap_content"
+                        android:layout_marginTop="@dimen/_12sdp"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="@string/app_name"
+                        android:src="@drawable/ic_add"
+                        app:layout_constraintRight_toRightOf="parent"/>
+
 
                     <com.jangletech.qoogol.view.CustomAutoCompleteTextView
                         android:id="@+id/boardAutocompleteView"
@@ -51,17 +63,6 @@
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tvBoard" />
 
-                    <ImageView
-                        android:id="@+id/addUniversity"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignEnd="@+id/boardAutocompleteView"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        android:contentDescription="@string/app_name"
-                        android:src="@drawable/ic_add"
-                        android:visibility="visible"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tvBoard" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -70,13 +71,24 @@
                     android:layout_height="wrap_content">
 
                     <TextView
+                        app:layout_constraintLeft_toLeftOf="parent"
                         android:textColor="@color/colorSkyBlue"
                         android:id="@+id/tvInstitute"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_15sdp"
                         android:text="Institute"
                         app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:id="@+id/addInstitute"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_12sdp"
+                        android:contentDescription="@string/app_name"
+                        android:src="@drawable/ic_add"
+                        app:layout_constraintRight_toRightOf="parent" />
 
                     <com.jangletech.qoogol.view.CustomAutoCompleteTextView
                         android:id="@+id/instituteAutocompleteView"
@@ -87,17 +99,7 @@
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tvInstitute" />
 
-                    <ImageView
-                        android:id="@+id/addInstitute"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignEnd="@+id/instituteAutocompleteView"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        android:contentDescription="@string/app_name"
-                        android:src="@drawable/ic_add"
-                        android:visibility="visible"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tvInstitute" />
+
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

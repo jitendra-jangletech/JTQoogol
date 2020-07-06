@@ -42,11 +42,11 @@ import static com.jangletech.qoogol.util.Constant.profile;
 public class SavedQueFragment extends BaseFragment implements SavedQueAdapter.onIconClick {
 
     private SavedViewModel mViewModel;
-    LearningFragmentBinding learningFragmentBinding;
-    SavedQueAdapter learingAdapter;
-    List<LearningQuestions> learningQuestionsList;
-    List<LearningQuestions> questionsNewList;
-    ApiInterface apiService = ApiClient.getInstance().getApi();
+    private LearningFragmentBinding learningFragmentBinding;
+    private SavedQueAdapter learingAdapter;
+    private List<LearningQuestions> learningQuestionsList;
+    private List<LearningQuestions> questionsNewList;
+    private ApiInterface apiService = ApiClient.getInstance().getApi();
 
 
     public static SavedQueFragment newInstance() {
@@ -109,7 +109,7 @@ public class SavedQueFragment extends BaseFragment implements SavedQueAdapter.on
     }
 
 
-    private void ProcessQuestionAPI(String que_id, int flag, String call_from, String rating, String feedback) {
+    private void ProcessQuestionAPI(int que_id, int flag, String call_from, String rating, String feedback) {
         ProgressDialog.getInstance().show(getActivity());
         Call<ProcessQuestion> call;
         int user_id = new PreferenceManager(getApplicationContext()).getInt(Constant.USER_ID);
@@ -149,25 +149,25 @@ public class SavedQueFragment extends BaseFragment implements SavedQueAdapter.on
 
 
     @Override
-    public void onCommentClick(String questionId) {
+    public void onCommentClick(int questionId) {
         Bundle bundle = new Bundle();
         bundle.putString(Constant.CALL_FROM, Module.Learning.toString());
-        bundle.putString("QuestionId", questionId);
+        bundle.putInt("QuestionId", questionId);
         NavHostFragment.findNavController(this).navigate(R.id.nav_comments, bundle);
     }
 
 
     @Override
-    public void onShareClick(String questionId) {
+    public void onShareClick(int questionId) {
         Bundle bundle = new Bundle();
-        bundle.putString("QuestionId", questionId);
+        bundle.putInt("QuestionId", questionId);
         bundle.putInt("call_from", learning);
         NavHostFragment.findNavController(this).navigate(R.id.nav_share, bundle);
     }
 
 
     @Override
-    public void onSubmitClick(String questionId, int isRight) {
+    public void onSubmitClick(int questionId, int isRight) {
         ProcessQuestionAPI(questionId, isRight, "submit", "", "");
     }
 
@@ -180,9 +180,6 @@ public class SavedQueFragment extends BaseFragment implements SavedQueAdapter.on
             bundle.putInt(CALL_FROM, connectonId);
             bundle.putString(Constant.fetch_profile_id, userId);
         }
-
         NavHostFragment.findNavController(this).navigate(R.id.nav_edit_profile, bundle);
     }
-
-
 }

@@ -57,12 +57,12 @@ import static com.jangletech.qoogol.util.Constant.unfollow;
  * Created by Pritali on 5/6/2020.
  */
 public class FollowingsAdapter extends RecyclerView.Adapter<FollowingsAdapter.ViewHolder> implements Filterable {
-    List<Following> connectionsList;
-    Activity activity;
-    ConnectionItemBinding connectionItemBinding;
-    List<Following> filteredConnectionsList;
-    String call_from;
-    updateConnectionListener listener;
+    private List<Following> connectionsList;
+    private Activity activity;
+    private ConnectionItemBinding connectionItemBinding;
+    private List<Following> filteredConnectionsList;
+    private String call_from;
+    private updateConnectionListener listener;
 
     public FollowingsAdapter(Activity activity, List<Following> connectionsList, String call_from, updateConnectionListener listener) {
         this.activity = activity;
@@ -84,20 +84,22 @@ public class FollowingsAdapter extends RecyclerView.Adapter<FollowingsAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull FollowingsAdapter.ViewHolder holder, int position) {
         Following connections = connectionsList.get(position);
-        connectionItemBinding.tvUserName.setText(connections.getU_first_name() + " " + connections.getU_last_name());
+        holder.connectionItemBinding.tvUserName.setText(connections.getU_first_name() + " " + connections.getU_last_name());
         try {
             if (connections.getProf_pic() != null && !connections.getProf_pic().isEmpty()) {
-                Glide.with(activity).load(UtilHelper.getProfileImageUrl(connections.getProf_pic().trim())).circleCrop().placeholder(R.drawable.profile).into(connectionItemBinding.userProfileImage);
+                Glide.with(activity).load(UtilHelper.getProfileImageUrl(connections.getProf_pic().trim())).circleCrop().placeholder(R.drawable.profile).into(holder.connectionItemBinding.userProfileImage);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+        holder.connectionItemBinding.rlProfile.setOnClickListener(v->{
+            Bundle bundle = new Bundle();
+            bundle.putString(Constant.fetch_profile_id,connections.getCn_user_id_2());
+            listener.showProfileClick(bundle);
+        });
 
-
-
-
-        PopupMenu popup = new PopupMenu(activity, connectionItemBinding.textViewOptions,END);
+        PopupMenu popup = new PopupMenu(activity, holder.connectionItemBinding.textViewOptions,END);
         popup.setGravity(END);
         popup.inflate(R.menu.connection_options);
         Menu popupMenu = popup.getMenu();
@@ -184,7 +186,7 @@ public class FollowingsAdapter extends RecyclerView.Adapter<FollowingsAdapter.Vi
             }
             return false;
         });
-        connectionItemBinding.textViewOptions.setOnClickListener(v -> {
+        holder.connectionItemBinding.textViewOptions.setOnClickListener(v -> {
             popup.show();
         });
 
@@ -266,10 +268,10 @@ public class FollowingsAdapter extends RecyclerView.Adapter<FollowingsAdapter.Vi
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+        ConnectionItemBinding connectionItemBinding;
         public ViewHolder(@NonNull ConnectionItemBinding itemView) {
             super(itemView.getRoot());
-
-
+             this.connectionItemBinding = itemView;
         }
     }
 }

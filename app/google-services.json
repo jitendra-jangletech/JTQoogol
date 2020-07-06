@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "977947813878-upfdj3mva7gq8d0u4tkpquock7km5pa5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jangletech.qoogol",
+            "certificate_hash": "6d88446b58f37a92a9f8052acbb6926dda5e3c9d"
+          }
+        },
+        {
           "client_id": "977947813878-djplgqd7fb1u50oif89a4joea22bhden.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

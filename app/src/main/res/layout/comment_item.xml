@@ -9,6 +9,8 @@
         android:layout_marginBottom="@dimen/_15sdp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:foreground="?attr/selectableItemBackground"
+            android:clickable="true"
             android:id="@+id/commentlayouyt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

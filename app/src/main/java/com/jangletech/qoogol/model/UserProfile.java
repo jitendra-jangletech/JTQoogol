@@ -357,7 +357,7 @@ public class UserProfile {
     }
 
     public String getU_StateId() {
-        return u_StateId;
+        return u_StateId==null?"":u_StateId;
     }
 
 
@@ -375,11 +375,11 @@ public class UserProfile {
     }
 
     public String getU_BoardId() {
-        return u_BoardId;
+        return u_BoardId==null?"":u_BoardId;
     }
 
     public String getU_DegreeId() {
-        return u_DegreeId;
+        return u_DegreeId==null?"":u_DegreeId;
     }
 
 
@@ -419,7 +419,7 @@ public class UserProfile {
     }
 
     public String getU_CollegeId() {
-        return u_CollegeId;
+        return u_CollegeId==null?"":u_CollegeId;
     }
 
     public String getU_Nationality() {
@@ -469,7 +469,7 @@ public class UserProfile {
 
 
     public String getU_NationalityId() {
-        return u_NationalityId;
+        return u_NationalityId==null?"":u_NationalityId;
     }
 
 

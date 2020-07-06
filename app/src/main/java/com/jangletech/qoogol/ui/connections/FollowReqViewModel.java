@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData;
 import com.jangletech.qoogol.database.repo.AppRepository;
 import com.jangletech.qoogol.model.FollowRequest;
 import com.jangletech.qoogol.model.FollowRequestResponse;
+import com.jangletech.qoogol.model.FriendRequest;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.util.PreferenceManager;
@@ -30,11 +31,11 @@ import static com.jangletech.qoogol.util.Constant.qoogol;
  * Created by Pritali on 6/10/2020.
  */
 public class FollowReqViewModel extends AndroidViewModel {
-    ApiInterface apiService;
+    private ApiInterface apiService;
     public final AppRepository mAppRepository;
-    Call<FollowRequestResponse> call;
-    String userId;
-    String pagestart;
+    private Call<FollowRequestResponse> call;
+    private String userId;
+    private String pagestart;
 
     public FollowReqViewModel(@NonNull Application application) {
         super(application);
@@ -45,8 +46,12 @@ public class FollowReqViewModel extends AndroidViewModel {
 
     }
 
-    LiveData<List<FollowRequest>> getFollowReqdList() {
-        return mAppRepository.getFollowReqFromDb(userId);
+    LiveData<List<FollowRequest>> getFollowReqdList(String uId) {
+        return mAppRepository.getFollowReqFromDb(uId);
+    }
+
+    public void insert(List<FollowRequest> followRequests) {
+        mAppRepository.insertFollowRequests(followRequests);
     }
 
     void fetchFollowReqData(boolean isRefresh) {

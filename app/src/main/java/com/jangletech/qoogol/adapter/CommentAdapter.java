@@ -1,9 +1,7 @@
 package com.jangletech.qoogol.adapter;
 
 import android.app.Activity;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -27,11 +25,11 @@ import java.util.List;
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHolder> {
 
     private static final String TAG = "CommentAdapter";
-    CommentItemBinding commentItemBinding;
-    Activity activity;
-    List<Comments> commentList;
-    String callingFrom;
-    onCommentItemClickListener commentItemClickListener;
+    private CommentItemBinding commentItemBinding;
+    private Activity activity;
+    private List<Comments> commentList;
+    private String callingFrom;
+    private onCommentItemClickListener commentItemClickListener;
 
     public CommentAdapter(Activity activity, List<Comments> commentList, String callingFrom, onCommentItemClickListener commentItemClickListener) {
         this.activity = activity;
@@ -46,7 +44,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         commentItemBinding = DataBindingUtil.inflate(
                 LayoutInflater.from(parent.getContext()),
                 R.layout.comment_item, parent, false);
-
         return new ViewHolder(commentItemBinding);
     }
 
@@ -54,33 +51,43 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Comments comments = commentList.get(position);
         if (callingFrom.equals(Module.Learning.toString())) {
-            commentItemBinding.tvSenderName.setText(comments.getUserFirstName() + " " + comments.getUserLastName());
-            commentItemBinding.textCommentBody.setText(comments.getComment());
+            holder.commentItemBinding.tvSenderName.setText(comments.getUserFirstName() + " " + comments.getUserLastName());
+            holder.commentItemBinding.textCommentBody.setText(comments.getComment());
             if (comments.getTime() != null)
-                commentItemBinding.textCommentTime.setText(DateUtils.localeDateFormat(comments.getTime()));
+                holder.commentItemBinding.textCommentTime.setText(DateUtils.localeDateFormat(comments.getTime()));
             //commentItemBinding.textCommentTime.setText(DateUtils.getFormattedDate(comments.getTime().substring(0, 10)));
         }
 
         if (callingFrom.equals(Module.Test.toString())) {
-            commentItemBinding.tvSenderName.setText(comments.getUserFirstName() + " " + comments.getUserLastName());
-            commentItemBinding.textCommentBody.setText(comments.getTlc_comment_text());
+            holder.commentItemBinding.tvSenderName.setText(comments.getUserFirstName() + " " + comments.getUserLastName());
+            holder.commentItemBinding.textCommentBody.setText(comments.getTlc_comment_text());
             if (comments.getTlc_cdatetime() != null)
-                commentItemBinding.textCommentTime.setText(DateUtils.localeDateFormat(comments.getTlc_cdatetime()));
+                holder.commentItemBinding.textCommentTime.setText(DateUtils.localeDateFormat(comments.getTlc_cdatetime()));
             //commentItemBinding.textCommentTime.setText(DateUtils.getFormattedDate(comments.getTlc_cdatetime().substring(0, 10)));//todo change data & time format
         }
 
         Glide.with(activity)
                 .load(getProfileImageUrl(comments))
                 .apply(RequestOptions.circleCropTransform())
-                .into(commentItemBinding.profilePic);
+                .into(holder.commentItemBinding.profilePic);
+
+        holder.commentItemBinding.commentlayouyt.setOnClickListener(v->{
+            //Comments comments = commentList.get(getAdapterPosition());
+            if (callingFrom.equals(Module.Learning.toString())) {
+                commentItemClickListener.onItemClick(comments.getUserId());
+            }
+            if (callingFrom.equals(Module.Test.toString())) {
+                commentItemClickListener.onItemClick(comments.getTlc_user_id());
+            }
+        });
 
     }
 
-    public void updateList(List<Comments> commentList) {
+    /*public void updateList(List<Comments> commentList) {
         this.commentList.clear();
         this.commentList = commentList;
         notifyDataSetChanged();
-    }
+    }*/
 
 
     @Override
@@ -93,10 +100,12 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+        CommentItemBinding commentItemBinding;
         public ViewHolder(@NonNull CommentItemBinding itemView) {
             super(itemView.getRoot());
+            this.commentItemBinding = itemView;
 
-            commentItemBinding.getRoot().setOnClickListener(new View.OnClickListener() {
+            /*commentItemBinding.getRoot().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Comments comments = commentList.get(getAdapterPosition());
@@ -107,7 +116,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
                         commentItemClickListener.onItemClick(comments.getTlc_user_id());
                     }
                 }
-            });
+            });*/
         }
     }
 

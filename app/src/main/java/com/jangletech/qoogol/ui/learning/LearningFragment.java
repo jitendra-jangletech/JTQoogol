@@ -144,7 +144,7 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
     }
 
 
-    private void ProcessQuestionAPI(String que_id, int flag, String call_from, String rating, String feedback) {
+    private void ProcessQuestionAPI(int que_id, int flag, String call_from, String rating, String feedback) {
         ProgressDialog.getInstance().show(getActivity());
         Call<ProcessQuestion> call;
         int user_id = new PreferenceManager(getApplicationContext()).getInt(Constant.USER_ID);
@@ -178,31 +178,32 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
             public void onFailure(Call<ProcessQuestion> call, Throwable t) {
                 t.printStackTrace();
                 ProgressDialog.getInstance().dismiss();
+                apiCallFailureDialog(t);
             }
         });
     }
 
 
     @Override
-    public void onCommentClick(String questionId) {
+    public void onCommentClick(int questionId) {
         Bundle bundle = new Bundle();
         bundle.putString(Constant.CALL_FROM, Module.Learning.toString());
-        bundle.putString("QuestionId", questionId);
+        bundle.putInt("QuestionId", questionId);
         NavHostFragment.findNavController(this).navigate(R.id.nav_comments, bundle);
     }
 
 
     @Override
-    public void onShareClick(String questionId) {
+    public void onShareClick(int questionId) {
         Bundle bundle = new Bundle();
-        bundle.putString("QuestionId", questionId);
+        bundle.putInt("QuestionId", questionId);
         bundle.putInt("call_from", learning);
         NavHostFragment.findNavController(this).navigate(R.id.nav_share, bundle);
     }
 
 
     @Override
-    public void onSubmitClick(String questionId, int isRight) {
+    public void onSubmitClick(int questionId, int isRight) {
         ProcessQuestionAPI(questionId, isRight, "submit", "", "");
     }
 

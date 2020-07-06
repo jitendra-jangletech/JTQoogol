@@ -24,7 +24,7 @@ import java.util.List;
  */
 public class PendingRequestsFragment extends Fragment {
 
-    FragmentPendingRequestsBinding mbinding;
+    private FragmentPendingRequestsBinding mbinding;
 
 
     @Override
@@ -77,6 +77,4 @@ public class PendingRequestsFragment extends Fragment {
             return mFragmentTitleList.get(position);
         }
     }
-
-
 }

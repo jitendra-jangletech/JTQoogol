@@ -155,7 +155,10 @@ public class Notification {
     }
 
     public String getN_cdatetime() {
-        return n_cdatetime;
+        if (n_cdatetime == null)
+            return "";
+        else
+            return n_cdatetime;
     }
 
     public void setN_cdatetime(String n_cdatetime) {
@@ -163,7 +166,10 @@ public class Notification {
     }
 
     public String getW_user_profile_image_name() {
-        return w_user_profile_image_name;
+        if (w_user_profile_image_name == null)
+            return "";
+        else
+            return w_user_profile_image_name;
     }
 
     public void setW_user_profile_image_name(String w_user_profile_image_name) {

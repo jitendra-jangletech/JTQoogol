@@ -87,7 +87,7 @@
                         android:id="@+id/userProfileLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:visibility="gone"
+                        android:visibility="visible"
                         app:layout_constraintTop_toBottomOf="@+id/profilePicLayout">
 
                         <LinearLayout
@@ -391,14 +391,46 @@
                                 android:text="@string/password"
                                 android:textColor="@color/colorSkyBlue" />
 
-                            <EditText
-                                android:id="@+id/etPassword"
+                            <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Password"
-                                android:inputType="textPassword"
-                                android:text="@{userProfile.password}"
-                                android:textColor="@color/colorBlack" />
+                                android:orientation="horizontal"
+                                android:weightSum="2">
+
+                                <EditText
+                                    android:id="@+id/etPassword"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1.8"
+                                    android:hint="Password"
+                                    android:inputType="textPassword"
+                                    android:text="@{userProfile.password}"
+                                    android:textColor="@color/colorBlack" />
+
+
+                                <!-- <androidx.appcompat.widget.AppCompatToggleButton
+                                     android:id="@+id/tvFavourite"
+                                     android:layout_width="@dimen/_20sdp"
+                                     android:layout_height="@dimen/_20sdp"
+                                     android:layout_alignParentRight="true"
+                                     android:layout_margin="@dimen/_5sdp"
+                                     android:background="@drawable/button_favorite"
+                                     android:checked="false"
+                                     android:text=""
+                                     android:textOff=""
+                                     android:textOn="" />-->
+                                <ToggleButton
+                                    android:id="@+id/hideShow"
+                                    android:layout_width="0dp"
+                                    android:layout_height="@dimen/_20sdp"
+                                    android:layout_gravity="center"
+                                    android:layout_weight="0.2"
+                                    android:background="@drawable/show"
+                                    android:text=""
+                                    android:textOff=""
+                                    android:textOn="" />
+
+                            </LinearLayout>
 
                         </LinearLayout>
 
@@ -606,7 +638,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_5sdp"
-                        android:visibility="visible">
+                        android:visibility="gone">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -633,10 +665,10 @@
                                     app:layout_constraintTop_toTopOf="parent" />
 
                                 <ImageView
-                                    android:padding="@dimen/_10sdp"
                                     android:id="@+id/imgBadge"
                                     android:layout_width="@dimen/_40sdp"
                                     android:layout_height="@dimen/_40sdp"
+                                    android:padding="@dimen/_10sdp"
                                     app:layout_constraintLeft_toRightOf="@+id/tvName"
                                     app:layout_constraintTop_toTopOf="parent" />
 

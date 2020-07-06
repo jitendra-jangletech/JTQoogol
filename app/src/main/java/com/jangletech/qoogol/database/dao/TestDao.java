@@ -16,8 +16,14 @@ public interface TestDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<TestModelNew> testModelNewList);
 
-    @Query("Select * from TestModelNew where flag=:flag")
-    LiveData<List<TestModelNew>> getAllTests(String flag);
+    @Query("Select * from TestModelNew where flag=:flag and userId=:uid")
+    LiveData<List<TestModelNew>> getAllTests(String flag,String uid);
+
+    @Query("Select * from TestModelNew where flag=:flag and userId=:uid and tm_diff_level=:diff")
+    LiveData<List<TestModelNew>> getAllTestsDiffLevel(String flag,String uid,String diff);
+
+    @Query("Select * from TestModelNew where flag=:flag and userId=:uid and tm_avg_rating=:rating")
+    LiveData<List<TestModelNew>> getAllTestsAvgRating(String flag,String uid,String rating);
 
     @Query("delete from TestModelNew")
     void delete();
