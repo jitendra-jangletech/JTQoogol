@@ -73,7 +73,7 @@ public class TestFavouriteFragment extends BaseFragment implements TestListAdapt
             @Override
             public void onChanged(@Nullable final List<TestModelNew> favTests) {
                 testModelNewList = favTests;
-                Log.d(TAG, "onChanged Fav Tests : " + testModelNewList);
+                Log.d(TAG, "onChanged Fav Tests : " + favTests.size());
                 if (testModelNewList.size() > 0) {
                     setFavTestList();
                 } else {
@@ -99,6 +99,7 @@ public class TestFavouriteFragment extends BaseFragment implements TestListAdapt
             public void onResponse(Call<TestListResponse> call, Response<TestListResponse> response) {
                 ProgressDialog.getInstance().dismiss();
                 if (response.body() != null && response.body().getResponse().equals("200")) {
+                    Log.d(TAG, "Fav List Size is  : " + response.body().getTestList().size());
                     mViewModel.setAllTestList(response.body().getTestList());
                 } else if (response.body().getResponse().equals("501")) {
                     resetSettingAndLogout();

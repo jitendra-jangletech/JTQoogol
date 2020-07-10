@@ -1,17 +1,11 @@
 package com.jangletech.qoogol.ui.faq;
 
-import android.annotation.SuppressLint;
-import android.app.Dialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,11 +14,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.bogdwellers.pinchtozoom.ImageMatrixTouchHandler;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.FAQListAdapter;
 import com.jangletech.qoogol.adapter.FAQTilesAdapter;
@@ -43,7 +33,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -62,7 +51,7 @@ public class FaqFragment extends BaseFragment implements
     private FAQTilesAdapter faqTilesAdapter;
     private GridLayoutManager gridLayoutManager;
     private ItemOffsetDecoration itemDecoration;
-    ApiInterface apiService = ApiClient.getInstance().getApi();
+    private ApiInterface apiService = ApiClient.getInstance().getApi();
 
     public static FaqFragment newInstance() {
         return new FaqFragment();

@@ -3,6 +3,7 @@ package com.jangletech.qoogol.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -76,6 +77,7 @@ public class ExistingUserFragment extends BaseFragment {
     }
 
     public void initViews() {
+        mBinding.termsPrivacy.setText(Html.fromHtml(getResources().getString(R.string.terms_and_conditions)));
         mBinding.login.setOnClickListener(v -> {
 
             mBinding.tilEmailMobileUserName.setError(null);

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
@@ -12,11 +13,13 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
+
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.FavouriteFragmentBinding;
 import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.ui.learning.LearningFragment;
 import com.jangletech.qoogol.ui.test.favourite.TestFavouriteFragment;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,7 +59,7 @@ public class FavouriteFragment extends BaseFragment {
 
     private void setupViewPager(ViewPager viewPager) {
         Adapter adapter = new Adapter(getChildFragmentManager());
-        adapter.addFragment(new TestFavouriteFragment(),"Test");
+        adapter.addFragment(new TestFavouriteFragment(), "Test");
         adapter.addFragment(new FavQueFragment(), "Questions");
         viewPager.setAdapter(adapter);
     }

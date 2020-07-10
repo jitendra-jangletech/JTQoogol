@@ -60,13 +60,15 @@
                             android:foreground="?attr/selectableItemBackground"
                             android:text="@string/learning" />
 
-
                         <RelativeLayout
                             android:id="@+id/tvTest"
                             android:layout_width="match_parent"
-                            android:layout_height="@dimen/_26sdp">
+                            android:layout_height="@dimen/_32sdp"
+                            android:foreground="?attr/selectableItemBackground">
 
                             <TextView
+                                android:layout_alignParentLeft="true"
+                                android:layout_centerInParent="true"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:layout_marginLeft="@dimen/_10sdp"
@@ -79,17 +81,18 @@
                                 android:textStyle="bold" />
 
                             <TextView
+                                android:layout_centerInParent="true"
                                 android:id="@+id/expand"
-                                android:layout_marginRight="@dimen/_10sdp"
                                 android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
+                                android:layout_height="wrap_content"
                                 android:layout_alignParentEnd="true"
-                                android:layout_gravity="center_horizontal"
+                                android:layout_marginRight="@dimen/_10sdp"
                                 android:background="@drawable/ic_expand" />
 
                         </RelativeLayout>
 
                         <LinearLayout
+                            android:animateLayoutChanges="true"
                             android:id="@+id/testNavLayout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -148,7 +151,7 @@
                         <TextView
                             android:id="@+id/nav_syllabus"
                             style="@style/menu_item_style"
-                            android:drawableLeft="@drawable/ic_settings"
+                            android:drawableLeft="@drawable/ic_learning"
                             android:foreground="?attr/selectableItemBackground"
                             android:text="@string/syllabus" />
 
@@ -200,20 +203,26 @@
                             android:foreground="?attr/selectableItemBackground"
                             android:text="@string/notifications" />-->
 
-
                         <TextView
                             android:id="@+id/nav_settings"
                             style="@style/menu_item_style"
-                            android:drawableLeft="@drawable/ic_settings"
+                            android:drawableLeft="@drawable/ic_test"
                             android:foreground="?attr/selectableItemBackground"
                             android:text="@string/settings" />
 
                         <TextView
                             android:id="@+id/nav_faq"
                             style="@style/menu_item_style"
-                            android:drawableLeft="@drawable/ic_settings"
+                            android:drawableLeft="@drawable/ic_test"
                             android:foreground="?attr/selectableItemBackground"
                             android:text="@string/faq" />
+
+                        <TextView
+                            android:id="@+id/nav_code_conduct"
+                            style="@style/menu_item_style"
+                            android:drawableLeft="@drawable/ic_test"
+                            android:foreground="?attr/selectableItemBackground"
+                            android:text="@string/code_conduct" />
 
                         <TextView
                             android:id="@+id/nav_share_app"
@@ -234,6 +243,7 @@
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
                             android:padding="@dimen/_5sdp"
+                            android:visibility="visible"
                             app:layout_constraintBottom_toBottomOf="parent">
 
                             <TextView

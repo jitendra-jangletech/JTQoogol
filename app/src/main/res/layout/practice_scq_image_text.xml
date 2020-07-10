@@ -138,6 +138,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="@dimen/_5sdp"
                         android:src="@drawable/ic_save_grey"
+                        android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="@id/timer"
                         app:layout_constraintRight_toLeftOf="@+id/timer"
                         app:layout_constraintTop_toTopOf="@id/timer" />
@@ -380,12 +381,12 @@
                                     android:text="Text 1" />
 
                                 <io.github.kexanie.library.MathView
-                                    android:visibility="gone"
                                     android:id="@+id/scq_imgtext_text4_math"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
-                                    android:text="Text 1" />
+                                    android:text="Text 1"
+                                    android:visibility="gone" />
                             </LinearLayout>
 
 

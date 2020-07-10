@@ -89,6 +89,7 @@ public class MainActivity extends BaseActivity {
                 R.id.nav_test_popular, R.id.nav_recent_test, R.id.nav_share_app, R.id.nav_about,
                 R.id.nav_faq, R.id.nav_fav, R.id.nav_syllabus, R.id.nav_edit_profile,
                 R.id.nav_settings, R.id.nav_requests, R.id.nav_import_contacts,
+                R.id.nav_code_conduct,
                 R.id.nav_home, R.id.nav_learning, R.id.nav_test_my, R.id.nav_doubts)
                 .setDrawerLayout(drawerLayout)
                 .build();
@@ -135,20 +136,23 @@ public class MainActivity extends BaseActivity {
                 if (item.getItemId() == R.id.nav_test_my) {
                     //navigateFlag = Nav.MY_TEST.toString();
                     //saveTestType(Nav.MY_TEST.toString());
-                    if (navController.getCurrentDestination().getId() != R.id.nav_test_my) {
+                    if (navController.getCurrentDestination() != null &&
+                            navController.getCurrentDestination().getId() != R.id.nav_test_my) {
                         clearFilters();
                         navController.navigate(R.id.nav_test_my);
                     }
                 }
                 if (item.getItemId() == R.id.nav_doubts) {
                     //navigateFlag = Nav.ASK_DOUBTS.toString();
-                    if (navController.getCurrentDestination().getId() != R.id.nav_doubts) {
+                    if (navController.getCurrentDestination() != null &&
+                            navController.getCurrentDestination().getId() != R.id.nav_doubts) {
                         navController.navigate(R.id.nav_doubts);
                     }
                 }
                 if (item.getItemId() == R.id.nav_notifications) {
                     //navigateFlag = Nav.NOTIFICATIONS.toString();
-                    if (navController.getCurrentDestination().getId() != R.id.nav_notifications) {
+                    if (navController.getCurrentDestination() != null &&
+                            navController.getCurrentDestination().getId() != R.id.nav_notifications) {
                         navController.navigate(R.id.nav_notifications);
                     }
                 }
@@ -414,13 +418,24 @@ public class MainActivity extends BaseActivity {
             }
         });
 
+        findViewById(R.id.nav_code_conduct).setOnClickListener(v -> {
+            mBinding.drawerLayout.closeDrawers();
+            navToFragment(R.id.nav_code_conduct, Bundle.EMPTY);
+            /*if (navController.getCurrentDestination().getId() != R.id.nav_settings) {
+                navigateFlag = Nav.SETTINGS.toString();
+            }*/
+        });
+
+
         findViewById(R.id.tvTest).setOnClickListener(v -> {
             if (mBinding.testNavLayout.getVisibility() == View.VISIBLE) {
                 mBinding.testNavLayout.setVisibility(View.GONE);
                 mBinding.expand.setBackground(getDrawable(R.drawable.ic_expand));
+                //collapse(mBinding.testNavLayout);
             } else {
                 mBinding.testNavLayout.setVisibility(View.VISIBLE);
                 mBinding.expand.setBackground(getDrawable(R.drawable.ic_collapse));
+                expand(mBinding.testNavLayout);
             }
         });
 
@@ -509,11 +524,24 @@ public class MainActivity extends BaseActivity {
                         .setNegativeButton("Cancel", null)
                         .show();
 
-            }
-            if (navController.getCurrentDestination().getId() == R.id.nav_edit_profile) {
-                navController.navigate(R.id.nav_home);
             } else {
-                navController.popBackStack();
+                if (navController.getCurrentDestination().getId() == R.id.nav_edit_profile ||
+                        navController.getCurrentDestination().getId() == R.id.nav_settings ||
+                        navController.getCurrentDestination().getId() == R.id.nav_syllabus ||
+                        navController.getCurrentDestination().getId() == R.id.nav_about ||
+                        navController.getCurrentDestination().getId() == R.id.nav_import_contacts ||
+                        navController.getCurrentDestination().getId() == R.id.nav_code_conduct ||
+                        navController.getCurrentDestination().getId() == R.id.nav_faq ||
+                        navController.getCurrentDestination().getId() == R.id.nav_fav ||
+                        navController.getCurrentDestination().getId() == R.id.nav_shared_with_you ||
+                        navController.getCurrentDestination().getId() == R.id.nav_test_popular ||
+                        navController.getCurrentDestination().getId() == R.id.nav_recent_test ||
+                        navController.getCurrentDestination().getId() == R.id.nav_connections ||
+                        navController.getCurrentDestination().getId() == R.id.nav_requests) {
+                    navController.navigate(R.id.nav_home);
+                } else {
+                    navController.popBackStack();
+                }
             }
         }
     }

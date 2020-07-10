@@ -89,7 +89,6 @@
     <!-- validation strings -->
     <string name="valid_input_chars">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ </string>
 
-
     <!--Error Messages-->
     <string name="empty_email">Please enter email.</string>
     <string name="empty_password">Please enter password.</string>
@@ -411,14 +410,14 @@
     <string name="include_institutes">Include institutes</string>
     <string name="remove_connection">Remove\nconnection</string>
     <string name="online">Online</string>
-    <string name="terms_and_conditions"><![CDATA[By registering and login, I accept the <a href="https://spot20191210061236.azurewebsites.net/uploads/Policies/terms_and_conditions.html">terms and conditions</a> and <a href="https://spot20191210061236.azurewebsites.net/uploads/Policies/privacy_policy.html">privacy policy</a>.]]></string>
+    <string name="terms_and_conditions"><![CDATA[I accept the <a href="https://spot20191210061236.azurewebsites.net/uploads/Policies/terms_and_conditions.html">terms and conditions</a> and <a href="https://spot20191210061236.azurewebsites.net/uploads/Policies/privacy_policy.html">privacy policy</a>.]]></string>
     <string name="spotmeets_desc"><b>qoogol</b> helps people connect and collaborate socially and professionally. It provides multiple useful features to find right people online on your finger tips. We acknowledge and attribute of audio video calling to <a href="https://jitsi.org/">jitsi.org</a></string>
     <string name="support"><![CDATA[Send your suggestions at : <a href="admin@qoogol.com">admin@qoogol.com</a>]]></string>
     <string name="link"><![CDATA[For more information, visit : <a href="https://www.qoogol.com">www.qoogol.com</a>]]></string>
     <string name="about_jangletch">Jangletech Systems is a big family of IT professionals driven by desire to invent and innovate new IT Products and Services.</string>
     <string name="reachout_text"><![CDATA[Reach out to us at : <a href="contactus@jangletech.com">contactus@jangletech.com</a>]]></string>
     <string name="more_info_link"><![CDATA[For more information, visit : <a href="https://www.jangletech.com">www.jangletech.com</a>]]></string>
-    <string name="code_conduct_head"><![CDATA[<b><font color=#FF0000>qoogol</font> Community Code of Conduct</b><br/>]]></string>
+    <string name="code_conduct_head"><![CDATA[<b><font color=#FF0000>Qoogol</font> Community Code of Conduct</b><br/>]]></string>
     <string name="code_conduct_desc"><![CDATA[<b>&#8226;</b> <font color=#FF0000>Be genuine.</font> Provide actual details in your profile including name, birth date and gender. <br/><br/>&#8226; <font color=#FF0000>Be professional.</font> Connecting is good and spamming is bad. Don’t be rude or foul. Do not harass. <br/><br/><b>&#8226;</b> <font color=#FF0000>Be honest.</font> Earn trust by being honest every moment every day. Accept and correct mistakes. <br/><br/><b>&#8226;</b> <font color=#FF0000>Be smart.</font> Forward content that is useful for recipients. Help stop spreading of rumors. <br/><br/><b>&#8226;</b> <font color=#FF0000>Be safe.</font> Verify identity before sharing contact details or meeting someone. <br/><br/><b>&#8226;</b> <font color=#FF0000>Be creative.</font> Create innovative content and display in larger forums like chatrooms. <br/><br/><b>&#8226;</b> <font color=#FF0000>Be collaborative.</font> Share content, ask questions and answer queries and interact. <br/><br/><b>&#8226;</b> <font color=#FF0000>Be respectful.</font> Respect ideas and work. Praise good work. Do not taunt or shame anyone. Agree to disagree. <br/><br/><b>&#8226;</b> <font color=#FF0000>Be truly human.</font> Honour diversity in all aspects. Show compassion, kindness, care and love for others.]]></string>
     <string name="company">Company</string>
     <string name="religion_">Religion</string>

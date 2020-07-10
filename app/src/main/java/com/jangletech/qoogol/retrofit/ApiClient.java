@@ -20,15 +20,15 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
     private static final String TAG = "ApiClient";
-//    public static final String BASE_URL = "http://192.168.0.109:8080/Qoogol/";
+    //    public static final String BASE_URL = "http://192.168.0.109:8080/Qoogol/";
     public static final String BASE_URL = "https://spot20191210061236.azurewebsites.net/api/";
     public static final String HEADER_CACHE_CONTROL = "Cache-Control";
     public static final String HEADER_PRAGMA = "Pragma";
 
     private static ApiClient instance;
 
-    public static ApiClient getInstance(){
-        if(instance == null){
+    public static ApiClient getInstance() {
+        if (instance == null) {
             instance = new ApiClient();
         }
         return instance;
@@ -36,7 +36,7 @@ public class ApiClient {
 
     private static final long cacheSize = 5 * 1024 * 1024; // 5 MB
 
-    private static Retrofit retrofit(){
+    private static Retrofit retrofit() {
         return new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .client(okHttpClient())
@@ -44,7 +44,7 @@ public class ApiClient {
                 .build();
     }
 
-    private static OkHttpClient okHttpClient(){
+    private static OkHttpClient okHttpClient() {
         return new OkHttpClient.Builder()
                 .cache(cache())
                 .addInterceptor(httpLoggingInterceptor()) // used if network off OR on
@@ -53,12 +53,13 @@ public class ApiClient {
                 .build();
     }
 
-    private static Cache cache(){
-        return new Cache(new File(QoogolApp.getInstance().getCacheDir(),"someIdentifier"), cacheSize);
+    private static Cache cache() {
+        return new Cache(new File(QoogolApp.getInstance().getCacheDir(), "someIdentifier"), cacheSize);
     }
 
     /**
      * This interceptor will be called both if the network is available and if the network is not available
+     *
      * @return
      */
     private static Interceptor offlineInterceptor() {
@@ -85,6 +86,7 @@ public class ApiClient {
 
     /**
      * This interceptor will be called ONLY if the network is available
+     *
      * @return
      */
     private static Interceptor networkInterceptor() {
@@ -105,15 +107,14 @@ public class ApiClient {
         };
     }
 
-    private static HttpLoggingInterceptor httpLoggingInterceptor ()
-    {
+    private static HttpLoggingInterceptor httpLoggingInterceptor() {
         HttpLoggingInterceptor httpLoggingInterceptor =
                 new HttpLoggingInterceptor(message -> Log.d(TAG, "log: http log: " + message));
-        httpLoggingInterceptor.setLevel( HttpLoggingInterceptor.Level.BODY);
+        httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         return httpLoggingInterceptor;
     }
 
-    public static ApiInterface getApi(){
+    public static ApiInterface getApi() {
         return retrofit().create(ApiInterface.class);
     }
 

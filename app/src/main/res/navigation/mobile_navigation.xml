@@ -9,15 +9,19 @@
         android:id="@+id/nav_home"
         android:name="com.jangletech.qoogol.ui.home.HomeFragment"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" >
-    </fragment>
+        tools:layout="@layout/fragment_home"></fragment>
 
     <fragment
         android:id="@+id/nav_about"
         android:name="com.jangletech.qoogol.ui.about.AboutFragment"
         android:label="@string/about"
-        tools:layout="@layout/fragment_about" >
-    </fragment>
+        tools:layout="@layout/fragment_about"></fragment>
+
+    <fragment
+        android:id="@+id/nav_code_conduct"
+        android:name="com.jangletech.qoogol.ui.CodeConductFragment"
+        android:label="@string/code_conduct"
+        tools:layout="@layout/fragment_code_conduct"></fragment>
 
 
     <fragment
@@ -25,7 +29,7 @@
         android:name="com.jangletech.qoogol.ui.learning.LearningFragment"
         android:label="@string/menu_learning"
         app:enterAnim="@anim/enter_from_left"
-        tools:layout="@layout/learning_fragment" >
+        tools:layout="@layout/learning_fragment">
         <action
             android:id="@+id/action_nav_learning_to_nav_learning_details"
             app:destination="@id/nav_learning_details" />
@@ -39,9 +43,7 @@
         android:name="com.jangletech.qoogol.ui.learning.LearningDetailsFragment"
         android:label="@string/menu_learning_details"
         app:enterAnim="@anim/enter_from_left"
-        tools:layout="@layout/fragment_learning_details" >
-    </fragment>
-
+        tools:layout="@layout/fragment_learning_details"></fragment>
 
 
     <fragment
@@ -49,38 +51,33 @@
         android:name="com.jangletech.qoogol.ui.test.recent_test.RecentTestFragment"
         android:label="@string/recent_test"
         app:enterAnim="@anim/enter_from_left"
-        tools:layout="@layout/fragment_test_my" >
-    </fragment>
+        tools:layout="@layout/fragment_test_my"></fragment>
 
     <fragment
         android:id="@+id/nav_comments"
         android:name="com.jangletech.qoogol.ui.learning.CommentFragment"
         android:label="@string/comments"
         app:enterAnim="@anim/enter_from_left"
-        tools:layout="@layout/comment_view" >
-    </fragment>
-
+        tools:layout="@layout/comment_view"></fragment>
 
 
     <fragment
         android:id="@+id/nav_test_attempt_history"
         android:name="com.jangletech.qoogol.ui.test_attempt_history.TestAttemptHistoryFragment"
         android:label="@string/menu_test_attempt"
-        tools:layout="@layout/fragment_test_attempt_history" >
-    </fragment>
+        tools:layout="@layout/fragment_test_attempt_history"></fragment>
 
     <fragment
         android:id="@+id/nav_doubts"
         android:name="com.jangletech.qoogol.ui.doubts.DoubtsFragment"
         android:label="@string/menu_ask_doubts"
-        tools:layout="@layout/doubts_fragment" >
-    </fragment>
+        tools:layout="@layout/doubts_fragment"></fragment>
 
     <fragment
         android:id="@+id/nav_test_my"
         android:name="com.jangletech.qoogol.ui.test.my_test.MyTestFragment"
         android:label="@string/menu_test_practice"
-        tools:layout="@layout/fragment_test_my" >
+        tools:layout="@layout/fragment_test_my">
         <action
             android:id="@+id/action_nav_test_my_to_nav_comments"
             app:destination="@id/nav_comments" />
@@ -153,10 +150,10 @@
 
     //Favourite Test
     <fragment
-    android:id="@+id/nav_fav_test"
-    android:name="com.jangletech.qoogol.ui.test.favourite.TestFavouriteFragment"
-    android:label="@string/favourite_test"
-    tools:layout="@layout/test_favourite_fragment" />
+        android:id="@+id/nav_fav_test"
+        android:name="com.jangletech.qoogol.ui.test.favourite.TestFavouriteFragment"
+        android:label="@string/favourite_test"
+        tools:layout="@layout/test_favourite_fragment" />
 
     <fragment
         android:id="@+id/nav_fav"

@@ -220,6 +220,4 @@ public class ShareFragment extends BaseFragment implements ShareAdapter.OnItemCl
             }
         });
     }
-
-
 }

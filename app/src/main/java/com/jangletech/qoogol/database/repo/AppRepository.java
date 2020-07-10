@@ -507,7 +507,6 @@ public class AppRepository {
         return learningQuestionDao.getAllSavedQuestions();
     }
 
-
     public List<LearningQuestionsNew> getQuestions() {
         return learningQuestionDao.getQuestions();
     }
@@ -515,5 +514,4 @@ public class AppRepository {
     public List<LearningQuestions> getSavedQuestions() {
         return learningQuestionDao.getSavedQuestions();
     }
-
 }

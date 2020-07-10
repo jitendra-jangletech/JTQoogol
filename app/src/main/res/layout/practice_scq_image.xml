@@ -131,6 +131,7 @@
                         app:layout_constraintTop_toTopOf="@id/tvtimer" />
 
                     <ImageView
+                        android:visibility="gone"
                         android:foreground="?attr/selectableItemBackground"
                         android:padding="@dimen/_10sdp"
                         android:id="@+id/save_que"

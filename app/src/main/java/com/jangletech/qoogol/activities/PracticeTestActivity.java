@@ -3,6 +3,7 @@ package com.jangletech.qoogol.activities;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -32,7 +33,6 @@ import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.dialog.SubmitTestDialog;
 import com.jangletech.qoogol.enums.QuestionFilterType;
 import com.jangletech.qoogol.enums.QuestionSortType;
-import com.jangletech.qoogol.model.ProcessQuestion;
 import com.jangletech.qoogol.model.StartResumeTestResponse;
 import com.jangletech.qoogol.model.SubmitTest;
 import com.jangletech.qoogol.model.TestQuestionNew;
@@ -42,8 +42,10 @@ import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.EndDrawerToggle;
 import com.jangletech.qoogol.util.PreferenceManager;
-import com.jangletech.qoogol.util.UtilHelper;
 
+import org.apache.commons.text.StringEscapeUtils;
+
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -89,7 +91,6 @@ public class PracticeTestActivity extends BaseActivity implements
         toolbar = findViewById(R.id.toolbar);
         tvTitle = findViewById(R.id.tvPracticeTitle);
         practiceViewPager = findViewById(R.id.practice_viewpager);
-        //questionsNewList = new ArrayList<>();
         gson = new Gson();
         setupNavigationDrawer();
         setMargins(mBinding.marginLayout);
@@ -106,7 +107,7 @@ public class PracticeTestActivity extends BaseActivity implements
                 if (practiceQAList != null) {
                     Log.d(TAG, "onChanged: ");
                     questionsNewList = practiceQAList;
-                    practiceViewPager.setOffscreenPageLimit(1);
+                    practiceViewPager.setOffscreenPageLimit(practiceQAList.size());
                     setQuestPaletAdapter();
                 }
             }
@@ -246,6 +247,65 @@ public class PracticeTestActivity extends BaseActivity implements
         });
     }
 
+    private void submitTestQuestions() {
+        SubmitTest submitTest = new SubmitTest();
+        List<TestQuestionNew> submitTestQuestionList = new ArrayList<>();
+        submitTest.setTm_id(startTestResponse.getTm_id());
+        submitTest.setTt_id(String.valueOf(startTestResponse.getTtId()));
+        for (TestQuestionNew question : questionsNewList) {
+            if (question.isAnsweredRight())
+                question.setTtqa_obtain_marks(question.getQ_marks());
+            else
+                question.setTtqa_obtain_marks("0");
+
+            if (question.getQue_option_type().equalsIgnoreCase(Constant.FILL_THE_BLANKS) ||
+                    question.getType().equalsIgnoreCase(Constant.SHORT_ANSWER) ||
+                    question.getType().equalsIgnoreCase(Constant.LONG_ANSWER) ||
+                    question.getType().equalsIgnoreCase(Constant.ONE_LINE_ANSWER) ||
+                    question.getType().equalsIgnoreCase(Constant.FILL_THE_BLANKS)) {
+                String encoded = Base64.encodeToString(question.getTtqa_sub_ans().getBytes(StandardCharsets.UTF_8), Base64.DEFAULT);
+                String encodedAns = StringEscapeUtils.escapeJava(encoded);
+                Log.d(TAG, "Encoded Ans : " + encodedAns);
+                question.setTtqa_sub_ans(encodedAns);
+            } else {
+                question.setTtqa_sub_ans(question.getTtqa_sub_ans());
+            }
+            submitTestQuestionList.add(question);
+        }
+
+        submitTest.setTestQuestionNewList(submitTestQuestionList);
+        String json = gson.toJson(submitTest);
+        Log.d(TAG, "submitTestQuestions JSON : " + json);
+        HashMap<String, String> params = new HashMap<>();
+        params.put(Constant.u_user_id, String.valueOf(new PreferenceManager(this).getInt(Constant.USER_ID)));
+        params.put(Constant.DataList, json);
+
+        Log.d(TAG, "submitTestQuestions Params : " + params);
+        ProgressDialog.getInstance().show(this);
+        Call<VerifyResponse> call = apiService.submitTestQuestion(
+                params.get(Constant.DataList),
+                params.get(Constant.u_user_id));
+        call.enqueue(new Callback<VerifyResponse>() {
+            @Override
+            public void onResponse(Call<VerifyResponse> call, Response<VerifyResponse> response) {
+                ProgressDialog.getInstance().dismiss();
+                if (response.body() != null && response.body().getResponse().equals("200")) {
+                    //showToast("Te Submitted");
+                    finish();
+                } else {
+                    Log.e(TAG, "submitTestQuestions Error : " + response.body().getResponse());
+                    showToast(response.body().getResponse());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<VerifyResponse> call, Throwable t) {
+                showToast("Something went wrong!!");
+                t.printStackTrace();
+            }
+        });
+    }
+
     private void fetchTestQA() {
         ProgressDialog.getInstance().show(this);
         tmId = getIntent().getIntExtra(Constant.TM_ID, 0);
@@ -356,18 +416,7 @@ public class PracticeTestActivity extends BaseActivity implements
 
     @Override
     public boolean onSupportNavigateUp() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogStyle);
-        builder.setTitle("Pause")
-                .setMessage("Are you sure, you want to pause this test?")
-                .setPositiveButton("Pause", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        finish();
-                    }
-                })
-                .setNegativeButton("Cancel", null)
-                .show();
-
+        onBackPressed();
         return true;
 
     }
@@ -384,6 +433,7 @@ public class PracticeTestActivity extends BaseActivity implements
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             finish();
+                            //submitTestQuestions();
                         }
                     })
                     .setNegativeButton("Cancel", null)
@@ -403,7 +453,7 @@ public class PracticeTestActivity extends BaseActivity implements
     @Override
     public void onYesClick() {
         //submitTestQuestions();
-        finish();
+        submitTestQuestions();
     }
 
 

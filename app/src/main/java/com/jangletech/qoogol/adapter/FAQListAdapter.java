@@ -42,7 +42,7 @@ public class FAQListAdapter extends RecyclerView.Adapter<FAQListAdapter.FaqVH> {
     public FAQListAdapter(List<FAQModel> faqModelList, Activity activity, OnItemClickListener listener) {
         this.faqModelList = faqModelList;
         this.listener = listener;
-        requestManager =  Glide.with(activity);
+        requestManager = Glide.with(activity);
     }
 
     @NonNull
@@ -63,7 +63,7 @@ public class FAQListAdapter extends RecyclerView.Adapter<FAQListAdapter.FaqVH> {
             holder.imageItem.setVisibility(View.VISIBLE);
             String path = Constant.PRODUCTION_BASE_FILE_API + faqModel.getUrl().trim();
             glideLoadImage(holder.imageItem, path);
-            holder.imageItem.setOnClickListener(view-> listener.onViewImage(path));
+            holder.imageItem.setOnClickListener(view -> listener.onViewImage(path));
         } else {
             holder.imageItem.setVisibility(View.GONE);
         }

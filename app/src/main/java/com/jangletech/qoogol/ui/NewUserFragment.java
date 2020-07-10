@@ -6,6 +6,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -87,8 +88,9 @@ public class NewUserFragment extends BaseFragment {
     }
 
     public void initViews() {
-        Log.d(TAG, "initViews String : " + getActivity().getString(R.string.terms_privacy));
-        mBinding.termsPrivacy.setText(getActivity().getString(R.string.terms_privacy));
+        mBinding.termsPrivacy.setText(Html.fromHtml(getResources().getString(R.string.terms_and_conditions)));
+        //Log.d(TAG, "initViews String : " + getActivity().getString(R.string.terms_privacy));
+        //mBinding.termsPrivacy.setText(getActivity().getString(R.string.terms_privacy));
 
         mBinding.radioMale.setOnClickListener(v -> {
             gender = "M";

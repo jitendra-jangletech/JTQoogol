@@ -87,12 +87,14 @@
             </LinearLayout>
 
             <TextView
+                android:textSize="@dimen/_8ssp"
+                android:text="@string/terms_privacy"
                 android:id="@+id/terms_privacy"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
-                android:gravity="center"
-                android:textColor="@color/colorWhite" />
+                android:layout_marginBottom="@dimen/_5sdp"
+                android:gravity="center" />
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/login"
