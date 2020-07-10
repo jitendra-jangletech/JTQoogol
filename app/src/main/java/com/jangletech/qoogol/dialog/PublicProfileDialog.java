@@ -44,13 +44,15 @@ public class PublicProfileDialog extends Dialog {
     private static final String TAG = "PublicProfileDialog";
     private DialogPublicProfileBinding mBinding;
     private Activity activity;
-    private String userid;
+    private String userid,profilePicPath="";
+    private PublicProfileClickListener clickListener;
     private ApiInterface apiService = ApiClient.getInstance().getApi();
 
-    public PublicProfileDialog(@NonNull Activity activity, String userid) {
+    public PublicProfileDialog(@NonNull Activity activity, String userid,PublicProfileClickListener clickListener) {
         super(activity, android.R.style.Theme_DeviceDefault_Light_DarkActionBar);
         this.activity = activity;
         this.userid = userid;
+        this.clickListener = clickListener;
     }
 
     @Override
@@ -59,6 +61,7 @@ public class PublicProfileDialog extends Dialog {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         mBinding = DataBindingUtil.inflate(LayoutInflater.from(getContext()), R.layout.dialog_public_profile, null, false);
         setContentView(mBinding.getRoot());
+        Log.d(TAG, "onCreate UserId : "+userid);
         fetchUserProfile();
     }
 
@@ -95,6 +98,7 @@ public class PublicProfileDialog extends Dialog {
     }
 
     private void setPublicProfile(UserProfile userProfile) {
+        mBinding.shimmerViewContainer.hideShimmer();
         try {
             if (userProfile != null && userProfile.getIsConnected().equalsIgnoreCase("true")) {
                 mBinding.addFriend.setText(activity.getResources().getString(R.string.unfriend));
@@ -170,7 +174,12 @@ public class PublicProfileDialog extends Dialog {
 
         } catch (Exception e) {
             e.printStackTrace();
+            mBinding.shimmerViewContainer.hideShimmer();
         }
+
+        mBinding.userProfilePic.setOnClickListener(v->{
+            clickListener.onViewImage(profilePicPath);
+        });
     }
 
     public void showToast(String msg) {
@@ -179,6 +188,7 @@ public class PublicProfileDialog extends Dialog {
 
     private void loadProfilePic(String url) {
         Log.d(TAG, "loadProfilePic : " + url);
+        profilePicPath = url;
         RequestOptions options = new RequestOptions()
                 .centerCrop()
                 .circleCrop()
@@ -214,12 +224,14 @@ public class PublicProfileDialog extends Dialog {
             public void onFailure(Call<ResponseObj> call, Throwable t) {
                 t.printStackTrace();
                 ProgressDialog.getInstance().dismiss();
+                mBinding.shimmerViewContainer.hideShimmer();
             }
         });
     }
 
-    public interface buttonClickListener {
-        void onAddFriendClick();
-        void onFollowClick();
+    public interface PublicProfileClickListener {
+        //void onAddFriendClick();
+        //void onFollowClick();
+        void onViewImage(String path);
     }
 }

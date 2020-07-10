@@ -17,7 +17,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
@@ -26,13 +25,14 @@ import androidx.databinding.DataBindingUtil;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
-import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
+import androidx.navigation.Navigator;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.jangletech.qoogol.BuildConfig;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.ActivityMainBinding;
@@ -82,11 +82,10 @@ public class MainActivity extends BaseActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setMargins(mBinding.marginLayout);
-
         NavigationView navigationView = findViewById(R.id.nav_view);
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_test_popular, R.id.nav_attended_by_friends, R.id.nav_shared_with_you,
-                R.id.nav_shared_by_you, R.id.nav_notifications,R.id.saved_questions,
+                R.id.nav_shared_by_you, R.id.nav_notifications, R.id.saved_questions,
                 R.id.nav_test_popular, R.id.nav_recent_test, R.id.nav_share_app, R.id.nav_about,
                 R.id.nav_faq, R.id.nav_fav, R.id.nav_syllabus, R.id.nav_edit_profile,
                 R.id.nav_settings, R.id.nav_requests, R.id.nav_import_contacts,
@@ -101,6 +100,8 @@ public class MainActivity extends BaseActivity {
             if (destination.getId() == R.id.nav_syllabus
                     || destination.getId() == R.id.nav_edit_profile
                     || destination.getId() == R.id.nav_test_filter
+                    || destination.getId() == R.id.nav_comments
+                    || destination.getId() == R.id.nav_share
                     || destination.getId() == R.id.nav_blocked_connections
                     || destination.getId() == R.id.nav_test_details) {
                 hideBottomNav();
@@ -112,9 +113,11 @@ public class MainActivity extends BaseActivity {
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                navigateFlag = "";
                 if (item.getItemId() == R.id.nav_home) {
-                    if (navController.getCurrentDestination().getId() != R.id.nav_home) {
-                        navigateFlag = Nav.HOME.toString();
+                    if (navController.getCurrentDestination() != null &&
+                            navController.getCurrentDestination().getId() != R.id.nav_home) {
+                        //navigateFlag = Nav.HOME.toString();
                         if (navController.popBackStack(R.id.nav_home, false)) {
                         } else {
                             navController.navigate(R.id.nav_home);
@@ -122,7 +125,7 @@ public class MainActivity extends BaseActivity {
                     }
                 }
                 if (item.getItemId() == R.id.nav_learning) {
-                    navigateFlag = Nav.LEARNING.toString();
+                    //navigateFlag = Nav.LEARNING.toString();
                     if (navController.getCurrentDestination().getId() != R.id.nav_learning) {
                         Bundle bundle = new Bundle();
                         bundle.putString("call_from", "learning");
@@ -130,7 +133,7 @@ public class MainActivity extends BaseActivity {
                     }
                 }
                 if (item.getItemId() == R.id.nav_test_my) {
-                    navigateFlag = Nav.MY_TEST.toString();
+                    //navigateFlag = Nav.MY_TEST.toString();
                     //saveTestType(Nav.MY_TEST.toString());
                     if (navController.getCurrentDestination().getId() != R.id.nav_test_my) {
                         clearFilters();
@@ -138,13 +141,13 @@ public class MainActivity extends BaseActivity {
                     }
                 }
                 if (item.getItemId() == R.id.nav_doubts) {
-                    navigateFlag = Nav.ASK_DOUBTS.toString();
+                    //navigateFlag = Nav.ASK_DOUBTS.toString();
                     if (navController.getCurrentDestination().getId() != R.id.nav_doubts) {
                         navController.navigate(R.id.nav_doubts);
                     }
                 }
                 if (item.getItemId() == R.id.nav_notifications) {
-                    navigateFlag = Nav.NOTIFICATIONS.toString();
+                    //navigateFlag = Nav.NOTIFICATIONS.toString();
                     if (navController.getCurrentDestination().getId() != R.id.nav_notifications) {
                         navController.navigate(R.id.nav_notifications);
                     }
@@ -362,7 +365,6 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-
         findViewById(R.id.saved_questions).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
             if (navController.getCurrentDestination().getId() != R.id.saved_questions) {
@@ -383,7 +385,6 @@ public class MainActivity extends BaseActivity {
                 navigateFlag = Nav.POPULAR_TEST.toString();
             }
         });
-
 
         findViewById(R.id.nav_attended_by_friends).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
@@ -406,13 +407,23 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-
         findViewById(R.id.nav_settings).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
             if (navController.getCurrentDestination().getId() != R.id.nav_settings) {
                 navigateFlag = Nav.SETTINGS.toString();
             }
         });
+
+        findViewById(R.id.tvTest).setOnClickListener(v -> {
+            if (mBinding.testNavLayout.getVisibility() == View.VISIBLE) {
+                mBinding.testNavLayout.setVisibility(View.GONE);
+                mBinding.expand.setBackground(getDrawable(R.drawable.ic_expand));
+            } else {
+                mBinding.testNavLayout.setVisibility(View.VISIBLE);
+                mBinding.expand.setBackground(getDrawable(R.drawable.ic_collapse));
+            }
+        });
+
 
         findViewById(R.id.nav_syllabus).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
@@ -478,23 +489,32 @@ public class MainActivity extends BaseActivity {
         if (drawerLayout.isDrawerOpen(Gravity.LEFT)) {
             drawerLayout.closeDrawer(Gravity.LEFT);
         }
-        if (navController.getCurrentDestination().getId() == R.id.nav_home) {
+        if (navController.getCurrentDestination() != null) {
+            if (navController.getCurrentDestination() != null &&
+                    (navController.getCurrentDestination().getId() == R.id.nav_home ||
+                            navController.getCurrentDestination().getId() == R.id.nav_notifications ||
+                            navController.getCurrentDestination().getId() == R.id.nav_doubts ||
+                            navController.getCurrentDestination().getId() == R.id.nav_test_my ||
+                            navController.getCurrentDestination().getId() == R.id.nav_learning)) {
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogStyle);
-            builder.setTitle("Exit")
-                    .setMessage("Are you sure, you want to close this application")
-                    .setPositiveButton("Exit", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            finish();
-                        }
-                    })
-                    .setNegativeButton("Cancel", null)
-                    .show();
+                AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogStyle);
+                builder.setTitle("Exit")
+                        .setMessage("Are you sure, you want to close this application")
+                        .setPositiveButton("Exit", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                finish();
+                            }
+                        })
+                        .setNegativeButton("Cancel", null)
+                        .show();
 
-        } else {
-            navController.navigate(R.id.nav_home);
-            //navController.navigateUp();
+            }
+            if (navController.getCurrentDestination().getId() == R.id.nav_edit_profile) {
+                navController.navigate(R.id.nav_home);
+            } else {
+                navController.popBackStack();
+            }
         }
     }
 

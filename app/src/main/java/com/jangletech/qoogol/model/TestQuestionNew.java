@@ -2,6 +2,7 @@ package com.jangletech.qoogol.model;
 
 import com.google.gson.annotations.SerializedName;
 import com.jangletech.qoogol.util.Constant;
+
 import java.io.Serializable;
 
 public class TestQuestionNew implements Serializable {
@@ -177,10 +178,15 @@ public class TestQuestionNew implements Serializable {
     }
 
     public String getRating() {
-        if (rating == null)
+        if (rating == null) {
             return "0";
-        else
+        } else {
+            if (rating.length() > 3) {
+                return rating.substring(0, 3);
+            }
             return rating;
+        }
+
     }
 
     public void setRating(String rating) {
@@ -215,7 +221,7 @@ public class TestQuestionNew implements Serializable {
     }
 
     public String getLikes() {
-        return likes;
+        return likes != null ? likes : "0";
     }
 
     public void setLikes(String likes) {
@@ -223,7 +229,7 @@ public class TestQuestionNew implements Serializable {
     }
 
     public String getComments() {
-        return comments;
+        return comments != null ? comments : "0";
     }
 
     public void setComments(String comments) {
@@ -231,7 +237,7 @@ public class TestQuestionNew implements Serializable {
     }
 
     public String getShares() {
-        return shares;
+        return shares != null ? shares : "0";
     }
 
     public void setShares(String shares) {
@@ -271,7 +277,7 @@ public class TestQuestionNew implements Serializable {
     }
 
     public String getQ_mcq_op_1() {
-        return q_mcq_op_1;
+        return q_mcq_op_1 != null ? q_mcq_op_1 : "";
     }
 
     public void setQ_mcq_op_1(String q_mcq_op_1) {
@@ -279,7 +285,7 @@ public class TestQuestionNew implements Serializable {
     }
 
     public String getQ_mcq_op_2() {
-        return q_mcq_op_2;
+        return q_mcq_op_2 != null ? q_mcq_op_2 : "";
     }
 
     public void setQ_mcq_op_2(String q_mcq_op_2) {
@@ -287,7 +293,7 @@ public class TestQuestionNew implements Serializable {
     }
 
     public String getQ_mcq_op_3() {
-        return q_mcq_op_3;
+        return q_mcq_op_3 != null ? q_mcq_op_3 : "";
     }
 
     public void setQ_mcq_op_3(String q_mcq_op_3) {
@@ -295,10 +301,7 @@ public class TestQuestionNew implements Serializable {
     }
 
     public String getQ_mcq_op_4() {
-        if (q_mcq_op_4 == null)
-            return "";
-        else
-            return q_mcq_op_4;
+        return q_mcq_op_4 != null ? q_mcq_op_4 : "";
     }
 
     public void setQ_mcq_op_4(String q_mcq_op_4) {
@@ -398,7 +401,7 @@ public class TestQuestionNew implements Serializable {
     }
 
     public String getTtqa_sub_ans() {
-        return ttqa_sub_ans;
+        return ttqa_sub_ans != null ? ttqa_sub_ans : "";
     }
 
     public void setTtqa_sub_ans(String ttqa_sub_ans) {
@@ -423,7 +426,7 @@ public class TestQuestionNew implements Serializable {
     }
 
     public String getA_sub_ans() {
-        return a_sub_ans;
+        return a_sub_ans != null ? a_sub_ans : "";
     }
 
     public void setA_sub_ans(String a_sub_ans) {
@@ -446,11 +449,11 @@ public class TestQuestionNew implements Serializable {
         this.tq_id = tq_id;
     }
 
-    public String getTq_q_id() {
+    public int getTq_q_id() {
         return tq_q_id;
     }
 
-    public void setTq_q_id(String tq_q_id) {
+    public void setTq_q_id(int tq_q_id) {
         this.tq_q_id = tq_q_id;
     }
 
@@ -643,7 +646,7 @@ public class TestQuestionNew implements Serializable {
     private String tq_id;
 
     @SerializedName(Constant.tq_q_id)
-    private String tq_q_id;
+    private int tq_q_id;
 
     @SerializedName(Constant.tq_marks)
     private double tq_marks;

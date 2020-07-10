@@ -91,14 +91,10 @@ public class TestSharedByYouFragment extends BaseFragment
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_test_my, container, false);
-        return mBinding.getRoot();
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+        mBinding.setLifecycleOwner(this);
         mViewModel = new ViewModelProvider(this).get(MyTestViewModel.class);
         initViews();
+        return mBinding.getRoot();
     }
 
     @Override
@@ -169,8 +165,7 @@ public class TestSharedByYouFragment extends BaseFragment
                 }
             }
         });
-        flag = "SH";
-        mViewModel.getAllTests(flag).observe(getViewLifecycleOwner(), new Observer<List<TestModelNew>>() {
+        mViewModel.getAllTests("SH", getUserId()).observe(getViewLifecycleOwner(), new Observer<List<TestModelNew>>() {
             @Override
             public void onChanged(@Nullable final List<TestModelNew> tests) {
                 if (tests != null) {
@@ -191,6 +186,7 @@ public class TestSharedByYouFragment extends BaseFragment
                         List<TestModelNew> filteredModelList = filterBySubject(testList, chip.getText().toString());
                         if (filteredModelList.size() > 0) {
                             mAdapter.setSearchResult(filteredModelList);
+                            mBinding.tvNoTest.setVisibility(View.GONE);
                         } else {
                             mAdapter.setSearchResult(filteredModelList);
                             mBinding.tvNoTest.setVisibility(View.VISIBLE);
@@ -205,7 +201,7 @@ public class TestSharedByYouFragment extends BaseFragment
 
     public void setMyTestList(List<TestModelNew> testList) {
         if (testList.size() > 0) {
-            mAdapter = new TestListAdapter(requireActivity(), testList, this);
+            mAdapter = new TestListAdapter(requireActivity(), testList, this, "");
             mBinding.testListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             mBinding.testListRecyclerView.setAdapter(mAdapter);
         } else {
@@ -319,13 +315,13 @@ public class TestSharedByYouFragment extends BaseFragment
         call.enqueue(new Callback<TestListResponse>() {
             @Override
             public void onResponse(Call<TestListResponse> call, Response<TestListResponse> response) {
-                //ProgressDialog.getInstance().dismiss();
                 mBinding.swipeToRefresh.setRefreshing(false);
                 if (response.body() != null && response.body().getResponse().equals("200")) {
                     //mViewModel.setAllTestList(response.body().getTestList());
                     List<TestModelNew> testList = response.body().getTestList();
                     for (TestModelNew testModelNew : testList) {
                         testModelNew.setFlag("SH");
+                        testModelNew.setUserId(getUserId());
                     }
                     mViewModel.insert(testList);
                 } else if (response.body().getResponse().equals("501")) {
@@ -378,6 +374,11 @@ public class TestSharedByYouFragment extends BaseFragment
     }
 
     @Override
+    public void favClick(TestModelNew testModelNew) {
+
+    }
+
+    /*@Override
     public void onLikeClick(TestModelNew testModel, int pos, boolean isChecked) {
         callApi(isChecked ? 1 : 0, pos);
     }
@@ -394,7 +395,7 @@ public class TestSharedByYouFragment extends BaseFragment
             params.put(Constant.tm_id, testModel.getTm_id());
             favTest(params);
         }
-    }
+    }*/
 
     @Override
     public void onAttemptsClick(TestModelNew testModel) {
@@ -405,7 +406,7 @@ public class TestSharedByYouFragment extends BaseFragment
     }
 
     private void callApi(int like, int pos) {
-        doLikeTest(like, pos, testList.get(pos).getTm_id());
+        //doLikeTest(like, pos, testList.get(pos).getTm_id());
     }
 
     private void favTest(HashMap<String, Integer> map) {
@@ -440,47 +441,47 @@ public class TestSharedByYouFragment extends BaseFragment
         });
     }
 
-    private void doLikeTest(int like, int pos, int testId) {
-        ProgressDialog.getInstance().show(getActivity());
-        Call<ProcessQuestion> call = apiService.addTestLike(new PreferenceManager(getActivity()).getInt(Constant.USER_ID), testId, "I", like);
-        call.enqueue(new Callback<ProcessQuestion>() {
-            @Override
-            public void onResponse(Call<ProcessQuestion> call, Response<ProcessQuestion> response) {
-                ProgressDialog.getInstance().dismiss();
-                try {
-                    if (response.body() != null && response.body().getResponse().equals("200")) {
-                        int likeCount = Integer.parseInt(testList.get(pos).getLikeCount());
-                        if (like == 1) {
-                            Log.e(TAG, "like 0 ");
-                            testList.get(pos).setLike(false);
-                            if (likeCount <= 0)
-                                testList.get(pos).setLikeCount("0");
-                            else
-                                testList.get(pos).setLikeCount("" + (likeCount - 1));
-                        }
-                        if (like == 0) {
-                            testList.get(pos).setLike(true);
-                            testList.get(pos).setLikeCount("" + (likeCount + 1));
-                        }
-                        //testList.set(pos, testList.get(pos));
-                        mAdapter.updateList(testList);
-
-                    } else {
-                        showErrorDialog(getActivity(), response.body().getResponse(), response.body().getMessage());
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ProcessQuestion> call, Throwable t) {
-                ProgressDialog.getInstance().dismiss();
-                showToast("Something went wrong!!");
-                t.printStackTrace();
-            }
-        });
-    }
+//    private void doLikeTest(int like, int pos, int testId) {
+//        ProgressDialog.getInstance().show(getActivity());
+//        Call<ProcessQuestion> call = apiService.addTestLike(new PreferenceManager(getActivity()).getInt(Constant.USER_ID), testId, "I", like);
+//        call.enqueue(new Callback<ProcessQuestion>() {
+//            @Override
+//            public void onResponse(Call<ProcessQuestion> call, Response<ProcessQuestion> response) {
+//                ProgressDialog.getInstance().dismiss();
+//                try {
+//                    if (response.body() != null && response.body().getResponse().equals("200")) {
+//                        int likeCount = Integer.parseInt(testList.get(pos).getLikeCount());
+//                        if (like == 1) {
+//                            Log.e(TAG, "like 0 ");
+//                            testList.get(pos).setLike(false);
+//                            if (likeCount <= 0)
+//                                testList.get(pos).setLikeCount("0");
+//                            else
+//                                testList.get(pos).setLikeCount("" + (likeCount - 1));
+//                        }
+//                        if (like == 0) {
+//                            testList.get(pos).setLike(true);
+//                            testList.get(pos).setLikeCount("" + (likeCount + 1));
+//                        }
+//                        //testList.set(pos, testList.get(pos));
+//                        mAdapter.updateList(testList);
+//
+//                    } else {
+//                        showErrorDialog(getActivity(), response.body().getResponse(), response.body().getMessage());
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<ProcessQuestion> call, Throwable t) {
+//                ProgressDialog.getInstance().dismiss();
+//                showToast("Something went wrong!!");
+//                t.printStackTrace();
+//            }
+//        });
+//    }
 
     @Override
     public void onDetach() {

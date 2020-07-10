@@ -122,7 +122,7 @@ public class ContactListFragment extends BaseFragment implements ContactListAdap
 
     private void setFilterRecycler(String letter, int position, int offset) {
         filterlinear = new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false);
-        filterAdapter = new ContactFilterAdapter(getActivity(),filterList, this, mBinding.filterRecycler);
+        filterAdapter = new ContactFilterAdapter(filterList,this);
         mBinding.filterRecycler.setHasFixedSize(true);
 
         mBinding.filterRecycler.setLayoutManager(filterlinear);

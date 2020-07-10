@@ -17,6 +17,7 @@ import java.util.List;
 public class TestModelNew implements Serializable {
 
     private String flag;
+    private String userId;
 
     @SerializedName(Constant.test_description)
     private String test_description;
@@ -215,7 +216,7 @@ public class TestModelNew implements Serializable {
     private String quest_count;
 
     @SerializedName(Constant.likeCount)
-    private String likeCount;
+    private int likeCount;
 
     @SerializedName(Constant.shareCount)
     private String shareCount;
@@ -238,6 +239,15 @@ public class TestModelNew implements Serializable {
     @TypeConverters(Converters.class)
     @SerializedName(Constant.DataList)
     private List<AttemptedTest> attemptedTests;
+
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
     public List<AttemptedTest> getAttemptedTests() {
         return attemptedTests;
@@ -271,11 +281,11 @@ public class TestModelNew implements Serializable {
         this.quest_count = quest_count;
     }
 
-    public String getLikeCount() {
+    public int getLikeCount() {
         return likeCount;
     }
 
-    public void setLikeCount(String likeCount) {
+    public void setLikeCount(int likeCount) {
         this.likeCount = likeCount;
     }
 
@@ -363,7 +373,7 @@ public class TestModelNew implements Serializable {
     }
 
     public String getTm_diff_level() {
-        return tm_diff_level;
+        return tm_diff_level!=null?tm_diff_level:"";
     }
 
     public void setTm_diff_level(String tm_diff_level) {
@@ -451,7 +461,7 @@ public class TestModelNew implements Serializable {
     }
 
     public String getTm_avg_rating() {
-        return tm_avg_rating;
+        return tm_avg_rating!=null?tm_avg_rating:"";
     }
 
     public void setTm_avg_rating(String tm_avg_rating) {

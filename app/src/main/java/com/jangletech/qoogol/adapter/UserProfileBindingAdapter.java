@@ -9,5 +9,4 @@ public class UserProfileBindingAdapter {
         }
         return buttonText;
     }
-
 }

@@ -114,11 +114,6 @@ public class SavedQueAdapter extends RecyclerView.Adapter<SavedQueAdapter.ViewHo
     }
 
 
-    public void updateList(List<LearningQuestions> learningQuestionsList) {
-        this.learningQuestionsList = learningQuestionsList;
-        notifyDataSetChanged();
-    }
-
     @Override
     public long getItemId(int position) {
         return position;
@@ -256,13 +251,12 @@ public class SavedQueAdapter extends RecyclerView.Adapter<SavedQueAdapter.ViewHo
     }
 
     public interface onIconClick {
-        void onCommentClick(String questionId);
-        void onShareClick(String questionId);
-        void onSubmitClick(String questionId, int isRight);
+        void onCommentClick(int questionId);
+        void onShareClick(int questionId);
+        void onSubmitClick(int questionId, int isRight);
         void onLikeClick(String userId);
 
     }
-
 
     public class ViewHolder extends RecyclerView.ViewHolder implements LikeAdapter.onItemClickListener {
         SavedItemBinding learningItemBinding;
@@ -2081,7 +2075,7 @@ public class SavedQueAdapter extends RecyclerView.Adapter<SavedQueAdapter.ViewHo
         }
 
 
-        private void ProcessQuestionAPI(String que_id, int flag, String call_from, String rating, String feedback, int position, String answer) {
+        private void ProcessQuestionAPI(int que_id, int flag, String call_from, String rating, String feedback, int position, String answer) {
             ProgressDialog.getInstance().show(activity);
             ApiInterface apiService = ApiClient.getInstance().getApi();
             Call<ProcessQuestion> call;

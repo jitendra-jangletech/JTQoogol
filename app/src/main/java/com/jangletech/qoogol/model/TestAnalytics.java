@@ -3,9 +3,9 @@ package com.jangletech.qoogol.model;
 public class TestAnalytics {
 
     private String featureName;
-    private int count;
+    private double count;
 
-    public TestAnalytics(String featureName, int count) {
+    public TestAnalytics(String featureName, double count) {
         this.featureName = featureName;
         this.count = count;
     }
@@ -18,8 +18,12 @@ public class TestAnalytics {
         this.featureName = featureName;
     }
 
-    public int getCount() {
+    public double getCount() {
         return count;
+    }
+
+    public void setCount(double count) {
+        this.count = count;
     }
 
     public void setCount(int count) {

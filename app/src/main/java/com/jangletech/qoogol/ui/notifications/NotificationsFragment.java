@@ -21,6 +21,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.NotificationAdapter;
 import com.jangletech.qoogol.databinding.FragmentNotificationsBinding;
+import com.jangletech.qoogol.dialog.PublicProfileDialog;
 import com.jangletech.qoogol.model.Notification;
 import com.jangletech.qoogol.model.NotificationResponse;
 import com.jangletech.qoogol.model.ResponseObj;
@@ -43,7 +44,7 @@ import static com.jangletech.qoogol.util.Constant.fromTest;
 import static com.jangletech.qoogol.util.Constant.from_question;
 import static com.jangletech.qoogol.util.Constant.from_user;
 
-public class NotificationsFragment extends BaseFragment implements NotificationAdapter.onItemClickListener {
+public class NotificationsFragment extends BaseFragment implements NotificationAdapter.onItemClickListener, PublicProfileDialog.PublicProfileClickListener {
 
     private static final String TAG = "NotificationsFragment";
     private NotificationsViewModel mViewModel;
@@ -53,7 +54,6 @@ public class NotificationsFragment extends BaseFragment implements NotificationA
     ApiInterface apiService = ApiClient.getInstance().getApi();
     NotificationAdapter.onItemClickListener onItemClickListener;
     List<Notification> notificationList = new ArrayList<>();
-
 
     public static NotificationsFragment newInstance() {
         return new NotificationsFragment();
@@ -79,7 +79,7 @@ public class NotificationsFragment extends BaseFragment implements NotificationA
         mViewModel = ViewModelProviders.of(this).get(NotificationsViewModel.class);
         fetchNotifications();
         onItemClickListener = this;
-        mViewModel.getAllNotifications().observe(getViewLifecycleOwner(), new Observer<List<Notification>>() {
+        mViewModel.getAllNotifications(getUserId()).observe(getViewLifecycleOwner(), new Observer<List<Notification>>() {
             @Override
             public void onChanged(@Nullable final List<Notification> notifications) {
                 Log.d(TAG, "onChanged: " + notifications.size());
@@ -132,6 +132,7 @@ public class NotificationsFragment extends BaseFragment implements NotificationA
                 mBinding.swipeToRefresh.setRefreshing(false);
                 if (response.body() != null && response.body().getResponse().equals("200")) {
                     deleteFromdb(n_id);
+                    showToast("Notification deleted.");
                     fetchNotifications();
                 }
             }
@@ -193,14 +194,23 @@ public class NotificationsFragment extends BaseFragment implements NotificationA
         Bundle bundle = new Bundle();
         bundle.putBoolean("fromNotification", true);
         bundle.putString(Constant.FB_MS_ID, notification.getN_ref_id());
-        if (notification.getN_ref_type().equalsIgnoreCase(from_user)) {
-            bundle.putInt(CALL_FROM, connectonId);
-            bundle.putString(Constant.fetch_profile_id, notification.getN_ref_id());
-            NavHostFragment.findNavController(this).navigate(R.id.nav_edit_profile, bundle);
+        if (notification.getN_ref_type().equalsIgnoreCase(from_user) ||
+                notification.getN_ref_type().equalsIgnoreCase(Constant.from_close_friend) ||
+                notification.getN_ref_type().equalsIgnoreCase(Constant.from_friend)) {
+            //bundle.putInt(CALL_FROM, connectonId);
+            //bundle.putString(Constant.fetch_profile_id, notification.getN_ref_id());
+            //NavHostFragment.findNavController(this).navigate(R.id.nav_edit_profile, bundle);
+            PublicProfileDialog publicProfileDialog = new PublicProfileDialog(getActivity(),notification.getN_sent_by_u_id(),this);
+            publicProfileDialog.show();
         } else if (notification.getN_ref_type().equalsIgnoreCase(from_question)) {
             NavHostFragment.findNavController(this).navigate(R.id.nav_learning, bundle);
         } else if (notification.getN_ref_type().equalsIgnoreCase(fromTest)) {
             NavHostFragment.findNavController(this).navigate(R.id.nav_test_my, bundle);
         }
+    }
+
+    @Override
+    public void onViewImage(String path) {
+        showFullScreen(path);
     }
 }

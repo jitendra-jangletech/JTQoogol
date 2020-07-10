@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.cardview.widget.CardView
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/_15sdp"
@@ -43,15 +42,15 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        app:layout_constraintRight_toLeftOf="@+id/markToggle"
-                        app:layout_constraintLeft_toRightOf="@+id/id_textview"
-                        app:layout_constraintTop_toTopOf="parent"
                         android:id="@+id/marks_textview"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Marks : 05"
                         android:textColor="@color/colorWhite"
-                        android:textSize="@dimen/_10ssp" />
+                        android:textSize="@dimen/_10ssp"
+                        app:layout_constraintLeft_toRightOf="@+id/id_textview"
+                        app:layout_constraintRight_toLeftOf="@+id/markToggle"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <ToggleButton
                         android:id="@+id/markToggle"
@@ -68,24 +67,40 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-
-
-
-
-                <TextView
-                    android:id="@+id/question_textview"
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:id="@+id/questLayout"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_10sdp"
-                    android:layout_marginRight="@dimen/_10sdp"
-                    android:padding="@dimen/_10sdp"
-                    android:text="question"
-                    android:textColor="@color/colorSkyBlue"
-                    android:textSize="@dimen/_12ssp"
+                    android:orientation="vertical"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toLeftOf="@+id/reset"
-                    app:layout_constraintTop_toBottomOf="@+id/header" />
+                    app:layout_constraintTop_toBottomOf="@+id/header">
+
+                    <TextView
+                        android:id="@+id/question_textview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/_10sdp"
+                        android:layout_marginRight="@dimen/_10sdp"
+                        android:padding="@dimen/_10sdp"
+                        android:text="question"
+                        android:textColor="@color/colorSkyBlue"
+                        android:textSize="@dimen/_12ssp"
+                        android:visibility="visible" />
+
+                    <io.github.kexanie.library.MathView
+                        android:id="@+id/questMathView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/_10sdp"
+                        android:layout_marginRight="@dimen/_10sdp"
+                        android:padding="@dimen/_10sdp"
+                        android:text="question"
+                        android:textColor="@color/colorSkyBlue"
+                        android:textSize="@dimen/_12ssp"
+                        android:visibility="gone" />
+                </LinearLayout>
+
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/timer_layout"
@@ -94,7 +109,7 @@
                     android:orientation="horizontal"
                     android:padding="@dimen/_10sdp"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/question_textview">
+                    app:layout_constraintTop_toBottomOf="@+id/questLayout">
 
                     <TextView
                         android:id="@+id/tvtimer"
@@ -178,7 +193,7 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
                                         android:scaleType="centerCrop"
-                                        android:src="@drawable/profile" />
+                                        android:src="@drawable/no_image" />
 
                                     <ImageView
                                         android:id="@+id/scqimg_imgtext_chck1"
@@ -195,7 +210,17 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
-                                    android:text="Text 1" />
+                                    android:text="Text 1"
+                                    android:visibility="visible" />
+
+                                <io.github.kexanie.library.MathView
+                                    android:id="@+id/scq_imgtext_text1_math"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:text="Text 1"
+                                    android:visibility="gone" />
+
                             </LinearLayout>
 
 
@@ -218,7 +243,7 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
                                         android:scaleType="centerCrop"
-                                        android:src="@drawable/profile" />
+                                        android:src="@drawable/no_image" />
 
 
                                     <ImageView
@@ -236,7 +261,16 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
-                                    android:text="Text 1" />
+                                    android:text="Text 1"
+                                    android:visibility="visible" />
+
+                                <io.github.kexanie.library.MathView
+                                    android:id="@+id/scq_imgtext_text2_math"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:text="Text 1"
+                                    android:visibility="gone" />
                             </LinearLayout>
 
 
@@ -272,7 +306,7 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
                                         android:scaleType="centerCrop"
-                                        android:src="@drawable/profile" />
+                                        android:src="@drawable/no_image" />
 
                                     <ImageView
                                         android:id="@+id/scqimg_imgtext_chck3"
@@ -289,7 +323,17 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
-                                    android:text="Text 1" />
+                                    android:text="Text 1"
+                                    android:visibility="visible" />
+
+                                <io.github.kexanie.library.MathView
+                                    android:id="@+id/scq_imgtext_text3_math"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:text="Text 1"
+                                    android:visibility="gone" />
+
 
                             </LinearLayout>
 
@@ -315,7 +359,7 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
                                         android:scaleType="centerCrop"
-                                        android:src="@drawable/profile" />
+                                        android:src="@drawable/no_image" />
 
 
                                     <ImageView
@@ -330,6 +374,14 @@
 
                                 <TextView
                                     android:id="@+id/scq_imgtext_text4"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:text="Text 1" />
+
+                                <io.github.kexanie.library.MathView
+                                    android:visibility="gone"
+                                    android:id="@+id/scq_imgtext_text4_math"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
@@ -449,7 +501,6 @@
                     app:layout_constraintTop_toBottomOf="@+id/solution_layout" />
 
                 <TextView
-                    app:layout_constraintTop_toBottomOf="@+id/solution_layout"
                     android:id="@+id/attended_count_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -459,10 +510,9 @@
                     android:textColor="@color/colorSkyBlue"
                     android:textSize="@dimen/_10ssp"
                     app:layout_constraintRight_toLeftOf="@+id/attempted_value"
-                    />
+                    app:layout_constraintTop_toBottomOf="@+id/solution_layout" />
 
                 <TextView
-                    app:layout_constraintTop_toBottomOf="@+id/solution_layout"
                     android:id="@+id/attempted_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -471,8 +521,8 @@
                     android:text="0"
                     android:textColor="@color/colorBlack"
                     android:textSize="@dimen/_10ssp"
-                    app:layout_constraintRight_toRightOf="parent" />
-
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/solution_layout" />
 
 
                 <View
@@ -555,8 +605,8 @@
                             android:id="@+id/like_value"
                             android:layout_width="@dimen/_24sdp"
                             android:layout_height="wrap_content"
-                            android:padding="@dimen/_5sdp"
                             android:layout_marginLeft="@dimen/_5sdp"
+                            android:padding="@dimen/_5sdp"
                             android:text="5"
                             android:textAlignment="textStart"
                             android:textColor="@color/colorBlack"
@@ -620,10 +670,10 @@
 
                         <TextView
                             android:id="@+id/share_value"
-                            android:padding="@dimen/_5sdp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/_5sdp"
+                            android:padding="@dimen/_5sdp"
                             android:text="5"
                             android:textAlignment="textStart"
                             android:textColor="@color/colorBlack"

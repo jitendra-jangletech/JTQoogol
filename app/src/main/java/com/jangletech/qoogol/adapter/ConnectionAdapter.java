@@ -56,12 +56,12 @@ import static com.jangletech.qoogol.util.Constant.unfollow;
  * Created by Pritali on 5/6/2020.
  */
 public class ConnectionAdapter extends RecyclerView.Adapter<ConnectionAdapter.ViewHolder> implements Filterable {
-    List<Connections> connectionsList;
-    Activity activity;
-    ConnectionItemBinding connectionItemBinding;
-    List<Connections> filteredConnectionsList;
-    String call_from;
-    updateConnectionListener listener;
+    private List<Connections> connectionsList;
+    private Activity activity;
+    private ConnectionItemBinding connectionItemBinding;
+    private List<Connections> filteredConnectionsList;
+    private String call_from;
+    private updateConnectionListener listener;
 
     public ConnectionAdapter(Activity activity, List<Connections> connectionsList, String call_from, updateConnectionListener listener) {
         this.activity = activity;
@@ -83,43 +83,51 @@ public class ConnectionAdapter extends RecyclerView.Adapter<ConnectionAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull ConnectionAdapter.ViewHolder holder, int position) {
         Connections connections = connectionsList.get(position);
-        connectionItemBinding.tvUserName.setText(connections.getU_first_name() + " " + connections.getU_last_name());
+        holder.connectionItemBinding.tvUserName.setText(connections.getU_first_name() + " " + connections.getU_last_name());
         if (connections.getBadge() != null && !connections.getBadge().isEmpty()) {
             String badge = connections.getBadge();
             if (badge.equalsIgnoreCase("B")) ;
-            connectionItemBinding.imgBadge.setImageDrawable(activity.getDrawable(R.drawable.bronze));
+            holder.connectionItemBinding.imgBadge.setImageDrawable(activity.getDrawable(R.drawable.bronze));
             if (badge.equalsIgnoreCase("G")) ;
-            connectionItemBinding.imgBadge.setImageDrawable(activity.getDrawable(R.drawable.gold));
+            holder.connectionItemBinding.imgBadge.setImageDrawable(activity.getDrawable(R.drawable.gold));
             if (badge.equalsIgnoreCase("S")) ;
-            connectionItemBinding.imgBadge.setImageDrawable(activity.getDrawable(R.drawable.silver));
+            holder.connectionItemBinding.imgBadge.setImageDrawable(activity.getDrawable(R.drawable.silver));
             if (badge.equalsIgnoreCase("P")) ;
-            connectionItemBinding.imgBadge.setImageDrawable(activity.getDrawable(R.drawable.platinum));
+            holder.connectionItemBinding.imgBadge.setImageDrawable(activity.getDrawable(R.drawable.platinum));
         }
+
+        holder.connectionItemBinding.rlProfile.setOnClickListener(v->{
+            Bundle bundle = new Bundle();
+            bundle.putString(Constant.fetch_profile_id, connections.getCn_user_id_2());
+            listener.showProfileClick(bundle);
+        });
+
+
         try {
             if (connections.getProf_pic() != null && !connections.getProf_pic().isEmpty()) {
-                Glide.with(activity).load(UtilHelper.getProfileImageUrl(connections.getProf_pic().trim())).circleCrop().placeholder(R.drawable.profile).into(connectionItemBinding.userProfileImage);
+                Glide.with(activity).load(UtilHelper.getProfileImageUrl(connections.getProf_pic().trim())).circleCrop().placeholder(R.drawable.profile).into(holder.connectionItemBinding.userProfileImage);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
 
-        PopupMenu popup = new PopupMenu(activity, connectionItemBinding.textViewOptions, END);
+        PopupMenu popup = new PopupMenu(activity, holder.connectionItemBinding.textViewOptions, END);
         popup.setGravity(END);
         popup.inflate(R.menu.connection_options);
         Menu popupMenu = popup.getMenu();
         if (call_from.equalsIgnoreCase(friends)) {
-            popupMenu.findItem(R.id.action_remove_connection).setVisible(true);
+            popupMenu.findItem(R.id.action_remove_connection).setVisible(false);
             if (connections.getCn_blocked_by_u1().equalsIgnoreCase("false"))
                 popupMenu.findItem(R.id.action_follow).setVisible(true);
         } else if (call_from.equalsIgnoreCase(followers)) {
             popupMenu.findItem(R.id.action_follow).setVisible(true);
             if (connections.getCn_connected().equalsIgnoreCase("false"))
-                popupMenu.findItem(R.id.action_add_friend).setVisible(true);
+                popupMenu.findItem(R.id.action_add_friend).setVisible(false);
         } else if (call_from.equalsIgnoreCase(following)) {
             popupMenu.findItem(R.id.action_unfollow).setVisible(true);
             if (connections.getCn_connected().equalsIgnoreCase("false"))
-                popupMenu.findItem(R.id.action_add_friend).setVisible(true);
+                popupMenu.findItem(R.id.action_add_friend).setVisible(false);
         } else if (call_from.equalsIgnoreCase(friendrequests)) {
             try {
                 if (connections.getFriend_req_sent().equalsIgnoreCase("true")) {
@@ -143,9 +151,7 @@ public class ConnectionAdapter extends RecyclerView.Adapter<ConnectionAdapter.Vi
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
         }
-
 
         popup.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
@@ -184,7 +190,6 @@ public class ConnectionAdapter extends RecyclerView.Adapter<ConnectionAdapter.Vi
                     bundle.putInt(CALL_FROM, connectonId);
                     bundle.putString(Constant.fetch_profile_id, connections.getCn_user_id_2());
                     listener.showProfileClick(bundle);
-//                    NavHostFragment.findNavController(this).navigate(R.id.nav_edit_profile,bundle);
                     break;
 
             }
@@ -233,9 +238,7 @@ public class ConnectionAdapter extends RecyclerView.Adapter<ConnectionAdapter.Vi
 
     public interface updateConnectionListener {
         void onUpdateConnection();
-
         void onBottomReached(int size);
-
         void showProfileClick(Bundle bundle);
     }
 
@@ -274,8 +277,11 @@ public class ConnectionAdapter extends RecyclerView.Adapter<ConnectionAdapter.Vi
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+        ConnectionItemBinding connectionItemBinding;
+
         public ViewHolder(@NonNull ConnectionItemBinding itemView) {
             super(itemView.getRoot());
+            this.connectionItemBinding = itemView;
         }
     }
 }

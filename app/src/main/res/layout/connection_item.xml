@@ -2,21 +2,21 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/_10sdp"
+        android:layout_margin="@dimen/_5sdp"
         app:cardCornerRadius="@dimen/_5sdp"
         app:cardElevation="@dimen/_5sdp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/rlProfile"
+            android:foreground="?attr/selectableItemBackground"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="@dimen/_10sdp">
+            android:padding="@dimen/_5sdp">
 
             <ImageView
                 android:id="@+id/userProfileImage"
@@ -24,6 +24,7 @@
                 android:layout_height="45dp"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_profile_default"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -56,11 +57,13 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:foreground="?attr/selectableItemBackground"
                 android:id="@+id/textViewOptions"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentRight="true"
+                android:padding="@dimen/_10sdp"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:text="&#8942;"
                 android:textAppearance="?android:textAppearanceLarge"

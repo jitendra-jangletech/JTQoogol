@@ -45,7 +45,7 @@ public interface LearningQuestionDao {
     void insertQuestion(LearningQuestions learningQuestions);
 
     @Query("delete from LearningQuestions where question_id=:questionId")
-    void deleteQuestion(String questionId);
+    void deleteQuestion(int questionId);
 
     @Delete
     void delete(List<LearningQuestionsNew> learningQuestions);

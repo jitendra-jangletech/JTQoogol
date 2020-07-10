@@ -20,69 +20,47 @@ import java.util.Objects;
  */
 public class ContactFilterAdapter extends RecyclerView.Adapter<ContactFilterAdapter.ViewHolder> {
 
-    ContactFilterItemBinding itemBinding;
-    Activity activity;
-    List<String> filterList;
-    OnFilterItemClickListener listener;
-    int previous=0;
-    RecyclerView recyclerview;
-    TextView previousTextview = null;
-    boolean isFirst = true;
+    private List<String> filterList;
+    private OnFilterItemClickListener listener;
+    private int previous = 0;
 
-    public ContactFilterAdapter(Activity activity, List<String> filterList, OnFilterItemClickListener listener, RecyclerView recyclerview) {
-        this.activity = activity;
+    public ContactFilterAdapter(List<String> filterList, OnFilterItemClickListener listener) {
         this.filterList = filterList;
         this.listener = listener;
-        this.recyclerview = recyclerview;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        itemBinding = DataBindingUtil.inflate(
+        ContactFilterItemBinding itemBinding = DataBindingUtil.inflate(
                 LayoutInflater.from(parent.getContext()),
                 R.layout.contact_filter_item, parent, false);
 
         return new ViewHolder(itemBinding);
     }
 
-
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final String letter = filterList.get(position);
-        itemBinding.alphabet.setText(letter);
+        if (position == previous) {
+            holder.itemBinding.alphabet.setChecked(true);
+        } else {
+            holder.itemBinding.alphabet.setChecked(false);
+        }
+        holder.itemBinding.alphabet.setText(letter);
 
-        if (position==previous)
-            holder.itemView.findViewById(R.id.alphabet).setBackgroundResource(R.drawable.contactfilter_active_bg);
-
-
-        itemBinding.alphabet.setOnClickListener(v -> {
+        holder.itemBinding.alphabet.setOnCheckedChangeListener((buttonView, isChecked) -> {
             try {
-                listener.onFilterClick(letter,position);
-                holder.itemView.findViewById(R.id.alphabet).setBackgroundResource(R.drawable.contactfilter_active_bg);
-
-                if (previousTextview !=null) {
-                    previousTextview.setBackgroundResource(R.drawable.contactfilter_bg);
-                    notifyItemChanged(previous);
+                if (isChecked) {
+                    listener.onFilterClick(letter, position);
+                    previous = position;
+                    notifyDataSetChanged();
                 }
-                previousTextview = Objects.requireNonNull(recyclerview.findViewHolderForAdapterPosition(position)).itemView.findViewById(R.id.alphabet);
-                previous = position;
-
-                if (isFirst) {
-                    Objects.requireNonNull(recyclerview.findViewHolderForAdapterPosition(0)).itemView.findViewById(R.id.alphabet).setBackgroundResource(R.drawable.contactfilter_bg);
-                    isFirst = false;
-                }
-
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
-
         });
-
-
-
     }
 
     public interface OnFilterItemClickListener {
@@ -105,10 +83,10 @@ public class ContactFilterAdapter extends RecyclerView.Adapter<ContactFilterAdap
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+        ContactFilterItemBinding itemBinding;
         public ViewHolder(@NonNull ContactFilterItemBinding itemView) {
             super(itemView.getRoot());
-//            if (selected.equalsIgnoreCase(filterList.get(getAdapterPosition())))
-//                itemBinding.alphabet.setBackgroundResource(R.drawable.contactfilter_active_bg);
+            this.itemBinding = itemView;
         }
     }
 }

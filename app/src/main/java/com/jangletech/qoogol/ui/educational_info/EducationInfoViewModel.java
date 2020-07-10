@@ -44,7 +44,7 @@ public class EducationInfoViewModel extends AndroidViewModel {
         appRepository.deleteEducationInfo(id);
     }
 
-    public LiveData<List<Education>> getAllEducations() {
-        return appRepository.getUserEducations();
+    public LiveData<List<Education>> getAllEducations(String userId) {
+        return appRepository.getUserEducations(userId);
     }
 }

@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -267,6 +268,7 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
                 ProgressDialog.getInstance().dismiss();
                 showToast("Something went wrong!!");
                 t.printStackTrace();
+                apiCallFailureDialog(t);
             }
         });
     }
@@ -280,7 +282,7 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
         dialog.setContentView(R.layout.add_element_dialog);
         dialog.show();
         TextInputLayout inputLayout = dialog.findViewById(R.id.tvInputLayout);
-        inputLayout.requestFocus();
+        inputLayout.getEditText().requestFocus();
         TextView btnAdd = dialog.findViewById(R.id.btnAdd);
         TextView btnCancel = dialog.findViewById(R.id.btnCancel);
         TextView tvHead = dialog.findViewById(R.id.tvHead);
@@ -313,6 +315,15 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
         btnCancel.setOnClickListener(v -> {
             dialog.dismiss();
         });
+
+       /* inputLayout.getEditText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                }
+            }
+        });*/
     }
 
     private void addNewUniversity(String text) {

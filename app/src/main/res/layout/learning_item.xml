@@ -11,7 +11,6 @@
     </data>
 
 
-
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/container"
         android:layout_width="match_parent"
@@ -50,7 +49,7 @@
                     android:layout_marginRight="@dimen/_10sdp"
                     android:ellipsize="end"
                     android:singleLine="true"
-                    android:text="@{question.question_id}"
+                    android:text="@{String.valueOf(question.question_id)}"
                     android:textColor="@color/colorWhite"
                     android:textSize="@dimen/_10ssp"
                     app:layout_constraintLeft_toLeftOf="parent"
@@ -179,34 +178,39 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/subheader_layout" />
 
-            <TextView
-                android:id="@+id/question_textview"
-                android:layout_width="0dp"
+            <LinearLayout
+                android:id="@+id/questLayout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_10sdp"
-                android:layout_marginRight="@dimen/_10sdp"
-                android:text="@{question.question}"
-                android:visibility="gone"
-                android:textColor="@color/colorSkyBlue"
-                android:textSize="@dimen/_12ssp"
+                android:orientation="vertical"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toLeftOf="@+id/reset"
-                app:layout_constraintTop_toBottomOf="@+id/subheader_view" />
+                app:layout_constraintTop_toBottomOf="@+id/subheader_view">
 
-            <io.github.kexanie.library.MathView
-                android:id="@+id/question_mathview"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_10sdp"
-                android:layout_marginRight="@dimen/_10sdp"
-                android:padding="@dimen/_10sdp"
-                android:text="@{question.question}"
-                android:visibility="gone"
-                android:textColor="@color/colorSkyBlue"
-                android:textSize="@dimen/_14ssp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@+id/reset"
-                app:layout_constraintTop_toBottomOf="@+id/subheader_view" />
+                <TextView
+                    android:id="@+id/question_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_10sdp"
+                    android:layout_marginRight="@dimen/_10sdp"
+                    android:text="@{question.question}"
+                    android:textColor="@color/colorSkyBlue"
+                    android:textSize="@dimen/_12ssp"
+                    android:visibility="gone" />
+
+                <io.github.kexanie.library.MathView
+                    android:id="@+id/question_mathview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_10sdp"
+                    android:layout_marginRight="@dimen/_10sdp"
+                    android:padding="@dimen/_10sdp"
+                    android:text="@{question.question}"
+                    android:textColor="@color/colorSkyBlue"
+                    android:textSize="@dimen/_14ssp"
+                    android:visibility="gone" />
+
+            </LinearLayout>
 
             <ImageView
                 android:id="@+id/reset"
@@ -215,9 +219,9 @@
                 android:layout_marginEnd="@dimen/_2sdp"
                 android:src="@drawable/ic_reset"
                 android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="@+id/question_textview"
+                app:layout_constraintBottom_toBottomOf="@+id/questLayout"
                 app:layout_constraintRight_toLeftOf="@+id/reset_label"
-                app:layout_constraintTop_toTopOf="@+id/question_textview" />
+                app:layout_constraintTop_toTopOf="@+id/questLayout" />
 
             <TextView
                 android:id="@+id/reset_label"
@@ -227,22 +231,43 @@
                 android:text="Reset"
                 android:textColor="@color/black"
                 android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="@+id/question_textview"
+                app:layout_constraintBottom_toBottomOf="@+id/questLayout"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/question_textview" />
+                app:layout_constraintTop_toTopOf="@+id/questLayout" />
 
-            <com.skyhope.showmoretextview.ShowMoreTextView
-                android:id="@+id/questiondesc_textview"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/_10sdp"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:layout_marginEnd="@dimen/_10sdp"
-                android:text="@{question.questiondesc}"
-                android:textColor="@color/colorBlack"
-                android:textSize="@dimen/_10ssp"
+            <LinearLayout
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/question_textview" />
+                app:layout_constraintTop_toBottomOf="@+id/questLayout"
+                android:id="@+id/descLayout"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.skyhope.showmoretextview.ShowMoreTextView
+                    android:id="@+id/questiondesc_textview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:text="@{question.questiondesc}"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/_10ssp"/>
+
+                <io.github.kexanie.library.MathView
+                    android:id="@+id/questiondesc_textview_math"
+                    android:layout_width="match_parent"
+                    android:visibility="gone"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:text="@{question.questiondesc}"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/_10ssp"/>
+
+            </LinearLayout>
+
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/timer_layout"
@@ -252,7 +277,7 @@
                 android:padding="@dimen/_10sdp"
                 android:visibility="gone"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/questiondesc_textview">
+                app:layout_constraintTop_toBottomOf="@+id/descLayout">
 
                 <TextView
                     android:id="@+id/tvtimer"
@@ -767,7 +792,7 @@
                                     android:id="@+id/b1text"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_3sdp"/>
+                                    android:layout_marginTop="@dimen/_3sdp" />
                             </LinearLayout>
 
 
@@ -877,7 +902,7 @@
                                     android:id="@+id/a3text"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_3sdp"/>
+                                    android:layout_marginTop="@dimen/_3sdp" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -942,7 +967,7 @@
                                     android:id="@+id/a4text"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_3sdp"/>
+                                    android:layout_marginTop="@dimen/_3sdp" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -963,7 +988,7 @@
                                     android:id="@+id/b4text"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_3sdp"/>
+                                    android:layout_marginTop="@dimen/_3sdp" />
                             </LinearLayout>
 
                         </LinearLayout>
@@ -998,7 +1023,6 @@
                             app:layout_constraintLeft_toLeftOf="parent"
                             app:layout_constraintTop_toTopOf="parent">
 
-
                             <com.google.android.material.card.MaterialCardView
                                 android:layout_width="@dimen/_100sdp"
                                 android:layout_height="@dimen/_100sdp"
@@ -1012,7 +1036,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:scaleType="centerCrop"
-                                    android:src="@drawable/profile" />
+                                    android:src="@drawable/no_image" />
 
                                 <ImageView
                                     android:id="@+id/scqimg_chck1"
@@ -1037,7 +1061,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:scaleType="centerCrop"
-                                    android:src="@drawable/profile" />
+                                    android:src="@drawable/no_image" />
 
 
                                 <ImageView
@@ -1073,7 +1097,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:scaleType="centerCrop"
-                                    android:src="@drawable/profile" />
+                                    android:src="@drawable/no_image" />
 
                                 <ImageView
                                     android:id="@+id/scqimg_chck3"
@@ -1098,7 +1122,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:scaleType="centerCrop"
-                                    android:src="@drawable/profile" />
+                                    android:src="@drawable/no_image" />
 
 
                                 <ImageView
@@ -1154,7 +1178,7 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
                                         android:scaleType="centerCrop"
-                                        android:src="@drawable/profile" />
+                                        android:src="@drawable/no_image" />
 
                                     <ImageView
                                         android:id="@+id/scqimg_imgtext_chck1"
@@ -1194,7 +1218,7 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
                                         android:scaleType="centerCrop"
-                                        android:src="@drawable/profile" />
+                                        android:src="@drawable/no_image" />
 
 
                                     <ImageView
@@ -1248,7 +1272,7 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
                                         android:scaleType="centerCrop"
-                                        android:src="@drawable/profile" />
+                                        android:src="@drawable/no_image" />
 
                                     <ImageView
                                         android:id="@+id/scqimg_imgtext_chck3"
@@ -1291,7 +1315,7 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
                                         android:scaleType="centerCrop"
-                                        android:src="@drawable/profile" />
+                                        android:src="@drawable/no_image" />
 
 
                                     <ImageView
@@ -1358,7 +1382,7 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
                                         android:scaleType="centerCrop"
-                                        android:src="@drawable/profile" />
+                                        android:src="@drawable/no_image" />
 
                                     <ImageView
                                         android:id="@+id/mcqimg_imgtext_chck1"
@@ -1398,7 +1422,7 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
                                         android:scaleType="centerCrop"
-                                        android:src="@drawable/profile" />
+                                        android:src="@drawable/no_image" />
 
 
                                     <ImageView
@@ -1452,7 +1476,7 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
                                         android:scaleType="centerCrop"
-                                        android:src="@drawable/profile" />
+                                        android:src="@drawable/no_image" />
 
                                     <ImageView
                                         android:id="@+id/mcqimg_imgtext_chck3"
@@ -1495,7 +1519,7 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
                                         android:scaleType="centerCrop"
-                                        android:src="@drawable/profile" />
+                                        android:src="@drawable/no_image" />
 
 
                                     <ImageView
@@ -1555,7 +1579,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:scaleType="centerCrop"
-                                    android:src="@drawable/profile" />
+                                    android:src="@drawable/no_image" />
 
                                 <ImageView
                                     android:id="@+id/mcqimg_chck1"
@@ -1580,7 +1604,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:scaleType="centerCrop"
-                                    android:src="@drawable/profile" />
+                                    android:src="@drawable/no_image" />
 
 
                                 <ImageView
@@ -1616,7 +1640,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:scaleType="centerCrop"
-                                    android:src="@drawable/profile" />
+                                    android:src="@drawable/no_image" />
 
                                 <ImageView
                                     android:id="@+id/mcqimg_chck3"
@@ -1641,7 +1665,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:scaleType="centerCrop"
-                                    android:src="@drawable/profile" />
+                                    android:src="@drawable/no_image" />
 
 
                                 <ImageView
@@ -1691,7 +1715,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:scaleType="centerCrop"
-                                    android:src="@drawable/profile" />
+                                    android:src="@drawable/no_image" />
 
                                 <ImageView
                                     android:id="@+id/a_mtp_chck1"
@@ -1716,7 +1740,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:scaleType="centerCrop"
-                                    android:src="@drawable/profile" />
+                                    android:src="@drawable/no_image" />
 
 
                                 <ImageView
@@ -1753,7 +1777,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:scaleType="centerCrop"
-                                    android:src="@drawable/profile" />
+                                    android:src="@drawable/no_image" />
 
                                 <ImageView
                                     android:id="@+id/a_mtp_chck2"
@@ -1778,7 +1802,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:scaleType="centerCrop"
-                                    android:src="@drawable/profile" />
+                                    android:src="@drawable/no_image" />
 
 
                                 <ImageView
@@ -1815,7 +1839,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:scaleType="centerCrop"
-                                    android:src="@drawable/profile" />
+                                    android:src="@drawable/no_image" />
 
                                 <ImageView
                                     android:id="@+id/a_mtp_chck3"
@@ -1840,7 +1864,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:scaleType="centerCrop"
-                                    android:src="@drawable/profile" />
+                                    android:src="@drawable/no_image" />
 
 
                                 <ImageView
@@ -1859,6 +1883,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
+                            android:visibility="gone"
                             android:weightSum="2"
                             app:layout_constraintLeft_toLeftOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/mtp_linear3">
@@ -1877,7 +1902,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:scaleType="centerCrop"
-                                    android:src="@drawable/profile" />
+                                    android:src="@drawable/no_image" />
 
                                 <ImageView
                                     android:id="@+id/a_mtp_chck4"
@@ -1902,8 +1927,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:scaleType="centerCrop"
-                                    android:src="@drawable/profile" />
-
+                                    android:src="@drawable/no_image" />
 
                                 <ImageView
                                     android:id="@+id/b_mtp_chck4"
@@ -1927,9 +1951,9 @@
                         android:layout_marginBottom="@dimen/_20sdp"
                         android:backgroundTint="@color/color_red"
                         android:text="@string/submit"
+                        android:textAllCaps="false"
                         android:textColor="@color/colorWhite"
                         app:cornerRadius="@dimen/_50sdp"
-                        android:textAllCaps="false"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/mtp_img_layout" />
 

@@ -89,7 +89,7 @@ public class Comments {
     }
 
     public String getTlc_cdatetime() {
-        return tlc_cdatetime;
+        return tlc_cdatetime!=null?tlc_cdatetime:"";
     }
 
     public void setTlc_cdatetime(String tlc_cdatetime) {
@@ -137,7 +137,7 @@ public class Comments {
     }
 
     public String getTime() {
-        return time;
+        return time!=null?time:"";
     }
 
     public void setTime(String time) {

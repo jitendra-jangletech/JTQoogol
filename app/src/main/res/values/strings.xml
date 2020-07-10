@@ -38,7 +38,7 @@
     <string name="menu_quest_trending">Trending</string>
     <string name="menu_quest_popular">Popular</string>
     <string name="menu_quest_recent">Recent</string>
-    <string name="menu_ask_doubts">Ask Doubts</string>
+    <string name="menu_ask_doubts">Doubts</string>
 
     <string name="menu_review">Review</string>
     <string name="menu_published">Published</string>
@@ -62,6 +62,15 @@
     <!-- SignUp -->
     <string name="mobile">Mobile</string>
     <string name="email">Email</string>
+    <string name="email_mobile">Email or Mobile Number</string>
+    <string name="email_mobile_username">Email or Mobile Number or User Name</string>
+    <string name="password_otp">Password or OTP</string>
+    <string name="otp_new">OTP</string>
+    <string name="otp_password">Password or OTP</string>
+    <string name="existing_user"><u>Existing User?</u></string>
+    <string name="new_user"><u>New User?</u></string>
+
+    <string name="password_new">Password</string>
     <string name="create_password">Create Password</string>
     <string name="confirm_password">Confirm Password</string>
 
@@ -100,7 +109,7 @@
     <string name="exam">Exam</string>
     <string name="test">Test</string>
     <string name="practice_test">Practice Test</string>
-    <string name="my_test">My Test</string>
+    <string name="my_test">Practice Test</string>
     <string name="popular_test">Popular Test</string>
     <string name="recent_test">Recent Test</string>
     <string name="attended_by_friends">Attended By Friends</string>
@@ -197,11 +206,12 @@
     <string name="qoogol_version_1_0">Qoogol Version 1.0</string>
     <string name="menu_learning">Learning</string>
     <string name="menu_learning_details">Question Details</string>
-    <string name="menu_test">Test</string>
+    <string name="menu_test">Practise Test</string>
     <string name="menu_questions">Questions</string>
     <string name="personal_info_tab">Personal</string>
     <string name="educational_info_tab">Educational</string>
-    <string name="preference_tab">Preferences</string>
+    <string name="test_analytics">Test Analytics</string>
+    <string name="question_analytics">Question Analytics</string>
     <string name="verify_mobile_dialog_msg">Please type the verification code sent to your mobile number</string>
     <string name="verify_email_dialog_msg">Please type the verification code sent to your email</string>
     <string name="question">A pie chart with one or more slices offset is called a(n)_____________ple chart. \n
@@ -271,6 +281,7 @@
 
     <string name="register">Login or Register</string>
     <string name="dob">Dob:</string>
+    <string name="date_of_bir">Date of Birth</string>
     <string name="date_of_birth"><![CDATA[Date of Birth <font color=\'#cc0029\'><b>*</b></font>]]></string>
     <string name="mobile_number"><![CDATA[Mobile number <font color=\'#cc0029\'><b>*</b></font>]]></string>
     <string name="ok">OK</string>
@@ -346,6 +357,7 @@
     <string name="search">Search</string>
     <string name="search_hint">Search by name</string>
     <string name="deactivate_my_account">Deactivate My Account</string>
+    <string name="more_settings">More Settings</string>
     <string name="blocked_list">Blocked List</string>
     <string name="yes">Yes</string>
     <string name="type_message">Type message</string>
@@ -400,13 +412,13 @@
     <string name="remove_connection">Remove\nconnection</string>
     <string name="online">Online</string>
     <string name="terms_and_conditions"><![CDATA[By registering and login, I accept the <a href="https://spot20191210061236.azurewebsites.net/uploads/Policies/terms_and_conditions.html">terms and conditions</a> and <a href="https://spot20191210061236.azurewebsites.net/uploads/Policies/privacy_policy.html">privacy policy</a>.]]></string>
-    <string name="spotmeets_desc"><b>spotmeets</b> helps people connect and collaborate socially and professionally. It provides multiple useful features to find right people online on your finger tips. We acknowledge and attribute of audio video calling to <a href="https://jitsi.org/">jitsi.org</a></string>
-    <string name="support"><![CDATA[Send your suggestions at : <a href="admin@spotmeets.com">admin@spotmeets.com</a>]]></string>
-    <string name="link"><![CDATA[For more information, visit : <a href="https://www.spotmeets.com">www.spotmeets.com</a>]]></string>
+    <string name="spotmeets_desc"><b>qoogol</b> helps people connect and collaborate socially and professionally. It provides multiple useful features to find right people online on your finger tips. We acknowledge and attribute of audio video calling to <a href="https://jitsi.org/">jitsi.org</a></string>
+    <string name="support"><![CDATA[Send your suggestions at : <a href="admin@qoogol.com">admin@qoogol.com</a>]]></string>
+    <string name="link"><![CDATA[For more information, visit : <a href="https://www.qoogol.com">www.qoogol.com</a>]]></string>
     <string name="about_jangletch">Jangletech Systems is a big family of IT professionals driven by desire to invent and innovate new IT Products and Services.</string>
     <string name="reachout_text"><![CDATA[Reach out to us at : <a href="contactus@jangletech.com">contactus@jangletech.com</a>]]></string>
     <string name="more_info_link"><![CDATA[For more information, visit : <a href="https://www.jangletech.com">www.jangletech.com</a>]]></string>
-    <string name="code_conduct_head"><![CDATA[<b><font color=#FF0000>spotmeets</font> Community Code of Conduct</b><br/>]]></string>
+    <string name="code_conduct_head"><![CDATA[<b><font color=#FF0000>qoogol</font> Community Code of Conduct</b><br/>]]></string>
     <string name="code_conduct_desc"><![CDATA[<b>&#8226;</b> <font color=#FF0000>Be genuine.</font> Provide actual details in your profile including name, birth date and gender. <br/><br/>&#8226; <font color=#FF0000>Be professional.</font> Connecting is good and spamming is bad. Don’t be rude or foul. Do not harass. <br/><br/><b>&#8226;</b> <font color=#FF0000>Be honest.</font> Earn trust by being honest every moment every day. Accept and correct mistakes. <br/><br/><b>&#8226;</b> <font color=#FF0000>Be smart.</font> Forward content that is useful for recipients. Help stop spreading of rumors. <br/><br/><b>&#8226;</b> <font color=#FF0000>Be safe.</font> Verify identity before sharing contact details or meeting someone. <br/><br/><b>&#8226;</b> <font color=#FF0000>Be creative.</font> Create innovative content and display in larger forums like chatrooms. <br/><br/><b>&#8226;</b> <font color=#FF0000>Be collaborative.</font> Share content, ask questions and answer queries and interact. <br/><br/><b>&#8226;</b> <font color=#FF0000>Be respectful.</font> Respect ideas and work. Praise good work. Do not taunt or shame anyone. Agree to disagree. <br/><br/><b>&#8226;</b> <font color=#FF0000>Be truly human.</font> Honour diversity in all aspects. Show compassion, kindness, care and love for others.]]></string>
     <string name="company">Company</string>
     <string name="religion_">Religion</string>

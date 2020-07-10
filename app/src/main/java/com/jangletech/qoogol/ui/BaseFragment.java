@@ -2,11 +2,15 @@ package com.jangletech.qoogol.ui;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,7 +19,11 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.bogdwellers.pinchtozoom.ImageMatrixTouchHandler;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
@@ -25,8 +33,6 @@ import com.jangletech.qoogol.activities.LaunchActivity;
 import com.jangletech.qoogol.activities.MainActivity;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
-
-import org.apache.commons.collections4.functors.ExceptionTransformer;
 
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
@@ -50,6 +56,54 @@ public class BaseFragment extends Fragment {
         }
         Log.d(TAG, "hasError: " + result);
         return result;
+    }
+
+    public boolean isAppInstalled() {
+        PackageManager pm = getActivity().getPackageManager();
+        try {
+            pm.getPackageInfo("com.jangletech.chatchilli", PackageManager.GET_ACTIVITIES);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+        }
+        return false;
+    }
+
+    public void replaceFragment(int resId, Fragment fragment, Bundle bundle) {
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        String backStateName = fragment.getClass().getName();
+        boolean fragmentPopped = fragmentManager.popBackStackImmediate(backStateName, 0);
+        if (!fragmentPopped) {
+            fragment.setArguments(bundle);
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left);
+            fragmentTransaction.replace(resId, fragment);
+            fragmentTransaction.addToBackStack(backStateName);
+            fragmentTransaction.commit();
+        }
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    public void showFullScreen(final String profilePath) {
+        final Dialog dialog = new Dialog(requireActivity(), android.R.style.Theme_Light);
+        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawableResource(android.R.color.transparent);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.image_fullscreen_preview);
+        ImageView imageView = dialog.findViewById(R.id.image_preview);
+        imageView.setOnTouchListener(new ImageMatrixTouchHandler(dialog.getWindow().getContext()));
+
+        Glide.with(requireActivity()).load(profilePath)
+                .thumbnail(0.5f)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .dontTransform()
+                .dontAnimate()
+                .into(imageView);
+
+        dialog.show();
+    }
+
+    public String getEmptyStringIfNull(String string) {
+        return string != null ? string : "";
     }
 
     public String getStringValue(Object object) {
@@ -81,6 +135,11 @@ public class BaseFragment extends Fragment {
                 .into(imageView);
     }
 
+    public void clearFilters() {
+        saveString(Constant.tm_diff_level, "");
+        saveString(Constant.tm_avg_rating, "");
+    }
+
     public void resetSettingAndLogout() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(requireActivity(), R.style.AlertDialogStyle);
         alertDialog.setTitle(getActivity().getResources().getString(R.string.warning));
@@ -95,7 +154,7 @@ public class BaseFragment extends Fragment {
             Objects.requireNonNull(requireActivity()).finish();
             dialog.dismiss();
         });
-        alertDialog.show();
+        alertDialog.setCancelable(false).show();
     }
 
     public String getTempImageUrl(String path) {
@@ -193,20 +252,27 @@ public class BaseFragment extends Fragment {
         return Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
     }
 
-    public String getString(String key){
+    public String getString(String key) {
         return new PreferenceManager(getApplicationContext()).getString(key);
     }
 
-    public static void saveString(String key,String value){
-        new PreferenceManager(getApplicationContext()).saveString(key,value);
+    public static void saveString(String key, String value) {
+        new PreferenceManager(getApplicationContext()).saveString(key, value);
     }
 
     public static String getUserId() {
         return String.valueOf(new PreferenceManager(getApplicationContext()).getInt(Constant.USER_ID));
     }
 
+    public void dismissRefresh(SwipeRefreshLayout swipeRefreshLayout) {
+        if (swipeRefreshLayout != null && swipeRefreshLayout.isRefreshing()) {
+            swipeRefreshLayout.setRefreshing(false);
+        }
+    }
+
     public String getProfileImageUrl(String imageName) {
-        //String userId = String.valueOf(new PreferenceManager(getApplicationContext()).getInt(Constant.USER_ID));
+        //String userId = String.valueOf(new PreferenceManager(
+        // getApplicationContext()).getInt(Constant.USER_ID));
         return Constant.PRODUCTION_BASE_FILE_API + imageName;
     }
 

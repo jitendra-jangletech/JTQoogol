@@ -16,8 +16,8 @@ public interface NotificationDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<Notification> notifications);
 
-    @Query("Select * from Notification")
-    LiveData<List<Notification>> getAllNotifications();
+    @Query("Select * from Notification where n_sent_to_u_id=:uid")
+    LiveData<List<Notification>> getAllNotifications(String uid);
 
     @Query("delete from Notification")
     void deleteAllNotifications();

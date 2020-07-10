@@ -3,7 +3,6 @@ package com.jangletech.qoogol.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -45,13 +44,19 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     public void onBindViewHolder(@NonNull NotificationAdapter.ViewHolder holder, int position) {
         Notification notification = notifications.get(position);
         holder.itemBinding.notificationText.setText(notification.getW_notification_desc());
-        if(notification.getN_cdatetime()!=null)
+        if(notification.getN_cdatetime()!=null )
         holder.itemBinding.tvDate.setText(DateUtils.localeDateFormat(notification.getN_cdatetime()));
         //holder.itemBinding.tvDate.setText(DateUtils.getFormattedDate(notification.getN_cdatetime().substring(0,10)));
         Glide.with(mContext)
                 .load(getImageUrl(notification))
+                .circleCrop()
+                .placeholder(R.drawable.profile)
+                .error(R.drawable.profile)
                 .apply(RequestOptions.circleCropTransform())
                 .into(holder.itemBinding.profilePic);
+
+        holder.itemBinding.getRoot().setOnClickListener(v ->
+                onItemClickListener.onItemClick(notifications.get(position)));
 
     }
 
@@ -70,14 +75,15 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         public ViewHolder(@NonNull NotificationItemBinding itemView) {
             super(itemView.getRoot());
             this.itemBinding = itemView;
-
-            itemBinding.getRoot().setOnClickListener(v -> onItemClickListener.onItemClick(notifications.get(getAdapterPosition())));
         }
     }
 
     public String getImageUrl(Notification notification){
-        String paddedString = Constant.PRODUCTION_BASE_FILE_API
-                +notification.getW_user_profile_image_name();
+        String paddedString = "";
+        if(!notification.getW_user_profile_image_name().isEmpty()) {
+            paddedString = Constant.PRODUCTION_BASE_FILE_API
+                    + notification.getW_user_profile_image_name();
+        }
         return paddedString;
     }
 }

@@ -20,7 +20,6 @@ import com.jangletech.qoogol.databinding.CommentDialogBinding;
 import com.jangletech.qoogol.enums.Module;
 import com.jangletech.qoogol.model.Comments;
 import com.jangletech.qoogol.model.ProcessQuestion;
-import com.jangletech.qoogol.model.TestQuestionNew;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.learning.CommentViewModel;
@@ -42,14 +41,14 @@ public class CommentDialog extends Dialog implements CommentAdapter.onCommentIte
     private List<Comments> commentList;
     private CommentAdapter commentAdapter;
     private CommentViewModel mViewModel;
-    private TestQuestionNew testQuestionNew;
+    private int id;
     private CommentClickListener commentClickListener;
     ApiInterface apiService = ApiClient.getInstance().getApi();
 
-    public CommentDialog(@NonNull Activity mContext, TestQuestionNew testQuestionNew,CommentClickListener commentClickListener) {
+    public CommentDialog(@NonNull Activity mContext, int id, CommentClickListener commentClickListener) {
         super(mContext, android.R.style.Theme_DeviceDefault_Light_DarkActionBar);
         this.mContext = mContext;
-        this.testQuestionNew = testQuestionNew;
+        this.id = id;
         this.commentClickListener = commentClickListener;
     }
 
@@ -62,7 +61,7 @@ public class CommentDialog extends Dialog implements CommentAdapter.onCommentIte
         setContentView(mBinding.getRoot());
         commentList = new ArrayList<>();
         fetchCommentsAPI(new PreferenceManager(mContext).getInt(Constant.USER_ID),
-                testQuestionNew.getTq_q_id(), "L", "");
+                id, "L", "");
 
         mBinding.btnClose.setOnClickListener(v -> {
             dismiss();
@@ -74,12 +73,12 @@ public class CommentDialog extends Dialog implements CommentAdapter.onCommentIte
                 return;
             }
             fetchCommentsAPI(new PreferenceManager(mContext).getInt(Constant.USER_ID),
-                    testQuestionNew.getTq_q_id(), "I", mBinding.etComment.getText().toString());
+                    id, "I", mBinding.etComment.getText().toString());
         });
     }
 
-    private void fetchCommentsAPI(int user_id, String que_id, String api_case, String comment_text) {
-        ProgressDialog.getInstance().show(mContext);
+    private void fetchCommentsAPI(int user_id, int que_id, String api_case, String comment_text) {
+        //ProgressDialog.getInstance().show(mContext);
         Call<ProcessQuestion> call;
 
         Log.d(TAG, "fetchCommentsAPI userId : " + user_id);
@@ -94,7 +93,7 @@ public class CommentDialog extends Dialog implements CommentAdapter.onCommentIte
             @Override
             public void onResponse(Call<ProcessQuestion> call, retrofit2.Response<ProcessQuestion> response) {
                 try {
-                    ProgressDialog.getInstance().dismiss();
+                    //ProgressDialog.getInstance().dismiss();
                     commentList.clear();
                     if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
                         commentList = response.body().getCommentList();
@@ -105,14 +104,16 @@ public class CommentDialog extends Dialog implements CommentAdapter.onCommentIte
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    ProgressDialog.getInstance().dismiss();
+                    mBinding.shimmerViewContainer.hideShimmer();
+                    //ProgressDialog.getInstance().dismiss();
                 }
             }
 
             @Override
             public void onFailure(Call<ProcessQuestion> call, Throwable t) {
                 t.printStackTrace();
-                ProgressDialog.getInstance().dismiss();
+                mBinding.shimmerViewContainer.hideShimmer();
+                //ProgressDialog.getInstance().dismiss();
             }
         });
     }
@@ -122,6 +123,7 @@ public class CommentDialog extends Dialog implements CommentAdapter.onCommentIte
         mBinding.commentRecycler.setHasFixedSize(true);
         mBinding.commentRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         mBinding.commentRecycler.setAdapter(commentAdapter);
+        mBinding.shimmerViewContainer.hideShimmer();
     }
 
     private void emptyView() {
@@ -133,7 +135,7 @@ public class CommentDialog extends Dialog implements CommentAdapter.onCommentIte
             mBinding.emptytv.setVisibility(View.GONE);
     }
 
-    public interface CommentClickListener{
+    public interface CommentClickListener {
         void onCommentClick(String userId);
     }
 

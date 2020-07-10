@@ -20,8 +20,8 @@ public interface EducationDetailsDao {
     @Query("Select * from Education where ue_id =:ueId")
     LiveData<Education> getUserEducation(String ueId);
 
-    @Query("Select * from Education")
-    LiveData<List<Education>> getAllUserEducations();
+    @Query("Select * from Education where ue_user_id=:uid")
+    LiveData<List<Education>> getAllUserEducations(String uid);
 
     @Query("delete from Education where ue_id=:ueId")
     void deleteEducation(String ueId);

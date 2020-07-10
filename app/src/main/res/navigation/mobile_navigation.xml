@@ -19,12 +19,6 @@
         tools:layout="@layout/fragment_about" >
     </fragment>
 
-    <fragment
-        android:id="@+id/nav_share_app"
-        android:name="com.jangletech.qoogol.ui.share.ShareFragment"
-        android:label="@string/share"
-        tools:layout="@layout/fragment_share_app" >
-    </fragment>
 
     <fragment
         android:id="@+id/nav_learning"
@@ -85,7 +79,7 @@
     <fragment
         android:id="@+id/nav_test_my"
         android:name="com.jangletech.qoogol.ui.test.my_test.MyTestFragment"
-        android:label="@string/menu_test_my"
+        android:label="@string/menu_test_practice"
         tools:layout="@layout/fragment_test_my" >
         <action
             android:id="@+id/action_nav_test_my_to_nav_comments"
@@ -98,11 +92,6 @@
         android:label="@string/menu_test_popular"
         tools:layout="@layout/fragment_test_popular" />
 
-    <fragment
-        android:id="@+id/nav_attended_by_friends"
-        android:name="com.jangletech.qoogol.ui.test.attended_by_friends.TestAttentedByFriendsFragment"
-        android:label="@string/menu_test_attended_by_friends"
-        tools:layout="@layout/fragment_test_attented_by_friends" />
 
     <fragment
         android:id="@+id/nav_shared_with_you"

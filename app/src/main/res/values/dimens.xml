@@ -19,7 +19,13 @@
     <dimen name="btn_padding">8dp</dimen>
     <dimen name="media_upload_size">40dp</dimen>
 
-    <dimen name="design_bottom_navigation_text_size" tools:override="true">10sp</dimen>
-    <dimen name="design_bottom_navigation_active_text_size" tools:override="true">10sp</dimen>
+    <dimen name="design_bottom_navigation_text_size" tools:override="true">6sp</dimen>
+    <dimen name="design_bottom_navigation_active_text_size" tools:override="true">6sp</dimen>
+
+    //data place holder for shimmer effect
+    <dimen name="activityPadding">16dp</dimen>
+    <dimen name="placeholderImage">60dp</dimen>
+    <dimen name="placeholderTextHeight">8dp</dimen>
+    <dimen name="padding_10">10dp</dimen>
 
 </resources>

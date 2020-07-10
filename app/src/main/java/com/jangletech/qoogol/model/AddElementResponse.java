@@ -5,8 +5,6 @@ import com.jangletech.qoogol.util.Constant;
 
 public class AddElementResponse {
 
-
-
     @SerializedName("520")
     private String instituteId;
 

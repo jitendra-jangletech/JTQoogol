@@ -61,10 +61,81 @@
                             android:text="@string/learning" />
 
 
-                        <TextView
-                            style="@style/menu_item_style"
-                            android:drawableLeft="@drawable/ic_test"
-                            android:text="@string/test" />
+                        <RelativeLayout
+                            android:id="@+id/tvTest"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_26sdp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_marginLeft="@dimen/_10sdp"
+                                android:layout_marginTop="@dimen/_10sdp"
+                                android:drawableLeft="@drawable/ic_test"
+                                android:drawablePadding="@dimen/_10sdp"
+                                android:gravity="center_vertical"
+                                android:text="@string/test"
+                                android:textColor="@color/menu_item_text_color"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/expand"
+                                android:layout_marginRight="@dimen/_10sdp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_alignParentEnd="true"
+                                android:layout_gravity="center_horizontal"
+                                android:background="@drawable/ic_expand" />
+
+                        </RelativeLayout>
+
+                        <LinearLayout
+                            android:id="@+id/testNavLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:id="@+id/tvNavTest"
+                                style="@style/sub_menu_item_style"
+                                android:foreground="?attr/selectableItemBackground"
+                                android:text="@string/my_test" />
+
+                            <TextView
+                                android:id="@+id/nav_attended_by_friends"
+                                style="@style/sub_menu_item_style"
+                                android:foreground="?attr/selectableItemBackground"
+                                android:text="@string/attended_by_friends"
+                                android:visibility="gone" />
+
+                            <TextView
+                                android:id="@+id/nav_shared_with_you"
+                                style="@style/sub_menu_item_style"
+                                android:foreground="?attr/selectableItemBackground"
+                                android:text="@string/shared_with_you"
+                                android:visibility="gone" />
+
+                            <TextView
+                                android:id="@+id/nav_shared_by_you"
+                                style="@style/sub_menu_item_style"
+                                android:foreground="?attr/selectableItemBackground"
+                                android:text="@string/shared_by_you" />
+
+                            <TextView
+                                android:id="@+id/nav_test_popular"
+                                style="@style/sub_menu_item_style"
+                                android:foreground="?attr/selectableItemBackground"
+                                android:text="@string/popular_test" />
+
+                            <TextView
+                                android:id="@+id/nav_recent_test"
+                                style="@style/sub_menu_item_style"
+                                android:foreground="?attr/selectableItemBackground"
+                                android:text="@string/recent_test" />
+
+
+                        </LinearLayout>
 
                         <TextView
                             android:id="@+id/nav_practice_test"
@@ -72,46 +143,6 @@
                             android:foreground="?attr/selectableItemBackground"
                             android:text="@string/practice_test"
                             android:visibility="gone" />
-
-                        <TextView
-                            android:id="@+id/tvNavTest"
-                            style="@style/sub_menu_item_style"
-                            android:foreground="?attr/selectableItemBackground"
-                            android:text="@string/my_test" />
-
-
-
-                        <TextView
-                            android:id="@+id/nav_attended_by_friends"
-                            style="@style/sub_menu_item_style"
-                            android:foreground="?attr/selectableItemBackground"
-                            android:text="@string/attended_by_friends"
-                            android:visibility="gone" />
-
-                        <TextView
-                            android:id="@+id/nav_shared_with_you"
-                            style="@style/sub_menu_item_style"
-                            android:foreground="?attr/selectableItemBackground"
-                            android:text="@string/shared_with_you"
-                            android:visibility="gone" />
-
-                        <TextView
-                            android:id="@+id/nav_shared_by_you"
-                            style="@style/sub_menu_item_style"
-                            android:foreground="?attr/selectableItemBackground"
-                            android:text="@string/shared_by_you" />
-
-                        <TextView
-                            android:id="@+id/nav_test_popular"
-                            style="@style/sub_menu_item_style"
-                            android:foreground="?attr/selectableItemBackground"
-                            android:text="@string/popular_test" />
-
-                        <TextView
-                            android:id="@+id/nav_recent_test"
-                            style="@style/sub_menu_item_style"
-                            android:foreground="?attr/selectableItemBackground"
-                            android:text="@string/recent_test" />
 
 
                         <TextView
@@ -187,14 +218,14 @@
                         <TextView
                             android:id="@+id/nav_share_app"
                             style="@style/menu_item_style"
-                            android:drawableLeft="@drawable/ic_settings"
+                            android:drawableLeft="@drawable/ic_share"
                             android:foreground="?attr/selectableItemBackground"
                             android:text="@string/share" />
 
                         <TextView
                             android:id="@+id/nav_about"
                             style="@style/menu_item_style"
-                            android:drawableLeft="@drawable/ic_settings"
+                            android:drawableLeft="@drawable/ic_about"
                             android:foreground="?attr/selectableItemBackground"
                             android:text="@string/about" />
 
@@ -227,9 +258,6 @@
                     </LinearLayout>
 
                 </androidx.core.widget.NestedScrollView>
-
-
-
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

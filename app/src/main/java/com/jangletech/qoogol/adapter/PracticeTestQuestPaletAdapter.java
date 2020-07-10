@@ -50,7 +50,6 @@ public class PracticeTestQuestPaletAdapter extends RecyclerView.Adapter<Practice
                     R.layout.quest_palet_item, parent, false);
             return new PracticeQuestionViewHolder(itemGridQuestBinding);
         }
-
         return null;
     }
 
@@ -60,15 +59,34 @@ public class PracticeTestQuestPaletAdapter extends RecyclerView.Adapter<Practice
 
         if (strSortType.equalsIgnoreCase(QuestionSortType.LIST.toString())) {
             holder.itemBinding.tvQuestNo.setText(String.valueOf(practiceQuestion.getTq_quest_seq_num()));
-            holder.itemBinding.tvQuest.setText(practiceQuestion.getQ_quest());
+
+            if(practiceQuestion.getQ_quest().contains("\\")){
+                holder.itemBinding.tvQuest.setVisibility(View.GONE);
+                holder.itemBinding.tvQuestMath.setVisibility(View.VISIBLE);
+                holder.itemBinding.tvQuestMath.setText(practiceQuestion.getQ_quest());
+            }else{
+                holder.itemBinding.tvQuestMath.setVisibility(View.GONE);
+                holder.itemBinding.tvQuest.setVisibility(View.VISIBLE);
+                holder.itemBinding.tvQuest.setText(practiceQuestion.getQ_quest());
+            }
 
             if (practiceQuestion.isTtqa_visited()) {
                 holder.itemBinding.tvQuestNo.setBackground(activity.getResources().getDrawable(R.drawable.bg_quest_visited));
                 holder.itemBinding.tvQuestNo.setTextColor(activity.getResources().getColor(R.color.colorWhite));
             }
 
-            if (practiceQuestion.isTtqa_attempted()) {
+           /* if (practiceQuestion.isTtqa_attempted()) {
                 holder.itemBinding.tvQuestNo.setBackground(activity.getResources().getDrawable(R.drawable.bg_quest_attempted));
+                holder.itemBinding.tvQuestNo.setTextColor(activity.getResources().getColor(R.color.colorWhite));
+            }*/
+
+            if (practiceQuestion.isAnsweredRight() || practiceQuestion.getA_sub_ans().equalsIgnoreCase(practiceQuestion.getTtqa_sub_ans())) {
+                holder.itemBinding.tvQuestNo.setBackground(activity.getResources().getDrawable(R.drawable.bg_ans_right));
+                holder.itemBinding.tvQuestNo.setTextColor(activity.getResources().getColor(R.color.colorWhite));
+            }
+
+            if (!practiceQuestion.isAnsweredRight() || !practiceQuestion.getA_sub_ans().equalsIgnoreCase(practiceQuestion.getTtqa_sub_ans())) {
+                holder.itemBinding.tvQuestNo.setBackground(activity.getResources().getDrawable(R.drawable.bg_ans_wrong));
                 holder.itemBinding.tvQuestNo.setTextColor(activity.getResources().getColor(R.color.colorWhite));
             }
 
@@ -89,8 +107,18 @@ public class PracticeTestQuestPaletAdapter extends RecyclerView.Adapter<Practice
                 holder.itemBindingGrid.tvQuestNo.setTextColor(activity.getResources().getColor(R.color.colorWhite));
             }
 
-            if (practiceQuestion.isTtqa_attempted()) {
+            /*if (practiceQuestion.isTtqa_attempted()) {
                 holder.itemBindingGrid.tvQuestNo.setBackground(activity.getResources().getDrawable(R.drawable.bg_quest_attempted));
+                holder.itemBindingGrid.tvQuestNo.setTextColor(activity.getResources().getColor(R.color.colorWhite));
+            }*/
+
+            if (practiceQuestion.isAnsweredRight() || practiceQuestion.getA_sub_ans().equalsIgnoreCase(practiceQuestion.getTtqa_sub_ans())) {
+                holder.itemBindingGrid.tvQuestNo.setBackground(activity.getResources().getDrawable(R.drawable.bg_ans_right));
+                holder.itemBindingGrid.tvQuestNo.setTextColor(activity.getResources().getColor(R.color.colorWhite));
+            }
+
+            if (!practiceQuestion.isAnsweredRight() || !practiceQuestion.getA_sub_ans().equalsIgnoreCase(practiceQuestion.getTtqa_sub_ans())) {
+                holder.itemBindingGrid.tvQuestNo.setBackground(activity.getResources().getDrawable(R.drawable.bg_ans_wrong));
                 holder.itemBindingGrid.tvQuestNo.setTextColor(activity.getResources().getColor(R.color.colorWhite));
             }
 

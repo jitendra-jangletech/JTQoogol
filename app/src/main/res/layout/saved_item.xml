@@ -7,10 +7,7 @@
         <variable
             name="question"
             type="com.jangletech.qoogol.model.LearningQuestions" />
-
     </data>
-
-
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/container"
@@ -50,7 +47,7 @@
                     android:layout_marginRight="@dimen/_10sdp"
                     android:ellipsize="end"
                     android:singleLine="true"
-                    android:text="@{question.question_id}"
+                    android:text="@{String.valueOf(question.question_id)}"
                     android:textColor="@color/colorWhite"
                     android:textSize="@dimen/_10ssp"
                     app:layout_constraintLeft_toLeftOf="parent"
@@ -186,9 +183,9 @@
                 android:layout_margin="@dimen/_10sdp"
                 android:layout_marginRight="@dimen/_10sdp"
                 android:text="@{question.question}"
-                android:visibility="gone"
                 android:textColor="@color/colorSkyBlue"
                 android:textSize="@dimen/_12ssp"
+                android:visibility="gone"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toLeftOf="@+id/reset"
                 app:layout_constraintTop_toBottomOf="@+id/subheader_view" />
@@ -201,9 +198,9 @@
                 android:layout_marginRight="@dimen/_10sdp"
                 android:padding="@dimen/_10sdp"
                 android:text="@{question.question}"
-                android:visibility="gone"
                 android:textColor="@color/colorSkyBlue"
                 android:textSize="@dimen/_14ssp"
+                android:visibility="gone"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toLeftOf="@+id/reset"
                 app:layout_constraintTop_toBottomOf="@+id/subheader_view" />
@@ -767,7 +764,7 @@
                                     android:id="@+id/b1text"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_3sdp"/>
+                                    android:layout_marginTop="@dimen/_3sdp" />
                             </LinearLayout>
 
 
@@ -877,7 +874,7 @@
                                     android:id="@+id/a3text"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_3sdp"/>
+                                    android:layout_marginTop="@dimen/_3sdp" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -942,7 +939,7 @@
                                     android:id="@+id/a4text"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_3sdp"/>
+                                    android:layout_marginTop="@dimen/_3sdp" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -963,7 +960,7 @@
                                     android:id="@+id/b4text"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_3sdp"/>
+                                    android:layout_marginTop="@dimen/_3sdp" />
                             </LinearLayout>
 
                         </LinearLayout>
@@ -1927,9 +1924,9 @@
                         android:layout_marginBottom="@dimen/_20sdp"
                         android:backgroundTint="@color/color_red"
                         android:text="@string/submit"
+                        android:textAllCaps="false"
                         android:textColor="@color/colorWhite"
                         app:cornerRadius="@dimen/_50sdp"
-                        android:textAllCaps="false"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/mtp_img_layout" />
 

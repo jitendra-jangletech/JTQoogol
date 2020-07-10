@@ -10,85 +10,121 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.ConnectionAdapter;
-import com.jangletech.qoogol.adapter.FriendsAdapter;
 import com.jangletech.qoogol.databinding.FragmentFriendsBinding;
+import com.jangletech.qoogol.dialog.PublicProfileDialog;
+import com.jangletech.qoogol.model.ConnectionResponse;
 import com.jangletech.qoogol.model.Connections;
-import com.jangletech.qoogol.model.Friends;
+import com.jangletech.qoogol.retrofit.ApiClient;
+import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.util.Constant;
-import com.jangletech.qoogol.util.PreferenceManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+
+import static com.jangletech.qoogol.util.Constant.connections;
 import static com.jangletech.qoogol.util.Constant.friends;
+import static com.jangletech.qoogol.util.Constant.qoogol;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ConnectionListFragment extends BaseFragment implements ConnectionAdapter.updateConnectionListener {
+public class ConnectionListFragment extends BaseFragment implements ConnectionAdapter.updateConnectionListener, PublicProfileDialog.PublicProfileClickListener {
 
-    FragmentFriendsBinding mBinding;
-    List<Connections> connectionsList = new ArrayList<>();
-    private static final String TAG = "FriendsFragment";
-    ConnectionAdapter mAdapter;
-    Boolean isVisible = false;
-    String userId = "";
-    ConnectionsViewModel mViewModel;
+    private static final String TAG = "ConnectionListFragment";
+    private FragmentFriendsBinding mBinding;
+    private List<Connections> connectionsList = new ArrayList<>();
+    private ConnectionAdapter mAdapter;
+    private Boolean isVisible = false;
+    private ConnectionsViewModel mViewModel;
+    private LinearLayoutManager linearLayoutManager;
+    private ApiInterface apiService = ApiClient.getInstance().getApi();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_friends, container, false);
+        linearLayoutManager = new LinearLayoutManager(getContext());
         return mBinding.getRoot();
     }
 
-    private void init() {
-        userId = String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));
+    /*private void init() {
         if (!isVisible) {
             isVisible = true;
             mViewModel.fetchConnectionsData(false);
         }
         mBinding.connectionSwiperefresh.setOnRefreshListener(() -> mViewModel.fetchConnectionsData(true));
-    }
+    }*/
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(ConnectionsViewModel.class);
-        init();
-        mViewModel.getConnectionsList().observe(getViewLifecycleOwner(), connectionsList -> {
-            connectionsList.clear();
-            connectionsList.addAll(connectionsList);
-            initView();
-            checkRefresh();
+        //init();
+        fetchConnections();
+        mViewModel.getConnectionsList(getUserId()).observe(getViewLifecycleOwner(), connectionsList -> {
+            if (connectionsList != null) {
+                setConnectionAdapter(connectionsList);
+            }
         });
 
+        mBinding.connectionSwiperefresh.setOnRefreshListener(() -> fetchConnections());
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
+    private void setConnectionAdapter(List<Connections> connectionsList) {
+        if (connectionsList.size() > 0) {
+            mBinding.emptyview.setVisibility(View.GONE);
+            mAdapter = new ConnectionAdapter(getActivity(), connectionsList, friends, this);
+            mBinding.connectionRecycler.setHasFixedSize(true);
+            mBinding.connectionRecycler.setLayoutManager(linearLayoutManager);
+            mBinding.connectionRecycler.setAdapter(mAdapter);
+        } else {
+            mBinding.emptyview.setVisibility(View.VISIBLE);
+        }
     }
 
-    public void checkRefresh() {
+    private void fetchConnections() {
+        Call<ConnectionResponse> call = apiService.fetchConnections(getUserId(), connections, getDeviceId(), qoogol, "0");
+        call.enqueue(new Callback<ConnectionResponse>() {
+            @Override
+            public void onResponse(Call<ConnectionResponse> call, retrofit2.Response<ConnectionResponse> response) {
+                dismissRefresh(mBinding.connectionSwiperefresh);
+                if (response.body().getResponse().equalsIgnoreCase("200")) {
+                    mViewModel.insert(response.body().getConnection_list());
+                } else {
+                    showToast("Error Code : " + response.body().getResponse());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ConnectionResponse> call, Throwable t) {
+                t.printStackTrace();
+                dismissRefresh(mBinding.connectionSwiperefresh);
+                showToast("Something went wrong!!");
+                apiCallFailureDialog(t);
+            }
+        });
+    }
+
+    /*public void checkRefresh() {
         if (mBinding.connectionSwiperefresh.isRefreshing()) {
             mBinding.connectionSwiperefresh.setRefreshing(false);
         }
-    }
+    }*/
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser && isVisible)
-            mViewModel.fetchConnectionsData(false);
+        /*if (isVisibleToUser && isVisible)
+            mViewModel.fetchConnectionsData(false);*/
     }
-
 
     private void initView() {
         mAdapter = new ConnectionAdapter(getActivity(), connectionsList, friends, this);
@@ -110,6 +146,19 @@ public class ConnectionListFragment extends BaseFragment implements ConnectionAd
 
     @Override
     public void showProfileClick(Bundle bundle) {
-        NavHostFragment.findNavController(this).navigate(R.id.nav_edit_profile, bundle);
+        String otherUserId = bundle.getString(Constant.fetch_profile_id);
+        PublicProfileDialog publicProfileDialog = new PublicProfileDialog(getActivity(), otherUserId, this);
+        publicProfileDialog.show();
+    }
+
+    @Override
+    public void onViewImage(String path) {
+        showFullScreen(path);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mAdapter = null;
     }
 }

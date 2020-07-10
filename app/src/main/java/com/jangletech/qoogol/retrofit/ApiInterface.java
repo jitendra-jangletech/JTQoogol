@@ -1,5 +1,7 @@
 package com.jangletech.qoogol.retrofit;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 import com.jangletech.qoogol.model.AddElementResponse;
 import com.jangletech.qoogol.model.BlockedConnResp;
 import com.jangletech.qoogol.model.ChapterResponse;
@@ -303,7 +305,24 @@ public interface ApiInterface {
                                              @Field(Constant.u_Password) String password,
                                              @Field(Constant.device_id) String deviceId,
                                              @Field(Constant.appName) String appName,
-                                             @Field(Constant.u_fcm_token) String token);
+                                             @Field(Constant.u_fcm_token) String token,
+                                             @Field(Constant.CASE2) String case2);
+
+    @FormUrlEncoded
+    @POST(Constant.REGISTER_LOGIN)
+    Call<RegisterLoginModel> doRegister(@Field(Constant.u_first_name) String fname,
+                                        @Field(Constant.u_last_name) String lname,
+                                        @Field(Constant.u_gender) String gender,
+                                        @Field(Constant.u_birth_date) String dob,
+                                        @Field(Constant.u_mob_1) String mobileEmail,
+                                        @Field(Constant.OTP) String otp,
+                                        @Field(Constant.u_Password) String password,
+                                        @Field(Constant.CASE) String caseR,
+                                        @Field(Constant.u_calling_code) int countryCode,
+                                        @Field(Constant.device_id) String deviceId,
+                                        @Field(Constant.appName) String appName,
+                                        @Field(Constant.u_fcm_token) String token,
+                                        @Field(Constant.CASE2) String case2);
 
     @FormUrlEncoded
     @POST(Constant.FETCH_QA)
@@ -318,8 +337,7 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST(Constant.FETCH_QA)
     Call<LearningQuestResponse> fetchFavQAApi(@Field(Constant.u_user_id) String userid,
-                                            @Field(Constant.CASE) String caseR);
-
+                                              @Field(Constant.CASE) String caseR);
 
 
     Call<LearningQuestResponse> fetchQAApi(@Field(Constant.u_user_id) int userid,
@@ -335,7 +353,7 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST(Constant.PROCESS_QUESTION)
     Call<ProcessQuestion> fetchComments(@Field(Constant.u_user_id) int userid,
-                                        @Field(Constant.q_id) String queId,
+                                        @Field(Constant.q_id) int queId,
                                         @Field(Constant.CASE) String caseL);
 
     @FormUrlEncoded
@@ -345,30 +363,38 @@ public interface ApiInterface {
                                             @Field(Constant.CASE) String caseL);
 
     @FormUrlEncoded
+    @POST(Constant.PROCESS_TEST)
+    Call<ProcessQuestion> submitTestFeedBack(@Field(Constant.u_user_id) String userid,
+                                             @Field(Constant.tlc_rating) String rating,
+                                             @Field(Constant.tlc_feedback) String feedback,
+                                             @Field(Constant.tt_id) String tmId,
+                                             @Field(Constant.CASE) String caseL);
+
+    @FormUrlEncoded
     @POST(Constant.PROCESS_QUESTION)
     Call<ProcessQuestion> likeApi(@Field(Constant.u_user_id) int userid,
-                                  @Field(Constant.q_id) String queId,
+                                  @Field(Constant.q_id) int queId,
                                   @Field(Constant.CASE) String caseL,
                                   @Field(Constant.qlc_like_flag) int like);
 
     @FormUrlEncoded
     @POST(Constant.PROCESS_QUESTION)
     Call<ProcessQuestion> saveQueApi(@Field(Constant.u_user_id) int userid,
-                                  @Field(Constant.q_id) String queId,
-                                  @Field(Constant.CASE) String caseL,
-                                  @Field(Constant.qlc_save_flag) int save);
+                                     @Field(Constant.q_id) int queId,
+                                     @Field(Constant.CASE) String caseL,
+                                     @Field(Constant.qlc_save_flag) int save);
 
     @FormUrlEncoded
     @POST(Constant.PROCESS_QUESTION)
     Call<ProcessQuestion> favApi(@Field(Constant.u_user_id) int userid,
-                                 @Field(Constant.q_id) String queId,
+                                 @Field(Constant.q_id) int queId,
                                  @Field(Constant.CASE) String caseL,
                                  @Field(Constant.qlc_fav_flag) int like);
 
     @FormUrlEncoded
     @POST(Constant.PROCESS_QUESTION)
     Call<ProcessQuestion> addRatingsApi(@Field(Constant.u_user_id) int userid,
-                                        @Field(Constant.q_id) String queId,
+                                        @Field(Constant.q_id) int queId,
                                         @Field("Case") String caseL,
                                         @Field(Constant.qlc_rating) String ratings,
                                         @Field(Constant.qlc_feedback) String feedback);
@@ -376,14 +402,14 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST(Constant.PROCESS_QUESTION)
     Call<ProcessQuestion> submitSubjectiveQueApi(@Field(Constant.u_user_id) int userid,
-                                                 @Field(Constant.q_id) String queId,
+                                                 @Field(Constant.q_id) int queId,
                                                  @Field("Case") String caseL,
                                                  @Field(Constant.sub_ans) String ratings);
 
     @FormUrlEncoded
     @POST(Constant.PROCESS_QUESTION)
     Call<ProcessQuestion> questionAttemptApi(@Field(Constant.u_user_id) int userid,
-                                             @Field(Constant.q_id) String queId,
+                                             @Field(Constant.q_id) int queId,
                                              @Field("Case") String caseL,
                                              @Field(Constant.attmpted) int attempted,
                                              @Field(Constant.solved_right) int solved_right);
@@ -391,7 +417,7 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST(Constant.PROCESS_QUESTION)
     Call<ProcessQuestion> addCommentApi(@Field(Constant.u_user_id) String userid,
-                                        @Field(Constant.q_id) String queId,
+                                        @Field(Constant.q_id) int queId,
                                         @Field(Constant.CASE) String caseL,
                                         @Field(Constant.qlc_comment_text) String comment);
 
@@ -415,11 +441,11 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST(Constant.FETCH_CONNECTIONS)
     Call<BlockedConnResp> fetchRefreshedBlockedConn(@Field(Constant.u_user_id) String userid,
-                                                 @Field("Case") String connectionCase,
-                                                 @Field(Constant.device_id) String device_id,
-                                                 @Field("200Q") String app,
-                                                 @Field(Constant.pagestart) String pagestart,
-                                                 @Field("ForceRefresh") String refresh);
+                                                    @Field("Case") String connectionCase,
+                                                    @Field(Constant.device_id) String device_id,
+                                                    @Field("200Q") String app,
+                                                    @Field(Constant.pagestart) String pagestart,
+                                                    @Field("ForceRefresh") String refresh);
 
     @FormUrlEncoded
     @POST(Constant.FETCH_CONNECTIONS)
@@ -507,7 +533,6 @@ public interface ApiInterface {
                                                         @Field("200Q") String app,
                                                         @Field(Constant.pagestart) String pagestart,
                                                         @Field("ForceRefresh") String refresh);
-
 
     @FormUrlEncoded
     @POST(Constant.FETCH_CONNECTIONS)

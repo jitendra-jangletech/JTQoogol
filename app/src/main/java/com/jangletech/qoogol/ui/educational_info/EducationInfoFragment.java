@@ -1,6 +1,5 @@
 package com.jangletech.qoogol.ui.educational_info;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -13,7 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -21,10 +19,8 @@ import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.EducationAdapter;
 import com.jangletech.qoogol.databinding.FragmentEducationInfoBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
-import com.jangletech.qoogol.model.ClassList;
 import com.jangletech.qoogol.model.Education;
 import com.jangletech.qoogol.model.FetchEducationResponse;
-import com.jangletech.qoogol.model.TestListResponse;
 import com.jangletech.qoogol.model.VerifyResponse;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
@@ -96,7 +92,7 @@ public class EducationInfoFragment extends BaseFragment implements EducationAdap
             mBinding.addedu.setVisibility(View.GONE);
         }
 
-        mViewModel.getAllEducations().observe(getViewLifecycleOwner(), educations -> {
+        mViewModel.getAllEducations(getUserId()).observe(getViewLifecycleOwner(), educations -> {
             Log.d(TAG, "onChanged Education List Size : " + educations.size());
             if (educations != null) {
                 educationList = educations;

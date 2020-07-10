@@ -1,6 +1,7 @@
 package com.jangletech.qoogol.ui.learning;
 
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,37 +11,36 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.CommentAdapter;
 import com.jangletech.qoogol.databinding.CommentViewBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
+import com.jangletech.qoogol.dialog.PublicProfileDialog;
 import com.jangletech.qoogol.enums.Module;
 import com.jangletech.qoogol.model.Comments;
 import com.jangletech.qoogol.model.ProcessQuestion;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
+import com.jangletech.qoogol.ui.BaseFragment;
+import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
 
+import org.apache.commons.text.StringEscapeUtils;
+
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 
-import static com.jangletech.qoogol.util.Constant.CALL_FROM;
-import static com.jangletech.qoogol.util.Constant.connectonId;
-import static com.jangletech.qoogol.util.Constant.profile;
 
-
-public class CommentFragment extends Fragment implements View.OnClickListener, CommentAdapter.onCommentItemClickListener {
+public class CommentFragment extends BaseFragment implements View.OnClickListener, CommentAdapter.onCommentItemClickListener, PublicProfileDialog.PublicProfileClickListener {
 
     private static final String TAG = "CommentFragment";
     private CommentViewModel mViewModel;
@@ -49,15 +49,16 @@ public class CommentFragment extends Fragment implements View.OnClickListener, C
         return new CommentFragment();
     }
 
-    CommentViewBinding commentViewBinding;
-    Bundle bundle;
-    String questionId;
-    int tmId;
-    List<Comments> commentList;
-    CommentAdapter commentAdapter;
-    ApiInterface apiService = ApiClient.getInstance().getApi();
+    private CommentViewBinding commentViewBinding;
+    private Bundle bundle;
+    private int questionId;
+    private int tmId;
+    private List<Comments> commentList;
+    private CommentAdapter commentAdapter;
+    private ApiInterface apiService = ApiClient.getInstance().getApi();
 
     CommentAdapter.onCommentItemClickListener commentItemClickListener;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
@@ -72,14 +73,21 @@ public class CommentFragment extends Fragment implements View.OnClickListener, C
     }
 
 
-    private void fetchCommentsAPI(String user_id, String que_id, String api_case, String comment_text) {
+    private void fetchCommentsAPI(String user_id, int que_id, String api_case, String comment_text) {
         ProgressDialog.getInstance().show(getActivity());
+        Log.e(TAG, "fetchCommentsAPI User Id : " + user_id);
+        Log.e(TAG, "fetchCommentsAPI Quest Id : " + que_id);
+        Log.e(TAG, "fetchCommentsAPI Api Case : " + api_case);
+        Log.e(TAG, "fetchCommentsAPI Comment : " + comment_text);
+        String encoded = Base64.encodeToString(comment_text.getBytes(StandardCharsets.UTF_8), Base64.DEFAULT);
+        String encodedAns = StringEscapeUtils.escapeJava(encoded);
+        Log.d(TAG, "Encoded : " + encodedAns);
         Call<ProcessQuestion> call;
 
         if (api_case.equalsIgnoreCase("L"))
             call = apiService.fetchComments(Integer.parseInt(user_id), que_id, api_case);
         else
-            call = apiService.addCommentApi(user_id, que_id, api_case, comment_text);
+            call = apiService.addCommentApi(user_id, que_id, api_case, encodedAns);
 
         call.enqueue(new Callback<ProcessQuestion>() {
             @Override
@@ -111,11 +119,14 @@ public class CommentFragment extends Fragment implements View.OnClickListener, C
     private void fetchTestCommentsAPI(int user_id, int tmId, String api_case, String comment_text) {
         ProgressDialog.getInstance().show(getActivity());
         Call<ProcessQuestion> call;
-
+        Log.d(TAG, "Before encoding : " + comment_text);
+        String encoded = Base64.encodeToString(comment_text.getBytes(StandardCharsets.UTF_8), Base64.DEFAULT);
+        String encodedComment = StringEscapeUtils.escapeJava(encoded);
+        Log.d(TAG, "Encoded Test Comment : " + encodedComment);
         if (api_case.equalsIgnoreCase("L"))
             call = apiService.fetchTestComments(user_id, tmId, api_case);
         else
-            call = apiService.addTestCommentApi(user_id, tmId, api_case, comment_text);
+            call = apiService.addTestCommentApi(user_id, tmId, api_case, encodedComment);
 
         call.enqueue(new Callback<ProcessQuestion>() {
             @Override
@@ -141,6 +152,7 @@ public class CommentFragment extends Fragment implements View.OnClickListener, C
             public void onFailure(Call<ProcessQuestion> call, Throwable t) {
                 t.printStackTrace();
                 ProgressDialog.getInstance().dismiss();
+                apiCallFailureDialog(t);
             }
         });
     }
@@ -151,13 +163,13 @@ public class CommentFragment extends Fragment implements View.OnClickListener, C
         commentItemClickListener = this::onItemClick;
         emptyView();
         if (bundle != null && bundle.getString(Constant.CALL_FROM).equals(Module.Learning.toString())) {
-            questionId = bundle.getString("QuestionId");
+            questionId = bundle.getInt("QuestionId");
             fetchCommentsAPI(new PreferenceManager(getActivity()).getUserId(), questionId, "L", "");
         }
 
         if (bundle != null && bundle.getString(Constant.CALL_FROM).equals(Module.Test.toString())) {
             tmId = bundle.getInt("tmId");
-            Log.d(TAG, "Tm Id : "+tmId);
+            Log.d(TAG, "Tm Id : " + tmId);
             fetchTestCommentsAPI(new PreferenceManager(getActivity()).getInt(Constant.USER_ID), tmId, "L", "");
         }
     }
@@ -176,10 +188,10 @@ public class CommentFragment extends Fragment implements View.OnClickListener, C
         mViewModel.getCommentList().observe(getActivity(), comments -> {
             Log.d(TAG, "onChanged Size : " + comments.size());
             if (bundle != null && bundle.getString(Constant.CALL_FROM).equals(Module.Learning.toString())) {
-                commentAdapter = new CommentAdapter(getActivity(), comments,Module.Learning.toString(),commentItemClickListener);
+                commentAdapter = new CommentAdapter(getActivity(), comments, Module.Learning.toString(), commentItemClickListener);
             }
             if (bundle != null && bundle.getString(Constant.CALL_FROM).equals(Module.Test.toString())) {
-                commentAdapter = new CommentAdapter(getActivity(), comments,Module.Test.toString(), commentItemClickListener);
+                commentAdapter = new CommentAdapter(getActivity(), comments, Module.Test.toString(), commentItemClickListener);
             }
             commentViewBinding.commentRecycler.setHasFixedSize(true);
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
@@ -197,7 +209,7 @@ public class CommentFragment extends Fragment implements View.OnClickListener, C
                         fetchCommentsAPI(new PreferenceManager(getActivity()).getUserId(), questionId, "I", commentViewBinding.etComment.getText().toString().trim());
                     }
                     if (bundle != null && bundle.getString(Constant.CALL_FROM).equals(Module.Test.toString())) {
-                        fetchTestCommentsAPI(new PreferenceManager(getActivity()).getInt(Constant.USER_ID), tmId, "I", commentViewBinding.etComment.getText().toString().trim());
+                        fetchTestCommentsAPI(new PreferenceManager(getActivity()).getInt(Constant.USER_ID), tmId, "I", commentViewBinding.etComment.getText().toString());
                     }
                 }
                 commentViewBinding.etComment.setText("");
@@ -207,14 +219,27 @@ public class CommentFragment extends Fragment implements View.OnClickListener, C
 
     @Override
     public void onItemClick(String userId) {
-        Bundle bundle = new Bundle();
+        /*Bundle bundle = new Bundle();
         if (userId!=null && userId.equalsIgnoreCase(new PreferenceManager(getActivity()).getUserId())) {
             bundle.putInt(CALL_FROM, profile);
         } else {
             bundle.putInt(CALL_FROM, connectonId);
             bundle.putString(Constant.fetch_profile_id,userId);
         }
+        NavHostFragment.findNavController(this).navigate(R.id.nav_edit_profile,bundle);*/
+        Log.d(TAG, "onItemClick Comment : ");
+        PublicProfileDialog publicProfileDialog = new PublicProfileDialog(getActivity(), userId, this);
+        publicProfileDialog.show();
+    }
 
-        NavHostFragment.findNavController(this).navigate(R.id.nav_edit_profile,bundle);
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        commentAdapter = null;
+    }
+
+    @Override
+    public void onViewImage(String path) {
+        showFullScreen(path);
     }
 }

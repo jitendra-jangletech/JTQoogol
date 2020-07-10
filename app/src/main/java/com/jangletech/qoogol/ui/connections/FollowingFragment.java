@@ -1,6 +1,5 @@
 package com.jangletech.qoogol.ui.connections;
 
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,12 +9,12 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.FollowingsAdapter;
 import com.jangletech.qoogol.databinding.FragmentFriendsBinding;
+import com.jangletech.qoogol.dialog.PublicProfileDialog;
 import com.jangletech.qoogol.model.Following;
 import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.util.Constant;
@@ -29,16 +28,15 @@ import static com.jangletech.qoogol.util.Constant.following;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FollowingFragment extends BaseFragment implements FollowingsAdapter.updateConnectionListener {
+public class FollowingFragment extends BaseFragment implements FollowingsAdapter.updateConnectionListener, PublicProfileDialog.PublicProfileClickListener {
 
-    FragmentFriendsBinding mBinding;
-    List<Following> connectionsList = new ArrayList<>();
-    ;
     private static final String TAG = "FollowingFragment";
-    FollowingsAdapter mAdapter;
-    Boolean isVisible = false;
-    String userId = "";
-    FollowingViewModel mViewModel;
+    private FragmentFriendsBinding mBinding;
+    private List<Following> connectionsList = new ArrayList<>();
+    private FollowingsAdapter mAdapter;
+    private Boolean isVisible = false;
+    private String userId = "";
+    private FollowingViewModel mViewModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -88,13 +86,23 @@ public class FollowingFragment extends BaseFragment implements FollowingsAdapter
             mViewModel.fetchFollowingsData(false);
     }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mAdapter = null;
+    }
 
     private void initView() {
-        mAdapter = new FollowingsAdapter(getActivity(), connectionsList, following, this);
-        mBinding.connectionRecycler.setHasFixedSize(true);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        mBinding.connectionRecycler.setLayoutManager(linearLayoutManager);
-        mBinding.connectionRecycler.setAdapter(mAdapter);
+        if (connectionsList.size() > 0) {
+            mAdapter = new FollowingsAdapter(getActivity(), connectionsList, following, this);
+            mBinding.connectionRecycler.setHasFixedSize(true);
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+            mBinding.connectionRecycler.setLayoutManager(linearLayoutManager);
+            mBinding.connectionRecycler.setAdapter(mAdapter);
+        } else {
+            mBinding.emptyview.setText("No Connections Found.");
+            mBinding.emptyview.setVisibility(View.VISIBLE);
+        }
     }
 
 
@@ -110,6 +118,14 @@ public class FollowingFragment extends BaseFragment implements FollowingsAdapter
 
     @Override
     public void showProfileClick(Bundle bundle) {
-        NavHostFragment.findNavController(this).navigate(R.id.nav_edit_profile, bundle);
+        String otherUserId = bundle.getString(Constant.fetch_profile_id);
+        PublicProfileDialog publicProfileDialog = new PublicProfileDialog(getActivity(), otherUserId, this);
+        publicProfileDialog.show();
+        //NavHostFragment.findNavController(this).navigate(R.id.nav_edit_profile, bundle);
+    }
+
+    @Override
+    public void onViewImage(String path) {
+        showFullScreen(path);
     }
 }

@@ -34,9 +34,9 @@ import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.NetworkUtil;
 import com.jangletech.qoogol.util.PreferenceManager;
-import java.util.Objects;
 
-import static com.facebook.FacebookSdk.getApplicationContext;
+import java.net.UnknownHostException;
+import java.util.Objects;
 
 
 public class BaseActivity extends AppCompatActivity {
@@ -56,6 +56,17 @@ public class BaseActivity extends AppCompatActivity {
     public void clearFilters(){
         saveString(Constant.tm_diff_level,"");
         saveString(Constant.tm_avg_rating,"");
+    }
+
+    public void apiCallFailureDialog(Throwable t) {
+        if (t instanceof UnknownHostException) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogStyle);
+            builder.setTitle("Alert")
+                    .setMessage("Check your internet connection.")
+                    .setPositiveButton("OK", null)
+                    .show();
+
+        }
     }
 
     public String getSingleQuoteString(String text) {

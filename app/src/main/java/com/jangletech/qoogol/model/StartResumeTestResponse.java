@@ -97,6 +97,14 @@ public class StartResumeTestResponse {
     @SerializedName("Response")
     private String responseCode;
 
+    public int getTtId() {
+        return ttId;
+    }
+
+    public void setTtId(int ttId) {
+        this.ttId = ttId;
+    }
+
     public String getTm_id() {
         return tm_id;
     }
@@ -146,7 +154,7 @@ public class StartResumeTestResponse {
     }
 
     public String getTm_tot_marks() {
-        return tm_tot_marks;
+        return tm_tot_marks != null ? tm_tot_marks : "";
     }
 
     public void setTm_tot_marks(String tm_tot_marks) {

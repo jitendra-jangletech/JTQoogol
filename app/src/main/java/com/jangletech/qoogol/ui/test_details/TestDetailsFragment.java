@@ -66,8 +66,8 @@ public class TestDetailsFragment extends BaseFragment {
         mViewModel = ViewModelProviders.of(this).get(TestDetailsViewModel.class);
         HashMap<String, String> params = new HashMap<>();
         params.put(Constant.u_user_id, getUserId());
-        if(testModelNew!=null)
-        params.put(Constant.tm_id, getStringValue(testModelNew.getTm_id()));
+        if (testModelNew != null)
+            params.put(Constant.tm_id, getStringValue(testModelNew.getTm_id()));
         fetchTestDetails(params);
         mViewModel.getQsetList().observe(getActivity(), new Observer<List<QSet>>() {
             @Override
@@ -114,10 +114,22 @@ public class TestDetailsFragment extends BaseFragment {
             }
         }
 
-        setRecentQsetAdapter(qsetRecentList);
-        setTopScoredQsetAdapter(qsetTopScoreList);
-        setLeastScoredQsetAdapter(qsetLowScoreList);
+        if (qsetRecentList.size() > 0) {
+            setRecentQsetAdapter(qsetRecentList);
+        } else {
+            mBinding.recentQuestLayout.setVisibility(View.GONE);
+        }
 
+        if (qsetTopScoreList.size() > 0) {
+            setTopScoredQsetAdapter(qsetTopScoreList);
+        } else {
+            mBinding.topQuestLayout.setVisibility(View.GONE);
+        }
+        if (qsetLowScoreList.size() > 0) {
+            setLeastScoredQsetAdapter(qsetLowScoreList);
+        } else {
+            mBinding.leastScoredLayout.setVisibility(View.GONE);
+        }
     }
 
     private void setRecentQsetAdapter(List<QSet> qSets) {

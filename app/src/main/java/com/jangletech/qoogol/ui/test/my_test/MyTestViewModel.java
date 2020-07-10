@@ -1,6 +1,7 @@
 package com.jangletech.qoogol.ui.test.my_test;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -21,6 +22,7 @@ import java.util.List;
 
 public class MyTestViewModel extends AndroidViewModel {
 
+    private static final String TAG = "MyTestViewModel";
     private AppRepository appRepository;
     private MutableLiveData<List<TestModelNew>> allTestList;
     private MutableLiveData<List<FetchSubjectResponse>> allSubjectList;
@@ -113,8 +115,34 @@ public class MyTestViewModel extends AndroidViewModel {
         appRepository.insertTests(testModelNewList);
     }
 
-    public LiveData<List<TestModelNew>> getAllTests(String flag) {
-        return appRepository.getAllTests(flag);
+    public LiveData<List<TestModelNew>> getAllTests(String flag,String userId) {
+        Log.d(TAG, "getAllTests Flag : "+flag);
+        Log.d(TAG, "getAllTests userId : "+userId);
+        return appRepository.getAllTests(flag,userId);
+    }
+
+    public LiveData<List<TestModelNew>> getAllFavTests(String flag,String userId) {
+        Log.d(TAG, "getAllTests Flag : "+flag);
+        Log.d(TAG, "getAllTests userId : "+userId);
+        return appRepository.getAllFavTests(flag,userId);
+    }
+
+    public void updateFav(String flag,String userId,int tmId,boolean value){
+        appRepository.updateFavTest(flag,userId,tmId,value);
+    }
+
+    public LiveData<List<TestModelNew>> getAllTestByDifficultyLevel(String flag,String userId,String diffLevel) {
+        Log.d(TAG, "getAllTests Flag : "+flag);
+        Log.d(TAG, "getAllTests userId : "+userId);
+        Log.d(TAG, "getAllTests DiffLevel : "+diffLevel);
+        return appRepository.getAllTestsFiltered(flag,userId,diffLevel);
+    }
+
+    public LiveData<List<TestModelNew>> getAllTestByAvgRating(String flag,String userId,String avgRating) {
+        Log.d(TAG, "getAllTests Flag : "+flag);
+        Log.d(TAG, "getAllTests userId : "+userId);
+        Log.d(TAG, "getAllTests Avg Rating : "+avgRating);
+        return appRepository.getAllTestsAvgRating(flag,userId,avgRating);
     }
 
     /*public void insertAttemptedTest(List<AttemptedTest> attemptedTests) {

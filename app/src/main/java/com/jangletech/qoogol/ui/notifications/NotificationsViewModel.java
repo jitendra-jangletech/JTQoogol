@@ -42,8 +42,8 @@ public class NotificationsViewModel extends AndroidViewModel {
         appRepository.deleteNotification(nId);
     }
 
-    public LiveData<List<Notification>> getAllNotifications() {
-        return appRepository.getAllNotifications();
+    public LiveData<List<Notification>> getAllNotifications(String userId) {
+        return appRepository.getAllNotifications(userId);
     }
 
     @Override

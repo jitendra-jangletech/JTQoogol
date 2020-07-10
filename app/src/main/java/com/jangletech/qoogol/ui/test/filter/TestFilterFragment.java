@@ -1,5 +1,6 @@
 package com.jangletech.qoogol.ui.test.filter;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +11,7 @@ import android.widget.RatingBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -56,10 +58,10 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
     private HashMap<String, String> params;
     private HashMap<String, String> mDiffMap = new HashMap<>();
     private HashMap<String, String> mCategoryMap = new HashMap<>();
-    Set subjectset = new HashSet<String>();
-    Set chapterset = new HashSet<String>();
-    Set ratingset = new HashSet<String>();
-    String call_from = "";
+    private Set subjectset = new HashSet<String>();
+    private Set chapterset = new HashSet<String>();
+    private Set ratingset = new HashSet<String>();
+    private String call_from = "";
 
     public static TestFilterFragment newInstance() {
         return new TestFilterFragment();
@@ -159,6 +161,26 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
             }
         });
 
+        mBinding.reset.setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity(), R.style.AlertDialogStyle);
+            builder.setTitle("Confirm")
+                    .setMessage("Are you sure, you want to reset filters?")
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            clearFilters();
+                            mBinding.rating.setRating(0);
+                            mBinding.testDifficultyLevelChipGrp.clearCheck();
+                            mBinding.subjectsChipGrp.clearCheck();
+                            mBinding.chapterChipGrp.clearCheck();
+                            mBinding.ratingChipGrp.clearCheck();
+                            mBinding.testCategoryChipGrp.clearCheck();
+                        }
+                    })
+                    .setNegativeButton("No", null)
+                    .show();
+        });
+
         mViewModel.getAllChapter().observe(getActivity(), chapters -> {
             Log.d(TAG, "onChanged Subjects Size : " + chapters.size());
             prepareChapterChips(chapters);
@@ -171,8 +193,13 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
         mBinding.rating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             public void onRatingChanged(RatingBar ratingBar, float rating,
                                         boolean fromUser) {
-                params.put(Constant.tm_avg_rating, String.valueOf(rating));
-                saveString(Constant.tm_avg_rating, String.valueOf(rating));
+                Log.d(TAG, "onRatingChanged: " + rating);
+                if (rating == 0) {
+                    saveString(Constant.tm_avg_rating, "");
+                } else {
+                    params.put(Constant.tm_avg_rating, String.valueOf(rating));
+                    saveString(Constant.tm_avg_rating, String.valueOf(rating));
+                }
             }
         });
 
@@ -237,6 +264,17 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
                 } else {
                     saveString(Constant.tm_catg, "");
                     setCheckedChip(mBinding.testCategoryChipGrp);
+                }
+            }
+        });
+
+        mBinding.chapterChipGrp.setOnCheckedChangeListener((chipGroup, id) -> {
+            Chip chip = ((Chip) chipGroup.getChildAt(chipGroup.getCheckedChipId()));
+            if (chip != null) {
+                if (chip.isChecked()) {
+                    setCheckedChip(mBinding.chapterChipGrp);
+                } else {
+                    setCheckedChip(mBinding.chapterChipGrp);
                 }
             }
         });
