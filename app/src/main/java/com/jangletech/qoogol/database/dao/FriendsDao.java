@@ -31,6 +31,9 @@ public interface FriendsDao {
     @Delete
     void delete(List<Friends> friendsList);
 
+    @Query("delete from Friends where user_id =:loggedInuserId and cn_user_id_2 =:cnUserId")
+    void deleteFriends(String loggedInuserId,String cnUserId);
+
     @Update
     void updateFriends(List<Friends> friendsList);
 

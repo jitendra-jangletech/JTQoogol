@@ -58,6 +58,11 @@ public class FriendReqViewModel extends AndroidViewModel {
         mAppRepository.insertFriendRequests(friendRequests);
     }
 
+    void deleteUpdatedConnection(String user) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> mAppRepository.deleteFriendReq(userId,user));
+    }
+
     void fetchFriendReqData(boolean isRefresh) {
         getData(isRefresh);
     }

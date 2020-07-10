@@ -54,6 +54,11 @@ public class FollowReqViewModel extends AndroidViewModel {
         mAppRepository.insertFollowRequests(followRequests);
     }
 
+    void deleteUpdatedConnection(String user) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> mAppRepository.deleteFollowReq(userId,user));
+    }
+
     void fetchFollowReqData(boolean isRefresh) {
         getData(isRefresh);
     }

@@ -222,7 +222,7 @@ public class FollowReqAdapter extends RecyclerView.Adapter<FollowReqAdapter.View
     }
 
     public interface updateConnectionListener {
-        void onUpdateConnection();
+        void onUpdateConnection(String user);
 
         void onBottomReached(int size);
 
@@ -239,7 +239,7 @@ public class FollowReqAdapter extends RecyclerView.Adapter<FollowReqAdapter.View
                 try {
                     ProgressDialog.getInstance().dismiss();
                     if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
-                        listener.onUpdateConnection();
+                        listener.onUpdateConnection(user);
                     } else {
                         Toast.makeText(activity, UtilHelper.getAPIError(String.valueOf(response.body())), Toast.LENGTH_SHORT).show();
                     }

@@ -18,7 +18,6 @@ import com.bumptech.glide.Glide;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.ConnectionItemBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
-import com.jangletech.qoogol.model.Followers;
 import com.jangletech.qoogol.model.Following;
 import com.jangletech.qoogol.model.ResponseObj;
 import com.jangletech.qoogol.retrofit.ApiClient;
@@ -228,7 +227,7 @@ public class FollowingsAdapter extends RecyclerView.Adapter<FollowingsAdapter.Vi
     }
 
     public interface updateConnectionListener {
-        void onUpdateConnection();
+        void onUpdateConnection(String user);
         void onBottomReached(int size);
         void showProfileClick(Bundle bundle);
     }
@@ -243,7 +242,7 @@ public class FollowingsAdapter extends RecyclerView.Adapter<FollowingsAdapter.Vi
                 try {
                     ProgressDialog.getInstance().dismiss();
                     if (response.body()!=null && response.body().getResponse().equalsIgnoreCase("200")){
-                        listener.onUpdateConnection();
+                        listener.onUpdateConnection(user);
                     } else {
                         Toast.makeText(activity, UtilHelper.getAPIError(String.valueOf(response.body())),Toast.LENGTH_SHORT).show();
                     }

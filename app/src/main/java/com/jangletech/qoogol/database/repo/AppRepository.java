@@ -123,6 +123,10 @@ public class AppRepository {
     public void insertConnections(List<Connections> connections){
         insertAllConnectionsAsync(connections);
     }
+
+    public void deleteConnections(String logInuser, String otherUser) {
+        connectionsDao.deleteConnections(logInuser,otherUser);
+    }
     public void insertFriendRequests(List<FriendRequest> friendRequests){
         insertAllFriendReqAsync(friendRequests);
     }
@@ -444,6 +448,10 @@ public class AppRepository {
         friendsDao.upsertFriends(friendsList);
     }
 
+    public void deleteriends(String logInuser, String otherUser) {
+        friendsDao.deleteFriends(logInuser,otherUser);
+    }
+
     public void insertBlockedList(List<BlockedConnections> blockedConnections) {
         blockedDao.upsertBlockedConn(blockedConnections);
     }
@@ -452,8 +460,16 @@ public class AppRepository {
         friendReqDao.insertFriendReq(friendRequests);
     }
 
+    public void deleteFriendReq(String logInuser, String otherUser) {
+        friendReqDao.deleteFriendReq(logInuser,otherUser);
+    }
+
     public void insertFollowdReq(List<FollowRequest> followRequestList) {
         followReqDao.insertFollowdReq(followRequestList);
+    }
+
+    public void deleteFollowReq(String logInuser, String otherUser) {
+        followReqDao.deleteFollowReq(logInuser,otherUser);
     }
 
 
@@ -461,9 +477,18 @@ public class AppRepository {
         followingsDao.upsertFollowings(followingList);
     }
 
+    public void deleteFollowings(String logInuser, String otherUser) {
+        followingsDao.deleteFollowing(logInuser,otherUser);
+    }
+
     public void insertFollowers(List<Followers> followersList) {
         followersDao.upsertFollowers(followersList);
     }
+
+    public void deleteFollowers(String logInuser, String otherUser) {
+        followersDao.deleteFollower(logInuser,otherUser);
+    }
+
 
     public LiveData<List<Connections>> getConnectionsFromDb(String userID) {
         return connectionsDao.getAllConnections(userID);

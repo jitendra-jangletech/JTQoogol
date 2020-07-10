@@ -107,7 +107,8 @@ public class FollowingFragment extends BaseFragment implements FollowingsAdapter
 
 
     @Override
-    public void onUpdateConnection() {
+    public void onUpdateConnection(String user) {
+        mViewModel.deleteUpdatedConnection(user);
         mViewModel.fetchFollowingsData(true);
     }
 

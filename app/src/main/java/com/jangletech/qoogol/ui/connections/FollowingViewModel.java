@@ -57,6 +57,11 @@ public class FollowingViewModel extends AndroidViewModel {
         getData(isRefresh);
     }
 
+    void deleteUpdatedConnection(String user) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> mAppRepository.deleteFollowings(userId,user));
+    }
+
 
 
     private void getData(boolean isRefresh) {

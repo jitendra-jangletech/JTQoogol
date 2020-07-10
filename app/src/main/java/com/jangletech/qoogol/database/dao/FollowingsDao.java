@@ -31,6 +31,9 @@ public interface FollowingsDao {
     @Delete
     void delete(List<Following> followingList);
 
+    @Query("delete from Following where user_id =:loggedInuserId and cn_user_id_2 =:cnUserId")
+    void deleteFollowing(String loggedInuserId,String cnUserId);
+
     @Update
     void updateFollowings(List<Following> followingList);
 

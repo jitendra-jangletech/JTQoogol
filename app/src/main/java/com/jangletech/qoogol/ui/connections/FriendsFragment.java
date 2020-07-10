@@ -10,7 +10,6 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.jangletech.qoogol.R;
@@ -18,17 +17,12 @@ import com.jangletech.qoogol.adapter.FriendsAdapter;
 import com.jangletech.qoogol.databinding.FragmentFriendsBinding;
 import com.jangletech.qoogol.dialog.PublicProfileDialog;
 import com.jangletech.qoogol.model.Friends;
-import com.jangletech.qoogol.model.FriendsResponse;
-import com.jangletech.qoogol.retrofit.ApiClient;
-import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import retrofit2.Call;
 
 import static com.jangletech.qoogol.util.Constant.friends;
 
@@ -108,7 +102,8 @@ public class FriendsFragment extends BaseFragment implements FriendsAdapter.upda
     }
 
     @Override
-    public void onUpdateConnection() {
+    public void onUpdateConnection(String user) {
+        mViewModel.deleteUpdatedConnection(user);
         mViewModel.fetchFriendsData(true);
     }
 

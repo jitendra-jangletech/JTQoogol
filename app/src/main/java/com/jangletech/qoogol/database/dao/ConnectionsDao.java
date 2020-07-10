@@ -32,6 +32,9 @@ public interface ConnectionsDao {
     @Delete
     void delete(List<Connections> connectionsList);
 
+    @Query("delete from Connections where user_id =:loggedInuserId and cn_user_id_2 =:cnUserId")
+    void deleteConnections(String loggedInuserId,String cnUserId);
+
     @Update
     void updateConnections(List<Connections> connectionsList);
 

@@ -32,6 +32,10 @@ public interface FollowReqDao {
     @Delete
     void delete(List<FollowRequest> followRequestList);
 
+
+    @Query("delete from FollowRequest where user_id =:loggedInuserId and cn_user_id_2 =:cnUserId")
+    void deleteFollowReq(String loggedInuserId,String cnUserId);
+
     @Update
     void updateFollowReq(List<FollowRequest> followRequestList);
 

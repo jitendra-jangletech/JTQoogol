@@ -60,6 +60,11 @@ public class ConnectionsViewModel extends AndroidViewModel {
         mAppRepository.insertConnections(connections);
     }
 
+    void deleteUpdatedConnection(String user) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> mAppRepository.deleteConnections(userId,user));
+    }
+
     void fetchConnectionsData(boolean isRefresh) {
         getData(isRefresh);
     }

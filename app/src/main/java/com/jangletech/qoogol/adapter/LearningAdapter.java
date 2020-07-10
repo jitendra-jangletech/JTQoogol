@@ -291,6 +291,7 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
         boolean isB1Selected = false, isB2Selected = false, isB3Selected = false, isB4Selected = false, isMCQImgSubmited = false,
                 isMCQImgTextSubmited = false;
 
+        @SuppressLint("ClickableViewAccessibility")
         public ViewHolder(@NonNull LearningItemBinding itemView) {
             super(itemView.getRoot());
             this.learningItemBinding = itemView;

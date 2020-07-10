@@ -135,7 +135,8 @@ public class ConnectionListFragment extends BaseFragment implements ConnectionAd
     }
 
     @Override
-    public void onUpdateConnection() {
+    public void onUpdateConnection(String user) {
+        mViewModel.deleteUpdatedConnection(user);
         mViewModel.fetchConnectionsData(true);
     }
 

@@ -32,6 +32,9 @@ public interface FriendReqDao {
     @Delete
     void delete(List<FriendRequest> friendRequestList);
 
+    @Query("delete from FriendRequest where user_id =:loggedInuserId and cn_user_id_2 =:cnUserId")
+    void deleteFriendReq(String loggedInuserId,String cnUserId);
+
     @Update
     void updateFriendReq(List<FriendRequest> friendRequestList);
 

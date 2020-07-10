@@ -10,7 +10,6 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.jangletech.qoogol.R;
@@ -18,17 +17,12 @@ import com.jangletech.qoogol.adapter.FollowersAdapter;
 import com.jangletech.qoogol.databinding.FragmentFriendsBinding;
 import com.jangletech.qoogol.dialog.PublicProfileDialog;
 import com.jangletech.qoogol.model.Followers;
-import com.jangletech.qoogol.model.FollowersResponse;
-import com.jangletech.qoogol.retrofit.ApiClient;
-import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import retrofit2.Call;
 
 import static com.jangletech.qoogol.util.Constant.followers;
 
@@ -109,7 +103,8 @@ public class FollowersFragment extends BaseFragment implements FollowersAdapter.
     }
 
     @Override
-    public void onUpdateConnection() {
+    public void onUpdateConnection(String user) {
+        mViewModel.deleteUpdatedConnection(user);
         mViewModel.fetchFollowersData(true);
     }
 
@@ -123,7 +118,6 @@ public class FollowersFragment extends BaseFragment implements FollowersAdapter.
         String otherUserId = bundle.getString(Constant.fetch_profile_id);
         PublicProfileDialog publicProfileDialog = new PublicProfileDialog(getActivity(),otherUserId,this);
         publicProfileDialog.show();
-        //NavHostFragment.findNavController(this).navigate(R.id.nav_edit_profile, bundle);
     }
 
     @Override
