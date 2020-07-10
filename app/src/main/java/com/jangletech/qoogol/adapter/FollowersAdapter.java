@@ -19,7 +19,6 @@ import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.ConnectionItemBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.model.Followers;
-import com.jangletech.qoogol.model.Friends;
 import com.jangletech.qoogol.model.ResponseObj;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
@@ -103,12 +102,14 @@ public class FollowersAdapter extends RecyclerView.Adapter<FollowersAdapter.View
         popup.setGravity(END);
         popup.inflate(R.menu.connection_options);
         Menu popupMenu = popup.getMenu();
+        if (connections.getCn_u1_follows_u2().equalsIgnoreCase("false")) {
+            popupMenu.findItem(R.id.action_follow).setVisible(true);
+        }
         if (call_from.equalsIgnoreCase(friends)) {
             popupMenu.findItem(R.id.action_remove_connection).setVisible(true);
             if (connections.getCn_blocked_by_u1().equalsIgnoreCase("false"))
                 popupMenu.findItem(R.id.action_follow).setVisible(true);
         } else if (call_from.equalsIgnoreCase(followers)) {
-            popupMenu.findItem(R.id.action_follow).setVisible(true);
             if (connections.getCn_connected().equalsIgnoreCase("false"))
                 popupMenu.findItem(R.id.action_add_friend).setVisible(true);
         } else if (call_from.equalsIgnoreCase(following)) {
@@ -174,7 +175,6 @@ public class FollowersAdapter extends RecyclerView.Adapter<FollowersAdapter.View
                 case R.id.cancel_friend:
                     updateConnection(connections.getCn_user_id_2(),reject_friend_requests);
                     break;
-
                 case  R.id.action_view_profile:
                     Bundle bundle = new Bundle();
                     bundle.putInt(CALL_FROM, connectonId);
@@ -227,7 +227,7 @@ public class FollowersAdapter extends RecyclerView.Adapter<FollowersAdapter.View
     }
 
     public interface updateConnectionListener {
-        void onUpdateConnection();
+        void onUpdateConnection(String user);
         void onBottomReached(int size);
         void showProfileClick(Bundle bundle);
     }
@@ -242,7 +242,7 @@ public class FollowersAdapter extends RecyclerView.Adapter<FollowersAdapter.View
                 try {
                     ProgressDialog.getInstance().dismiss();
                     if (response.body()!=null && response.body().getResponse().equalsIgnoreCase("200")){
-                        listener.onUpdateConnection();
+                        listener.onUpdateConnection(user);
                     } else {
                         Toast.makeText(activity, UtilHelper.getAPIError(String.valueOf(response.body())),Toast.LENGTH_SHORT).show();
                     }

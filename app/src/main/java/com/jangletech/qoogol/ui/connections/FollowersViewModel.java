@@ -57,6 +57,11 @@ public class FollowersViewModel  extends AndroidViewModel {
         getData(isRefresh);
     }
 
+    void deleteUpdatedConnection(String user) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> mAppRepository.deleteFollowers(userId,user));
+    }
+
     private void getData(boolean isRefresh) {
         if (isRefresh)
             call = apiService.fetchRefreshedFollowers(userId, followers, getDeviceId(), qoogol, pagestart,forcerefresh);

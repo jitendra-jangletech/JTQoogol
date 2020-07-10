@@ -69,6 +69,8 @@ public class FriendRequestFragment extends BaseFragment implements FriendReqAdap
             if (friendRequestList != null) {
                 initView(friendRequestList);
             }
+            if (mBinding.requestsSwiperefresh.isRefreshing())
+                mBinding.requestsSwiperefresh.setRefreshing(false);
         });
     }
 
@@ -168,7 +170,8 @@ public class FriendRequestFragment extends BaseFragment implements FriendReqAdap
     }
 
     @Override
-    public void onUpdateConnection() {
+    public void onUpdateConnection(String user) {
+        mViewModel.deleteUpdatedConnection(user);
         mViewModel.fetchFriendReqData(true);
     }
 

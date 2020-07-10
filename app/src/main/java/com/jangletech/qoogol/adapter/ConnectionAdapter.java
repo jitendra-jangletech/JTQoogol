@@ -237,7 +237,7 @@ public class ConnectionAdapter extends RecyclerView.Adapter<ConnectionAdapter.Vi
     }
 
     public interface updateConnectionListener {
-        void onUpdateConnection();
+        void onUpdateConnection(String user);
         void onBottomReached(int size);
         void showProfileClick(Bundle bundle);
     }
@@ -252,7 +252,7 @@ public class ConnectionAdapter extends RecyclerView.Adapter<ConnectionAdapter.Vi
                 try {
                     ProgressDialog.getInstance().dismiss();
                     if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
-                        listener.onUpdateConnection();
+                        listener.onUpdateConnection(user);
                     } else {
                         Toast.makeText(activity, UtilHelper.getAPIError(String.valueOf(response.body())), Toast.LENGTH_SHORT).show();
                     }

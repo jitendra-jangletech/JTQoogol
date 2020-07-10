@@ -35,7 +35,6 @@ public class FollowRequestFragment extends BaseFragment implements FollowReqAdap
     private static final String TAG = "FollowRequestFragment";
     private FragmentFriendRequestBinding mBinding;
     private LinearLayoutManager linearLayoutManager;
-    //private List<FollowRequest> connectionsList = new ArrayList<>();
     private FollowReqAdapter mAdapter;
     private Boolean isVisible = false;
     private String userId = "";
@@ -65,6 +64,8 @@ public class FollowRequestFragment extends BaseFragment implements FollowReqAdap
             if (followRequestList != null) {
                 initView(followRequestList);
             }
+            if (mBinding.requestsSwiperefresh.isRefreshing())
+                mBinding.requestsSwiperefresh.setRefreshing(false);
         });
     }
 
@@ -128,7 +129,8 @@ public class FollowRequestFragment extends BaseFragment implements FollowReqAdap
     }
 
     @Override
-    public void onUpdateConnection() {
+    public void onUpdateConnection(String user) {
+        mViewModel.deleteUpdatedConnection(user);
         mViewModel.fetchFollowReqData(true);
     }
 
