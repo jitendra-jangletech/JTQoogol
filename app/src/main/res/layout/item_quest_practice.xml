@@ -32,9 +32,10 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:layout_marginLeft="@dimen/_25sdp"
                     android:id="@+id/marked"
-                    android:layout_width="@dimen/_10sdp"
-                    android:layout_height="@dimen/_10sdp"
+                    android:layout_width="@dimen/_9sdp"
+                    android:layout_height="@dimen/_9sdp"
                     android:layout_gravity="bottom|right"
                     android:background="@drawable/ic_star"
                     android:visibility="gone" />

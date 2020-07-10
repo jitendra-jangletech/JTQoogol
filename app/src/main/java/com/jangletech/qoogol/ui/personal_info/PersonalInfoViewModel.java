@@ -33,7 +33,6 @@ public class PersonalInfoViewModel extends AndroidViewModel {
     }
 
 
-
     public LiveData<UserProfile> getUserProfile(String userId) {
         return appRepository.getUserProfile(userId);
     }
@@ -42,7 +41,7 @@ public class PersonalInfoViewModel extends AndroidViewModel {
         return appRepository.getUserProfilePrev(userId);
     }
 
-    public LiveData<GenerateVerifyUserName> getUserNameData(){
+    public LiveData<GenerateVerifyUserName> getUserNameData() {
         return generateVerifyUserNameMutableLiveData;
     }
 

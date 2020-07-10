@@ -121,6 +121,16 @@ public class MyTestViewModel extends AndroidViewModel {
         return appRepository.getAllTests(flag,userId);
     }
 
+    public LiveData<List<TestModelNew>> getAllFavTests(String flag,String userId) {
+        Log.d(TAG, "getAllTests Flag : "+flag);
+        Log.d(TAG, "getAllTests userId : "+userId);
+        return appRepository.getAllFavTests(flag,userId);
+    }
+
+    public void updateFav(String flag,String userId,int tmId,boolean value){
+        appRepository.updateFavTest(flag,userId,tmId,value);
+    }
+
     public LiveData<List<TestModelNew>> getAllTestByDifficultyLevel(String flag,String userId,String diffLevel) {
         Log.d(TAG, "getAllTests Flag : "+flag);
         Log.d(TAG, "getAllTests userId : "+userId);

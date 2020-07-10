@@ -22,8 +22,10 @@ import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.util.Constant;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 
@@ -77,10 +79,15 @@ public class ConnectionListFragment extends BaseFragment implements ConnectionAd
     }
 
     private void setConnectionAdapter(List<Connections> connectionsList) {
-        mAdapter = new ConnectionAdapter(getActivity(), connectionsList, friends, this);
-        mBinding.connectionRecycler.setHasFixedSize(true);
-        mBinding.connectionRecycler.setLayoutManager(linearLayoutManager);
-        mBinding.connectionRecycler.setAdapter(mAdapter);
+        if (connectionsList.size() > 0) {
+            mBinding.emptyview.setVisibility(View.GONE);
+            mAdapter = new ConnectionAdapter(getActivity(), connectionsList, friends, this);
+            mBinding.connectionRecycler.setHasFixedSize(true);
+            mBinding.connectionRecycler.setLayoutManager(linearLayoutManager);
+            mBinding.connectionRecycler.setAdapter(mAdapter);
+        } else {
+            mBinding.emptyview.setVisibility(View.VISIBLE);
+        }
     }
 
     private void fetchConnections() {

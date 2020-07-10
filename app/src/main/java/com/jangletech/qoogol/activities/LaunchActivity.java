@@ -31,7 +31,7 @@ public class LaunchActivity extends BaseActivity {
     private static final String TAG = "LaunchActivity";
     private ActivityLaunchBinding mBinding;
     private RegisterLoginViewModel mViewModel;
-    ApiInterface apiService = ApiClient.getInstance().getApi();
+    private ApiInterface apiService = ApiClient.getInstance().getApi();
     RegisterLoginModel registerLoginModel;
     boolean isOtpSent = false;
     int countryCode = 91; //todo country code hardcoded
@@ -113,18 +113,18 @@ public class LaunchActivity extends BaseActivity {
         }
     }*/
 
-    private void deleteOfflineData(){
+   /* private void deleteOfflineData(){
         mViewModel.deleteDashboard();
         mViewModel.deleteEducations();
         mViewModel.deleteNotifications();
         mViewModel.deletePersonalInfo();
         mViewModel.deleteTests();
     }
-
+*/
     private void doRegisterLogin(String mobile, String caseR, int countryCode, String passwordOtp, String deviceId, String appName) {
         Log.d(TAG, "Mobile : " + mobile);
         ProgressDialog.getInstance().show(this);
-        Call<RegisterLoginModel> call = apiService.doRegisterLogin(mobile, caseR, countryCode, passwordOtp, deviceId, appName, new PreferenceManager(getApplicationContext()).getToken());
+        Call<RegisterLoginModel> call = apiService.doRegisterLogin(mobile, caseR, countryCode, passwordOtp, deviceId, appName, new PreferenceManager(getApplicationContext()).getToken(),"E");
         call.enqueue(new Callback<RegisterLoginModel>() {
             @Override
             public void onResponse(Call<RegisterLoginModel> call, Response<RegisterLoginModel> response) {

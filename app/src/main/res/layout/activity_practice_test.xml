@@ -48,7 +48,19 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
+                    <TextView
+                        android:textColor="@color/colorBlack"
+                        android:textStyle="bold"
+                        android:padding="@dimen/_5sdp"
+                        android:gravity="center"
+                        android:id="@+id/tvTestTitle"
+                        android:text="Summative Test 2013-2014"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
                     <LinearLayout
+                        android:layout_below="@+id/tvTestTitle"
                         android:id="@+id/rootLayout"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_40sdp"

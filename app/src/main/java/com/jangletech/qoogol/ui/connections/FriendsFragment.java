@@ -94,13 +94,17 @@ public class FriendsFragment extends BaseFragment implements FriendsAdapter.upda
             mViewModel.fetchFriendsData(false);
     }
 
-
     private void initView() {
-        mAdapter = new FriendsAdapter(getActivity(), connectionsList, friends, this);
-        mBinding.connectionRecycler.setHasFixedSize(true);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        mBinding.connectionRecycler.setLayoutManager(linearLayoutManager);
-        mBinding.connectionRecycler.setAdapter(mAdapter);
+        if (connectionsList.size() > 0) {
+            mAdapter = new FriendsAdapter(getActivity(), connectionsList, friends, this);
+            mBinding.connectionRecycler.setHasFixedSize(true);
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+            mBinding.connectionRecycler.setLayoutManager(linearLayoutManager);
+            mBinding.connectionRecycler.setAdapter(mAdapter);
+        } else {
+            mBinding.emptyview.setText("No Friends Added.");
+            mBinding.emptyview.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -116,7 +120,7 @@ public class FriendsFragment extends BaseFragment implements FriendsAdapter.upda
     @Override
     public void showProfileClick(Bundle bundle) {
         String otherUserId = bundle.getString(Constant.fetch_profile_id);
-        PublicProfileDialog publicProfileDialog = new PublicProfileDialog(getActivity(),otherUserId,this);
+        PublicProfileDialog publicProfileDialog = new PublicProfileDialog(getActivity(), otherUserId, this);
         publicProfileDialog.show();
         //NavHostFragment.findNavController(this).navigate(R.id.nav_edit_profile, bundle);
     }

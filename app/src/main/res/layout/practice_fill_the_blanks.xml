@@ -163,6 +163,7 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/grey_border"
                         android:maxLines="2"
+                        android:inputType="textNoSuggestions"
                         android:textColor="@color/colorBlack"
                         android:visibility="visible"
                         app:layout_constraintLeft_toLeftOf="parent"

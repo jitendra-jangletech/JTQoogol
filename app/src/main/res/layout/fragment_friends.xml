@@ -12,7 +12,7 @@
             android:visibility="gone"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textColor="@color/colorSkyBlue"
-            android:text="No Friends Added."
+            android:text="No Connections Added."
             android:id="@+id/emptyview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

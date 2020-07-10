@@ -9,44 +9,41 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.MenuItemCompat;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.viewpager.widget.ViewPager;
 
-import com.github.mikephil.charting.animation.Easing;
-import com.github.mikephil.charting.components.Description;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
-import com.github.mikephil.charting.utils.ColorTemplate;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.activities.MainActivity;
 import com.jangletech.qoogol.databinding.FragmentHomeBinding;
 import com.jangletech.qoogol.model.DashBoard;
-import com.jangletech.qoogol.model.TestAnalytics;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
+import com.jangletech.qoogol.ui.QuestionAnalyticsFragment;
+import com.jangletech.qoogol.ui.TestAnalyticsFragment;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -55,11 +52,13 @@ import retrofit2.Response;
 public class HomeFragment extends BaseFragment implements View.OnClickListener,
         OnChartValueSelectedListener, SearchView.OnQueryTextListener {
 
+    private double total;
     private HomeViewModel mViewModel;
     private FragmentHomeBinding mBinding;
+    private DashBoard globalDashboard;
     private static final String TAG = "HomeFragment";
-    ApiInterface apiService = ApiClient.getInstance().getApi();
-    ArrayList<TestAnalytics> testAnalytics = new ArrayList<>();
+    private ApiInterface apiService = ApiClient.getInstance().getApi();
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -67,13 +66,15 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false);
         mBinding.setLifecycleOwner(this);
         initViews();
-        testAnalytics.clear();
-        testAnalytics.add(new TestAnalytics("Like", 50));
-        testAnalytics.add(new TestAnalytics("Share", 30));
-        testAnalytics.add(new TestAnalytics("Taken", 15));
-        testAnalytics.add(new TestAnalytics("Favourites", 5));
-        setBarChartData();
         return mBinding.getRoot();
+    }
+
+    private void setupViewPager(ViewPager viewPager, DashBoard dashBoard) {
+        mBinding.tabs.setupWithViewPager(viewPager);
+        Adapter adapter = new Adapter(getChildFragmentManager());
+        adapter.addFragment(new TestAnalyticsFragment(dashBoard),"Test");
+        adapter.addFragment(new QuestionAnalyticsFragment(dashBoard),"Questions");
+        viewPager.setAdapter(adapter);
     }
 
     private ArrayList<String> getXValues() {
@@ -100,76 +101,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
         return barDataSets;
     }
 
-    private void setDynamicPieChartData(String label) {
-        mBinding.pieChartDetailed.setVisibility(View.VISIBLE);
-        mBinding.tvLabel.setVisibility(View.VISIBLE);
-        mBinding.tvLabel.setText(label);
-        mBinding.pieChartDetailed.setUsePercentValues(true);
-        mBinding.pieChartDetailed.getDescription().setEnabled(false);
-        mBinding.pieChartDetailed.setExtraOffsets(5, 10, 5, 5);
-        mBinding.pieChartDetailed.setDragDecelerationFrictionCoef(0.95f);
-
-        mBinding.pieChartDetailed.setDrawHoleEnabled(true);
-        mBinding.pieChartDetailed.setHoleColor(Color.WHITE);
-        mBinding.pieChartDetailed.setTransparentCircleRadius(61f);
-
-        ArrayList<PieEntry> yValues = new ArrayList<>();
-        yValues.add(new PieEntry(30, "Maths"));
-        yValues.add(new PieEntry(40, "Science"));
-        yValues.add(new PieEntry(20, "English"));
-        yValues.add(new PieEntry(10, "Marathi"));
-
-        mBinding.pieChartDetailed.animateY(1000, Easing.EaseInOutCubic);
-
-        PieDataSet pieDataSet = new PieDataSet(yValues, label);
-        pieDataSet.setSliceSpace(3f);
-        pieDataSet.setSelectionShift(5f);
-        pieDataSet.setColors(ColorTemplate.JOYFUL_COLORS);
-
-        PieData pieData = new PieData(pieDataSet);
-        pieData.setValueTextSize(10f);
-        pieData.setValueTextColor(Color.WHITE);
-        mBinding.pieChartDetailed.setData(pieData);
-        mBinding.pieChartDetailed.invalidate();
-    }
-
-
-    private void setBarChartData() {
-        ArrayList<String> labels = new ArrayList<>();
-        ArrayList<BarEntry> barEntries = new ArrayList<>();
-        for (int i = 0; i < testAnalytics.size(); i++) {
-            String featureName = testAnalytics.get(i).getFeatureName();
-            int count = testAnalytics.get(i).getCount();
-            barEntries.add(new BarEntry(i, count));
-            labels.add(featureName);
-        }
-
-        BarDataSet barDataSet = new BarDataSet(barEntries, "Test Analytics");
-        barDataSet.setColor(Color.RED);
-        Description description = new Description();
-        description.setText("Test");
-
-        mBinding.barChart.setDescription(description);
-        BarData barData = new BarData(barDataSet);
-        XAxis xAxis = mBinding.barChart.getXAxis();
-        xAxis.setValueFormatter(new IndexAxisValueFormatter(labels));
-        xAxis.setPosition(XAxis.XAxisPosition.TOP);
-        xAxis.setDrawAxisLine(false);
-        xAxis.setDrawAxisLine(false);
-        xAxis.setGranularity(1f);
-        xAxis.setLabelCount(labels.size());
-        xAxis.setLabelRotationAngle(270);
-        mBinding.barChart.setData(barData);
-        mBinding.barChart.animateY(1000);
-        mBinding.barChart.invalidate();
-
-        /*mBinding.barChart.setBackgroundColor(Color.GRAY);
-        mBinding.barChart.setGridBackgroundColor(Color.DKGRAY);
-        mBinding.barChart.setData(barData);
-        mBinding.barChart.animateXY(3000, 300);
-        mBinding.barChart.invalidate();
-*/
-    }
 
     private void initViews() {
         mBinding.connectionLayout.setOnClickListener(this);
@@ -177,67 +108,24 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
         mBinding.followersLayout.setOnClickListener(this);
         mBinding.followingLayout.setOnClickListener(this);
         mBinding.connectionLayout.setOnClickListener(this);
-        mBinding.pieChart.setOnChartValueSelectedListener(this);
+        //mBinding.pieChart.setOnChartValueSelectedListener(this);
         fetchDashboardDetails();
         mViewModel.getDashboardDetails(getUserId()).observe(getViewLifecycleOwner(), new Observer<DashBoard>() {
             @Override
-            public void onChanged(@Nullable final DashBoard dashBoard) {
-                if (dashBoard != null) {
-                    setDashBoardData(dashBoard);
-                }
-            }
-        });
-
-        mBinding.toggleChart.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    //showToast("Pie Chart");
-                    mBinding.barChart.setVisibility(View.GONE);
-                    mBinding.pieChart.setVisibility(View.VISIBLE);
-                    setPieChartData();
-                } else {
-                    //showToast("Bar Chart");
-                    mBinding.barChart.setVisibility(View.VISIBLE);
-                    mBinding.pieChart.setVisibility(View.GONE);
-                    mBinding.pieChartDetailed.setVisibility(View.GONE);
-                    setBarChartData();
+            public void onChanged(@Nullable final DashBoard dashBoard1) {
+                if (dashBoard1 != null) {
+                    globalDashboard = dashBoard1;
+                    //setTestAnalytics(dashBoard1);
+                    setDashBoardData(dashBoard1);
                 }
             }
         });
     }
 
-    private void setPieChartData() {
-        //set pie chart
-        mBinding.pieChart.setUsePercentValues(true);
-        mBinding.pieChart.getDescription().setEnabled(false);
-        mBinding.pieChart.setExtraOffsets(5, 10, 5, 5);
-        mBinding.pieChart.setDragDecelerationFrictionCoef(0.95f);
-
-        mBinding.pieChart.setDrawHoleEnabled(true);
-        mBinding.pieChart.setHoleColor(Color.WHITE);
-        mBinding.pieChart.setTransparentCircleRadius(61f);
-
-        ArrayList<PieEntry> yValues = new ArrayList<>();
-        yValues.add(new PieEntry(30, "Like"));
-        yValues.add(new PieEntry(40, "Share"));
-        yValues.add(new PieEntry(30, "Favourite"));
-
-        mBinding.pieChart.animateY(1000, Easing.EaseInOutCubic);
-
-        PieDataSet pieDataSet = new PieDataSet(yValues, "Test");
-        pieDataSet.setSliceSpace(3f);
-        pieDataSet.setSelectionShift(5f);
-        pieDataSet.setColors(ColorTemplate.JOYFUL_COLORS);
-
-        PieData pieData = new PieData(pieDataSet);
-        pieData.setValueTextSize(10f);
-        pieData.setValueTextColor(Color.WHITE);
-
-        mBinding.pieChart.setData(pieData);
-    }
 
     private void setDashBoardData(DashBoard dashBoard) {
+        Log.d(TAG, "setDashBoardData Followers Data : " + dashBoard.getFollowers());
+        setupViewPager(mBinding.viewpager, dashBoard);
         mBinding.followers.setText(dashBoard.getFollowers());
         mBinding.following.setText(dashBoard.getFollowings());
         mBinding.friends.setText(dashBoard.getU_friends());
@@ -289,6 +177,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
             public void onResponse(Call<DashBoard> call, Response<DashBoard> response) {
                 //ProgressDialog.getInstance().dismiss();
                 mBinding.swipeToRefresh.setRefreshing(false);
+                Log.d(TAG, "onResponse Done: " + response.body().getResponse());
                 if (response.body() != null) {
                     DashBoard dashBoard = response.body();
                     dashBoard.setUserId(getUserId());
@@ -333,7 +222,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
     @Override
     public void onValueSelected(Entry e, Highlight h) {
         PieEntry pieEntry = (PieEntry) e;
-        setDynamicPieChartData(pieEntry.getLabel());
+        //setDynamicPieChartData(pieEntry.getLabel());
     }
 
     @Override
@@ -377,5 +266,34 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
     @Override
     public boolean onQueryTextChange(String newText) {
         return false;
+    }
+
+    public static class Adapter extends FragmentPagerAdapter {
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<String> mFragmentTitleList = new ArrayList<>();
+
+        public Adapter(FragmentManager manager) {
+            super(manager);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragmentList.size();
+        }
+
+        public void addFragment(Fragment fragment, String title) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitleList.get(position);
+        }
     }
 }

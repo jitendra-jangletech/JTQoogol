@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -186,6 +187,7 @@ public class PersonalInfoFragment extends BaseFragment {
             }
         });
 
+
         mBinding.userProfilePic.setOnClickListener(v -> {
             loadImage();
         });
@@ -230,11 +232,12 @@ public class PersonalInfoFragment extends BaseFragment {
         mBinding.btnEmailVerify.setOnClickListener(v -> {
             mBinding.etEmail.setError(null);
             String email = mBinding.etEmail.getText().toString().trim();
-            if (email.isEmpty() && isValidMail(email)) {
+            if (email.isEmpty() && !isValidMail(email)) {
                 mBinding.etEmail.setError("Please enter valid email.");
                 return;
+            } else {
+                verifyMobile(mBinding.etEmail.getText().toString().trim(), "E");
             }
-            verifyMobile(mBinding.etEmail.getText().toString().trim(), "E");
         });
         mBinding.btnMobileVerify.setOnClickListener(v -> {
             mBinding.etMobile.setError(null);

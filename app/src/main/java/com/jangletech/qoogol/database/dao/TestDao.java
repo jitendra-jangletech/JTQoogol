@@ -19,6 +19,12 @@ public interface TestDao {
     @Query("Select * from TestModelNew where flag=:flag and userId=:uid")
     LiveData<List<TestModelNew>> getAllTests(String flag,String uid);
 
+    @Query("Select * from TestModelNew where flag=:flag and userId=:uid and isFavourite=:isFav")
+    LiveData<List<TestModelNew>> getAllFavTest(String flag,String uid,boolean isFav);
+
+    @Query("update TestModelNew set isFavourite =:value where tm_id=:tmId and flag=:flag and userId=:uid")
+    void updateFav(String flag,String uid,int tmId,boolean value);
+
     @Query("Select * from TestModelNew where flag=:flag and userId=:uid and tm_diff_level=:diff")
     LiveData<List<TestModelNew>> getAllTestsDiffLevel(String flag,String uid,String diff);
 

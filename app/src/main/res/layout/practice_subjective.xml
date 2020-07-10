@@ -53,13 +53,13 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <ToggleButton
-                        android:foreground="?attr/selectableItemBackground"
                         android:id="@+id/markToggle"
                         android:layout_width="@dimen/_20sdp"
                         android:layout_height="@dimen/_20sdp"
                         android:layout_marginRight="@dimen/_10sdp"
                         android:background="@drawable/button_marked"
                         android:checked="false"
+                        android:foreground="?attr/selectableItemBackground"
                         android:text=""
                         android:textOff=""
                         android:textOn=""
@@ -133,12 +133,12 @@
                         app:layout_constraintTop_toTopOf="@id/tvtimer" />
 
                     <ImageView
-                        android:foreground="?attr/selectableItemBackground"
-                        android:padding="@dimen/_10sdp"
                         android:id="@+id/save_que"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="@dimen/_5sdp"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:padding="@dimen/_10sdp"
                         android:src="@drawable/ic_save_grey"
                         app:layout_constraintBottom_toBottomOf="@id/timer"
                         app:layout_constraintRight_toLeftOf="@+id/timer"
@@ -165,9 +165,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@drawable/grey_border"
-                            android:digits="qwertyuiopasdfghjklzxcvbnm1234567890QWERTYUIOPASDFGHJKLZXCVBNM "
                             android:gravity="top|start"
                             android:lines="5"
+                            android:inputType="textMultiLine|textNoSuggestions"
                             android:maxLines="5"
                             android:textColor="@color/colorBlack"
                             android:visibility="visible"

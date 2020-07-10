@@ -105,7 +105,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
         popup.inflate(R.menu.connection_options);
         Menu popupMenu = popup.getMenu();
         if (call_from.equalsIgnoreCase(friends)) {
-            popupMenu.findItem(R.id.action_remove_connection).setVisible(true);
+            popupMenu.findItem(R.id.action_remove_connection).setVisible(false);
             if (connections.getCn_blocked_by_u1().equalsIgnoreCase("false"))
                 popupMenu.findItem(R.id.action_follow).setVisible(true);
         } else if (call_from.equalsIgnoreCase(followers)) {

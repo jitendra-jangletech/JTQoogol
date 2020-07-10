@@ -96,11 +96,16 @@ public class FollowersFragment extends BaseFragment implements FollowersAdapter.
     }
 
     private void initView() {
-        mAdapter = new FollowersAdapter(getActivity(), connectionsList, followers, this);
-        mBinding.connectionRecycler.setHasFixedSize(true);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        mBinding.connectionRecycler.setLayoutManager(linearLayoutManager);
-        mBinding.connectionRecycler.setAdapter(mAdapter);
+        if(connectionsList.size() > 0) {
+            mAdapter = new FollowersAdapter(getActivity(), connectionsList, followers, this);
+            mBinding.connectionRecycler.setHasFixedSize(true);
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+            mBinding.connectionRecycler.setLayoutManager(linearLayoutManager);
+            mBinding.connectionRecycler.setAdapter(mAdapter);
+        }else{
+            mBinding.emptyview.setText("No Followers Yet.");
+            mBinding.emptyview.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

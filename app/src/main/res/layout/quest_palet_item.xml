@@ -25,8 +25,8 @@
             android:id="@+id/marked"
             android:layout_gravity="bottom|right"
             android:background="@drawable/ic_star"
-            android:layout_width="@dimen/_10sdp"
-            android:layout_height="@dimen/_10sdp"/>
+            android:layout_width="@dimen/_9sdp"
+            android:layout_height="@dimen/_9sdp"/>
 
     </FrameLayout>
 </layout>

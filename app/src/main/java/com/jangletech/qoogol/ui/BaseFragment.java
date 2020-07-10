@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.provider.Settings;
 import android.util.Log;
@@ -17,6 +19,8 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bogdwellers.pinchtozoom.ImageMatrixTouchHandler;
@@ -52,6 +56,30 @@ public class BaseFragment extends Fragment {
         }
         Log.d(TAG, "hasError: " + result);
         return result;
+    }
+
+    public boolean isAppInstalled() {
+        PackageManager pm = getActivity().getPackageManager();
+        try {
+            pm.getPackageInfo("com.jangletech.chatchilli", PackageManager.GET_ACTIVITIES);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+        }
+        return false;
+    }
+
+    public void replaceFragment(int resId, Fragment fragment, Bundle bundle) {
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        String backStateName = fragment.getClass().getName();
+        boolean fragmentPopped = fragmentManager.popBackStackImmediate(backStateName, 0);
+        if (!fragmentPopped) {
+            fragment.setArguments(bundle);
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left);
+            fragmentTransaction.replace(resId, fragment);
+            fragmentTransaction.addToBackStack(backStateName);
+            fragmentTransaction.commit();
+        }
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -237,13 +265,14 @@ public class BaseFragment extends Fragment {
     }
 
     public void dismissRefresh(SwipeRefreshLayout swipeRefreshLayout) {
-        if ( swipeRefreshLayout!=null && swipeRefreshLayout.isRefreshing()) {
+        if (swipeRefreshLayout != null && swipeRefreshLayout.isRefreshing()) {
             swipeRefreshLayout.setRefreshing(false);
         }
     }
 
     public String getProfileImageUrl(String imageName) {
-        //String userId = String.valueOf(new PreferenceManager(getApplicationContext()).getInt(Constant.USER_ID));
+        //String userId = String.valueOf(new PreferenceManager(
+        // getApplicationContext()).getInt(Constant.USER_ID));
         return Constant.PRODUCTION_BASE_FILE_API + imageName;
     }
 

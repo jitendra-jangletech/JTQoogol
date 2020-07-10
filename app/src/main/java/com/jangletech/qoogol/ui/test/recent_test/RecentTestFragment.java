@@ -376,6 +376,11 @@ public class RecentTestFragment extends BaseFragment
         NavHostFragment.findNavController(this).navigate(R.id.nav_share, bundle);
     }
 
+    @Override
+    public void favClick(TestModelNew testModelNew) {
+
+    }
+
    /* @Override
     public void onLikeClick(TestModelNew testModel, int pos, boolean isChecked) {
         callApi(isChecked ? 1 : 0, pos);

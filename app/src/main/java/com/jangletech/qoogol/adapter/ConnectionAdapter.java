@@ -117,17 +117,17 @@ public class ConnectionAdapter extends RecyclerView.Adapter<ConnectionAdapter.Vi
         popup.inflate(R.menu.connection_options);
         Menu popupMenu = popup.getMenu();
         if (call_from.equalsIgnoreCase(friends)) {
-            popupMenu.findItem(R.id.action_remove_connection).setVisible(true);
+            popupMenu.findItem(R.id.action_remove_connection).setVisible(false);
             if (connections.getCn_blocked_by_u1().equalsIgnoreCase("false"))
                 popupMenu.findItem(R.id.action_follow).setVisible(true);
         } else if (call_from.equalsIgnoreCase(followers)) {
             popupMenu.findItem(R.id.action_follow).setVisible(true);
             if (connections.getCn_connected().equalsIgnoreCase("false"))
-                popupMenu.findItem(R.id.action_add_friend).setVisible(true);
+                popupMenu.findItem(R.id.action_add_friend).setVisible(false);
         } else if (call_from.equalsIgnoreCase(following)) {
             popupMenu.findItem(R.id.action_unfollow).setVisible(true);
             if (connections.getCn_connected().equalsIgnoreCase("false"))
-                popupMenu.findItem(R.id.action_add_friend).setVisible(true);
+                popupMenu.findItem(R.id.action_add_friend).setVisible(false);
         } else if (call_from.equalsIgnoreCase(friendrequests)) {
             try {
                 if (connections.getFriend_req_sent().equalsIgnoreCase("true")) {

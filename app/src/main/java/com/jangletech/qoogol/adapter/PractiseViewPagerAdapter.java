@@ -13,6 +13,7 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.text.TextWatcher;
+import android.util.Base64;
 import android.util.Log;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
@@ -32,7 +33,6 @@ import android.widget.ToggleButton;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.LiveData;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.bogdwellers.pinchtozoom.ImageMatrixTouchHandler;
@@ -54,16 +54,19 @@ import com.jangletech.qoogol.dialog.PublicProfileDialog;
 import com.jangletech.qoogol.model.ProcessQuestion;
 import com.jangletech.qoogol.model.StartResumeTestResponse;
 import com.jangletech.qoogol.model.SubmitTest;
-import com.jangletech.qoogol.model.TestModelNew;
 import com.jangletech.qoogol.model.TestQuestionNew;
 import com.jangletech.qoogol.model.VerifyResponse;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
+import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
 
+import org.apache.commons.text.StringEscapeUtils;
+
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -296,24 +299,24 @@ public class PractiseViewPagerAdapter extends PagerAdapter
                 Log.e(TAG, "initMtp Value : " + entry.getValue());
                 if (entry.getValue().equalsIgnoreCase("B1")) {
                     //setmatchedPair(entry.getKey().toLowerCase(), context.getResources().getDrawable(R.drawable.ic_mtp1));
-                    Log.e(TAG, "Pairs :  "+entry.getKey()+" => "+entry.getValue());
+                    Log.e(TAG, "Pairs :  " + entry.getKey() + " => " + entry.getValue());
                     practiceMtpBinding.a2Img.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_mtp1));
                     practiceMtpBinding.b1Img.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_mtp1));
                 }
                 if (entry.getValue().equalsIgnoreCase("B2")) {
-                    Log.e(TAG, "Pairs :  "+entry.getKey()+" => "+entry.getValue());
+                    Log.e(TAG, "Pairs :  " + entry.getKey() + " => " + entry.getValue());
                     //setmatchedPair(entry.getKey().toLowerCase(), context.getResources().getDrawable(R.drawable.ic_mtp2));
                     practiceMtpBinding.a3Img.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_mtp2));
                     practiceMtpBinding.b2Img.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_mtp2));
                 }
                 if (entry.getValue().equalsIgnoreCase("B3")) {
-                    Log.e(TAG, "Pairs :  "+entry.getKey()+" => "+entry.getValue());
+                    Log.e(TAG, "Pairs :  " + entry.getKey() + " => " + entry.getValue());
                     //setmatchedPair(entry.getKey().toLowerCase(), context.getResources().getDrawable(R.drawable.ic_mtp3));
                     practiceMtpBinding.b3Img.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_mtp3));
                     practiceMtpBinding.a1Img.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_mtp3));
                 }
                 if (entry.getValue().equalsIgnoreCase("B4")) {
-                    Log.e(TAG, "Pairs :  "+entry.getKey()+" => "+entry.getValue());
+                    Log.e(TAG, "Pairs :  " + entry.getKey() + " => " + entry.getValue());
                     //setmatchedPair(entry.getKey().toLowerCase(), context.getResources().getDrawable(R.drawable.ic_mtp4));
                     practiceMtpBinding.a1Img.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_mtp3));
                     practiceMtpBinding.b4Img.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_mtp4));
@@ -519,6 +522,7 @@ public class PractiseViewPagerAdapter extends PagerAdapter
         //fill the blanks attributes
         EditText etFillTheBlanks = layout.findViewById(R.id.fillTheBlanksEditText);
         ImageView fibImg = layout.findViewById(R.id.fib_img);
+        Log.d(TAG, "FILL_THE_BLANKS");
 
         Button btnSubmit = layout.findViewById(R.id.submit);
 
@@ -1287,7 +1291,12 @@ public class PractiseViewPagerAdapter extends PagerAdapter
         else
             question.setTtqa_obtain_marks("0");
 
-        question.setTtqa_sub_ans(scq_ans);
+        //todo encode
+        String encoded = Base64.encodeToString(scq_ans.getBytes(StandardCharsets.UTF_8), Base64.DEFAULT);
+        String encodedAns = StringEscapeUtils.escapeJava(encoded);
+        Log.d(TAG, "Encoded Ans : " + encodedAns);
+        question.setTtqa_sub_ans(encodedAns);
+
         question.setTtqa_attempted(true);
         question.setTtqa_visited(false);
 
@@ -1499,23 +1508,28 @@ public class PractiseViewPagerAdapter extends PagerAdapter
         EditText etMultiLineAns = layout.findViewById(R.id.multi_line);
         EditText etSinlgeineAns = layout.findViewById(R.id.fill_in_the_blanks);
 
+        String decodedAns = AppUtils.decodedMessage(StringEscapeUtils.unescapeJava(testQuestionNew.getTtqa_sub_ans()));
 
         if (testQuestionNew.getType().equalsIgnoreCase(Constant.ONE_LINE_ANSWER) ||
                 testQuestionNew.getType().equalsIgnoreCase(Constant.FILL_THE_BLANKS)) {
+            Log.d(TAG, "FILL_THE_BLANKS");
             fillTheBlanksLayout.setVisibility(View.VISIBLE);
-            //etSinlgeineAns.setText(testQuestionNew.getA_sub_ans());
+            etSinlgeineAns.setText(decodedAns);
         }
         if (testQuestionNew.getType().equalsIgnoreCase(Constant.SHORT_ANSWER) ||
                 testQuestionNew.getType().equalsIgnoreCase(Constant.LONG_ANSWER)) {
+            Log.d(TAG, "SHORT_ANSWER OR LONG_ANSWER");
             multiLineAnswerLayout.setVisibility(View.VISIBLE);
             answerCharCounter(etMultiLineAns, tvWordCounter, 200, testQuestionNew);
-            //etMultiLineAns.setText(testQuestionNew.getA_sub_ans());
+            etMultiLineAns.setText(decodedAns);
         }
 
         Log.e(TAG, "initSubjective Condtn : " + testQuestionNew.isTtqa_attempted());
         if (testQuestionNew.isTtqa_attempted()) {
             solutionLayout.setVisibility(View.VISIBLE);
-            etMultiLineAns.setText(testQuestionNew.getTtqa_sub_ans());
+            Log.d(TAG, "Base 64 : " + testQuestionNew.getTtqa_sub_ans());
+            Log.d(TAG, "Decoded Ans : " + decodedAns);
+            etMultiLineAns.setText(decodedAns);
         }
 
         btnSubmit.setOnClickListener(v -> {

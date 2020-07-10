@@ -39,10 +39,10 @@ public class TestListAdapter extends RecyclerView.Adapter<TestListAdapter.ViewHo
     private ApiInterface apiService = ApiClient.getInstance().getApi();
     private TestItemBinding itemBinding;
     private TestListAdapter.TestClickListener testClickListener;
-    private String flag="";
+    private String flag = "";
     private HashMap<String, String> mapDiffLevel = new HashMap<>();
 
-    public TestListAdapter(Activity activity, List<TestModelNew> itemlist, TestListAdapter.TestClickListener testClickListener,String flag) {
+    public TestListAdapter(Activity activity, List<TestModelNew> itemlist, TestListAdapter.TestClickListener testClickListener, String flag) {
         this.activity = activity;
         this.testModelList = itemlist;
         this.testClickListener = testClickListener;
@@ -180,6 +180,8 @@ public class TestListAdapter extends RecyclerView.Adapter<TestListAdapter.ViewHo
 
         void onShareClick(int testid);
 
+        void favClick(TestModelNew testModelNew);
+
         //void onLikeClick(TestModelNew testModel, int pos, boolean isChecked);
 
         //void onFavouriteClick(TestModelNew testModel, boolean isChecked, int position);
@@ -221,9 +223,10 @@ public class TestListAdapter extends RecyclerView.Adapter<TestListAdapter.ViewHo
                             testModelNew.setLikeCount((likeCount + 1));
                         }
                         //testModelList.set(pos,testModelNew);
-                        notifyItemChanged(pos,testModelNew);
+                        notifyItemChanged(pos, testModelNew);
 
                     } else {
+                        showToast(response.body().getResponse());
                         // showErrorDialog(getActivity(), response.body().getResponse(), response.body().getMessage());
                     }
                 } catch (Exception e) {
@@ -260,8 +263,9 @@ public class TestListAdapter extends RecyclerView.Adapter<TestListAdapter.ViewHo
                             }
                             //testModelList.set(pos,testModelNew);
                             notifyItemChanged(pos, testModelNew);
+                           //testClickListener.favClick(testModelNew);
                             //notifyDataSetChanged();
-                        }else{
+                        } else {
                             deleteFav(pos);
                         }
                     }

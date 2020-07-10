@@ -76,6 +76,7 @@ public class Constant {
     public static final String u_last_name = "105";
     public static final String w_user_profile_image_name = "507";
     public static final String CASE = "Case";
+    public static final String CASE2 = "Case2";
     public static final String userName = "143A";
 
     public static final String STATUS = "status";
@@ -99,6 +100,7 @@ public class Constant {
     public static final String w_contact_name = "541";
     public static final String w_contact_number = "540";
     public static final String w_otp_sent = "542";
+    public static final String OTP = "OTP";
     public static final String initial_letter = "541";
     public static final String returnrows = "ReturnRows";
     public static final String q_T_list = "69";

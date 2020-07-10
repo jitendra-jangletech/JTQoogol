@@ -417,23 +417,12 @@ public class MyTestFragment extends BaseFragment
         NavHostFragment.findNavController(this).navigate(R.id.nav_share, bundle);
     }
 
-    /* @Override
-     public void onLikeClick(TestModelNew testModel, int pos, boolean isChecked) {
-         callApi(isChecked ? 0 : 1, pos, testModel);
-     }
+    @Override
+    public void favClick(TestModelNew testModelNew) {
+        Log.d(TAG, "favClick Value : "+testModelNew.isFavourite());
+        mViewModel.updateFav("PRACTICE", getUserId(),testModelNew.getTm_id(),testModelNew.isFavourite());
+    }
 
-     @Override
-     public void onFavouriteClick(TestModelNew testModel, boolean isChecked, int pos) {
-         HashMap<String, Integer> params = new HashMap<>();
-         params.put(Constant.tm_id, testModel.getTm_id());
-         if (!isChecked) {
-             params.put(Constant.isFavourite, 1);
-         } else {
-             params.put(Constant.isFavourite, 0);
-         }
-         //favTest(params, pos);
-     }
- */
     @Override
     public void onAttemptsClick(TestModelNew testModel) {
         Bundle bundle = new Bundle();
@@ -441,89 +430,6 @@ public class MyTestFragment extends BaseFragment
         NavHostFragment.findNavController(this).navigate(R.id.nav_test_attempt_history, bundle);
         //MainActivity.navController.navigate(R.id.nav_test_attempt_history,bundle);
     }
-
-    private void callApi(int like, int pos, TestModelNew testModelNew) {
-        //doLikeTest(like, pos, testModelNew);
-    }
-
-//    private void favTest(HashMap<String, Integer> map, int pos) {
-//        Log.d(TAG, "favTest params : " + map);
-//        ProgressDialog.getInstance().show(getActivity());
-//        Call<ProcessQuestion> call = apiService.addFavTest(new PreferenceManager(getActivity()).getInt(Constant.USER_ID), map.get(Constant.tm_id), "I", map.get(Constant.isFavourite));
-//        call.enqueue(new Callback<ProcessQuestion>() {
-//            @Override
-//            public void onResponse(Call<ProcessQuestion> call, Response<ProcessQuestion> response) {
-//                ProgressDialog.getInstance().dismiss();
-//                try {
-//                    if (response.body() != null && response.body().getResponse().equals("200")) {
-//                        if (map.get(Constant.isFavourite) == 0) {
-//                            showToast("Removed from favourites");
-//                            testList.get(pos).setFavourite(false);
-//                        } else {
-//                            showToast("Added to favourites");
-//                            testList.get(pos).setFavourite(true);
-//                        }
-//                        mAdapter.notifyItemChanged(pos, testList.get(pos));
-//                    } else {
-//                        showErrorDialog(getActivity(), response.body().getResponse(), response.body().getMessage());
-//                    }
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<ProcessQuestion> call, Throwable t) {
-//                ProgressDialog.getInstance().dismiss();
-//                showToast("Something went wrong!!");
-//                t.printStackTrace();
-//            }
-//        });
-//    }
-
-//    private void doLikeTest(int like, int pos, TestModelNew testModelNew) {
-//        ProgressDialog.getInstance().show(getActivity());
-//        Call<ProcessQuestion> call = apiService.addTestLike(new PreferenceManager(getActivity()).getInt(Constant.USER_ID), testModelNew.getTm_id(), "I", like);
-//        call.enqueue(new Callback<ProcessQuestion>() {
-//            @Override
-//            public void onResponse(Call<ProcessQuestion> call, Response<ProcessQuestion> response) {
-//                ProgressDialog.getInstance().dismiss();
-//                try {
-//                    if (response.body() != null && response.body().getResponse().equals("200")) {
-//                        int likeCount = testModelNew.getLikeCount();
-//                        if (like == 0) {
-//                            Log.e(TAG, "like 0 ");
-//                            testModelNew.setLike(false);
-//                            if (likeCount <= 0)
-//                                testModelNew.setLikeCount(0);
-//                            else
-//                                testModelNew.setLikeCount((likeCount - 1));
-//                        }
-//                        if (like == 1) {
-//                            testModelNew.setLike(true);
-//                            testModelNew.setLikeCount((likeCount + 1));
-//                        }
-//                        testList.set(pos, testModelNew);
-//                        mAdapter.setSearchResult(testList);
-//                        //mAdapter.notifyDataSetChanged();
-//                        ///mAdapter.notifyItemChanged(pos, testModelNew);
-//
-//                    } else {
-//                        showErrorDialog(getActivity(), response.body().getResponse(), response.body().getMessage());
-//                    }
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<ProcessQuestion> call, Throwable t) {
-//                ProgressDialog.getInstance().dismiss();
-//                showToast("Something went wrong!!");
-//                t.printStackTrace();
-//            }
-//        });
-//    }
 
     @Override
     public void onDetach() {

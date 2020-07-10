@@ -2,6 +2,8 @@ package com.jangletech.qoogol.util;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Base64;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
@@ -9,14 +11,16 @@ import androidx.appcompat.app.AlertDialog;
 import com.jangletech.qoogol.R;
 
 import java.net.UnknownHostException;
+import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
 public class AppUtils {
-    public static final String NOT_CONNECTED ="NOT_CONNECTED";
-    public static final String CONNECTED ="CONNECTED";
+    private static final String TAG = "AppUtils";
+    public static final String NOT_CONNECTED = "NOT_CONNECTED";
+    public static final String CONNECTED = "CONNECTED";
 
     public static String getDateFormat(String strDate) throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
@@ -24,11 +28,22 @@ public class AppUtils {
         return date.toString();
     }
 
-    public static String getStringField(Object object){
-        return object!=null?String.valueOf(object):"";
+    public static String decodedMessage(String message) {
+        try {
+            byte[] messageBytes = Base64.decode(message, Base64.DEFAULT);
+            return new String(messageBytes, StandardCharsets.UTF_8);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            //Log.e(TAG, "decodedMessage: " + ex.getMessage());
+        }
+        return "";
     }
 
-    public static void showToast(Context context,String msg){
+    public static String getStringField(Object object) {
+        return object != null ? String.valueOf(object) : "";
+    }
+
+    public static void showToast(Context context, String msg) {
         Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
     }
 

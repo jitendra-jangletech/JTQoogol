@@ -73,7 +73,7 @@ public class FriendRequestFragment extends BaseFragment implements FriendReqAdap
     }
 
     private void fetchFriendRequests() {
-        Call<FriendRequestResponse> call = apiService.fetchFriendRequests(userId, friendrequests, getDeviceId(), qoogol, "0");
+        Call<FriendRequestResponse> call = apiService.fetchFriendRequests(getUserId(), friendrequests, getDeviceId(), qoogol, "0");
         call.enqueue(new Callback<FriendRequestResponse>() {
             @Override
             public void onResponse(Call<FriendRequestResponse> call, retrofit2.Response<FriendRequestResponse> response) {

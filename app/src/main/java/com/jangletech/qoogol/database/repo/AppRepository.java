@@ -101,6 +101,13 @@ public class AppRepository {
     public LiveData<List<TestModelNew>> getAllTests(String flag,String uId) {
         return testDao.getAllTests(flag,uId);
     }
+    public LiveData<List<TestModelNew>> getAllFavTests(String flag,String uId) {
+        return testDao.getAllFavTest(flag,uId,true);
+    }
+
+    public void updateFavTest(String flag,String uId,int tmId,boolean value) {
+         testDao.updateFav(flag,uId,tmId,value);
+    }
 
     public LiveData<List<TestModelNew>> getAllTestsFiltered(String flag,String uId,String diffLevel) {
         return testDao.getAllTestsDiffLevel(flag,uId,diffLevel);

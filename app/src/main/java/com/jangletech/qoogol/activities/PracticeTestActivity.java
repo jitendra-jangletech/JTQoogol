@@ -79,6 +79,7 @@ public class PracticeTestActivity extends BaseActivity implements
     private boolean isDialogItemClicked = false;
     private String testName = "";
     static CountDownTimer countDownTimer;
+    private TextView tvTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,12 +87,12 @@ public class PracticeTestActivity extends BaseActivity implements
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_practice_test);
         mViewModel = new ViewModelProvider(this).get(StartTestViewModel.class);
         toolbar = findViewById(R.id.toolbar);
+        tvTitle = findViewById(R.id.tvPracticeTitle);
         practiceViewPager = findViewById(R.id.practice_viewpager);
         //questionsNewList = new ArrayList<>();
         gson = new Gson();
         setupNavigationDrawer();
         setMargins(mBinding.marginLayout);
-        setTitle("Practice Test");
 
         if (getIntent() != null && getIntent().getStringExtra("FLAG") != null
                 && getIntent().getStringExtra("FLAG").equalsIgnoreCase("ATTEMPTED")) {
@@ -138,6 +139,9 @@ public class PracticeTestActivity extends BaseActivity implements
             public void onChanged(StartResumeTestResponse startResumeTestResponse) {
                 if (startResumeTestResponse != null) {
                     startTestResponse = startResumeTestResponse;
+                    //tvTitle.setText(startResumeTestResponse.getTm_name());
+                    setTitle(startTestResponse.getTm_name());
+                    mBinding.tvTestTitle.setText(startTestResponse.getTm_name());
                     questionsNewList = startResumeTestResponse.getTestQuestionNewList();
                     setupViewPager(startResumeTestResponse);
                 }
@@ -161,7 +165,7 @@ public class PracticeTestActivity extends BaseActivity implements
             if (currentPos < questionsNewList.size() - 1) {
                 practiceViewPager.setCurrentItem(currentPos + 1, true);
             } else {
-                Toast.makeText(this, "This is last page", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "This is last Question", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -170,7 +174,7 @@ public class PracticeTestActivity extends BaseActivity implements
             if (currentPos > 0) {
                 practiceViewPager.setCurrentItem(currentPos - 1, true);
             } else {
-                Toast.makeText(this, "This is first Page", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "This is first Question", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -196,7 +200,7 @@ public class PracticeTestActivity extends BaseActivity implements
 
         mBinding.btnSubmitTest.setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawer(Gravity.RIGHT);
-            submitTestDialog = new SubmitTestDialog(this,this, this, startTestResponse);
+            submitTestDialog = new SubmitTestDialog(this, this, this, startTestResponse);
             submitTestDialog.show();
         });
 
@@ -260,7 +264,7 @@ public class PracticeTestActivity extends BaseActivity implements
                     mViewModel.setStartResumeTestResponse(response.body());
                     mViewModel.setTestQuestAnsList(response.body().getTestQuestionNewList());
                 } else {
-                    showErrorDialog(PracticeTestActivity.this,response.body().getResponseCode(),"Something went wrong");
+                    showErrorDialog(PracticeTestActivity.this, response.body().getResponseCode(), "Something went wrong");
                     Log.e(TAG, "onResponse Error : " + response.body().getResponseCode());
                 }
             }

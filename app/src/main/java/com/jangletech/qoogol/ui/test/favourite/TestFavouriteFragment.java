@@ -22,7 +22,6 @@ import com.jangletech.qoogol.adapter.TestListAdapter;
 import com.jangletech.qoogol.databinding.TestFavouriteFragmentBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.enums.Module;
-import com.jangletech.qoogol.model.ProcessQuestion;
 import com.jangletech.qoogol.model.TestListResponse;
 import com.jangletech.qoogol.model.TestModelNew;
 import com.jangletech.qoogol.retrofit.ApiClient;
@@ -30,9 +29,7 @@ import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.ui.test.my_test.MyTestViewModel;
 import com.jangletech.qoogol.util.Constant;
-import com.jangletech.qoogol.util.PreferenceManager;
 
-import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -54,6 +51,7 @@ public class TestFavouriteFragment extends BaseFragment implements TestListAdapt
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.test_favourite_fragment, container, false);
+        //mBinding.setLifecycleOwner(this);
         mViewModel = ViewModelProviders.of(this).get(MyTestViewModel.class);
         initViews();
         return mBinding.getRoot();
@@ -65,12 +63,12 @@ public class TestFavouriteFragment extends BaseFragment implements TestListAdapt
             NavHostFragment.findNavController(this).navigate(R.id.nav_test_my);
         });
 
-        HashMap<String, String> params = new HashMap<>();
+       /* HashMap<String, String> params = new HashMap<>();
         params.put(Constant.u_user_id, getUserId());
         params.put(Constant.CASE, "FV");
         params.put(Constant.tm_recent_test, "");
-        params.put(Constant.tm_popular_test, "");
-        fetchTestList(params);
+        params.put(Constant.tm_popular_test, "");*/
+        fetchTestList();
         mViewModel.getAllTestList().observe(getActivity(), new Observer<List<TestModelNew>>() {
             @Override
             public void onChanged(@Nullable final List<TestModelNew> favTests) {
@@ -85,16 +83,16 @@ public class TestFavouriteFragment extends BaseFragment implements TestListAdapt
         });
     }
 
-    private void fetchTestList(HashMap<String, String> params) {
-        Log.d(TAG, "fetchTestList PARAMS : " + params);
+    private void fetchTestList() {
+        Log.d(TAG, "fetchTestList UserId : " + getUserId());
         ProgressDialog.getInstance().show(getActivity());
         Call<TestListResponse> call = apiService.fetchTestList(
-                params.get(Constant.u_user_id),
-                params.get(Constant.CASE),
-                params.get(Constant.tm_recent_test),
-                params.get(Constant.tm_popular_test),
-                params.get(Constant.tm_diff_level),
-                params.get(Constant.tm_avg_rating)
+                getUserId(),
+                "FV",
+                "",
+                "",
+                "",
+                ""
         );
         call.enqueue(new Callback<TestListResponse>() {
             @Override
@@ -120,7 +118,7 @@ public class TestFavouriteFragment extends BaseFragment implements TestListAdapt
     }
 
     private void setFavTestList() {
-        testListAdapter = new TestListAdapter(requireActivity(), testModelNewList, this,"FAV");
+        testListAdapter = new TestListAdapter(requireActivity(), testModelNewList, this, "FAV");
         mBinding.favTestListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mBinding.favTestListRecyclerView.setAdapter(testListAdapter);
     }
@@ -158,35 +156,15 @@ public class TestFavouriteFragment extends BaseFragment implements TestListAdapt
     }
 
     @Override
+    public void favClick(TestModelNew testModelNew) {
+        Log.d(TAG, "favClick Value : " + testModelNew.isFavourite());
+        mViewModel.updateFav("PRACTICE", getUserId(), testModelNew.getTm_id(), testModelNew.isFavourite());
+    }
+
+    @Override
     public void onAttemptsClick(TestModelNew testModel) {
         Bundle bundle = new Bundle();
         bundle.putSerializable("PARAMS", testModel);
         NavHostFragment.findNavController(this).navigate(R.id.nav_test_attempt_history, bundle);
-    }
-
-    private void removeFavTest(HashMap<String, Integer> map) {
-        Log.d(TAG, "favTest params : " + map);
-        ProgressDialog.getInstance().show(getActivity());
-        Call<ProcessQuestion> call = apiService.addFavTest(new PreferenceManager(getActivity()).getInt(Constant.USER_ID), map.get(Constant.tm_id), "I", map.get(Constant.isFavourite));
-        call.enqueue(new Callback<ProcessQuestion>() {
-            @Override
-            public void onResponse(Call<ProcessQuestion> call, Response<ProcessQuestion> response) {
-                ProgressDialog.getInstance().dismiss();
-                if (response.body() != null && response.body().getResponse().equals("200")) {
-                    if (testModelNewList.size() == 1)
-                        mBinding.tvNoFavTest.setVisibility(View.VISIBLE);
-                    testListAdapter.deleteFav(map.get("POS"));
-                } else {
-                    showErrorDialog(getActivity(), response.body().getResponse(), response.body().getMessage());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ProcessQuestion> call, Throwable t) {
-                ProgressDialog.getInstance().dismiss();
-                showToast("Something went wrong!!");
-                t.printStackTrace();
-            }
-        });
     }
 }

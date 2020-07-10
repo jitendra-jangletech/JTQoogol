@@ -1,5 +1,7 @@
 package com.jangletech.qoogol.retrofit;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 import com.jangletech.qoogol.model.AddElementResponse;
 import com.jangletech.qoogol.model.BlockedConnResp;
 import com.jangletech.qoogol.model.ChapterResponse;
@@ -303,7 +305,24 @@ public interface ApiInterface {
                                              @Field(Constant.u_Password) String password,
                                              @Field(Constant.device_id) String deviceId,
                                              @Field(Constant.appName) String appName,
-                                             @Field(Constant.u_fcm_token) String token);
+                                             @Field(Constant.u_fcm_token) String token,
+                                             @Field(Constant.CASE2) String case2);
+
+    @FormUrlEncoded
+    @POST(Constant.REGISTER_LOGIN)
+    Call<RegisterLoginModel> doRegister(@Field(Constant.u_first_name) String fname,
+                                        @Field(Constant.u_last_name) String lname,
+                                        @Field(Constant.u_gender) String gender,
+                                        @Field(Constant.u_birth_date) String dob,
+                                        @Field(Constant.u_mob_1) String mobileEmail,
+                                        @Field(Constant.OTP) String otp,
+                                        @Field(Constant.u_Password) String password,
+                                        @Field(Constant.CASE) String caseR,
+                                        @Field(Constant.u_calling_code) int countryCode,
+                                        @Field(Constant.device_id) String deviceId,
+                                        @Field(Constant.appName) String appName,
+                                        @Field(Constant.u_fcm_token) String token,
+                                        @Field(Constant.CASE2) String case2);
 
     @FormUrlEncoded
     @POST(Constant.FETCH_QA)

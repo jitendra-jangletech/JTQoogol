@@ -132,6 +132,7 @@ public class NotificationsFragment extends BaseFragment implements NotificationA
                 mBinding.swipeToRefresh.setRefreshing(false);
                 if (response.body() != null && response.body().getResponse().equals("200")) {
                     deleteFromdb(n_id);
+                    showToast("Notification deleted.");
                     fetchNotifications();
                 }
             }

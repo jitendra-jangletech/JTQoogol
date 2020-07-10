@@ -93,11 +93,16 @@ public class FollowingFragment extends BaseFragment implements FollowingsAdapter
     }
 
     private void initView() {
-        mAdapter = new FollowingsAdapter(getActivity(), connectionsList, following, this);
-        mBinding.connectionRecycler.setHasFixedSize(true);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        mBinding.connectionRecycler.setLayoutManager(linearLayoutManager);
-        mBinding.connectionRecycler.setAdapter(mAdapter);
+        if (connectionsList.size() > 0) {
+            mAdapter = new FollowingsAdapter(getActivity(), connectionsList, following, this);
+            mBinding.connectionRecycler.setHasFixedSize(true);
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+            mBinding.connectionRecycler.setLayoutManager(linearLayoutManager);
+            mBinding.connectionRecycler.setAdapter(mAdapter);
+        } else {
+            mBinding.emptyview.setText("No Connections Found.");
+            mBinding.emptyview.setVisibility(View.VISIBLE);
+        }
     }
 
 
@@ -114,7 +119,7 @@ public class FollowingFragment extends BaseFragment implements FollowingsAdapter
     @Override
     public void showProfileClick(Bundle bundle) {
         String otherUserId = bundle.getString(Constant.fetch_profile_id);
-        PublicProfileDialog publicProfileDialog = new PublicProfileDialog(getActivity(),otherUserId,this);
+        PublicProfileDialog publicProfileDialog = new PublicProfileDialog(getActivity(), otherUserId, this);
         publicProfileDialog.show();
         //NavHostFragment.findNavController(this).navigate(R.id.nav_edit_profile, bundle);
     }

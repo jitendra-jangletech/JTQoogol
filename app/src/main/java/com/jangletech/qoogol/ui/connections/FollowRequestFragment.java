@@ -69,7 +69,7 @@ public class FollowRequestFragment extends BaseFragment implements FollowReqAdap
     }
 
     public void fetchFollowReq() {
-        Call<FollowRequestResponse> call = apiService.fetchRefreshedFollowReq(userId, followrequests, getDeviceId(), qoogol, "0", forcerefresh);
+        Call<FollowRequestResponse> call = apiService.fetchRefreshedFollowReq(getUserId(), followrequests, getDeviceId(), qoogol, "0", forcerefresh);
         call.enqueue(new Callback<FollowRequestResponse>() {
             @Override
             public void onResponse(Call<FollowRequestResponse> call, retrofit2.Response<FollowRequestResponse> response) {

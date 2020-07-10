@@ -1,7 +1,4 @@
 package com.jangletech.qoogol.activities;
-
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -30,7 +27,7 @@ public class SplashActivity extends BaseActivity {
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(i);
         } else {
-            Intent i = new Intent(SplashActivity.this, LaunchActivity.class);
+            Intent i = new Intent(SplashActivity.this, RegisterLoginActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(i);
         }
