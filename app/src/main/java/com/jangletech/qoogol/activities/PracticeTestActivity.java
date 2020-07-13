@@ -43,6 +43,7 @@ import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.EndDrawerToggle;
 import com.jangletech.qoogol.util.PreferenceManager;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringEscapeUtils;
 
 import java.nio.charset.StandardCharsets;
@@ -264,7 +265,7 @@ public class PracticeTestActivity extends BaseActivity implements
                     question.getType().equalsIgnoreCase(Constant.ONE_LINE_ANSWER) ||
                     question.getType().equalsIgnoreCase(Constant.FILL_THE_BLANKS)) {
                 String encoded = Base64.encodeToString(question.getTtqa_sub_ans().getBytes(StandardCharsets.UTF_8), Base64.DEFAULT);
-                String encodedAns = StringEscapeUtils.escapeJava(encoded);
+                String encodedAns = StringUtils.stripAccents(encoded);
                 Log.d(TAG, "Encoded Ans : " + encodedAns);
                 question.setTtqa_sub_ans(encodedAns);
             } else {

@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.provider.Settings;
+import android.util.Base64;
 import android.util.Log;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -34,7 +35,10 @@ import com.jangletech.qoogol.activities.MainActivity;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.net.UnknownHostException;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;

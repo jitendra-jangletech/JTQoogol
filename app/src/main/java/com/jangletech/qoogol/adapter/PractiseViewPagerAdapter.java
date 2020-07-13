@@ -63,6 +63,7 @@ import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringEscapeUtils;
 
 import java.io.File;
@@ -1297,9 +1298,9 @@ public class PractiseViewPagerAdapter extends PagerAdapter
                 question.getType().equalsIgnoreCase(Constant.ONE_LINE_ANSWER) ||
                 question.getType().equalsIgnoreCase(Constant.FILL_THE_BLANKS)) {
             String encoded = Base64.encodeToString(scq_ans.getBytes(StandardCharsets.UTF_8), Base64.DEFAULT);
-            //String encodedAns = StringEscapeUtils.escapeJava(encoded);
-            Log.d(TAG, "Encoded Ans : " + encoded);
-            question.setTtqa_sub_ans(encoded);
+            String encodedAns = StringUtils.stripAccents(encoded);
+            Log.d(TAG, "Encoded Ans : " + encodedAns);
+            question.setTtqa_sub_ans(encodedAns);
         } else {
             question.setTtqa_sub_ans(scq_ans);
         }
@@ -1515,10 +1516,9 @@ public class PractiseViewPagerAdapter extends PagerAdapter
         EditText etMultiLineAns = layout.findViewById(R.id.multi_line);
         EditText etSinlgeineAns = layout.findViewById(R.id.fill_in_the_blanks);
 
-        String decodedAns = AppUtils.decodedMessage("4KSu4KSl4KSsIOCkpeCkoeCksOCkoSDgpKHgpKTgpKE=");
-
+        String decodedAns = AppUtils.decodedString(testQuestionNew.getTtqa_sub_ans());
         //Log.d(TAG, "Plain Text : "+testQuestionNew.getTtqa_sub_ans());
-        Log.d(TAG, "Decoded Text : "+decodedAns);
+        Log.d(TAG, "Decoded Text : " + decodedAns);
 
         if (testQuestionNew.getType().equalsIgnoreCase(Constant.ONE_LINE_ANSWER) ||
                 testQuestionNew.getType().equalsIgnoreCase(Constant.FILL_THE_BLANKS)) {
@@ -1538,8 +1538,7 @@ public class PractiseViewPagerAdapter extends PagerAdapter
         Log.e(TAG, "initSubjective Condtn : " + testQuestionNew.isTtqa_attempted());
         if (testQuestionNew.isTtqa_attempted()) {
             solutionLayout.setVisibility(View.VISIBLE);
-            //decodedAns = AppUtils.decodedMessage(StringEscapeUtils.unescapeJava(testQuestionNew.getTtqa_sub_ans()));
-            Log.d(TAG, "Base 64 : " + testQuestionNew.getTtqa_sub_ans());
+            //Log.d(TAG, "Base 64 : " + testQuestionNew.getTtqa_sub_ans());
             Log.d(TAG, "Decoded Ans : " + decodedAns);
             etMultiLineAns.setText(decodedAns);
         }

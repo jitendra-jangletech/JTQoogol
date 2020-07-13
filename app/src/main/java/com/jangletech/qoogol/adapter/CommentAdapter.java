@@ -18,7 +18,10 @@ import com.jangletech.qoogol.model.Comments;
 import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.DateUtils;
+
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringEscapeUtils;
+
 import java.util.List;
 
 /**
@@ -53,22 +56,20 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Comments comments = commentList.get(position);
         if (callingFrom.equals(Module.Learning.toString())) {
-            String decodedAns = AppUtils.decodedMessage(StringEscapeUtils.unescapeJava(comments.getComment()));
+            String decoded = AppUtils.decodedString(comments.getComment());
             holder.commentItemBinding.tvSenderName.setText(comments.getUserFirstName() + " " + comments.getUserLastName());
-            holder.commentItemBinding.textCommentBody.setText(decodedAns);
+            holder.commentItemBinding.textCommentBody.setText(decoded);
             holder.commentItemBinding.textCommentTime.setText(DateUtils.localeDateFormat(comments.getTime()));
             //commentItemBinding.textCommentTime.setText(DateUtils.getFormattedDate(comments.getTime().substring(0, 10)));
         }
 
         if (callingFrom.equals(Module.Test.toString())) {
-            Log.d(TAG, "Without Decoding : " + comments.getTlc_comment_text());
-            String plain  = StringEscapeUtils.unescapeJava(comments.getTlc_comment_text());
-            Log.d(TAG, "Plain :  "+plain);
-            String decodedAns = AppUtils.decodedMessage(plain);
-            Log.d(TAG, "decoded Plain :  "+StringEscapeUtils.unescapeJava(decodedAns));
+            //Log.d(TAG, "Without Decoding : " + comments.getTlc_comment_text());
+            String decoded = AppUtils.decodedString(comments.getTlc_comment_text());
+            Log.d(TAG, "decoded  :  " + StringUtils.stripAccents(decoded));
             //String decoded = AppUtils.decodedMessage(StringEscapeUtils.unescapeJava(comments.getTlc_comment_text()));
             holder.commentItemBinding.tvSenderName.setText(comments.getUserFirstName() + " " + comments.getUserLastName());
-            holder.commentItemBinding.textCommentBody.setText(AppUtils.decodedMessage(decodedAns));
+            holder.commentItemBinding.textCommentBody.setText(decoded);
             holder.commentItemBinding.textCommentTime.setText(DateUtils.localeDateFormat(comments.getTlc_cdatetime()));
             //commentItemBinding.textCommentTime.setText(DateUtils.getFormattedDate(comments.getTlc_cdatetime().substring(0, 10)));//todo change data & time format
         }

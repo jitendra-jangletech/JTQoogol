@@ -25,17 +25,15 @@ import com.jangletech.qoogol.model.ProcessQuestion;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
-import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringEscapeUtils;
-
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 
@@ -44,11 +42,6 @@ public class CommentFragment extends BaseFragment implements View.OnClickListene
 
     private static final String TAG = "CommentFragment";
     private CommentViewModel mViewModel;
-
-    public static CommentFragment newInstance() {
-        return new CommentFragment();
-    }
-
     private CommentViewBinding commentViewBinding;
     private Bundle bundle;
     private int questionId;
@@ -80,7 +73,7 @@ public class CommentFragment extends BaseFragment implements View.OnClickListene
         Log.e(TAG, "fetchCommentsAPI Api Case : " + api_case);
         Log.e(TAG, "fetchCommentsAPI Comment : " + comment_text);
         String encoded = Base64.encodeToString(comment_text.getBytes(StandardCharsets.UTF_8), Base64.DEFAULT);
-        String encodedAns = StringEscapeUtils.escapeJava(encoded);
+        String encodedAns = StringUtils.stripAccents(encoded);
         Log.d(TAG, "Encoded : " + encodedAns);
         Call<ProcessQuestion> call;
 
@@ -121,7 +114,7 @@ public class CommentFragment extends BaseFragment implements View.OnClickListene
         Call<ProcessQuestion> call;
         Log.d(TAG, "Before encoding : " + comment_text);
         String encoded = Base64.encodeToString(comment_text.getBytes(StandardCharsets.UTF_8), Base64.DEFAULT);
-        String encodedComment = StringEscapeUtils.escapeJava(encoded);
+        String encodedComment = StringUtils.stripAccents(encoded);
         Log.d(TAG, "Encoded Test Comment : " + encodedComment);
         if (api_case.equalsIgnoreCase("L"))
             call = apiService.fetchTestComments(user_id, tmId, api_case);

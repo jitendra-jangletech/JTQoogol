@@ -167,9 +167,9 @@
                             android:layout_height="wrap_content"
                             android:background="@drawable/grey_border"
                             android:gravity="top|start"
-                            android:lines="5"
+                            android:lines="10"
                             android:inputType="textMultiLine|textNoSuggestions"
-                            android:maxLines="5"
+                            android:maxLines="10"
                             android:textColor="@color/colorBlack"
                             android:visibility="visible"
                             app:layout_constraintTop_toTopOf="parent" />

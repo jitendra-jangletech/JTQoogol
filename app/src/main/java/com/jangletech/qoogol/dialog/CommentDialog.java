@@ -1,9 +1,9 @@
 package com.jangletech.qoogol.dialog;
 
-
 import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +27,9 @@ import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
 
+import org.apache.commons.lang3.StringUtils;
+
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +46,7 @@ public class CommentDialog extends Dialog implements CommentAdapter.onCommentIte
     private CommentViewModel mViewModel;
     private int id;
     private CommentClickListener commentClickListener;
-    ApiInterface apiService = ApiClient.getInstance().getApi();
+    private ApiInterface apiService = ApiClient.getInstance().getApi();
 
     public CommentDialog(@NonNull Activity mContext, int id, CommentClickListener commentClickListener) {
         super(mContext, android.R.style.Theme_DeviceDefault_Light_DarkActionBar);
@@ -84,10 +87,13 @@ public class CommentDialog extends Dialog implements CommentAdapter.onCommentIte
         Log.d(TAG, "fetchCommentsAPI userId : " + user_id);
         Log.d(TAG, "fetchCommentsAPI Case : " + api_case);
 
+        String encoded = Base64.encodeToString(comment_text.getBytes(StandardCharsets.UTF_8), Base64.DEFAULT);
+        String encodedComment = StringUtils.stripAccents(encoded);
+
         if (api_case.equalsIgnoreCase("L"))
             call = apiService.fetchComments(user_id, que_id, api_case);
         else
-            call = apiService.addCommentApi(String.valueOf(user_id), que_id, api_case, comment_text);
+            call = apiService.addCommentApi(String.valueOf(user_id), que_id, api_case, encodedComment);
 
         call.enqueue(new Callback<ProcessQuestion>() {
             @Override

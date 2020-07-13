@@ -10,6 +10,9 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.jangletech.qoogol.R;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.StringEscapeUtils;
+
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
@@ -28,15 +31,23 @@ public class AppUtils {
         return date.toString();
     }
 
-    public static String decodedMessage(String message) {
+    public static String decodedString(String message) {
         try {
             byte[] messageBytes = Base64.decode(message, Base64.DEFAULT);
-            return new String(messageBytes, StandardCharsets.UTF_8);
+            return StringEscapeUtils.unescapeJava(new String(messageBytes, StandardCharsets.UTF_8));
         } catch (Exception ex) {
             ex.printStackTrace();
-            //Log.e(TAG, "decodedMessage: " + ex.getMessage());
         }
         return "";
+    }
+
+    public static String encodedString(String plainText) {
+        String encodedString = "";
+        if (plainText != null) {
+            String encoded = Base64.encodeToString(plainText.getBytes(StandardCharsets.UTF_8), Base64.DEFAULT);
+            encodedString = StringUtils.stripAccents(encoded);
+        }
+        return encodedString;
     }
 
     public static String getStringField(Object object) {
