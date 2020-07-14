@@ -113,6 +113,8 @@ public class Constant {
     public static final String from_question = "Q";
     public static final String fromTest = "T";
     public static final String share_comment = "370";
+    public static final String mst_text = "451";
+
 
     //Preferences
     public static final String PREF_NAME = "qoogol";
@@ -371,6 +373,9 @@ public class Constant {
     public static final String lm_name = "280";
     public static final String lm_lang_cat = "281";
     public static final String lm_app_lang = "282";
+
+    public static final String sub_ans_right_wrong = "1271";
+    public static final String sub_ans_probability = "1272";
 
     public static final String u_purpose = "135";
     public static final String w_purpose_desc = "510";

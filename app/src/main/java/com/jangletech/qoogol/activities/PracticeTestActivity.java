@@ -433,8 +433,8 @@ public class PracticeTestActivity extends BaseActivity implements
                     .setPositiveButton("Pause", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            finish();
-                            //submitTestQuestions();
+                            //finish();
+                            submitTestQuestions();
                         }
                     })
                     .setNegativeButton("Cancel", null)

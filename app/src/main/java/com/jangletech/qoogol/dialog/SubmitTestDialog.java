@@ -68,7 +68,7 @@ public class SubmitTestDialog extends Dialog {
             //submitDialogClickListener.onYesClick();
             testFeedback = mBinding.feedback.getText().toString();
             params.put(Constant.tlc_rating, testRating);
-            params.put(Constant.tlc_feedback, testFeedback);
+            params.put(Constant.tlc_feedback, AppUtils.encodedString(testFeedback));
             params.put(Constant.CASE, "I");
             submitTestFeedBack(params);
         });
@@ -114,23 +114,31 @@ public class SubmitTestDialog extends Dialog {
         for (TestQuestionNew testQuestionNew : questionList) {
             totalMarks = totalMarks + testQuestionNew.getTq_marks();
             if (testQuestionNew.isTtqa_attempted()) {
-                if (!testQuestionNew.isAnsweredRight() || !testQuestionNew.getA_sub_ans().equalsIgnoreCase(testQuestionNew.getTtqa_sub_ans())) {
-                    Log.d(TAG, "Wrong Question Ids : " + testQuestionNew.getTq_quest_seq_num());
-                    wrongQuest++;
+                if (testQuestionNew.getType().equalsIgnoreCase(Constant.SHORT_ANSWER) ||
+                        testQuestionNew.getType().equalsIgnoreCase(Constant.LONG_ANSWER)) {
+                    if (!testQuestionNew.isRightAnswered()) {
+                        wrongQuest++;
+                    } else {
+                        //right answer
+                        obtainMarks = obtainMarks + testQuestionNew.getTq_marks();
+                    }
+                } else {
+                    //Questions other than subjective
+                    if (testQuestionNew.getA_sub_ans().equalsIgnoreCase(testQuestionNew.getTtqa_sub_ans())) {
+                        //Right answer
+                        obtainMarks = obtainMarks + testQuestionNew.getTq_marks();
+                    } else {
+                        wrongQuest++;
+                    }
+                }
+
+            } else {
+                if (testQuestionNew.isTtqa_visited()) {
+                    unAttemptedQuest++;
                 }
             }
             if (testQuestionNew.isTtqa_marked()) {
                 markedQuest++;
-            }
-            if (!testQuestionNew.isTtqa_attempted()) {
-                unAttemptedQuest++;
-            }
-
-            if (testQuestionNew.isAnsweredRight()) {
-                obtainMarks = obtainMarks + testQuestionNew.getTq_marks();
-                Log.d(TAG, "marksCalculation Right Answer : " + testQuestionNew.getTq_quest_seq_num());
-            } else {
-                Log.d(TAG, "marksCalculation Wrong Answer : " + testQuestionNew.getTq_quest_seq_num());
             }
         }
 

@@ -35,7 +35,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/_4sdp"
-                    android:text=" Amey shared test with you. Amey shared test with you.Amey shared test with you"
+                    android:text=" Amey shared test with you. Amey shared test with you.Amey shared test with you Amey shared test with you. Amey shared test with you.Amey shared test with you Amey shared test with you. Amey shared test with you.Amey shared test with you"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />

@@ -14,6 +14,7 @@ import com.jangletech.qoogol.databinding.ItemQuestPracticeBinding;
 import com.jangletech.qoogol.databinding.QuestPaletItemBinding;
 import com.jangletech.qoogol.enums.QuestionSortType;
 import com.jangletech.qoogol.model.TestQuestionNew;
+import com.jangletech.qoogol.util.Constant;
 
 import java.util.List;
 
@@ -60,11 +61,11 @@ public class PracticeTestQuestPaletAdapter extends RecyclerView.Adapter<Practice
         if (strSortType.equalsIgnoreCase(QuestionSortType.LIST.toString())) {
             holder.itemBinding.tvQuestNo.setText(String.valueOf(practiceQuestion.getTq_quest_seq_num()));
 
-            if(practiceQuestion.getQ_quest().contains("\\")){
+            if (practiceQuestion.getQ_quest().contains("\\")) {
                 holder.itemBinding.tvQuest.setVisibility(View.GONE);
                 holder.itemBinding.tvQuestMath.setVisibility(View.VISIBLE);
                 holder.itemBinding.tvQuestMath.setText(practiceQuestion.getQ_quest());
-            }else{
+            } else {
                 holder.itemBinding.tvQuestMath.setVisibility(View.GONE);
                 holder.itemBinding.tvQuest.setVisibility(View.VISIBLE);
                 holder.itemBinding.tvQuest.setText(practiceQuestion.getQ_quest());
@@ -73,6 +74,9 @@ public class PracticeTestQuestPaletAdapter extends RecyclerView.Adapter<Practice
             if (practiceQuestion.isTtqa_visited()) {
                 holder.itemBinding.tvQuestNo.setBackground(activity.getResources().getDrawable(R.drawable.bg_quest_visited));
                 holder.itemBinding.tvQuestNo.setTextColor(activity.getResources().getColor(R.color.colorWhite));
+            } else {
+                holder.itemBinding.tvQuestNo.setBackground(activity.getResources().getDrawable(R.drawable.bg_quest_default));
+                holder.itemBinding.tvQuestNo.setTextColor(activity.getResources().getColor(R.color.colorBlack));
             }
 
            /* if (practiceQuestion.isTtqa_attempted()) {
@@ -80,14 +84,28 @@ public class PracticeTestQuestPaletAdapter extends RecyclerView.Adapter<Practice
                 holder.itemBinding.tvQuestNo.setTextColor(activity.getResources().getColor(R.color.colorWhite));
             }*/
 
-            if (practiceQuestion.isAnsweredRight() || practiceQuestion.getA_sub_ans().equalsIgnoreCase(practiceQuestion.getTtqa_sub_ans())) {
-                holder.itemBinding.tvQuestNo.setBackground(activity.getResources().getDrawable(R.drawable.bg_ans_right));
-                holder.itemBinding.tvQuestNo.setTextColor(activity.getResources().getColor(R.color.colorWhite));
-            }
-
-            if (!practiceQuestion.isAnsweredRight() || !practiceQuestion.getA_sub_ans().equalsIgnoreCase(practiceQuestion.getTtqa_sub_ans())) {
-                holder.itemBinding.tvQuestNo.setBackground(activity.getResources().getDrawable(R.drawable.bg_ans_wrong));
-                holder.itemBinding.tvQuestNo.setTextColor(activity.getResources().getColor(R.color.colorWhite));
+            if (practiceQuestion.isTtqa_attempted()) {
+                if (!practiceQuestion.getType().equalsIgnoreCase(Constant.SHORT_ANSWER) ||
+                        !practiceQuestion.getType().equalsIgnoreCase(Constant.LONG_ANSWER) ||
+                        !practiceQuestion.getType().equalsIgnoreCase(Constant.MATCH_PAIR) ||
+                        !practiceQuestion.getType().equalsIgnoreCase(Constant.MATCH_PAIR_IMAGE)) {
+                    if (practiceQuestion.getA_sub_ans().equalsIgnoreCase(practiceQuestion.getTtqa_sub_ans())) {
+                        holder.itemBinding.tvQuestNo.setBackground(activity.getResources().getDrawable(R.drawable.bg_ans_right));
+                        holder.itemBinding.tvQuestNo.setTextColor(activity.getResources().getColor(R.color.colorWhite));
+                    } else {
+                        holder.itemBinding.tvQuestNo.setBackground(activity.getResources().getDrawable(R.drawable.bg_ans_wrong));
+                        holder.itemBinding.tvQuestNo.setTextColor(activity.getResources().getColor(R.color.colorWhite));
+                    }
+                } else {
+                    if (practiceQuestion.getType().equalsIgnoreCase(Constant.SHORT_ANSWER) ||
+                            practiceQuestion.getType().equalsIgnoreCase(Constant.LONG_ANSWER)) {
+                        //subjective question
+                    } else {
+                        //other than subjective type Question
+                    }
+                }
+            } else {
+                //Question Not Attempted
             }
 
             if (practiceQuestion.isTtqa_marked()) {
@@ -95,7 +113,7 @@ public class PracticeTestQuestPaletAdapter extends RecyclerView.Adapter<Practice
             }
 
             holder.itemBinding.questLayout.setOnClickListener(v -> {
-                questClickListener.onQuestionSelected(practiceQuestion,holder.getAdapterPosition());
+                questClickListener.onQuestionSelected(practiceQuestion, holder.getAdapterPosition());
             });
         }
 
@@ -105,29 +123,42 @@ public class PracticeTestQuestPaletAdapter extends RecyclerView.Adapter<Practice
             if (practiceQuestion.isTtqa_visited()) {
                 holder.itemBindingGrid.tvQuestNo.setBackground(activity.getResources().getDrawable(R.drawable.bg_quest_visited));
                 holder.itemBindingGrid.tvQuestNo.setTextColor(activity.getResources().getColor(R.color.colorWhite));
+            } else {
+                holder.itemBindingGrid.tvQuestNo.setBackground(activity.getResources().getDrawable(R.drawable.bg_quest_default));
+                holder.itemBindingGrid.tvQuestNo.setTextColor(activity.getResources().getColor(R.color.colorBlack));
             }
 
-            /*if (practiceQuestion.isTtqa_attempted()) {
-                holder.itemBindingGrid.tvQuestNo.setBackground(activity.getResources().getDrawable(R.drawable.bg_quest_attempted));
-                holder.itemBindingGrid.tvQuestNo.setTextColor(activity.getResources().getColor(R.color.colorWhite));
-            }*/
-
-            if (practiceQuestion.isAnsweredRight() || practiceQuestion.getA_sub_ans().equalsIgnoreCase(practiceQuestion.getTtqa_sub_ans())) {
-                holder.itemBindingGrid.tvQuestNo.setBackground(activity.getResources().getDrawable(R.drawable.bg_ans_right));
-                holder.itemBindingGrid.tvQuestNo.setTextColor(activity.getResources().getColor(R.color.colorWhite));
+            if (practiceQuestion.isTtqa_attempted()) {
+                if (!practiceQuestion.getType().equalsIgnoreCase(Constant.SHORT_ANSWER) ||
+                        !practiceQuestion.getType().equalsIgnoreCase(Constant.LONG_ANSWER) ||
+                        !practiceQuestion.getType().equalsIgnoreCase(Constant.MATCH_PAIR) ||
+                        !practiceQuestion.getType().equalsIgnoreCase(Constant.MATCH_PAIR_IMAGE)) {
+                    if (practiceQuestion.getA_sub_ans().equalsIgnoreCase(practiceQuestion.getTtqa_sub_ans())) {
+                        holder.itemBindingGrid.tvQuestNo.setBackground(activity.getResources().getDrawable(R.drawable.bg_ans_right));
+                        holder.itemBindingGrid.tvQuestNo.setTextColor(activity.getResources().getColor(R.color.colorWhite));
+                    } else {
+                        holder.itemBindingGrid.tvQuestNo.setBackground(activity.getResources().getDrawable(R.drawable.bg_ans_wrong));
+                        holder.itemBindingGrid.tvQuestNo.setTextColor(activity.getResources().getColor(R.color.colorWhite));
+                    }
+                } else {
+                    if (practiceQuestion.getType().equalsIgnoreCase(Constant.SHORT_ANSWER) ||
+                            practiceQuestion.getType().equalsIgnoreCase(Constant.LONG_ANSWER)) {
+                        //subjective question
+                    } else {
+                        //other than subjective type Question
+                    }
+                }
+            } else {
+                //Question Not Attempted
             }
 
-            if (!practiceQuestion.isAnsweredRight() || !practiceQuestion.getA_sub_ans().equalsIgnoreCase(practiceQuestion.getTtqa_sub_ans())) {
-                holder.itemBindingGrid.tvQuestNo.setBackground(activity.getResources().getDrawable(R.drawable.bg_ans_wrong));
-                holder.itemBindingGrid.tvQuestNo.setTextColor(activity.getResources().getColor(R.color.colorWhite));
-            }
 
             if (practiceQuestion.isTtqa_marked()) {
                 holder.itemBindingGrid.marked.setVisibility(View.VISIBLE);
             }
 
             holder.itemBindingGrid.tvQuestNo.setOnClickListener(v -> {
-                questClickListener.onQuestionSelected(practiceQuestion,holder.getAdapterPosition());
+                questClickListener.onQuestionSelected(practiceQuestion, holder.getAdapterPosition());
             });
         }
     }
@@ -152,12 +183,12 @@ public class PracticeTestQuestPaletAdapter extends RecyclerView.Adapter<Practice
         }
     }
 
-    public void setSortedQuestList(List<TestQuestionNew> sortedQuest){
+    public void setSortedQuestList(List<TestQuestionNew> sortedQuest) {
         this.questionList = sortedQuest;
         notifyDataSetChanged();
     }
 
     public interface QuestClickListener {
-        void onQuestionSelected(TestQuestionNew testQuestionNew,int pos);
+        void onQuestionSelected(TestQuestionNew testQuestionNew, int pos);
     }
 }

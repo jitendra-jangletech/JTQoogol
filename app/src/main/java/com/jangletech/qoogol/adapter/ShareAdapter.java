@@ -1,6 +1,7 @@
 package com.jangletech.qoogol.adapter;
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.Filter;
@@ -15,7 +16,6 @@ import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.ShareItemBinding;
 import com.jangletech.qoogol.model.ShareModel;
 import com.jangletech.qoogol.util.UtilHelper;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +23,7 @@ import java.util.List;
  * Created by Pritali on 5/4/2020.
  */
 public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> implements Filterable {
+    private static final String TAG = "ShareAdapter";
     private ShareItemBinding shareItemBinding;
     private List<ShareModel> connectionsList;
     private List<ShareModel> filteredConnectionsList;
@@ -32,7 +33,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
     public ShareAdapter(Activity activity, List<ShareModel> connectionsList, OnItemClickListener onItemClickListener) {
         this.activity = activity;
         this.connectionsList = connectionsList;
-        this.filteredConnectionsList = connectionsList;
+        //this.filteredConnectionsList = connectionsList;
         this.onItemClickListener = onItemClickListener;
     }
 
@@ -88,9 +89,15 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
 
     public interface OnItemClickListener {
         void actionPerformed(ShareModel connections, int position);
-
         void onBottomReached(int position);
+    }
 
+    public void filterList(List<ShareModel> resultShareModelList) {
+        connectionsList = resultShareModelList;
+        for (ShareModel model :resultShareModelList){
+            Log.d(TAG, "filterList: "+model.getU_first_name());
+        }
+        notifyDataSetChanged();
     }
 
     @Override

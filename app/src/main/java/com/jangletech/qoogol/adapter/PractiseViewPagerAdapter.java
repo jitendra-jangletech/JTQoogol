@@ -13,7 +13,6 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.text.TextWatcher;
-import android.util.Base64;
 import android.util.Log;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
@@ -51,6 +50,7 @@ import com.jangletech.qoogol.dialog.CommentDialog;
 import com.jangletech.qoogol.dialog.LikeListingDialog;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.dialog.PublicProfileDialog;
+import com.jangletech.qoogol.dialog.ShareQuestionDialog;
 import com.jangletech.qoogol.model.ProcessQuestion;
 import com.jangletech.qoogol.model.StartResumeTestResponse;
 import com.jangletech.qoogol.model.SubmitTest;
@@ -67,7 +67,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringEscapeUtils;
 
 import java.io.File;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -527,10 +526,10 @@ public class PractiseViewPagerAdapter extends PagerAdapter
         Button btnSubmit = layout.findViewById(R.id.submit);
 
         if (testQuestionNew.isTtqa_attempted()) {
-            etFillTheBlanks.setText(testQuestionNew.getTtqa_sub_ans());
+            etFillTheBlanks.setText(AppUtils.decodedString(testQuestionNew.getTtqa_sub_ans()));
             solutionLayout.setVisibility(View.VISIBLE);
             fibImg.setVisibility(View.VISIBLE);
-            if (testQuestionNew.getA_sub_ans().equalsIgnoreCase(testQuestionNew.getTtqa_sub_ans())) {
+            if (testQuestionNew.getA_sub_ans().equalsIgnoreCase(AppUtils.decodedString(testQuestionNew.getTtqa_sub_ans()))) {
                 fibImg.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_right));
                 testQuestionNew.setAnsweredRight(true);
             } else {
@@ -1297,10 +1296,11 @@ public class PractiseViewPagerAdapter extends PagerAdapter
                 question.getType().equalsIgnoreCase(Constant.LONG_ANSWER) ||
                 question.getType().equalsIgnoreCase(Constant.ONE_LINE_ANSWER) ||
                 question.getType().equalsIgnoreCase(Constant.FILL_THE_BLANKS)) {
-            String encoded = Base64.encodeToString(scq_ans.getBytes(StandardCharsets.UTF_8), Base64.DEFAULT);
-            String encodedAns = StringUtils.stripAccents(encoded);
-            Log.d(TAG, "Encoded Ans : " + encodedAns);
-            question.setTtqa_sub_ans(encodedAns);
+            //String encoded = Base64.encodeToString(scq_ans.getBytes(StandardCharsets.UTF_8), Base64.DEFAULT);
+            //String encodedAns = StringUtils.stripAccents(encoded);
+            question.setTtqa_sub_ans(AppUtils.encodedString(scq_ans));
+            Log.d(TAG, "Encoded Ans : " + AppUtils.encodedString(scq_ans));
+            Log.d(TAG, "Decoded Ans : "+AppUtils.decodedString(AppUtils.encodedString(scq_ans)));
         } else {
             question.setTtqa_sub_ans(scq_ans);
         }
@@ -1516,7 +1516,7 @@ public class PractiseViewPagerAdapter extends PagerAdapter
         EditText etMultiLineAns = layout.findViewById(R.id.multi_line);
         EditText etSinlgeineAns = layout.findViewById(R.id.fill_in_the_blanks);
 
-        String decodedAns = AppUtils.decodedString(testQuestionNew.getTtqa_sub_ans());
+        String decodedAns = AppUtils.decodedString(StringEscapeUtils.escapeJava(testQuestionNew.getTtqa_sub_ans()));
         //Log.d(TAG, "Plain Text : "+testQuestionNew.getTtqa_sub_ans());
         Log.d(TAG, "Decoded Text : " + decodedAns);
 
@@ -1636,6 +1636,8 @@ public class PractiseViewPagerAdapter extends PagerAdapter
         TextView tvCommentValue = layout.findViewById(R.id.comment_value);
         TextView tvShareValue = layout.findViewById(R.id.share_value);
 
+        ImageView share = layout.findViewById(R.id.share);
+
         TextView solutionDesc = layout.findViewById(R.id.solution_option);
 
         LinearLayout questLayout = layout.findViewById(R.id.questLayout);
@@ -1723,6 +1725,13 @@ public class PractiseViewPagerAdapter extends PagerAdapter
                     int prevLikeCount = Integer.parseInt(tvLikeValue.getText().toString());
                     ProcessQuestionAPI(testQuestionNew.getTq_q_id(), isChecked ? 1 : 0, "like", prevLikeCount);
                 }
+            });
+
+        if (share != null)
+            share.setOnClickListener(v -> {
+                //showToast("Hello");
+                ShareQuestionDialog shareDialog = new ShareQuestionDialog(context);
+                shareDialog.show();
             });
     }
 

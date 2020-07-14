@@ -28,6 +28,7 @@ import com.jangletech.qoogol.model.ShareResponse;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
+import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
@@ -49,7 +50,7 @@ import static com.jangletech.qoogol.util.Constant.test_share;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ShareFragment extends BaseFragment implements ShareAdapter.OnItemClickListener {
+public class ShareFragment extends BaseFragment implements ShareAdapter.OnItemClickListener, SearchView.OnQueryTextListener {
 
     private static final String TAG = "ShareFragment";
     private FragmentShareBinding shareBinding;
@@ -118,13 +119,30 @@ public class ShareFragment extends BaseFragment implements ShareAdapter.OnItemCl
     }
 
     private void initRecycler() {
-        mAdapter = new ShareAdapter(getActivity(), connectionsList, this);
-        shareBinding.shareRecycler.setHasFixedSize(true);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        shareBinding.shareRecycler.setLayoutManager(linearLayoutManager);
-        shareBinding.shareRecycler.setAdapter(mAdapter);
+        if (connectionsList != null) {
+            mAdapter = new ShareAdapter(getActivity(), connectionsList, this);
+            shareBinding.shareRecycler.setHasFixedSize(true);
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+            shareBinding.shareRecycler.setLayoutManager(linearLayoutManager);
+            shareBinding.shareRecycler.setAdapter(mAdapter);
+        }
     }
 
+    private List<ShareModel> filter(List<ShareModel> models, String query) {
+        query = query.trim().toLowerCase();
+        Log.d(TAG, "filter Query : " + query);
+        List<ShareModel> filteredModelList = new ArrayList<>();
+        for (ShareModel model : models) {
+            String searchName = model.getU_first_name().trim().toLowerCase();
+            Log.d(TAG, "filter SearchName : " + searchName);
+            Log.d(TAG, "filter LastName : " + model.getU_last_name());
+            if (searchName.contains(query)) {
+                Log.d(TAG, "filter Matched : " + query);
+                filteredModelList.add(model);
+            }
+        }
+        return filteredModelList;
+    }
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
@@ -139,16 +157,13 @@ public class ShareFragment extends BaseFragment implements ShareAdapter.OnItemCl
         });
 
         SearchView searchView = (SearchView) searchItem.getActionView();
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        searchView.setOnQueryTextListener(this);
+       /* searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                try {
-                    // filter recycler view when query submitted
-                    mAdapter.getFilter().filter(query);
-                } catch (Exception ex) {
-                    Log.e(TAG, ex.getMessage());
-                }
-                return false;
+                final List<ShareModel> shareList = filter(connectionsList, query);
+                mAdapter.filterList(shareList);
+                return true;
             }
 
             @Override
@@ -161,7 +176,7 @@ public class ShareFragment extends BaseFragment implements ShareAdapter.OnItemCl
                 }
                 return false;
             }
-        });
+        });*/
     }
 
     @Override
@@ -174,50 +189,88 @@ public class ShareFragment extends BaseFragment implements ShareAdapter.OnItemCl
 
     @Override
     public void onBottomReached(int position) {
+
     }
 
     private void callShareAPI() {
+
         String modelAction = TextUtils.join(",", selectedconnectionsList).replace(",,", ",");
         modelAction = modelAction.replace("D", "U");
         modelAction = modelAction.replace("A", "U");
-        String comment = shareBinding.shareComment.getText().toString();
+        String comment = AppUtils.encodedString(shareBinding.shareComment.getText().toString().trim());
 
-        ProgressDialog.getInstance().show(getActivity());
+        //logs
+        Log.d(TAG, "callShareAPI Test Share : " + test_share);
+        Log.d(TAG, "callShareAPI Question Share : " + question_share);
+        Log.d(TAG, "callShareAPI Test Id : " + testId);
+        Log.d(TAG, "callShareAPI Comment : " + comment);
+        Log.d(TAG, "callShareAPI Model Action : " + modelAction);
+        Log.d(TAG, "callShareAPI Device Id : " + getDeviceId());
+        Log.d(TAG, "callShareAPI UserId : " + getUserId());
+        Log.d(TAG, "callShareAPI Call From : " + call_from);
 
-        if (call_from == learning)
-            call = apiService.shareAPI(question_id, question_share, "F", getDeviceId(), userId, modelAction, "1.68", qoogol, comment);
-        else
-            call = apiService.shareAPI(testId, test_share, "F", getDeviceId(), userId, modelAction, "1.68", qoogol, comment);
+        if (modelAction != null && modelAction.isEmpty()) {
+            showToast("Please, select atleast 1 connection or group to share with.");
+        } else {
+            ProgressDialog.getInstance().show(getActivity());
+            if (call_from == learning)
+                call = apiService.shareAPI(question_id, question_share, "F", getDeviceId(), getUserId(), modelAction, "1.68", qoogol, comment);
+            else
+                call = apiService.shareAPI(testId, test_share, "F", getDeviceId(), getUserId(), modelAction, "1.68", qoogol, comment);
 
-        call.enqueue(new Callback<ResponseObj>() {
-            @Override
-            public void onResponse(Call<ResponseObj> call, retrofit2.Response<ResponseObj> response) {
-                try {
-                    ProgressDialog.getInstance().dismiss();
-                    connectionsList.clear();
-                    if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
-                        Log.i(TAG, "shared successfully");
+            call.enqueue(new Callback<ResponseObj>() {
+                @Override
+                public void onResponse(Call<ResponseObj> call, retrofit2.Response<ResponseObj> response) {
+                    try {
+                        ProgressDialog.getInstance().dismiss();
+                        connectionsList.clear();
+                        if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
+                            Log.i(TAG, "shared successfully");
 
-                    } else {
-                        Toast.makeText(getActivity(), UtilHelper.getAPIError(String.valueOf(response.body())), Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getActivity(), UtilHelper.getAPIError(String.valueOf(response.body())), Toast.LENGTH_SHORT).show();
+                        }
+                        Bundle bundle = new Bundle();
+                        bundle.putString("call_from", "share");
+                        if (call_from == learning)
+                            NavHostFragment.findNavController(ShareFragment.this).navigate(R.id.nav_learning, bundle);
+                        else
+                            NavHostFragment.findNavController(ShareFragment.this).navigate(R.id.nav_test_my, bundle);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        ProgressDialog.getInstance().dismiss();
                     }
-                    Bundle bundle = new Bundle();
-                    bundle.putString("call_from", "share");
-                    if (call_from == learning)
-                        NavHostFragment.findNavController(ShareFragment.this).navigate(R.id.nav_learning, bundle);
-                    else
-                        NavHostFragment.findNavController(ShareFragment.this).navigate(R.id.nav_test_my, bundle);
-                } catch (Exception e) {
-                    e.printStackTrace();
+                }
+
+                @Override
+                public void onFailure(Call<ResponseObj> call, Throwable t) {
+                    t.printStackTrace();
                     ProgressDialog.getInstance().dismiss();
                 }
-            }
+            });
+        }
 
-            @Override
-            public void onFailure(Call<ResponseObj> call, Throwable t) {
-                t.printStackTrace();
-                ProgressDialog.getInstance().dismiss();
-            }
-        });
+
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mAdapter = null;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        final List<ShareModel> filteredModelList = filter(connectionsList, newText);
+        if (filteredModelList.size() > 0)
+            mAdapter.filterList(filteredModelList);
+        else
+            mAdapter.filterList(connectionsList);
+        return false;
     }
 }

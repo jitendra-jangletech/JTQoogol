@@ -23,6 +23,7 @@ import com.jangletech.qoogol.model.ProcessQuestion;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.learning.CommentViewModel;
+import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
@@ -87,13 +88,13 @@ public class CommentDialog extends Dialog implements CommentAdapter.onCommentIte
         Log.d(TAG, "fetchCommentsAPI userId : " + user_id);
         Log.d(TAG, "fetchCommentsAPI Case : " + api_case);
 
-        String encoded = Base64.encodeToString(comment_text.getBytes(StandardCharsets.UTF_8), Base64.DEFAULT);
-        String encodedComment = StringUtils.stripAccents(encoded);
+        //String encoded = Base64.encodeToString(comment_text.getBytes(StandardCharsets.UTF_8), Base64.DEFAULT);
+        //String encodedComment = StringUtils.stripAccents(encoded);
 
         if (api_case.equalsIgnoreCase("L"))
             call = apiService.fetchComments(user_id, que_id, api_case);
         else
-            call = apiService.addCommentApi(String.valueOf(user_id), que_id, api_case, encodedComment);
+            call = apiService.addCommentApi(String.valueOf(user_id), que_id, api_case, AppUtils.encodedString(comment_text));
 
         call.enqueue(new Callback<ProcessQuestion>() {
             @Override

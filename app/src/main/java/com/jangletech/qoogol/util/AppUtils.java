@@ -2,8 +2,8 @@ package com.jangletech.qoogol.util;
 
 import android.app.Activity;
 import android.content.Context;
+import android.provider.Settings;
 import android.util.Base64;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
@@ -20,6 +20,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import static com.facebook.FacebookSdk.getApplicationContext;
+
 public class AppUtils {
     private static final String TAG = "AppUtils";
     public static final String NOT_CONNECTED = "NOT_CONNECTED";
@@ -31,9 +33,17 @@ public class AppUtils {
         return date.toString();
     }
 
-    public static String decodedString(String message) {
+    public static String getUserId() {
+        return String.valueOf(new PreferenceManager(getApplicationContext()).getInt(Constant.USER_ID));
+    }
+
+    public static String getDeviceId() {
+        return Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+    }
+
+    public static String decodedString(String encodedString) {
         try {
-            byte[] messageBytes = Base64.decode(message, Base64.DEFAULT);
+            byte[] messageBytes = Base64.decode(encodedString, Base64.DEFAULT);
             return StringEscapeUtils.unescapeJava(new String(messageBytes, StandardCharsets.UTF_8));
         } catch (Exception ex) {
             ex.printStackTrace();

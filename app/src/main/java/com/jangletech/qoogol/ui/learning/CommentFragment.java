@@ -25,15 +25,17 @@ import com.jangletech.qoogol.model.ProcessQuestion;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
+import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.text.StringEscapeUtils;
+
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 
@@ -113,13 +115,13 @@ public class CommentFragment extends BaseFragment implements View.OnClickListene
         ProgressDialog.getInstance().show(getActivity());
         Call<ProcessQuestion> call;
         Log.d(TAG, "Before encoding : " + comment_text);
-        String encoded = Base64.encodeToString(comment_text.getBytes(StandardCharsets.UTF_8), Base64.DEFAULT);
-        String encodedComment = StringUtils.stripAccents(encoded);
-        Log.d(TAG, "Encoded Test Comment : " + encodedComment);
+        //String encoded = Base64.encodeToString(comment_text.getBytes(StandardCharsets.UTF_8), Base64.DEFAULT);
+        //String encodedComment = StringUtils.stripAccents(encoded);
+        Log.d(TAG, "Encoded Test Comment : " + AppUtils.encodedString(comment_text));
         if (api_case.equalsIgnoreCase("L"))
             call = apiService.fetchTestComments(user_id, tmId, api_case);
         else
-            call = apiService.addTestCommentApi(user_id, tmId, api_case, encodedComment);
+            call = apiService.addTestCommentApi(user_id, tmId, api_case, AppUtils.encodedString(comment_text));
 
         call.enqueue(new Callback<ProcessQuestion>() {
             @Override

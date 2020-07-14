@@ -26,13 +26,11 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.navigation.Navigator;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.jangletech.qoogol.BuildConfig;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.ActivityMainBinding;
@@ -56,7 +54,6 @@ public class MainActivity extends BaseActivity {
     private ActivityMainBinding mBinding;
     private DrawerLayout drawerLayout;
     private NavController navController;
-    private LinearLayout friendsLayout, followersLayout;
     private PersonalInfoViewModel mViewmodel;
     public static ImageView profileImage, badgeImg;
     public static TextView textViewDisplayName;

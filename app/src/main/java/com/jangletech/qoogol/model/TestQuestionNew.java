@@ -9,6 +9,28 @@ public class TestQuestionNew implements Serializable {
 
     private boolean isAnsweredRight;
 
+    @SerializedName(Constant.sub_ans_right_wrong)
+    private boolean rightAnswered;
+
+    public boolean isRightAnswered() {
+        return rightAnswered;
+    }
+
+    public void setRightAnswered(boolean rightAnswered) {
+        this.rightAnswered = rightAnswered;
+    }
+
+    public float getRightAnsProbability() {
+        return rightAnsProbability;
+    }
+
+    public void setRightAnsProbability(float rightAnsProbability) {
+        this.rightAnsProbability = rightAnsProbability;
+    }
+
+    @SerializedName(Constant.sub_ans_probability)
+    private float rightAnsProbability;
+
     @SerializedName(Constant.ttqa_id)
     private int ttqa_id;
 
