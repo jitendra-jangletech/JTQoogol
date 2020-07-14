@@ -46,8 +46,8 @@ public class FollowReqViewModel extends AndroidViewModel {
 
     }
 
-    LiveData<List<FollowRequest>> getFollowReqdList(String uId) {
-        return mAppRepository.getFollowReqFromDb(uId);
+    LiveData<List<FollowRequest>> getFollowReqdList() {
+        return mAppRepository.getFollowReqFromDb(userId);
     }
 
     public void insert(List<FollowRequest> followRequests) {

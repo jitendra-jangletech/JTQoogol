@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.FollowReqAdapter;
 import com.jangletech.qoogol.databinding.FragmentFriendRequestBinding;
@@ -20,9 +21,12 @@ import com.jangletech.qoogol.model.FollowRequestResponse;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
+
 import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
+
 import static com.jangletech.qoogol.util.Constant.followrequests;
 import static com.jangletech.qoogol.util.Constant.forcerefresh;
 import static com.jangletech.qoogol.util.Constant.qoogol;
@@ -32,12 +36,10 @@ import static com.jangletech.qoogol.util.Constant.qoogol;
  */
 public class FollowRequestFragment extends BaseFragment implements FollowReqAdapter.updateConnectionListener {
 
-    private static final String TAG = "FollowRequestFragment";
     private FragmentFriendRequestBinding mBinding;
     private LinearLayoutManager linearLayoutManager;
     private FollowReqAdapter mAdapter;
     private Boolean isVisible = false;
-    private String userId = "";
     private FollowReqViewModel mViewModel;
     private ApiInterface apiService = ApiClient.getInstance().getApi();
 
@@ -55,19 +57,21 @@ public class FollowRequestFragment extends BaseFragment implements FollowReqAdap
         mAdapter = null;
     }
 
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(FollowReqViewModel.class);
+        init();
         fetchFollowReq();
-        mViewModel.getFollowReqdList(getUserId()).observe(getViewLifecycleOwner(), followRequestList -> {
+        mViewModel.getFollowReqdList().observe(getViewLifecycleOwner(), followRequestList -> {
             if (followRequestList != null) {
                 initView(followRequestList);
             }
-            if (mBinding.requestsSwiperefresh.isRefreshing())
-                mBinding.requestsSwiperefresh.setRefreshing(false);
+            dismissRefresh(mBinding.requestsSwiperefresh);
         });
     }
+
 
     public void fetchFollowReq() {
         Call<FollowRequestResponse> call = apiService.fetchRefreshedFollowReq(getUserId(), followrequests, getDeviceId(), qoogol, "0", forcerefresh);
@@ -78,9 +82,9 @@ public class FollowRequestFragment extends BaseFragment implements FollowReqAdap
                 if (response.body() != null &&
                         response.body().getResponse().equalsIgnoreCase("200")) {
                     mViewModel.insert(response.body().getFollowreq_list());
-                }else{
-                    if(response.body()!=null)
-                    showToast("Error : "+response.body().getResponse());
+                } else {
+                    if (response.body() != null)
+                        showToast("Error : " + response.body().getResponse());
                 }
             }
 
@@ -94,32 +98,31 @@ public class FollowRequestFragment extends BaseFragment implements FollowReqAdap
         });
     }
 
-//    private void init() {
-//        userId = String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));
-//        if (!isVisible) {
-//            isVisible = true;
-//            mViewModel.fetchFollowReqData(false);
-//        }
-//        mBinding.requestsSwiperefresh.setOnRefreshListener(() -> mViewModel.fetchFollowReqData(true));
-//    }
+    private void init() {
+        if (!isVisible) {
+            isVisible = true;
+            mViewModel.fetchFollowReqData(false);
+        }
+        mBinding.requestsSwiperefresh.setOnRefreshListener(() -> mViewModel.fetchFollowReqData(true));
+    }
 
-//    public void checkRefresh() {
-//        if (mBinding.requestsSwiperefresh.isRefreshing()) {
-//            mBinding.requestsSwiperefresh.setRefreshing(false);
-//        }
-//    }
+    public void checkRefresh() {
+        if (mBinding.requestsSwiperefresh.isRefreshing()) {
+            mBinding.requestsSwiperefresh.setRefreshing(false);
+        }
+    }
 
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//    }
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
 
-//    @Override
-//    public void setUserVisibleHint(boolean isVisibleToUser) {
-//        super.setUserVisibleHint(isVisibleToUser);
-//        if (isVisibleToUser && isVisible)
-//            mViewModel.fetchFollowReqData(false);
-//    }
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser && isVisible)
+            mViewModel.fetchFollowReqData(false);
+    }
 
     private void initView(List<FollowRequest> followRequests) {
         mAdapter = new FollowReqAdapter(getActivity(), followRequests, followrequests, this);
