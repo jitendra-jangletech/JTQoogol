@@ -1,17 +1,13 @@
 package com.jangletech.qoogol.ui.connections;
-
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
-
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.FollowersAdapter;
 import com.jangletech.qoogol.databinding.FragmentFriendsBinding;
@@ -20,7 +16,6 @@ import com.jangletech.qoogol.model.Followers;
 import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
-
 import java.util.ArrayList;
 import java.util.List;
 

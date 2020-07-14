@@ -43,10 +43,8 @@ public class FriendRequestFragment extends BaseFragment implements FriendReqAdap
 
     private static final String TAG = "FriendRequestFragment";
     private FragmentFriendRequestBinding mBinding;
-    //private List<FriendRequest> connectionsList = new ArrayList<>();
     private FriendReqAdapter mAdapter;
     private Boolean isVisible = false;
-    private String userId = "";
     private FriendReqViewModel mViewModel;
     private LinearLayoutManager linearLayoutManager;
     private ApiInterface apiService = ApiClient.getInstance().getApi();
@@ -64,13 +62,13 @@ public class FriendRequestFragment extends BaseFragment implements FriendReqAdap
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(FriendReqViewModel.class);
+        init();
         fetchFriendRequests();
-        mViewModel.getFrienReqdList(getUserId()).observe(getViewLifecycleOwner(), friendRequestList -> {
+        mViewModel.getFrienReqdList().observe(getViewLifecycleOwner(), friendRequestList -> {
             if (friendRequestList != null) {
                 initView(friendRequestList);
             }
-            if (mBinding.requestsSwiperefresh.isRefreshing())
-                mBinding.requestsSwiperefresh.setRefreshing(false);
+            dismissRefresh(mBinding.requestsSwiperefresh);
         });
     }
 
@@ -84,9 +82,9 @@ public class FriendRequestFragment extends BaseFragment implements FriendReqAdap
                         response.body().getResponse().equalsIgnoreCase("200")) {
                     Log.d(TAG, "onResponse: ");
                     mViewModel.insert(response.body().getFriend_req_list());
-                }else{
-                    if(response.body()!=null)
-                    showToast("Error : "+response.body().getResponse());
+                } else {
+                    if (response.body() != null)
+                        showToast("Error : " + response.body().getResponse());
                 }
             }
 
@@ -100,20 +98,19 @@ public class FriendRequestFragment extends BaseFragment implements FriendReqAdap
         });
     }
 
-//    private void init() {
-//        //userId = String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));
-//        if (!isVisible) {
-//            isVisible = true;
-//            mViewModel.fetchFriendReqData(false);
-//        }
-//        mBinding.requestsSwiperefresh.setOnRefreshListener(() -> mViewModel.fetchFriendReqData(true));
-//    }
+    private void init() {
+        if (!isVisible) {
+            isVisible = true;
+            mViewModel.fetchFriendReqData(false);
+        }
+        mBinding.requestsSwiperefresh.setOnRefreshListener(() -> mViewModel.fetchFriendReqData(true));
+    }
 
-//    public void checkRefresh() {
-////        if (mBinding.requestsSwiperefresh.isRefreshing()) {
-////            mBinding.requestsSwiperefresh.setRefreshing(false);
-////        }
-////    }
+    public void checkRefresh() {
+        if (mBinding.requestsSwiperefresh.isRefreshing()) {
+            mBinding.requestsSwiperefresh.setRefreshing(false);
+        }
+    }
 
     @Override
     public void onDetach() {
@@ -153,12 +150,12 @@ public class FriendRequestFragment extends BaseFragment implements FriendReqAdap
         });
     }
 
-   /* @Override
+    @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser && isVisible)
             mViewModel.fetchFriendReqData(false);
-    }*/
+    }
 
     private void initView(List<FriendRequest> friendRequests) {
         if (mBinding.requestsSwiperefresh.isRefreshing())

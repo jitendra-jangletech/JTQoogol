@@ -11,6 +11,7 @@ import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
+import android.util.Base64;
 import android.util.Log;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
@@ -45,13 +46,17 @@ import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.dialog.LikeListingDialog;
 import com.jangletech.qoogol.ui.learning.SlideshowDialogFragment;
+import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.File;
 import java.io.Serializable;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -296,10 +301,6 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
             super(itemView.getRoot());
             this.learningItemBinding = itemView;
             MTP_ans.clear();
-           /* MTP_ans.put("a1", "b3");
-            MTP_ans.put("a2", "b4");
-            MTP_ans.put("a3", "b1");
-            MTP_ans.put("a4", "b2");*/
 
             learningItemBinding.questiondescTextview.setShowingLine(2);
             learningItemBinding.questiondescTextview.addShowLessText("Show Less");
@@ -439,7 +440,6 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
             });
 
             learningItemBinding.close.setOnClickListener(v ->
-
             {
                 countDownTimer.cancel();
                 learningItemBinding.expandableLayout.setVisibility(View.GONE);
@@ -836,9 +836,7 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
                 submitCall();
             });
 
-            learningItemBinding.submitAndRate.setOnClickListener(v ->
-
-            {
+            learningItemBinding.submitAndRate.setOnClickListener(v ->  {
                 submitCall();
                 displayRatingDialog(learningQuestionsList.get(getAdapterPosition()), getAdapterPosition());
             });
@@ -1049,7 +1047,9 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
                     Toast.makeText(activity, "Please enter answer first.", Toast.LENGTH_SHORT).show();
                 } else {
                     isAttempted = 1;
-                    ProcessQuestionAPI(learningQuestions.getQuestion_id(), 0, ONE_LINE_ANSWER, "", "", getAdapterPosition(), learningItemBinding.singleLine.getText().toString());
+                    String encoded = Base64.encodeToString(learningItemBinding.singleLine.getText().toString().getBytes(StandardCharsets.UTF_8), Base64.DEFAULT);
+                    String encodedText = StringUtils.stripAccents(encoded);
+                    ProcessQuestionAPI(learningQuestions.getQuestion_id(), 0, ONE_LINE_ANSWER, "", "", getAdapterPosition(), encodedText);
                 }
 
             } else if (learningQuestions.getType().equalsIgnoreCase(LONG_ANSWER)) {
@@ -1057,7 +1057,9 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
                     Toast.makeText(activity, "Please enter answer first.", Toast.LENGTH_SHORT).show();
                 } else {
                     isAttempted = 1;
-                    ProcessQuestionAPI(learningQuestions.getQuestion_id(), 0, LONG_ANSWER, "", "", getAdapterPosition(), learningItemBinding.multiLine.getText().toString());
+                    String encoded = Base64.encodeToString(learningItemBinding.multiLine.getText().toString().getBytes(StandardCharsets.UTF_8), Base64.DEFAULT);
+                    String encodedText = StringUtils.stripAccents(encoded);
+                    ProcessQuestionAPI(learningQuestions.getQuestion_id(), 0, LONG_ANSWER, "", "", getAdapterPosition(), encodedText);
                 }
 
             } else {
@@ -2263,7 +2265,6 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
             learningItemBinding.b2Img.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_mtp_grey));
             learningItemBinding.b3Img.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_mtp_grey));
             learningItemBinding.b4Img.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_mtp_grey));
-
         }
 
         private void ProcessQuestionAPI(int que_id, int flag, String call_from, String rating, String feedback, int position, String answer) {
@@ -2428,11 +2429,14 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
                 dialog.show();
 
                 ratingFeedbackBinding.rating.setRating(Float.parseFloat(learningQuestionsNew.getRating()));
-                ratingFeedbackBinding.feedback.setText(learningQuestionsNew.getFeedback());
+                String decoded = AppUtils.decodedString(learningQuestionsNew.getFeedback());
+                ratingFeedbackBinding.feedback.setText(decoded);
                 ratingFeedbackBinding.submitRating.setOnClickListener(v -> {
                     dialog.dismiss();
                     if (ratingFeedbackBinding.rating.getRating() != 0) {
-                        ProcessQuestionAPI(learningQuestionsNew.getQuestion_id(), 0, "rating", String.valueOf(ratingFeedbackBinding.rating.getRating()), ratingFeedbackBinding.feedback.getText().toString(), position, "");
+                        String encoded = Base64.encodeToString(ratingFeedbackBinding.feedback.getText().toString().getBytes(StandardCharsets.UTF_8), Base64.DEFAULT);
+                        String encodedText = StringUtils.stripAccents(encoded);
+                        ProcessQuestionAPI(learningQuestionsNew.getQuestion_id(), 0, "rating", String.valueOf(ratingFeedbackBinding.rating.getRating()),encodedText , position, "");
                     } else {
                         Toast.makeText(activity, "Please add ratings", Toast.LENGTH_SHORT).show();
                     }
