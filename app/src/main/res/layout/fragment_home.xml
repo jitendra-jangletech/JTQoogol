@@ -49,9 +49,9 @@
 
 
                             <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:src="@drawable/ic_connect_theme" />
+                                android:layout_width="@dimen/_30sdp"
+                                android:layout_height="@dimen/_30sdp"
+                                android:src="@drawable/connections" />
 
                             <TextView
                                 android:id="@+id/tvConnections"
@@ -88,9 +88,9 @@
 
 
                             <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:src="@drawable/ic_connect_theme" />
+                                android:layout_width="@dimen/_30sdp"
+                                android:layout_height="@dimen/_30sdp"
+                                android:src="@drawable/ic_friends" />
 
                             <TextView
                                 android:id="@+id/friends"
@@ -126,9 +126,9 @@
                             app:layout_constraintTop_toTopOf="parent">
 
                             <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:src="@drawable/ic_connect_theme" />
+                                android:layout_width="@dimen/_30sdp"
+                                android:layout_height="@dimen/_30sdp"
+                                android:src="@drawable/followers" />
 
                             <TextView
                                 android:id="@+id/followers"
@@ -165,9 +165,9 @@
                             app:layout_constraintTop_toTopOf="parent">
 
                             <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:src="@drawable/ic_connect_theme" />
+                                android:layout_width="@dimen/_30sdp"
+                                android:layout_height="@dimen/_30sdp"
+                                android:src="@drawable/following" />
 
                             <TextView
                                 android:id="@+id/following"

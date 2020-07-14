@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.jangletech.qoogol.R;
+import com.jangletech.qoogol.database.repo.AppRepository;
 import com.jangletech.qoogol.databinding.DialogPublicProfileBinding;
 import com.jangletech.qoogol.model.ResponseObj;
 import com.jangletech.qoogol.model.UserProfile;
@@ -27,6 +28,9 @@ import com.jangletech.qoogol.ui.connections.FriendReqViewModel;
 import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.UtilHelper;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -48,15 +52,17 @@ public class PublicProfileDialog extends Dialog {
     private static final String TAG = "PublicProfileDialog";
     private DialogPublicProfileBinding mBinding;
     private Activity activity;
-    private String userid,profilePicPath="";
+    private AppRepository mAppRepository;
+    private String userid, profilePicPath = "";
     private PublicProfileClickListener clickListener;
     private ApiInterface apiService = ApiClient.getInstance().getApi();
 
-    public PublicProfileDialog(@NonNull Activity activity, String userid,PublicProfileClickListener clickListener) {
+    public PublicProfileDialog(@NonNull Activity activity, String userid, PublicProfileClickListener clickListener) {
         super(activity, android.R.style.Theme_DeviceDefault_Light_DarkActionBar);
         this.activity = activity;
         this.userid = userid;
         this.clickListener = clickListener;
+        mAppRepository = new AppRepository(getContext());
     }
 
     @Override
@@ -65,8 +71,8 @@ public class PublicProfileDialog extends Dialog {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         mBinding = DataBindingUtil.inflate(LayoutInflater.from(getContext()), R.layout.dialog_public_profile, null, false);
         setContentView(mBinding.getRoot());
-        Log.d(TAG, "onCreate UserId : "+userid);
-        if(userid.equalsIgnoreCase(AppUtils.getUserId())){
+        Log.d(TAG, "onCreate UserId : " + userid);
+        if (userid.equalsIgnoreCase(AppUtils.getUserId())) {
             mBinding.addFriend.setVisibility(View.GONE);
             mBinding.follow.setVisibility(View.GONE);
         }
@@ -185,7 +191,7 @@ public class PublicProfileDialog extends Dialog {
             mBinding.shimmerViewContainer.hideShimmer();
         }
 
-        mBinding.userProfilePic.setOnClickListener(v->{
+        mBinding.userProfilePic.setOnClickListener(v -> {
             clickListener.onViewImage(profilePicPath);
         });
     }
@@ -221,6 +227,14 @@ public class PublicProfileDialog extends Dialog {
                     ProgressDialog.getInstance().dismiss();
                     if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
                         fetchUserProfile();
+                        if (Processcase.equalsIgnoreCase(reject_friend_requests) || Processcase.equalsIgnoreCase(accept_friend_requests)) {
+                            ExecutorService executor = Executors.newSingleThreadExecutor();
+                            executor.execute(() -> mAppRepository.deleteFriendReq(AppUtils.getUserId(), user));
+                        } else if (Processcase.equalsIgnoreCase(unfollow)) {
+                            ExecutorService executor = Executors.newSingleThreadExecutor();
+                            executor.execute(() -> mAppRepository.deleteFollowings(AppUtils.getUserId(), user));
+                        }
+
                     } else {
                         Toast.makeText(activity, UtilHelper.getAPIError(String.valueOf(response.body())), Toast.LENGTH_SHORT).show();
                     }
