@@ -3,7 +3,6 @@ package com.jangletech.qoogol.activities;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -43,10 +42,6 @@ import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.EndDrawerToggle;
 import com.jangletech.qoogol.util.PreferenceManager;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.text.StringEscapeUtils;
-
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -264,10 +259,10 @@ public class PracticeTestActivity extends BaseActivity implements
                     question.getType().equalsIgnoreCase(Constant.LONG_ANSWER) ||
                     question.getType().equalsIgnoreCase(Constant.ONE_LINE_ANSWER) ||
                     question.getType().equalsIgnoreCase(Constant.FILL_THE_BLANKS)) {
-                String encoded = Base64.encodeToString(question.getTtqa_sub_ans().getBytes(StandardCharsets.UTF_8), Base64.DEFAULT);
-                String encodedAns = StringUtils.stripAccents(encoded);
-                Log.d(TAG, "Encoded Ans : " + encodedAns);
-                question.setTtqa_sub_ans(encodedAns);
+                //String encoded = Base64.encodeToString(question.getTtqa_sub_ans().getBytes(StandardCharsets.UTF_8), Base64.DEFAULT);
+                //String encodedAns = StringUtils.stripAccents(encoded);
+                //Log.d(TAG, "Encoded Ans While Test Submition : " + AppUtils.encodedString(question.getTtqa_sub_ans()));
+                //question.setTtqa_sub_ans(AppUtils.encodedString(question.getTtqa_sub_ans()));
             } else {
                 question.setTtqa_sub_ans(question.getTtqa_sub_ans());
             }
@@ -323,6 +318,7 @@ public class PracticeTestActivity extends BaseActivity implements
                 if (response.body() != null && response.body().getResponseCode() != null
                         && response.body().getResponseCode().equals("200")) {
                     mViewModel.setStartResumeTestResponse(response.body());
+                    Log.d(TAG, "onResponse Question List Size : " + response.body().getTestQuestionNewList().size());
                     mViewModel.setTestQuestAnsList(response.body().getTestQuestionNewList());
                 } else {
                     showErrorDialog(PracticeTestActivity.this, response.body().getResponseCode(), "Something went wrong");
@@ -339,12 +335,12 @@ public class PracticeTestActivity extends BaseActivity implements
     }
 
     private void setupViewPager(StartResumeTestResponse startResumeTestResponse) {
-        for (TestQuestionNew testQuestionNew : startResumeTestResponse.getTestQuestionNewList()) {
+        /*for (TestQuestionNew testQuestionNew : startResumeTestResponse.getTestQuestionNewList()) {
             if (testQuestionNew.getA_sub_ans().trim().equalsIgnoreCase(testQuestionNew.getTtqa_sub_ans().trim())
                     || testQuestionNew.getType().equals("5") || testQuestionNew.getType().equals("6")) {
                 testQuestionNew.setAnsweredRight(true);
             }
-        }
+        }*/
         practiseViewPagerAdapter = new PractiseViewPagerAdapter(PracticeTestActivity.this, this, startResumeTestResponse, flag);
         practiceViewPager.setAdapter(practiseViewPagerAdapter);
     }
@@ -433,8 +429,8 @@ public class PracticeTestActivity extends BaseActivity implements
                     .setPositiveButton("Pause", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            //finish();
-                            submitTestQuestions();
+                            finish();
+                            //submitTestQuestions();
                         }
                     })
                     .setNegativeButton("Cancel", null)
@@ -454,7 +450,8 @@ public class PracticeTestActivity extends BaseActivity implements
     @Override
     public void onYesClick() {
         //submitTestQuestions();
-        submitTestQuestions();
+        //submitTestQuestions();
+        finish();
     }
 
 

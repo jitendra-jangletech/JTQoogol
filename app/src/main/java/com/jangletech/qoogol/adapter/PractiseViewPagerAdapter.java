@@ -119,6 +119,7 @@ public class PractiseViewPagerAdapter extends PagerAdapter
         this.startResumeTestResponse = startResumeTestResponse;
         this.flag = flag;
         gson = new Gson();
+        Log.d(TAG, "PractiseViewPagerAdapter Size : "+testQuestionNewList.size());
     }
 
     @Override
@@ -1189,7 +1190,6 @@ public class PractiseViewPagerAdapter extends PagerAdapter
                     setRightSCQ(testQuestionNew.getA_sub_ans(), img1, img2, img3, img4, img5);
                     setWrongSCQ(testQuestionNew.getTtqa_sub_ans(), img1, img2, img3, img4, img5, false);
                 }
-
             }
         }
 
@@ -1298,9 +1298,10 @@ public class PractiseViewPagerAdapter extends PagerAdapter
                 question.getType().equalsIgnoreCase(Constant.FILL_THE_BLANKS)) {
             //String encoded = Base64.encodeToString(scq_ans.getBytes(StandardCharsets.UTF_8), Base64.DEFAULT);
             //String encodedAns = StringUtils.stripAccents(encoded);
-            question.setTtqa_sub_ans(AppUtils.encodedString(scq_ans));
-            Log.d(TAG, "Encoded Ans : " + AppUtils.encodedString(scq_ans));
-            Log.d(TAG, "Decoded Ans : "+AppUtils.decodedString(AppUtils.encodedString(scq_ans)));
+            String encoded = AppUtils.encodedString(scq_ans);
+            question.setTtqa_sub_ans(encoded);
+            Log.d(TAG, "Encoded Ans : " + encoded);
+            Log.d(TAG, "Decoded Ans : " + AppUtils.decodedString(encoded));
         } else {
             question.setTtqa_sub_ans(scq_ans);
         }
@@ -1310,6 +1311,7 @@ public class PractiseViewPagerAdapter extends PagerAdapter
 
         submitTestQuestionList.add(question);
         submitTest.setTestQuestionNewList(submitTestQuestionList);
+        Log.d(TAG, "Get Encoded : " + StringEscapeUtils.unescapeJava(question.getTtqa_sub_ans().replace("=", "")));
         String json = gson.toJson(submitTest);
         Log.d(TAG, "submitSubjectiveAnsToServer JSON : " + json);
         HashMap<String, String> params = new HashMap<>();
@@ -1516,9 +1518,9 @@ public class PractiseViewPagerAdapter extends PagerAdapter
         EditText etMultiLineAns = layout.findViewById(R.id.multi_line);
         EditText etSinlgeineAns = layout.findViewById(R.id.fill_in_the_blanks);
 
-        String decodedAns = AppUtils.decodedString(StringEscapeUtils.escapeJava(testQuestionNew.getTtqa_sub_ans()));
+        String decodedAns = AppUtils.decodedString(testQuestionNew.getTtqa_sub_ans());
         //Log.d(TAG, "Plain Text : "+testQuestionNew.getTtqa_sub_ans());
-        Log.d(TAG, "Decoded Text : " + decodedAns);
+        Log.d(TAG, "Decoded Text : " + StringUtils.stripAccents(decodedAns));
 
         if (testQuestionNew.getType().equalsIgnoreCase(Constant.ONE_LINE_ANSWER) ||
                 testQuestionNew.getType().equalsIgnoreCase(Constant.FILL_THE_BLANKS)) {
