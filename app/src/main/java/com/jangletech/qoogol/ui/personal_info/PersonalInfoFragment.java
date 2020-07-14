@@ -55,6 +55,8 @@ import com.jangletech.qoogol.model.VerifyResponse;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
+import com.jangletech.qoogol.ui.connections.FollowersViewModel;
+import com.jangletech.qoogol.ui.connections.FriendReqViewModel;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.DateUtils;
 import com.jangletech.qoogol.util.PreferenceManager;
@@ -512,6 +514,11 @@ public class PersonalInfoFragment extends BaseFragment {
                     ProgressDialog.getInstance().dismiss();
                     if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
                         fetchUserProfile(fetch_other_user, "");
+                        if (Processcase.equalsIgnoreCase(reject_friend_requests) || Processcase.equalsIgnoreCase(accept_friend_requests)) {
+                            removeReqFromDb(user);
+                        } else if (Processcase.equalsIgnoreCase(unfollow)) {
+                            removeFollowerFromDb(user);
+                        }
                     } else {
                         Toast.makeText(getActivity(), UtilHelper.getAPIError(String.valueOf(response.body())), Toast.LENGTH_SHORT).show();
                     }
@@ -527,6 +534,16 @@ public class PersonalInfoFragment extends BaseFragment {
                 ProgressDialog.getInstance().dismiss();
             }
         });
+    }
+
+    private void removeFollowerFromDb(String user) {
+        FollowersViewModel mViewModel = ViewModelProviders.of(this).get(FollowersViewModel.class);
+        mViewModel.deleteUpdatedConnection(user);
+    }
+
+    private void removeReqFromDb(String user) {
+        FriendReqViewModel mViewModel = ViewModelProviders.of(this).get(FriendReqViewModel.class);
+        mViewModel.deleteUpdatedConnection(user);
     }
 
     private void updateUi(UserProfile userProfile) {

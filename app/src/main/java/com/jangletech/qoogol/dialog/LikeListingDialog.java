@@ -122,7 +122,7 @@ public class LikeListingDialog extends Dialog implements LikeAdapter.onItemClick
     @Override
     public void onItemCLick(String user_id) {
         onItemClickListener.onItemCLick(user_id);
-//        dismiss();
+        dismiss();
     }
 
 
