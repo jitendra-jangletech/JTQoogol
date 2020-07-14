@@ -243,7 +243,6 @@ public class BaseFragment extends Fragment {
                     .setMessage("Check your internet connection.")
                     .setPositiveButton("OK", null)
                     .show();
-
         }
     }
 

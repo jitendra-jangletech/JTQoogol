@@ -419,8 +419,8 @@ public class MyTestFragment extends BaseFragment
 
     @Override
     public void favClick(TestModelNew testModelNew) {
-        Log.d(TAG, "favClick Value : "+testModelNew.isFavourite());
-        mViewModel.updateFav("PRACTICE", getUserId(),testModelNew.getTm_id(),testModelNew.isFavourite());
+        Log.d(TAG, "favClick Value : " + testModelNew.isFavourite());
+        mViewModel.updateFav("PRACTICE", getUserId(), testModelNew.getTm_id(), testModelNew.isFavourite());
     }
 
     @Override

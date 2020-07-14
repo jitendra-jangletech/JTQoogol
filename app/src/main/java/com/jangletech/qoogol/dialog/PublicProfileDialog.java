@@ -21,6 +21,7 @@ import com.jangletech.qoogol.model.ResponseObj;
 import com.jangletech.qoogol.model.UserProfile;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
+import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.UtilHelper;
 
@@ -62,6 +63,10 @@ public class PublicProfileDialog extends Dialog {
         mBinding = DataBindingUtil.inflate(LayoutInflater.from(getContext()), R.layout.dialog_public_profile, null, false);
         setContentView(mBinding.getRoot());
         Log.d(TAG, "onCreate UserId : "+userid);
+        if(userid.equalsIgnoreCase(AppUtils.getUserId())){
+            mBinding.addFriend.setVisibility(View.GONE);
+            mBinding.follow.setVisibility(View.GONE);
+        }
         fetchUserProfile();
     }
 
