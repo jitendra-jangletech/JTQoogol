@@ -1281,7 +1281,7 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
                         }
                     } else {
                         if (timerCountSeconds < 10) {
-                            timer.setText(String.valueOf(timerCountMinutes + ":0" + timerCountSeconds));
+                            timer.setText(timerCountMinutes + ":0" + timerCountSeconds);
                         } else {
                             timer.setText(String.valueOf(timerCountMinutes + ":" + timerCountSeconds));
                         }
