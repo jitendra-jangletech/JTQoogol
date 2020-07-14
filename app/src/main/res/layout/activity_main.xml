@@ -67,10 +67,10 @@
                             android:foreground="?attr/selectableItemBackground">
 
                             <TextView
-                                android:layout_alignParentLeft="true"
-                                android:layout_centerInParent="true"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
+                                android:layout_alignParentLeft="true"
+                                android:layout_centerInParent="true"
                                 android:layout_marginLeft="@dimen/_10sdp"
                                 android:layout_marginTop="@dimen/_10sdp"
                                 android:drawableLeft="@drawable/ic_test"
@@ -81,21 +81,21 @@
                                 android:textStyle="bold" />
 
                             <TextView
-                                android:layout_centerInParent="true"
                                 android:id="@+id/expand"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentEnd="true"
+                                android:layout_centerInParent="true"
                                 android:layout_marginRight="@dimen/_10sdp"
                                 android:background="@drawable/ic_expand" />
 
                         </RelativeLayout>
 
                         <LinearLayout
-                            android:animateLayoutChanges="true"
                             android:id="@+id/testNavLayout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:animateLayoutChanges="true"
                             android:orientation="vertical"
                             android:visibility="gone">
 
@@ -192,7 +192,7 @@
                         <TextView
                             android:id="@+id/nav_import_contacts"
                             style="@style/menu_item_style"
-                            android:drawableLeft="@drawable/ic_block"
+                            android:drawableLeft="@drawable/ic_phone_contacts"
                             android:text="@string/importContacts" />
 
 
@@ -206,21 +206,21 @@
                         <TextView
                             android:id="@+id/nav_settings"
                             style="@style/menu_item_style"
-                            android:drawableLeft="@drawable/ic_test"
+                            android:drawableLeft="@drawable/ic_settings"
                             android:foreground="?attr/selectableItemBackground"
                             android:text="@string/settings" />
 
                         <TextView
                             android:id="@+id/nav_faq"
                             style="@style/menu_item_style"
-                            android:drawableLeft="@drawable/ic_test"
+                            android:drawableLeft="@drawable/qa_drawable"
                             android:foreground="?attr/selectableItemBackground"
                             android:text="@string/faq" />
 
                         <TextView
                             android:id="@+id/nav_code_conduct"
                             style="@style/menu_item_style"
-                            android:drawableLeft="@drawable/ic_test"
+                            android:drawableLeft="@drawable/ic_code_of_conduct"
                             android:foreground="?attr/selectableItemBackground"
                             android:text="@string/code_conduct" />
 
