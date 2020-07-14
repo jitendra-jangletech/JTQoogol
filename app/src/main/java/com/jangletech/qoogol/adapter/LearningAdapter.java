@@ -972,6 +972,7 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
                     learningItemBinding.reset.setVisibility(View.VISIBLE);
                     learningItemBinding.resetLabel.setVisibility(View.VISIBLE);
                     learningItemBinding.categoryTextview.setText("Match the Pairs");
+                    setPairAnswers(learningQuestions);
 
                     learningItemBinding.a1text.setText(learningQuestions.getMcq1().split("::", -1)[0]);
                     learningItemBinding.b1text.setText(learningQuestions.getMcq1().split("::", -1)[1]);
@@ -990,8 +991,8 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
                     learningItemBinding.reset.setVisibility(View.VISIBLE);
                     learningItemBinding.resetLabel.setVisibility(View.VISIBLE);
                     learningItemBinding.categoryTextview.setText("Match the Pairs");
+                    setPairAnswers(learningQuestions);
 
-                    //todo set mtp options
                     loadImage(learningQuestions.getMcq1().split("::", -1)[0], learningItemBinding.aMtp1);
                     loadImage(learningQuestions.getMcq1().split("::", -1)[1], learningItemBinding.bMtp1);
 
@@ -1190,8 +1191,7 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
                         Toast.makeText(activity, "Please select atleast one option.", Toast.LENGTH_SHORT).show();
                     }
                 } else if (learningQuestions.getQue_option_type().equalsIgnoreCase(MATCH_PAIR)) {
-                    setPairAnswers(learningQuestions);
-                    if (!isB1Selected || !isB2Selected || !isB3Selected || !isB4Selected) {
+                    if (paired.size()!=MTP_ans.size()) {
                         Toast.makeText(activity, "Select all pairs first.", Toast.LENGTH_SHORT).show();
                     } else {
                         isAttempted = 1;
@@ -1215,8 +1215,7 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
                         }
                     }
                 } else if (learningQuestions.getQue_option_type().equalsIgnoreCase(MATCH_PAIR_IMAGE)) {
-                    setPairAnswers(learningQuestions);
-                    if (!isB1Selected || !isB2Selected || !isB3Selected) {
+                    if (imgpaired.size()!=MTP_ans.size()) {
                         Toast.makeText(activity, "Select all pairs first.", Toast.LENGTH_SHORT).show();
                     } else {
                         isAttempted = 1;
@@ -1282,7 +1281,7 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
                         }
                     } else {
                         if (timerCountSeconds < 10) {
-                            timer.setText(String.valueOf(timerCountMinutes + ":0" + timerCountSeconds));
+                            timer.setText(timerCountMinutes + ":0" + timerCountSeconds);
                         } else {
                             timer.setText(String.valueOf(timerCountMinutes + ":" + timerCountSeconds));
                         }

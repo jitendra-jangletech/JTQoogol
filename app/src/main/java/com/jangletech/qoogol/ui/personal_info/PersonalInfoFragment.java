@@ -36,6 +36,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.jangletech.qoogol.R;
+import com.jangletech.qoogol.database.repo.AppRepository;
 import com.jangletech.qoogol.databinding.FragmentPersonalInfoBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.model.City;
@@ -56,6 +57,7 @@ import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.ui.connections.FollowersViewModel;
+import com.jangletech.qoogol.ui.connections.FollowingViewModel;
 import com.jangletech.qoogol.ui.connections.FriendReqViewModel;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.DateUtils;
@@ -77,6 +79,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.regex.Pattern;
 
 import okhttp3.MediaType;
@@ -517,7 +521,7 @@ public class PersonalInfoFragment extends BaseFragment {
                         if (Processcase.equalsIgnoreCase(reject_friend_requests) || Processcase.equalsIgnoreCase(accept_friend_requests)) {
                             removeReqFromDb(user);
                         } else if (Processcase.equalsIgnoreCase(unfollow)) {
-                            removeFollowerFromDb(user);
+                            removeFollowingFromDb(user);
                         }
                     } else {
                         Toast.makeText(getActivity(), UtilHelper.getAPIError(String.valueOf(response.body())), Toast.LENGTH_SHORT).show();
@@ -536,8 +540,8 @@ public class PersonalInfoFragment extends BaseFragment {
         });
     }
 
-    private void removeFollowerFromDb(String user) {
-        FollowersViewModel mViewModel = ViewModelProviders.of(this).get(FollowersViewModel.class);
+    private void removeFollowingFromDb(String user) {
+         FollowingViewModel mViewModel = ViewModelProviders.of(this).get(FollowingViewModel.class);
         mViewModel.deleteUpdatedConnection(user);
     }
 
