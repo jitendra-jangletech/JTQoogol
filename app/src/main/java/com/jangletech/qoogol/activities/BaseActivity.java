@@ -31,7 +31,6 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import com.jangletech.qoogol.R;
-import com.jangletech.qoogol.service.NetworkSchedulerService;
 import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.NetworkUtil;
@@ -255,11 +254,6 @@ public class BaseActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    @Override
-    protected void onStop() {
-        stopService(new Intent(this, NetworkSchedulerService.class));
-        super.onStop();
-    }
 
     public static boolean isConnected(Context context) {
         int conn = NetworkUtil.getConnectivityStatus(context);

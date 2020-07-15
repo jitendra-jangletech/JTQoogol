@@ -201,7 +201,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@+id/terms_privacy"
-                android:layout_alignBottom="@+id/rootLayout"
                 android:src="@drawable/launch">
 
             </ImageView>

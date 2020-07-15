@@ -4,13 +4,13 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/testItemCard"
-        app:cardUseCompatPadding="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/bg_recycler"
         android:clickable="true"
         android:foreground="?attr/selectableItemBackground"
         app:cardElevation="@dimen/_10sdp"
+        app:cardUseCompatPadding="true"
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
@@ -284,63 +284,6 @@
                 android:layout_marginBottom="@dimen/_2sdp"
                 android:background="@color/colorLightGrey" />
 
-            <!-- <RelativeLayout
-                 android:visibility="gone"
-                 android:layout_width="match_parent"
-                 android:layout_height="wrap_content"
-                 android:layout_marginTop="@dimen/_20sdp"
-                 android:layout_marginBottom="@dimen/_10sdp">
-
-                 <androidx.appcompat.widget.AppCompatButton
-                     android:layout_alignParentRight="true"
-                     android:layout_width="@dimen/_100sdp"
-                     android:layout_height="@dimen/_30sdp"
-                     android:background="@drawable/button_background"
-                     android:text="  Start Test "
-                     android:textAllCaps="false"
-                     android:textColor="@color/colorWhite"
-                     android:textSize="@dimen/_12ssp" />
-
-                 <LinearLayout
-                     android:visibility="gone"
-                     android:layout_width="wrap_content"
-                     android:layout_height="wrap_content"
-                     android:layout_alignParentRight="true"
-                     android:layout_gravity="center"
-                     android:orientation="horizontal">
-
-                     <androidx.appcompat.widget.AppCompatToggleButton
-                         android:id="@+id/tvFavourite"
-                         android:layout_width="@dimen/_20sdp"
-                         android:layout_height="@dimen/_20sdp"
-                         android:layout_alignParentRight="true"
-                         android:layout_margin="@dimen/_5sdp"
-                         android:background="@drawable/button_favorite"
-                         android:checked="false"
-                         android:text=""
-                         android:textOff=""
-                         android:textOn="" />
-
-                     <TextView
-                         android:id="@+id/tvDownload"
-                         android:layout_width="wrap_content"
-                         android:layout_height="wrap_content"
-                         android:layout_margin="@dimen/_5sdp"
-                         android:background="@drawable/ic_download" />
-
-
-                     <TextView
-                         android:id="@+id/tvShare"
-                         android:layout_width="wrap_content"
-                         android:layout_height="wrap_content"
-                         android:layout_alignParentRight="true"
-                         android:layout_margin="@dimen/_5sdp"
-                         android:background="@drawable/ic_share" />
-
-                 </LinearLayout>
-
-
-             </RelativeLayout>-->
 
             <LinearLayout
                 android:id="@+id/bottom_layout"
@@ -399,22 +342,22 @@
                         android:layout_width="@dimen/_20sdp"
                         android:layout_height="@dimen/_20sdp"
                         android:src="@drawable/ic_like"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent" />
-<!--
-                    <ToggleButton
-                        android:id="@+id/like"
-                        android:layout_width="@dimen/_20sdp"
-                        android:layout_height="@dimen/_20sdp"
-                        android:background="@drawable/button_like"
-                        android:checked="false"
-                        android:text=""
-                        android:textOff=""
-                        android:textOn=""
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />-->
+                        app:layout_constraintTop_toTopOf="parent" />
+                    <!--
+                                        <ToggleButton
+                                            android:id="@+id/like"
+                                            android:layout_width="@dimen/_20sdp"
+                                            android:layout_height="@dimen/_20sdp"
+                                            android:background="@drawable/button_like"
+                                            android:checked="false"
+                                            android:text=""
+                                            android:textOff=""
+                                            android:textOn=""
+                                            app:layout_constraintBottom_toBottomOf="parent"
+                                            app:layout_constraintLeft_toLeftOf="parent"
+                                            app:layout_constraintTop_toTopOf="parent" />-->
 
                     <TextView
                         android:id="@+id/like_value"
@@ -504,19 +447,19 @@
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-               <!-- <ToggleButton
-                    android:id="@+id/favorite"
-                    android:layout_width="@dimen/_20sdp"
-                    android:layout_height="@dimen/_20sdp"
-                    android:background="@drawable/button_favorite"
-                    android:checked="false"
-                    android:text=""
-                    android:textOff=""
-                    android:textOn=""
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
--->
+                <!-- <ToggleButton
+                     android:id="@+id/favorite"
+                     android:layout_width="@dimen/_20sdp"
+                     android:layout_height="@dimen/_20sdp"
+                     android:background="@drawable/button_favorite"
+                     android:checked="false"
+                     android:text=""
+                     android:textOff=""
+                     android:textOn=""
+                     app:layout_constraintBottom_toBottomOf="parent"
+                     app:layout_constraintLeft_toLeftOf="parent"
+                     app:layout_constraintTop_toTopOf="parent" />
+ -->
             </LinearLayout>
 
             <View

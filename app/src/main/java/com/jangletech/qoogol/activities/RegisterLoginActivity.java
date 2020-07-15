@@ -1,6 +1,5 @@
 package com.jangletech.qoogol.activities;
 
-import android.app.Dialog;
 import android.os.Bundle;
 import android.util.Log;
 

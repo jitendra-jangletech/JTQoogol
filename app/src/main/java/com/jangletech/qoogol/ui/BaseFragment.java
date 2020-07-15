@@ -32,6 +32,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.activities.LaunchActivity;
 import com.jangletech.qoogol.activities.MainActivity;
+import com.jangletech.qoogol.activities.RegisterLoginActivity;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 
@@ -152,7 +153,7 @@ public class BaseFragment extends Fragment {
             new PreferenceManager(getApplicationContext()).setIsLoggedIn(false);
             new PreferenceManager(getApplicationContext()).saveString(Constant.MOBILE, "");
             new PreferenceManager(getApplicationContext()).saveString(Constant.USER_ID, "");
-            Intent intent = new Intent(requireActivity(), LaunchActivity.class);
+            Intent intent = new Intent(requireActivity(), RegisterLoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
             Objects.requireNonNull(requireActivity()).finish();

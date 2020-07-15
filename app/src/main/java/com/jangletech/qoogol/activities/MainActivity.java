@@ -240,6 +240,7 @@ public class MainActivity extends BaseActivity {
                 }
                 if (navigateFlag.equals(Nav.SHARE_APP.toString())) {
                     //navToFragment(R.id.nav_share_app, Bundle.EMPTY);
+                    navigateFlag = "";
                     shareAction();
                 }
                 if (navigateFlag.equals(Nav.ABOUT.toString())) {

@@ -48,7 +48,7 @@
                         <TextView
                             android:id="@+id/tvNavHome"
                             style="@style/menu_item_style"
-                            android:drawableLeft="@drawable/ic_learning"
+                            android:drawableLeft="@drawable/nav_learning"
                             android:foreground="?attr/selectableItemBackground"
                             android:text="@string/menu_home"
                             android:visibility="gone" />
@@ -56,7 +56,7 @@
                         <TextView
                             android:id="@+id/tvNavLearning"
                             style="@style/menu_item_style"
-                            android:drawableLeft="@drawable/ic_learning"
+                            android:drawableLeft="@drawable/nav_learning"
                             android:foreground="?attr/selectableItemBackground"
                             android:text="@string/learning" />
 
@@ -73,7 +73,7 @@
                                 android:layout_centerInParent="true"
                                 android:layout_marginLeft="@dimen/_10sdp"
                                 android:layout_marginTop="@dimen/_10sdp"
-                                android:drawableLeft="@drawable/ic_test"
+                                android:drawableLeft="@drawable/nav_test"
                                 android:drawablePadding="@dimen/_10sdp"
                                 android:gravity="center_vertical"
                                 android:text="@string/test"
@@ -147,11 +147,10 @@
                             android:text="@string/practice_test"
                             android:visibility="gone" />
 
-
                         <TextView
                             android:id="@+id/nav_syllabus"
                             style="@style/menu_item_style"
-                            android:drawableLeft="@drawable/ic_learning"
+                            android:drawableLeft="@drawable/nav_learning"
                             android:foreground="?attr/selectableItemBackground"
                             android:text="@string/syllabus" />
 
@@ -165,21 +164,22 @@
                         <TextView
                             android:id="@+id/nav_fav"
                             style="@style/menu_item_style"
-                            android:drawableLeft="@drawable/ic_learning"
+                            android:drawableLeft="@drawable/nav_fav"
                             android:foreground="?attr/selectableItemBackground"
                             android:text="@string/menu_fav" />
 
                         <TextView
                             android:id="@+id/saved_questions"
                             style="@style/menu_item_style"
-                            android:drawableLeft="@drawable/ic_questions"
+                            android:drawableLeft="@drawable/nav_saved"
                             android:foreground="?attr/selectableItemBackground"
                             android:text="@string/saved_questions" />
 
                         <TextView
                             android:id="@+id/nav_requests"
                             style="@style/menu_item_style"
-                            android:drawableLeft="@drawable/ic_questions"
+                            android:drawableLeft="@drawable/nav_pending_req"
+                            android:foreground="?attr/selectableItemBackground"
                             android:text="@string/pending_req" />
 
                         <TextView
@@ -193,6 +193,7 @@
                             android:id="@+id/nav_import_contacts"
                             style="@style/menu_item_style"
                             android:drawableLeft="@drawable/ic_phone_contacts"
+                            android:foreground="?attr/selectableItemBackground"
                             android:text="@string/importContacts" />
 
 
@@ -206,7 +207,7 @@
                         <TextView
                             android:id="@+id/nav_settings"
                             style="@style/menu_item_style"
-                            android:drawableLeft="@drawable/ic_settings"
+                            android:drawableLeft="@drawable/settings_nav"
                             android:foreground="?attr/selectableItemBackground"
                             android:text="@string/settings" />
 
@@ -227,7 +228,7 @@
                         <TextView
                             android:id="@+id/nav_share_app"
                             style="@style/menu_item_style"
-                            android:drawableLeft="@drawable/ic_share"
+                            android:drawableLeft="@drawable/share_nav"
                             android:foreground="?attr/selectableItemBackground"
                             android:text="@string/share" />
 

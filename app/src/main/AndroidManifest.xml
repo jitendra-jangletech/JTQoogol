@@ -14,9 +14,9 @@
     <application
         android:name=".util.QoogolApp"
         android:allowBackup="true"
+        android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:hardwareAccelerated="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
@@ -109,7 +109,7 @@
             </intent-filter>
         </service>
 
-        <receiver
+        <!--<receiver
             android:name=".receiver.ConnectivityReceiver"
             android:enabled="true">
             <intent-filter>
@@ -118,13 +118,13 @@
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
-        </receiver>
+        </receiver>-->
 
-        <service
-            android:name=".service.NetworkSchedulerService"
-            android:exported="true"
-            android:permission="android.permission.BIND_JOB_SERVICE" />
-
+        <!--  <service
+              android:name=".service.NetworkSchedulerService"
+              android:exported="true"
+              android:permission="android.permission.BIND_JOB_SERVICE" />
+  -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -135,5 +135,4 @@
                 android:resource="@xml/file_paths" />
         </provider>
     </application>
-
 </manifest>
