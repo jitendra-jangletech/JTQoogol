@@ -229,7 +229,6 @@ public class PublicProfileDialog extends Dialog {
                             ExecutorService executor = Executors.newSingleThreadExecutor();
                             executor.execute(() -> mAppRepository.deleteFollowings(AppUtils.getUserId(), user));
                         }
-
                     } else {
                         Toast.makeText(activity, UtilHelper.getAPIError(String.valueOf(response.body())), Toast.LENGTH_SHORT).show();
                     }

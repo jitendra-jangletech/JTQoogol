@@ -191,8 +191,7 @@
                         android:layout_height="wrap_content"
                         android:padding="@dimen/_10sdp"
                         android:visibility="visible"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/mcq_img_layout">
+                        app:layout_constraintLeft_toLeftOf="parent">
 
                         <androidx.appcompat.widget.LinearLayoutCompat
                             android:id="@+id/mtp_linear1"
@@ -717,7 +716,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:padding="@dimen/_10sdp"
-                            android:src="@drawable/ic_share"
+                            android:src="@drawable/ic_share_nav"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintLeft_toLeftOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />

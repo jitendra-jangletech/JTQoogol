@@ -45,7 +45,6 @@ import com.jangletech.qoogol.databinding.PracticeMtpBinding;
 import com.jangletech.qoogol.databinding.PracticeMtpImageBinding;
 import com.jangletech.qoogol.databinding.PracticeScqBinding;
 import com.jangletech.qoogol.databinding.PracticeScqImageBinding;
-import com.jangletech.qoogol.databinding.PracticeTrueFalseBinding;
 import com.jangletech.qoogol.dialog.CommentDialog;
 import com.jangletech.qoogol.dialog.LikeListingDialog;
 import com.jangletech.qoogol.dialog.ProgressDialog;
@@ -97,7 +96,6 @@ public class PractiseViewPagerAdapter extends PagerAdapter
     private PracticeMtpImageBinding practiceMtpImageBinding;
     private PracticeMcqBinding practiceMcqBinding;
     private PracticeScqImageBinding practiceScqImageBinding;
-    private PracticeTrueFalseBinding trueFalseBinding;
     private StartResumeTestResponse startResumeTestResponse;
     private HashMap<String, String> paired = new HashMap<String, String>();
     private HashMap<String, String> imgpaired = new HashMap<String, String>();
@@ -119,7 +117,7 @@ public class PractiseViewPagerAdapter extends PagerAdapter
         this.startResumeTestResponse = startResumeTestResponse;
         this.flag = flag;
         gson = new Gson();
-        Log.d(TAG, "PractiseViewPagerAdapter Size : "+testQuestionNewList.size());
+        Log.d(TAG, "PractiseViewPagerAdapter Size : " + testQuestionNewList.size());
     }
 
     @Override
@@ -555,34 +553,6 @@ public class PractiseViewPagerAdapter extends PagerAdapter
                     testQuestionNew.setAnsweredRight(false);
                 }
                 submitAnswerToServer(testQuestionNew, strAnswer, Constant.FILL_THE_BLANKS);
-            }
-        });
-    }
-
-    private void initTrueFalse(ViewGroup layout, TestQuestionNew testQuestionNew) {
-        final boolean[] isTrueSelected = {false};
-        final boolean[] isFalseSelected = {false};
-        LinearLayout trueFalseLayout = layout.findViewById(R.id.trueFalseLayout);
-        ConstraintLayout solutionLayout = layout.findViewById(R.id.solution_layout);
-
-        TextView tvTrue = layout.findViewById(R.id.btntrue);
-        TextView tvFalse = layout.findViewById(R.id.btnfalse);
-
-        Button btnSubmit = layout.findViewById(R.id.submit);
-
-        tvTrue.setOnClickListener(v -> {
-            isTrueSelected[0] = true;
-        });
-
-        tvFalse.setOnClickListener(v -> {
-            isFalseSelected[0] = true;
-        });
-
-        btnSubmit.setOnClickListener(v -> {
-            if (isTrueSelected[0] || isFalseSelected[0]) {
-                tvTrue.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_right, 0, 0, 0);
-            } else {
-                showToast("Please select answer.");
             }
         });
     }
@@ -1895,27 +1865,6 @@ public class PractiseViewPagerAdapter extends PagerAdapter
         dialog.show();
     }
 
-    public void setRightTF(String option) {
-        switch (option) {
-            case "true":
-                trueFalseBinding.btntrue.setBackground(context.getResources().getDrawable(R.drawable.bg_green_round));
-                break;
-            case "false":
-                trueFalseBinding.btnfalse.setBackground(context.getResources().getDrawable(R.drawable.bg_green_round));
-                break;
-        }
-    }
-
-    public void setWrongTF(String option) {
-        switch (option) {
-            case "true":
-                trueFalseBinding.btntrue.setBackground(context.getResources().getDrawable(R.drawable.bg_red_round));
-                break;
-            case "false":
-                trueFalseBinding.btnfalse.setBackground(context.getResources().getDrawable(R.drawable.bg_red_round));
-                break;
-        }
-    }
 
     @SuppressLint("NewApi")
     private class ImgChoiceDragListener implements View.OnDragListener {

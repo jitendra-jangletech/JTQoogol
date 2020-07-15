@@ -592,8 +592,7 @@
                         android:layout_height="match_parent"
                         android:padding="10dp"
                         android:visibility="visible"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/multi_choice">
+                        app:layout_constraintLeft_toLeftOf="parent">
 
                         <LinearLayout
                             android:id="@+id/a"
@@ -1132,7 +1131,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:padding="@dimen/_10sdp"
-                            android:src="@drawable/ic_share"
+                            android:src="@drawable/ic_share_nav"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintLeft_toLeftOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />

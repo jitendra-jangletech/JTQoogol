@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "172004971805",
+    "firebase_url": "https://qoogolnew-a58fb.firebaseio.com",
+    "project_id": "qoogolnew-a58fb",
+    "storage_bucket": "qoogolnew-a58fb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:172004971805:android:9a1713181fbc5b5e4dfdf4",
+        "android_client_info": {
+          "package_name": "com.jangletech.qoogol"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "172004971805-73tvg9r4mnuu7scbm7og53a55mkqfd7d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDW-HfjDfTQ0Rmf1AcHEYGQWXNd1_t3mgg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "172004971805-73tvg9r4mnuu7scbm7og53a55mkqfd7d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
