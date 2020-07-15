@@ -227,14 +227,13 @@ public class PublicProfileDialog extends Dialog {
                     ProgressDialog.getInstance().dismiss();
                     if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
                         fetchUserProfile();
-                        if (Processcase.equalsIgnoreCase(reject_friend_requests) || Processcase.equalsIgnoreCase(accept_friend_requests)) {
+                        if (Processcase.equalsIgnoreCase(reject_friend_requests) || Processcase.equalsIgnoreCase(accept_friend_requests) || Processcase.equalsIgnoreCase(remove_connection)) {
                             ExecutorService executor = Executors.newSingleThreadExecutor();
                             executor.execute(() -> mAppRepository.deleteFriendReq(AppUtils.getUserId(), user));
                         } else if (Processcase.equalsIgnoreCase(unfollow)) {
                             ExecutorService executor = Executors.newSingleThreadExecutor();
                             executor.execute(() -> mAppRepository.deleteFollowings(AppUtils.getUserId(), user));
                         }
-
                     } else {
                         Toast.makeText(activity, UtilHelper.getAPIError(String.valueOf(response.body())), Toast.LENGTH_SHORT).show();
                     }

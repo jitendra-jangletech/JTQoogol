@@ -8,6 +8,7 @@
         android:layout_height="match_parent"
         tools:context=".ui.learning.ShareFragment">
         <TextView
+            android:visibility="gone"
             android:id="@+id/emptyview"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"

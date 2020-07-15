@@ -1,6 +1,7 @@
 package com.jangletech.qoogol.ui.connections;
 
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.FollowReqAdapter;
@@ -58,6 +60,7 @@ public class FollowRequestFragment extends BaseFragment implements FollowReqAdap
     }
 
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -65,8 +68,12 @@ public class FollowRequestFragment extends BaseFragment implements FollowReqAdap
         init();
         fetchFollowReq();
         mViewModel.getFollowReqdList().observe(getViewLifecycleOwner(), followRequestList -> {
-            if (followRequestList != null) {
+            if (followRequestList != null && followRequestList.size()>0) {
                 initView(followRequestList);
+                mBinding.emptyview.setVisibility(View.GONE);
+            } else {
+                mBinding.emptyview.setText("You don not have any pending requests.");
+                mBinding.emptyview.setVisibility(View.VISIBLE);
             }
             dismissRefresh(mBinding.requestsSwiperefresh);
         });
@@ -103,7 +110,11 @@ public class FollowRequestFragment extends BaseFragment implements FollowReqAdap
             isVisible = true;
             mViewModel.fetchFollowReqData(false);
         }
-        mBinding.requestsSwiperefresh.setOnRefreshListener(() -> mViewModel.fetchFollowReqData(true));
+        mBinding.requestsSwiperefresh.setOnRefreshListener(() -> {
+            mViewModel.fetchFollowReqData(true);
+            dismissRefresh(mBinding.requestsSwiperefresh);
+
+        });
     }
 
     public void checkRefresh() {
