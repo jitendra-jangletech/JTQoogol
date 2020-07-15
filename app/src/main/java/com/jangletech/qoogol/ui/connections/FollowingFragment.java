@@ -99,6 +99,7 @@ public class FollowingFragment extends BaseFragment implements FollowingsAdapter
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
             mBinding.connectionRecycler.setLayoutManager(linearLayoutManager);
             mBinding.connectionRecycler.setAdapter(mAdapter);
+            mBinding.emptyview.setVisibility(View.GONE);
         } else {
             mBinding.emptyview.setText("No Connections Found.");
             mBinding.emptyview.setVisibility(View.VISIBLE);

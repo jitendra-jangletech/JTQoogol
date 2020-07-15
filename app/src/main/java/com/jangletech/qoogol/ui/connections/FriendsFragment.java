@@ -95,6 +95,7 @@ public class FriendsFragment extends BaseFragment implements FriendsAdapter.upda
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
             mBinding.connectionRecycler.setLayoutManager(linearLayoutManager);
             mBinding.connectionRecycler.setAdapter(mAdapter);
+            mBinding.emptyview.setVisibility(View.GONE);
         } else {
             mBinding.emptyview.setText("No Friends Added.");
             mBinding.emptyview.setVisibility(View.VISIBLE);
