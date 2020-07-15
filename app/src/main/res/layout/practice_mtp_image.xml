@@ -160,14 +160,14 @@
                         app:layout_constraintTop_toTopOf="@id/tvtimer" />
 
                     <ImageView
-                        android:visibility="gone"
-                        android:padding="@dimen/_10sdp"
-                        android:foreground="?attr/selectableItemBackground"
                         android:id="@+id/save_que"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="@dimen/_5sdp"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:padding="@dimen/_10sdp"
                         android:src="@drawable/ic_save_grey"
+                        android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="@id/timer"
                         app:layout_constraintRight_toLeftOf="@+id/timer"
                         app:layout_constraintTop_toTopOf="@id/timer" />
@@ -716,7 +716,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:padding="@dimen/_10sdp"
-                            android:src="@drawable/ic_share_nav"
+                            android:src="@drawable/ic_share"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintLeft_toLeftOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -775,7 +775,6 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.core.widget.NestedScrollView>
-
 
     </com.google.android.material.card.MaterialCardView>
 

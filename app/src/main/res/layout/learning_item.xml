@@ -427,7 +427,6 @@
                             app:layout_constraintRight_toRightOf="@+id/scq2_layout"
                             app:layout_constraintTop_toTopOf="@+id/scq2_layout" />
 
-
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:id="@+id/scq3_layout"
                             android:layout_width="match_parent"
@@ -2284,7 +2283,7 @@
                             android:id="@+id/share"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/ic_share_nav"
+                            android:src="@drawable/ic_share"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintLeft_toLeftOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
