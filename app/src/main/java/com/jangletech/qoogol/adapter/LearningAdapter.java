@@ -805,9 +805,7 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
                 learningItemBinding.scq4Layout.setBackground(activity.getResources().getDrawable(R.drawable.grey_border_grey_bg));
             });
 
-            learningItemBinding.btntrue.setOnClickListener(v ->
-
-            {
+            learningItemBinding.btntrue.setOnClickListener(v ->            {
                 setTFLayoutBg();
                 tfAns = "true";
                 learningItemBinding.btnfalse.setTextColor(activity.getResources().getColor(R.color.black));
@@ -816,7 +814,6 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
             });
 
             learningItemBinding.btnfalse.setOnClickListener(v ->
-
             {
                 setTFLayoutBg();
                 tfAns = "false";
@@ -1174,11 +1171,9 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
                         isAttempted = 1;
                         if (tfAns.equalsIgnoreCase(learningQuestions.getAnswer())) {
                             setRightTF("true");
-                            learningItemBinding.btntrue.setTextColor(activity.getResources().getColor(R.color.white));
                         } else {
                             isSolvedRight = 0;
                             setWrongTF(tfAns);
-                            learningItemBinding.btnfalse.setTextColor(activity.getResources().getColor(R.color.white));
                         }
                         learningItemBinding.solutionLayout.setVisibility(View.VISIBLE);
                     } else {
@@ -1625,9 +1620,11 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
         public void setRightTF(String option) {
             switch (option) {
                 case "true":
+                    learningItemBinding.btntrue.setTextColor(activity.getResources().getColor(R.color.white));
                     learningItemBinding.btntrue.setBackground(activity.getResources().getDrawable(R.drawable.bg_green_round));
                     break;
                 case "false":
+                    learningItemBinding.btnfalse.setTextColor(activity.getResources().getColor(R.color.white));
                     learningItemBinding.btnfalse.setBackground(activity.getResources().getDrawable(R.drawable.bg_green_round));
                     break;
             }
@@ -1636,9 +1633,11 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
         public void setWrongTF(String option) {
             switch (option) {
                 case "true":
+                    learningItemBinding.btntrue.setTextColor(activity.getResources().getColor(R.color.white));
                     learningItemBinding.btntrue.setBackground(activity.getResources().getDrawable(R.drawable.bg_red_round));
                     break;
                 case "false":
+                    learningItemBinding.btnfalse.setTextColor(activity.getResources().getColor(R.color.white));
                     learningItemBinding.btnfalse.setBackground(activity.getResources().getDrawable(R.drawable.bg_red_round));
                     break;
             }
