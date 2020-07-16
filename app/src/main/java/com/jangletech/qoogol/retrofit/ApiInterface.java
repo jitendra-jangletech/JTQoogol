@@ -328,6 +328,10 @@ public interface ApiInterface {
     @POST(Constant.FETCH_QA)
     Call<LearningQuestResponse> fetchQAApi(@Field(Constant.u_user_id) String userid, @Field(Constant.q_id) String question);
 
+    @FormUrlEncoded
+    @POST(Constant.FETCH_QA)
+    Call<LearningQuestResponse> fetchQAApi(@Field(Constant.u_user_id) String userid, @Field(Constant.q_id) String question, @Field(Constant.CASE) String CASE);
+
 
     @FormUrlEncoded
     @POST(Constant.FETCH_QA)

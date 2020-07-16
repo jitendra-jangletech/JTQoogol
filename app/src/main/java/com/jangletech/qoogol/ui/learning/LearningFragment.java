@@ -113,8 +113,9 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
                     ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Saved Questions");
                 } else {
                     ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Learning");
+                    mViewModel.fetchQuestionData("");
                 }
-                mViewModel.fetchQuestionData("");
+
             }
         }
 

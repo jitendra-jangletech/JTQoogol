@@ -1,6 +1,8 @@
 package com.jangletech.qoogol.ui.usercontacts;
 
 import android.Manifest;
+import android.app.Dialog;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -12,7 +14,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -48,6 +52,7 @@ import com.karumi.dexter.listener.single.PermissionListener;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import retrofit2.Call;
@@ -89,6 +94,7 @@ public class ContactListFragment extends BaseFragment implements ContactListAdap
     ApiInterface apiService = ApiClient.getInstance().getApi();
     LinearLayoutManager filterlinear;
     String letter = "";
+    private boolean isContactFetched = false;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -105,7 +111,19 @@ public class ContactListFragment extends BaseFragment implements ContactListAdap
 
         mSettings = new PreferenceManager(activity);
 
-        enableRuntimePermission();
+        if (checkWriteExternalPermission()) {
+            if (!isContactFetched) {
+                getContactList();
+            } else {
+                isContactFetched=true;
+                if (letter.equalsIgnoreCase(""))
+                    CallFetchAllContactsAPI();
+                else
+                    callFetchAPI(letter);
+            }
+        } else {
+            askUserPermission();
+        }
         updateUI();
         setHasOptionsMenu(true);
         return mBinding.getRoot();
@@ -256,10 +274,19 @@ public class ContactListFragment extends BaseFragment implements ContactListAdap
 
     private void updateUI() {
         mBinding.swipeToRefresh.setOnRefreshListener(() -> {
-            if (letter.equalsIgnoreCase(""))
-                CallFetchAllContactsAPI();
-            else
-                callFetchAPI(letter);
+            if (checkWriteExternalPermission()) {
+                if (!isContactFetched) {
+                    getContactList();
+                } else {
+                    isContactFetched=true;
+                    if (letter.equalsIgnoreCase(""))
+                        CallFetchAllContactsAPI();
+                    else
+                        callFetchAPI(letter);
+                }
+            } else {
+                askUserPermission();
+            }
         });
 
         mBinding.selectCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -302,6 +329,37 @@ public class ContactListFragment extends BaseFragment implements ContactListAdap
     }
 
 
+
+    private boolean checkWriteExternalPermission() {
+        String permission = android.Manifest.permission.READ_CONTACTS;
+        int res = requireContext().checkCallingOrSelfPermission(permission);
+        return (res == PackageManager.PERMISSION_GRANTED);
+    }
+    private void askUserPermission() {
+        final Dialog dialog = new Dialog(requireActivity());
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.alert_layout);
+        TextView btnCancel = dialog.findViewById(R.id.btnCancel);
+        TextView tvDesc = dialog.findViewById(R.id.txt_dia);
+        tvDesc.setText(requireContext().getResources().getString(R.string.import_permission_desc));
+        btnCancel.setText(getString(R.string.cancel));
+        btnCancel.setVisibility(View.GONE);
+        btnCancel.setOnClickListener(view -> dialog.dismiss());
+        TextView btnExit = dialog.findViewById(R.id.btnExit);
+        btnExit.setText(getString(R.string.ok));
+        btnExit.setOnClickListener(view -> {
+            enableRuntimePermission();
+            dialog.dismiss();
+        });
+        if (!dialog.isShowing() && isAdded()) {
+            dialog.show();
+        }
+    }
+
+
+
         private void enableRuntimePermission() {
             Dexter.withActivity(activity)
                     .withPermission(Manifest.permission.READ_CONTACTS)
@@ -309,7 +367,16 @@ public class ContactListFragment extends BaseFragment implements ContactListAdap
                         @Override
                         public void onPermissionGranted(PermissionGrantedResponse response) {
                             mBinding.swipeToRefresh.setRefreshing(true);
-                            getContactList();
+                            if (!isContactFetched) {
+                                getContactList();
+                            } else {
+                                isContactFetched=true;
+                                if (letter.equalsIgnoreCase(""))
+                                    CallFetchAllContactsAPI();
+                                else
+                                    callFetchAPI(letter);
+                            }
+
                         }
 
                         @Override
@@ -546,9 +613,19 @@ public class ContactListFragment extends BaseFragment implements ContactListAdap
 
     @Override
     public void onFilterClick(String letter, int position) {
-        if (position==0)
-            CallFetchAllContactsAPI();
-        else
-            callFetchAPI(letter);
+        if (checkWriteExternalPermission()) {
+            if (!isContactFetched) {
+                getContactList();
+            } else {
+                isContactFetched=true;
+                if (position==0)
+                    CallFetchAllContactsAPI();
+                else
+                    callFetchAPI(letter);
+            }
+        } else {
+            askUserPermission();
+        }
+
     }
 }

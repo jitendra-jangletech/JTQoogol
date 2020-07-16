@@ -694,6 +694,8 @@ public class Constant {
     public static final String SHARED_BY_YOU = "SHARED_BY_YOU";
     public static final String MY_TEST = "MY_TEST";
     public static final String FAV = "FAV";
+    public static final String SHARED_BY_ME = "SV";
+    public static final String SHARED_WITH_ME = "SV";
 
 
 //    //Start Resume missing Parameter

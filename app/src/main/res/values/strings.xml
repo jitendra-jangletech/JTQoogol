@@ -12,7 +12,6 @@
     //Learning Menu
     <string name="menu_course">Course</string>
     <string name="menu_exam">Exam</string>
-
     <string name="menu_test_attempt">Test Attempt History</string>
 
     //Learning Filter Menu
@@ -105,6 +104,7 @@
     <string name="verify_text"><u>Verify</u></string>
     <string name="verified_text">Verified</string>
     <string name="learning">Learning</string>
+    <string name="practice_questions">Practice Questions</string>
     <string name="exam">Exam</string>
     <string name="test">Test</string>
     <string name="practice_test">Practice Test</string>
@@ -234,6 +234,8 @@
     <string name="confirm_new_password">Confirm New Password</string>
     <string name="old_password">Current Password</string>
     <string name="select_country">Please select country.</string>
+    <string name="import_permission_desc">Provide permission to send and store your phone contacts data to our Microsoft Azure servers to enable you to send SMS invites and add them as friends in future. This data will be visible only to you and will never be shared with anyone. It will be deleted when you deactivate the account.</string>
+
 
     <!-- TODO: Remove or change this placeholder text -->
 

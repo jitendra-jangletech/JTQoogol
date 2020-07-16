@@ -428,9 +428,7 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
                 onIconClick.onShareClick(learningQuestions.getQuestion_id());
             });
 
-            learningItemBinding.favorite.setOnClickListener(v ->
-
-            {
+            learningItemBinding.favorite.setOnClickListener(v ->    {
                 LearningQuestionsNew learningQuestions = learningQuestionsList.get(getAdapterPosition());
                 if (learningQuestions.getIs_fav().equalsIgnoreCase("true")) {
                     ProcessQuestionAPI(learningQuestions.getQuestion_id(), 0, "fav", "", "", getAdapterPosition(), "");
@@ -456,14 +454,10 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
                     reset());
 
             learningItemBinding.commentLayout.setOnClickListener(v -> onIconClick.onCommentClick(learningQuestionsList.get(
-
                     getAdapterPosition()).
-
                     getQuestion_id()));
 
-            learningItemBinding.mcqImgtextImg1.setOnClickListener(v ->
-
-            {
+            learningItemBinding.mcqImgtextImg1.setOnClickListener(v ->  {
                 if (isMCQImgSubmited)
                     setMCQImgTextAnsIndicator();
                 if (!mcqimgtext_ans.contains("A")) {
@@ -811,9 +805,7 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
                 learningItemBinding.scq4Layout.setBackground(activity.getResources().getDrawable(R.drawable.grey_border_grey_bg));
             });
 
-            learningItemBinding.btntrue.setOnClickListener(v ->
-
-            {
+            learningItemBinding.btntrue.setOnClickListener(v ->            {
                 setTFLayoutBg();
                 tfAns = "true";
                 learningItemBinding.btnfalse.setTextColor(activity.getResources().getColor(R.color.black));
@@ -822,7 +814,6 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
             });
 
             learningItemBinding.btnfalse.setOnClickListener(v ->
-
             {
                 setTFLayoutBg();
                 tfAns = "false";
@@ -1180,11 +1171,9 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
                         isAttempted = 1;
                         if (tfAns.equalsIgnoreCase(learningQuestions.getAnswer())) {
                             setRightTF("true");
-                            learningItemBinding.btntrue.setTextColor(activity.getResources().getColor(R.color.white));
                         } else {
                             isSolvedRight = 0;
                             setWrongTF(tfAns);
-                            learningItemBinding.btnfalse.setTextColor(activity.getResources().getColor(R.color.white));
                         }
                         learningItemBinding.solutionLayout.setVisibility(View.VISIBLE);
                     } else {
@@ -1631,9 +1620,11 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
         public void setRightTF(String option) {
             switch (option) {
                 case "true":
+                    learningItemBinding.btntrue.setTextColor(activity.getResources().getColor(R.color.white));
                     learningItemBinding.btntrue.setBackground(activity.getResources().getDrawable(R.drawable.bg_green_round));
                     break;
                 case "false":
+                    learningItemBinding.btnfalse.setTextColor(activity.getResources().getColor(R.color.white));
                     learningItemBinding.btnfalse.setBackground(activity.getResources().getDrawable(R.drawable.bg_green_round));
                     break;
             }
@@ -1642,9 +1633,11 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
         public void setWrongTF(String option) {
             switch (option) {
                 case "true":
+                    learningItemBinding.btntrue.setTextColor(activity.getResources().getColor(R.color.white));
                     learningItemBinding.btntrue.setBackground(activity.getResources().getDrawable(R.drawable.bg_red_round));
                     break;
                 case "false":
+                    learningItemBinding.btnfalse.setTextColor(activity.getResources().getColor(R.color.white));
                     learningItemBinding.btnfalse.setBackground(activity.getResources().getDrawable(R.drawable.bg_red_round));
                     break;
             }
@@ -2291,7 +2284,6 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
                     try {
                         if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
                             LearningQuestionsNew learningQuestionsNew = learningQuestionsList.get(position);
-                            learningQuestionsNew.setRating(response.body().getRatings() != null ? UtilHelper.roundAvoid(response.body().getRatings()) : "0");
                             learningQuestionsNew.setLikes(response.body().getLikeCount());
                             learningQuestionsNew.setComments(response.body().getQ_comments());
                             learningQuestionsNew.setShares(response.body().getQ_shares());
@@ -2301,8 +2293,12 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
                             learningItemBinding.shareValue.setText(response.body().getQ_shares());
                             learningItemBinding.attemptedValue.setText(response.body().getAttmpted_count() != null ? response.body().getAttmpted_count() : "0");
                             learningItemBinding.likeValue.setText(response.body().getLikeCount());
-                            learningItemBinding.ratingvalue.setText(response.body().getRatings() != null ? UtilHelper.roundAvoid(response.body().getRatings()) : "0");
 
+                            if (call_from.equalsIgnoreCase("rating")) {
+                                learningQuestionsNew.setRating(rating);
+                                learningQuestionsNew.setFeedback(feedback);
+                                learningItemBinding.ratingvalue.setText(response.body().getRatings() != null ? UtilHelper.roundAvoid(rating) : "0");
+                            }
                             if (call_from.equalsIgnoreCase("like")) {
                                 if (flag == 0) {
                                     Glide.with(activity).load(activity.getResources().getDrawable(R.drawable.ic_like)).into(learningItemBinding.like);

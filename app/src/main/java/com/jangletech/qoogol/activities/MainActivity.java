@@ -119,53 +119,50 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                navigateFlag = "";
-                if (item.getItemId() == R.id.nav_home) {
-                    if (navController.getCurrentDestination() != null &&
-                            navController.getCurrentDestination().getId() != R.id.nav_home) {
-                        //navigateFlag = Nav.HOME.toString();
-                        if (navController.popBackStack(R.id.nav_home, false)) {
-                        } else {
-                            navController.navigate(R.id.nav_home);
-                        }
+        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+            navigateFlag = "";
+            if (item.getItemId() == R.id.nav_home) {
+                if (navController.getCurrentDestination() != null &&
+                        navController.getCurrentDestination().getId() != R.id.nav_home) {
+                    //navigateFlag = Nav.HOME.toString();
+                    if (navController.popBackStack(R.id.nav_home, false)) {
+                    } else {
+                        navController.navigate(R.id.nav_home);
                     }
                 }
-                if (item.getItemId() == R.id.nav_learning) {
-                    //navigateFlag = Nav.LEARNING.toString();
-                    if (navController.getCurrentDestination().getId() != R.id.nav_learning) {
-                        Bundle bundle = new Bundle();
-                        bundle.putString("call_from", "learning");
-                        navToFragment(R.id.nav_learning, bundle);
-                    }
-                }
-                if (item.getItemId() == R.id.nav_test_my) {
-                    //navigateFlag = Nav.MY_TEST.toString();
-                    //saveTestType(Nav.MY_TEST.toString());
-                    if (navController.getCurrentDestination() != null &&
-                            navController.getCurrentDestination().getId() != R.id.nav_test_my) {
-                        clearFilters();
-                        navController.navigate(R.id.nav_test_my);
-                    }
-                }
-                if (item.getItemId() == R.id.nav_doubts) {
-                    //navigateFlag = Nav.ASK_DOUBTS.toString();
-                    if (navController.getCurrentDestination() != null &&
-                            navController.getCurrentDestination().getId() != R.id.nav_doubts) {
-                        navController.navigate(R.id.nav_doubts);
-                    }
-                }
-                if (item.getItemId() == R.id.nav_notifications) {
-                    //navigateFlag = Nav.NOTIFICATIONS.toString();
-                    if (navController.getCurrentDestination() != null &&
-                            navController.getCurrentDestination().getId() != R.id.nav_notifications) {
-                        navController.navigate(R.id.nav_notifications);
-                    }
-                }
-                return true;
             }
+            if (item.getItemId() == R.id.nav_learning) {
+                //navigateFlag = Nav.LEARNING.toString();
+                if (navController.getCurrentDestination().getId() != R.id.nav_learning) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("call_from", "learning");
+                    navToFragment(R.id.nav_learning, bundle);
+                }
+            }
+            if (item.getItemId() == R.id.nav_test_my) {
+                //navigateFlag = Nav.MY_TEST.toString();
+                //saveTestType(Nav.MY_TEST.toString());
+                if (navController.getCurrentDestination() != null &&
+                        navController.getCurrentDestination().getId() != R.id.nav_test_my) {
+                    clearFilters();
+                    navController.navigate(R.id.nav_test_my);
+                }
+            }
+            if (item.getItemId() == R.id.nav_doubts) {
+                //navigateFlag = Nav.ASK_DOUBTS.toString();
+                if (navController.getCurrentDestination() != null &&
+                        navController.getCurrentDestination().getId() != R.id.nav_doubts) {
+                    navController.navigate(R.id.nav_doubts);
+                }
+            }
+            if (item.getItemId() == R.id.nav_notifications) {
+                //navigateFlag = Nav.NOTIFICATIONS.toString();
+                if (navController.getCurrentDestination() != null &&
+                        navController.getCurrentDestination().getId() != R.id.nav_notifications) {
+                    navController.navigate(R.id.nav_notifications);
+                }
+            }
+            return true;
         });
 
 
