@@ -10,10 +10,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -54,7 +52,6 @@ import retrofit2.Response;
 import static com.jangletech.qoogol.ui.BaseFragment.getUserId;
 import static com.jangletech.qoogol.ui.BaseFragment.getUserName;
 import static com.jangletech.qoogol.util.Constant.CALL_FROM;
-import static com.jangletech.qoogol.util.Constant.fetch_loged_in_user;
 import static com.jangletech.qoogol.util.Constant.profile;
 
 public class MainActivity extends BaseActivity {

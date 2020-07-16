@@ -72,10 +72,7 @@ public class SettingsFragment extends BaseFragment implements UniversalDialog.Di
                 bundle.putString(Constant.u_user_id, getUserId());
                 bundle.putString("SCREEN","SETTINGS");
                 LaunchIntent.putExtras(bundle);
-
-                //LaunchIntent.putExtra(Constant.device_id, getDeviceId());
-                //LaunchIntent.putExtra(Constant.u_user_id, getUserId());
-                //LaunchIntent.putExtra("SCREEN", "SETTINGS");
+                LaunchIntent.putExtra(Intent.ACTION_VIEW,bundle);
                 startActivity(LaunchIntent);
             } else {
                 Log.i(TAG, "Application is not currently installed.");

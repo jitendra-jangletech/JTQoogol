@@ -199,7 +199,7 @@
 
     <fragment
         android:id="@+id/saved_questions"
-        android:name="com.jangletech.qoogol.ui.Saved.SavedQueFragment"
+        android:name="com.jangletech.qoogol.ui.saved.SavedQueFragment"
         android:label="@string/saved_questions"
         tools:layout="@layout/saved_fragment" />
 
