@@ -109,7 +109,7 @@ public class ShareFragment extends BaseFragment implements ShareAdapter.OnItemCl
         Bundle bundle = getArguments();
         if (bundle != null) {
             if (bundle.getInt("call_from") == learning) {
-                question_id = bundle.getString("QuestionId");
+                question_id = String.valueOf(bundle.getInt("QuestionId"));
             } else {
                 call_from = test;
                 testId = bundle.getString("testId");

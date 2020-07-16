@@ -2284,7 +2284,6 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
                     try {
                         if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
                             LearningQuestionsNew learningQuestionsNew = learningQuestionsList.get(position);
-                            learningQuestionsNew.setRating(response.body().getRatings() != null ? UtilHelper.roundAvoid(response.body().getRatings()) : "0");
                             learningQuestionsNew.setLikes(response.body().getLikeCount());
                             learningQuestionsNew.setComments(response.body().getQ_comments());
                             learningQuestionsNew.setShares(response.body().getQ_shares());
@@ -2294,8 +2293,12 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
                             learningItemBinding.shareValue.setText(response.body().getQ_shares());
                             learningItemBinding.attemptedValue.setText(response.body().getAttmpted_count() != null ? response.body().getAttmpted_count() : "0");
                             learningItemBinding.likeValue.setText(response.body().getLikeCount());
-                            learningItemBinding.ratingvalue.setText(response.body().getRatings() != null ? UtilHelper.roundAvoid(response.body().getRatings()) : "0");
 
+                            if (call_from.equalsIgnoreCase("rating")) {
+                                learningQuestionsNew.setRating(rating);
+                                learningQuestionsNew.setFeedback(feedback);
+                                learningItemBinding.ratingvalue.setText(response.body().getRatings() != null ? UtilHelper.roundAvoid(rating) : "0");
+                            }
                             if (call_from.equalsIgnoreCase("like")) {
                                 if (flag == 0) {
                                     Glide.with(activity).load(activity.getResources().getDrawable(R.drawable.ic_like)).into(learningItemBinding.like);

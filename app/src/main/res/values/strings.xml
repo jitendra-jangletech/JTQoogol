@@ -104,6 +104,7 @@
     <string name="verify_text"><u>Verify</u></string>
     <string name="verified_text">Verified</string>
     <string name="learning">Learning</string>
+    <string name="practice_questions">Practice Questions</string>
     <string name="exam">Exam</string>
     <string name="test">Test</string>
     <string name="practice_test">Practice Test</string>

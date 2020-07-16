@@ -35,6 +35,7 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 public class LearningViewModel extends AndroidViewModel {
     ApiInterface apiService;
     public final AppRepository mAppRepository;
+    Call<LearningQuestResponse> call;
 
     public LearningViewModel(Application application) {
         super(application);
@@ -42,18 +43,23 @@ public class LearningViewModel extends AndroidViewModel {
         mAppRepository = new AppRepository(application);
     }
 
-
-
     LiveData<List<LearningQuestionsNew>> getQuestionList() {
         return mAppRepository.getQuestionsFromDb();
     }
 
     void fetchQuestionData(String q_id) {
-        getDataFromApi(q_id);
+        getDataFromApi(q_id,"");
     }
 
-    private void getDataFromApi(String q_id) {
-        Call<LearningQuestResponse> call = apiService.fetchQAApi(new PreferenceManager(getApplicationContext()).getUserId(),q_id);
+    void fetchQuestionData(String q_id, String CASE) {
+        getDataFromApi(q_id,CASE);
+    }
+
+    private void getDataFromApi(String q_id,String CASE) {
+        if (CASE.equalsIgnoreCase(""))
+             call = apiService.fetchQAApi(new PreferenceManager(getApplicationContext()).getUserId(),q_id);
+        else
+            call = apiService.fetchQAApi(new PreferenceManager(getApplicationContext()).getUserId(),q_id, CASE);
         call.enqueue(new Callback<LearningQuestResponse>() {
             @Override
             public void onResponse(Call<LearningQuestResponse> call, retrofit2.Response<LearningQuestResponse> response) {
