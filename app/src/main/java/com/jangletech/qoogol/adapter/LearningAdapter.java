@@ -428,9 +428,7 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
                 onIconClick.onShareClick(learningQuestions.getQuestion_id());
             });
 
-            learningItemBinding.favorite.setOnClickListener(v ->
-
-            {
+            learningItemBinding.favorite.setOnClickListener(v ->    {
                 LearningQuestionsNew learningQuestions = learningQuestionsList.get(getAdapterPosition());
                 if (learningQuestions.getIs_fav().equalsIgnoreCase("true")) {
                     ProcessQuestionAPI(learningQuestions.getQuestion_id(), 0, "fav", "", "", getAdapterPosition(), "");
@@ -456,14 +454,10 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
                     reset());
 
             learningItemBinding.commentLayout.setOnClickListener(v -> onIconClick.onCommentClick(learningQuestionsList.get(
-
                     getAdapterPosition()).
-
                     getQuestion_id()));
 
-            learningItemBinding.mcqImgtextImg1.setOnClickListener(v ->
-
-            {
+            learningItemBinding.mcqImgtextImg1.setOnClickListener(v ->  {
                 if (isMCQImgSubmited)
                     setMCQImgTextAnsIndicator();
                 if (!mcqimgtext_ans.contains("A")) {
