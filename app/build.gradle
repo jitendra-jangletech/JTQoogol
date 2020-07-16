@@ -17,16 +17,17 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled true
-            shrinkResources true
+            minifyEnabled false
+            shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
 
-        debug {
-            minifyEnabled false
+       /* debug {
+            minifyEnabled true
             shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-
+*/
         shrunk {
             minifyEnabled true
             shrinkResources true
@@ -69,7 +70,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-crashlytics:17.1.1'
 
     //time ago library
-    //implementation 'joda-time:joda-time:2.9.4'
+    implementation 'joda-time:joda-time:2.9.4'
 
     //ViewPager 2
     implementation "androidx.viewpager2:viewpager2:1.0.0"

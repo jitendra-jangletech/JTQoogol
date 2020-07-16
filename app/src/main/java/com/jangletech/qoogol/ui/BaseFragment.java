@@ -268,6 +268,10 @@ public class BaseFragment extends Fragment {
         return String.valueOf(new PreferenceManager(getApplicationContext()).getInt(Constant.USER_ID));
     }
 
+    public static String getUserName() {
+        return String.valueOf(new PreferenceManager(getApplicationContext()).getString(Constant.userName));
+    }
+
     public void dismissRefresh(SwipeRefreshLayout swipeRefreshLayout) {
         if (swipeRefreshLayout != null && swipeRefreshLayout.isRefreshing()) {
             swipeRefreshLayout.setRefreshing(false);

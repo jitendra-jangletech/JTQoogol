@@ -22,11 +22,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.FriendReqAdapter;
 import com.jangletech.qoogol.databinding.FragmentFriendRequestBinding;
+import com.jangletech.qoogol.dialog.PublicProfileDialog;
 import com.jangletech.qoogol.model.FriendRequest;
 import com.jangletech.qoogol.model.FriendRequestResponse;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
+import com.jangletech.qoogol.util.Constant;
 
 import java.util.List;
 
@@ -39,7 +41,7 @@ import static com.jangletech.qoogol.util.Constant.qoogol;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FriendRequestFragment extends BaseFragment implements FriendReqAdapter.updateConnectionListener {
+public class FriendRequestFragment extends BaseFragment implements FriendReqAdapter.updateConnectionListener, PublicProfileDialog.PublicProfileClickListener {
 
     private static final String TAG = "FriendRequestFragment";
     private FragmentFriendRequestBinding mBinding;
@@ -179,6 +181,15 @@ public class FriendRequestFragment extends BaseFragment implements FriendReqAdap
 
     @Override
     public void showProfileClick(Bundle bundle) {
-        NavHostFragment.findNavController(this).navigate(R.id.nav_edit_profile, bundle);
+        //NavHostFragment.findNavController(this).navigate(R.id.nav_edit_profile, bundle);
+        String userId = bundle.getString(Constant.fetch_profile_id);
+        Log.d(TAG, "showProfileClick User Id : "+userId);
+        PublicProfileDialog dialog = new PublicProfileDialog(getActivity(),userId,this);
+        dialog.show();
+    }
+
+    @Override
+    public void onViewImage(String path) {
+        showFullScreen(path);
     }
 }

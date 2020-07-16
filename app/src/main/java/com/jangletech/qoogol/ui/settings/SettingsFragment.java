@@ -65,8 +65,17 @@ public class SettingsFragment extends BaseFragment implements UniversalDialog.Di
         mBinding.tvMoreSettings.setOnClickListener(v -> {
             if (isAppInstalled()) {
                 //This intent will help you to launch if the package is already installed
+                Bundle bundle = new Bundle();
                 Intent LaunchIntent = getActivity().getPackageManager()
                         .getLaunchIntentForPackage("com.jangletech.chatchilli");
+                bundle.putString(Constant.device_id, getDeviceId());
+                bundle.putString(Constant.u_user_id, getUserId());
+                bundle.putString("SCREEN","SETTINGS");
+                LaunchIntent.putExtras(bundle);
+
+                //LaunchIntent.putExtra(Constant.device_id, getDeviceId());
+                //LaunchIntent.putExtra(Constant.u_user_id, getUserId());
+                //LaunchIntent.putExtra("SCREEN", "SETTINGS");
                 startActivity(LaunchIntent);
             } else {
                 Log.i(TAG, "Application is not currently installed.");

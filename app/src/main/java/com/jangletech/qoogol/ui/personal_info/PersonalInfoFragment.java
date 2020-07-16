@@ -17,7 +17,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -36,7 +35,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.jangletech.qoogol.R;
-import com.jangletech.qoogol.database.repo.AppRepository;
 import com.jangletech.qoogol.databinding.FragmentPersonalInfoBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.model.City;
@@ -56,9 +54,9 @@ import com.jangletech.qoogol.model.VerifyResponse;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
-import com.jangletech.qoogol.ui.connections.FollowersViewModel;
 import com.jangletech.qoogol.ui.connections.FollowingViewModel;
 import com.jangletech.qoogol.ui.connections.FriendReqViewModel;
+import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.DateUtils;
 import com.jangletech.qoogol.util.PreferenceManager;
@@ -79,8 +77,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.regex.Pattern;
 
 import okhttp3.MediaType;
@@ -121,10 +117,10 @@ public class PersonalInfoFragment extends BaseFragment {
     private boolean isMailVerified = false;
     private boolean isMobileVerified = false;
     private HashMap<String, String> userProfileMap;
-    ApiInterface apiService = ApiClient.getInstance().getApi();
-    String userid = "";
+    private ApiInterface apiService = ApiClient.getInstance().getApi();
+    private String userid = "";
     private PreferenceManager mSettings;
-    Call<UserProfile> call;
+    private Call<UserProfile> call;
 
     public static PersonalInfoFragment newInstance() {
         return new PersonalInfoFragment();
@@ -164,6 +160,7 @@ public class PersonalInfoFragment extends BaseFragment {
                 mBinding.setUserProfile(userProfile);
                 //save User Badge Info
                 new PreferenceManager(getActivity()).saveString("BADGE", userProfile.getBadge());
+                new PreferenceManager(getActivity()).saveString(Constant.userName, userProfile.getUserName());
 
                 if (!userid.equalsIgnoreCase(mSettings.getUserId())) {
                     //manageUnwantedFields(userProfile);
@@ -183,12 +180,8 @@ public class PersonalInfoFragment extends BaseFragment {
             @Override
             public void onChanged(GenerateVerifyUserName generateVerifyUserName) {
                 if (generateVerifyUserName != null) {
-                    String[] names = generateVerifyUserName.getUserNames().split(",", -1);
-                    List<String> userNames = new ArrayList<>();
-                    for (int i = 0; i < names.length; i++) {
-                        userNames.add(names[i]);
-                    }
-                    populateUserNames(userNames);
+                    Log.d(TAG, "onChanged UserNames Executed: ");
+                    getUserNames(generateVerifyUserName);
                 }
             }
         });
@@ -203,10 +196,16 @@ public class PersonalInfoFragment extends BaseFragment {
             params.put(Constant.u_first_name, mBinding.etFirstName.getText().toString());
             params.put(Constant.u_last_name, mBinding.etLastName.getText().toString());
             params.put(Constant.CASE, "V");
-            params.put(Constant.userName, mBinding.userNameAutoCompleteTextView.getTag().toString());
-            if (profile.getUserName().equals(mBinding.userNameAutoCompleteTextView.getTag().toString())) {
+            if (mBinding.userNameAutoCompleteTextView.getText().toString().trim().isEmpty())
+                params.put(Constant.userName, mBinding.userNameAutoCompleteTextView.getTag().toString());
+            else
+                params.put(Constant.userName, mBinding.userNameAutoCompleteTextView.getText().toString().trim());
+
+            if (mBinding.userNameAutoCompleteTextView.getText().toString().trim().isEmpty()) {
+                mBinding.userNameAutoCompleteTextView.setError("Enter valid username.");
+                //showToast("Please enter any unique username.");
+            } else if (mBinding.userNameAutoCompleteTextView.getTag().toString().equals(mBinding.userNameAutoCompleteTextView.getText().toString().trim())) {
                 showToast("You have already taken this username.");
-                return;
             } else {
                 generateVerifyUserName(params);
             }
@@ -398,6 +397,15 @@ public class PersonalInfoFragment extends BaseFragment {
         mBinding.cityAutocompleteView.setEnabled(false);
     }
 
+    private void getUserNames(GenerateVerifyUserName generateVerifyUserName) {
+        String[] names = generateVerifyUserName.getUserNames().split(",", -1);
+        List<String> userNames = new ArrayList<>();
+        for (int i = 0; i < names.length; i++) {
+            userNames.add(names[i]);
+        }
+        populateUserNames(userNames);
+    }
+
     private void verifyMobile(String mobile, String verify) {
         HashMap map = new HashMap();
         map.put(Constant.u_app_version, Constant.APP_VERSION);
@@ -541,7 +549,7 @@ public class PersonalInfoFragment extends BaseFragment {
     }
 
     private void removeFollowingFromDb(String user) {
-         FollowingViewModel mViewModel = ViewModelProviders.of(this).get(FollowingViewModel.class);
+        FollowingViewModel mViewModel = ViewModelProviders.of(this).get(FollowingViewModel.class);
         mViewModel.deleteUpdatedConnection(user);
     }
 
@@ -619,7 +627,7 @@ public class PersonalInfoFragment extends BaseFragment {
             }
 
             if (mBinding.etDob.getText().toString().trim().isEmpty()) {
-                mBinding.etMobile.setError("Required");
+                mBinding.etDob.setError("Required");
                 return;
             }
 
@@ -651,6 +659,7 @@ public class PersonalInfoFragment extends BaseFragment {
         mBinding.userNameAutoCompleteTextView.setOnItemClickListener((parent, view, position, id) -> {
             final String name = ((TextView) view).getText().toString();
             mBinding.userNameAutoCompleteTextView.setTag(name);
+            mBinding.userNameAutoCompleteTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_right_tick, 0);
         });
 
         mBinding.stateAutocompleteView.setOnItemClickListener((parent, view, position, id) -> {
@@ -762,13 +771,16 @@ public class PersonalInfoFragment extends BaseFragment {
 
         UserProfile userProfile = new UserProfile();
 
-
         userProfileMap.put(Constant.u_mob_1, mBinding.etMobile.getText().toString().trim());
         userProfileMap.put(Constant.u_Email, mBinding.etEmail.getText().toString().trim());
         userProfileMap.put(Constant.u_birth_date, convertDateToDataBaseFormat(mBinding.etDob.getText().toString()));
         userProfileMap.put(Constant.u_Password, mBinding.etPassword.getText().toString().trim());
 
-        userProfileMap.put(Constant.userName, getEmptyStringIfNull(String.valueOf(mBinding.userNameAutoCompleteTextView.getTag())));
+        if (mBinding.userNameAutoCompleteTextView.getText().toString().trim().isEmpty())
+            userProfileMap.put(Constant.userName, mBinding.userNameAutoCompleteTextView.getTag().toString());
+        else
+            userProfileMap.put(Constant.userName, mBinding.userNameAutoCompleteTextView.getText().toString().trim());
+        //userProfileMap.put(Constant.userName, getEmptyStringIfNull(String.valueOf(mBinding.userNameAutoCompleteTextView.getTag())));
 
         userProfileMap.put(Constant.u_user_id, String.valueOf(userid));
         userProfileMap.put(Constant.u_app_version, Constant.APP_VERSION);
@@ -1035,12 +1047,17 @@ public class PersonalInfoFragment extends BaseFragment {
             e.printStackTrace();
         }
         Calendar newCalendar = Calendar.getInstance();
-        newCalendar.setTime(date);
+        newCalendar.setTime(date != null ? date : new Date());
         DatePickerDialog dialog = new DatePickerDialog(getContext(), android.R.style.Theme_Holo_Dialog, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 String formattedDate = year + "-" + (month + 1) + "-" + day;
-                mBinding.etDob.setText(DateUtils.getFormattedDate(formattedDate));
+                if (AppUtils.isEnteredDOBValid(year, (month + 1), day)) {
+                    mBinding.etDob.setText(DateUtils.getFormattedDate(formattedDate));
+                } else {
+                    showToast("Minimum age required is 13 years.");
+                    mBinding.etDob.setText("");
+                }
             }
         }, //newCalendar.get(1990), newCalendar.get(1), newCalendar.get(Calendar.DAY_OF_MONTH));
                 newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
@@ -1256,12 +1273,14 @@ public class PersonalInfoFragment extends BaseFragment {
                 if (response.body() != null && response.body().getResponse().equals("200")) {
                     if (strCase.equals("G")) {
                         mViewModel.setUserNameData(response.body());
+                        getUserNames(response.body());
                     } else if (strCase.equals("V")) {
-
+                        mBinding.userNameAutoCompleteTextView.setTag(params.get(Constant.userName));
+                        mBinding.userNameAutoCompleteTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_right_tick, 0);
                     }
                 } else {
                     if (strCase.equals("V")) {
-                        mBinding.userNameAutoCompleteTextView.setTag("");
+                        //mBinding.userNameAutoCompleteTextView.setTag("");
                     }
                     showErrorDialog(requireActivity(), response.body().getResponse(), "");
                 }

@@ -78,6 +78,7 @@
         android:name="com.jangletech.qoogol.ui.test.my_test.MyTestFragment"
         android:label="@string/menu_test_practice"
         tools:layout="@layout/fragment_test_my">
+
         <action
             android:id="@+id/action_nav_test_my_to_nav_comments"
             app:destination="@id/nav_comments" />
@@ -89,10 +90,9 @@
         android:label="@string/menu_test_popular"
         tools:layout="@layout/fragment_test_popular" />
 
-
     <fragment
         android:id="@+id/nav_shared_with_you"
-        android:name="com.jangletech.qoogol.ui.test.recent_test.RecentTestFragment"
+        android:name="com.jangletech.qoogol.ui.test.shared_with_you.TestSharedWithYouFragment"
         android:label="@string/menu_test_shared_with_you"
         tools:layout="@layout/fragment_recent_test" />
 

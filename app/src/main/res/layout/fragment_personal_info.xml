@@ -516,6 +516,7 @@
                                 android:textColor="@color/colorSkyBlue" />
 
                             <com.jangletech.qoogol.view.CustomAutoCompleteTextView
+                                app:endIconMode="none"
                                 android:id="@+id/langAutocompleteView"
                                 style="@style/AutoCompleteTextViewStyle"
                                 android:layout_below="@+id/tvHobby"

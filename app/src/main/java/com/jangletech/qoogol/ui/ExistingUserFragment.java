@@ -141,6 +141,7 @@ public class ExistingUserFragment extends BaseFragment {
     }
 
     private void setTimer() {
+        showToast("Otp Sent Successfully");
         new CountDownTimer(120000, 1000) {
             public void onTick(long millisUntilFinished) {
                 mBinding.sendOtp.setEnabled(false);

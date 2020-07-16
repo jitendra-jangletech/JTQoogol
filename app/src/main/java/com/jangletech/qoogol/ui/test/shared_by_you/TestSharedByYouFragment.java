@@ -281,7 +281,7 @@ public class TestSharedByYouFragment extends BaseFragment
     private void fetchSubjectList(String scrCoId) {
         Log.d(TAG, "fetchSubjectList ScrCoId : " + scrCoId);
         mBinding.swipeToRefresh.setRefreshing(true);
-        Call<FetchSubjectResponseList> call = apiService.fetchSubjectList(scrCoId);
+        Call<FetchSubjectResponseList> call = apiService.fetchSubjectList(Constant.SCR_CO_ID);
         call.enqueue(new Callback<FetchSubjectResponseList>() {
             @Override
             public void onResponse(Call<FetchSubjectResponseList> call, Response<FetchSubjectResponseList> response) {

@@ -27,6 +27,7 @@ import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.model.RegisterLoginModel;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
+import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.DateUtils;
 import com.jangletech.qoogol.util.PreferenceManager;
@@ -116,7 +117,7 @@ public class NewUserFragment extends BaseFragment {
                 return;
             } else if (mBinding.tilDob.getEditText().getText().toString().isEmpty()) {
                 mBinding.tilDob.setError("Please enter date of birth.");
-                //showToast("Please enter date of birth.");
+                showToast("Please enter date of birth.");
                 //mBinding.tilDob.getEditText().requestFocus();
                 isValidated = false;
                 return;
@@ -355,7 +356,12 @@ public class NewUserFragment extends BaseFragment {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 String formattedDate = year + "-" + (month + 1) + "-" + day;
-                mBinding.tilDob.getEditText().setText(DateUtils.getFormattedDate(formattedDate));
+                if (AppUtils.isEnteredDOBValid(year, (month + 1), day)) {
+                    mBinding.tilDob.getEditText().setText(DateUtils.getFormattedDate(formattedDate));
+                } else {
+                    showToast("Minimum age required is 13 years.");
+                    mBinding.tilDob.getEditText().setText("");
+                }
             }
         }, //newCalendar.get(1990), newCalendar.get(1), newCalendar.get(Calendar.DAY_OF_MONTH));
                 newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
@@ -432,6 +438,7 @@ public class NewUserFragment extends BaseFragment {
     }
 
     private void setTimer() {
+        showToast("Otp Sent Successfully");
         new CountDownTimer(120000, 1000) {
             public void onTick(long millisUntilFinished) {
                 mBinding.tvSendOtp.setEnabled(false);

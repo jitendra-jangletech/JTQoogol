@@ -165,7 +165,7 @@ public class RecentTestFragment extends BaseFragment
             }
         });
 
-        mViewModel.getAllTests("R",getUserId()).observe(getViewLifecycleOwner(), new Observer<List<TestModelNew>>() {
+        mViewModel.getAllTests("R", getUserId()).observe(getViewLifecycleOwner(), new Observer<List<TestModelNew>>() {
             @Override
             public void onChanged(@Nullable final List<TestModelNew> tests) {
                 if (tests != null) {
@@ -202,7 +202,7 @@ public class RecentTestFragment extends BaseFragment
     public void setMyTestList(List<TestModelNew> testList) {
         if (testList.size() > 0) {
             mBinding.tvNoTest.setVisibility(View.GONE);
-            mAdapter = new TestListAdapter(requireActivity(), testList, this,"");
+            mAdapter = new TestListAdapter(requireActivity(), testList, this, "");
             mBinding.testListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             mBinding.testListRecyclerView.setAdapter(mAdapter);
         } else {
@@ -282,7 +282,7 @@ public class RecentTestFragment extends BaseFragment
     private void fetchSubjectList(String scrCoId) {
         Log.d(TAG, "fetchSubjectList ScrCoId : " + scrCoId);
         mBinding.swipeToRefresh.setRefreshing(true);
-        Call<FetchSubjectResponseList> call = apiService.fetchSubjectList(scrCoId);
+        Call<FetchSubjectResponseList> call = apiService.fetchSubjectList(Constant.SCR_CO_ID);
         call.enqueue(new Callback<FetchSubjectResponseList>() {
             @Override
             public void onResponse(Call<FetchSubjectResponseList> call, Response<FetchSubjectResponseList> response) {

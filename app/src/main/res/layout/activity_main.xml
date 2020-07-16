@@ -112,18 +112,19 @@
                                 android:text="@string/attended_by_friends"
                                 android:visibility="gone" />
 
-                            <TextView
-                                android:id="@+id/nav_shared_with_you"
-                                style="@style/sub_menu_item_style"
-                                android:foreground="?attr/selectableItemBackground"
-                                android:text="@string/shared_with_you"
-                                android:visibility="gone" />
 
                             <TextView
                                 android:id="@+id/nav_shared_by_you"
                                 style="@style/sub_menu_item_style"
                                 android:foreground="?attr/selectableItemBackground"
                                 android:text="@string/shared_by_you" />
+
+                            <TextView
+                                android:id="@+id/nav_shared_with_you"
+                                style="@style/sub_menu_item_style"
+                                android:foreground="?attr/selectableItemBackground"
+                                android:text="@string/shared_with_you"
+                                android:visibility="gone" />
 
                             <TextView
                                 android:id="@+id/nav_test_popular"

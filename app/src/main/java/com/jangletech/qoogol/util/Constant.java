@@ -719,4 +719,6 @@ public class Constant {
     public static final String w_ans_text = "1701";
     public static final String w_media_names = "1702";
     public static final String w_media_paths = "1703";
+
+    public static final String SCR_CO_ID = "2672";
 }

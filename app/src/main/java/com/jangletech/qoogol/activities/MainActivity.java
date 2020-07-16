@@ -34,7 +34,11 @@ import com.google.android.material.navigation.NavigationView;
 import com.jangletech.qoogol.BuildConfig;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.ActivityMainBinding;
+import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.enums.Nav;
+import com.jangletech.qoogol.model.UserProfile;
+import com.jangletech.qoogol.retrofit.ApiClient;
+import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.personal_info.PersonalInfoViewModel;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
@@ -43,8 +47,14 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Locale;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 import static com.jangletech.qoogol.ui.BaseFragment.getUserId;
+import static com.jangletech.qoogol.ui.BaseFragment.getUserName;
 import static com.jangletech.qoogol.util.Constant.CALL_FROM;
+import static com.jangletech.qoogol.util.Constant.fetch_loged_in_user;
 import static com.jangletech.qoogol.util.Constant.profile;
 
 public class MainActivity extends BaseActivity {
@@ -59,6 +69,7 @@ public class MainActivity extends BaseActivity {
     public static TextView textViewDisplayName;
     public static TextView tvNavConnections, tvNavCredits, tvNavFollowers, tvNavFollowing;
     private String navigateFlag = "";
+    private ApiInterface apiService = ApiClient.getInstance().getApi();
     private BottomNavigationView bottomNavigationView;
 
     @Override
@@ -241,7 +252,11 @@ public class MainActivity extends BaseActivity {
                 if (navigateFlag.equals(Nav.SHARE_APP.toString())) {
                     //navToFragment(R.id.nav_share_app, Bundle.EMPTY);
                     navigateFlag = "";
-                    shareAction();
+                    if (getUserName() != null && getUserName().isEmpty()) {
+                        fetchUserProfile();
+                    } else {
+                        shareAction();
+                    }
                 }
                 if (navigateFlag.equals(Nav.ABOUT.toString())) {
                     navToFragment(R.id.nav_about, Bundle.EMPTY);
@@ -479,7 +494,6 @@ public class MainActivity extends BaseActivity {
         navController.navigate(resId, bundle);
     }
 
-
     @Override
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -531,7 +545,8 @@ public class MainActivity extends BaseActivity {
                         navController.getCurrentDestination().getId() == R.id.nav_code_conduct ||
                         navController.getCurrentDestination().getId() == R.id.nav_faq ||
                         navController.getCurrentDestination().getId() == R.id.nav_fav ||
-                        navController.getCurrentDestination().getId() == R.id.nav_shared_with_you ||
+                        navController.getCurrentDestination().getId() == R.id.saved_questions ||
+                        navController.getCurrentDestination().getId() == R.id.nav_shared_by_you ||
                         navController.getCurrentDestination().getId() == R.id.nav_test_popular ||
                         navController.getCurrentDestination().getId() == R.id.nav_recent_test ||
                         navController.getCurrentDestination().getId() == R.id.nav_connections ||
@@ -592,6 +607,34 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+    private void fetchUserProfile() {
+        ProgressDialog.getInstance().show(this);
+        Call<UserProfile> call = apiService.fetchUserInfo(getUserId(), getDeviceId(), Constant.APP_NAME, Constant.APP_VERSION);
+        call.enqueue(new Callback<UserProfile>() {
+            @Override
+            public void onResponse(Call<UserProfile> call, Response<UserProfile> response) {
+                //ProgressDialog.getInstance().dismiss();
+                if (response.body() != null && response.body().getResponseCode().equals("200")) {
+                    new PreferenceManager(getApplicationContext()).saveString(Constant.userName, response.body().getUserName());
+                    shareAction();
+                } else if (response.body().getResponseCode().equals("501")) {
+                    resetSettingAndLogout();
+                } else {
+                    //showErrorDialog(this, response.body().getResponseCode(), "");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserProfile> call, Throwable t) {
+                ProgressDialog.getInstance().dismiss();
+                Log.e(TAG, "onFailure UserProfile: " + t.getMessage());
+                apiCallFailureDialog(t);
+                showToast("Something went wrong!!");
+                t.printStackTrace();
+            }
+        });
+    }
+
     private void shareAction() {
         try {
             Bitmap bitmap;
@@ -617,7 +660,7 @@ public class MainActivity extends BaseActivity {
             sendIntent.setType("image/*");
 
             String shareMessage = String.format(Locale.ENGLISH,
-                    "Install Qoogol android app for free academic tests, prepare for competitive exams & post doubts. %s %s", getString(Constant.u_first_name), getUserId() + "\n");
+                    "Install Qoogol android app for free academic tests, prepare for competitive exams & post doubts. Referral Code : %s", getUserName() + "\n");
             shareMessage = shareMessage + "https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID + "\n";
             sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Qoogol");
             sendIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);

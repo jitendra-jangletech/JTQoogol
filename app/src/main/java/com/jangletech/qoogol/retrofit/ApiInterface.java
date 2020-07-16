@@ -536,7 +536,11 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST(Constant.FETCH_CONNECTIONS)
-    Call<ShareResponse> fetchConnectionsforShare(@Field(Constant.u_user_id) String userid, @Field("Case") String connectionCase, @Field(Constant.device_id) String device_id, @Field("200Q") String app, @Field(Constant.pagestart) int pagestart);
+    Call<ShareResponse> fetchConnectionsforShare(@Field(Constant.u_user_id) String userid,
+                                                 @Field("Case") String connectionCase,
+                                                 @Field(Constant.device_id) String device_id,
+                                                 @Field("200Q") String app,
+                                                 @Field(Constant.pagestart) int pagestart);
 
 
     @FormUrlEncoded

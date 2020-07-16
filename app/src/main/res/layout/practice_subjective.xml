@@ -132,7 +132,6 @@
                         app:layout_constraintTop_toTopOf="@id/tvtimer" />
 
                     <ImageView
-                        android:visibility="gone"
                         android:id="@+id/save_que"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -140,6 +139,7 @@
                         android:foreground="?attr/selectableItemBackground"
                         android:padding="@dimen/_10sdp"
                         android:src="@drawable/ic_save_grey"
+                        android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="@id/timer"
                         app:layout_constraintRight_toLeftOf="@+id/timer"
                         app:layout_constraintTop_toTopOf="@id/timer" />
@@ -166,8 +166,8 @@
                             android:layout_height="wrap_content"
                             android:background="@drawable/grey_border"
                             android:gravity="top|start"
-                            android:lines="10"
                             android:inputType="textMultiLine|textNoSuggestions"
+                            android:lines="10"
                             android:maxLines="10"
                             android:textColor="@color/colorBlack"
                             android:visibility="visible"

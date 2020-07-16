@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -76,7 +75,7 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
     private Map<Integer, String> mMapCourse;
     private HashMap<Integer, Chip> mapExamChips = new HashMap();
     private HashMap<Integer, Chip> mapSubjectChips = new HashMap();
-    ApiInterface apiService = ApiClient.getInstance().getApi();
+    private ApiInterface apiService = ApiClient.getInstance().getApi();
     public static String strBoardName;
 
     public static SyllabusFragment newInstance() {
@@ -227,9 +226,9 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
                 if (subjects != null) {
                     Log.d(TAG, "onChanged Subjects Size : " + subjects.size());
                     ArrayList<String> subjectList = new ArrayList<>();
-                    for(FetchSubjectResponse obj:subjects){
-                        if(!subjectList.contains(obj.getSm_sub_name()))
-                        subjectList.add(obj.getSm_sub_name());
+                    for (FetchSubjectResponse obj : subjects) {
+                        if (!subjectList.contains(obj.getSm_sub_name()))
+                            subjectList.add(obj.getSm_sub_name());
                     }
                     prepareSubjectChips(subjectList);
                 }
@@ -256,7 +255,7 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
                 ProgressDialog.getInstance().dismiss();
                 if (response.body() != null && response.body().getResponse().equals("200")) {
                     mViewModel.setUserPreference(response.body().getPreferencesList().get(0));
-                    Navigation.findNavController(requireActivity(),R.id.nav_host_fragment).navigate(R.id.nav_test_my);
+                    Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_test_my);
                     //MainActivity.navController.navigate(R.id.nav_test_my);
                 } else {
                     showErrorDialog(requireActivity(), response.body().getResponse(), "");
@@ -554,8 +553,9 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
     }
 
     private void fetchSubjectList(String scr_co_id) {
+        Log.d(TAG, "fetchSubjectList scr_co_id : " + scr_co_id);
         ProgressDialog.getInstance().show(requireActivity());
-        Call<FetchSubjectResponseList> call = apiService.fetchSubjectList(scr_co_id);
+        Call<FetchSubjectResponseList> call = apiService.fetchSubjectList(Constant.SCR_CO_ID);
         call.enqueue(new Callback<FetchSubjectResponseList>() {
             @Override
             public void onResponse(Call<FetchSubjectResponseList> call, Response<FetchSubjectResponseList> response) {

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.provider.Settings;
 import android.util.Base64;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
@@ -12,6 +13,8 @@ import com.jangletech.qoogol.R;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringEscapeUtils;
+import org.joda.time.LocalDate;
+import org.joda.time.Period;
 
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
@@ -31,6 +34,19 @@ public class AppUtils {
         SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
         Date date = format.parse(strDate);
         return date.toString();
+    }
+
+    public static boolean isEnteredDOBValid(int year, int monthOfYear, int dayOfMonth) {
+        return getAgeInYears(year, monthOfYear, dayOfMonth) >= 13;
+    }
+
+    public static int getAgeInYears(int year, int monthOfYear, int dayOfMonth) {
+        LocalDate dateOfBirth = new LocalDate(year, monthOfYear, dayOfMonth);
+        LocalDate currentDate = new LocalDate();
+
+        Period period = Period.fieldDifference(dateOfBirth, currentDate);
+        Log.i(TAG, "period in years: " + period.getYears());
+        return period.getYears();
     }
 
     public static String getUserId() {
