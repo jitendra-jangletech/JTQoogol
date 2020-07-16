@@ -2121,18 +2121,18 @@ public class SavedQueAdapter extends RecyclerView.Adapter<SavedQueAdapter.ViewHo
                                     Glide.with(activity).load(activity.getResources().getDrawable(R.drawable.ic_thumb_up_black_24dp)).into(learningItemBinding.like);
                                 }
                             }    if (call_from.equalsIgnoreCase("save")) {
+
                                 ExecutorService executor = Executors.newSingleThreadExecutor();
+
                                 if (flag==0) {
                                     learningQuestionsNew.setIsSave("false");
                                     learningQuestionsList.set(position, learningQuestionsNew);
-
 //                                    Glide.with(activity).load(activity.getResources().getDrawable(R.drawable.ic_save_grey)).into(learningItemBinding.saveQue);
-//                                    executor.execute(() -> new AppRepository(getApplicationContext()).insertQuestion(learningQuestionsNew));
                                     executor.execute(() -> new AppRepository(getApplicationContext()).deleteQuestion(learningQuestionsNew.getQuestion_id()));
+
                                 } else {
                                     learningQuestionsNew.setIsSave("true");
                                     Glide.with(activity).load(activity.getResources().getDrawable(R.drawable.ic_save_black)).into(learningItemBinding.saveQue);
-//                                    executor.execute(() -> new AppRepository(getApplicationContext()).insertQuestion(learningQuestionsNew));
                                 }
 
                             } else if (call_from.equalsIgnoreCase("fav")) {
