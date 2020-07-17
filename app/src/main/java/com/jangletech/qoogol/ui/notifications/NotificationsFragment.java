@@ -16,7 +16,6 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.NotificationAdapter;
@@ -38,8 +37,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.jangletech.qoogol.util.Constant.CALL_FROM;
-import static com.jangletech.qoogol.util.Constant.connectonId;
 import static com.jangletech.qoogol.util.Constant.fromTest;
 import static com.jangletech.qoogol.util.Constant.from_question;
 import static com.jangletech.qoogol.util.Constant.from_user;
@@ -103,7 +100,6 @@ public class NotificationsFragment extends BaseFragment implements NotificationA
 
     private void enableSwipe() {
 
-
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT) {
             @Override
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder viewHolder1) {
@@ -119,7 +115,6 @@ public class NotificationsFragment extends BaseFragment implements NotificationA
                 }
             }
         }).attachToRecyclerView(mBinding.notificationRecyclerView);
-
 
     }
 
@@ -200,7 +195,7 @@ public class NotificationsFragment extends BaseFragment implements NotificationA
             //bundle.putInt(CALL_FROM, connectonId);
             //bundle.putString(Constant.fetch_profile_id, notification.getN_ref_id());
             //NavHostFragment.findNavController(this).navigate(R.id.nav_edit_profile, bundle);
-            PublicProfileDialog publicProfileDialog = new PublicProfileDialog(getActivity(),notification.getN_sent_by_u_id(),this);
+            PublicProfileDialog publicProfileDialog = new PublicProfileDialog(getActivity(), notification.getN_sent_by_u_id(), this);
             publicProfileDialog.show();
         } else if (notification.getN_ref_type().equalsIgnoreCase(from_question)) {
             NavHostFragment.findNavController(this).navigate(R.id.nav_learning, bundle);

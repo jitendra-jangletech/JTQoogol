@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.activities.PracticeTestActivity;
@@ -63,6 +64,14 @@ public class TestFavouriteFragment extends BaseFragment implements TestListAdapt
             NavHostFragment.findNavController(this).navigate(R.id.nav_test_my);
         });
 
+        mBinding.swipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                fetchTestList();
+            }
+        });
+
+
        /* HashMap<String, String> params = new HashMap<>();
         params.put(Constant.u_user_id, getUserId());
         params.put(Constant.CASE, "FV");
@@ -85,7 +94,8 @@ public class TestFavouriteFragment extends BaseFragment implements TestListAdapt
 
     private void fetchTestList() {
         Log.d(TAG, "fetchTestList UserId : " + getUserId());
-        ProgressDialog.getInstance().show(getActivity());
+        //ProgressDialog.getInstance().show(getActivity());
+        mBinding.swipeToRefresh.setRefreshing(true);
         Call<TestListResponse> call = apiService.fetchTestList(
                 getUserId(),
                 "FV",
@@ -97,7 +107,8 @@ public class TestFavouriteFragment extends BaseFragment implements TestListAdapt
         call.enqueue(new Callback<TestListResponse>() {
             @Override
             public void onResponse(Call<TestListResponse> call, Response<TestListResponse> response) {
-                ProgressDialog.getInstance().dismiss();
+                //ProgressDialog.getInstance().dismiss();
+                mBinding.swipeToRefresh.setRefreshing(false);
                 if (response.body() != null && response.body().getResponse().equals("200")) {
                     Log.d(TAG, "Fav List Size is  : " + response.body().getTestList().size());
                     mViewModel.setAllTestList(response.body().getTestList());
@@ -110,7 +121,8 @@ public class TestFavouriteFragment extends BaseFragment implements TestListAdapt
 
             @Override
             public void onFailure(Call<TestListResponse> call, Throwable t) {
-                ProgressDialog.getInstance().dismiss();
+                //ProgressDialog.getInstance().dismiss();
+                mBinding.swipeToRefresh.setRefreshing(false);
                 showToast("Something went wrong!!");
                 t.printStackTrace();
                 apiCallFailureDialog(t);
@@ -160,6 +172,7 @@ public class TestFavouriteFragment extends BaseFragment implements TestListAdapt
     public void favClick(TestModelNew testModelNew) {
         Log.d(TAG, "favClick Value : " + testModelNew.isFavourite());
         mViewModel.updateFav("PRACTICE", getUserId(), testModelNew.getTm_id(), testModelNew.isFavourite());
+        //fetchTestList();
     }
 
     @Override

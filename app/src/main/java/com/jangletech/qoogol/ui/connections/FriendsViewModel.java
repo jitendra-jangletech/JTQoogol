@@ -72,6 +72,8 @@ public class FriendsViewModel extends AndroidViewModel {
                     if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
                         ExecutorService executor = Executors.newSingleThreadExecutor();
                         executor.execute(() -> mAppRepository.insertFriends(response.body().getFriends_list()));
+                    }else if (response.body().getResponse().equals("501")) {
+                        //resetSettingAndLogout();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

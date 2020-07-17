@@ -607,7 +607,7 @@ public class MainActivity extends BaseActivity {
         call.enqueue(new Callback<UserProfile>() {
             @Override
             public void onResponse(Call<UserProfile> call, Response<UserProfile> response) {
-                //ProgressDialog.getInstance().dismiss();
+                ProgressDialog.getInstance().dismiss();
                 if (response.body() != null && response.body().getResponseCode().equals("200")) {
                     new PreferenceManager(getApplicationContext()).saveString(Constant.userName, response.body().getUserName());
                     shareAction();

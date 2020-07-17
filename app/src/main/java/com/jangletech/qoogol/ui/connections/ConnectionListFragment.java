@@ -98,6 +98,8 @@ public class ConnectionListFragment extends BaseFragment implements ConnectionAd
                 dismissRefresh(mBinding.connectionSwiperefresh);
                 if (response.body().getResponse().equalsIgnoreCase("200")) {
                     mViewModel.insert(response.body().getConnection_list());
+                } else if (response.body().getResponse().equals("501")) {
+                    resetSettingAndLogout();
                 } else {
                     showToast("Error Code : " + response.body().getResponse());
                 }

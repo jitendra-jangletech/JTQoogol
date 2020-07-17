@@ -66,13 +66,11 @@ public class SettingsFragment extends BaseFragment implements UniversalDialog.Di
             if (isAppInstalled()) {
                 //This intent will help you to launch if the package is already installed
                 Bundle bundle = new Bundle();
-                Intent LaunchIntent = getActivity().getPackageManager()
-                        .getLaunchIntentForPackage("com.jangletech.chatchilli");
-                bundle.putString(Constant.device_id, getDeviceId());
+                Intent LaunchIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://chatchilli.com"));
                 bundle.putString(Constant.u_user_id, getUserId());
-                bundle.putString("SCREEN","SETTINGS");
+                bundle.putString("SCREEN", "SETTINGS");
                 LaunchIntent.putExtras(bundle);
-                LaunchIntent.putExtra(Intent.ACTION_VIEW,bundle);
+                LaunchIntent.putExtra(Intent.ACTION_VIEW, bundle);
                 startActivity(LaunchIntent);
             } else {
                 Log.i(TAG, "Application is not currently installed.");

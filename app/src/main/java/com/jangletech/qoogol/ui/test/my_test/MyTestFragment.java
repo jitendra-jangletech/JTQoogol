@@ -238,6 +238,7 @@ public class MyTestFragment extends BaseFragment
 
     public void setMyTestList(List<TestModelNew> testList) {
         if (testList.size() > 0) {
+            mBinding.tvNoTest.setVisibility(View.GONE);
             mAdapter = new TestListAdapter(requireActivity(), testList, this, "");
             mBinding.testListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             mBinding.testListRecyclerView.setAdapter(mAdapter);

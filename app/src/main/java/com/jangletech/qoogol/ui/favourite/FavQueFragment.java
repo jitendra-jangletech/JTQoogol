@@ -46,13 +46,13 @@ import static com.jangletech.qoogol.util.Constant.profile;
  */
 public class FavQueFragment extends Fragment implements LearningAdapter.onIconClick {
 
-    LearningFragmentBinding learningFragmentBinding;
-    LearningAdapter learingAdapter;
-    List<LearningQuestionsNew> learningQuestionsList;
-    List<LearningQuestionsNew> questionsNewList;
-    ApiInterface apiService = ApiClient.getInstance().getApi();
-    String userId = "";
-    FavouriteViewModel mViewModel;
+    private LearningFragmentBinding learningFragmentBinding;
+    private LearningAdapter learingAdapter;
+    private List<LearningQuestionsNew> learningQuestionsList;
+    private List<LearningQuestionsNew> questionsNewList;
+    private ApiInterface apiService = ApiClient.getInstance().getApi();
+    private String userId = "";
+    private FavouriteViewModel mViewModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

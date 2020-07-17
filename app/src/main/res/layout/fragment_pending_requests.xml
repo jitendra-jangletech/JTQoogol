@@ -24,17 +24,17 @@
                     android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
                     <com.google.android.material.tabs.TabLayout
-                        android:id="@+id/requests_tab"
+                        android:id="@+id/requests_tabs"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:tabTextAppearance="@style/CustomTextAppearanceTab"
                         android:background="@color/colorPrimary"
-                        app:tabIndicatorColor="@color/colorWhite"
-                        app:tabMaxWidth="0dp"
                         app:tabGravity="fill"
+                        app:tabIndicatorColor="@color/white"
+                        app:tabMaxWidth="0dp"
                         app:tabMode="fixed"
-                        app:tabSelectedTextColor="@color/color_red"
-                        app:tabTextColor="@color/colorWhite" />
+                        app:tabSelectedTextColor="@color/colorWhite"
+                        app:tabTextAppearance="@style/CustomTextAppearanceTab"
+                        app:tabTextColor="@color/grey" />
                 </com.google.android.material.appbar.AppBarLayout>
 
                 <androidx.viewpager.widget.ViewPager

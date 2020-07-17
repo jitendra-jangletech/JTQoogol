@@ -10,13 +10,20 @@
         android:background="@color/colorLightGray"
         android:orientation="vertical">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/favTestListRecyclerView"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeToRefresh"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:visibility="visible"
-            tools:listitem="@layout/test_item" />
+            android:layout_alignParentTop="true">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/favTestListRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:visibility="visible"
+                tools:listitem="@layout/test_item" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <LinearLayout
             android:id="@+id/tvNoFavTest"

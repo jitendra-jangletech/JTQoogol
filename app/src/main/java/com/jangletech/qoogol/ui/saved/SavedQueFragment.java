@@ -94,6 +94,11 @@ public class SavedQueFragment extends BaseFragment implements SavedQueAdapter.on
 
 
     private void initRecycler() {
+        if(questionsNewList!=null && questionsNewList.size() > 0){
+            learningFragmentBinding.tvNoQuest.setVisibility(View.GONE);
+        }else{
+            learningFragmentBinding.tvNoQuest.setVisibility(View.VISIBLE);
+        }
         learingAdapter = new SavedQueAdapter(getActivity(), questionsNewList, this, learning);
         learningFragmentBinding.learningRecycler.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
@@ -155,7 +160,6 @@ public class SavedQueFragment extends BaseFragment implements SavedQueAdapter.on
         bundle.putInt("QuestionId", questionId);
         NavHostFragment.findNavController(this).navigate(R.id.nav_comments, bundle);
     }
-
 
     @Override
     public void onShareClick(int questionId) {

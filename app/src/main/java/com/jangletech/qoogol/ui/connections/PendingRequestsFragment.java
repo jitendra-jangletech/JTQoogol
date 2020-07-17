@@ -39,7 +39,7 @@ public class PendingRequestsFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setupViewPager(mbinding.requestsViewpager);
-        mbinding.requestsTab.setupWithViewPager(mbinding.requestsViewpager);
+        mbinding.requestsTabs.setupWithViewPager(mbinding.requestsViewpager);
     }
 
     private void setupViewPager(ViewPager viewPager) {

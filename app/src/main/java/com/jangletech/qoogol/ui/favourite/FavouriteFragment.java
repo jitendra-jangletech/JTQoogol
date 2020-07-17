@@ -29,9 +29,12 @@ public class FavouriteFragment extends BaseFragment {
     private FavouriteViewModel mViewModel;
     private FavouriteFragmentBinding mBinding;
 
+
     public static FavouriteFragment newInstance() {
         return new FavouriteFragment();
     }
+
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

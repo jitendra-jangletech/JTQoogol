@@ -204,7 +204,7 @@ public class PersonalInfoFragment extends BaseFragment {
             if (mBinding.userNameAutoCompleteTextView.getText().toString().trim().isEmpty()) {
                 mBinding.userNameAutoCompleteTextView.setError("Enter valid username.");
                 //showToast("Please enter any unique username.");
-            } else if (mBinding.userNameAutoCompleteTextView.getTag().toString().equals(mBinding.userNameAutoCompleteTextView.getText().toString().trim())) {
+            } else if (profile.getUserName().equals(mBinding.userNameAutoCompleteTextView.getText().toString().trim())) {
                 showToast("You have already taken this username.");
             } else {
                 generateVerifyUserName(params);
