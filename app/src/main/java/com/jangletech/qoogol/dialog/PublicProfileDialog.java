@@ -119,7 +119,7 @@ public class PublicProfileDialog extends Dialog {
             } else if (userProfile != null && userProfile.getIsInitiated_by_u1().equalsIgnoreCase("true")) {
                 mBinding.addFriend.setText(activity.getResources().getString(R.string.cancel));
             } else if (userProfile != null && userProfile.getIsInitiated_by_u2().equalsIgnoreCase("true")) {
-                mBinding.addFriend.setText(activity.getResources().getString(R.string.accept_friend_req));
+                mBinding.addFriend.setText(activity.getResources().getString(R.string.accept));
             } else {
                 mBinding.addFriend.setText(activity.getResources().getString(R.string.add_friend));
             }
@@ -227,12 +227,13 @@ public class PublicProfileDialog extends Dialog {
                     ProgressDialog.getInstance().dismiss();
                     if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
                         fetchUserProfile();
-                        if (Processcase.equalsIgnoreCase(reject_friend_requests) || Processcase.equalsIgnoreCase(accept_friend_requests) || Processcase.equalsIgnoreCase(remove_connection)) {
-                            ExecutorService executor = Executors.newSingleThreadExecutor();
+                        ExecutorService executor = Executors.newSingleThreadExecutor();
+                        if (Processcase.equalsIgnoreCase(reject_friend_requests) || Processcase.equalsIgnoreCase(accept_friend_requests)) {
                             executor.execute(() -> mAppRepository.deleteFriendReq(AppUtils.getUserId(), user));
                         } else if (Processcase.equalsIgnoreCase(unfollow)) {
-                            ExecutorService executor = Executors.newSingleThreadExecutor();
                             executor.execute(() -> mAppRepository.deleteFollowings(AppUtils.getUserId(), user));
+                        } else if (Processcase.equalsIgnoreCase(remove_connection)) {
+                            executor.execute(() -> mAppRepository.deleteFriends(AppUtils.getUserId(), user));
                         }
                     } else {
                         Toast.makeText(activity, UtilHelper.getAPIError(String.valueOf(response.body())), Toast.LENGTH_SHORT).show();

@@ -51,7 +51,7 @@ public class FriendsViewModel extends AndroidViewModel {
 
     void deleteUpdatedConnection(String user) {
         ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.execute(() -> mAppRepository.deleteriends(userId,user));
+        executor.execute(() -> mAppRepository.deleteFriends(userId,user));
     }
 
     void fetchFriendsData(boolean isRefresh) {
