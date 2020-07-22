@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,11 +17,13 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.LearningAdapter;
 import com.jangletech.qoogol.databinding.LearningFragmentBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.enums.Module;
+import com.jangletech.qoogol.enums.Nav;
 import com.jangletech.qoogol.model.LearningQuestionsNew;
 import com.jangletech.qoogol.model.ProcessQuestion;
 import com.jangletech.qoogol.retrofit.ApiClient;
@@ -29,17 +32,20 @@ import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
+
 import static com.facebook.FacebookSdk.getApplicationContext;
 import static com.jangletech.qoogol.util.Constant.CALL_FROM;
 import static com.jangletech.qoogol.util.Constant.connectonId;
-import static com.jangletech.qoogol.util.Constant.profile;
 import static com.jangletech.qoogol.util.Constant.learning;
+import static com.jangletech.qoogol.util.Constant.profile;
 
-public class LearningFragment extends BaseFragment implements LearningAdapter.onIconClick {
+public class SharedByYouFragment extends BaseFragment implements LearningAdapter.onIconClick {
 
     private LearningViewModel mViewModel;
     LearningFragmentBinding learningFragmentBinding;
@@ -50,8 +56,8 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
     String userId = "";
 
 
-    public static LearningFragment newInstance() {
-        return new LearningFragment();
+    public static SharedByYouFragment newInstance() {
+        return new SharedByYouFragment();
     }
 
     @Override
@@ -104,19 +110,7 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
 
         Bundle bundle = getArguments();
         if (bundle != null) {
-            if (bundle.getBoolean("fromNotification")) {
-                ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Learning");
-                if (bundle.getString(Constant.FB_MS_ID) != null)
-                    mViewModel.fetchQuestionData(bundle.getString(Constant.FB_MS_ID));
-            } else {
-                if (bundle.getString("call_from").equalsIgnoreCase("saved_questions")) {
-                    ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Saved Questions");
-                } else {
-                    ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Practice Questions");
-                    mViewModel.fetchQuestionData("");
-                }
-
-            }
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Shared by You");
         }
 
         mViewModel.getQuestionList().observe(getViewLifecycleOwner(), questionsList -> {

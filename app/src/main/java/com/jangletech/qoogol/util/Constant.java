@@ -528,6 +528,14 @@ public class Constant {
     public static final String q_favs = "1355A";
     public static final String attmpted_count = "1355B";
     public static final String right_solved_count = "1355C";
+    public static final String stq_id = "1465";
+    public static final String stq_by_user_id = "1466";
+    public static final String stq_to_user_id = "1467";
+    public static final String stq_to_cr_id = "1468";
+    public static final String stq_tm_id= "1469";
+    public static final String stq_q_id = "1470";
+    public static final String stq_cdatetime = "1471";
+    public static final String stq_mst_id = "1472";
 
     //Answers
     public static final String a_id = "1363";

@@ -90,6 +90,7 @@ public class PublicProfileDialog extends Dialog {
                 userid,
                 "UP"
         );
+
         call.enqueue(new Callback<UserProfile>() {
             @Override
             public void onResponse(Call<UserProfile> call, Response<UserProfile> response) {
