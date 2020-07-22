@@ -95,7 +95,7 @@ public class MainActivity extends BaseActivity {
                 R.id.nav_faq, R.id.nav_fav, R.id.nav_syllabus, R.id.nav_edit_profile,
                 R.id.nav_settings, R.id.nav_requests, R.id.nav_import_contacts,
                 R.id.nav_code_conduct,
-                R.id.nav_home, R.id.nav_learning, R.id.nav_test_my, R.id.nav_doubts)
+                R.id.nav_home, R.id.nav_learning, R.id.nav_shared_with_you_que, R.id.nav_shared_by_you_que, R.id.nav_test_my, R.id.nav_doubts)
                 .setDrawerLayout(drawerLayout)
                 .build();
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
@@ -263,6 +263,24 @@ public class MainActivity extends BaseActivity {
                     bundle.putString(CALL_FROM, Nav.MY_TEST.toString());
                     navToFragment(R.id.nav_test_my, bundle);
                 }
+
+                if (navigateFlag.equals(Nav.SHARED_BY_ME_QUE.toString())) {
+                    navigateFlag = "";
+                    clearFilters();
+                    saveTestType(Nav.SHARED_BY_ME_QUE.toString());
+                    Bundle bundle = new Bundle();
+                    bundle.putString(CALL_FROM, Nav.SHARED_BY_ME_QUE.toString());
+                    navToFragment(R.id.nav_shared_by_you_que, bundle);
+                }
+
+                if (navigateFlag.equals(Nav.SHARED_WITH_ME_QUE.toString())) {
+                    navigateFlag = "";
+                    clearFilters();
+                    saveTestType(Nav.SHARED_WITH_ME_QUE.toString());
+                    Bundle bundle = new Bundle();
+                    bundle.putString(CALL_FROM, Nav.SHARED_WITH_ME_QUE.toString());
+                    navToFragment(R.id.nav_shared_with_you_que, bundle);
+                }
                 if (navigateFlag.equals(Nav.POPULAR_TEST.toString())) {
                     navigateFlag = "";
                     clearFilters();
@@ -418,6 +436,20 @@ public class MainActivity extends BaseActivity {
             }
         });
 
+        findViewById(R.id.nav_shared_by_you_que).setOnClickListener(v -> {
+            mBinding.drawerLayout.closeDrawers();
+            if (navController.getCurrentDestination().getId() != R.id.nav_shared_by_you_que) {
+                navigateFlag = Nav.SHARED_BY_ME_QUE.toString();
+            }
+        });
+
+        findViewById(R.id.nav_shared_with_you_que).setOnClickListener(v -> {
+            mBinding.drawerLayout.closeDrawers();
+            if (navController.getCurrentDestination().getId() != R.id.nav_shared_with_you_que) {
+                navigateFlag = Nav.SHARED_WITH_ME_QUE.toString();
+            }
+        });
+
         findViewById(R.id.nav_settings).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
             if (navController.getCurrentDestination().getId() != R.id.nav_settings) {
@@ -443,6 +475,18 @@ public class MainActivity extends BaseActivity {
                 mBinding.testNavLayout.setVisibility(View.VISIBLE);
                 mBinding.expand.setBackground(getDrawable(R.drawable.ic_collapse));
                 expand(mBinding.testNavLayout);
+            }
+        });
+
+        findViewById(R.id.tvLearning).setOnClickListener(v -> {
+            if (mBinding.learningNavLayout.getVisibility() == View.VISIBLE) {
+                mBinding.learningNavLayout.setVisibility(View.GONE);
+                mBinding.expandLearning.setBackground(getDrawable(R.drawable.ic_expand));
+                //collapse(mBinding.testNavLayout);
+            } else {
+                mBinding.learningNavLayout.setVisibility(View.VISIBLE);
+                mBinding.expandLearning.setBackground(getDrawable(R.drawable.ic_collapse));
+                expand(mBinding.learningNavLayout);
             }
         });
 

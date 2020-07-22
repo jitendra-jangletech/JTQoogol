@@ -444,11 +444,15 @@ public class AppRepository {
         learningQuestionDao.deleteQuestion(questionId);
     }
 
+    public void updateQuestion(int questionId, String flag) {
+        learningQuestionDao.updateQuestion(questionId,flag);
+    }
+
     public void insertFriends(List<Friends> friendsList) {
         friendsDao.upsertFriends(friendsList);
     }
 
-    public void deleteriends(String logInuser, String otherUser) {
+    public void deleteFriends(String logInuser, String otherUser) {
         friendsDao.deleteFriends(logInuser,otherUser);
     }
 

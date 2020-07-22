@@ -53,12 +53,69 @@
                             android:text="@string/menu_home"
                             android:visibility="gone" />
 
-                        <TextView
-                            android:id="@+id/tvNavLearning"
-                            style="@style/menu_item_style"
-                            android:drawableLeft="@drawable/nav_learning"
-                            android:foreground="?attr/selectableItemBackground"
-                            android:text="@string/learning" />
+
+                        <RelativeLayout
+                            android:id="@+id/tvLearning"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_32sdp"
+                            android:foreground="?attr/selectableItemBackground">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_alignParentLeft="true"
+                                android:layout_centerInParent="true"
+                                android:layout_marginLeft="@dimen/_10sdp"
+                                android:layout_marginTop="@dimen/_10sdp"
+                                android:drawableLeft="@drawable/nav_learning"
+                                android:drawablePadding="@dimen/_10sdp"
+                                android:gravity="center_vertical"
+                                android:text="@string/learning"
+                                android:textColor="@color/menu_item_text_color"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/expand_learning"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerInParent="true"
+                                android:layout_marginRight="@dimen/_10sdp"
+                                android:background="@drawable/ic_expand" />
+
+                        </RelativeLayout>
+
+                        <LinearLayout
+                            android:id="@+id/learningNavLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:animateLayoutChanges="true"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:id="@+id/tvNavLearning"
+                                style="@style/sub_menu_item_style"
+                                android:foreground="?attr/selectableItemBackground"
+                                android:text="@string/practice_questions" />
+
+
+
+                            <TextView
+                                android:id="@+id/nav_shared_by_you_que"
+                                style="@style/sub_menu_item_style"
+                                android:foreground="?attr/selectableItemBackground"
+                                android:text="@string/shared_by_you" />
+
+                            <TextView
+                                android:id="@+id/nav_shared_with_you_que"
+                                style="@style/sub_menu_item_style"
+                                android:foreground="?attr/selectableItemBackground"
+                                android:text="@string/shared_with_you" />
+
+
+
+                        </LinearLayout>
 
                         <RelativeLayout
                             android:id="@+id/tvTest"

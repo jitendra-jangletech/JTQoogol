@@ -2323,12 +2323,15 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
                                 }
 
                             } else if (call_from.equalsIgnoreCase("fav")) {
+                                ExecutorService executor = Executors.newSingleThreadExecutor();
                                 if (flag == 0) {
                                     learningQuestionsNew.setIs_fav("false");
                                     Glide.with(activity).load(activity.getResources().getDrawable(R.drawable.ic_fav)).into(learningItemBinding.favorite);
+                                    executor.execute(() -> new AppRepository(getApplicationContext()).updateQuestion(learningQuestionsNew.getQuestion_id(),"false"));
                                 } else {
                                     Glide.with(activity).load(activity.getResources().getDrawable(R.drawable.ic_favorite_black_24dp)).into(learningItemBinding.favorite);
                                     learningQuestionsNew.setIs_fav("true");
+                                    executor.execute(() -> new AppRepository(getApplicationContext()).updateQuestion(learningQuestionsNew.getQuestion_id(),"true"));
                                 }
                             } else if (call_from.equalsIgnoreCase(ONE_LINE_ANSWER)) {
                                 if (response.body().getSolved_right().equalsIgnoreCase("true")) {

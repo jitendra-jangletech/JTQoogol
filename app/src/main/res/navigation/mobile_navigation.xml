@@ -39,11 +39,23 @@
     </fragment>
 
     <fragment
+        android:id="@+id/nav_shared_with_you_que"
+        android:name="com.jangletech.qoogol.ui.learning.SharedWithYouFragment"
+        android:label="@string/menu_test_shared_with_you"
+        tools:layout="@layout/learning_fragment" />
+
+    <fragment
+        android:id="@+id/nav_shared_by_you_que"
+        android:name="com.jangletech.qoogol.ui.learning.SharedByYouFragment"
+        android:label="@string/menu_test_shared_by_you"
+        tools:layout="@layout/learning_fragment" />
+
+    <fragment
         android:id="@+id/nav_learning_details"
         android:name="com.jangletech.qoogol.ui.learning.LearningDetailsFragment"
         android:label="@string/menu_learning_details"
         app:enterAnim="@anim/enter_from_left"
-        tools:layout="@layout/fragment_learning_details"></fragment>
+        tools:layout="@layout/fragment_learning_details"/>
 
 
     <fragment
@@ -51,27 +63,27 @@
         android:name="com.jangletech.qoogol.ui.test.recent_test.RecentTestFragment"
         android:label="@string/recent_test"
         app:enterAnim="@anim/enter_from_left"
-        tools:layout="@layout/fragment_test_my"></fragment>
+        tools:layout="@layout/fragment_test_my"/>
 
     <fragment
         android:id="@+id/nav_comments"
         android:name="com.jangletech.qoogol.ui.learning.CommentFragment"
         android:label="@string/comments"
         app:enterAnim="@anim/enter_from_left"
-        tools:layout="@layout/comment_view"></fragment>
+        tools:layout="@layout/comment_view"/>
 
 
     <fragment
         android:id="@+id/nav_test_attempt_history"
         android:name="com.jangletech.qoogol.ui.test_attempt_history.TestAttemptHistoryFragment"
         android:label="@string/menu_test_attempt"
-        tools:layout="@layout/fragment_test_attempt_history"></fragment>
+        tools:layout="@layout/fragment_test_attempt_history"/>
 
     <fragment
         android:id="@+id/nav_doubts"
         android:name="com.jangletech.qoogol.ui.doubts.DoubtsFragment"
         android:label="@string/menu_ask_doubts"
-        tools:layout="@layout/doubts_fragment"></fragment>
+        tools:layout="@layout/doubts_fragment"/>
 
     <fragment
         android:id="@+id/nav_test_my"

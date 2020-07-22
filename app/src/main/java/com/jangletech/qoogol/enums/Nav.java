@@ -3,6 +3,8 @@ package com.jangletech.qoogol.enums;
 public enum Nav {
     HOME,
     LEARNING,
+    SHARED_BY_ME_QUE,
+    SHARED_WITH_ME_QUE,
     MY_TEST,
     RECENT_TEST,
     POPULAR_TEST,

@@ -47,6 +47,12 @@ public interface LearningQuestionDao {
     @Query("delete from LearningQuestions where question_id=:questionId")
     void deleteQuestion(int questionId);
 
+
+
+    @Query("update LearningQuestions set is_fav=:fav_flag  where question_id=:questionId")
+    void updateQuestion(int questionId, String fav_flag);
+
+
     @Delete
     void delete(List<LearningQuestionsNew> learningQuestions);
 
