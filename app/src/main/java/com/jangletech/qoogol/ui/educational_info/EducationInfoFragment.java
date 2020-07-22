@@ -92,7 +92,7 @@ public class EducationInfoFragment extends BaseFragment implements EducationAdap
             mBinding.addedu.setVisibility(View.GONE);
         }
 
-        mViewModel.getAllEducations(getUserId()).observe(getViewLifecycleOwner(), educations -> {
+        mViewModel.getAllEducations(getUserId(getContext())).observe(getViewLifecycleOwner(), educations -> {
             Log.d(TAG, "onChanged Education List Size : " + educations.size());
             if (educations != null) {
                 educationList = educations;
@@ -157,9 +157,9 @@ public class EducationInfoFragment extends BaseFragment implements EducationAdap
         ProgressDialog.getInstance().show(getActivity());
 
         if (call_from == fetch_loged_in_user)
-            call = apiService.fetchUserEdu(userid, "L", getDeviceId(), Constant.APP_NAME);
+            call = apiService.fetchUserEdu(userid, "L", getDeviceId(getActivity()), Constant.APP_NAME);
         else
-            call = apiService.fetchOtherUSersUserEdu(mSettings.getUserId(), "L", getDeviceId(), Constant.APP_NAME, userid);
+            call = apiService.fetchOtherUSersUserEdu(mSettings.getUserId(), "L", getDeviceId(getActivity()), Constant.APP_NAME, userid);
 
 
         call.enqueue(new Callback<FetchEducationResponse>() {
@@ -219,7 +219,7 @@ public class EducationInfoFragment extends BaseFragment implements EducationAdap
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         HashMap<String,String> params = new HashMap<>();
-                        params.put(Constant.u_user_id,getUserId());
+                        params.put(Constant.u_user_id,getUserId(getActivity()));
                         params.put(Constant.ue_id,education.getUe_id());
                         params.put(Constant.CASE,"D");
                         deleteEdu(params,pos);

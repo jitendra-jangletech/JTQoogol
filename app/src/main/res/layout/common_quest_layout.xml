@@ -124,11 +124,11 @@
 
                 <LinearLayout
                     android:id="@+id/dynamicLayout"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/timer_layout"
-                    android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/timer_layout">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/match_the_pairs"
@@ -445,8 +445,8 @@
                         android:id="@+id/fill_in_the_blanks_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:visibility="gone"
                         android:padding="@dimen/_10sdp"
+                        android:visibility="visible"
                         app:layout_constraintTop_toBottomOf="@+id/multi_line_answer">
 
                         <EditText
@@ -459,6 +459,16 @@
                             android:visibility="visible"
                             app:layout_constraintTop_toTopOf="parent" />
 
+                        <TextView
+                            android:id="@+id/tvFtbWordCounter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="@dimen/_5sdp"
+                            android:text="120/200"
+                            android:textColor="@color/colorSkyBlue"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/fill_in_the_blanks" />
+
                         <ImageView
                             android:id="@+id/fib_img"
                             android:layout_width="wrap_content"
@@ -470,7 +480,6 @@
                             app:layout_constraintTop_toTopOf="@+id/fill_in_the_blanks" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -807,9 +816,7 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-
                 </LinearLayout>
-
 
 
                 <Button

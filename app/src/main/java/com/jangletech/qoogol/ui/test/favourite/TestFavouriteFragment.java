@@ -93,11 +93,11 @@ public class TestFavouriteFragment extends BaseFragment implements TestListAdapt
     }
 
     private void fetchTestList() {
-        Log.d(TAG, "fetchTestList UserId : " + getUserId());
+        Log.d(TAG, "fetchTestList UserId : " + getUserId(getActivity()));
         //ProgressDialog.getInstance().show(getActivity());
         mBinding.swipeToRefresh.setRefreshing(true);
         Call<TestListResponse> call = apiService.fetchTestList(
-                getUserId(),
+                getUserId(getActivity()),
                 "FV",
                 "",
                 "",
@@ -171,7 +171,7 @@ public class TestFavouriteFragment extends BaseFragment implements TestListAdapt
     @Override
     public void favClick(TestModelNew testModelNew) {
         Log.d(TAG, "favClick Value : " + testModelNew.isFavourite());
-        mViewModel.updateFav("PRACTICE", getUserId(), testModelNew.getTm_id(), testModelNew.isFavourite());
+        mViewModel.updateFav("PRACTICE", getUserId(getActivity()), testModelNew.getTm_id(), testModelNew.isFavourite());
         //fetchTestList();
     }
 

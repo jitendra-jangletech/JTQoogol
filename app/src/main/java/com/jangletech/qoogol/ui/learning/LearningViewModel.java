@@ -30,7 +30,6 @@ import java.util.concurrent.Executors;
 import retrofit2.Call;
 import retrofit2.Callback;
 
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class LearningViewModel extends AndroidViewModel {
     ApiInterface apiService;
@@ -48,23 +47,23 @@ public class LearningViewModel extends AndroidViewModel {
     }
 
     void fetchQuestionData(String q_id) {
-        getDataFromApi(q_id,"");
+        getDataFromApi(q_id, "");
     }
 
     void fetchQuestionData(String q_id, String CASE) {
-        getDataFromApi(q_id,CASE);
+        getDataFromApi(q_id, CASE);
     }
 
-    private void getDataFromApi(String q_id,String CASE) {
+    private void getDataFromApi(String q_id, String CASE) {
         if (CASE.equalsIgnoreCase(""))
-             call = apiService.fetchQAApi(new PreferenceManager(getApplicationContext()).getUserId(),q_id);
+            call = apiService.fetchQAApi(new PreferenceManager(getApplication()).getUserId(), q_id);
         else
-            call = apiService.fetchQAApi(new PreferenceManager(getApplicationContext()).getUserId(),q_id, CASE);
+            call = apiService.fetchQAApi(new PreferenceManager(getApplication()).getUserId(), q_id, CASE);
         call.enqueue(new Callback<LearningQuestResponse>() {
             @Override
             public void onResponse(Call<LearningQuestResponse> call, retrofit2.Response<LearningQuestResponse> response) {
                 try {
-                    if (response.body()!=null && response.body().getResponse().equalsIgnoreCase("200")){
+                    if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
                         ExecutorService executor = Executors.newSingleThreadExecutor();
                         executor.execute(() -> mAppRepository.insertQuestions(response.body().getQuestion_list()));
                         Thread thread = new Thread() {
@@ -80,6 +79,7 @@ public class LearningViewModel extends AndroidViewModel {
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void onFailure(Call<LearningQuestResponse> call, Throwable t) {
                 t.printStackTrace();
@@ -87,7 +87,7 @@ public class LearningViewModel extends AndroidViewModel {
         });
     }
 
-    private String  getQuestionImages() {
+    private String getQuestionImages() {
         try {
             String images = "";
             List<LearningQuestionsNew> list = mAppRepository.getQuestions();
@@ -102,15 +102,13 @@ public class LearningViewModel extends AndroidViewModel {
         return "";
     }
 
-
     private void downloadImages() {
         try {
-            DownloadAsyncTask downloadAsyncTask = new DownloadAsyncTask(UtilHelper.getDirectory(getApplicationContext()));
+            DownloadAsyncTask downloadAsyncTask = new DownloadAsyncTask(UtilHelper.getDirectory(getApplication()));
             downloadAsyncTask.execute(createMediaPathDownloaded((getQuestionImages())), "1");
         } catch (Exception e) {
             e.printStackTrace();
         }
-
 
     }
 

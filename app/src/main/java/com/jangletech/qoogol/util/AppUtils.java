@@ -23,7 +23,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class AppUtils {
     private static final String TAG = "AppUtils";
@@ -50,11 +49,11 @@ public class AppUtils {
     }
 
     public static String getUserId() {
-        return String.valueOf(new PreferenceManager(getApplicationContext()).getInt(Constant.USER_ID));
+        return String.valueOf(new PreferenceManager(QoogolApp.getInstance()).getInt(Constant.USER_ID));
     }
 
     public static String getDeviceId() {
-        return Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+        return Settings.Secure.getString(QoogolApp.getInstance().getContentResolver(), Settings.Secure.ANDROID_ID);
     }
 
     public static String decodedString(String encodedString) {

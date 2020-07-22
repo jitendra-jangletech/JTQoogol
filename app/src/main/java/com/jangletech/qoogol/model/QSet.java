@@ -5,7 +5,7 @@ import android.os.Parcel;
 import com.google.gson.annotations.SerializedName;
 import com.jangletech.qoogol.util.Constant;
 
-public class QSet{
+public class QSet {
 
     @SerializedName("QSet")
     private String qSet;
@@ -63,7 +63,7 @@ public class QSet{
     }
 
     public String getQ_quest_desc() {
-        return q_quest_desc;
+        return q_quest_desc != null ? q_quest_desc : "";
     }
 
     public void setQ_quest_desc(String q_quest_desc) {

@@ -22,7 +22,6 @@ import java.util.concurrent.Executors;
 import retrofit2.Call;
 import retrofit2.Callback;
 
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class SavedViewModel extends AndroidViewModel {
     ApiInterface apiService;
@@ -40,7 +39,7 @@ public class SavedViewModel extends AndroidViewModel {
 
 
     private void getDataFromApi() {
-        Call<SaveQuestResponse> call = apiService.fetchSavedQAApi(new PreferenceManager(getApplicationContext()).getUserId(),"SV");
+        Call<SaveQuestResponse> call = apiService.fetchSavedQAApi(new PreferenceManager(getApplication()).getUserId(),"SV");
         call.enqueue(new Callback<SaveQuestResponse>() {
             @Override
             public void onResponse(Call<SaveQuestResponse> call, retrofit2.Response<SaveQuestResponse> response) {
@@ -70,7 +69,7 @@ public class SavedViewModel extends AndroidViewModel {
 
     private void downloadImages() {
         try {
-            DownloadAsyncTask downloadAsyncTask = new DownloadAsyncTask(UtilHelper.getDirectory(getApplicationContext()));
+            DownloadAsyncTask downloadAsyncTask = new DownloadAsyncTask(UtilHelper.getDirectory(getApplication()));
             downloadAsyncTask.execute(createMediaPathDownloaded((getQuestionImages())), "1");
         } catch (Exception e) {
             e.printStackTrace();

@@ -50,6 +50,7 @@ import com.jangletech.qoogol.dialog.LikeListingDialog;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.dialog.PublicProfileDialog;
 import com.jangletech.qoogol.dialog.ShareQuestionDialog;
+import com.jangletech.qoogol.dialog.SubjectiveAnsDialog;
 import com.jangletech.qoogol.model.ProcessQuestion;
 import com.jangletech.qoogol.model.StartResumeTestResponse;
 import com.jangletech.qoogol.model.SubmitTest;
@@ -64,6 +65,7 @@ import com.jangletech.qoogol.util.UtilHelper;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringEscapeUtils;
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -80,7 +82,11 @@ import retrofit2.Response;
 
 
 public class PractiseViewPagerAdapter extends PagerAdapter
-        implements LikeListingDialog.onItemClickListener, CommentDialog.CommentClickListener, PublicProfileDialog.PublicProfileClickListener {
+        implements LikeListingDialog.onItemClickListener,
+        CommentDialog.CommentClickListener,
+        PublicProfileDialog.PublicProfileClickListener,
+        SubjectiveAnsDialog.GetAnsListener
+{
     private static final String TAG = "PractiseViewPagerAdapte";
     private Activity context;
     private List<TestQuestionNew> testQuestionNewList;
@@ -522,6 +528,23 @@ public class PractiseViewPagerAdapter extends PagerAdapter
         ImageView fibImg = layout.findViewById(R.id.fib_img);
         Log.d(TAG, "FILL_THE_BLANKS");
 
+        etFillTheBlanks.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                testQuestionNew.setTtqa_sub_ans(AppUtils.encodedString(s.toString()));
+            }
+        });
+
         Button btnSubmit = layout.findViewById(R.id.submit);
 
         if (testQuestionNew.isTtqa_attempted()) {
@@ -552,7 +575,7 @@ public class PractiseViewPagerAdapter extends PagerAdapter
                     fibImg.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_wrong));
                     testQuestionNew.setAnsweredRight(false);
                 }
-                submitAnswerToServer(testQuestionNew, strAnswer, Constant.FILL_THE_BLANKS);
+                submitAnswerToServer(testQuestionNew, testQuestionNew.getTtqa_sub_ans(), Constant.FILL_THE_BLANKS);
             }
         });
     }
@@ -1260,28 +1283,13 @@ public class PractiseViewPagerAdapter extends PagerAdapter
         else
             question.setTtqa_obtain_marks("0");
 
-        //todo encode only for subjective and fill the blanks type
-        if (question.getQue_option_type().equalsIgnoreCase(Constant.FILL_THE_BLANKS) ||
-                question.getType().equalsIgnoreCase(Constant.SHORT_ANSWER) ||
-                question.getType().equalsIgnoreCase(Constant.LONG_ANSWER) ||
-                question.getType().equalsIgnoreCase(Constant.ONE_LINE_ANSWER) ||
-                question.getType().equalsIgnoreCase(Constant.FILL_THE_BLANKS)) {
-            //String encoded = Base64.encodeToString(scq_ans.getBytes(StandardCharsets.UTF_8), Base64.DEFAULT);
-            //String encodedAns = StringUtils.stripAccents(encoded);
-            String encoded = AppUtils.encodedString(scq_ans);
-            question.setTtqa_sub_ans(encoded);
-            Log.d(TAG, "Encoded Ans : " + encoded);
-            Log.d(TAG, "Decoded Ans : " + AppUtils.decodedString(encoded));
-        } else {
-            question.setTtqa_sub_ans(scq_ans);
-        }
-
+        question.setTtqa_sub_ans(scq_ans);
         question.setTtqa_attempted(true);
         question.setTtqa_visited(false);
 
         submitTestQuestionList.add(question);
         submitTest.setTestQuestionNewList(submitTestQuestionList);
-        Log.d(TAG, "Get Encoded : " + StringEscapeUtils.unescapeJava(question.getTtqa_sub_ans().replace("=", "")));
+        //Log.d(TAG, "Get Encoded : " + StringEscapeUtils.unescapeJava(question.getTtqa_sub_ans().replace("=", "")));
         String json = gson.toJson(submitTest);
         Log.d(TAG, "submitSubjectiveAnsToServer JSON : " + json);
         HashMap<String, String> params = new HashMap<>();
@@ -1311,6 +1319,10 @@ public class PractiseViewPagerAdapter extends PagerAdapter
                 t.printStackTrace();
             }
         });
+    }
+
+    private void markAQuestion() {
+
     }
 
     public void setRightSCQ(String option, ImageView scq1Img, ImageView scq2Img, ImageView scq3Img, ImageView scq4Img, ImageView scq5Img) {
@@ -1397,7 +1409,6 @@ public class PractiseViewPagerAdapter extends PagerAdapter
         }
 
         scqImgtextImg1.setOnClickListener(v ->
-
         {
             setSCQImgTextAnsIndicator(scqimgImgtextChck1, scqimgImgtextChck2, scqimgImgtextChck3, scqimgImgtextChck4);
             setSCQImgTextLayout(scqImgtextImg1, scqImgtextImg2, scqImgtextImg3, scqImgtextImg4);
@@ -1408,7 +1419,6 @@ public class PractiseViewPagerAdapter extends PagerAdapter
         });
 
         scqImgtextImg2.setOnClickListener(v ->
-
         {
             setSCQImgTextAnsIndicator(scqimgImgtextChck1, scqimgImgtextChck2, scqimgImgtextChck3, scqimgImgtextChck4);
             setSCQImgTextLayout(scqImgtextImg1, scqImgtextImg2, scqImgtextImg3, scqImgtextImg4);
@@ -1419,7 +1429,6 @@ public class PractiseViewPagerAdapter extends PagerAdapter
         });
 
         scqImgtextImg3.setOnClickListener(v ->
-
         {
             setSCQImgTextAnsIndicator(scqimgImgtextChck1, scqimgImgtextChck2, scqimgImgtextChck3, scqimgImgtextChck4);
             setSCQImgTextLayout(scqImgtextImg1, scqImgtextImg2, scqImgtextImg3, scqImgtextImg4);
@@ -1430,7 +1439,6 @@ public class PractiseViewPagerAdapter extends PagerAdapter
         });
 
         scqImgtextImg4.setOnClickListener(v ->
-
         {
             setSCQImgTextAnsIndicator(scqimgImgtextChck1, scqimgImgtextChck2, scqimgImgtextChck3, scqimgImgtextChck4);
             setSCQImgTextLayout(scqImgtextImg1, scqImgtextImg2, scqImgtextImg3, scqImgtextImg4);
@@ -1478,8 +1486,9 @@ public class PractiseViewPagerAdapter extends PagerAdapter
 
     private void initSubjective(ViewGroup layout, TestQuestionNew testQuestionNew) {
         TextView tvWordCounter = layout.findViewById(R.id.tvWordCounter);
+        TextView tvFtbWordCounter = layout.findViewById(R.id.tvFtbWordCounter);
         TextView multi_lineCounter = layout.findViewById(R.id.multi_lineCounter);
-
+        TextView tvTimer = layout.findViewById(R.id.tvtimer);
         Button btnSubmit = layout.findViewById(R.id.submit);
         ConstraintLayout multiLineAnswerLayout = layout.findViewById(R.id.multi_line_answer);
         ConstraintLayout fillTheBlanksLayout = layout.findViewById(R.id.fill_in_the_blanks_layout);
@@ -1490,14 +1499,44 @@ public class PractiseViewPagerAdapter extends PagerAdapter
 
         String decodedAns = AppUtils.decodedString(testQuestionNew.getTtqa_sub_ans());
         //Log.d(TAG, "Plain Text : "+testQuestionNew.getTtqa_sub_ans());
-        Log.d(TAG, "Decoded Text : " + StringUtils.stripAccents(decodedAns));
+        //Log.d(TAG, "Decoded Text : " + StringUtils.stripAccents(decodedAns));
+        int minutes = Integer.parseInt(tvTimer.getText().toString().split(":",-1)[0]);
+        int seconds = Integer.parseInt(tvTimer.getText().toString().split(":",-1)[1]);
+        SubjectiveAnsDialog subjectiveAnsDialog = new SubjectiveAnsDialog(context,decodedAns,seconds,minutes,this);
+
+        /*etMultiLineAns.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                etMultiLineAns.requestFocus();
+                return true;
+            }
+        });*/
+
+        etMultiLineAns.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                etMultiLineAns.requestFocus();
+            }
+        });
+
+        etMultiLineAns.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    etMultiLineAns.clearFocus();
+                            subjectiveAnsDialog.show();
+                }
+            }
+        });
 
         if (testQuestionNew.getType().equalsIgnoreCase(Constant.ONE_LINE_ANSWER) ||
                 testQuestionNew.getType().equalsIgnoreCase(Constant.FILL_THE_BLANKS)) {
             Log.d(TAG, "FILL_THE_BLANKS");
             fillTheBlanksLayout.setVisibility(View.VISIBLE);
+            answerCharCounter(etSinlgeineAns, tvFtbWordCounter, 10, testQuestionNew);
             etSinlgeineAns.setText(decodedAns);
         }
+
         if (testQuestionNew.getType().equalsIgnoreCase(Constant.SHORT_ANSWER) ||
                 testQuestionNew.getType().equalsIgnoreCase(Constant.LONG_ANSWER)) {
             Log.d(TAG, "SHORT_ANSWER OR LONG_ANSWER");
@@ -1526,7 +1565,7 @@ public class PractiseViewPagerAdapter extends PagerAdapter
                         testQuestionNew.setAnsweredRight(false);
                     }
                     solutionLayout.setVisibility(View.VISIBLE);
-                    submitAnswerToServer(testQuestionNew, etMultiLineAns.getText().toString(), "SUBJECTIVE");
+                    submitAnswerToServer(testQuestionNew, testQuestionNew.getTtqa_sub_ans(), "SUBJECTIVE");
                 }
             }
         });
@@ -1749,7 +1788,7 @@ public class PractiseViewPagerAdapter extends PagerAdapter
                     for (int i = 0; i < words.length; i++) {
                         if (!words[i].isEmpty()) {
                             wordCount++;
-                            testQuestionNew.setTtqa_sub_ans(s.toString());
+                            testQuestionNew.setTtqa_sub_ans(AppUtils.encodedString(s.toString()));
                         }
                     }
                 }
@@ -1863,6 +1902,12 @@ public class PractiseViewPagerAdapter extends PagerAdapter
                 .dontAnimate()
                 .into(imageView);
         dialog.show();
+    }
+
+    @Override
+    public void onAnswerEntered(String answer) {
+        //showToast(answer);
+        viewPagerClickListener.onFullScreenAns(answer);
     }
 
 
@@ -2495,15 +2540,11 @@ public class PractiseViewPagerAdapter extends PagerAdapter
 
     public interface ViewPagerClickListener {
         void onLikeClick(boolean isChecked, int likeCount);
-
         void onCommentClick();
-
         void onShareClick();
-
         void onSubmitClick();
-
         void onMarkQuestion(int pos);
-
+        void onFullScreenAns(String strAns);
         void onFavouriteClick(boolean isChecked);
     }
 }

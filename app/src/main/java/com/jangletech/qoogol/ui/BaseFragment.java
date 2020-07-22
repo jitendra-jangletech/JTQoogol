@@ -3,12 +3,13 @@ package com.jangletech.qoogol.ui;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.provider.Settings;
-import android.util.Base64;
 import android.util.Log;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -30,21 +31,16 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.textfield.TextInputLayout;
 import com.jangletech.qoogol.R;
-import com.jangletech.qoogol.activities.LaunchActivity;
 import com.jangletech.qoogol.activities.MainActivity;
 import com.jangletech.qoogol.activities.RegisterLoginActivity;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.net.UnknownHostException;
-import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
 
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class BaseFragment extends Fragment {
 
@@ -141,8 +137,8 @@ public class BaseFragment extends Fragment {
     }
 
     public void clearFilters() {
-        saveString(Constant.tm_diff_level, "");
-        saveString(Constant.tm_avg_rating, "");
+        saveString(getActivity(), Constant.tm_diff_level, "");
+        saveString(getActivity(), Constant.tm_avg_rating, "");
     }
 
     public void resetSettingAndLogout() {
@@ -150,9 +146,9 @@ public class BaseFragment extends Fragment {
         alertDialog.setTitle(getActivity().getResources().getString(R.string.warning));
         alertDialog.setMessage("You have signed-in from another device. Logging out.");
         alertDialog.setPositiveButton("Ok", (dialog, which) -> {
-            new PreferenceManager(getApplicationContext()).setIsLoggedIn(false);
-            new PreferenceManager(getApplicationContext()).saveString(Constant.MOBILE, "");
-            new PreferenceManager(getApplicationContext()).saveString(Constant.USER_ID, "");
+            new PreferenceManager(getActivity()).setIsLoggedIn(false);
+            new PreferenceManager(getActivity()).saveString(Constant.MOBILE, "");
+            new PreferenceManager(getActivity()).saveString(Constant.USER_ID, "");
             Intent intent = new Intent(requireActivity(), RegisterLoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
@@ -187,6 +183,33 @@ public class BaseFragment extends Fragment {
                 .setMessage(msg)
                 .setPositiveButton("OK", null)
                 .show();
+    }
+
+    public void showErrorDialog(Activity activity, String title, String msg, String flag, String mobile) {
+        Bundle bundle = new Bundle();
+        bundle.putString(Constant.u_mob_1, mobile);
+        Log.d(TAG, "showErrorDialog Mobile : " + mobile);
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.AlertDialogStyle);
+        builder.setTitle("Error Code : " + title)
+                .setMessage(msg)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (flag.equals("NEW_USER")) {
+                            replaceFragment(R.id.container, new NewUserFragment(), bundle);
+                        } else if (flag.equals("EXISTING_USER")) {
+                            replaceFragment(R.id.container, new ExistingUserFragment(), bundle);
+                        }
+                    }
+                })
+                .show();
+    }
+
+    public String getMobileFromBundle(Bundle bundle) {
+        if (bundle != null) {
+            return bundle.getString(Constant.u_mob_1);
+        }
+        return "";
     }
 
     public void setTimer(TextView timer, int seconds, int minutes) {
@@ -252,24 +275,24 @@ public class BaseFragment extends Fragment {
     }
 
     //To Device get Android Id
-    public static String getDeviceId() {
-        return Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+    public static String getDeviceId(Context mContext) {
+        return Settings.Secure.getString(mContext.getContentResolver(), Settings.Secure.ANDROID_ID);
     }
 
     public String getString(String key) {
-        return new PreferenceManager(getApplicationContext()).getString(key);
+        return new PreferenceManager(getActivity()).getString(key);
     }
 
-    public static void saveString(String key, String value) {
-        new PreferenceManager(getApplicationContext()).saveString(key, value);
+    public static void saveString(Context mContext, String key, String value) {
+        new PreferenceManager(mContext).saveString(key, value);
     }
 
-    public static String getUserId() {
-        return String.valueOf(new PreferenceManager(getApplicationContext()).getInt(Constant.USER_ID));
+    public static String getUserId(Context mContext) {
+        return String.valueOf(new PreferenceManager(mContext).getInt(Constant.USER_ID));
     }
 
-    public static String getUserName() {
-        return String.valueOf(new PreferenceManager(getApplicationContext()).getString(Constant.userName));
+    public static String getUserName(Context mContext) {
+        return String.valueOf(new PreferenceManager(mContext).getString(Constant.userName));
     }
 
     public void dismissRefresh(SwipeRefreshLayout swipeRefreshLayout) {

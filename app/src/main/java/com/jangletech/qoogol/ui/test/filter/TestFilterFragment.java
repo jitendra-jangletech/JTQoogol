@@ -195,10 +195,10 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
                                         boolean fromUser) {
                 Log.d(TAG, "onRatingChanged: " + rating);
                 if (rating == 0) {
-                    saveString(Constant.tm_avg_rating, "");
+                    saveString(getActivity(),Constant.tm_avg_rating, "");
                 } else {
                     params.put(Constant.tm_avg_rating, String.valueOf(rating));
-                    saveString(Constant.tm_avg_rating, String.valueOf(rating));
+                    saveString(getActivity(),Constant.tm_avg_rating, String.valueOf(rating));
                 }
             }
         });
@@ -260,9 +260,9 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
             if (chip != null) {
                 if (chip.isChecked()) {
                     setCheckedChip(mBinding.testCategoryChipGrp);
-                    saveString(Constant.tm_catg, mCategoryMap.get(chip.getText()));
+                    saveString(getActivity(),Constant.tm_catg, mCategoryMap.get(chip.getText()));
                 } else {
-                    saveString(Constant.tm_catg, "");
+                    saveString(getActivity(),Constant.tm_catg, "");
                     setCheckedChip(mBinding.testCategoryChipGrp);
                 }
             }
@@ -292,11 +292,11 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
                         diffLevel = "M";
 
                     params.put(Constant.tm_diff_level, diffLevel);
-                    saveString(Constant.tm_diff_level, diffLevel);
+                    saveString(getActivity(),Constant.tm_diff_level, diffLevel);
                     setCheckedChip(mBinding.testDifficultyLevelChipGrp);
                 }
             } else {
-                saveString(Constant.tm_diff_level, "");
+                saveString(getActivity(),Constant.tm_diff_level, "");
                 setCheckedChip(mBinding.testDifficultyLevelChipGrp);
             }
         });

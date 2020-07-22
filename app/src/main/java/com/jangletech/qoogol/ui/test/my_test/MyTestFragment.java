@@ -86,7 +86,7 @@ public class MyTestFragment extends BaseFragment
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        Log.d(TAG, "Android Id : " + getDeviceId());
+        Log.d(TAG, "Android Id : " + getDeviceId(getActivity()));
     }
 
     @Override
@@ -147,7 +147,7 @@ public class MyTestFragment extends BaseFragment
             }
         });
 
-        params.put(Constant.u_user_id, getUserId());
+        params.put(Constant.u_user_id, getUserId(getActivity()));
         params.put(CASE, "");
         params.put(Constant.tm_popular_test, "");
         params.put(Constant.tm_recent_test, "");
@@ -178,7 +178,7 @@ public class MyTestFragment extends BaseFragment
 
         if (params.get(Constant.tm_diff_level) != null && !params.get(Constant.tm_diff_level).isEmpty()) {
             Log.d(TAG, "initViews Diff Level: " + params.get(Constant.tm_diff_level));
-            mViewModel.getAllTestByDifficultyLevel("PRACTICE", getUserId(), params.get(Constant.tm_diff_level)).observe(getViewLifecycleOwner(), new Observer<List<TestModelNew>>() {
+            mViewModel.getAllTestByDifficultyLevel("PRACTICE", getUserId(getActivity()), params.get(Constant.tm_diff_level)).observe(getViewLifecycleOwner(), new Observer<List<TestModelNew>>() {
                 @Override
                 public void onChanged(@Nullable final List<TestModelNew> tests) {
                     if (tests != null) {
@@ -191,7 +191,7 @@ public class MyTestFragment extends BaseFragment
         }
         if (params.get(Constant.tm_avg_rating) != null && !params.get(Constant.tm_avg_rating).isEmpty()) {
             Log.d(TAG, "initViews Avg Rating: " + params.get(Constant.tm_avg_rating));
-            mViewModel.getAllTestByAvgRating("PRACTICE", getUserId(), params.get(Constant.tm_avg_rating)).observe(getViewLifecycleOwner(), new Observer<List<TestModelNew>>() {
+            mViewModel.getAllTestByAvgRating("PRACTICE", getUserId(getActivity()), params.get(Constant.tm_avg_rating)).observe(getViewLifecycleOwner(), new Observer<List<TestModelNew>>() {
                 @Override
                 public void onChanged(@Nullable final List<TestModelNew> tests) {
                     if (tests != null) {
@@ -202,7 +202,7 @@ public class MyTestFragment extends BaseFragment
                 }
             });
         } else {
-            mViewModel.getAllTests("PRACTICE", getUserId()).observe(getViewLifecycleOwner(), new Observer<List<TestModelNew>>() {
+            mViewModel.getAllTests("PRACTICE", getUserId(getActivity())).observe(getViewLifecycleOwner(), new Observer<List<TestModelNew>>() {
                 @Override
                 public void onChanged(@Nullable final List<TestModelNew> tests) {
                     if (tests != null) {
@@ -362,7 +362,7 @@ public class MyTestFragment extends BaseFragment
                     List<TestModelNew> testList = response.body().getTestList();
                     for (TestModelNew testModelNew : testList) {
                         testModelNew.setFlag("PRACTICE");
-                        testModelNew.setUserId(getUserId());
+                        testModelNew.setUserId(getUserId(getActivity()));
                     }
                     mViewModel.insert(testList);
                 } else if (response.body().getResponse().equals("501")) {
@@ -421,7 +421,7 @@ public class MyTestFragment extends BaseFragment
     @Override
     public void favClick(TestModelNew testModelNew) {
         Log.d(TAG, "favClick Value : " + testModelNew.isFavourite());
-        mViewModel.updateFav("PRACTICE", getUserId(), testModelNew.getTm_id(), testModelNew.isFavourite());
+        mViewModel.updateFav("PRACTICE", getUserId(getActivity()), testModelNew.getTm_id(), testModelNew.isFavourite());
     }
 
     @Override

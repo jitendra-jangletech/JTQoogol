@@ -21,7 +21,6 @@ import java.util.concurrent.Executors;
 import retrofit2.Call;
 import retrofit2.Callback;
 
-import static com.facebook.FacebookSdk.getApplicationContext;
 import static com.jangletech.qoogol.ui.BaseFragment.getDeviceId;
 import static com.jangletech.qoogol.util.Constant.forcerefresh;
 import static com.jangletech.qoogol.util.Constant.friends;
@@ -41,7 +40,7 @@ public class FriendsViewModel extends AndroidViewModel {
         super(application);
         apiService = ApiClient.getInstance().getApi();
         mAppRepository = new AppRepository(application);
-        userId = new PreferenceManager(getApplicationContext()).getUserId();
+        userId = new PreferenceManager(getApplication()).getUserId();
         pagestart = "0";
     }
 
@@ -61,9 +60,9 @@ public class FriendsViewModel extends AndroidViewModel {
 
     private void getData(boolean isRefresh) {
         if (isRefresh)
-            call = apiService.fetchRefreshedFriendss(userId, friends, getDeviceId(), qoogol, pagestart, forcerefresh);
+            call = apiService.fetchRefreshedFriendss(userId, friends, getDeviceId(getApplication()), qoogol, pagestart, forcerefresh);
         else
-            call = apiService.fetchFriends(userId, friends, getDeviceId(), qoogol, pagestart);
+            call = apiService.fetchFriends(userId, friends, getDeviceId(getApplication()), qoogol, pagestart);
         call.enqueue(new Callback<FriendsResponse>() {
             @Override
             public void onResponse(Call<FriendsResponse> call, retrofit2.Response<FriendsResponse> response) {

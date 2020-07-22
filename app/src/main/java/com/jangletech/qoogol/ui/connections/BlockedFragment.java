@@ -175,7 +175,7 @@ public class BlockedFragment extends BaseFragment implements BlockedConnectionAd
     private void updateConnection(String user, String Processcase) {
         ApiInterface apiService = ApiClient.getInstance().getApi();
         ProgressDialog.getInstance().show(getActivity());
-        Call<ResponseObj> call = apiService.updateConnections(userId, Processcase, getDeviceId(), qoogol, user);
+        Call<ResponseObj> call = apiService.updateConnections(userId, Processcase, getDeviceId(getActivity()), qoogol, user);
         call.enqueue(new Callback<ResponseObj>() {
             @Override
             public void onResponse(Call<ResponseObj> call, retrofit2.Response<ResponseObj> response) {

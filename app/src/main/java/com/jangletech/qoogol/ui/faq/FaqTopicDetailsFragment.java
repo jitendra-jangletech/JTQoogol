@@ -63,7 +63,7 @@ public class FaqTopicDetailsFragment extends BaseFragment implements FAQListAdap
     private void initViews() {
         getActionBar().setTitle(faqModel.getFaqt_name());
         HashMap<String, String> params = new HashMap<>();
-        params.put(Constant.u_user_id, getUserId());
+        params.put(Constant.u_user_id, getUserId(getActivity()));
         params.put(Constant.CASE, "");
         params.put(Constant.faq_app, Constant.APP_NAME);
         params.put(Constant.faqt_id, faqModel.getFaqt_id());

@@ -1,21 +1,17 @@
 package com.jangletech.qoogol.ui.connections;
 
 import android.app.Application;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import com.jangletech.qoogol.database.repo.AppRepository;
-import com.jangletech.qoogol.dialog.ProgressDialog;
-import com.jangletech.qoogol.model.Connections;
 import com.jangletech.qoogol.model.FriendRequest;
 import com.jangletech.qoogol.model.FriendRequestResponse;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.util.PreferenceManager;
-import com.jangletech.qoogol.util.UtilHelper;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -24,7 +20,6 @@ import java.util.concurrent.Executors;
 import retrofit2.Call;
 import retrofit2.Callback;
 
-import static com.facebook.FacebookSdk.getApplicationContext;
 import static com.jangletech.qoogol.ui.BaseFragment.getDeviceId;
 import static com.jangletech.qoogol.util.Constant.forcerefresh;
 import static com.jangletech.qoogol.util.Constant.friendrequests;
@@ -45,7 +40,7 @@ public class FriendReqViewModel extends AndroidViewModel {
         super(application);
         apiService = ApiClient.getInstance().getApi();
         mAppRepository = new AppRepository(application);
-        userId = new PreferenceManager(getApplicationContext()).getUserId();
+        userId = new PreferenceManager(getApplication()).getUserId();
         pagestart = "0";
     }
 
@@ -70,9 +65,9 @@ public class FriendReqViewModel extends AndroidViewModel {
 
     private void getData(boolean isRefresh) {
         if (isRefresh)
-            call = apiService.fetchRefreshedFriendReq(userId,friendrequests, getDeviceId(), qoogol,pagestart,forcerefresh);
+            call = apiService.fetchRefreshedFriendReq(userId,friendrequests, getDeviceId(getApplication()), qoogol,pagestart,forcerefresh);
         else
-            call = apiService.fetchFriendRequests(userId,friendrequests, getDeviceId(), qoogol,pagestart);
+            call = apiService.fetchFriendRequests(userId,friendrequests, getDeviceId(getApplication()), qoogol,pagestart);
 
         call.enqueue(new Callback<FriendRequestResponse>() {
             @Override

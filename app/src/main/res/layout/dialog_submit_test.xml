@@ -2,292 +2,299 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.core.widget.NestedScrollView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <LinearLayout
+        <androidx.core.widget.NestedScrollView
+            app:layout_constraintTop_toTopOf="parent"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:minWidth="@dimen/_400sdp"
-            android:orientation="vertical">
+            android:layout_height="0dp"
+            android:fillViewport="true">
 
-            <TextView
-                android:id="@+id/tvTitle"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/_10sdp"
-                android:text="Test Name"
-                android:textColor="@color/colorBlack"
-                android:textSize="@dimen/_15ssp" />
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:minWidth="@dimen/_400sdp"
+                android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/tvTotalMarks"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:padding="@dimen/_5sdp"
-                    android:text="Total Marks : "
-                    android:textSize="@dimen/_12ssp"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/tvTotalMarksValue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:padding="@dimen/_5sdp"
-                    android:text="0"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="@dimen/_12ssp"
-                    app:layout_constraintLeft_toRightOf="@+id/tvTotalMarks"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/tvObtainMarks"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:padding="@dimen/_5sdp"
-                    android:text="Obtain Marks : "
-                    android:textSize="@dimen/_12ssp"
-                    app:layout_constraintRight_toLeftOf="@+id/tvObtainMarksValue"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/tvObtainMarksValue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:padding="@dimen/_5sdp"
-                    android:text="0"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="@dimen/_12ssp"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:layout_marginBottom="@dimen/_5sdp"
-                android:background="@color/colorLightGrey" />
-
-            <RelativeLayout
-                android:id="@+id/wrongLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:foreground="?attr/selectableItemBackground"
-                android:padding="@dimen/_15sdp">
-
-                <TextView
-                    android:id="@+id/wrong"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/ic_wrong_mtp" />
-
-                <TextView
-                    android:id="@+id/tvAttempted"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/_12sdp"
-                    android:layout_toRightOf="@+id/wrong"
-                    android:gravity="center_horizontal"
-                    android:text="Wrong"
-                    android:textSize="@dimen/_12ssp" />
-
-                <TextView
-                    android:id="@+id/tvWrongCount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="@dimen/_20sdp"
-                    android:text="0"
-                    android:textColor="@color/colorBlack"
-                    android:textStyle="bold" />
-
-            </RelativeLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:layout_marginBottom="@dimen/_5sdp"
-                android:background="@color/colorLightGrey" />
-
-            <RelativeLayout
-                android:id="@+id/unattemptedLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:foreground="?attr/selectableItemBackground"
-                android:padding="@dimen/_15sdp">
-
-                <TextView
-                    android:id="@+id/unattempted"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/ic_unattempted" />
-
-                <TextView
-                    android:id="@+id/tvUnAttempted"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/_12sdp"
-                    android:layout_toRightOf="@+id/unattempted"
-                    android:gravity="center_horizontal"
-                    android:text="Unattempted"
-                    android:textSize="@dimen/_12ssp" />
-
-                <TextView
-                    android:id="@+id/tvUnAttemptedCount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="@dimen/_20sdp"
-                    android:text="0"
-                    android:textColor="@color/colorBlack"
-                    android:textStyle="bold" />
-
-            </RelativeLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:layout_marginBottom="@dimen/_5sdp"
-                android:background="@color/colorLightGrey" />
-
-            <RelativeLayout
-                android:id="@+id/markedLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:foreground="?attr/selectableItemBackground"
-                android:padding="@dimen/_15sdp">
-
-                <TextView
-                    android:id="@+id/marked"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/button_marked" />
-
-                <TextView
-                    android:id="@+id/tvMarked"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/_12sdp"
-                    android:layout_toRightOf="@+id/marked"
-                    android:gravity="center_horizontal"
-                    android:text="Marked"
-                    android:textSize="@dimen/_12ssp" />
-
-                <TextView
-                    android:id="@+id/tvMarkedCount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="@dimen/_20sdp"
-                    android:text="0"
-                    android:textColor="@color/colorBlack"
-                    android:textStyle="bold" />
-
-            </RelativeLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/_10sdp">
-
-                <TextView
-                    android:id="@+id/rating_heading"
+                    android:id="@+id/tvTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/roboto_medium"
-                    android:text="@string/rating_test_heading"
-                    android:textAlignment="center"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/_12ssp"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <androidx.appcompat.widget.AppCompatRatingBar
-                    android:id="@+id/rating"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_15sdp"
-                    android:numStars="5"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/rating_heading" />
-
-                <EditText
-                    android:id="@+id/feedback"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_15sdp"
-                    android:background="@drawable/grey_border"
-                    android:gravity="top|left"
-                    android:hint="@string/feedback_label"
-                    android:lines="5"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/_12ssp"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/rating" />
-
-                <TextView
-                    android:id="@+id/tvConfirmMsg"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/_15sdp"
-                    android:text="Are you sure want to submit the test?"
+                    android:padding="@dimen/_10sdp"
+                    android:text="Test Name"
                     android:textColor="@color/colorBlack"
-                    android:textSize="@dimen/_14ssp"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/feedback" />
+                    android:textSize="@dimen/_15ssp" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/tvTotalMarks"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:padding="@dimen/_5sdp"
+                        android:text="Total Marks : "
+                        android:textSize="@dimen/_12ssp"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvTotalMarksValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:padding="@dimen/_5sdp"
+                        android:text="0"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/_12ssp"
+                        app:layout_constraintLeft_toRightOf="@+id/tvTotalMarks"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvObtainMarks"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:padding="@dimen/_5sdp"
+                        android:text="Obtain Marks : "
+                        android:textSize="@dimen/_12ssp"
+                        app:layout_constraintRight_toLeftOf="@+id/tvObtainMarksValue"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvObtainMarksValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:padding="@dimen/_5sdp"
+                        android:text="0"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/_12ssp"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:background="@color/colorLightGrey" />
 
                 <RelativeLayout
-                    android:layout_width="wrap_content"
+                    android:id="@+id/wrongLayout"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/_20sdp"
-                    android:padding="@dimen/_5sdp"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvConfirmMsg">
+                    android:foreground="?attr/selectableItemBackground"
+                    android:padding="@dimen/_15sdp">
 
                     <TextView
-                        android:id="@+id/tvYes"
-                        android:layout_width="@dimen/_50sdp"
-                        android:layout_height="@dimen/_35sdp"
-                        android:background="@color/colorSkyBlue"
-                        android:gravity="center"
-                        android:text="Yes"
-                        android:textColor="@color/colorWhite"
-                        android:textStyle="bold" />
+                        android:id="@+id/wrong"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/ic_wrong_mtp" />
 
                     <TextView
-                        android:id="@+id/tvNo"
-                        android:layout_width="@dimen/_50sdp"
-                        android:layout_height="@dimen/_35sdp"
-                        android:layout_marginLeft="@dimen/_20sdp"
-                        android:layout_toRightOf="@+id/tvYes"
-                        android:background="@color/grey"
-                        android:gravity="center"
-                        android:text="No"
-                        android:textColor="@color/colorWhite"
+                        android:id="@+id/tvAttempted"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_12sdp"
+                        android:layout_toRightOf="@+id/wrong"
+                        android:gravity="center_horizontal"
+                        android:text="Wrong"
+                        android:textSize="@dimen/_12ssp" />
+
+                    <TextView
+                        android:id="@+id/tvWrongCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="@dimen/_20sdp"
+                        android:text="0"
+                        android:textColor="@color/colorBlack"
                         android:textStyle="bold" />
 
                 </RelativeLayout>
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:background="@color/colorLightGrey" />
+
+                <RelativeLayout
+                    android:id="@+id/unattemptedLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:padding="@dimen/_15sdp">
+
+                    <TextView
+                        android:id="@+id/unattempted"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/ic_unattempted" />
+
+                    <TextView
+                        android:id="@+id/tvUnAttempted"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_12sdp"
+                        android:layout_toRightOf="@+id/unattempted"
+                        android:gravity="center_horizontal"
+                        android:text="Unattempted"
+                        android:textSize="@dimen/_12ssp" />
+
+                    <TextView
+                        android:id="@+id/tvUnAttemptedCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="@dimen/_20sdp"
+                        android:text="0"
+                        android:textColor="@color/colorBlack"
+                        android:textStyle="bold" />
+
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:background="@color/colorLightGrey" />
+
+                <RelativeLayout
+                    android:id="@+id/markedLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:padding="@dimen/_15sdp">
+
+                    <TextView
+                        android:id="@+id/marked"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/button_marked" />
+
+                    <TextView
+                        android:id="@+id/tvMarked"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_12sdp"
+                        android:layout_toRightOf="@+id/marked"
+                        android:gravity="center_horizontal"
+                        android:text="Marked"
+                        android:textSize="@dimen/_12ssp" />
+
+                    <TextView
+                        android:id="@+id/tvMarkedCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="@dimen/_20sdp"
+                        android:text="0"
+                        android:textColor="@color/colorBlack"
+                        android:textStyle="bold" />
+
+                </RelativeLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/_10sdp">
+
+                    <TextView
+                        android:id="@+id/rating_heading"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_medium"
+                        android:text="@string/rating_test_heading"
+                        android:textAlignment="center"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_12ssp"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatRatingBar
+                        android:id="@+id/rating"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_15sdp"
+                        android:numStars="5"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/rating_heading" />
+
+                    <EditText
+                        android:id="@+id/feedback"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_15sdp"
+                        android:background="@drawable/grey_border"
+                        android:gravity="top|left"
+                        android:hint="@string/feedback_label"
+                        android:lines="5"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_12ssp"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/rating" />
+
+                    <TextView
+                        android:id="@+id/tvConfirmMsg"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/_15sdp"
+                        android:text="Are you sure want to submit the test?"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/_14ssp"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/feedback" />
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_20sdp"
+                        android:padding="@dimen/_5sdp"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tvConfirmMsg">
+
+                        <TextView
+                            android:id="@+id/tvYes"
+                            android:layout_width="@dimen/_50sdp"
+                            android:layout_height="@dimen/_35sdp"
+                            android:background="@color/colorSkyBlue"
+                            android:gravity="center"
+                            android:text="Yes"
+                            android:textColor="@color/colorWhite"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvNo"
+                            android:layout_width="@dimen/_50sdp"
+                            android:layout_height="@dimen/_35sdp"
+                            android:layout_marginLeft="@dimen/_20sdp"
+                            android:layout_toRightOf="@+id/tvYes"
+                            android:background="@color/grey"
+                            android:gravity="center"
+                            android:text="No"
+                            android:textColor="@color/colorWhite"
+                            android:textStyle="bold" />
+
+                    </RelativeLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-        </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

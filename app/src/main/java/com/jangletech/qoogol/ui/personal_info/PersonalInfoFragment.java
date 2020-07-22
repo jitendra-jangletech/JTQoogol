@@ -409,7 +409,7 @@ public class PersonalInfoFragment extends BaseFragment {
     private void verifyMobile(String mobile, String verify) {
         HashMap map = new HashMap();
         map.put(Constant.u_app_version, Constant.APP_VERSION);
-        map.put(Constant.device_id, getDeviceId());
+        map.put(Constant.device_id, getDeviceId(getActivity()));
         map.put(Constant.u_user_type, "u");
         map.put(Constant.u_mob_1, mobile);
         map.put(Constant.VERIFY, verify);
@@ -518,7 +518,7 @@ public class PersonalInfoFragment extends BaseFragment {
     private void updateConnection(String user, String Processcase) {
         ApiInterface apiService = ApiClient.getInstance().getApi();
         ProgressDialog.getInstance().show(getActivity());
-        Call<ResponseObj> call = apiService.updateConnections(String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID)), Processcase, getDeviceId(), qoogol, user);
+        Call<ResponseObj> call = apiService.updateConnections(String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID)), Processcase, getDeviceId(getActivity()), qoogol, user);
         call.enqueue(new Callback<ResponseObj>() {
             @Override
             public void onResponse(Call<ResponseObj> call, retrofit2.Response<ResponseObj> response) {
@@ -784,7 +784,7 @@ public class PersonalInfoFragment extends BaseFragment {
 
         userProfileMap.put(Constant.u_user_id, String.valueOf(userid));
         userProfileMap.put(Constant.u_app_version, Constant.APP_VERSION);
-        userProfileMap.put(Constant.device_id, getSingleQuoteString(getDeviceId()));
+        userProfileMap.put(Constant.device_id, getSingleQuoteString(getDeviceId(getActivity())));
         userProfileMap.put(Constant.appName, getSingleQuoteString(Constant.APP_NAME));
         userProfileMap.put(Constant.u_first_name, getSingleQuoteString(mBinding.etFirstName.getText().toString().trim()));
         userProfileMap.put(Constant.u_last_name, getSingleQuoteString(mBinding.etLastName.getText().toString().trim()));
@@ -877,9 +877,9 @@ public class PersonalInfoFragment extends BaseFragment {
     private void fetchUserProfile(int call_from, String flag) {
         //ProgressDialog.getInstance().show(requireActivity());
         if (call_from == fetch_loged_in_user)
-            call = apiService.fetchUserInfo(userid, getDeviceId(), Constant.APP_NAME, Constant.APP_VERSION);
+            call = apiService.fetchUserInfo(userid, getDeviceId(getActivity()), Constant.APP_NAME, Constant.APP_VERSION);
         else
-            call = apiService.fetchOtherUsersInfo(mSettings.getUserId(), getDeviceId(), Constant.APP_NAME, Constant.APP_VERSION, userid, "UP");
+            call = apiService.fetchOtherUsersInfo(mSettings.getUserId(), getDeviceId(getActivity()), Constant.APP_NAME, Constant.APP_VERSION, userid, "UP");
 
         call.enqueue(new Callback<UserProfile>() {
             @Override
@@ -1304,7 +1304,7 @@ public class PersonalInfoFragment extends BaseFragment {
 
         HashMap<String, String> params = new HashMap<>();
         params.put(Constant.u_user_id, String.valueOf(userid));
-        params.put(Constant.device_id, getDeviceId());
+        params.put(Constant.device_id, getDeviceId(getActivity()));
         params.put(Constant.appName, Constant.APP_NAME);
         params.put(Constant.u_app_version, Constant.APP_VERSION);
         params.put(Constant.CASE, "N");
@@ -1312,7 +1312,7 @@ public class PersonalInfoFragment extends BaseFragment {
         RequestBody userId =
                 RequestBody.create(MediaType.parse("multipart/form-data"), userid);
         RequestBody deviceId =
-                RequestBody.create(MediaType.parse("multipart/form-data"), getDeviceId());
+                RequestBody.create(MediaType.parse("multipart/form-data"), getDeviceId(getActivity()));
         RequestBody appName =
                 RequestBody.create(MediaType.parse("multipart/form-data"), Constant.APP_NAME);
         RequestBody appVersion =

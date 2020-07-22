@@ -10,6 +10,7 @@ package com.jangletech.qoogol.service;
 
 import android.os.AsyncTask;
 import android.util.Log;
+
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
@@ -44,21 +45,20 @@ public class DownloadAsyncTask extends AsyncTask<String, Integer, String> {
 
     @Override
     protected String doInBackground(String... strings) {
-        String[] filesToDownload=strings[0].split(",");
-        for(int i=0;i<filesToDownload.length;i++) {
-            downloadFile(filesToDownload[i],(i+1)/filesToDownload.length);
+        String[] filesToDownload = strings[0].split(",");
+        for (int i = 0; i < filesToDownload.length; i++) {
+            downloadFile(filesToDownload[i], (i + 1) / filesToDownload.length);
         }
         if (strings[1].equalsIgnoreCase("1")) {
             return strings[1];
-        }
-        else {
+        } else {
             return null;
         }
     }
 
 
     @Nullable
-    private void downloadFile(String urlfileName,float number) {
+    private void downloadFile(String urlfileName, float number) {
         HttpURLConnection urlConnection = null;
         String fileName;
         File file = null;
@@ -80,17 +80,16 @@ public class DownloadAsyncTask extends AsyncTask<String, Integer, String> {
             while ((bufferLength = inputStream.read(buffer)) > 0) {
                 outPut.write(buffer, 0, bufferLength);
                 downloadedSize += bufferLength;
-                if(isCancelled()){
+                if (isCancelled()) {
                     file.delete();
                     break;
-                }else{
-                    publishProgress((int) ((int) (Math.abs(downloadedSize * 100 / totalSize))*number));
+                } else {
+                    publishProgress((int) ((int) (Math.abs(downloadedSize * 100 / totalSize)) * number));
                 }
             }
             outPut.close();
             inputStream.close();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             Log.e("checkException:-", "" + e);
             if (file != null && file.exists()) {
                 if (file.delete()) {

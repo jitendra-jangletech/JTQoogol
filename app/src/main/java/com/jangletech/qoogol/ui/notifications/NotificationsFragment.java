@@ -76,7 +76,7 @@ public class NotificationsFragment extends BaseFragment implements NotificationA
         mViewModel = ViewModelProviders.of(this).get(NotificationsViewModel.class);
         fetchNotifications();
         onItemClickListener = this;
-        mViewModel.getAllNotifications(getUserId()).observe(getViewLifecycleOwner(), new Observer<List<Notification>>() {
+        mViewModel.getAllNotifications(getUserId(getActivity())).observe(getViewLifecycleOwner(), new Observer<List<Notification>>() {
             @Override
             public void onChanged(@Nullable final List<Notification> notifications) {
                 Log.d(TAG, "onChanged: " + notifications.size());
@@ -119,7 +119,7 @@ public class NotificationsFragment extends BaseFragment implements NotificationA
     }
 
     private void deleteNotification(String n_id) {
-        Call<ResponseObj> call = apiService.updateNotifications(new PreferenceManager(getActivity()).getUserId(), getDeviceId(), "Q", n_id, "D");
+        Call<ResponseObj> call = apiService.updateNotifications(new PreferenceManager(getActivity()).getUserId(), getDeviceId(getActivity()), "Q", n_id, "D");
         call.enqueue(new Callback<ResponseObj>() {
             @Override
             public void onResponse(Call<ResponseObj> call, Response<ResponseObj> response) {
@@ -150,7 +150,7 @@ public class NotificationsFragment extends BaseFragment implements NotificationA
     private void fetchNotifications() {
         //ProgressDialog.getInstance().show(getActivity());
         mBinding.swipeToRefresh.setRefreshing(true);
-        Call<NotificationResponse> call = apiService.fetchNotifications(new PreferenceManager(getActivity()).getUserId(), getDeviceId(), "Q");
+        Call<NotificationResponse> call = apiService.fetchNotifications(new PreferenceManager(getActivity()).getUserId(), getDeviceId(getActivity()), "Q");
         call.enqueue(new Callback<NotificationResponse>() {
             @Override
             public void onResponse(Call<NotificationResponse> call, Response<NotificationResponse> response) {

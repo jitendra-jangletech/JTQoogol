@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
 import androidx.databinding.DataBindingUtil;
@@ -32,20 +31,16 @@ import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
-
 import static com.jangletech.qoogol.util.Constant.friends_and_groups;
 import static com.jangletech.qoogol.util.Constant.learning;
 import static com.jangletech.qoogol.util.Constant.qoogol;
 import static com.jangletech.qoogol.util.Constant.question_share;
 import static com.jangletech.qoogol.util.Constant.test;
 import static com.jangletech.qoogol.util.Constant.test_share;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -75,7 +70,7 @@ public class ShareFragment extends BaseFragment implements ShareAdapter.OnItemCl
 
     private void getData(int pagestart) {
         ProgressDialog.getInstance().show(getActivity());
-        Call<ShareResponse> call = apiService.fetchConnectionsforShare(userId, friends_and_groups, getDeviceId(), qoogol, pagestart);
+        Call<ShareResponse> call = apiService.fetchConnectionsforShare(userId, friends_and_groups, getDeviceId(getActivity()), qoogol, pagestart);
         call.enqueue(new Callback<ShareResponse>() {
             @Override
             public void onResponse(Call<ShareResponse> call, retrofit2.Response<ShareResponse> response) {
@@ -205,8 +200,8 @@ public class ShareFragment extends BaseFragment implements ShareAdapter.OnItemCl
         Log.d(TAG, "callShareAPI Test Id : " + testId);
         Log.d(TAG, "callShareAPI Comment : " + comment);
         Log.d(TAG, "callShareAPI Model Action : " + modelAction);
-        Log.d(TAG, "callShareAPI Device Id : " + getDeviceId());
-        Log.d(TAG, "callShareAPI UserId : " + getUserId());
+        Log.d(TAG, "callShareAPI Device Id : " + getDeviceId(getActivity()));
+        Log.d(TAG, "callShareAPI UserId : " + getUserId(getActivity()));
         Log.d(TAG, "callShareAPI Call From : " + call_from);
 
         if (modelAction != null && modelAction.isEmpty()) {
@@ -214,9 +209,9 @@ public class ShareFragment extends BaseFragment implements ShareAdapter.OnItemCl
         } else {
             ProgressDialog.getInstance().show(getActivity());
             if (call_from == learning)
-                call = apiService.shareAPI(question_id, question_share, "F", getDeviceId(), getUserId(), modelAction, "1.68", qoogol, comment);
+                call = apiService.shareAPI(question_id, question_share, "F", getDeviceId(getActivity()), getUserId(getActivity()), modelAction, "1.68", qoogol, comment);
             else
-                call = apiService.shareAPI(testId, test_share, "F", getDeviceId(), getUserId(), modelAction, "1.68", qoogol, comment);
+                call = apiService.shareAPI(testId, test_share, "F", getDeviceId(getActivity()), getUserId(getActivity()), modelAction, "1.68", qoogol, comment);
 
             call.enqueue(new Callback<ResponseObj>() {
                 @Override

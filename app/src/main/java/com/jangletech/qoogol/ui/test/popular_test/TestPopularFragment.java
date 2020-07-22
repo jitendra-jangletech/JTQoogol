@@ -84,7 +84,7 @@ public class TestPopularFragment extends BaseFragment
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        Log.d(TAG, "Android Id : " + getDeviceId());
+        Log.d(TAG, "Android Id : " + getDeviceId(getActivity()));
     }
 
     @Override
@@ -146,7 +146,7 @@ public class TestPopularFragment extends BaseFragment
             }
         });
 
-        params.put(Constant.u_user_id, getUserId());
+        params.put(Constant.u_user_id, getUserId(getActivity()));
         params.put(CASE, "");
         params.put(Constant.tm_popular_test, "1");
         params.put(Constant.tm_recent_test, "");
@@ -168,7 +168,7 @@ public class TestPopularFragment extends BaseFragment
             }
         });
 
-        mViewModel.getAllTests("P",getUserId()).observe(getViewLifecycleOwner(), new Observer<List<TestModelNew>>() {
+        mViewModel.getAllTests("P",getUserId(getActivity())).observe(getViewLifecycleOwner(), new Observer<List<TestModelNew>>() {
             @Override
             public void onChanged(@Nullable final List<TestModelNew> tests) {
                 if (tests != null) {
@@ -323,7 +323,7 @@ public class TestPopularFragment extends BaseFragment
                     List<TestModelNew> testList = response.body().getTestList();
                     for (TestModelNew testModelNew : testList) {
                         testModelNew.setFlag("P");
-                        testModelNew.setUserId(getUserId());
+                        testModelNew.setUserId(getUserId(getActivity()));
                     }
                     mViewModel.insert(testList);
                 } else if (response.body().getResponse().equals("501")) {

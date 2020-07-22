@@ -69,7 +69,7 @@ public class ConnectionListFragment extends BaseFragment implements ConnectionAd
         mViewModel = ViewModelProviders.of(this).get(ConnectionsViewModel.class);
         //init();
         fetchConnections();
-        mViewModel.getConnectionsList(getUserId()).observe(getViewLifecycleOwner(), connectionsList -> {
+        mViewModel.getConnectionsList(getUserId(getActivity())).observe(getViewLifecycleOwner(), connectionsList -> {
             if (connectionsList != null) {
                 setConnectionAdapter(connectionsList);
             }
@@ -91,7 +91,7 @@ public class ConnectionListFragment extends BaseFragment implements ConnectionAd
     }
 
     private void fetchConnections() {
-        Call<ConnectionResponse> call = apiService.fetchConnections(getUserId(), connections, getDeviceId(), qoogol, "0");
+        Call<ConnectionResponse> call = apiService.fetchConnections(getUserId(getActivity()), connections, getDeviceId(getActivity()), qoogol, "0");
         call.enqueue(new Callback<ConnectionResponse>() {
             @Override
             public void onResponse(Call<ConnectionResponse> call, retrofit2.Response<ConnectionResponse> response) {

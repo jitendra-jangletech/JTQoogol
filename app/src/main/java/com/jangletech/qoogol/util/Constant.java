@@ -83,7 +83,7 @@ public class Constant {
     public static final String VERIFY = "Verify";
     public static final String u_imei_num = "126";
     public static final String GroupMembersList = "70"; /// List of master data id, desc
-    public static final String u_fcm_token  = "178Q"; /// List of master data id, desc
+    public static final String u_fcm_token = "178Q"; /// List of master data id, desc
 
 
     // Firebase notification Constant
@@ -93,7 +93,6 @@ public class Constant {
     public static final String FB_TITLE = "title";
     public static final String FB_MS_ID = "msID";
     public static final String FB_ACTION = "action";
-
 
 
     //Work fields
@@ -216,7 +215,7 @@ public class Constant {
     public static final String u_t_and_c = "114";
     public static final String u_referred_by = "143";
 
-    public static final String APP_NAME ="Q";
+    public static final String APP_NAME = "Q";
     public static final String APP_VERSION = "1.0";
 
     // QLikesComments

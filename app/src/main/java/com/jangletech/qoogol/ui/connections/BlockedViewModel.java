@@ -21,7 +21,6 @@ import java.util.concurrent.Executors;
 import retrofit2.Call;
 import retrofit2.Callback;
 
-import static com.facebook.FacebookSdk.getApplicationContext;
 import static com.jangletech.qoogol.ui.BaseFragment.getDeviceId;
 import static com.jangletech.qoogol.util.Constant.block;
 import static com.jangletech.qoogol.util.Constant.forcerefresh;
@@ -41,7 +40,7 @@ public class BlockedViewModel extends AndroidViewModel {
         super(application);
         apiService = ApiClient.getInstance().getApi();
         mAppRepository = new AppRepository(application);
-        userId = new PreferenceManager(getApplicationContext()).getUserId();
+        userId = new PreferenceManager(getApplication()).getUserId();
         pagestart = "0";
     }
 
@@ -57,9 +56,9 @@ public class BlockedViewModel extends AndroidViewModel {
 
     private void getData(boolean isRefresh) {
         if (isRefresh)
-            call = apiService.fetchRefreshedBlockedConn(userId, block, getDeviceId(), qoogol, pagestart, forcerefresh);
+            call = apiService.fetchRefreshedBlockedConn(userId, block, getDeviceId(getApplication()), qoogol, pagestart, forcerefresh);
         else
-            call = apiService.fetchBlockedConnections(userId, block, getDeviceId(), qoogol, Integer.parseInt(pagestart));
+            call = apiService.fetchBlockedConnections(userId, block, getDeviceId(getApplication()), qoogol, Integer.parseInt(pagestart));
         call.enqueue(new Callback<BlockedConnResp>() {
             @Override
             public void onResponse(Call<BlockedConnResp> call, retrofit2.Response<BlockedConnResp> response) {

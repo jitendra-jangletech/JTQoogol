@@ -165,7 +165,7 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
 
             HashMap<String, String> params = new HashMap<>();
             params.put(Constant.u_user_id, String.valueOf(new PreferenceManager(requireActivity()).getInt(Constant.USER_ID)));
-            params.put(Constant.device_id, getDeviceId());
+            params.put(Constant.device_id, getDeviceId(getActivity()));
             params.put(Constant.appName, Constant.APP_NAME);
             params.put(Constant.CASE, "I");
             params.put(Constant.ubm_id, ubmId);
@@ -407,8 +407,8 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
     private void fetchUserPreferences() {
         ProgressDialog.getInstance().show(requireActivity());
         Call<VerifyResponse> call = apiService.fetchUserSettings(
-                getUserId(),
-                getDeviceId(),
+                getUserId(getActivity()),
+                getDeviceId(getActivity()),
                 Constant.APP_NAME,
                 "L"
         );

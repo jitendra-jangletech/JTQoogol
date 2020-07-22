@@ -1,6 +1,7 @@
 package com.jangletech.qoogol.adapter;
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import java.util.List;
 
 public class PracticeTestQuestPaletAdapter extends RecyclerView.Adapter<PracticeTestQuestPaletAdapter.PracticeQuestionViewHolder> {
 
+    private static final String TAG = "PracticeTestQuestPaletA";
     private Activity activity;
     private List<TestQuestionNew> questionList;
     private ItemQuestPracticeBinding itemBinding;
@@ -96,20 +98,13 @@ public class PracticeTestQuestPaletAdapter extends RecyclerView.Adapter<Practice
                         holder.itemBinding.tvQuestNo.setBackground(activity.getResources().getDrawable(R.drawable.bg_ans_wrong));
                         holder.itemBinding.tvQuestNo.setTextColor(activity.getResources().getColor(R.color.colorWhite));
                     }
-                } else {
-                    if (practiceQuestion.getType().equalsIgnoreCase(Constant.SHORT_ANSWER) ||
-                            practiceQuestion.getType().equalsIgnoreCase(Constant.LONG_ANSWER)) {
-                        //subjective question
-                    } else {
-                        //other than subjective type Question
-                    }
                 }
-            } else {
-                //Question Not Attempted
             }
-
             if (practiceQuestion.isTtqa_marked()) {
+                Log.d(TAG, "onBindViewHolder: " + practiceQuestion.isTtqa_marked());
                 holder.itemBinding.marked.setVisibility(View.VISIBLE);
+            } else {
+                holder.itemBinding.marked.setVisibility(View.GONE);
             }
 
             holder.itemBinding.questLayout.setOnClickListener(v -> {
@@ -155,6 +150,8 @@ public class PracticeTestQuestPaletAdapter extends RecyclerView.Adapter<Practice
 
             if (practiceQuestion.isTtqa_marked()) {
                 holder.itemBindingGrid.marked.setVisibility(View.VISIBLE);
+            } else {
+                holder.itemBindingGrid.marked.setVisibility(View.GONE);
             }
 
             holder.itemBindingGrid.tvQuestNo.setOnClickListener(v -> {

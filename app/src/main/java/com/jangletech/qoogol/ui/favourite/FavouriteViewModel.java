@@ -4,8 +4,6 @@ import android.app.Application;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModel;
-
 import com.jangletech.qoogol.database.repo.AppRepository;
 import com.jangletech.qoogol.model.LearningQuestResponse;
 import com.jangletech.qoogol.model.LearningQuestionsNew;
@@ -23,7 +21,6 @@ import java.util.concurrent.Executors;
 import retrofit2.Call;
 import retrofit2.Callback;
 
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class FavouriteViewModel extends AndroidViewModel {
     ApiInterface apiService;
@@ -44,7 +41,7 @@ public class FavouriteViewModel extends AndroidViewModel {
     }
 
     private void getDataFromApi() {
-        Call<LearningQuestResponse> call = apiService.fetchFavQAApi(new PreferenceManager(getApplicationContext()).getUserId(), "FV");
+        Call<LearningQuestResponse> call = apiService.fetchFavQAApi(new PreferenceManager(getApplication()).getUserId(), "FV");
         call.enqueue(new Callback<LearningQuestResponse>() {
             @Override
             public void onResponse(Call<LearningQuestResponse> call, retrofit2.Response<LearningQuestResponse> response) {
@@ -91,7 +88,7 @@ public class FavouriteViewModel extends AndroidViewModel {
 
     private void downloadImages() {
         try {
-            DownloadAsyncTask downloadAsyncTask = new DownloadAsyncTask(UtilHelper.getDirectory(getApplicationContext()));
+            DownloadAsyncTask downloadAsyncTask = new DownloadAsyncTask(UtilHelper.getDirectory(getApplication()));
             downloadAsyncTask.execute(createMediaPathDownloaded((getQuestionImages())), "1");
         } catch (Exception e) {
             e.printStackTrace();

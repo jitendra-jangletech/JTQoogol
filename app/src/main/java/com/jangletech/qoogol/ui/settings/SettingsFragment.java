@@ -18,7 +18,6 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 
 import com.jangletech.qoogol.R;
-import com.jangletech.qoogol.activities.LaunchActivity;
 import com.jangletech.qoogol.activities.RegisterLoginActivity;
 import com.jangletech.qoogol.databinding.SettingsFragmentBinding;
 import com.jangletech.qoogol.dialog.UniversalDialog;
@@ -67,7 +66,7 @@ public class SettingsFragment extends BaseFragment implements UniversalDialog.Di
                 //This intent will help you to launch if the package is already installed
                 Bundle bundle = new Bundle();
                 Intent LaunchIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://chatchilli.com"));
-                bundle.putString(Constant.u_user_id, getUserId());
+                bundle.putString(Constant.u_user_id, getUserId(getActivity()));
                 bundle.putString("SCREEN", "SETTINGS");
                 LaunchIntent.putExtras(bundle);
                 LaunchIntent.putExtra(Intent.ACTION_VIEW, bundle);

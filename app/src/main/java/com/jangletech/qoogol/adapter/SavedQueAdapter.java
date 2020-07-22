@@ -62,7 +62,6 @@ import java.util.concurrent.Executors;
 import retrofit2.Call;
 import retrofit2.Callback;
 
-import static com.facebook.FacebookSdk.getApplicationContext;
 import static com.jangletech.qoogol.util.Constant.FILL_THE_BLANKS;
 import static com.jangletech.qoogol.util.Constant.IMAGE;
 import static com.jangletech.qoogol.util.Constant.LONG_ANSWER;
@@ -713,7 +712,7 @@ public class SavedQueAdapter extends RecyclerView.Adapter<SavedQueAdapter.ViewHo
 
         private void loadImage(String img, ImageView imageView) {
             String fileName = img.substring(img.lastIndexOf('/') + 1);
-            File file = new File(UtilHelper.getDirectory(getApplicationContext()), fileName);
+            File file = new File(UtilHelper.getDirectory(activity), fileName);
             if (file.exists()) {
                 Glide.with(activity).load(file).into(imageView);
             } else {
@@ -2079,7 +2078,7 @@ public class SavedQueAdapter extends RecyclerView.Adapter<SavedQueAdapter.ViewHo
             ProgressDialog.getInstance().show(activity);
             ApiInterface apiService = ApiClient.getInstance().getApi();
             Call<ProcessQuestion> call;
-            int user_id = Integer.parseInt(new PreferenceManager(getApplicationContext()).getUserId());
+            int user_id = Integer.parseInt(new PreferenceManager(activity).getUserId());
 
             if (call_from.equalsIgnoreCase("like"))
                 call = apiService.likeApi(user_id, que_id, "I", flag);
@@ -2128,7 +2127,7 @@ public class SavedQueAdapter extends RecyclerView.Adapter<SavedQueAdapter.ViewHo
                                     learningQuestionsNew.setIsSave("false");
                                     learningQuestionsList.set(position, learningQuestionsNew);
 //                                    Glide.with(activity).load(activity.getResources().getDrawable(R.drawable.ic_save_grey)).into(learningItemBinding.saveQue);
-                                    executor.execute(() -> new AppRepository(getApplicationContext()).deleteQuestion(learningQuestionsNew.getQuestion_id()));
+                                    executor.execute(() -> new AppRepository(activity).deleteQuestion(learningQuestionsNew.getQuestion_id()));
 
                                 } else {
                                     learningQuestionsNew.setIsSave("true");

@@ -8,6 +8,7 @@ import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,9 +43,6 @@ import java.util.Locale;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static com.facebook.FacebookSdk.getApplicationContext;
-
 
 public class NewUserFragment extends BaseFragment {
 
@@ -89,9 +87,13 @@ public class NewUserFragment extends BaseFragment {
     }
 
     public void initViews() {
+        String mobile = getMobileFromBundle(getArguments());
+        if (mobile != null && !mobile.isEmpty()) {
+            mBinding.tilEmailMobile.getEditText().setText(mobile);
+        }
+
         mBinding.termsPrivacy.setText(Html.fromHtml(getResources().getString(R.string.terms_and_conditions)));
-        //Log.d(TAG, "initViews String : " + getActivity().getString(R.string.terms_privacy));
-        //mBinding.termsPrivacy.setText(getActivity().getString(R.string.terms_privacy));
+        mBinding.termsPrivacy.setMovementMethod(LinkMovementMethod.getInstance());
 
         mBinding.radioMale.setOnClickListener(v -> {
             gender = "M";
@@ -138,7 +140,7 @@ public class NewUserFragment extends BaseFragment {
                 return;
             } else {
                 if (isOtpSent)
-                    doRegisterLogin(strMobile, "N", countryCode, "", getDeviceId(), "Q");
+                    doRegisterLogin(strMobile, "N", countryCode, "", getDeviceId(getActivity()), "Q");
             }
         });
 
@@ -165,11 +167,11 @@ public class NewUserFragment extends BaseFragment {
                 return;
             }
             strMobile = mBinding.tilEmailMobile.getEditText().getText().toString().trim();
-            new PreferenceManager(getApplicationContext()).saveString(Constant.MOBILE, strMobile);
+            new PreferenceManager(getActivity()).saveString(Constant.MOBILE, strMobile);
             if (!isOtpSent) {
-                doRegisterLogin(strMobile, isOtpSent ? "R" : "1", countryCode, "", getDeviceId(), "Q");
+                doRegisterLogin(strMobile, isOtpSent ? "R" : "1", countryCode, "", getDeviceId(getActivity()), "Q");
             } else {
-                doRegisterLogin(strMobile, isOtpSent ? "R" : "1", countryCode, "", getDeviceId(), "Q");
+                doRegisterLogin(strMobile, isOtpSent ? "R" : "1", countryCode, "", getDeviceId(getActivity()), "Q");
             }
         });
 
@@ -381,7 +383,7 @@ public class NewUserFragment extends BaseFragment {
         Log.d(TAG, "Country Code : " + countryCode);
         Log.d(TAG, "Device Id : " + deviceId);
         Log.d(TAG, "App Name : " + appName);
-        Log.d(TAG, "Token : " + new PreferenceManager(getApplicationContext()).getToken());
+        Log.d(TAG, "Token : " + new PreferenceManager(getActivity()).getToken());
         Log.d(TAG, "Case2 : N");
 
         ProgressDialog.getInstance().show(getActivity());
@@ -397,7 +399,7 @@ public class NewUserFragment extends BaseFragment {
                 countryCode,
                 deviceId,
                 appName,
-                new PreferenceManager(getApplicationContext()).getToken(),
+                new PreferenceManager(getActivity()).getToken(),
                 "N"
         );
         call.enqueue(new Callback<RegisterLoginModel>() {
@@ -422,6 +424,8 @@ public class NewUserFragment extends BaseFragment {
                             startActivity(i);
                         }
                     }
+                } else if (response.body() != null && response.body().getResponse().equals("316")) {
+                    showErrorDialog(getActivity(), response.body().getResponse(), response.body().getMessage(), "EXISTING_USER", mobile);
                 } else {
                     showErrorDialog(getActivity(), response.body().getResponse(), response.body().getMessage());
                     showToast("Error Code : " + response.body().getResponse());

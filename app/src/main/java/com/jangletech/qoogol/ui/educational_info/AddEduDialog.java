@@ -154,15 +154,15 @@ public class AddEduDialog extends Dialog {
 
             params.put(Constant.u_user_id, String.valueOf(new PreferenceManager(context).getInt(Constant.USER_ID)));
             params.put(Constant.appName, Constant.APP_NAME);
-            params.put(Constant.device_id, BaseFragment.getDeviceId());
+            params.put(Constant.device_id, BaseFragment.getDeviceId(getContext()));
             params.put(Constant.ubm_id, addEditEducationBinding.universityBoardAutocompleteView.getTag().toString());
             params.put(Constant.iom_id, addEditEducationBinding.instituteAutocompleteView.getTag().toString());
             params.put(Constant.dm_id, addEditEducationBinding.degreeAutocompleteView.getTag().toString());
             params.put(Constant.co_id, addEditEducationBinding.courseAutocompleteView.getTag().toString());
             params.put(Constant.ue_startdate, addEditEducationBinding.etstartdate.getText().toString());
             params.put(Constant.ue_enddate, addEditEducationBinding.etenddate.getText().toString());
-            if(addEditEducationBinding.courseYearAutocompleteView.getTag()!=null)
-            params.put(Constant.ue_cy_num, addEditEducationBinding.courseYearAutocompleteView.getTag().toString());
+            if (addEditEducationBinding.courseYearAutocompleteView.getTag() != null)
+                params.put(Constant.ue_cy_num, addEditEducationBinding.courseYearAutocompleteView.getTag().toString());
 
             if (education != null) {
                 params.put(Constant.CASE, "U");

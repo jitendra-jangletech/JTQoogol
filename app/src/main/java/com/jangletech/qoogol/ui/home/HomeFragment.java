@@ -110,7 +110,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
         mBinding.connectionLayout.setOnClickListener(this);
         //mBinding.pieChart.setOnChartValueSelectedListener(this);
         fetchDashboardDetails();
-        mViewModel.getDashboardDetails(getUserId()).observe(getViewLifecycleOwner(), new Observer<DashBoard>() {
+        mViewModel.getDashboardDetails(getUserId(getActivity())).observe(getViewLifecycleOwner(), new Observer<DashBoard>() {
             @Override
             public void onChanged(@Nullable final DashBoard dashBoard1) {
                 if (dashBoard1 != null) {
@@ -138,7 +138,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
         MainActivity.tvNavFollowing.setText(dashBoard.getFollowings());
 
         if (dashBoard.getFirstName() != null || dashBoard.getLastName() != null) {
-            saveString(Constant.u_first_name, dashBoard.getFirstName());
+            saveString(getActivity(),Constant.u_first_name, dashBoard.getFirstName());
             MainActivity.textViewDisplayName.setText(dashBoard.getFirstName() + " " + dashBoard.getLastName());
         } else {
             MainActivity.textViewDisplayName.setText("Qoogol User");
@@ -163,9 +163,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
 
     private void fetchDashboardDetails() {
         HashMap<String, String> params = new HashMap<>();
-        params.put(Constant.u_user_id, getUserId());
-        params.put(Constant.device_id, getDeviceId());
-        Log.d(TAG, "fetchDashboardDetails UserId : " + getUserId());
+        params.put(Constant.u_user_id, getUserId(getActivity()));
+        params.put(Constant.device_id, getDeviceId(getActivity()));
+        Log.d(TAG, "fetchDashboardDetails UserId : " + getUserId(getActivity()));
         //ProgressDialog.getInstance().show(getActivity());
         mBinding.swipeToRefresh.setRefreshing(true);
         Call<DashBoard> call = apiService.fetchDashBoardDetails(
@@ -180,7 +180,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
                 Log.d(TAG, "onResponse Done: " + response.body().getResponse());
                 if (response.body() != null) {
                     DashBoard dashBoard = response.body();
-                    dashBoard.setUserId(getUserId());
+                    dashBoard.setUserId(getUserId(getActivity()));
                     mViewModel.insert(dashBoard);
                 }
             }

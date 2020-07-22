@@ -5,57 +5,74 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/_5sdp"
         android:layout_marginBottom="@dimen/_1sdp"
+        android:padding="@dimen/_5sdp"
         app:cardElevation="@dimen/_20sdp">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/colorWhite"
                 android:orientation="horizontal"
-                android:weightSum="2"
-                android:padding="@dimen/_5sdp">
+                android:padding="@dimen/_5sdp"
+                android:weightSum="2">
 
                 <TextView
-                    android:layout_weight="0.2"
                     android:id="@+id/tv_quest_no"
-                    android:layout_marginRight="@dimen/_10sdp"
-                    android:padding="@dimen/_2sdp"
-                    android:textSize="@dimen/_15ssp"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
+                    android:layout_marginRight="@dimen/_10sdp"
+                    android:layout_weight="0.2"
+                    android:padding="@dimen/_2sdp"
                     android:text="01"
                     android:textColor="@color/icon_color"
+                    android:textSize="@dimen/_15ssp"
                     android:textStyle="bold" />
 
-                <io.github.kexanie.library.MathView
-                    android:textSize="@dimen/_12ssp"
-                    android:layout_weight="1.8"
-                    android:id="@+id/tv_quest_desc"
+                <RelativeLayout
                     android:layout_width="0dp"
-                    android:layout_gravity="center_vertical"
                     android:layout_height="wrap_content"
-                    android:text="If x is a primeber would be"
-                    android:textColor="@color/colorBlack" />
+                    android:layout_weight="1.8">
+
+                    <io.github.kexanie.library.MathView
+                        android:visibility="gone"
+                        android:id="@+id/tvQuestMath"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:text="If x is a primeber would be"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/_12ssp" />
+
+                    <TextView
+                        android:visibility="visible"
+                        android:id="@+id/tvQuest"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:text="If x is a primeber would be"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/_12ssp" />
+
+                </RelativeLayout>
 
             </LinearLayout>
 
             <TextView
-                android:visibility="gone"
                 android:id="@+id/tvQuestInfo"
-                android:textStyle="bold"
-                android:textColor="@color/icon_color"
-                android:text="Scored(10/100)"
-                android:gravity="right"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:text="Scored(10/100)"
+                android:textColor="@color/icon_color"
+                android:textStyle="bold"
+                android:visibility="gone" />
 
         </LinearLayout>
 

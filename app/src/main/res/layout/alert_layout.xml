@@ -64,7 +64,6 @@
             android:layout_marginStart="@dimen/margin_10"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:layout_marginEnd="@dimen/margin_10"
-            android:background="@drawable/com_facebook_auth_dialog_cancel_background"
             android:gravity="center"
             android:padding="5dp"
             android:paddingLeft="5dp"

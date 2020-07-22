@@ -9,6 +9,7 @@ public class QoogolApp extends Application {
 
     private static QoogolApp instance;
 
+
     @Override
     public void onCreate() {
         super.onCreate();

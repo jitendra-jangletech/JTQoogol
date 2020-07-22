@@ -246,7 +246,7 @@ public class MainActivity extends BaseActivity {
                 if (navigateFlag.equals(Nav.SHARE_APP.toString())) {
                     //navToFragment(R.id.nav_share_app, Bundle.EMPTY);
                     navigateFlag = "";
-                    if (getUserName() != null && getUserName().isEmpty()) {
+                    if (getUserName(getApplicationContext()) != null && getUserName(getApplicationContext()).isEmpty()) {
                         fetchUserProfile();
                     } else {
                         shareAction();
@@ -603,7 +603,7 @@ public class MainActivity extends BaseActivity {
 
     private void fetchUserProfile() {
         ProgressDialog.getInstance().show(this);
-        Call<UserProfile> call = apiService.fetchUserInfo(getUserId(), getDeviceId(), Constant.APP_NAME, Constant.APP_VERSION);
+        Call<UserProfile> call = apiService.fetchUserInfo(getUserId(getApplicationContext()), getDeviceId(), Constant.APP_NAME, Constant.APP_VERSION);
         call.enqueue(new Callback<UserProfile>() {
             @Override
             public void onResponse(Call<UserProfile> call, Response<UserProfile> response) {
@@ -654,7 +654,7 @@ public class MainActivity extends BaseActivity {
             sendIntent.setType("image/*");
 
             String shareMessage = String.format(Locale.ENGLISH,
-                    "Install Qoogol android app for free academic tests, prepare for competitive exams & post doubts. Referral Code : %s", getUserName() + "\n");
+                    "Install Qoogol android app for free academic tests, prepare for competitive exams & post doubts. Referral Code : %s", getUserName(getApplicationContext()) + "\n");
             shareMessage = shareMessage + "https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID + "\n";
             sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Qoogol");
             sendIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);

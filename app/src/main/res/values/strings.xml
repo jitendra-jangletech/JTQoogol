@@ -412,7 +412,7 @@
     <string name="include_institutes">Include institutes</string>
     <string name="remove_connection">Remove\nconnection</string>
     <string name="online">Online</string>
-    <string name="terms_and_conditions"><![CDATA[I accept the <a href="https://spot20191210061236.azurewebsites.net/uploads/Policies/terms_and_conditions.html">terms and conditions</a> and <a href="https://spot20191210061236.azurewebsites.net/uploads/Policies/privacy_policy.html">privacy policy</a>.]]></string>
+    <string name="terms_and_conditions"><![CDATA[I accept the <a href="https://spot20191210061236.azurewebsites.net/uploads/Policies/qoogol_terms_and_conditions.html">terms and conditions</a> and <a href="https://spot20191210061236.azurewebsites.net/uploads/Policies/qoogol_privacy_policy.html">privacy policy</a>.]]></string>
     <string name="spotmeets_desc"><b>Qoogol</b> android app for free academic tests, prepare for competitive exams &amp; post doubts.</string>
     <string name="support"><![CDATA[Send your suggestions at : <a href="admin@qoogol.com">admin@qoogol.com</a>]]></string>
     <string name="link"><![CDATA[For more information, visit : <a href="https://www.qoogol.com">www.qoogol.com</a>]]></string>

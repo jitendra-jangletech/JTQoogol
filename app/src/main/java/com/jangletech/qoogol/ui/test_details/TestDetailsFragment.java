@@ -27,7 +27,6 @@ import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.util.Constant;
-import com.jangletech.qoogol.util.PreferenceManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,7 +43,7 @@ public class TestDetailsFragment extends BaseFragment {
     private TestDetailsFragmentBinding mBinding;
     private List<QSet> qSets;
     private TestModelNew testModelNew;
-    ApiInterface apiService = ApiClient.getInstance().getApi();
+    private ApiInterface apiService = ApiClient.getInstance().getApi();
 
     public static TestDetailsFragment newInstance() {
         return new TestDetailsFragment();
@@ -65,7 +64,7 @@ public class TestDetailsFragment extends BaseFragment {
         }
         mViewModel = ViewModelProviders.of(this).get(TestDetailsViewModel.class);
         HashMap<String, String> params = new HashMap<>();
-        params.put(Constant.u_user_id, getUserId());
+        params.put(Constant.u_user_id, getUserId(getActivity()));
         if (testModelNew != null)
             params.put(Constant.tm_id, getStringValue(testModelNew.getTm_id()));
         fetchTestDetails(params);

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,14 +12,10 @@ import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.jangletech.qoogol.R;
-import com.jangletech.qoogol.activities.LaunchActivity;
 import com.jangletech.qoogol.activities.MainActivity;
 import com.jangletech.qoogol.activities.RegisterLoginViewModel;
 import com.jangletech.qoogol.databinding.FragmentExistingUserBinding;
@@ -35,10 +32,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 
-public class ExistingUserFragment extends BaseFragment {
+public class ExistingUserFragment extends BaseFragment{
 
     private static final String TAG = "ExistingUserFragment";
     private FragmentExistingUserBinding mBinding;
@@ -77,9 +73,16 @@ public class ExistingUserFragment extends BaseFragment {
     }
 
     public void initViews() {
-        mBinding.termsPrivacy.setText(Html.fromHtml(getResources().getString(R.string.terms_and_conditions)));
-        mBinding.login.setOnClickListener(v -> {
+        Log.d(TAG, "initViews Args : " + getArguments().getString(Constant.u_mob_1));
+        String mobile = getMobileFromBundle(getArguments());
+        if (mobile != null && !mobile.isEmpty()) {
+            mBinding.tilEmailMobileUserName.getEditText().setText(mobile);
+        }
 
+        mBinding.termsPrivacy.setText(Html.fromHtml(getResources().getString(R.string.terms_and_conditions)));
+        mBinding.termsPrivacy.setMovementMethod(LinkMovementMethod.getInstance());
+
+        mBinding.login.setOnClickListener(v -> {
             mBinding.tilEmailMobileUserName.setError(null);
             mBinding.tilPasswordOtp.setError(null);
             if (isOtpSent && mBinding.tilPasswordOtp.getEditText().getText().toString().isEmpty()) {
@@ -92,13 +95,13 @@ public class ExistingUserFragment extends BaseFragment {
             //strMobile = new PreferenceManager(getApplicationContext()).getString(Constant.MOBILE);//mBinding.etMobileNumber.getText().toString().trim();
             strPasswordOtp = mBinding.tilPasswordOtp.getEditText().getText().toString().trim();
             if (isOtpSent && registerLoginModel.getNewOTP().equals(strPasswordOtp)) {
-                doRegisterLogin(strMobile, "2", countryCode, strPasswordOtp, getDeviceId(), "Q");
+                doRegisterLogin(strMobile, "2", countryCode, strPasswordOtp, getDeviceId(getActivity()), "Q");
                 return;
             } else if (isOtpSent && (strPasswordOtp.length() == 4) && !registerLoginModel.getNewOTP().equals(strPasswordOtp)) {
                 mBinding.tilPasswordOtp.setError("Please enter valid otp");
                 return;
             } else if (strPasswordOtp.length() >= 8) {
-                doRegisterLogin(strMobile, "2", countryCode, strPasswordOtp, getDeviceId(), "Q");
+                doRegisterLogin(strMobile, "2", countryCode, strPasswordOtp, getDeviceId(getActivity()), "Q");
             } else if (!isOtpSent && strPasswordOtp.isEmpty()) {
                 mBinding.tilPasswordOtp.setError("Please enter otp or password.");
                 return;
@@ -122,11 +125,11 @@ public class ExistingUserFragment extends BaseFragment {
                 return;
             }
             strMobile = mBinding.tilEmailMobileUserName.getEditText().getText().toString().trim();
-            new PreferenceManager(getApplicationContext()).saveString(Constant.MOBILE, strMobile);
+            new PreferenceManager(getActivity()).saveString(Constant.MOBILE, strMobile);
             if (!isOtpSent) {
-                doRegisterLogin(strMobile, isOtpSent ? "R" : "1", countryCode, "", getDeviceId(), "Q");
+                doRegisterLogin(strMobile, isOtpSent ? "R" : "1", countryCode, "", getDeviceId(getActivity()), "Q");
             } else {
-                doRegisterLogin(strMobile, isOtpSent ? "R" : "1", countryCode, "", getDeviceId(), "Q");
+                doRegisterLogin(strMobile, isOtpSent ? "R" : "1", countryCode, "", getDeviceId(getActivity()), "Q");
             }
         });
         mBinding.tvNewUser.setOnClickListener(v -> {
@@ -160,7 +163,7 @@ public class ExistingUserFragment extends BaseFragment {
     private void doRegisterLogin(String mobile, String caseR, int countryCode, String passwordOtp, String deviceId, String appName) {
         Log.d(TAG, "Mobile : " + mobile);
         ProgressDialog.getInstance().show(getActivity());
-        Call<RegisterLoginModel> call = apiService.doRegisterLogin(mobile, caseR, countryCode, passwordOtp, deviceId, appName, new PreferenceManager(getApplicationContext()).getToken(), "E");
+        Call<RegisterLoginModel> call = apiService.doRegisterLogin(mobile, caseR, countryCode, passwordOtp, deviceId, appName, new PreferenceManager(getActivity()).getToken(), "E");
         call.enqueue(new Callback<RegisterLoginModel>() {
             @Override
             public void onResponse(Call<RegisterLoginModel> call, Response<RegisterLoginModel> response) {
@@ -182,6 +185,8 @@ public class ExistingUserFragment extends BaseFragment {
                             startActivity(i);
                         }
                     }
+                } else if (response != null && response.body().getResponse().equals("315")) {
+                    showErrorDialog(getActivity(), response.body().getResponse(), response.body().getMessage(), "NEW_USER", mobile);
                 } else {
                     showErrorDialog(getActivity(), response.body().getResponse(), response.body().getMessage());
                     showToast("Error Code : " + response.body().getResponse());
@@ -196,4 +201,5 @@ public class ExistingUserFragment extends BaseFragment {
             }
         });
     }
+
 }

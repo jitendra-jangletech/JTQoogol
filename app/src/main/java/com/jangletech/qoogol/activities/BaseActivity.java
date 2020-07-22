@@ -143,7 +143,7 @@ public class BaseActivity extends AppCompatActivity {
             new PreferenceManager(getApplicationContext()).setIsLoggedIn(false);
             new PreferenceManager(getApplicationContext()).saveString(Constant.MOBILE, "");
             new PreferenceManager(getApplicationContext()).saveString(Constant.USER_ID, "");
-            Intent intent = new Intent(this, LaunchActivity.class);
+            Intent intent = new Intent(this, SplashActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
             Objects.requireNonNull(this).finish();

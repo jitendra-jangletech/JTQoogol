@@ -2,6 +2,7 @@ package com.jangletech.qoogol.adapter;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -41,7 +42,15 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHo
     public void onBindViewHolder(@NonNull QuestionAdapter.ViewHolder holder, int position) {
         QSet question = questionList.get(position);
         holder.itemQuestionBinding.tvQuestNo.setText("" + question.getQ_id());
-        holder.itemQuestionBinding.tvQuestDesc.setText(question.getQ_quest());
+        if (question.getQ_quest_desc().contains("\\")) {
+            holder.itemQuestionBinding.tvQuest.setVisibility(View.GONE);
+            holder.itemQuestionBinding.tvQuestMath.setVisibility(View.VISIBLE);
+            holder.itemQuestionBinding.tvQuestMath.setText(question.getQ_quest());
+        } else {
+            holder.itemQuestionBinding.tvQuestMath.setVisibility(View.GONE);
+            holder.itemQuestionBinding.tvQuest.setVisibility(View.VISIBLE);
+            holder.itemQuestionBinding.tvQuest.setText(question.getQ_quest());
+        }
     }
 
     @Override

@@ -196,13 +196,13 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
-                    android:textSize="@dimen/_8ssp"
                     android:id="@+id/terms_privacy"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:layout_marginBottom="@dimen/_5sdp"
-                    android:gravity="center" />
+                    android:gravity="center"
+                    android:textSize="@dimen/_8ssp" />
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/register"

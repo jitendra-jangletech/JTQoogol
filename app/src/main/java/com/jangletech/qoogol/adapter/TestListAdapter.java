@@ -263,7 +263,7 @@ public class TestListAdapter extends RecyclerView.Adapter<TestListAdapter.ViewHo
                             }
                             //testModelList.set(pos,testModelNew);
                             notifyItemChanged(pos, testModelNew);
-                           //testClickListener.favClick(testModelNew);
+                            //testClickListener.favClick(testModelNew);
                             //notifyDataSetChanged();
                         } else {
                             deleteFav(pos);

@@ -6,6 +6,7 @@ import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,6 +39,7 @@ import com.jangletech.qoogol.model.TestQuestionNew;
 import com.jangletech.qoogol.model.VerifyResponse;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
+import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.EndDrawerToggle;
 import com.jangletech.qoogol.util.PreferenceManager;
@@ -243,64 +245,64 @@ public class PracticeTestActivity extends BaseActivity implements
         });
     }
 
-    private void submitTestQuestions() {
-        SubmitTest submitTest = new SubmitTest();
-        List<TestQuestionNew> submitTestQuestionList = new ArrayList<>();
-        submitTest.setTm_id(startTestResponse.getTm_id());
-        submitTest.setTt_id(String.valueOf(startTestResponse.getTtId()));
-        for (TestQuestionNew question : questionsNewList) {
-            if (question.isAnsweredRight())
-                question.setTtqa_obtain_marks(question.getQ_marks());
-            else
-                question.setTtqa_obtain_marks("0");
-
-            if (question.getQue_option_type().equalsIgnoreCase(Constant.FILL_THE_BLANKS) ||
-                    question.getType().equalsIgnoreCase(Constant.SHORT_ANSWER) ||
-                    question.getType().equalsIgnoreCase(Constant.LONG_ANSWER) ||
-                    question.getType().equalsIgnoreCase(Constant.ONE_LINE_ANSWER) ||
-                    question.getType().equalsIgnoreCase(Constant.FILL_THE_BLANKS)) {
-                //String encoded = Base64.encodeToString(question.getTtqa_sub_ans().getBytes(StandardCharsets.UTF_8), Base64.DEFAULT);
-                //String encodedAns = StringUtils.stripAccents(encoded);
-                //Log.d(TAG, "Encoded Ans While Test Submition : " + AppUtils.encodedString(question.getTtqa_sub_ans()));
-                //question.setTtqa_sub_ans(AppUtils.encodedString(question.getTtqa_sub_ans()));
-            } else {
-                question.setTtqa_sub_ans(question.getTtqa_sub_ans());
-            }
-            submitTestQuestionList.add(question);
-        }
-
-        submitTest.setTestQuestionNewList(submitTestQuestionList);
-        String json = gson.toJson(submitTest);
-        Log.d(TAG, "submitTestQuestions JSON : " + json);
-        HashMap<String, String> params = new HashMap<>();
-        params.put(Constant.u_user_id, String.valueOf(new PreferenceManager(this).getInt(Constant.USER_ID)));
-        params.put(Constant.DataList, json);
-
-        Log.d(TAG, "submitTestQuestions Params : " + params);
-        ProgressDialog.getInstance().show(this);
-        Call<VerifyResponse> call = apiService.submitTestQuestion(
-                params.get(Constant.DataList),
-                params.get(Constant.u_user_id));
-        call.enqueue(new Callback<VerifyResponse>() {
-            @Override
-            public void onResponse(Call<VerifyResponse> call, Response<VerifyResponse> response) {
-                ProgressDialog.getInstance().dismiss();
-                if (response.body() != null && response.body().getResponse().equals("200")) {
-                    //showToast("Te Submitted");
-                    finish();
-                } else {
-                    Log.e(TAG, "submitTestQuestions Error : " + response.body().getResponse());
-                    showToast(response.body().getResponse());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<VerifyResponse> call, Throwable t) {
-                showToast("Something went wrong!!");
-                t.printStackTrace();
-            }
-        });
-    }
+//    private void submitTestQuestions() {
+//        SubmitTest submitTest = new SubmitTest();
+//        List<TestQuestionNew> submitTestQuestionList = new ArrayList<>();
+//        submitTest.setTm_id(startTestResponse.getTm_id());
+//        submitTest.setTt_id(String.valueOf(startTestResponse.getTtId()));
+//        for (TestQuestionNew question : questionsNewList) {
+//            if (question.isAnsweredRight())
+//                question.setTtqa_obtain_marks(question.getQ_marks());
+//            else
+//                question.setTtqa_obtain_marks("0");
+//
+//            if (question.getQue_option_type().equalsIgnoreCase(Constant.FILL_THE_BLANKS) ||
+//                    question.getType().equalsIgnoreCase(Constant.SHORT_ANSWER) ||
+//                    question.getType().equalsIgnoreCase(Constant.LONG_ANSWER) ||
+//                    question.getType().equalsIgnoreCase(Constant.ONE_LINE_ANSWER) ||
+//                    question.getType().equalsIgnoreCase(Constant.FILL_THE_BLANKS)) {
+//                //String encoded = Base64.encodeToString(question.getTtqa_sub_ans().getBytes(StandardCharsets.UTF_8), Base64.DEFAULT);
+//                //String encodedAns = StringUtils.stripAccents(encoded);
+//                //Log.d(TAG, "Encoded Ans While Test Submition : " + AppUtils.encodedString(question.getTtqa_sub_ans()));
+//                //question.setTtqa_sub_ans(AppUtils.encodedString(question.getTtqa_sub_ans()));
+//            } else {
+//                question.setTtqa_sub_ans(question.getTtqa_sub_ans());
+//            }
+//            submitTestQuestionList.add(question);
+//        }
+//
+//        submitTest.setTestQuestionNewList(submitTestQuestionList);
+//        String json = gson.toJson(submitTest);
+//        Log.d(TAG, "submitTestQuestions JSON : " + json);
+//        HashMap<String, String> params = new HashMap<>();
+//        params.put(Constant.u_user_id, String.valueOf(new PreferenceManager(this).getInt(Constant.USER_ID)));
+//        params.put(Constant.DataList, json);
+//
+//        Log.d(TAG, "submitTestQuestions Params : " + params);
+//        ProgressDialog.getInstance().show(this);
+//        Call<VerifyResponse> call = apiService.submitTestQuestion(
+//                params.get(Constant.DataList),
+//                params.get(Constant.u_user_id));
+//        call.enqueue(new Callback<VerifyResponse>() {
+//            @Override
+//            public void onResponse(Call<VerifyResponse> call, Response<VerifyResponse> response) {
+//                ProgressDialog.getInstance().dismiss();
+//                if (response.body() != null && response.body().getResponse().equals("200")) {
+//                    //showToast("Te Submitted");
+//                    finish();
+//                } else {
+//                    Log.e(TAG, "submitTestQuestions Error : " + response.body().getResponse());
+//                    showToast(response.body().getResponse());
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<VerifyResponse> call, Throwable t) {
+//                showToast("Something went wrong!!");
+//                t.printStackTrace();
+//            }
+//        });
+//    }
 
     private void fetchTestQA() {
         ProgressDialog.getInstance().show(this);
@@ -415,7 +417,6 @@ public class PracticeTestActivity extends BaseActivity implements
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
-
     }
 
     @Override
@@ -429,8 +430,8 @@ public class PracticeTestActivity extends BaseActivity implements
                     .setPositiveButton("Pause", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            finish();
-                            //submitTestQuestions();
+                            //finish();
+                            submitTestQuestions();
                         }
                     })
                     .setNegativeButton("Cancel", null)
@@ -449,13 +450,11 @@ public class PracticeTestActivity extends BaseActivity implements
 
     @Override
     public void onYesClick() {
-        //submitTestQuestions();
-        //submitTestQuestions();
-        finish();
+        submitTestQuestions();
+        //finish();
     }
 
-
-   /* private void submitTestQuestions() {
+    private void submitTestQuestions() {
         SubmitTest submitTest = new SubmitTest();
         List<TestQuestionNew> submitTestQuestionList = new ArrayList<>();
         submitTest.setTm_id(startTestResponse.getTm_id());
@@ -482,7 +481,6 @@ public class PracticeTestActivity extends BaseActivity implements
             public void onResponse(Call<VerifyResponse> call, Response<VerifyResponse> response) {
                 ProgressDialog.getInstance().dismiss();
                 if (response.body() != null && response.body().getResponse().equals("200")) {
-                    showToast("Answer Submitted");
                     finish();
                 } else {
                     Log.e(TAG, "onResponse Error : " + response.body().getResponse());
@@ -491,13 +489,13 @@ public class PracticeTestActivity extends BaseActivity implements
 
             @Override
             public void onFailure(Call<VerifyResponse> call, Throwable t) {
+                ProgressDialog.getInstance().dismiss();
                 showToast("Something went wrong!!");
                 t.printStackTrace();
                 apiCallFailureDialog(t);
             }
         });
-
-    }*/
+    }
 
     @Override
     public void onNoClick() {
@@ -554,13 +552,122 @@ public class PracticeTestActivity extends BaseActivity implements
 
     @Override
     public void onMarkQuestion(int pos) {
-        questionGridAdapter.notifyItemChanged(pos);
-        questionListAdapter.notifyItemChanged(pos);
+        notifyPaletAdapters(pos);
+        markAQuestion(pos);
+    }
+
+    @Override
+    public void onFullScreenAns(String strAns) {
+        setFullScreenAns(strAns);
+    }
+
+    private void submitQuestion(String ans) {
+        int currentPos = practiceViewPager.getCurrentItem();
+        SubmitTest submitTest = new SubmitTest();
+        List<TestQuestionNew> submitTestQuestionList = new ArrayList<>();
+        TestQuestionNew testQuestionNew = questionsNewList.get(currentPos);
+        testQuestionNew.setTtqa_sub_ans(AppUtils.encodedString(ans));
+        Log.d(TAG, "markAQuestion Submit Position : " + currentPos);
+        Log.d(TAG, "markAQuestion Submit Question Desc : " + testQuestionNew.getQ_quest());
+        Log.d(TAG, "markAQuestion Submit Marked  : " + testQuestionNew.isTtqa_marked());
+        Log.d(TAG, "markAQuestion Submit Ans  : " + testQuestionNew.getTtqa_sub_ans());
+        submitTest.setTm_id(startTestResponse.getTm_id());
+        submitTest.setTt_id(String.valueOf(startTestResponse.getTtId()));
+
+        submitTestQuestionList.add(testQuestionNew);
+        submitTest.setTestQuestionNewList(submitTestQuestionList);
+        String json = gson.toJson(submitTest);
+        Log.d(TAG, "markAQuestion JSON : " + json);
+        HashMap<String, String> params = new HashMap<>();
+        params.put(Constant.u_user_id, AppUtils.getUserId());
+        params.put(Constant.DataList, json);
+        Log.d(TAG, "markAQuestion UserId : " + AppUtils.getUserId());
+        Log.d(TAG, "submitSubjectiveAnsToServer Params : " + params);
+        ProgressDialog.getInstance().show(this);
+        Call<VerifyResponse> call = apiService.submitTestQuestion(
+                params.get(Constant.DataList),
+                params.get(Constant.u_user_id));
+        call.enqueue(new Callback<VerifyResponse>() {
+            @Override
+            public void onResponse(Call<VerifyResponse> call, Response<VerifyResponse> response) {
+                ProgressDialog.getInstance().dismiss();
+                if (response.body() != null && response.body().getResponse().equals("200")) {
+                    showToast("Question Marked.");
+                } else {
+                    Log.e(TAG, "onResponse Error : " + response.body().getResponse());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<VerifyResponse> call, Throwable t) {
+                ProgressDialog.getInstance().dismiss();
+                showToast("Something went wrong!!");
+                t.printStackTrace();
+            }
+        });
+    }
+
+    private void notifyPaletAdapters(int pos) {
+        TestQuestionNew testQuestionNew = questionsNewList.get(pos);
+        questionGridAdapter.notifyItemChanged(pos, testQuestionNew);
+        questionListAdapter.notifyItemChanged(pos, testQuestionNew);
+    }
+
+    private void markAQuestion(int markedPos) {
+        SubmitTest submitTest = new SubmitTest();
+        List<TestQuestionNew> submitTestQuestionList = new ArrayList<>();
+        TestQuestionNew testQuestionNew = questionsNewList.get(markedPos);
+        Log.d(TAG, "markAQuestion Marked Position : " + markedPos);
+        Log.d(TAG, "markAQuestion Question Desc : " + testQuestionNew.getQ_quest());
+        Log.d(TAG, "markAQuestion Marked  : " + testQuestionNew.isTtqa_marked());
+        Log.d(TAG, "markAQuestion Ans  : " + testQuestionNew.getTtqa_sub_ans());
+        submitTest.setTm_id(startTestResponse.getTm_id());
+        submitTest.setTt_id(String.valueOf(startTestResponse.getTtId()));
+
+        submitTestQuestionList.add(testQuestionNew);
+        submitTest.setTestQuestionNewList(submitTestQuestionList);
+        String json = gson.toJson(submitTest);
+        Log.d(TAG, "markAQuestion JSON : " + json);
+        HashMap<String, String> params = new HashMap<>();
+        params.put(Constant.u_user_id, AppUtils.getUserId());
+        params.put(Constant.DataList, json);
+        Log.d(TAG, "markAQuestion UserId : " + AppUtils.getUserId());
+        Log.d(TAG, "submitSubjectiveAnsToServer Params : " + params);
+        ProgressDialog.getInstance().show(this);
+        Call<VerifyResponse> call = apiService.submitTestQuestion(
+                params.get(Constant.DataList),
+                params.get(Constant.u_user_id));
+        call.enqueue(new Callback<VerifyResponse>() {
+            @Override
+            public void onResponse(Call<VerifyResponse> call, Response<VerifyResponse> response) {
+                ProgressDialog.getInstance().dismiss();
+                if (response.body() != null && response.body().getResponse().equals("200")) {
+                    showToast("Question Marked.");
+                } else {
+                    Log.e(TAG, "onResponse Error : " + response.body().getResponse());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<VerifyResponse> call, Throwable t) {
+                ProgressDialog.getInstance().dismiss();
+                showToast("Something went wrong!!");
+                t.printStackTrace();
+            }
+        });
     }
 
     @Override
     public void onFavouriteClick(boolean isChecked) {
 
+    }
+
+    private void setFullScreenAns(String ans) {
+        View view = practiceViewPager.findViewWithTag(practiceViewPager.getCurrentItem());
+        if (view != null) {
+            EditText etAns = view.findViewById(R.id.multi_line);
+            etAns.setText(ans);
+        }
     }
 
     private void setTimerToSelectedPage(int pos) {

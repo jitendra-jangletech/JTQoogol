@@ -21,7 +21,7 @@ import java.util.concurrent.Executors;
 import retrofit2.Call;
 import retrofit2.Callback;
 
-import static com.facebook.FacebookSdk.getApplicationContext;
+
 import static com.jangletech.qoogol.ui.BaseFragment.getDeviceId;
 import static com.jangletech.qoogol.util.Constant.followrequests;
 import static com.jangletech.qoogol.util.Constant.forcerefresh;
@@ -41,7 +41,7 @@ public class FollowReqViewModel extends AndroidViewModel {
         super(application);
         apiService = ApiClient.getInstance().getApi();
         mAppRepository = new AppRepository(application);
-        userId = new PreferenceManager(getApplicationContext()).getUserId();
+        userId = new PreferenceManager(getApplication()).getUserId();
         pagestart = "0";
 
     }
@@ -65,9 +65,9 @@ public class FollowReqViewModel extends AndroidViewModel {
 
     private void getData(boolean isRefresh) {
         if (isRefresh)
-            call = apiService.fetchFollowRequests(userId, followrequests, getDeviceId(), qoogol, pagestart);
+            call = apiService.fetchFollowRequests(userId, followrequests, getDeviceId(getApplication()), qoogol, pagestart);
         else
-            call = apiService.fetchRefreshedFollowReq(userId, followrequests, getDeviceId(), qoogol, pagestart, forcerefresh);
+            call = apiService.fetchRefreshedFollowReq(userId, followrequests, getDeviceId(getApplication()), qoogol, pagestart, forcerefresh);
 
         call.enqueue(new Callback<FollowRequestResponse>() {
             @Override

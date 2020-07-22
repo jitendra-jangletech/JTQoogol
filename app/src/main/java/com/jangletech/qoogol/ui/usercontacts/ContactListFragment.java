@@ -240,7 +240,7 @@ public class ContactListFragment extends BaseFragment implements ContactListAdap
             isSendingInvite = true;
             contactsSet.clear();
 
-            Call<SendInviteResponse> call = apiService.inviteContacts(String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID)), getDeviceId(), qoogol, contactListToInvite);
+            Call<SendInviteResponse> call = apiService.inviteContacts(String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID)), getDeviceId(getActivity()), qoogol, contactListToInvite);
             call.enqueue(new Callback<SendInviteResponse>() {
                 @Override
                 public void onResponse(Call<SendInviteResponse> call, retrofit2.Response<SendInviteResponse> response) {
@@ -484,7 +484,7 @@ public class ContactListFragment extends BaseFragment implements ContactListAdap
         if (contacts != null)
             modelAction = TextUtils.join(",", contacts);
 
-        Call<ContactResponse> call = apiService.fetchVerifiedContacts(String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID)), getDeviceId(), qoogol, pagestart, modelAction, "N", letter,"100");
+        Call<ContactResponse> call = apiService.fetchVerifiedContacts(String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID)), getDeviceId(getActivity()), qoogol, pagestart, modelAction, "N", letter,"100");
         call.enqueue(new Callback<ContactResponse>() {
             @Override
             public void onResponse(Call<ContactResponse> call, retrofit2.Response<ContactResponse> response) {
@@ -549,7 +549,7 @@ public class ContactListFragment extends BaseFragment implements ContactListAdap
     private void updateConnection(String user) {
         ApiInterface apiService = ApiClient.getInstance().getApi();
         com.jangletech.qoogol.dialog.ProgressDialog.getInstance().show(getActivity());
-        Call<ResponseObj> call = apiService.updateConnections(String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID)), "I", getDeviceId(), qoogol, user);
+        Call<ResponseObj> call = apiService.updateConnections(String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID)), "I", getDeviceId(getActivity()), qoogol, user);
         call.enqueue(new Callback<ResponseObj>() {
             @Override
             public void onResponse(Call<ResponseObj> call, retrofit2.Response<ResponseObj> response) {

@@ -25,11 +25,10 @@ import java.util.concurrent.Executors;
 import retrofit2.Call;
 import retrofit2.Callback;
 
-import static com.facebook.FacebookSdk.getApplicationContext;
+
 import static com.jangletech.qoogol.ui.BaseFragment.getDeviceId;
 import static com.jangletech.qoogol.util.Constant.connections;
 import static com.jangletech.qoogol.util.Constant.forcerefresh;
-import static com.jangletech.qoogol.util.Constant.friends;
 import static com.jangletech.qoogol.util.Constant.qoogol;
 
 /**
@@ -47,7 +46,7 @@ public class ConnectionsViewModel extends AndroidViewModel {
         super(application);
         apiService = ApiClient.getInstance().getApi();
         mAppRepository = new AppRepository(application);
-        userId = new PreferenceManager(getApplicationContext()).getUserId();
+        userId = new PreferenceManager(getApplication()).getUserId();
         pagestart = "0";
         connectionResponseMutableLiveData = new MutableLiveData<>();
     }
@@ -71,9 +70,9 @@ public class ConnectionsViewModel extends AndroidViewModel {
 
     private void getData(boolean isRefresh) {
         if (isRefresh)
-            call = apiService.fetchRefreshedConnections(userId, connections, getDeviceId(), qoogol, pagestart, forcerefresh);
+            call = apiService.fetchRefreshedConnections(userId, connections, getDeviceId(getApplication()), qoogol, pagestart, forcerefresh);
         else
-            call = apiService.fetchConnections(userId, connections, getDeviceId(), qoogol, pagestart);
+            call = apiService.fetchConnections(userId, connections, getDeviceId(getApplication()), qoogol, pagestart);
         call.enqueue(new Callback<ConnectionResponse>() {
             @Override
             public void onResponse(Call<ConnectionResponse> call, retrofit2.Response<ConnectionResponse> response) {

@@ -69,7 +69,6 @@ import java.util.concurrent.Executors;
 import retrofit2.Call;
 import retrofit2.Callback;
 
-import static com.facebook.FacebookSdk.getApplicationContext;
 import static com.jangletech.qoogol.util.Constant.FILL_THE_BLANKS;
 import static com.jangletech.qoogol.util.Constant.IMAGE;
 import static com.jangletech.qoogol.util.Constant.LONG_ANSWER;
@@ -836,7 +835,7 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
         private void loadImage(String img, ImageView imageView) {
             if (!img.contains("http")) {
                 String fileName = img.substring(img.lastIndexOf('/') + 1);
-                File file = new File(UtilHelper.getDirectory(getApplicationContext()), fileName);
+                File file = new File(UtilHelper.getDirectory(activity), fileName);
                 Log.d(TAG, "loadImage URL : " + file);
                 if (file.exists()) {
                     Glide.with(activity).load(file).into(imageView);
@@ -2263,7 +2262,7 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
             ProgressDialog.getInstance().show(activity);
             ApiInterface apiService = ApiClient.getInstance().getApi();
             Call<ProcessQuestion> call;
-            int user_id = Integer.parseInt(new PreferenceManager(getApplicationContext()).getUserId());
+            int user_id = Integer.parseInt(new PreferenceManager(activity).getUserId());
 
             if (call_from.equalsIgnoreCase("like"))
                 call = apiService.likeApi(user_id, que_id, "I", flag);
@@ -2314,12 +2313,12 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
                                 if (flag == 0) {
                                     learningQuestionsNew.setIsSave("false");
                                     Glide.with(activity).load(activity.getResources().getDrawable(R.drawable.ic_save_grey)).into(learningItemBinding.saveQue);
-                                    executor.execute(() -> new AppRepository(getApplicationContext()).deleteQuestion(learningQuestionsNew.getQuestion_id()));
+                                    executor.execute(() -> new AppRepository(activity).deleteQuestion(learningQuestionsNew.getQuestion_id()));
 
                                 } else {
                                     learningQuestionsNew.setIsSave("true");
                                     Glide.with(activity).load(activity.getResources().getDrawable(R.drawable.ic_save_black)).into(learningItemBinding.saveQue);
-                                    executor.execute(() -> new AppRepository(getApplicationContext()).insertQuestion(copyFields(learningQuestionsNew)));
+                                    executor.execute(() -> new AppRepository(activity).insertQuestion(copyFields(learningQuestionsNew)));
 
                                 }
 

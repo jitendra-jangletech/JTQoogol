@@ -11,15 +11,14 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.jangletech.qoogol.activities.MainActivity;
 import com.jangletech.qoogol.R;
+import com.jangletech.qoogol.activities.MainActivity;
 import com.jangletech.qoogol.activities.PracticeTestActivity;
 import com.jangletech.qoogol.databinding.ImageItemBinding;
 import com.jangletech.qoogol.ui.learning.SlideshowDialogFragment;
 
 import java.io.Serializable;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
