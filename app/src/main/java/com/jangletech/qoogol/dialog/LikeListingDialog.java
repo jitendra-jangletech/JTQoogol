@@ -65,10 +65,10 @@ public class LikeListingDialog extends Dialog implements LikeAdapter.onItemClick
         mSettings = new PreferenceManager(context);
         likeDialogBinding.titletv.setText("Likes");
         likeDialogBinding.btnClose.setOnClickListener(v -> dismiss());
+        likeDialogBinding.likeSwiperefresh.setOnRefreshListener(() -> getData());
     }
 
     private void getData() {
-        //ProgressDialog.getInstance().show(context);
 
         Call<ProcessQuestion> call;
         call = apiService.fetchComments(Integer.parseInt(mSettings.getUserId()), questionId, "L");

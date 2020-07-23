@@ -174,6 +174,8 @@ public class Constant {
     public static int test = 1;
     public static int profile = 2;
     public static int connectonId = 3;
+    public static int sharedby = 4;
+    public static int sharedto = 5;
     public static int fetch_loged_in_user = 0;
     public static int fetch_other_user = 1;
 
@@ -251,6 +253,7 @@ public class Constant {
     public static final String FETCH_SUBJECTS = "q111FetchSubjectMaster";
     public static final String FETCH_CHAPTERS = "q114FetchChapterMaster";
     public static final String FETCH_NOTIFICATIONS = "sm28FetchNotifications";
+    public static final String FETCH_SHAREDTQ_USERS = "q153FetchSharedTQ";
     public static final String UPDATE_NOTIFICATIONS = "sm27UpdateNotifications";
     public static final String COUNTRY = "sm05CountryData";
     public static final String STATE = "sm06StateData";
@@ -535,6 +538,7 @@ public class Constant {
     public static final String stq_q_id = "1470";
     public static final String stq_cdatetime = "1471";
     public static final String stq_mst_id = "1472";
+    public static final String group_name = "386";
 
     //Answers
     public static final String a_id = "1363";
@@ -701,8 +705,8 @@ public class Constant {
     public static final String SHARED_BY_YOU = "SHARED_BY_YOU";
     public static final String MY_TEST = "MY_TEST";
     public static final String FAV = "FAV";
-    public static final String SHARED_BY_ME = "SV";
-    public static final String SHARED_WITH_ME = "SV";
+    public static final String SHARED_BY_ME = "SHBY";
+    public static final String SHARED_WITH_ME = "SHTO";
 
 
 //    //Start Resume missing Parameter

@@ -180,6 +180,17 @@ public class LearningQuestionsNew  implements Cloneable{
     @SerializedName(Constant.qlc_save_flag)
     private String isSave;
 
+    @SerializedName(Constant.CASE)
+    private String fetchCASE;
+
+    public String getFetchCASE() {
+        return fetchCASE;
+    }
+
+    public void setFetchCASE(String fetchCASE) {
+        this.fetchCASE = fetchCASE;
+    }
+
     public String getIsSave() {
         return isSave!=null?isSave:"";
     }

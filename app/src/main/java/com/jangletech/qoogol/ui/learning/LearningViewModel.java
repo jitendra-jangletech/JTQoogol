@@ -46,6 +46,11 @@ public class LearningViewModel extends AndroidViewModel {
         return mAppRepository.getQuestionsFromDb();
     }
 
+
+    LiveData<List<LearningQuestionsNew>> getSharedQuestionList(String CASE) {
+        return mAppRepository.getSharedQuestions(CASE);
+    }
+
     void fetchQuestionData(String q_id) {
         getDataFromApi(q_id, "");
     }
