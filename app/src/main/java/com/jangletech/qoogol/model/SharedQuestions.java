@@ -34,6 +34,50 @@ public class SharedQuestions implements Serializable {
     @SerializedName(Constant.stq_mst_id)
     private String stq_mst_id;
 
+    @SerializedName(Constant.u_first_name)
+    private String u_first_name;
+
+    @SerializedName(Constant.u_last_name)
+    private String u_last_name;
+
+    @SerializedName(Constant.group_name)
+    private String group_name;
+
+    @SerializedName(Constant.w_user_profile_image_name)
+    private String w_user_profile_image_name;
+
+    public String getU_first_name() {
+        return u_first_name;
+    }
+
+    public void setU_first_name(String u_first_name) {
+        this.u_first_name = u_first_name;
+    }
+
+    public String getU_last_name() {
+        return u_last_name;
+    }
+
+    public void setU_last_name(String u_last_name) {
+        this.u_last_name = u_last_name;
+    }
+
+    public String getGroup_name() {
+        return group_name;
+    }
+
+    public void setGroup_name(String group_name) {
+        this.group_name = group_name;
+    }
+
+    public String getW_user_profile_image_name() {
+        return w_user_profile_image_name;
+    }
+
+    public void setW_user_profile_image_name(String w_user_profile_image_name) {
+        this.w_user_profile_image_name = w_user_profile_image_name;
+    }
+
     public String getStq_id() {
         return stq_id;
     }
@@ -83,7 +127,7 @@ public class SharedQuestions implements Serializable {
     }
 
     public String getStq_cdatetime() {
-        return stq_cdatetime;
+        return stq_cdatetime!=null?"Shared on : " +stq_cdatetime.substring(0, 10):"";
     }
 
     public void setStq_cdatetime(String stq_cdatetime) {

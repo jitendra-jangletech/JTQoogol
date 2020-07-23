@@ -20,6 +20,7 @@ import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.LearningAdapter;
 import com.jangletech.qoogol.databinding.LearningFragmentBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
+import com.jangletech.qoogol.dialog.PublicProfileDialog;
 import com.jangletech.qoogol.enums.Module;
 import com.jangletech.qoogol.model.LearningQuestionsNew;
 import com.jangletech.qoogol.model.ProcessQuestion;
@@ -38,7 +39,7 @@ import static com.jangletech.qoogol.util.Constant.connectonId;
 import static com.jangletech.qoogol.util.Constant.profile;
 import static com.jangletech.qoogol.util.Constant.learning;
 
-public class LearningFragment extends BaseFragment implements LearningAdapter.onIconClick {
+public class LearningFragment extends BaseFragment implements LearningAdapter.onIconClick, PublicProfileDialog.PublicProfileClickListener {
 
     private LearningViewModel mViewModel;
     LearningFragmentBinding learningFragmentBinding;
@@ -212,13 +213,21 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
         Bundle bundle = new Bundle();
         if (userId.equalsIgnoreCase(new PreferenceManager(getActivity()).getUserId())) {
             bundle.putInt(CALL_FROM, profile);
+            NavHostFragment.findNavController(this).navigate(R.id.nav_edit_profile,bundle);
         } else {
-            bundle.putInt(CALL_FROM, connectonId);
-            bundle.putString(Constant.fetch_profile_id,userId);
+
+            PublicProfileDialog publicProfileDialog = new PublicProfileDialog(getActivity(), userId, this);
+            publicProfileDialog.show();
+
+//            bundle.putInt(CALL_FROM, connectonId);
+//            bundle.putString(Constant.fetch_profile_id,userId);
         }
 
-        NavHostFragment.findNavController(this).navigate(R.id.nav_edit_profile,bundle);
     }
 
 
+    @Override
+    public void onViewImage(String path) {
+        showFullScreen(path);
+    }
 }

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.ClipData;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -39,6 +40,7 @@ import com.jangletech.qoogol.database.repo.AppRepository;
 import com.jangletech.qoogol.databinding.LearningItemBinding;
 import com.jangletech.qoogol.databinding.RatingFeedbackBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
+import com.jangletech.qoogol.dialog.ShareUserListingDialog;
 import com.jangletech.qoogol.model.LearningQuestions;
 import com.jangletech.qoogol.model.LearningQuestionsNew;
 import com.jangletech.qoogol.model.ProcessQuestion;
@@ -84,6 +86,8 @@ import static com.jangletech.qoogol.util.Constant.SCQ_IMAGE_WITH_TEXT;
 import static com.jangletech.qoogol.util.Constant.SHORT_ANSWER;
 import static com.jangletech.qoogol.util.Constant.TRUE_FALSE;
 import static com.jangletech.qoogol.util.Constant.learning;
+import static com.jangletech.qoogol.util.Constant.sharedby;
+import static com.jangletech.qoogol.util.Constant.sharedto;
 import static com.jangletech.qoogol.util.Constant.test;
 
 /**
@@ -111,7 +115,7 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
         learningItemBinding = DataBindingUtil.inflate(
                 LayoutInflater.from(parent.getContext()),
                 R.layout.learning_item, parent, false);
-        if (call_from == learning) {
+        if (call_from == learning||call_from == sharedby||call_from == sharedto) {
             params = new MaterialCardView.LayoutParams(MaterialCardView.LayoutParams.MATCH_PARENT, MaterialCardView.LayoutParams.WRAP_CONTENT);
             int margin = activity.getResources().getDimensionPixelSize(R.dimen._10sdp);
             params.setMargins(0, margin, 0, margin);
@@ -410,9 +414,7 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
                 }
             });
 
-            learningItemBinding.likeValue.setOnClickListener(v ->
-
-            {
+            learningItemBinding.likeValue.setOnClickListener(v -> {
                 LearningQuestionsNew learningQuestions = learningQuestionsList.get(getAdapterPosition());
                 if (!learningQuestions.getLikes().equalsIgnoreCase("0")) {
                     LikeListingDialog listingDialog = new LikeListingDialog(activity, learningQuestions.getQuestion_id(), this::onItemCLick);
@@ -420,8 +422,16 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
                 }
             });
 
-            learningItemBinding.share.setOnClickListener(v ->
+            learningItemBinding.shareValue.setOnClickListener(v -> {
+                if (call_from==sharedby || call_from==sharedto ) {
+                    LearningQuestionsNew learningQuestions = learningQuestionsList.get(getAdapterPosition());
+                    ShareUserListingDialog userListingDialog = new ShareUserListingDialog(activity, learningQuestions.getQuestion_id(), this::onItemCLick,call_from);
+                    userListingDialog.show();
+                }
+            });
 
+
+            learningItemBinding.share.setOnClickListener(v ->
             {
                 LearningQuestionsNew learningQuestions = learningQuestionsList.get(getAdapterPosition());
                 onIconClick.onShareClick(learningQuestions.getQuestion_id());
@@ -2327,11 +2337,11 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
                                 if (flag == 0) {
                                     learningQuestionsNew.setIs_fav("false");
                                     Glide.with(activity).load(activity.getResources().getDrawable(R.drawable.ic_fav)).into(learningItemBinding.favorite);
-                                    executor.execute(() -> new AppRepository(getApplicationContext()).updateQuestion(learningQuestionsNew.getQuestion_id(),"false"));
+                                    executor.execute(() -> new AppRepository(activity).updateQuestion(learningQuestionsNew.getQuestion_id(),"false"));
                                 } else {
                                     Glide.with(activity).load(activity.getResources().getDrawable(R.drawable.ic_favorite_black_24dp)).into(learningItemBinding.favorite);
                                     learningQuestionsNew.setIs_fav("true");
-                                    executor.execute(() -> new AppRepository(getApplicationContext()).updateQuestion(learningQuestionsNew.getQuestion_id(),"true"));
+                                    executor.execute(() -> new AppRepository(activity).updateQuestion(learningQuestionsNew.getQuestion_id(),"true"));
                                 }
                             } else if (call_from.equalsIgnoreCase(ONE_LINE_ANSWER)) {
                                 if (response.body().getSolved_right().equalsIgnoreCase("true")) {

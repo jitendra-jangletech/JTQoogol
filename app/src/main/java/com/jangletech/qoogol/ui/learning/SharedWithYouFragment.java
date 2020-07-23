@@ -39,11 +39,13 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 
-import static com.facebook.FacebookSdk.getApplicationContext;
 import static com.jangletech.qoogol.util.Constant.CALL_FROM;
+import static com.jangletech.qoogol.util.Constant.SHARED_BY_ME;
+import static com.jangletech.qoogol.util.Constant.SHARED_WITH_ME;
 import static com.jangletech.qoogol.util.Constant.connectonId;
 import static com.jangletech.qoogol.util.Constant.learning;
 import static com.jangletech.qoogol.util.Constant.profile;
+import static com.jangletech.qoogol.util.Constant.sharedto;
 
 public class SharedWithYouFragment extends BaseFragment implements LearningAdapter.onIconClick {
 
@@ -113,18 +115,20 @@ public class SharedWithYouFragment extends BaseFragment implements LearningAdapt
             ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Shared with You");
         }
 
-        mViewModel.getQuestionList().observe(getViewLifecycleOwner(), questionsList -> {
+        mViewModel.fetchQuestionData("",SHARED_WITH_ME);
+
+        mViewModel.getSharedQuestionList(SHARED_WITH_ME).observe(getViewLifecycleOwner(), questionsList -> {
             questionsNewList.clear();
             questionsNewList.addAll(questionsList);
             initRecycler();
         });
 
-        learningFragmentBinding.learningSwiperefresh.setOnRefreshListener(() -> mViewModel.fetchQuestionData(""));
+        learningFragmentBinding.learningSwiperefresh.setOnRefreshListener(() -> mViewModel.fetchQuestionData("",SHARED_WITH_ME));
     }
 
 
     private void initRecycler() {
-        learningAdapter = new LearningAdapter(getActivity(), questionsNewList, this, learning);
+        learningAdapter = new LearningAdapter(getActivity(), questionsNewList, this, sharedto);
         learningFragmentBinding.learningRecycler.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setAutoMeasureEnabled(false);
@@ -142,7 +146,7 @@ public class SharedWithYouFragment extends BaseFragment implements LearningAdapt
     private void ProcessQuestionAPI(int que_id, int flag, String call_from, String rating, String feedback) {
         ProgressDialog.getInstance().show(getActivity());
         Call<ProcessQuestion> call;
-        int user_id = new PreferenceManager(getApplicationContext()).getInt(Constant.USER_ID);
+        int user_id = new PreferenceManager(getActivity()).getInt(Constant.USER_ID);
 
         if (call_from.equalsIgnoreCase("like"))
             call = apiService.likeApi(user_id, que_id, "I", flag);

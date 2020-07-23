@@ -34,6 +34,7 @@ import com.jangletech.qoogol.model.ResponseObj;
 import com.jangletech.qoogol.model.SaveQuestResponse;
 import com.jangletech.qoogol.model.SendInviteResponse;
 import com.jangletech.qoogol.model.ShareResponse;
+import com.jangletech.qoogol.model.ShareUserResponse;
 import com.jangletech.qoogol.model.StartResumeTestResponse;
 import com.jangletech.qoogol.model.StateResponse;
 import com.jangletech.qoogol.model.TestDetailsResponse;
@@ -359,6 +360,20 @@ public interface ApiInterface {
     Call<ProcessQuestion> fetchComments(@Field(Constant.u_user_id) int userid,
                                         @Field(Constant.q_id) int queId,
                                         @Field(Constant.CASE) String caseL);
+
+    @FormUrlEncoded
+    @POST(Constant.FETCH_SHAREDTQ_USERS)
+    Call<ShareUserResponse> fetchSharedByUsers(@Field(Constant.u_user_id) String  userid,
+                                               @Field(Constant.q_id) int queId,
+                                               @Field(Constant.device_id) String device_id,
+                                               @Field(Constant.stq_by_user_id) String user);
+
+    @FormUrlEncoded
+    @POST(Constant.FETCH_SHAREDTQ_USERS)
+    Call<ShareUserResponse> fetchSharedToUsers(@Field(Constant.u_user_id) String  userid,
+                                               @Field(Constant.q_id) int queId,
+                                               @Field(Constant.device_id) String device_id,
+                                               @Field(Constant.stq_to_user_id) String user);
 
     @FormUrlEncoded
     @POST(Constant.PROCESS_TEST)
