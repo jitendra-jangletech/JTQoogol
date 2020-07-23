@@ -32,6 +32,7 @@ import androidx.databinding.DataBindingUtil;
 
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.DialogSubjectiveAnsBinding;
+import com.jangletech.qoogol.util.AppUtils;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener;
@@ -57,6 +58,7 @@ public class SubjectiveAnsDialog extends Dialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().getAttributes().windowAnimations = R.anim.fragment_open_enter;
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         mBinding = DataBindingUtil.inflate(LayoutInflater.from(getContext()),
                 R.layout.dialog_subjective_ans, null, false);
@@ -74,7 +76,7 @@ public class SubjectiveAnsDialog extends Dialog {
                             //showToast("Opened");
                         } else {
                             //showToast("Closed");
-                            getAnsListener.onAnswerEntered(mBinding.etAns.getText().toString().trim());
+                            getAnsListener.onAnswerEntered(AppUtils.encodedString(mBinding.etAns.getText().toString().trim()));
                             dismiss();
                         }
                     }
@@ -95,8 +97,8 @@ public class SubjectiveAnsDialog extends Dialog {
 
     private void setTimer(TextView tvTimer, int seconds, int minutes) {
         CountDownTimer countDownTimer = new CountDownTimer(60 * 1000 * 60, 1000) {
-            int timerCountSeconds = 0;
-            int timerCountMinutes = 0;
+            int timerCountSeconds = seconds;
+            int timerCountMinutes = minutes;
 
             public void onTick(long millisUntilFinished) {
                 // timer.setText(new SimpleDateFormat("mm:ss").format(new Date( millisUntilFinished)));
@@ -127,15 +129,6 @@ public class SubjectiveAnsDialog extends Dialog {
         }.start();
     }
 
-    private boolean keyboardShown(View rootView) {
-        final int softKeyboardHeight = 100;
-        Rect r = new Rect();
-        rootView.getWindowVisibleDisplayFrame(r);
-        DisplayMetrics dm = rootView.getResources().getDisplayMetrics();
-        int heightDiff = rootView.getBottom() - r.bottom;
-        return heightDiff > softKeyboardHeight * dm.density;
-    }
-
     private void answerCharCounter(EditText etAnswer, TextView tvCounter, int maxWordLength) {
 
         InputFilter filter = new InputFilter() {
@@ -163,6 +156,7 @@ public class SubjectiveAnsDialog extends Dialog {
                     for (int i = 0; i < words.length; i++) {
                         if (!words[i].isEmpty()) {
                             wordCount++;
+                            //AppUtils.encodedString(s.toString());
                         }
                     }
                 }

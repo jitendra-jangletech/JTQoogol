@@ -185,7 +185,7 @@ public class ShareModel {
     }
 
     public String getU_first_name() {
-        return u_first_name;
+        return u_first_name != null ? u_first_name : "";
     }
 
     public void setU_first_name(String u_first_name) {
@@ -193,7 +193,7 @@ public class ShareModel {
     }
 
     public String getU_last_name() {
-        return u_last_name;
+        return u_last_name != null ? u_last_name : "";
     }
 
     public void setU_last_name(String u_last_name) {
@@ -373,9 +373,9 @@ public class ShareModel {
     @NonNull
     @Override
     public String toString() {
-        if (isAddedtoList && cn_user_id_2!=null && Integer.parseInt(cn_user_id_2) != 0) {
+        if (isAddedtoList && cn_user_id_2 != null && Integer.parseInt(cn_user_id_2) != 0) {
             return cn_user_id_2 + "=U";
-        } else if (isAddedtoList && group_id!=null && Integer.parseInt(group_id) != 0) {
+        } else if (isAddedtoList && group_id != null && Integer.parseInt(group_id) != 0) {
             return group_id + "=G";
         }
         return "";

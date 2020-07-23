@@ -39,7 +39,6 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 
-import static com.facebook.FacebookSdk.getApplicationContext;
 import static com.jangletech.qoogol.util.Constant.CALL_FROM;
 import static com.jangletech.qoogol.util.Constant.connectonId;
 import static com.jangletech.qoogol.util.Constant.learning;
@@ -142,7 +141,7 @@ public class SharedWithYouFragment extends BaseFragment implements LearningAdapt
     private void ProcessQuestionAPI(int que_id, int flag, String call_from, String rating, String feedback) {
         ProgressDialog.getInstance().show(getActivity());
         Call<ProcessQuestion> call;
-        int user_id = new PreferenceManager(getApplicationContext()).getInt(Constant.USER_ID);
+        int user_id = new PreferenceManager(getActivity()).getInt(Constant.USER_ID);
 
         if (call_from.equalsIgnoreCase("like"))
             call = apiService.likeApi(user_id, que_id, "I", flag);

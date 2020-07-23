@@ -558,7 +558,10 @@ public class PracticeTestActivity extends BaseActivity implements
 
     @Override
     public void onFullScreenAns(String strAns) {
-        setFullScreenAns(strAns);
+        if (!strAns.isEmpty()) {
+            submitQuestion(strAns);
+            setFullScreenAns(AppUtils.decodedString(strAns));
+        }
     }
 
     private void submitQuestion(String ans) {
@@ -566,7 +569,9 @@ public class PracticeTestActivity extends BaseActivity implements
         SubmitTest submitTest = new SubmitTest();
         List<TestQuestionNew> submitTestQuestionList = new ArrayList<>();
         TestQuestionNew testQuestionNew = questionsNewList.get(currentPos);
-        testQuestionNew.setTtqa_sub_ans(AppUtils.encodedString(ans));
+        testQuestionNew.setTtqa_sub_ans(ans);
+        testQuestionNew.setTtqa_attempted(true);
+        testQuestionNew.setTtqa_visited(false);
         Log.d(TAG, "markAQuestion Submit Position : " + currentPos);
         Log.d(TAG, "markAQuestion Submit Question Desc : " + testQuestionNew.getQ_quest());
         Log.d(TAG, "markAQuestion Submit Marked  : " + testQuestionNew.isTtqa_marked());
@@ -592,7 +597,8 @@ public class PracticeTestActivity extends BaseActivity implements
             public void onResponse(Call<VerifyResponse> call, Response<VerifyResponse> response) {
                 ProgressDialog.getInstance().dismiss();
                 if (response.body() != null && response.body().getResponse().equals("200")) {
-                    showToast("Question Marked.");
+                    //showToast("Question Marked.");
+
                 } else {
                     Log.e(TAG, "onResponse Error : " + response.body().getResponse());
                 }

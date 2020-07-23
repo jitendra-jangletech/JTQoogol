@@ -273,7 +273,7 @@ public class Constant {
     public static final String ADD_INSTITUTE = "sm38AddIOM";
     public static final String LANGUAGE_API = "sm11LanguageData";
     public static final String FETCH_VERIFIED_CONTACTLIST = "sm99ImportContacts";
-    public static final String SHARE_QUESTION_TEST = "sm34UpdateMessages ";
+    public static final String SHARE_QUESTION_TEST = "sm34ShareMessages";
     public static final String INVITE_CONTACTLIST = "sm98SendInvite";
     public static final String masterDataList = "61";
     public static final String likesList = "60";
@@ -531,7 +531,7 @@ public class Constant {
     public static final String stq_by_user_id = "1466";
     public static final String stq_to_user_id = "1467";
     public static final String stq_to_cr_id = "1468";
-    public static final String stq_tm_id= "1469";
+    public static final String stq_tm_id = "1469";
     public static final String stq_q_id = "1470";
     public static final String stq_cdatetime = "1471";
     public static final String stq_mst_id = "1472";

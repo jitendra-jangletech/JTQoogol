@@ -13,11 +13,19 @@ public class ShareResponse {
     private String response;
 
     @SerializedName(Constant.row_count)
-    private String row_count;
+    private int row_count;
 
 
     @SerializedName(Constant.connection_list)
     private List<ShareModel> connection_list;
+
+    public int getRow_count() {
+        return row_count;
+    }
+
+    public void setRow_count(int row_count) {
+        this.row_count = row_count;
+    }
 
     public String getResponse() {
         return response;
@@ -25,14 +33,6 @@ public class ShareResponse {
 
     public void setResponse(String response) {
         this.response = response;
-    }
-
-    public String getRow_count() {
-        return row_count;
-    }
-
-    public void setRow_count(String row_count) {
-        this.row_count = row_count;
     }
 
     public List<ShareModel> getConnection_list() {

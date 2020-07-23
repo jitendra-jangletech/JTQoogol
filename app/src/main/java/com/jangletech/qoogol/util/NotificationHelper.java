@@ -87,7 +87,7 @@ public class NotificationHelper {
         }
     }
 
-    private static PendingIntent getReplyAction(Context context) {
+    /*private static PendingIntent getReplyAction(Context context) {
         Intent yesReceive = new Intent();
         yesReceive.setAction(REPLY_ACTION);
         return PendingIntent.getBroadcast(context, 12345, yesReceive, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -97,7 +97,7 @@ public class NotificationHelper {
         Intent yesReceive = new Intent();
         yesReceive.setAction(REPLY_DISMISS);
         return PendingIntent.getBroadcast(context, 12345, yesReceive, PendingIntent.FLAG_UPDATE_CURRENT);
-    }
+    }*/
 
     @RequiresApi(Build.VERSION_CODES.O)
     private static String createNotificationChannel(NotificationManager notificationManager) {

@@ -405,10 +405,6 @@ public class TestSharedWithYouFragment extends BaseFragment
         //MainActivity.navController.navigate(R.id.nav_test_attempt_history,bundle);
     }
 
-    private void callApi(int like, int pos) {
-        //doLikeTest(like, pos, testList.get(pos).getTm_id());
-    }
-
     private void favTest(HashMap<String, Integer> map) {
         Log.d(TAG, "favTest params : " + map);
         ProgressDialog.getInstance().show(getActivity());

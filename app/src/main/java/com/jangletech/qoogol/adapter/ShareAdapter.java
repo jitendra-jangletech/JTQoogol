@@ -16,6 +16,7 @@ import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.ShareItemBinding;
 import com.jangletech.qoogol.model.ShareModel;
 import com.jangletech.qoogol.util.UtilHelper;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +26,7 @@ import java.util.List;
 public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> implements Filterable {
     private static final String TAG = "ShareAdapter";
     private ShareItemBinding shareItemBinding;
-    private List<ShareModel> connectionsList;
+    private List<ShareModel> connectionsList, shareList;
     private List<ShareModel> filteredConnectionsList;
     private Activity activity;
     private OnItemClickListener onItemClickListener;
@@ -33,8 +34,8 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
     public ShareAdapter(Activity activity, List<ShareModel> connectionsList, OnItemClickListener onItemClickListener) {
         this.activity = activity;
         this.connectionsList = connectionsList;
-        //this.filteredConnectionsList = connectionsList;
         this.onItemClickListener = onItemClickListener;
+        shareList = new ArrayList<>(connectionsList);
     }
 
     @NonNull
@@ -49,26 +50,23 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ShareModel connections = connectionsList.get(position);
-        shareItemBinding.setConnection(connections);
-        try {
-            if (connections.getRecordType().equalsIgnoreCase("G")) {
-                shareItemBinding.tvUserName.setText(connections.getU_first_name());
-                if (connections.getProf_pic() != null && !connections.getProf_pic().isEmpty()) {
-                    Glide.with(activity).load(UtilHelper.getProfileImageUrl(connections.getProf_pic().trim())).circleCrop().placeholder(R.drawable.profile).into(shareItemBinding.userProfileImage);
-                }
-            } else {
-                shareItemBinding.tvUserName.setText(connections.getU_first_name() + " " + connections.getU_last_name());
-                if (connections.getProf_pic() != null && !connections.getProf_pic().isEmpty()) {
-                    Glide.with(activity).load(UtilHelper.getProfileImageUrl(connections.getProf_pic().trim())).circleCrop().placeholder(R.drawable.profile).into(shareItemBinding.userProfileImage);
-                }
+        if (connections.getRecordType().equalsIgnoreCase("G")) {
+            holder.shareItemBinding.tvUserName.setText(connections.getU_first_name());
+            if (connections.getProf_pic() != null && !connections.getProf_pic().isEmpty()) {
+                Log.d(TAG, "onBindViewHolder Image Url : " + UtilHelper.getProfileImageUrl(connections.getProf_pic().trim()));
+                Glide.with(activity).load(UtilHelper.getProfileImageUrl(connections.getProf_pic().trim())).circleCrop().placeholder(R.drawable.profile).into(holder.shareItemBinding.userProfileImage);
             }
-
-            shareItemBinding.pauseSwitch.setOnClickListener(v -> {
-                onItemClickListener.actionPerformed(connections, position);
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
+        } else {
+            holder.shareItemBinding.tvUserName.setText(connections.getU_first_name() + " " + connections.getU_last_name());
+            if (connections.getProf_pic() != null && !connections.getProf_pic().isEmpty()) {
+                Glide.with(activity).load(UtilHelper.getProfileImageUrl(connections.getProf_pic().trim())).circleCrop().placeholder(R.drawable.profile).into(holder.shareItemBinding.userProfileImage);
+            }
         }
+
+        holder.shareItemBinding.pauseSwitch.setOnClickListener(v -> {
+            onItemClickListener.actionPerformed(connections, position);
+        });
+
     }
 
 
@@ -87,6 +85,43 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         return position;
     }
 
+    public void updateShareList(List<ShareModel> updatedList){
+        connectionsList = updatedList;
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public Filter getFilter() {
+        return shareFilter;
+    }
+
+    private Filter shareFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<ShareModel> filteredList = new ArrayList<>();
+            if (constraint == null || constraint.length() == 0) {
+                filteredList.addAll(shareList);
+            } else {
+                String filterPattern = constraint.toString().toLowerCase().trim();
+                for (ShareModel item : shareList) {
+                    if (item.getU_first_name().toLowerCase().contains(filterPattern)) {
+                        filteredList.add(item);
+                    }
+                }
+            }
+            FilterResults results = new FilterResults();
+            results.values = filteredList;
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            connectionsList.clear();
+            connectionsList.addAll((List) results.values);
+            notifyDataSetChanged();
+        }
+    };
+
     public interface OnItemClickListener {
         void actionPerformed(ShareModel connections, int position);
         void onBottomReached(int position);
@@ -94,46 +129,16 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
 
     public void filterList(List<ShareModel> resultShareModelList) {
         connectionsList = resultShareModelList;
-        for (ShareModel model :resultShareModelList){
-            Log.d(TAG, "filterList: "+model.getU_first_name());
-        }
         notifyDataSetChanged();
     }
 
-    @Override
-    public Filter getFilter() {
-        return new Filter() {
-            @Override
-            protected FilterResults performFiltering(CharSequence charSequence) {
-                String charString = charSequence.toString();
-                if (charString.isEmpty()) {
-                    connectionsList = filteredConnectionsList;
-                } else {
-                    List<ShareModel> filteredList = new ArrayList<>();
-                    for (ShareModel row : filteredConnectionsList) {
-                        if (row.getU_first_name().toLowerCase().contains(charString.toLowerCase()) || row.getU_last_name().toLowerCase().contains(charString.toLowerCase())) {
-                            filteredList.add(row);
-                        }
-                    }
-                    connectionsList = filteredList;
-                }
-
-                FilterResults filterResults = new FilterResults();
-                filterResults.values = connectionsList;
-                return filterResults;
-            }
-
-            @Override
-            protected void publishResults(CharSequence constraint, FilterResults filterResults) {
-                connectionsList = (ArrayList<ShareModel>) filterResults.values;
-                notifyDataSetChanged();
-            }
-        };
-    }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+        ShareItemBinding shareItemBinding;
+
         public ViewHolder(@NonNull ShareItemBinding itemView) {
             super(itemView.getRoot());
+            this.shareItemBinding = itemView;
         }
     }
 }

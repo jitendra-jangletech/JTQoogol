@@ -427,7 +427,7 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
                 onIconClick.onShareClick(learningQuestions.getQuestion_id());
             });
 
-            learningItemBinding.favorite.setOnClickListener(v ->    {
+            learningItemBinding.favorite.setOnClickListener(v -> {
                 LearningQuestionsNew learningQuestions = learningQuestionsList.get(getAdapterPosition());
                 if (learningQuestions.getIs_fav().equalsIgnoreCase("true")) {
                     ProcessQuestionAPI(learningQuestions.getQuestion_id(), 0, "fav", "", "", getAdapterPosition(), "");
@@ -456,7 +456,7 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
                     getAdapterPosition()).
                     getQuestion_id()));
 
-            learningItemBinding.mcqImgtextImg1.setOnClickListener(v ->  {
+            learningItemBinding.mcqImgtextImg1.setOnClickListener(v -> {
                 if (isMCQImgSubmited)
                     setMCQImgTextAnsIndicator();
                 if (!mcqimgtext_ans.contains("A")) {
@@ -804,7 +804,7 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
                 learningItemBinding.scq4Layout.setBackground(activity.getResources().getDrawable(R.drawable.grey_border_grey_bg));
             });
 
-            learningItemBinding.btntrue.setOnClickListener(v ->            {
+            learningItemBinding.btntrue.setOnClickListener(v -> {
                 setTFLayoutBg();
                 tfAns = "true";
                 learningItemBinding.btnfalse.setTextColor(activity.getResources().getColor(R.color.black));
@@ -826,7 +826,7 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
                 submitCall();
             });
 
-            learningItemBinding.submitAndRate.setOnClickListener(v ->  {
+            learningItemBinding.submitAndRate.setOnClickListener(v -> {
                 submitCall();
                 displayRatingDialog(learningQuestionsList.get(getAdapterPosition()), getAdapterPosition());
             });
@@ -899,12 +899,12 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
                         //loadImage(learningQuestions.getMcq2().split("::")[0], learningItemBinding.scqImgtextImg2);
                         //loadImage(learningQuestions.getMcq3().split("::")[0], learningItemBinding.scqImgtextImg3);
                         //loadImage(learningQuestions.getMcq4().split("::")[0], learningItemBinding.scqImgtextImg4);
-                        Glide.with(activity).load(Constant.PRODUCTION_BASE_FILE_API+learningQuestions.getMcq1().split("::")[0]).into(learningItemBinding.scqImgtextImg1);
-                        Glide.with(activity).load(Constant.PRODUCTION_BASE_FILE_API+learningQuestions.getMcq2().split("::")[0]).into(learningItemBinding.scqImgtextImg2);
-                        Glide.with(activity).load(Constant.PRODUCTION_BASE_FILE_API+learningQuestions.getMcq3().split("::")[0]).into(learningItemBinding.scqImgtextImg3);
-                        Glide.with(activity).load(Constant.PRODUCTION_BASE_FILE_API+learningQuestions.getMcq4().split("::")[0]).into(learningItemBinding.scqImgtextImg4);
+                        Glide.with(activity).load(Constant.PRODUCTION_BASE_FILE_API + learningQuestions.getMcq1().split("::")[0]).into(learningItemBinding.scqImgtextImg1);
+                        Glide.with(activity).load(Constant.PRODUCTION_BASE_FILE_API + learningQuestions.getMcq2().split("::")[0]).into(learningItemBinding.scqImgtextImg2);
+                        Glide.with(activity).load(Constant.PRODUCTION_BASE_FILE_API + learningQuestions.getMcq3().split("::")[0]).into(learningItemBinding.scqImgtextImg3);
+                        Glide.with(activity).load(Constant.PRODUCTION_BASE_FILE_API + learningQuestions.getMcq4().split("::")[0]).into(learningItemBinding.scqImgtextImg4);
 
-                        
+
 //                        Glide.with(activity).load(new URL(Constant.QUESTION_IMAGES_API + learningQuestions.getMcq1().split(":")[0].trim())).into(learningItemBinding.scqImgtextImg1);
 //                        Glide.with(activity).load(new URL(Constant.QUESTION_IMAGES_API + learningQuestions.getMcq2().split(":")[0].trim())).into(learningItemBinding.scqImgtextImg2);
 //                        Glide.with(activity).load(new URL(Constant.QUESTION_IMAGES_API + learningQuestions.getMcq3().split(":")[0].trim())).into(learningItemBinding.scqImgtextImg3);
@@ -1179,7 +1179,7 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
                         Toast.makeText(activity, "Please select atleast one option.", Toast.LENGTH_SHORT).show();
                     }
                 } else if (learningQuestions.getQue_option_type().equalsIgnoreCase(MATCH_PAIR)) {
-                    if (paired.size()!=MTP_ans.size()) {
+                    if (paired.size() != MTP_ans.size()) {
                         Toast.makeText(activity, "Select all pairs first.", Toast.LENGTH_SHORT).show();
                     } else {
                         isAttempted = 1;
@@ -1203,7 +1203,7 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
                         }
                     }
                 } else if (learningQuestions.getQue_option_type().equalsIgnoreCase(MATCH_PAIR_IMAGE)) {
-                    if (imgpaired.size()!=MTP_ans.size()) {
+                    if (imgpaired.size() != MTP_ans.size()) {
                         Toast.makeText(activity, "Select all pairs first.", Toast.LENGTH_SHORT).show();
                     } else {
                         isAttempted = 1;
@@ -2327,11 +2327,11 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
                                 if (flag == 0) {
                                     learningQuestionsNew.setIs_fav("false");
                                     Glide.with(activity).load(activity.getResources().getDrawable(R.drawable.ic_fav)).into(learningItemBinding.favorite);
-                                    executor.execute(() -> new AppRepository(getApplicationContext()).updateQuestion(learningQuestionsNew.getQuestion_id(),"false"));
+                                    executor.execute(() -> new AppRepository(activity).updateQuestion(learningQuestionsNew.getQuestion_id(), "false"));
                                 } else {
                                     Glide.with(activity).load(activity.getResources().getDrawable(R.drawable.ic_favorite_black_24dp)).into(learningItemBinding.favorite);
                                     learningQuestionsNew.setIs_fav("true");
-                                    executor.execute(() -> new AppRepository(getApplicationContext()).updateQuestion(learningQuestionsNew.getQuestion_id(),"true"));
+                                    executor.execute(() -> new AppRepository(activity).updateQuestion(learningQuestionsNew.getQuestion_id(), "true"));
                                 }
                             } else if (call_from.equalsIgnoreCase(ONE_LINE_ANSWER)) {
                                 if (response.body().getSolved_right().equalsIgnoreCase("true")) {
@@ -2433,7 +2433,7 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
                     if (ratingFeedbackBinding.rating.getRating() != 0) {
                         String encoded = Base64.encodeToString(ratingFeedbackBinding.feedback.getText().toString().getBytes(StandardCharsets.UTF_8), Base64.DEFAULT);
                         String encodedText = StringUtils.stripAccents(encoded);
-                        ProcessQuestionAPI(learningQuestionsNew.getQuestion_id(), 0, "rating", String.valueOf(ratingFeedbackBinding.rating.getRating()),encodedText , position, "");
+                        ProcessQuestionAPI(learningQuestionsNew.getQuestion_id(), 0, "rating", String.valueOf(ratingFeedbackBinding.rating.getRating()), encodedText, position, "");
                     } else {
                         Toast.makeText(activity, "Please add ratings", Toast.LENGTH_SHORT).show();
                     }

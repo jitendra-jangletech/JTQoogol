@@ -21,7 +21,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ApiClient {
     private static final String TAG = "ApiClient";
     //    public static final String BASE_URL = "http://192.168.0.109:8080/Qoogol/";
-    public static final String BASE_URL = "https://spot20191210061236.azurewebsites.net/api/";
+    public static final String BASE_URL_PROD = "https://spot20191210061236.azurewebsites.net/api/";
+    public static final String BASE_URL_STAGING = "https://spot20191210061236-staging.azurewebsites.net/api/";
     public static final String HEADER_CACHE_CONTROL = "Cache-Control";
     public static final String HEADER_PRAGMA = "Pragma";
 
@@ -38,7 +39,7 @@ public class ApiClient {
 
     private static Retrofit retrofit() {
         return new Retrofit.Builder()
-                .baseUrl(BASE_URL)
+                .baseUrl(BASE_URL_STAGING)
                 .client(okHttpClient())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();

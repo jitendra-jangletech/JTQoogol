@@ -82,11 +82,11 @@ public class MainActivity extends BaseActivity {
         tvNavCredits = findViewById(R.id.tvNavCredits);
         tvNavFollowing = findViewById(R.id.tvNavFollowing);
         bottomNavigationView = findViewById(R.id.bottomNav);
-
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setMargins(mBinding.marginLayout);
+        getNotificationIntent(getIntent());
         NavigationView navigationView = findViewById(R.id.nav_view);
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_test_popular, R.id.nav_attended_by_friends, R.id.nav_shared_with_you,
@@ -525,6 +525,30 @@ public class MainActivity extends BaseActivity {
                 navigateFlag = Nav.ABOUT.toString();
             }
         });
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        getNotificationIntent(intent);
+    }
+
+    private void getNotificationIntent(Intent intent) {
+        if (intent != null) {
+            if (intent.hasExtra("bundle")) {
+                Bundle bundle = intent.getBundleExtra("bundle");
+                if (bundle != null && bundle.getBoolean("fromNotification")) {
+                    String action = bundle.getString(Constant.FB_ACTION);
+                    Log.d(TAG, "getNotificationIntent: " + bundle.getString(Constant.FB_FROM_TYPE));
+                    Log.d(TAG, "getNotificationIntent: " + bundle.getString(Constant.FB_ACTION));
+                    if (action != null && action.equalsIgnoreCase("T")) {
+                        navToFragment(R.id.nav_test_my, bundle);
+                    } else if (action != null && action.equalsIgnoreCase("Q")) {
+                        navToFragment(R.id.nav_learning, bundle);
+                    }
+                }
+            }
+        }
     }
 
     private void navToFragment(int resId, Bundle bundle) {

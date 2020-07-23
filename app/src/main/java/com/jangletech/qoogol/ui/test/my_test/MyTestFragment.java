@@ -33,6 +33,7 @@ import com.jangletech.qoogol.adapter.TestListAdapter;
 import com.jangletech.qoogol.databinding.FragmentTestMyBinding;
 import com.jangletech.qoogol.dialog.CommentDialog;
 import com.jangletech.qoogol.dialog.PublicProfileDialog;
+import com.jangletech.qoogol.dialog.ShareQuestionDialog;
 import com.jangletech.qoogol.enums.Module;
 import com.jangletech.qoogol.model.FetchSubjectResponse;
 import com.jangletech.qoogol.model.FetchSubjectResponseList;
@@ -412,10 +413,12 @@ public class MyTestFragment extends BaseFragment
 
     @Override
     public void onShareClick(int testid) {
-        Bundle bundle = new Bundle();
-        bundle.putString("testId", String.valueOf(testid));
-        bundle.putInt("call_from", test);
-        NavHostFragment.findNavController(this).navigate(R.id.nav_share, bundle);
+//        Bundle bundle = new Bundle();
+//        bundle.putString("testId", String.valueOf(testid));
+//        bundle.putInt("call_from", test);
+//        NavHostFragment.findNavController(this).navigate(R.id.nav_share, bundle);
+        new ShareQuestionDialog(getActivity(), String.valueOf(testid))
+                .show();
     }
 
     @Override

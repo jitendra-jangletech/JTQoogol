@@ -1,47 +1,62 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~
+  ~ /*
+  ~  * /////////////////////////////////////////////////////////////////////////////////////////////////
+  ~  * //
+  ~  * //            Copyright (c) 2020. JangleTech Systems Private Limited, Thane, India
+  ~  * //
+  ~  * /////////////////////////////////////////////////////////////////////////////////////////////////
+  ~  */
+  -->
+
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/tools">
 
-
-    <data>
-
-        <variable
-            name="connection"
-            type="com.jangletech.qoogol.model.ShareModel" />
-
-    </data>
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/container"
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="@dimen/_5sdp"
-        app:cardElevation="@dimen/_5sdp">
-
+        android:layout_marginTop="0dp"
+        app:cardBackgroundColor="@color/background_color"
+        app:cardUseCompatPadding="false"
+        card_view:cardElevation="0dp">
 
         <RelativeLayout
             android:id="@+id/rlProfile"
+            android:background="@color/colorWhite"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="2dp">
+            android:padding="5dp">
 
             <ImageView
                 android:id="@+id/userProfileImage"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_profile_default" />
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/ic_profile_default"/>
+
+            <ImageView
+                android:id="@+id/badges"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="4dp"
+                android:layout_toEndOf="@+id/userProfileImage"
+                android:adjustViewBounds="true"
+                android:background="@drawable/image_border"
+                android:contentDescription="@string/app_name"
+                android:scaleType="fitXY"/>
 
             <TextView
                 android:id="@+id/tvUserName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="8dp"
-                android:layout_toEndOf="@+id/userProfileImage"
+                android:layout_marginStart="4dp"
+                android:layout_toEndOf="@+id/badges"
                 android:ellipsize="end"
-                android:fontFamily="sans-serif-black"
                 android:textAlignment="viewStart"
                 android:textColor="@color/colorBlack"
                 android:textSize="@dimen/textSizexSmall"
@@ -54,19 +69,18 @@
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="5dp"
-                android:layout_marginLeft="5dp"
-                android:checked="@={connection.checkedItem}"
-                android:textColor="@color/white"
+                android:layout_toEndOf="@+id/tvUserName"
                 android:textSize="@dimen/textSizexSmall"
                 android:theme="@style/GroupSwitch"
-                android:visibility="visible"
                 app:switchPadding="5dp" />
 
-
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/userProfileImage"
+                android:layout_marginTop="@dimen/btn_padding"
+                android:layout_toEndOf="@+id/userProfileImage"
+                android:background="@color/colorDarkGray" />
         </RelativeLayout>
-
-
-    </com.google.android.material.card.MaterialCardView>
-
-
+    </androidx.cardview.widget.CardView>
 </layout>

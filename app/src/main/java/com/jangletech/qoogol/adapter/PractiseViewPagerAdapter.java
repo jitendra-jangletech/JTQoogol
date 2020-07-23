@@ -1741,7 +1741,7 @@ public class PractiseViewPagerAdapter extends PagerAdapter
         if (share != null)
             share.setOnClickListener(v -> {
                 //showToast("Hello");
-                ShareQuestionDialog shareDialog = new ShareQuestionDialog(context);
+                ShareQuestionDialog shareDialog = new ShareQuestionDialog(context,"");
                 shareDialog.show();
             });
     }
