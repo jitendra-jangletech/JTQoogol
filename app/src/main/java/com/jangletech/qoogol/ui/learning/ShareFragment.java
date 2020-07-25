@@ -9,14 +9,18 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.jangletech.qoogol.BuildConfig;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.ShareAdapter;
 import com.jangletech.qoogol.databinding.FragmentShareBinding;
@@ -29,12 +33,14 @@ import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
-import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
+
 import static com.jangletech.qoogol.util.Constant.friends_and_groups;
 import static com.jangletech.qoogol.util.Constant.learning;
 import static com.jangletech.qoogol.util.Constant.qoogol;
@@ -55,7 +61,11 @@ public class ShareFragment extends BaseFragment implements ShareAdapter.OnItemCl
     private ApiInterface apiService = ApiClient.getInstance().getApi();
     private String userId = "", question_id = "", testId = "";
     private int call_from;
+    private int pageStart = 0;
+    private Boolean isScrolling = false;
+    private int currentItems, scrolledOutItems, totalItems;
     private Call<ResponseObj> call;
+    private LinearLayoutManager linearLayoutManager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,40 +73,52 @@ public class ShareFragment extends BaseFragment implements ShareAdapter.OnItemCl
         shareBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_share, container, false);
         setHasOptionsMenu(true);
         initView();
-        getData(0);
+        getData(pageStart);
         return shareBinding.getRoot();
     }
 
-
     private void getData(int pagestart) {
-        ProgressDialog.getInstance().show(getActivity());
-        Call<ShareResponse> call = apiService.fetchConnectionsforShare(userId, friends_and_groups, getDeviceId(getActivity()), qoogol, pagestart);
+        //ProgressDialog.getInstance().show(getActivity());
+        shareBinding.progress.setVisibility(View.VISIBLE);
+        Call<ShareResponse> call = apiService.fetchConnectionsforShare(getUserId(getActivity()), friends_and_groups, getDeviceId(getActivity()), qoogol, pagestart,"");
         call.enqueue(new Callback<ShareResponse>() {
             @Override
             public void onResponse(Call<ShareResponse> call, retrofit2.Response<ShareResponse> response) {
                 try {
-                    ProgressDialog.getInstance().dismiss();
-                    connectionsList.clear();
+                    //ProgressDialog.getInstance().dismiss();
+                    //connectionsList.clear();
+                    shareBinding.progress.setVisibility(View.GONE);
                     if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
-                        connectionsList = response.body().getConnection_list();
-                        initRecycler();
+                        setData(response.body());
                     } else {
                         Toast.makeText(getActivity(), UtilHelper.getAPIError(String.valueOf(response.body())), Toast.LENGTH_SHORT).show();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    ProgressDialog.getInstance().dismiss();
+                    shareBinding.progress.setVisibility(View.GONE);
+                    //ProgressDialog.getInstance().dismiss();
                 }
             }
 
             @Override
             public void onFailure(Call<ShareResponse> call, Throwable t) {
                 t.printStackTrace();
-                ProgressDialog.getInstance().dismiss();
+                shareBinding.progress.setVisibility(View.GONE);
+                //ProgressDialog.getInstance().dismiss();
             }
         });
     }
 
+    private void setData(ShareResponse shareResponse) {
+        Log.d(TAG, "setData PageStart : " + pageStart);
+        if (shareResponse.getConnection_list().size() > 0) {
+            pageStart = shareResponse.getRow_count();
+            connectionsList.addAll(shareResponse.getConnection_list());
+            mAdapter.notifyDataSetChanged();
+        } else {
+            showToast("No more connections available.");
+        }
+    }
 
     private void initView() {
         connectionsList = new ArrayList<>();
@@ -110,17 +132,38 @@ public class ShareFragment extends BaseFragment implements ShareAdapter.OnItemCl
                 testId = bundle.getString("testId");
             }
         }
-        userId = String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));
-    }
 
-    private void initRecycler() {
-        if (connectionsList != null) {
-            mAdapter = new ShareAdapter(getActivity(), connectionsList, this);
-            shareBinding.shareRecycler.setHasFixedSize(true);
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-            shareBinding.shareRecycler.setLayoutManager(linearLayoutManager);
-            shareBinding.shareRecycler.setAdapter(mAdapter);
-        }
+        mAdapter = new ShareAdapter(getActivity(), connectionsList, this);
+        //shareBinding.shareRecycler.setHasFixedSize(true);
+        linearLayoutManager = new LinearLayoutManager(getContext());
+        shareBinding.shareRecycler.setLayoutManager(linearLayoutManager);
+        shareBinding.shareRecycler.setAdapter(mAdapter);
+        //userId = String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));
+
+        shareBinding.shareRecycler.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                    isScrolling = true;
+                }
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                currentItems = linearLayoutManager.getChildCount();
+                totalItems = linearLayoutManager.getItemCount();
+                scrolledOutItems = linearLayoutManager.findFirstVisibleItemPosition();
+                if (dy > 0) {
+                    if (isScrolling && (currentItems + scrolledOutItems == totalItems)) {
+                        isScrolling = false;
+                        getData(pageStart);
+                        //Toast.makeText(TestingActivity.this, "Last Item", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
     }
 
     private List<ShareModel> filter(List<ShareModel> models, String query) {
@@ -153,25 +196,6 @@ public class ShareFragment extends BaseFragment implements ShareAdapter.OnItemCl
 
         SearchView searchView = (SearchView) searchItem.getActionView();
         searchView.setOnQueryTextListener(this);
-       /* searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                final List<ShareModel> shareList = filter(connectionsList, query);
-                mAdapter.filterList(shareList);
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String query) {
-                try {
-                    // filter recycler view when text is changed
-                    mAdapter.getFilter().filter(query);
-                } catch (Exception ex) {
-                    Log.e(TAG, ex.getMessage());
-                }
-                return false;
-            }
-        });*/
     }
 
     @Override
@@ -188,7 +212,6 @@ public class ShareFragment extends BaseFragment implements ShareAdapter.OnItemCl
     }
 
     private void callShareAPI() {
-
         String modelAction = TextUtils.join(",", selectedconnectionsList).replace(",,", ",");
         modelAction = modelAction.replace("D", "U");
         modelAction = modelAction.replace("A", "U");
@@ -209,16 +232,16 @@ public class ShareFragment extends BaseFragment implements ShareAdapter.OnItemCl
         } else {
             ProgressDialog.getInstance().show(getActivity());
             if (call_from == learning)
-                call = apiService.shareAPI(question_id, question_share, "F", getDeviceId(getActivity()), getUserId(getActivity()), modelAction, "1.68", qoogol, comment);
+                call = apiService.shareAPI(question_id, question_share, "F", getDeviceId(getActivity()), getUserId(getActivity()), modelAction, Constant.APP_VERSION, qoogol, comment);
             else
-                call = apiService.shareAPI(testId, test_share, "F", getDeviceId(getActivity()), getUserId(getActivity()), modelAction, "1.68", qoogol, comment);
+                call = apiService.shareAPI(testId, test_share, "F", getDeviceId(getActivity()), getUserId(getActivity()), modelAction, Constant.APP_VERSION, qoogol, comment);
 
             call.enqueue(new Callback<ResponseObj>() {
                 @Override
                 public void onResponse(Call<ResponseObj> call, retrofit2.Response<ResponseObj> response) {
                     try {
                         ProgressDialog.getInstance().dismiss();
-                        connectionsList.clear();
+                        //connectionsList.clear();
                         if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
                             Log.i(TAG, "shared successfully");
 
@@ -227,10 +250,10 @@ public class ShareFragment extends BaseFragment implements ShareAdapter.OnItemCl
                         }
                         Bundle bundle = new Bundle();
                         bundle.putString("call_from", "share");
-                        if (call_from == learning)
-                            NavHostFragment.findNavController(ShareFragment.this).navigate(R.id.nav_learning, bundle);
-                        else
-                            NavHostFragment.findNavController(ShareFragment.this).navigate(R.id.nav_test_my, bundle);
+                        //if (call_from == learning)
+                        //  NavHostFragment.findNavController(ShareFragment.this).navigate(R.id.nav_learning, bundle);
+                        /// else
+                        // NavHostFragment.findNavController(ShareFragment.this).navigate(R.id.nav_test_my, bundle);
                     } catch (Exception e) {
                         e.printStackTrace();
                         ProgressDialog.getInstance().dismiss();
@@ -244,8 +267,6 @@ public class ShareFragment extends BaseFragment implements ShareAdapter.OnItemCl
                 }
             });
         }
-
-
     }
 
     @Override
@@ -261,11 +282,7 @@ public class ShareFragment extends BaseFragment implements ShareAdapter.OnItemCl
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        final List<ShareModel> filteredModelList = filter(connectionsList, newText);
-        if (filteredModelList.size() > 0)
-            mAdapter.filterList(filteredModelList);
-        else
-            mAdapter.filterList(connectionsList);
+        Log.d(TAG, "onQueryTextChange: " + newText);
         return false;
     }
 }

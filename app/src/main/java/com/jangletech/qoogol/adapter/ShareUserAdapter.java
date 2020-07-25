@@ -1,6 +1,7 @@
 package com.jangletech.qoogol.adapter;
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,12 +40,13 @@ public class ShareUserAdapter extends RecyclerView.Adapter<ShareUserAdapter.View
     }
 
 
-    public ShareUserAdapter(Activity activity, List<SharedQuestions> sharedQuestionsList, onItemClickListener onItemClickListener,int call_from) {
+    public ShareUserAdapter(Activity activity, List<SharedQuestions> sharedQuestionsList, onItemClickListener onItemClickListener, int call_from) {
         this.activity = activity;
         this.sharedQuestionsList = sharedQuestionsList;
         this.onItemClickListener = onItemClickListener;
         this.call_from = call_from;
     }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -58,7 +60,8 @@ public class ShareUserAdapter extends RecyclerView.Adapter<ShareUserAdapter.View
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         SharedQuestions sharedQuestions = sharedQuestionsList.get(position);
         try {
-            if (sharedQuestions.getGroup_name()!=null) {
+            Log.d(TAG, "onBindViewHolder Url : " + UtilHelper.getProfileImageUrl(sharedQuestions.getW_user_profile_image_name().trim()));
+            if (sharedQuestions.getGroup_name() != null) {
                 shareuseritemBinding.tvUserName.setText(sharedQuestions.getGroup_name());
                 if (sharedQuestions.getW_user_profile_image_name() != null && !sharedQuestions.getW_user_profile_image_name().isEmpty()) {
                     Glide.with(activity).load(UtilHelper.getProfileImageUrl(sharedQuestions.getW_user_profile_image_name().trim())).circleCrop().placeholder(R.drawable.profile).into(shareuseritemBinding.userProfileImage);
@@ -91,8 +94,8 @@ public class ShareUserAdapter extends RecyclerView.Adapter<ShareUserAdapter.View
 
             shareuseritemBinding.container.setOnClickListener(v -> {
                 SharedQuestions sharedQuestions = sharedQuestionsList.get(getAdapterPosition());
-                if (sharedQuestions.getGroup_name()==null) {
-                    if (call_from==sharedby)
+                if (sharedQuestions.getGroup_name() == null) {
+                    if (call_from == sharedby)
                         onItemClickListener.onItemCLick(sharedQuestions.getStq_to_user_id());
                     else
                         onItemClickListener.onItemCLick(sharedQuestions.getStq_by_user_id());

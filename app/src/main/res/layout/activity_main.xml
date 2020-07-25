@@ -181,7 +181,7 @@
                                 style="@style/sub_menu_item_style"
                                 android:foreground="?attr/selectableItemBackground"
                                 android:text="@string/shared_with_you"
-                                android:visibility="gone" />
+                                android:visibility="visible" />
 
                             <TextView
                                 android:id="@+id/nav_test_popular"

@@ -25,7 +25,6 @@ public class MessagingService extends FirebaseMessagingService {
         mSettings = new PreferenceManager(getApplicationContext());
     }
 
-
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);

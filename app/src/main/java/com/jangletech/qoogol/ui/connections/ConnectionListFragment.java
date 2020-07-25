@@ -5,12 +5,15 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.ConnectionAdapter;
@@ -43,6 +46,10 @@ public class ConnectionListFragment extends BaseFragment implements ConnectionAd
     private List<Connections> connectionsList = new ArrayList<>();
     private ConnectionAdapter mAdapter;
     private Boolean isVisible = false;
+    private String pageCount = "0";
+    private int currentItems, scrolledOutItems, totalItems;
+    private Boolean isScrolling = false;
+    private ConnectionResponse connectionResponse;
     private ConnectionsViewModel mViewModel;
     private LinearLayoutManager linearLayoutManager;
     private ApiInterface apiService = ApiClient.getInstance().getApi();
@@ -55,48 +62,66 @@ public class ConnectionListFragment extends BaseFragment implements ConnectionAd
         return mBinding.getRoot();
     }
 
-    /*private void init() {
-        if (!isVisible) {
-            isVisible = true;
-            mViewModel.fetchConnectionsData(false);
-        }
-        mBinding.connectionSwiperefresh.setOnRefreshListener(() -> mViewModel.fetchConnectionsData(true));
-    }*/
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(ConnectionsViewModel.class);
-        //init();
-        fetchConnections();
-        mViewModel.getConnectionsList(getUserId(getActivity())).observe(getViewLifecycleOwner(), connectionsList -> {
-            if (connectionsList != null) {
-                setConnectionAdapter(connectionsList);
+        mBinding.emptyview.setVisibility(View.GONE);
+        fetchConnections(pageCount);
+        mAdapter = new ConnectionAdapter(getActivity(), connectionsList, friends, this);
+        mBinding.connectionRecycler.setHasFixedSize(true);
+        mBinding.connectionRecycler.setLayoutManager(linearLayoutManager);
+        mBinding.connectionRecycler.setAdapter(mAdapter);
+        mViewModel.getConnectionsList(getUserId(getActivity())).observe(getViewLifecycleOwner(), connections -> {
+            if (connections != null) {
+                if (connectionResponse != null)
+                    pageCount = connectionResponse.getRow_count();
+                if (connections.size() > 0) {
+                    connectionsList.addAll(connections);
+                    mAdapter.updateList(connectionsList);
+                } else {
+                    mBinding.emptyview.setVisibility(View.VISIBLE);
+                }
             }
         });
 
-        mBinding.connectionSwiperefresh.setOnRefreshListener(() -> fetchConnections());
+        mBinding.connectionRecycler.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                    isScrolling = true;
+                }
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                currentItems = linearLayoutManager.getChildCount();
+                totalItems = linearLayoutManager.getItemCount();
+                scrolledOutItems = linearLayoutManager.findFirstVisibleItemPosition();
+                if (dy > 0) {
+                    if (isScrolling && (currentItems + scrolledOutItems == totalItems)) {
+                        isScrolling = false;
+                        fetchConnections(pageCount);
+                    }
+                }
+            }
+        });
+
+        mBinding.connectionSwiperefresh.setOnRefreshListener(() -> fetchConnections("0"));
     }
 
-    private void setConnectionAdapter(List<Connections> connectionsList) {
-        if (connectionsList.size() > 0) {
-            mBinding.emptyview.setVisibility(View.GONE);
-            mAdapter = new ConnectionAdapter(getActivity(), connectionsList, friends, this);
-            mBinding.connectionRecycler.setHasFixedSize(true);
-            mBinding.connectionRecycler.setLayoutManager(linearLayoutManager);
-            mBinding.connectionRecycler.setAdapter(mAdapter);
-        } else {
-            mBinding.emptyview.setVisibility(View.VISIBLE);
-        }
-    }
 
-    private void fetchConnections() {
-        Call<ConnectionResponse> call = apiService.fetchConnections(getUserId(getActivity()), connections, getDeviceId(getActivity()), qoogol, "0");
+    private void fetchConnections(String pageCount) {
+        Call<ConnectionResponse> call = apiService.fetchConnections(getUserId(getActivity()), connections, getDeviceId(getActivity()), qoogol, pageCount);
         call.enqueue(new Callback<ConnectionResponse>() {
             @Override
             public void onResponse(Call<ConnectionResponse> call, retrofit2.Response<ConnectionResponse> response) {
                 dismissRefresh(mBinding.connectionSwiperefresh);
                 if (response.body().getResponse().equalsIgnoreCase("200")) {
+                    connectionResponse = response.body();
                     mViewModel.insert(response.body().getConnection_list());
                 } else if (response.body().getResponse().equals("501")) {
                     resetSettingAndLogout();
@@ -128,13 +153,13 @@ public class ConnectionListFragment extends BaseFragment implements ConnectionAd
             mViewModel.fetchConnectionsData(false);*/
     }
 
-    private void initView() {
-        mAdapter = new ConnectionAdapter(getActivity(), connectionsList, friends, this);
-        mBinding.connectionRecycler.setHasFixedSize(true);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        mBinding.connectionRecycler.setLayoutManager(linearLayoutManager);
-        mBinding.connectionRecycler.setAdapter(mAdapter);
-    }
+//    private void initView() {
+//        mAdapter = new ConnectionAdapter(getActivity(), connectionsList, friends, this);
+//        mBinding.connectionRecycler.setHasFixedSize(true);
+//        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+//        mBinding.connectionRecycler.setLayoutManager(linearLayoutManager);
+//        mBinding.connectionRecycler.setAdapter(mAdapter);
+//    }
 
     @Override
     public void onUpdateConnection(String user) {
@@ -144,7 +169,7 @@ public class ConnectionListFragment extends BaseFragment implements ConnectionAd
 
     @Override
     public void onBottomReached(int size) {
-        mViewModel.fetchConnectionsData(false);
+
     }
 
     @Override

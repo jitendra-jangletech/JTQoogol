@@ -6,8 +6,9 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.Window;
-import android.widget.Toast;
+import android.widget.AbsListView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
@@ -24,6 +25,8 @@ import com.jangletech.qoogol.model.ShareResponse;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.util.AppUtils;
+import com.jangletech.qoogol.util.Constant;
+import com.jangletech.qoogol.util.UtilHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,11 +34,8 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 
-import static com.jangletech.qoogol.util.Constant.connection_list;
 import static com.jangletech.qoogol.util.Constant.friends_and_groups;
 import static com.jangletech.qoogol.util.Constant.qoogol;
-import static com.jangletech.qoogol.util.Constant.question_share;
-import static com.jangletech.qoogol.util.Constant.test_share;
 
 public class ShareQuestionDialog extends Dialog implements ShareAdapter.OnItemClickListener {
 
@@ -45,16 +45,27 @@ public class ShareQuestionDialog extends Dialog implements ShareAdapter.OnItemCl
     private List<ShareModel> selectedconnectionsList;
     private ShareAdapter mAdapter;
     private List<ShareModel> shareModelList;
+    private List<ShareModel> filteredModelList;
     private Call<ResponseObj> call;
     private String actionId;
+    private String userId;
+    private String deviceId;
     private int pageCount = 0;
-    LinearLayoutManager linearLayoutManager;
+    private String tOrQ = "";
+    private boolean isSearching = false;
+    private Boolean isScrolling = false;
+    private int currentItems, scrolledOutItems, totalItems;
+    private LinearLayoutManager linearLayoutManager;
     private ApiInterface apiService = ApiClient.getInstance().getApi();
 
-    public ShareQuestionDialog(@NonNull Activity mContext, String actionId) {
+    public ShareQuestionDialog(@NonNull Activity mContext, String actionId,
+                               String userId, String deviceId, String tOrQ) {
         super(mContext, android.R.style.Theme_DeviceDefault_Light_DarkActionBar);
         this.mContext = mContext;
         this.actionId = actionId;
+        this.userId = userId;
+        this.deviceId = deviceId;
+        this.tOrQ = tOrQ;
     }
 
     @Override
@@ -65,21 +76,49 @@ public class ShareQuestionDialog extends Dialog implements ShareAdapter.OnItemCl
                 R.layout.dialog_share_question, null, false);
         setContentView(mBinding.getRoot());
         shareModelList = new ArrayList<>();
+        filteredModelList = new ArrayList<>();
+        getData(pageCount, "");
         linearLayoutManager = new LinearLayoutManager(getContext());
         selectedconnectionsList = new ArrayList<>();
-        getData(0);
+        mAdapter = new ShareAdapter(mContext, shareModelList, this);
+        mBinding.shareRecycler.setLayoutManager(linearLayoutManager);
+        mBinding.shareRecycler.setAdapter(mAdapter);
+
 
         mBinding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                //mAdapter.filterList(filterContacts(query.toLowerCase().trim()));
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String query) {
-                mAdapter.getFilter().filter(query);
-                return false;
+                filteredModelList.clear();
+                query = query.toLowerCase().trim();
+                for (ShareModel shareModel : shareModelList) {
+                    if (shareModel.getRecordType().equalsIgnoreCase("U")) {
+                        if (shareModel.getU_first_name().trim().toLowerCase().contains(query) ||
+                                shareModel.getU_last_name().trim().toLowerCase().contains(query)) {
+                            filteredModelList.add(shareModel);
+                        }
+                    } else {
+                        if (shareModel.getU_first_name().trim().toLowerCase().contains(query)) {
+                            filteredModelList.add(shareModel);
+                        }
+                    }
+                }
+                if (filteredModelList.size() > 0) {
+                    mAdapter.updateList(filteredModelList);
+                } else {
+                    //mAdapter.updateList(shareModelList);
+                    if (!query.isEmpty() && !isSearching) {
+                        isSearching = true;
+                        getData(0, query);
+                    } else {
+                        mAdapter.updateList(shareModelList);
+                    }
+                }
+                return true;
             }
         });
 
@@ -92,79 +131,50 @@ public class ShareQuestionDialog extends Dialog implements ShareAdapter.OnItemCl
         });
 
         mBinding.shareRecycler.setOnScrollListener(new RecyclerView.OnScrollListener() {
-            int ydy = 0;
-
             @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
+                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                    isScrolling = true;
+                }
             }
 
             @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                if (isLastVisible()) {
-                    Log.i(TAG, "Calling next part of data. ");
-                    getData(pageCount);
+                currentItems = linearLayoutManager.getChildCount();
+                totalItems = linearLayoutManager.getItemCount();
+                scrolledOutItems = linearLayoutManager.findFirstVisibleItemPosition();
+                if (dy > 0) {
+                    if (isScrolling && (currentItems + scrolledOutItems == totalItems)) {
+                        isScrolling = false;
+                        getData(pageCount, "");
+                    }
                 }
             }
         });
     }
 
-    private boolean isLastVisible() {
-        int pos = linearLayoutManager.findLastVisibleItemPosition();
-        int numItems = mBinding.shareRecycler.getAdapter().getItemCount();
-        if (pos < 1) {
-            return false;
-        }
-        return (pos >= (numItems - 2));
-    }
-
-  /*  private List<ShareModel> filterContacts(String query) {
-        List<ShareModel> filteredList = new ArrayList<>();
-        for (ShareModel shareModel : shareModelList) {
-            if (query.contains(shareModel.getU_first_name().toLowerCase().trim()) ||
-                    query.contains(shareModel.getU_last_name().toLowerCase().trim())) {
-                filteredList.add(shareModel);
-            }
-            Log.d(TAG, "filterContacts First Name : " + shareModel.getU_first_name().toLowerCase());
-            Log.d(TAG, "filterContacts Last Name : " + shareModel.getU_last_name().toLowerCase());
-        }
-        Log.d(TAG, "filterContacts Size : " + filteredList.size());
-        return filteredList;
-        // mAdapter.filterList(filteredList);
-    }*/
-
-    private void getData(int pagestart) {
-        //ProgressDialog.getInstance().show(mContext);
-        Log.d(TAG, "getData Called: ");
-        Call<ShareResponse> call = apiService.fetchConnectionsforShare(AppUtils.getUserId(),
-                friends_and_groups, AppUtils.getDeviceId(), qoogol, pagestart);
+    private void getData(int pagestart, String text) {
+        //ProgressDialog.getInstance().show(getActivity());
+        mBinding.progress.setVisibility(View.VISIBLE);
+        Call<ShareResponse> call = apiService.fetchConnectionsforShare(userId, friends_and_groups,
+                deviceId, qoogol, pagestart, text);
         call.enqueue(new Callback<ShareResponse>() {
             @Override
             public void onResponse(Call<ShareResponse> call, retrofit2.Response<ShareResponse> response) {
                 try {
-                    //ProgressDialog.getInstance().dismiss();
+                    mBinding.progress.setVisibility(View.GONE);
                     if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
-                        if (pageCount == 0) {
-                            Log.d(TAG, "onResponse If PageCount : " + pageCount);
-                            pageCount = response.body().getRow_count();
-                            initRecycler(response.body().getConnection_list());
-                        } else {
-                            //shareModelList = response.body().getConnection_list();
-                            pageCount = response.body().getRow_count();
-                            Log.d(TAG, "onResponse Else PageCount : " + pageCount);
-                            if (response.body().getConnection_list() != null) {
-                                shareModelList.addAll(response.body().getConnection_list());
-                                Log.d(TAG, "onResponse: "+shareModelList.size());
-                                mAdapter.notifyDataSetChanged();
-                            }
-                        }
+                        setData(response.body());
                     } else {
-                        AppUtils.showToast(mContext, response.body().getResponse());
-                        //Toast.makeText(getActivity(), UtilHelper.getAPIError(String.valueOf(response.body())), Toast.LENGTH_SHORT).show();
+                        AppUtils.showToast(mContext, "Something went wrong!!");
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
+                    isSearching = false;
+                    mBinding.progress.setVisibility(View.GONE);
+                    AppUtils.showToast(mContext, "Something went wrong!!");
                     //ProgressDialog.getInstance().dismiss();
                 }
             }
@@ -172,72 +182,81 @@ public class ShareQuestionDialog extends Dialog implements ShareAdapter.OnItemCl
             @Override
             public void onFailure(Call<ShareResponse> call, Throwable t) {
                 t.printStackTrace();
+                isSearching = false;
+                mBinding.progress.setVisibility(View.GONE);
                 //ProgressDialog.getInstance().dismiss();
             }
         });
     }
 
-    private void callShareAPI() {
+    private void setData(ShareResponse shareResponse) {
+        Log.d(TAG, "setData PageStart : " + pageCount);
+        Log.d(TAG, "setData List Size : " + shareResponse.getConnection_list().size());
+        if (!isSearching) {
+            if (shareResponse.getConnection_list().size() > 0) {
+                pageCount = shareResponse.getRow_count();
+                shareModelList.addAll(shareResponse.getConnection_list());
+                mAdapter.updateList(shareModelList);
+                //mAdapter.notifyDataSetChanged();
+            } else {
+                AppUtils.showToast(mContext, "No more connections available.");
+            }
+        } else {
+            isSearching = false;
+            filteredModelList.clear();
+            filteredModelList.addAll(shareResponse.getConnection_list());
+            if (filteredModelList.size() > 0) {
+                mAdapter.updateList(filteredModelList);
+            } else {
+                AppUtils.showToast(mContext, "No search results found.");
+                mAdapter.updateList(shareModelList);
+            }
+        }
+    }
 
+    private void callShareAPI() {
         String modelAction = TextUtils.join(",", selectedconnectionsList).replace(",,", ",");
         modelAction = modelAction.replace("D", "U");
         modelAction = modelAction.replace("A", "U");
         String comment = AppUtils.encodedString(mBinding.shareComment.getText().toString().trim());
 
-        //logs
-        Log.d(TAG, "callShareAPI Test Share : " + test_share);
-        Log.d(TAG, "callShareAPI Question Share : " + question_share);
         Log.d(TAG, "callShareAPI Test Id : " + actionId);
         Log.d(TAG, "callShareAPI Comment : " + comment);
         Log.d(TAG, "callShareAPI Model Action : " + modelAction);
-        Log.d(TAG, "callShareAPI Device Id : " + AppUtils.getDeviceId());
-        Log.d(TAG, "callShareAPI UserId : " + AppUtils.getUserId());
+        Log.d(TAG, "callShareAPI Device Id : " + deviceId);
+        Log.d(TAG, "callShareAPI UserId : " + userId);
 
         if (modelAction != null && modelAction.isEmpty()) {
             AppUtils.showToast(mContext, "Please, select atleast 1 connection or group to share with.");
         } else {
             ProgressDialog.getInstance().show(mContext);
-            call = apiService.shareAPI(actionId, test_share, "F", AppUtils.getDeviceId(), AppUtils.getUserId(), modelAction, "1.68", qoogol, comment);
-
+            call = apiService.shareAPI(actionId, tOrQ, "F", deviceId, userId,
+                    modelAction, Constant.APP_VERSION, qoogol, comment);
             call.enqueue(new Callback<ResponseObj>() {
                 @Override
                 public void onResponse(Call<ResponseObj> call, retrofit2.Response<ResponseObj> response) {
-                    try {
-                        ProgressDialog.getInstance().dismiss();
-                        if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
-                            Log.i(TAG, "shared successfully");
-                            dismiss();
-                        } else {
-                            AppUtils.showToast(mContext, response.body().getResponse());
-                            //Toast.makeText(getActivity(), UtilHelper.getAPIError(String.valueOf(response.body())), Toast.LENGTH_SHORT).show();
-                        }
-                        Bundle bundle = new Bundle();
-                        bundle.putString("call_from", "share");
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        ProgressDialog.getInstance().dismiss();
+                    ProgressDialog.getInstance().dismiss();
+                    dismiss();
+                    if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
+                        Log.i(TAG, "shared successfully");
+                    } else {
+                        AppUtils.showToast(mContext, UtilHelper.getAPIError(String.valueOf(response.body())));
                     }
                 }
 
                 @Override
                 public void onFailure(Call<ResponseObj> call, Throwable t) {
                     t.printStackTrace();
-                    AppUtils.showToast(mContext, "Something went wrong!!");
                     ProgressDialog.getInstance().dismiss();
+                    dismiss();
                 }
             });
         }
     }
 
-    private void initRecycler(List<ShareModel> shareModelList) {
-        mAdapter = new ShareAdapter(mContext, shareModelList, this);
-        mBinding.shareRecycler.setHasFixedSize(true);
-        mBinding.shareRecycler.setLayoutManager(linearLayoutManager);
-        mBinding.shareRecycler.setAdapter(mAdapter);
-    }
-
     @Override
     public void actionPerformed(ShareModel connections, int position) {
+        Log.d(TAG, "actionPerformed: ");
         if (selectedconnectionsList.contains(connections))
             selectedconnectionsList.remove(connections);
         else

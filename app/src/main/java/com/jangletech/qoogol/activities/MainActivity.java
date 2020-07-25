@@ -539,8 +539,10 @@ public class MainActivity extends BaseActivity {
                 Bundle bundle = intent.getBundleExtra("bundle");
                 if (bundle != null && bundle.getBoolean("fromNotification")) {
                     String action = bundle.getString(Constant.FB_ACTION);
-                    Log.d(TAG, "getNotificationIntent: " + bundle.getString(Constant.FB_FROM_TYPE));
-                    Log.d(TAG, "getNotificationIntent: " + bundle.getString(Constant.FB_ACTION));
+                    Log.d(TAG, "getNotificationIntent From Notification : " + bundle.getString(Constant.FB_FROM_TYPE));
+                    Log.d(TAG, "getNotificationIntent From Type : " + bundle.getString(Constant.FB_FROM_TYPE));
+                    Log.d(TAG, "getNotificationIntent Action : " + bundle.getString(Constant.FB_ACTION));
+                    Log.d(TAG, "getNotificationIntent msId : " + bundle.getString(Constant.FB_MS_ID));
                     if (action != null && action.equalsIgnoreCase("T")) {
                         navToFragment(R.id.nav_test_my, bundle);
                     } else if (action != null && action.equalsIgnoreCase("Q")) {
@@ -607,8 +609,11 @@ public class MainActivity extends BaseActivity {
                         navController.getCurrentDestination().getId() == R.id.nav_code_conduct ||
                         navController.getCurrentDestination().getId() == R.id.nav_faq ||
                         navController.getCurrentDestination().getId() == R.id.nav_fav ||
+                        navController.getCurrentDestination().getId() == R.id.nav_shared_with_you_que ||
+                        navController.getCurrentDestination().getId() == R.id.nav_shared_by_you_que ||
                         navController.getCurrentDestination().getId() == R.id.saved_questions ||
                         navController.getCurrentDestination().getId() == R.id.nav_shared_by_you ||
+                        navController.getCurrentDestination().getId() == R.id.nav_shared_with_you ||
                         navController.getCurrentDestination().getId() == R.id.nav_test_popular ||
                         navController.getCurrentDestination().getId() == R.id.nav_recent_test ||
                         navController.getCurrentDestination().getId() == R.id.nav_connections ||

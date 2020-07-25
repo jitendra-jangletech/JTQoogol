@@ -31,6 +31,7 @@ import com.jangletech.qoogol.activities.PracticeTestActivity;
 import com.jangletech.qoogol.adapter.TestListAdapter;
 import com.jangletech.qoogol.databinding.FragmentTestMyBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
+import com.jangletech.qoogol.dialog.ShareQuestionDialog;
 import com.jangletech.qoogol.enums.Module;
 import com.jangletech.qoogol.model.FetchSubjectResponse;
 import com.jangletech.qoogol.model.FetchSubjectResponseList;
@@ -311,7 +312,8 @@ public class RecentTestFragment extends BaseFragment
                 params.get(Constant.tm_recent_test),
                 params.get(Constant.tm_popular_test),
                 params.get(Constant.tm_diff_level),
-                params.get(Constant.tm_avg_rating)
+                params.get(Constant.tm_avg_rating),
+                params.get(Constant.tm_id)
         );
         call.enqueue(new Callback<TestListResponse>() {
             @Override
@@ -370,10 +372,13 @@ public class RecentTestFragment extends BaseFragment
 
     @Override
     public void onShareClick(int testid) {
-        Bundle bundle = new Bundle();
+       /* Bundle bundle = new Bundle();
         bundle.putString("testId", String.valueOf(testid));
         bundle.putInt("call_from", test);
-        NavHostFragment.findNavController(this).navigate(R.id.nav_share, bundle);
+        NavHostFragment.findNavController(this).navigate(R.id.nav_share, bundle);*/
+        new ShareQuestionDialog(getActivity(), String.valueOf(testid), getUserId(mContext)
+                , getDeviceId(mContext), "T")
+                .show();
     }
 
     @Override

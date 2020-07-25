@@ -589,6 +589,7 @@ public class Constant {
     public static final String scr_ex_id = "1428";
     public static final String scr_sem_id = "1429";
     public static final String scr_cy_num = "1430";
+    public static final String SearchText = "SearchText";
 
     //TestQuestion Api Start/Resume Test Constants
     public static final String tm_id = "1200";
@@ -660,6 +661,9 @@ public class Constant {
     public static final String ct_dt_id = "237";
     public static final String ct_name = "238";
 
+    public static final String SHARED_WITH_YOU = "SHTO";
+    public static final String SHARED_BY_YOU = "SH";
+
     //State MAster Data
     public static final String s_id = "225";
     public static final String s_c_id = "226";
@@ -702,7 +706,6 @@ public class Constant {
     public static final String CALL_FROM = "CALL_FROM";
     public static final String POPULAR_TEST = "POPULAR_TEST";
     public static final String RECENT_TEST = "RECENT_TEST";
-    public static final String SHARED_BY_YOU = "SHARED_BY_YOU";
     public static final String MY_TEST = "MY_TEST";
     public static final String FAV = "FAV";
     public static final String SHARED_BY_ME = "SHBY";
