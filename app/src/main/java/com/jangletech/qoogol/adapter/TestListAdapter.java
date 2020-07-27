@@ -283,6 +283,11 @@ public class TestListAdapter extends RecyclerView.Adapter<TestListAdapter.ViewHo
         });
     }
 
+    public void updateList(List<TestModelNew> testList){
+        testModelList = testList;
+        notifyDataSetChanged();
+    }
+
     public void showToast(String msg) {
         Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show();
     }

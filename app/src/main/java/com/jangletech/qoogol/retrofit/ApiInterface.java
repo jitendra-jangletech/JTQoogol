@@ -1,7 +1,5 @@
 package com.jangletech.qoogol.retrofit;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
-
 import com.jangletech.qoogol.model.AddElementResponse;
 import com.jangletech.qoogol.model.BlockedConnResp;
 import com.jangletech.qoogol.model.ChapterResponse;
@@ -26,7 +24,6 @@ import com.jangletech.qoogol.model.GenerateVerifyUserName;
 import com.jangletech.qoogol.model.InstituteResponse;
 import com.jangletech.qoogol.model.Language;
 import com.jangletech.qoogol.model.LearningQuestResponse;
-import com.jangletech.qoogol.model.LearningQuestions;
 import com.jangletech.qoogol.model.NotificationResponse;
 import com.jangletech.qoogol.model.ProcessQuestion;
 import com.jangletech.qoogol.model.RegisterLoginModel;
@@ -236,7 +233,8 @@ public interface ApiInterface {
                                          @Field(Constant.tm_recent_test) String recentTest,
                                          @Field(Constant.tm_popular_test) String popularTest,
                                          @Field(Constant.tm_diff_level) String diffLevel,
-                                         @Field(Constant.tm_avg_rating) String avgRating);
+                                         @Field(Constant.tm_avg_rating) String avgRating,
+                                         @Field(Constant.tm_id) String tmId);
 
     @FormUrlEncoded
     @POST(Constant.FETCH_NOTIFICATIONS)
@@ -363,14 +361,14 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST(Constant.FETCH_SHAREDTQ_USERS)
-    Call<ShareUserResponse> fetchSharedByUsers(@Field(Constant.u_user_id) String  userid,
+    Call<ShareUserResponse> fetchSharedByUsers(@Field(Constant.u_user_id) String userid,
                                                @Field(Constant.q_id) int queId,
                                                @Field(Constant.device_id) String device_id,
                                                @Field(Constant.stq_by_user_id) String user);
 
     @FormUrlEncoded
     @POST(Constant.FETCH_SHAREDTQ_USERS)
-    Call<ShareUserResponse> fetchSharedToUsers(@Field(Constant.u_user_id) String  userid,
+    Call<ShareUserResponse> fetchSharedToUsers(@Field(Constant.u_user_id) String userid,
                                                @Field(Constant.q_id) int queId,
                                                @Field(Constant.device_id) String device_id,
                                                @Field(Constant.stq_to_user_id) String user);
@@ -559,7 +557,8 @@ public interface ApiInterface {
                                                  @Field("Case") String connectionCase,
                                                  @Field(Constant.device_id) String device_id,
                                                  @Field("200Q") String app,
-                                                 @Field(Constant.pagestart) int pagestart);
+                                                 @Field(Constant.pagestart) int pagestart,
+                                                 @Field(Constant.SearchText) String text);
 
 
     @FormUrlEncoded

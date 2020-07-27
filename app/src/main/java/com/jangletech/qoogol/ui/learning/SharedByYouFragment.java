@@ -114,7 +114,6 @@ public class SharedByYouFragment extends BaseFragment implements LearningAdapter
             ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Shared by You");
         }
         mViewModel.fetchQuestionData("",SHARED_BY_ME);
-
         mViewModel.getSharedQuestionList(SHARED_BY_ME).observe(getViewLifecycleOwner(), questionsList -> {
             questionsNewList.clear();
             questionsNewList.addAll(questionsList);

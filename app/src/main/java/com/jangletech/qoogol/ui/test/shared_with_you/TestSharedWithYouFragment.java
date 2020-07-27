@@ -31,6 +31,7 @@ import com.jangletech.qoogol.activities.PracticeTestActivity;
 import com.jangletech.qoogol.adapter.TestListAdapter;
 import com.jangletech.qoogol.databinding.FragmentTestMyBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
+import com.jangletech.qoogol.dialog.ShareQuestionDialog;
 import com.jangletech.qoogol.enums.Module;
 import com.jangletech.qoogol.model.FetchSubjectResponse;
 import com.jangletech.qoogol.model.FetchSubjectResponseList;
@@ -145,7 +146,7 @@ public class TestSharedWithYouFragment extends BaseFragment
         });
 
         params.put(Constant.u_user_id, getUserId(getActivity()));
-        params.put(CASE, "SH");
+        params.put(CASE, Constant.SHARED_WITH_YOU);
         params.put(Constant.tm_popular_test, "");
         params.put(Constant.tm_recent_test, "");
 
@@ -165,7 +166,7 @@ public class TestSharedWithYouFragment extends BaseFragment
                 }
             }
         });
-        mViewModel.getAllTests("SH", getUserId(getActivity())).observe(getViewLifecycleOwner(), new Observer<List<TestModelNew>>() {
+        mViewModel.getAllTests("SHTO", getUserId(getActivity())).observe(getViewLifecycleOwner(), new Observer<List<TestModelNew>>() {
             @Override
             public void onChanged(@Nullable final List<TestModelNew> tests) {
                 if (tests != null) {
@@ -310,7 +311,8 @@ public class TestSharedWithYouFragment extends BaseFragment
                 params.get(Constant.tm_recent_test),
                 params.get(Constant.tm_popular_test),
                 params.get(Constant.tm_diff_level),
-                params.get(Constant.tm_avg_rating)
+                params.get(Constant.tm_avg_rating),
+                params.get(Constant.tm_id)
         );
         call.enqueue(new Callback<TestListResponse>() {
             @Override
@@ -320,7 +322,7 @@ public class TestSharedWithYouFragment extends BaseFragment
                     //mViewModel.setAllTestList(response.body().getTestList());
                     List<TestModelNew> testList = response.body().getTestList();
                     for (TestModelNew testModelNew : testList) {
-                        testModelNew.setFlag("SH");
+                        testModelNew.setFlag("SHTO");
                         testModelNew.setUserId(getUserId(getActivity()));
                     }
                     mViewModel.insert(testList);
@@ -367,10 +369,13 @@ public class TestSharedWithYouFragment extends BaseFragment
 
     @Override
     public void onShareClick(int testid) {
-        Bundle bundle = new Bundle();
-        bundle.putString("testId", String.valueOf(testid));
-        bundle.putInt("call_from", test);
-        NavHostFragment.findNavController(this).navigate(R.id.nav_share, bundle);
+//        Bundle bundle = new Bundle();
+//        bundle.putString("testId", String.valueOf(testid));
+//        bundle.putInt("call_from", test);
+//        NavHostFragment.findNavController(this).navigate(R.id.nav_share, bundle);
+        new ShareQuestionDialog(getActivity(), String.valueOf(testid), getUserId(mContext)
+                , getDeviceId(mContext), "T")
+                .show();
     }
 
     @Override

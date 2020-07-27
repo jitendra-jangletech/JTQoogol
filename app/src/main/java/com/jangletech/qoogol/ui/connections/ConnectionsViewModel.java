@@ -11,9 +11,6 @@ import com.jangletech.qoogol.database.repo.AppRepository;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.model.ConnectionResponse;
 import com.jangletech.qoogol.model.Connections;
-import com.jangletech.qoogol.model.Friends;
-import com.jangletech.qoogol.model.FriendsResponse;
-import com.jangletech.qoogol.model.Notification;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.util.PreferenceManager;
@@ -24,7 +21,6 @@ import java.util.concurrent.Executors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
-
 
 import static com.jangletech.qoogol.ui.BaseFragment.getDeviceId;
 import static com.jangletech.qoogol.util.Constant.connections;
@@ -61,7 +57,7 @@ public class ConnectionsViewModel extends AndroidViewModel {
 
     void deleteUpdatedConnection(String user) {
         ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.execute(() -> mAppRepository.deleteConnections(userId,user));
+        executor.execute(() -> mAppRepository.deleteConnections(userId, user));
     }
 
     void fetchConnectionsData(boolean isRefresh) {

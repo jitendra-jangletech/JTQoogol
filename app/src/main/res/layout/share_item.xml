@@ -1,86 +1,67 @@
-<?xml version="1.0" encoding="utf-8"?><!--
-  ~
-  ~ /*
-  ~  * /////////////////////////////////////////////////////////////////////////////////////////////////
-  ~  * //
-  ~  * //            Copyright (c) 2020. JangleTech Systems Private Limited, Thane, India
-  ~  * //
-  ~  * /////////////////////////////////////////////////////////////////////////////////////////////////
-  ~  */
-  -->
-
+<?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:card_view="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.cardview.widget.CardView
+
+    <data>
+        <variable
+            name="connection"
+            type="com.jangletech.qoogol.model.ShareModel" />
+    </data>
+
+
+    <RelativeLayout
+        android:id="@+id/rlProfile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="0dp"
-        app:cardBackgroundColor="@color/background_color"
-        app:cardUseCompatPadding="false"
-        card_view:cardElevation="0dp">
+        android:orientation="horizontal"
+        android:padding="5dp">
 
-        <RelativeLayout
-            android:id="@+id/rlProfile"
-            android:background="@color/colorWhite"
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/userProfileImage"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_profile_default" />
+
+        <TextView
+            android:id="@+id/tvUserName"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="5dp">
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="8dp"
+            android:layout_toEndOf="@+id/userProfileImage"
+            android:ellipsize="end"
+            android:fontFamily="sans-serif-black"
+            android:textAlignment="viewStart"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/textSizexSmall"
+            android:textStyle="bold" />
 
-            <ImageView
-                android:id="@+id/userProfileImage"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:layout_gravity="center"
-                android:contentDescription="@string/app_name"
-                android:src="@drawable/ic_profile_default"/>
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/pauseSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"
+            android:checked="@={connection.checkedItem}"
+            android:textColor="@color/white"
+            android:textSize="@dimen/textSizexSmall"
+            android:theme="@style/GroupSwitch"
+            android:visibility="visible"
+            app:switchPadding="5dp" />
 
-            <ImageView
-                android:id="@+id/badges"
-                android:layout_width="18dp"
-                android:layout_height="18dp"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="4dp"
-                android:layout_toEndOf="@+id/userProfileImage"
-                android:adjustViewBounds="true"
-                android:background="@drawable/image_border"
-                android:contentDescription="@string/app_name"
-                android:scaleType="fitXY"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/userProfileImage"
+            android:layout_marginTop="@dimen/btn_padding"
+            android:layout_toEndOf="@+id/userProfileImage"
+            android:background="@color/colorDarkGray" />
 
-            <TextView
-                android:id="@+id/tvUserName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="4dp"
-                android:layout_toEndOf="@+id/badges"
-                android:ellipsize="end"
-                android:textAlignment="viewStart"
-                android:textColor="@color/colorBlack"
-                android:textSize="@dimen/textSizexSmall"
-                android:textStyle="bold" />
+    </RelativeLayout>
 
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/pauseSwitch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="5dp"
-                android:layout_toEndOf="@+id/tvUserName"
-                android:textSize="@dimen/textSizexSmall"
-                android:theme="@style/GroupSwitch"
-                app:switchPadding="5dp" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_below="@+id/userProfileImage"
-                android:layout_marginTop="@dimen/btn_padding"
-                android:layout_toEndOf="@+id/userProfileImage"
-                android:background="@color/colorDarkGray" />
-        </RelativeLayout>
-    </androidx.cardview.widget.CardView>
 </layout>

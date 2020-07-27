@@ -30,6 +30,7 @@ import com.jangletech.qoogol.adapter.PracticeTestQuestPaletAdapter;
 import com.jangletech.qoogol.adapter.PractiseViewPagerAdapter;
 import com.jangletech.qoogol.databinding.ActivityPracticeTestBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
+import com.jangletech.qoogol.dialog.ShareQuestionDialog;
 import com.jangletech.qoogol.dialog.SubmitTestDialog;
 import com.jangletech.qoogol.enums.QuestionFilterType;
 import com.jangletech.qoogol.enums.QuestionSortType;
@@ -541,7 +542,11 @@ public class PracticeTestActivity extends BaseActivity implements
 
     @Override
     public void onShareClick() {
-
+        TestQuestionNew testQuestionNew = questionsNewList.get(practiceViewPager.getCurrentItem());
+        String qId = String.valueOf(testQuestionNew.getTtqa_id());
+        new ShareQuestionDialog(this, qId, AppUtils.getUserId()
+                , getDeviceId(), "Q")
+                .show();
     }
 
     @Override

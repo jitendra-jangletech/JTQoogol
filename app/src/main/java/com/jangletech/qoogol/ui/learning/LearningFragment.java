@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,24 +17,30 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.LearningAdapter;
 import com.jangletech.qoogol.databinding.LearningFragmentBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.dialog.PublicProfileDialog;
+import com.jangletech.qoogol.dialog.ShareQuestionDialog;
 import com.jangletech.qoogol.enums.Module;
 import com.jangletech.qoogol.model.LearningQuestionsNew;
 import com.jangletech.qoogol.model.ProcessQuestion;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
+import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
+
 import static com.jangletech.qoogol.util.Constant.CALL_FROM;
 import static com.jangletech.qoogol.util.Constant.connectonId;
 import static com.jangletech.qoogol.util.Constant.profile;
@@ -63,7 +70,7 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
         return learningFragmentBinding.getRoot();
     }
 
-       @Override
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(LearningViewModel.class);
@@ -83,7 +90,7 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
             case R.id.action_filter:
                 Bundle bundle = new Bundle();
                 bundle.putString("call_from", "learning");
-                Navigation.findNavController(requireActivity(),R.id.nav_host_fragment).navigate(R.id.nav_test_filter,bundle);
+                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_test_filter, bundle);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -195,10 +202,13 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
 
     @Override
     public void onShareClick(int questionId) {
-        Bundle bundle = new Bundle();
+        /*Bundle bundle = new Bundle();
         bundle.putInt("QuestionId", questionId);
         bundle.putInt("call_from", learning);
-        NavHostFragment.findNavController(this).navigate(R.id.nav_share, bundle);
+        NavHostFragment.findNavController(this).navigate(R.id.nav_share, bundle);*/
+        new ShareQuestionDialog(getActivity(), String.valueOf(questionId), AppUtils.getUserId()
+                , getDeviceId(getActivity()), "Q")
+                .show();
     }
 
 
@@ -212,7 +222,7 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
         Bundle bundle = new Bundle();
         if (userId.equalsIgnoreCase(new PreferenceManager(getActivity()).getUserId())) {
             bundle.putInt(CALL_FROM, profile);
-            NavHostFragment.findNavController(this).navigate(R.id.nav_edit_profile,bundle);
+            NavHostFragment.findNavController(this).navigate(R.id.nav_edit_profile, bundle);
         } else {
             PublicProfileDialog publicProfileDialog = new PublicProfileDialog(getActivity(), userId, this);
             publicProfileDialog.show();

@@ -49,7 +49,6 @@ import com.jangletech.qoogol.dialog.CommentDialog;
 import com.jangletech.qoogol.dialog.LikeListingDialog;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.dialog.PublicProfileDialog;
-import com.jangletech.qoogol.dialog.ShareQuestionDialog;
 import com.jangletech.qoogol.dialog.SubjectiveAnsDialog;
 import com.jangletech.qoogol.model.ProcessQuestion;
 import com.jangletech.qoogol.model.StartResumeTestResponse;
@@ -62,10 +61,6 @@ import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
-
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.text.StringEscapeUtils;
-import org.w3c.dom.Text;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -85,8 +80,7 @@ public class PractiseViewPagerAdapter extends PagerAdapter
         implements LikeListingDialog.onItemClickListener,
         CommentDialog.CommentClickListener,
         PublicProfileDialog.PublicProfileClickListener,
-        SubjectiveAnsDialog.GetAnsListener
-{
+        SubjectiveAnsDialog.GetAnsListener {
     private static final String TAG = "PractiseViewPagerAdapte";
     private Activity context;
     private List<TestQuestionNew> testQuestionNewList;
@@ -1500,9 +1494,9 @@ public class PractiseViewPagerAdapter extends PagerAdapter
         String decodedAns = AppUtils.decodedString(testQuestionNew.getTtqa_sub_ans());
         //Log.d(TAG, "Plain Text : "+testQuestionNew.getTtqa_sub_ans());
         //Log.d(TAG, "Decoded Text : " + StringUtils.stripAccents(decodedAns));
-        int minutes = Integer.parseInt(tvTimer.getText().toString().split(":",-1)[0]);
-        int seconds = Integer.parseInt(tvTimer.getText().toString().split(":",-1)[1]);
-        SubjectiveAnsDialog subjectiveAnsDialog = new SubjectiveAnsDialog(context,decodedAns,seconds,minutes,this);
+        int minutes = Integer.parseInt(tvTimer.getText().toString().split(":", -1)[0]);
+        int seconds = Integer.parseInt(tvTimer.getText().toString().split(":", -1)[1]);
+        SubjectiveAnsDialog subjectiveAnsDialog = new SubjectiveAnsDialog(context, decodedAns, seconds, minutes, this);
 
         /*etMultiLineAns.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -1524,7 +1518,7 @@ public class PractiseViewPagerAdapter extends PagerAdapter
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
                     etMultiLineAns.clearFocus();
-                            subjectiveAnsDialog.show();
+                    subjectiveAnsDialog.show();
                 }
             }
         });
@@ -1740,9 +1734,7 @@ public class PractiseViewPagerAdapter extends PagerAdapter
 
         if (share != null)
             share.setOnClickListener(v -> {
-                //showToast("Hello");
-                ShareQuestionDialog shareDialog = new ShareQuestionDialog(context,"");
-                shareDialog.show();
+                viewPagerClickListener.onShareClick();
             });
     }
 
@@ -2540,11 +2532,17 @@ public class PractiseViewPagerAdapter extends PagerAdapter
 
     public interface ViewPagerClickListener {
         void onLikeClick(boolean isChecked, int likeCount);
+
         void onCommentClick();
+
         void onShareClick();
+
         void onSubmitClick();
+
         void onMarkQuestion(int pos);
+
         void onFullScreenAns(String strAns);
+
         void onFavouriteClick(boolean isChecked);
     }
 }

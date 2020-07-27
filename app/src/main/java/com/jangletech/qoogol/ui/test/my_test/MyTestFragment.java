@@ -54,7 +54,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.jangletech.qoogol.util.Constant.CASE;
-import static com.jangletech.qoogol.util.Constant.test;
 
 public class MyTestFragment extends BaseFragment
         implements TestListAdapter.TestClickListener, SearchView.OnQueryTextListener, CommentDialog.CommentClickListener, PublicProfileDialog.PublicProfileClickListener {
@@ -152,6 +151,10 @@ public class MyTestFragment extends BaseFragment
         params.put(CASE, "");
         params.put(Constant.tm_popular_test, "");
         params.put(Constant.tm_recent_test, "");
+        if (getArguments() != null && getArguments().getBoolean("fromNotification")) {
+            Log.d(TAG, "initViews msId : " + getArguments().getString(Constant.FB_MS_ID));
+            params.put(Constant.tm_id, getArguments().getString(Constant.FB_MS_ID));
+        }
 
         if (getString(Constant.tm_diff_level) != null && !getString(Constant.tm_diff_level).isEmpty())
             params.put(Constant.tm_diff_level, getString(Constant.tm_diff_level));
@@ -352,7 +355,8 @@ public class MyTestFragment extends BaseFragment
                 params.get(Constant.tm_recent_test),
                 params.get(Constant.tm_popular_test),
                 params.get(Constant.tm_diff_level),
-                params.get(Constant.tm_avg_rating)
+                params.get(Constant.tm_avg_rating),
+                params.get(Constant.tm_id)
         );
         call.enqueue(new Callback<TestListResponse>() {
             @Override
@@ -360,12 +364,21 @@ public class MyTestFragment extends BaseFragment
                 //ProgressDialog.getInstance().dismiss();
                 mBinding.swipeToRefresh.setRefreshing(false);
                 if (response.body() != null && response.body().getResponse().equals("200")) {
-                    List<TestModelNew> testList = response.body().getTestList();
-                    for (TestModelNew testModelNew : testList) {
-                        testModelNew.setFlag("PRACTICE");
-                        testModelNew.setUserId(getUserId(getActivity()));
+                    if (params.get(Constant.tm_id) != null &&
+                            !(params.get(Constant.tm_id).isEmpty())) {
+                        if (response.body().getTestList().size() > 0) {
+                            mAdapter.updateList(response.body().getTestList());
+                        } else {
+                            mBinding.tvNoTest.setVisibility(View.VISIBLE);
+                        }
+                    } else {
+                        List<TestModelNew> testList = response.body().getTestList();
+                        for (TestModelNew testModelNew : testList) {
+                            testModelNew.setFlag("PRACTICE");
+                            testModelNew.setUserId(getUserId(getActivity()));
+                        }
+                        mViewModel.insert(testList);
                     }
-                    mViewModel.insert(testList);
                 } else if (response.body().getResponse().equals("501")) {
                     resetSettingAndLogout();
                 } else {
@@ -413,11 +426,12 @@ public class MyTestFragment extends BaseFragment
 
     @Override
     public void onShareClick(int testid) {
-//        Bundle bundle = new Bundle();
-//        bundle.putString("testId", String.valueOf(testid));
-//        bundle.putInt("call_from", test);
-//        NavHostFragment.findNavController(this).navigate(R.id.nav_share, bundle);
-        new ShareQuestionDialog(getActivity(), String.valueOf(testid))
+        /*Bundle bundle = new Bundle();
+        bundle.putString("testId", String.valueOf(testid));
+        bundle.putInt("call_from", test);
+        NavHostFragment.findNavController(this).navigate(R.id.nav_share, bundle);*/
+        new ShareQuestionDialog(getActivity(), String.valueOf(testid), getUserId(mContext)
+                , getDeviceId(mContext), "T")
                 .show();
     }
 

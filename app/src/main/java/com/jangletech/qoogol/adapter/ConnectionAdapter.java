@@ -26,6 +26,7 @@ import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -96,7 +97,7 @@ public class ConnectionAdapter extends RecyclerView.Adapter<ConnectionAdapter.Vi
             holder.connectionItemBinding.imgBadge.setImageDrawable(activity.getDrawable(R.drawable.platinum));
         }
 
-        holder.connectionItemBinding.rlProfile.setOnClickListener(v->{
+        holder.connectionItemBinding.rlProfile.setOnClickListener(v -> {
             Bundle bundle = new Bundle();
             bundle.putString(Constant.fetch_profile_id, connections.getCn_user_id_2());
             listener.showProfileClick(bundle);
@@ -236,9 +237,16 @@ public class ConnectionAdapter extends RecyclerView.Adapter<ConnectionAdapter.Vi
         };
     }
 
+    public void updateList(List<Connections> connections) {
+        connectionsList = connectionsList;
+        notifyDataSetChanged();
+    }
+
     public interface updateConnectionListener {
         void onUpdateConnection(String user);
+
         void onBottomReached(int size);
+
         void showProfileClick(Bundle bundle);
     }
 
