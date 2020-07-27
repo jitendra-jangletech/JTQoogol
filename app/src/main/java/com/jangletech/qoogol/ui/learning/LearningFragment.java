@@ -184,7 +184,6 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
         });
     }
 
-
     @Override
     public void onCommentClick(int questionId) {
         Bundle bundle = new Bundle();
@@ -215,16 +214,12 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
             bundle.putInt(CALL_FROM, profile);
             NavHostFragment.findNavController(this).navigate(R.id.nav_edit_profile,bundle);
         } else {
-
             PublicProfileDialog publicProfileDialog = new PublicProfileDialog(getActivity(), userId, this);
             publicProfileDialog.show();
-
 //            bundle.putInt(CALL_FROM, connectonId);
 //            bundle.putString(Constant.fetch_profile_id,userId);
         }
-
     }
-
 
     @Override
     public void onViewImage(String path) {

@@ -39,6 +39,7 @@ import com.jangletech.qoogol.activities.PracticeTestActivity;
 import com.jangletech.qoogol.database.repo.AppRepository;
 import com.jangletech.qoogol.databinding.LearningItemBinding;
 import com.jangletech.qoogol.databinding.RatingFeedbackBinding;
+import com.jangletech.qoogol.dialog.AddDoubtDialog;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.dialog.ShareUserListingDialog;
 import com.jangletech.qoogol.model.LearningQuestions;
@@ -358,33 +359,35 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
 
                     ChoiceDragListener());
             learningItemBinding.b2text.setOnDragListener(new
-
                     ChoiceDragListener());
             learningItemBinding.b3text.setOnDragListener(new
-
                     ChoiceDragListener());
             learningItemBinding.b4text.setOnDragListener(new
-
                     ChoiceDragListener());
 
 
             learningItemBinding.bMtp1.setOnDragListener(new
-
                     ImgChoiceDragListener());
+
             learningItemBinding.bMtp2.setOnDragListener(new
-
                     ImgChoiceDragListener());
+
             learningItemBinding.bMtp3.setOnDragListener(new
-
                     ImgChoiceDragListener());
+
             learningItemBinding.bMtp4.setOnDragListener(new
-
                     ImgChoiceDragListener());
 
 
-            learningItemBinding.saveQue.setOnClickListener(v ->
+            learningItemBinding.askDoubt.setOnClickListener(v -> {
+                LearningQuestionsNew learningQuestions = learningQuestionsList.get(getAdapterPosition());
 
-            {
+
+                AddDoubtDialog addDoubtDialog = new AddDoubtDialog(activity,learningQuestions.getQuestion_id());
+                addDoubtDialog.show();
+            });
+
+            learningItemBinding.saveQue.setOnClickListener(v ->  {
                 LearningQuestionsNew learningQuestionsNew = learningQuestionsList.get(getAdapterPosition());
                 if (learningQuestionsNew.getIsSave().equalsIgnoreCase("true")) {
                     learningQuestionsNew.setIs_fav("false");
