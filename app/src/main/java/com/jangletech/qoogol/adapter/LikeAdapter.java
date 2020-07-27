@@ -53,7 +53,6 @@ public class LikeAdapter  extends RecyclerView.Adapter<LikeAdapter.ViewHolder> {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     public interface onItemClickListener {

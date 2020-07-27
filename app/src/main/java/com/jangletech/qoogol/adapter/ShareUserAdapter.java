@@ -11,13 +11,11 @@ import android.widget.Filterable;
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.ShareuseritemBinding;
 import com.jangletech.qoogol.model.SharedQuestions;
 import com.jangletech.qoogol.util.UtilHelper;
-
 import java.util.List;
 
 import static com.jangletech.qoogol.util.Constant.sharedby;
