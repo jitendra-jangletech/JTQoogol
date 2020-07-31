@@ -30,7 +30,7 @@ public class ShareUserAdapter extends RecyclerView.Adapter<ShareUserAdapter.View
     private List<SharedQuestions> sharedQuestionsList;
     private Activity activity;
     private onItemClickListener onItemClickListener;
-    private int call_from;
+    int call_from;
 
     @Override
     public Filter getFilter() {

@@ -835,9 +835,7 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
                 learningItemBinding.btnfalse.setBackground(activity.getResources().getDrawable(R.drawable.grey_border_grey_bg));
             });
 
-            learningItemBinding.submit.setOnClickListener(v ->
-
-            {
+            learningItemBinding.submit.setOnClickListener(v -> {
                 submitCall();
             });
 

@@ -355,9 +355,17 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST(Constant.PROCESS_QUESTION)
+    Call<ProcessQuestion> fetchLikes(@Field(Constant.u_user_id) int userid,
+                                        @Field(Constant.q_id) int queId,
+                                        @Field(Constant.CASE) String caseL,
+                                        @Field(Constant.qlc_like_flag) int flag);
+
+    @FormUrlEncoded
+    @POST(Constant.PROCESS_QUESTION)
     Call<ProcessQuestion> fetchComments(@Field(Constant.u_user_id) int userid,
                                         @Field(Constant.q_id) int queId,
-                                        @Field(Constant.CASE) String caseL);
+                                        @Field(Constant.CASE) String caseL,
+                                        @Field(Constant.qlc_comment_flag) int flag);
 
     @FormUrlEncoded
     @POST(Constant.FETCH_SHAREDTQ_USERS)

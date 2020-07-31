@@ -79,8 +79,7 @@
             android:id="@+id/sendlayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/_5sdp"
-            android:paddingTop="@dimen/_5sdp"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:orientation="horizontal"
             android:weightSum="1"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -106,6 +105,7 @@
                     android:backgroundTint="@color/colorWhite"
                     android:hint="Enter Comment"
                     android:imeOptions="normal"
+                    android:padding="@dimen/margin_10"
                     android:textColor="@color/colorBlack"
                     android:textColorHint="@color/grey" />
 

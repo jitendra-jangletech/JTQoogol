@@ -2,6 +2,7 @@ package com.jangletech.qoogol.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -13,6 +14,7 @@ import com.jangletech.qoogol.databinding.ItemAttemptHistoryBinding;
 import com.jangletech.qoogol.model.AttemptedTest;
 import com.jangletech.qoogol.util.DateUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AttemptHistoryAdapter extends RecyclerView.Adapter<AttemptHistoryAdapter.ViewHolder> {

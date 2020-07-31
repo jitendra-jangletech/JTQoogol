@@ -20,7 +20,7 @@ import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.DateUtils;
 
 import org.apache.commons.lang3.StringUtils;
-import org.w3c.dom.Comment;
+import org.apache.commons.text.StringEscapeUtils;
 
 import java.util.List;
 
@@ -88,22 +88,13 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
                 commentItemClickListener.onItemClick(comments.getTlc_user_id());
             }
         });
-
-        holder.commentItemBinding.tvLike.setOnClickListener(v -> {
-            commentItemClickListener.onLikeClick(comments);
-        });
-
-        holder.commentItemBinding.tvReply.setOnClickListener(v -> {
-            commentItemClickListener.onReplyClick(comments);
-        });
-
-
     }
 
-    public void updateCommentList(List<Comments> comments) {
-        commentList = comments;
+    /*public void updateList(List<Comments> commentList) {
+        this.commentList.clear();
+        this.commentList = commentList;
         notifyDataSetChanged();
-    }
+    }*/
 
 
     @Override
@@ -113,10 +104,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
 
     public interface onCommentItemClickListener {
         void onItemClick(String userId);
-
-        void onLikeClick(Comments comment);
-
-        void onReplyClick(Comments comment);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -125,6 +112,19 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         public ViewHolder(@NonNull CommentItemBinding itemView) {
             super(itemView.getRoot());
             this.commentItemBinding = itemView;
+
+            /*commentItemBinding.getRoot().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Comments comments = commentList.get(getAdapterPosition());
+                    if (callingFrom.equals(Module.Learning.toString())) {
+                        commentItemClickListener.onItemClick(comments.getUserId());
+                    }
+                    if (callingFrom.equals(Module.Test.toString())) {
+                        commentItemClickListener.onItemClick(comments.getTlc_user_id());
+                    }
+                }
+            });*/
         }
     }
 

@@ -140,6 +140,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ShareItemBinding shareItemBinding;
+
         public ViewHolder(@NonNull ShareItemBinding itemView) {
             super(itemView.getRoot());
             this.shareItemBinding = itemView;

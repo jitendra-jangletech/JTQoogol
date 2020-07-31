@@ -414,14 +414,14 @@ public class MyTestFragment extends BaseFragment
 
     @Override
     public void onCommentClick(TestModelNew testModel) {
-       /* Bundle bundle = new Bundle();
+        Bundle bundle = new Bundle();
         tmId = testModel.getTm_id();
         bundle.putInt("tmId", tmId);
         bundle.putString(Constant.CALL_FROM, Module.Test.toString());
-        NavHostFragment.findNavController(this).navigate(R.id.nav_comments, bundle);*/
+        NavHostFragment.findNavController(this).navigate(R.id.nav_comments, bundle);
         Log.d(TAG, "onCommentClick TmId : " + testModel.getTm_id());
-        CommentDialog commentDialog = new CommentDialog(getActivity(), testModel.getTm_id(), true,this);
-        commentDialog.show();
+        //CommentDialog commentDialog = new CommentDialog(getActivity(), testModel.getTm_id(), this);
+        //commentDialog.show();
     }
 
     @Override

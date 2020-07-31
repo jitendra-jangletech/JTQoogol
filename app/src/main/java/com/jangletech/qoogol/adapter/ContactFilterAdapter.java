@@ -1,7 +1,9 @@
 package com.jangletech.qoogol.adapter;
 
+import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
@@ -11,6 +13,7 @@ import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.ContactFilterItemBinding;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by Pritali on 5/12/2020.

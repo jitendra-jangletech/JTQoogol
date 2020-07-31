@@ -3,6 +3,7 @@ package com.jangletech.qoogol.dialog;
 import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +28,9 @@ import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
 
+import org.apache.commons.lang3.StringUtils;
+
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,16 +45,14 @@ public class CommentDialog extends Dialog implements CommentAdapter.onCommentIte
     private List<Comments> commentList;
     private CommentAdapter commentAdapter;
     private CommentViewModel mViewModel;
-    private boolean isCallFromTest;
     private int id;
     private CommentClickListener commentClickListener;
     private ApiInterface apiService = ApiClient.getInstance().getApi();
 
-    public CommentDialog(@NonNull Activity mContext, int id, boolean isCallFromTest, CommentClickListener commentClickListener) {
+    public CommentDialog(@NonNull Activity mContext, int id, CommentClickListener commentClickListener) {
         super(mContext, android.R.style.Theme_DeviceDefault_Light_DarkActionBar);
         this.mContext = mContext;
         this.id = id;
-        this.isCallFromTest = isCallFromTest;
         this.commentClickListener = commentClickListener;
     }
 
@@ -62,8 +64,7 @@ public class CommentDialog extends Dialog implements CommentAdapter.onCommentIte
                 R.layout.comment_dialog, null, false);
         setContentView(mBinding.getRoot());
         commentList = new ArrayList<>();
-        setCommentAdapter();
-        fetchCommentsAPI(Integer.parseInt(AppUtils.getUserId()),
+        fetchCommentsAPI(new PreferenceManager(mContext).getInt(Constant.USER_ID),
                 id, "L", "");
 
         mBinding.btnClose.setOnClickListener(v -> {
@@ -86,49 +87,50 @@ public class CommentDialog extends Dialog implements CommentAdapter.onCommentIte
 
         Log.d(TAG, "fetchCommentsAPI userId : " + user_id);
         Log.d(TAG, "fetchCommentsAPI Case : " + api_case);
-        Log.d(TAG, "fetchCommentsAPI QueId : " + que_id);
 
-        if (api_case.equalsIgnoreCase("L")) {
-            if (isCallFromTest) {
-                call = apiService.fetchTestComments(user_id, que_id, api_case);
-            } else {
-                call = apiService.fetchComments(user_id, que_id, api_case);
-            }
-        } else {
-            call = apiService.addCommentApi(String.valueOf(user_id), que_id, api_case, AppUtils.encodedString(comment_text));
-        }
-        call.enqueue(new Callback<ProcessQuestion>() {
-            @Override
-            public void onResponse(Call<ProcessQuestion> call, retrofit2.Response<ProcessQuestion> response) {
-                try {
-                    //ProgressDialog.getInstance().dismiss();
-                    commentList.clear();
-                    if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
-                        commentList = response.body().getCommentList();
-                        commentAdapter.updateCommentList(commentList);
-                        emptyView();
-                    } else {
-                        Toast.makeText(mContext, UtilHelper.getAPIError(String.valueOf(response.body())), Toast.LENGTH_SHORT).show();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    mBinding.shimmerViewContainer.hideShimmer();
-                    //ProgressDialog.getInstance().dismiss();
-                }
-            }
+        //String encoded = Base64.encodeToString(comment_text.getBytes(StandardCharsets.UTF_8), Base64.DEFAULT);
+        //String encodedComment = StringUtils.stripAccents(encoded);
 
-            @Override
-            public void onFailure(Call<ProcessQuestion> call, Throwable t) {
-                t.printStackTrace();
-                mBinding.shimmerViewContainer.hideShimmer();
-                //ProgressDialog.getInstance().dismiss();
-            }
-        });
+       try {
+           if (api_case.equalsIgnoreCase("L"))
+               call = apiService.fetchComments(user_id, que_id, api_case,1);
+           else
+               call = apiService.addCommentApi(String.valueOf(user_id), que_id, api_case, AppUtils.encodedString(comment_text));
+
+           call.enqueue(new Callback<ProcessQuestion>() {
+               @Override
+               public void onResponse(Call<ProcessQuestion> call, retrofit2.Response<ProcessQuestion> response) {
+                   try {
+                       //ProgressDialog.getInstance().dismiss();
+                       commentList.clear();
+                       if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
+                           commentList = response.body().getCommentList();
+                           Log.d(TAG, "onResponse commentList : " + commentList.size());
+                           emptyView();
+                       } else {
+                           Toast.makeText(mContext, UtilHelper.getAPIError(String.valueOf(response.body())), Toast.LENGTH_SHORT).show();
+                       }
+                   } catch (Exception e) {
+                       e.printStackTrace();
+                       mBinding.shimmerViewContainer.hideShimmer();
+                       //ProgressDialog.getInstance().dismiss();
+                   }
+               }
+
+               @Override
+               public void onFailure(Call<ProcessQuestion> call, Throwable t) {
+                   t.printStackTrace();
+                   mBinding.shimmerViewContainer.hideShimmer();
+                   //ProgressDialog.getInstance().dismiss();
+               }
+           });
+       } catch(Exception e) {
+           e.printStackTrace();
+       }
     }
 
-
     private void setCommentAdapter() {
-        commentAdapter = new CommentAdapter(mContext, commentList, Module.Test.toString(), this);
+        commentAdapter = new CommentAdapter(mContext, commentList, Module.Learning.toString(), this);
         mBinding.commentRecycler.setHasFixedSize(true);
         mBinding.commentRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         mBinding.commentRecycler.setAdapter(commentAdapter);
@@ -151,20 +153,5 @@ public class CommentDialog extends Dialog implements CommentAdapter.onCommentIte
     @Override
     public void onItemClick(String userId) {
         commentClickListener.onCommentClick(userId);
-    }
-
-    @Override
-    public void onLikeClick(Comments comment) {
-        //AppUtils.showToast(mContext, "Like");
-
-        //RepliesDialog dialogNew = new RepliesDialog(mContext);
-        //dialogNew.show();
-    }
-
-    @Override
-    public void onReplyClick(Comments comment) {
-        //AppUtils.showToast(mContext, "Reply");
-        RepliesDialog dialogNew = new RepliesDialog(mContext,comment);
-        dialogNew.show();
     }
 }

@@ -286,6 +286,7 @@ public class ConnectionAdapter extends RecyclerView.Adapter<ConnectionAdapter.Vi
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ConnectionItemBinding connectionItemBinding;
+
         public ViewHolder(@NonNull ConnectionItemBinding itemView) {
             super(itemView.getRoot());
             this.connectionItemBinding = itemView;

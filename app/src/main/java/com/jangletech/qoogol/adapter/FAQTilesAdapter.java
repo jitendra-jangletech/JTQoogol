@@ -41,8 +41,8 @@ public class FAQTilesAdapter extends RecyclerView.Adapter<FAQTilesAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull FAQTilesAdapter.ViewHolder holder, int position) {
         FAQModel faqModel = faqModelList.get(position);
-        holder.itemBinding.tvTopicName.setText(faqModel.getFaqt_name());
-        holder.itemBinding.cardLayout.setOnClickListener(v->{
+        itemBinding.tvTopicName.setText(faqModel.getFaqt_name());
+        itemBinding.cardLayout.setOnClickListener(v->{
             tilesClickListener.onItemClick(faqModel);
         });
     }
@@ -53,10 +53,8 @@ public class FAQTilesAdapter extends RecyclerView.Adapter<FAQTilesAdapter.ViewHo
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        FaqItemBinding itemBinding;
         public ViewHolder(@NonNull FaqItemBinding itemView) {
             super(itemView.getRoot());
-            this.itemBinding = itemView;
         }
     }
 

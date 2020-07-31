@@ -2,6 +2,7 @@ package com.jangletech.qoogol.adapter;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -14,16 +15,17 @@ import com.jangletech.qoogol.databinding.LikeitemBinding;
 import com.jangletech.qoogol.model.Like;
 import com.jangletech.qoogol.util.UtilHelper;
 
+import java.net.URL;
 import java.util.List;
 
 /**
  * Created by Pritali on 6/4/2020.
  */
-public class LikeAdapter extends RecyclerView.Adapter<LikeAdapter.ViewHolder> {
-    private Activity activity;
-    private List<Like> likeList;
-    private LikeitemBinding likeitemBinding;
-    private onItemClickListener onItemClickListener;
+public class LikeAdapter  extends RecyclerView.Adapter<LikeAdapter.ViewHolder> {
+    Activity activity;
+    List<Like> likeList;
+    LikeitemBinding likeitemBinding;
+    onItemClickListener onItemClickListener;
 
     public LikeAdapter(Activity activity, List<Like> likeList, onItemClickListener onItemClickListener) {
         this.activity = activity;
@@ -42,17 +44,12 @@ public class LikeAdapter extends RecyclerView.Adapter<LikeAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull LikeAdapter.ViewHolder holder, int position) {
-        Like like = likeList.get(position);
         try {
-            //likeitemBinding.setLike(like);
+            Like like = likeList.get(position);
             if (like.getProfile_image() != null && !like.getProfile_image().isEmpty()) {
-                Glide.with(activity).load(UtilHelper.getProfileImageUrl(like.getProfile_image().trim())).circleCrop().placeholder(R.drawable.profile).into(holder.likeitemBinding.userProfileImage);
+                Glide.with(activity).load(UtilHelper.getProfileImageUrl(like.getProfile_image().trim())).circleCrop().placeholder(R.drawable.profile).into(likeitemBinding.userProfileImage);
             }
-
-            holder.likeitemBinding.container.setOnClickListener(v -> {
-                onItemClickListener.onItemCLick(like.getUserId());
-            });
-
+            likeitemBinding.tvUserName.setText(like.getUserName());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -68,11 +65,13 @@ public class LikeAdapter extends RecyclerView.Adapter<LikeAdapter.ViewHolder> {
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        LikeitemBinding likeitemBinding;
-
         public ViewHolder(@NonNull LikeitemBinding itemView) {
             super(itemView.getRoot());
-            this.likeitemBinding = itemView;
+
+            likeitemBinding.container.setOnClickListener(v -> {
+                Like like = likeList.get(getAdapterPosition());
+                onItemClickListener.onItemCLick(like.getUserId());
+            });
         }
     }
 }
