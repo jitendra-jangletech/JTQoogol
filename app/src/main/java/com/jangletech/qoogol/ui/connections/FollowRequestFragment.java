@@ -76,7 +76,7 @@ public class FollowRequestFragment extends BaseFragment implements FollowReqAdap
                 initView(followRequestList);
                 mBinding.emptyview.setVisibility(View.GONE);
             } else {
-                mBinding.emptyview.setText("You don not have any pending requests.");
+                mBinding.emptyview.setText("You don't not have any pending requests.");
                 mBinding.emptyview.setVisibility(View.VISIBLE);
             }
             dismissRefresh(mBinding.requestsSwiperefresh);
