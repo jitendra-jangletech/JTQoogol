@@ -131,6 +131,13 @@
     <string name="home">home</string>
 
 
+    <!-- Doubt -->
+    <string name="doubt_text">What doubt you want to post about?</string>
+    <string name="select_question">Select Question</string>
+    <string name="select_subject">Select Subject</string>
+    <string name="select_chapter">Select Chapter</string>
+
+
     <!-- Sign Up Drop Down Values -->
 
     <string-array name="Select">

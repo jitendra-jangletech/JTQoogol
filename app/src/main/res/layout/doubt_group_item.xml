@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/container"
+        android:padding="@dimen/_5sdp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_5sdp"
+        app:cardCornerRadius="@dimen/_5sdp"
+        app:cardElevation="@dimen/_5sdp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/rlProfile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="@dimen/_10sdp">
+
+            <ImageView
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:id="@+id/userProfileImage"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_profile_default" />
+
+            <TextView
+                app:layout_constraintLeft_toRightOf="@+id/userProfileImage"
+                app:layout_constraintRight_toLeftOf="@+id/join"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:id="@+id/tvUserName"
+                android:layout_width="0dp"
+                android:layout_marginRight="@dimen/_5sdp"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:ellipsize="end"
+                android:fontFamily="sans-serif-black"
+                android:textAlignment="viewStart"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/_12ssp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/join"
+                android:text="Join"
+                android:padding="@dimen/_5sdp"
+                android:layout_marginLeft="@dimen/_5sdp"
+                android:textColor="@color/white"
+                android:background="@color/colorSkyBlue"
+                android:layout_width="wrap_content"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/userProfileImage"
+                app:layout_constraintBottom_toBottomOf="@+id/userProfileImage"
+                android:layout_height="wrap_content"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+
+</layout>

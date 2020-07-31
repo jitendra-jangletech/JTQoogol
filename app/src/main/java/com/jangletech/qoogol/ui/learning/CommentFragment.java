@@ -63,6 +63,7 @@ public class CommentFragment extends BaseFragment implements View.OnClickListene
         return commentViewBinding.getRoot();
     }
 
+
     private void setListeners() {
         commentViewBinding.btnSend.setOnClickListener(this);
     }

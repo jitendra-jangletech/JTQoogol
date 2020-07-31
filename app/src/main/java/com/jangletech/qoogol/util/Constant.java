@@ -178,6 +178,8 @@ public class Constant {
     public static int sharedto = 5;
     public static int fetch_loged_in_user = 0;
     public static int fetch_other_user = 1;
+    public static int my_doubts = 0;
+    public static int tq_doubts = 1;
 
     //Question media
     public static String TEXt = "1";

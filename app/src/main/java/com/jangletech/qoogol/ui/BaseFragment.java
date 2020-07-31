@@ -288,7 +288,7 @@ public class BaseFragment extends Fragment {
     }
 
     public static String getUserId(Context mContext) {
-        return String.valueOf(new PreferenceManager(mContext).getInt(Constant.USER_ID));
+        return new PreferenceManager(mContext).getUserId();
     }
 
     public static String getUserName(Context mContext) {
