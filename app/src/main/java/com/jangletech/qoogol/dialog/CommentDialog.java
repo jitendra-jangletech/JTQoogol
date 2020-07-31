@@ -91,38 +91,42 @@ public class CommentDialog extends Dialog implements CommentAdapter.onCommentIte
         //String encoded = Base64.encodeToString(comment_text.getBytes(StandardCharsets.UTF_8), Base64.DEFAULT);
         //String encodedComment = StringUtils.stripAccents(encoded);
 
-        if (api_case.equalsIgnoreCase("L"))
-            call = apiService.fetchComments(user_id, que_id, api_case);
-        else
-            call = apiService.addCommentApi(String.valueOf(user_id), que_id, api_case, AppUtils.encodedString(comment_text));
+       try {
+           if (api_case.equalsIgnoreCase("L"))
+               call = apiService.fetchComments(user_id, que_id, api_case,1);
+           else
+               call = apiService.addCommentApi(String.valueOf(user_id), que_id, api_case, AppUtils.encodedString(comment_text));
 
-        call.enqueue(new Callback<ProcessQuestion>() {
-            @Override
-            public void onResponse(Call<ProcessQuestion> call, retrofit2.Response<ProcessQuestion> response) {
-                try {
-                    //ProgressDialog.getInstance().dismiss();
-                    commentList.clear();
-                    if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
-                        commentList = response.body().getCommentList();
-                        Log.d(TAG, "onResponse commentList : " + commentList.size());
-                        emptyView();
-                    } else {
-                        Toast.makeText(mContext, UtilHelper.getAPIError(String.valueOf(response.body())), Toast.LENGTH_SHORT).show();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    mBinding.shimmerViewContainer.hideShimmer();
-                    //ProgressDialog.getInstance().dismiss();
-                }
-            }
+           call.enqueue(new Callback<ProcessQuestion>() {
+               @Override
+               public void onResponse(Call<ProcessQuestion> call, retrofit2.Response<ProcessQuestion> response) {
+                   try {
+                       //ProgressDialog.getInstance().dismiss();
+                       commentList.clear();
+                       if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
+                           commentList = response.body().getCommentList();
+                           Log.d(TAG, "onResponse commentList : " + commentList.size());
+                           emptyView();
+                       } else {
+                           Toast.makeText(mContext, UtilHelper.getAPIError(String.valueOf(response.body())), Toast.LENGTH_SHORT).show();
+                       }
+                   } catch (Exception e) {
+                       e.printStackTrace();
+                       mBinding.shimmerViewContainer.hideShimmer();
+                       //ProgressDialog.getInstance().dismiss();
+                   }
+               }
 
-            @Override
-            public void onFailure(Call<ProcessQuestion> call, Throwable t) {
-                t.printStackTrace();
-                mBinding.shimmerViewContainer.hideShimmer();
-                //ProgressDialog.getInstance().dismiss();
-            }
-        });
+               @Override
+               public void onFailure(Call<ProcessQuestion> call, Throwable t) {
+                   t.printStackTrace();
+                   mBinding.shimmerViewContainer.hideShimmer();
+                   //ProgressDialog.getInstance().dismiss();
+               }
+           });
+       } catch(Exception e) {
+           e.printStackTrace();
+       }
     }
 
     private void setCommentAdapter() {

@@ -69,44 +69,47 @@ public class LikeListingDialog extends Dialog implements LikeAdapter.onItemClick
     }
 
     private void getData() {
+        try {
+            Call<ProcessQuestion> call;
+            call = apiService.fetchLikes(Integer.parseInt(mSettings.getUserId()), questionId, "L",1);
 
-        Call<ProcessQuestion> call;
-        call = apiService.fetchComments(Integer.parseInt(mSettings.getUserId()), questionId, "L");
+            call.enqueue(new Callback<ProcessQuestion>() {
+                @Override
+                public void onResponse(Call<ProcessQuestion> call, retrofit2.Response<ProcessQuestion> response) {
+                    try {
+                        ProgressDialog.getInstance().dismiss();
+                        likeList.clear();
+                        if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
+                            likeList = response.body().getLikeList();
+                            initRecycler();
+                        } else {
+                            Toast.makeText(context, UtilHelper.getAPIError(String.valueOf(response.body())), Toast.LENGTH_SHORT).show();
+                        }
+                        if (likeDialogBinding.likeSwiperefresh.isRefreshing())
+                            likeDialogBinding.likeSwiperefresh.setRefreshing(false);
 
-        call.enqueue(new Callback<ProcessQuestion>() {
-            @Override
-            public void onResponse(Call<ProcessQuestion> call, retrofit2.Response<ProcessQuestion> response) {
-                try {
-                    ProgressDialog.getInstance().dismiss();
-                    likeList.clear();
-                    if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
-                        likeList = response.body().getLikeList();
-                        initRecycler();
-                    } else {
-                        Toast.makeText(context, UtilHelper.getAPIError(String.valueOf(response.body())), Toast.LENGTH_SHORT).show();
+                        likeDialogBinding.shimmerViewContainer.hideShimmer();
+                        likeDialogBinding.likeRecycler.setVisibility(View.VISIBLE);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        //ProgressDialog.getInstance().dismiss();
+                        likeDialogBinding.shimmerViewContainer.hideShimmer();
+                        if (likeDialogBinding.likeSwiperefresh.isRefreshing())
+                            likeDialogBinding.likeSwiperefresh.setRefreshing(false);
                     }
-                    if (likeDialogBinding.likeSwiperefresh.isRefreshing())
-                        likeDialogBinding.likeSwiperefresh.setRefreshing(false);
+                }
 
-                    likeDialogBinding.shimmerViewContainer.hideShimmer();
-                    likeDialogBinding.likeRecycler.setVisibility(View.VISIBLE);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    //ProgressDialog.getInstance().dismiss();
-                    likeDialogBinding.shimmerViewContainer.hideShimmer();
+                @Override
+                public void onFailure(Call<ProcessQuestion> call, Throwable t) {
+                    t.printStackTrace();
+                    ProgressDialog.getInstance().dismiss();
                     if (likeDialogBinding.likeSwiperefresh.isRefreshing())
                         likeDialogBinding.likeSwiperefresh.setRefreshing(false);
                 }
-            }
-
-            @Override
-            public void onFailure(Call<ProcessQuestion> call, Throwable t) {
-                t.printStackTrace();
-                ProgressDialog.getInstance().dismiss();
-                if (likeDialogBinding.likeSwiperefresh.isRefreshing())
-                    likeDialogBinding.likeSwiperefresh.setRefreshing(false);
-            }
-        });
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void initRecycler() {

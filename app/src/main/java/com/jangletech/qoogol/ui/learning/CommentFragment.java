@@ -80,36 +80,40 @@ public class CommentFragment extends BaseFragment implements View.OnClickListene
         Log.d(TAG, "Encoded : " + encodedAns);
         Call<ProcessQuestion> call;
 
-        if (api_case.equalsIgnoreCase("L"))
-            call = apiService.fetchComments(Integer.parseInt(user_id), que_id, api_case);
-        else
-            call = apiService.addCommentApi(user_id, que_id, api_case, encodedAns);
+     try {
+         if (api_case.equalsIgnoreCase("L"))
+             call = apiService.fetchComments(Integer.parseInt(user_id), que_id, api_case,1);
+         else
+             call = apiService.addCommentApi(user_id, que_id, api_case, encodedAns);
 
-        call.enqueue(new Callback<ProcessQuestion>() {
-            @Override
-            public void onResponse(Call<ProcessQuestion> call, retrofit2.Response<ProcessQuestion> response) {
-                try {
-                    ProgressDialog.getInstance().dismiss();
-                    commentList.clear();
-                    if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
-                        commentList = response.body().getCommentList();
-                        mViewModel.setCommentList(commentList);
-                        emptyView();
-                    } else {
-                        Toast.makeText(getActivity(), UtilHelper.getAPIError(String.valueOf(response.body())), Toast.LENGTH_SHORT).show();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    ProgressDialog.getInstance().dismiss();
-                }
-            }
+         call.enqueue(new Callback<ProcessQuestion>() {
+             @Override
+             public void onResponse(Call<ProcessQuestion> call, retrofit2.Response<ProcessQuestion> response) {
+                 try {
+                     ProgressDialog.getInstance().dismiss();
+                     commentList.clear();
+                     if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
+                         commentList = response.body().getCommentList();
+                         mViewModel.setCommentList(commentList);
+                         emptyView();
+                     } else {
+                         Toast.makeText(getActivity(), UtilHelper.getAPIError(String.valueOf(response.body())), Toast.LENGTH_SHORT).show();
+                     }
+                 } catch (Exception e) {
+                     e.printStackTrace();
+                     ProgressDialog.getInstance().dismiss();
+                 }
+             }
 
-            @Override
-            public void onFailure(Call<ProcessQuestion> call, Throwable t) {
-                t.printStackTrace();
-                ProgressDialog.getInstance().dismiss();
-            }
-        });
+             @Override
+             public void onFailure(Call<ProcessQuestion> call, Throwable t) {
+                 t.printStackTrace();
+                 ProgressDialog.getInstance().dismiss();
+             }
+         });
+     } catch (Exception e) {
+         e.printStackTrace();
+     }
     }
 
     private void fetchTestCommentsAPI(int user_id, int tmId, String api_case, String comment_text) {
