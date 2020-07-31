@@ -37,6 +37,7 @@ import com.jangletech.qoogol.enums.Nav;
 import com.jangletech.qoogol.model.UserProfile;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
+import com.jangletech.qoogol.ui.doubts.DoubtListingDialog;
 import com.jangletech.qoogol.ui.personal_info.PersonalInfoViewModel;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
@@ -378,6 +379,12 @@ public class MainActivity extends BaseActivity {
             if (navController.getCurrentDestination().getId() != R.id.nav_requests) {
                 navigateFlag = Nav.PENDING_REQ.toString();
             }
+        });
+
+        findViewById(R.id.nav_doubts).setOnClickListener(v -> {
+            mBinding.drawerLayout.closeDrawers();
+            DoubtListingDialog doubtListingDialog = new DoubtListingDialog(this, null, Constant.my_doubts);
+            doubtListingDialog.show();
         });
 
         findViewById(R.id.nav_blocked_connections).setOnClickListener(v -> {

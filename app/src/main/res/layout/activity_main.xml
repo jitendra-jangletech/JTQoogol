@@ -213,6 +213,13 @@
                             android:text="@string/syllabus" />
 
                         <TextView
+                            android:id="@+id/nav_doubts"
+                            style="@style/menu_item_style"
+                            android:drawableLeft="@drawable/nav_learning"
+                            android:foreground="?attr/selectableItemBackground"
+                            android:text="Doubts" />
+
+                        <TextView
                             android:id="@+id/tvNavDoubt"
                             style="@style/menu_item_style"
                             android:drawableLeft="@drawable/ic_test"

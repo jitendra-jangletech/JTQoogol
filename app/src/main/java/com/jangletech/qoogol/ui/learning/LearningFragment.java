@@ -1,6 +1,7 @@
 package com.jangletech.qoogol.ui.learning;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,10 +22,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.LearningAdapter;
 import com.jangletech.qoogol.databinding.LearningFragmentBinding;
+import com.jangletech.qoogol.dialog.CommentDialog;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.dialog.PublicProfileDialog;
 import com.jangletech.qoogol.dialog.ShareQuestionDialog;
-import com.jangletech.qoogol.enums.Module;
 import com.jangletech.qoogol.model.LearningQuestionsNew;
 import com.jangletech.qoogol.model.ProcessQuestion;
 import com.jangletech.qoogol.retrofit.ApiClient;
@@ -42,12 +43,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 
 import static com.jangletech.qoogol.util.Constant.CALL_FROM;
-import static com.jangletech.qoogol.util.Constant.connectonId;
-import static com.jangletech.qoogol.util.Constant.profile;
 import static com.jangletech.qoogol.util.Constant.learning;
+import static com.jangletech.qoogol.util.Constant.profile;
 
-public class LearningFragment extends BaseFragment implements LearningAdapter.onIconClick, PublicProfileDialog.PublicProfileClickListener {
+public class LearningFragment extends BaseFragment implements LearningAdapter.onIconClick, PublicProfileDialog.PublicProfileClickListener, CommentDialog.CommentClickListener {
 
+    private static final String TAG = "LearningFragment";
     private LearningViewModel mViewModel;
     LearningFragmentBinding learningFragmentBinding;
     LearningAdapter learningAdapter;
@@ -82,7 +83,6 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
         inflater.inflate(R.menu.action_search, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
-
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -122,7 +122,6 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
                     ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Practice Questions");
                     mViewModel.fetchQuestionData("");
                 }
-
             }
         }
 
@@ -193,10 +192,13 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
 
     @Override
     public void onCommentClick(int questionId) {
-        Bundle bundle = new Bundle();
+        /*Bundle bundle = new Bundle();
         bundle.putString(Constant.CALL_FROM, Module.Learning.toString());
         bundle.putInt("QuestionId", questionId);
-        NavHostFragment.findNavController(this).navigate(R.id.nav_comments, bundle);
+        NavHostFragment.findNavController(this).navigate(R.id.nav_comments, bundle);*/
+        Log.d(TAG, "onCommentClick questionId : " + questionId);
+        CommentDialog commentDialog = new CommentDialog(getActivity(), questionId, true, this);
+        commentDialog.show();
     }
 
 
@@ -234,5 +236,11 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
     @Override
     public void onViewImage(String path) {
         showFullScreen(path);
+    }
+
+    @Override
+    public void onCommentClick(String userId) {
+        PublicProfileDialog publicProfileDialog = new PublicProfileDialog(getActivity(), userId, this);
+        publicProfileDialog.show();
     }
 }

@@ -10,7 +10,6 @@ import android.view.Window;
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.DoubtAdapter;
