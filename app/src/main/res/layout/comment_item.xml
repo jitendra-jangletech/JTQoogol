@@ -6,7 +6,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/commentlayouyt"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/_10sdp"
         android:background="@drawable/rounded_rectangle_orange"
@@ -65,16 +65,77 @@
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tvSenderName" />
-
+                <!-- <com.skyhope.showmoretextview.ShowMoreTextView
+                     android:id="@+id/text_comment_body"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:padding="@dimen/_4sdp"
+                     android:text="English Text"
+                     app:layout_constraintLeft_toLeftOf="parent"
+                     app:layout_constraintTop_toBottomOf="@+id/tvSenderName" />
+ -->
                 <TextView
                     android:id="@+id/text_comment_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/_2sdp"
+                    android:padding="@dimen/_6sdp"
                     android:text="19 March 2020"
                     android:textSize="@dimen/_9ssp"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/text_comment_body" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/_25sdp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/text_comment_body">
+
+                    <TextView
+                        android:id="@+id/tvLikeSymbol"
+                        android:layout_width="@dimen/_15sdp"
+                        android:layout_height="@dimen/_15sdp"
+                        android:background="@drawable/ic_like"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvLikeCount"
+                        android:layout_width="@dimen/_15sdp"
+                        android:layout_height="@dimen/_15sdp"
+                        android:text="0"
+                        app:layout_constraintLeft_toRightOf="@+id/tvLikeSymbol"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvLike"
+                        android:layout_width="@dimen/_40sdp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_10sdp"
+                        android:layout_marginRight="@dimen/_10sdp"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:gravity="center"
+                        android:padding="@dimen/_6sdp"
+                        android:text="Like"
+                        android:textSize="@dimen/_9ssp"
+                        app:layout_constraintLeft_toRightOf="@+id/tvLikeCount"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvReply"
+                        android:layout_width="@dimen/_40sdp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_10sdp"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:gravity="center"
+                        android:padding="@dimen/_6sdp"
+                        android:text="Reply"
+                        android:textSize="@dimen/_9ssp"
+                        app:layout_constraintLeft_toRightOf="@id/tvLike"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

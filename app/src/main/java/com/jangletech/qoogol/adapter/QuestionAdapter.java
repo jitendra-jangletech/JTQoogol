@@ -18,10 +18,10 @@ import java.util.List;
 
 public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHolder> {
 
-    Activity activity;
-    List<QSet> questionList;
-    TestDetailQuestionItemBinding itemBinding;
-    ItemQuestionBinding itemQuestionBinding;
+    private Activity activity;
+    private List<QSet> questionList;
+    private TestDetailQuestionItemBinding itemBinding;
+    private ItemQuestionBinding itemQuestionBinding;
 
     public QuestionAdapter(Activity activity, List<QSet> questionList) {
         this.activity = activity;

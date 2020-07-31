@@ -2,13 +2,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <data>
-        <variable
-            name="like"
-            type="com.jangletech.qoogol.model.Like" />
-
-    </data>
-
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/container"
         android:padding="@dimen/_5sdp"
@@ -44,7 +37,6 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/_10sdp"
                 android:ellipsize="end"
-                android:text="@{like.userName}"
                 android:fontFamily="sans-serif-black"
                 android:textAlignment="viewStart"
                 android:textColor="@color/colorBlack"

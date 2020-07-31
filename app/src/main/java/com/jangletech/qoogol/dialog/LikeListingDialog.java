@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.LikeAdapter;
 import com.jangletech.qoogol.databinding.LikeDialogBinding;
-import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.model.Like;
 import com.jangletech.qoogol.model.ProcessQuestion;
 import com.jangletech.qoogol.retrofit.ApiClient;
@@ -33,14 +32,14 @@ import retrofit2.Callback;
  * Created by Pritali on 6/4/2020.
  */
 public class LikeListingDialog extends Dialog implements LikeAdapter.onItemClickListener {
-    LikeDialogBinding likeDialogBinding;
+    private LikeDialogBinding likeDialogBinding;
     private Activity context;
-    ApiInterface apiService = ApiClient.getInstance().getApi();
-    List<Like> likeList;
+    private ApiInterface apiService = ApiClient.getInstance().getApi();
+    private List<Like> likeList;
     private PreferenceManager mSettings;
-    int questionId;
-    LikeAdapter likeAdapter;
-    onItemClickListener onItemClickListener;
+    private int questionId;
+    private LikeAdapter likeAdapter;
+    private onItemClickListener onItemClickListener;
 
     public LikeListingDialog(@NonNull Activity context, int questionId, onItemClickListener onItemClickListener) {
         super(context, android.R.style.Theme_DeviceDefault_Light_DarkActionBar);
@@ -112,8 +111,7 @@ public class LikeListingDialog extends Dialog implements LikeAdapter.onItemClick
     private void initRecycler() {
         likeAdapter = new LikeAdapter(context, likeList, this);
         likeDialogBinding.likeRecycler.setHasFixedSize(true);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        linearLayoutManager.setAutoMeasureEnabled(false);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
         likeDialogBinding.likeRecycler.setLayoutManager(linearLayoutManager);
         likeDialogBinding.likeRecycler.setAdapter(likeAdapter);
         likeDialogBinding.shimmerViewContainer.hideShimmer();

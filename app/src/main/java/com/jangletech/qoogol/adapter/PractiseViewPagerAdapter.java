@@ -1698,7 +1698,7 @@ public class PractiseViewPagerAdapter extends PagerAdapter
 
         if (commentsLayout != null)
             commentsLayout.setOnClickListener(v -> {
-                commentDialog = new CommentDialog(context, testQuestionNew.getTq_q_id(), this);
+                commentDialog = new CommentDialog(context, testQuestionNew.getTq_q_id(), false, this);
                 commentDialog.show();
             });
 

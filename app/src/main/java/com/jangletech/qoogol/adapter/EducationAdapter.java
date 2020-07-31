@@ -24,7 +24,7 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.View
     private Context mContext;
     private ItemEducationBinding itemEducationBinding;
     private EducationItemClickListener educationItemClickListener;
-    int call_from;
+    private int call_from;
 
     public EducationAdapter(Context mContext,List<Education> educationList,EducationItemClickListener educationItemClickListener, int call_from){
         this.mContext = mContext;

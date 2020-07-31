@@ -249,7 +249,7 @@ public class Constant {
     public static final String FETCH_USER_SETTINGS = "q113ProcessUserSetting";
 
     public static final String FETCH_FAQ = "sm18FAQ";
-    public static final String UPDATE_USER_PROFILE = "sm23UpdateUserDetails";
+    public static final String UPDATE_USER_PROFILE = "sm67UpdateProfileDetails";
     public static final String FETCH_SUBJECTS = "q111FetchSubjectMaster";
     public static final String FETCH_CHAPTERS = "q114FetchChapterMaster";
     public static final String FETCH_NOTIFICATIONS = "sm28FetchNotifications";
@@ -259,7 +259,7 @@ public class Constant {
     public static final String STATE = "sm06StateData";
     public static final String CITY = "sm09CityData";
     public static final String UNIVERSITY = "sm12UBMData";
-    public static final String REGISTER_LOGIN = "sm01Signup";
+    public static final String REGISTER_LOGIN = "sm01SignupNew"; //sm01Signup(old)
     public static final String UPDATE_PROFILE_IMAGE_API = "sm22UpdateProfilePic";
     public static final String COURSE = "sm15CourseData";
     public static final String INSTITUTE = "sm13InstOrgData";

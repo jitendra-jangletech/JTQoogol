@@ -24,7 +24,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     private List<Notification> notifications;
     private Context mContext;
     private NotificationItemBinding itemBinding;
-    onItemClickListener onItemClickListener;
+    private onItemClickListener onItemClickListener;
 
     public NotificationAdapter(Context context,List<Notification> notifications, onItemClickListener onItemClickListener){
         this.mContext = context;

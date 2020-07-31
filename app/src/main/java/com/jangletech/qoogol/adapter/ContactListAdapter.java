@@ -33,7 +33,7 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
     private List<Contacts> contactsList;
     private List<Contacts> filteredContactList;
     private OnContactItemClickListener itemClickListener;
-    ContactlistItemBinding binding;
+    private ContactlistItemBinding binding;
 
     public ContactListAdapter(List<Contacts> contactsList, OnContactItemClickListener itemClickListener) {
         this.contactsList = contactsList;

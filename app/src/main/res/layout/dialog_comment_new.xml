@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/top_layout"
@@ -33,13 +33,15 @@
                 android:layout_gravity="center_vertical"
                 android:layout_margin="@dimen/_10sdp"
                 android:gravity="center_vertical"
-                android:text="Comments"
+                android:text="Replies"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/colorWhite"
                 app:layout_constraintLeft_toRightOf="@+id/btnClose"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
         <com.facebook.shimmer.ShimmerFrameLayout
             android:id="@+id/shimmer_view_container"
@@ -51,6 +53,40 @@
             app:shimmer_auto_start="true"
             app:shimmer_duration="800">
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/top_layout_dup"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/actionBarSize"
+                android:background="@color/colorPrimaryDark"
+                app:layout_constraintLeft_toLeftOf="parent">
+
+                <ImageView
+                    android:id="@+id/btnClose1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/_10sdp"
+                    android:gravity="center"
+                    android:src="?attr/homeAsUpIndicator"
+                    android:textColor="@color/colorWhite"
+                    android:tint="@color/white"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/titletv1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/_10sdp"
+                    android:gravity="center_vertical"
+                    android:text="Replies"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="@color/colorWhite"
+                    app:layout_constraintLeft_toRightOf="@+id/btnClose1"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/comment_recycler"
                 android:layout_width="match_parent"
@@ -58,22 +94,8 @@
                 android:padding="@dimen/_10sdp"
                 app:layout_constraintBottom_toTopOf="@+id/sendlayout"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/top_layout" />
+                app:layout_constraintTop_toBottomOf="@+id/top_layout_dup" />
         </com.facebook.shimmer.ShimmerFrameLayout>
-
-        <TextView
-            android:id="@+id/emptytv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="No Comments added yet."
-            android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textColor="@color/colorSkyBlue"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
             android:id="@+id/sendlayout"
@@ -124,5 +146,6 @@
                 app:srcCompat="@drawable/ic_send"
                 app:tint="@color/colorSkyBlue" />
         </LinearLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

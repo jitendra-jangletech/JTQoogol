@@ -155,7 +155,7 @@ public class CommentFragment extends BaseFragment implements View.OnClickListene
     private void initView() {
         bundle = getArguments();
         commentList = new ArrayList<>();
-        commentItemClickListener = this::onItemClick;
+        //commentItemClickListener = this::onItemClick;
         emptyView();
         if (bundle != null && bundle.getString(Constant.CALL_FROM).equals(Module.Learning.toString())) {
             questionId = bundle.getInt("QuestionId");
@@ -225,6 +225,16 @@ public class CommentFragment extends BaseFragment implements View.OnClickListene
         Log.d(TAG, "onItemClick Comment : ");
         PublicProfileDialog publicProfileDialog = new PublicProfileDialog(getActivity(), userId, this);
         publicProfileDialog.show();
+    }
+
+    @Override
+    public void onLikeClick(Comments comment) {
+
+    }
+
+    @Override
+    public void onReplyClick(Comments comment) {
+
     }
 
     @Override
