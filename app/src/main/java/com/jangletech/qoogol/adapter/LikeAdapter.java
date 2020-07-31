@@ -46,10 +46,10 @@ public class LikeAdapter  extends RecyclerView.Adapter<LikeAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull LikeAdapter.ViewHolder holder, int position) {
         try {
             Like like = likeList.get(position);
-            likeitemBinding.setLike(like);
             if (like.getProfile_image() != null && !like.getProfile_image().isEmpty()) {
                 Glide.with(activity).load(UtilHelper.getProfileImageUrl(like.getProfile_image().trim())).circleCrop().placeholder(R.drawable.profile).into(likeitemBinding.userProfileImage);
             }
+            likeitemBinding.tvUserName.setText(like.getUserName());
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -44,7 +44,6 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/_10sdp"
                 android:ellipsize="end"
-                android:text="@{like.userName}"
                 android:fontFamily="sans-serif-black"
                 android:textAlignment="viewStart"
                 android:textColor="@color/colorBlack"
