@@ -34,6 +34,7 @@
                 android:layout_gravity="center"
                 android:src="@drawable/ic_profile_default" />
 
+
             <TextView
                 app:layout_constraintLeft_toRightOf="@+id/userProfileImage"
                 app:layout_constraintBottom_toBottomOf="parent"
