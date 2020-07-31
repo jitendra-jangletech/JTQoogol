@@ -48,11 +48,11 @@
             android:layout_marginTop="?attr/actionBarSize"
             app:layout_constraintTop_toBottomOf="@+id/top_layout"
             app:layout_constraintLeft_toLeftOf="parent"
-            android:id="@+id/doubtgroup_swiperefresh">
+            android:id="@+id/doubt_swiperefresh">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
-                android:id="@+id/doubtgroup_recycler"
+                android:id="@+id/doubt_recycler"
                 android:padding="@dimen/_10sdp"
                 android:background="@color/colorLightGrey"
                 app:layout_constraintTop_toTopOf="parent"
@@ -79,10 +79,12 @@
             android:backgroundTint="@color/colorSkyBlue"
             android:src="@drawable/ic_add_white"
             android:tint="@color/white"
-            android:id="@+id/create_group"
+            android:id="@+id/add_doubt"
             android:layout_marginRight="@dimen/_10sdp"
             android:layout_marginBottom="@dimen/_10sdp"
             android:layout_height="wrap_content"/>
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

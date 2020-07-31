@@ -48,6 +48,7 @@ import com.jangletech.qoogol.model.ProcessQuestion;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.dialog.LikeListingDialog;
+import com.jangletech.qoogol.ui.doubts.DoubtListingDialog;
 import com.jangletech.qoogol.ui.learning.SlideshowDialogFragment;
 import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
@@ -90,6 +91,7 @@ import static com.jangletech.qoogol.util.Constant.learning;
 import static com.jangletech.qoogol.util.Constant.sharedby;
 import static com.jangletech.qoogol.util.Constant.sharedto;
 import static com.jangletech.qoogol.util.Constant.test;
+import static com.jangletech.qoogol.util.Constant.tq_doubts;
 
 /**
  * Created by Pritali on 3/18/2020.
@@ -383,8 +385,8 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
                 LearningQuestionsNew learningQuestions = learningQuestionsList.get(getAdapterPosition());
 
 
-                AddDoubtDialog addDoubtDialog = new AddDoubtDialog(activity,learningQuestions.getQuestion_id());
-                addDoubtDialog.show();
+                DoubtListingDialog doubtListingDialog = new DoubtListingDialog(activity,String.valueOf(learningQuestions.getQuestion_id()),tq_doubts);
+                doubtListingDialog.show();
             });
 
             learningItemBinding.saveQue.setOnClickListener(v ->  {
