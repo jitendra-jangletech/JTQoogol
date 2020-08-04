@@ -49,13 +49,13 @@ public class BlockedConnectionAdapter extends RecyclerView.Adapter<BlockedConnec
         blockedItemBinding = DataBindingUtil.inflate(
                 LayoutInflater.from(parent.getContext()),
                 R.layout.blocked_item, parent, false);
-        return new ViewHolder(blockedItemBinding.getRoot());
+        return new ViewHolder(blockedItemBinding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         BlockedConnections connections = connectionsList.get(position);
-        blockedItemBinding.tvUserName.setText(connections.getU_first_name() + " " + connections.getU_last_name());
+        holder.blockedItemBinding.tvUserName.setText(connections.getU_first_name() + " " + connections.getU_last_name());
         try {
             Glide.with(activity).load(UtilHelper.getProfilePath(connections.getCn_user_id_2(), connections.getProf_pic().trim())).circleCrop().placeholder(R.drawable.profile).into(blockedItemBinding.userProfileImage);
 
@@ -116,8 +116,10 @@ public class BlockedConnectionAdapter extends RecyclerView.Adapter<BlockedConnec
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
+        BlockedItemBinding blockedItemBinding;;
+        public ViewHolder(@NonNull BlockedItemBinding itemView) {
+            super(itemView.getRoot());
+            this.blockedItemBinding = itemView;
         }
     }
 }
