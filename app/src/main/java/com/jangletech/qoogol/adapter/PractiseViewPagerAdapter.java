@@ -57,6 +57,7 @@ import com.jangletech.qoogol.model.TestQuestionNew;
 import com.jangletech.qoogol.model.VerifyResponse;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
+import com.jangletech.qoogol.ui.doubts.DoubtListingDialog;
 import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
@@ -1641,6 +1642,8 @@ public class PractiseViewPagerAdapter extends PagerAdapter
         TextView tvCommentValue = layout.findViewById(R.id.comment_value);
         TextView tvShareValue = layout.findViewById(R.id.share_value);
 
+        ImageView imgDoubts = layout.findViewById(R.id.ask_doubt);
+
         ImageView share = layout.findViewById(R.id.share);
 
         TextView solutionDesc = layout.findViewById(R.id.solution_option);
@@ -1685,6 +1688,14 @@ public class PractiseViewPagerAdapter extends PagerAdapter
         if (mark != null)
             mark.setChecked(testQuestionNew.isTtqa_marked() ? true : false);
 
+        if (imgDoubts != null) {
+            imgDoubts.setOnClickListener(v -> {
+                new DoubtListingDialog(context, null, Constant.my_doubts)
+                        .show();
+            });
+        }
+
+
         tvLikeValue.setOnClickListener(v -> {
             if (!testQuestionNew.getLikes().equalsIgnoreCase("0")) {
                 LikeListingDialog listingDialog = new LikeListingDialog(context, testQuestionNew.getTq_q_id(), this);
@@ -1692,13 +1703,15 @@ public class PractiseViewPagerAdapter extends PagerAdapter
             }
         });
 
-        imgQueDownload.setOnClickListener(v -> {
-            showToast("Added to saved questions List.");
-        });
+        if (imgQueDownload != null)
+            imgQueDownload.setOnClickListener(v -> {
+                //todo add question to the saved Question List (Api Call needs to be implemented)
+                showToast("Added to saved questions List.");
+            });
 
         if (commentsLayout != null)
             commentsLayout.setOnClickListener(v -> {
-                commentDialog = new CommentDialog(context, testQuestionNew.getTq_q_id(), this);
+                commentDialog = new CommentDialog(context, testQuestionNew.getTq_q_id(), false, this);
                 commentDialog.show();
             });
 
@@ -1711,6 +1724,7 @@ public class PractiseViewPagerAdapter extends PagerAdapter
                     } else {
                         testQuestionNew.setTtqa_marked(false);
                     }
+                    AppUtils.bounceAnim(context, mark);
                     viewPagerClickListener.onMarkQuestion(pos);
                 }
             });
@@ -1719,6 +1733,7 @@ public class PractiseViewPagerAdapter extends PagerAdapter
             favorite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    AppUtils.bounceAnim(context, favorite);
                     ProcessQuestionAPI(testQuestionNew.getTq_q_id(), isChecked ? 1 : 0, "fav", 0);
                 }
             });
@@ -1727,6 +1742,7 @@ public class PractiseViewPagerAdapter extends PagerAdapter
             like.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    AppUtils.bounceAnim(context, like);
                     int prevLikeCount = Integer.parseInt(tvLikeValue.getText().toString());
                     ProcessQuestionAPI(testQuestionNew.getTq_q_id(), isChecked ? 1 : 0, "like", prevLikeCount);
                 }

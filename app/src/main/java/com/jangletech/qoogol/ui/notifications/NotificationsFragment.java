@@ -48,9 +48,9 @@ public class NotificationsFragment extends BaseFragment implements NotificationA
     private FragmentNotificationsBinding mBinding;
     private Context mContext;
     private NotificationAdapter notificationAdapter;
-    ApiInterface apiService = ApiClient.getInstance().getApi();
-    NotificationAdapter.onItemClickListener onItemClickListener;
-    List<Notification> notificationList = new ArrayList<>();
+    private ApiInterface apiService = ApiClient.getInstance().getApi();
+    private NotificationAdapter.onItemClickListener onItemClickListener;
+    private List<Notification> notificationList = new ArrayList<>();
 
     public static NotificationsFragment newInstance() {
         return new NotificationsFragment();

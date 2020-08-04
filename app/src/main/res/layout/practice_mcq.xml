@@ -52,13 +52,13 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <ToggleButton
-                        android:foreground="?attr/selectableItemBackground"
                         android:id="@+id/markToggle"
                         android:layout_width="@dimen/_20sdp"
                         android:layout_height="@dimen/_20sdp"
                         android:layout_marginRight="@dimen/_10sdp"
                         android:background="@drawable/button_marked"
                         android:checked="false"
+                        android:foreground="?attr/selectableItemBackground"
                         android:text=""
                         android:textOff=""
                         android:textOn=""
@@ -110,39 +110,40 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/questLayout">
 
+                    <ImageView
+                        android:id="@+id/save_que"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:padding="@dimen/_5sdp"
+                        android:src="@drawable/ic_save_grey"
+                        android:visibility="gone"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
                     <TextView
                         android:id="@+id/tvtimer"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/ic_timer"
                         android:gravity="center"
+                        android:padding="@dimen/_5sdp"
                         android:text="00:00"
                         android:textColor="@color/black"
                         android:textStyle="bold"
-                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/save_que"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageView
-                        android:id="@+id/timer"
+                        android:id="@+id/ask_doubt"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="@dimen/_3sdp"
-                        android:src="@drawable/ic_timer"
-                        app:layout_constraintBottom_toBottomOf="@id/tvtimer"
-                        app:layout_constraintRight_toLeftOf="@+id/tvtimer"
-                        app:layout_constraintTop_toTopOf="@id/tvtimer" />
-
-                    <ImageView
-                        android:visibility="gone"
                         android:foreground="?attr/selectableItemBackground"
-                        android:padding="@dimen/_10sdp"
-                        android:id="@+id/save_que"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="@dimen/_5sdp"
-                        android:src="@drawable/ic_save_grey"
-                        app:layout_constraintBottom_toBottomOf="@id/timer"
-                        app:layout_constraintRight_toLeftOf="@+id/timer"
-                        app:layout_constraintTop_toTopOf="@id/timer" />
+                        android:padding="@dimen/_5sdp"
+                        android:src="@drawable/ic_action_help"
+                        app:layout_constraintStart_toEndOf="@+id/tvtimer"
+                        app:layout_constraintTop_toTopOf="parent" />
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>

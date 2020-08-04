@@ -3,6 +3,7 @@ package com.jangletech.qoogol.adapter;
 import android.app.Activity;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -20,7 +21,6 @@ import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.DateUtils;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.text.StringEscapeUtils;
 
 import java.util.List;
 
@@ -74,6 +74,18 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             //commentItemBinding.textCommentTime.setText(DateUtils.getFormattedDate(comments.getTlc_cdatetime().substring(0, 10)));//todo change data & time format
         }
 
+        if (comments.isLiked()) {
+            AppUtils.bounceAnim(activity, holder.commentItemBinding.tvLikes);
+            //holder.commentItemBinding.tvLikes.setVisibility(View.VISIBLE);
+            holder.commentItemBinding.tvLikes.setText("1");
+            holder.commentItemBinding.tvLike.setTextColor(activity.getResources().getColor(R.color.colorSkyBlue));
+        } else {
+            AppUtils.bounceAnim(activity, holder.commentItemBinding.tvLikes);
+            //holder.commentItemBinding.tvLikes.setVisibility(View.GONE);
+            holder.commentItemBinding.tvLikes.setText("0");
+            holder.commentItemBinding.tvLike.setTextColor(activity.getResources().getColor(android.R.color.tab_indicator_text));
+        }
+
         Glide.with(activity)
                 .load(getProfileImageUrl(comments))
                 .apply(RequestOptions.circleCropTransform())
@@ -88,7 +100,26 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
                 commentItemClickListener.onItemClick(comments.getTlc_user_id());
             }
         });
+
+        holder.commentItemBinding.tvLike.setOnClickListener(v -> {
+            //commentItemClickListener.onLikeClick(position,comments);
+            AppUtils.bounceAnim(activity, holder.commentItemBinding.tvLike);
+            Comments newComment = comments;
+            if (newComment.isLiked()) {
+                newComment.setLikeCount(0);
+                newComment.setLiked(false);
+            } else {
+                newComment.setLikeCount(1);
+                newComment.setLiked(true);
+            }
+            notifyItemChanged(position, newComment);
+        });
+
+        holder.commentItemBinding.tvReply.setOnClickListener(v -> {
+            commentItemClickListener.onReplyClick(position, comments);
+        });
     }
+
 
     /*public void updateList(List<Comments> commentList) {
         this.commentList.clear();
@@ -104,6 +135,10 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
 
     public interface onCommentItemClickListener {
         void onItemClick(String userId);
+
+        void onLikeClick(int pos, Comments comments);
+
+        void onReplyClick(int pos, Comments comments);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -126,6 +161,10 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
                 }
             });*/
         }
+    }
+
+    public void updateLikeCount(int pos, Comments comments) {
+        notifyItemChanged(pos, comments);
     }
 
     private String getProfileImageUrl(Comments comments) {

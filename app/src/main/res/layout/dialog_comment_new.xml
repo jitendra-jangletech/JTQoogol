@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/top_layout"
@@ -42,48 +42,146 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-
-        <com.facebook.shimmer.ShimmerFrameLayout
-            android:id="@+id/shimmer_view_container"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@+id/sendlayout"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/top_layout"
-            app:shimmer_auto_start="true"
-            app:shimmer_duration="800">
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/top_layout"
+            android:orientation="vertical">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/top_layout_dup"
+                android:id="@+id/rootComment"
                 android:layout_width="match_parent"
-                android:layout_height="?android:attr/actionBarSize"
-                android:background="@color/colorPrimaryDark"
-                app:layout_constraintLeft_toLeftOf="parent">
+                android:layout_height="wrap_content"
+                android:padding="@dimen/_5sdp">
 
-                <ImageView
-                    android:id="@+id/btnClose1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_margin="@dimen/_10sdp"
-                    android:gravity="center"
-                    android:src="?attr/homeAsUpIndicator"
-                    android:textColor="@color/colorWhite"
-                    android:tint="@color/white"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                <LinearLayout
+                    android:id="@+id/commentLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:orientation="horizontal"
+                    android:weightSum="2"
+                    app:layout_constraintTop_toTopOf="parent">
 
-                <TextView
-                    android:id="@+id/titletv1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_vertical"
-                    android:layout_margin="@dimen/_10sdp"
-                    android:gravity="center_vertical"
-                    android:text="Replies"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:textColor="@color/colorWhite"
-                    app:layout_constraintLeft_toRightOf="@+id/btnClose1"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    <ImageView
+                        android:id="@+id/profilePic"
+                        android:layout_width="@dimen/_30sdp"
+                        android:layout_height="@dimen/_30sdp"
+                        android:layout_weight="0.2"
+                        android:contentDescription="Hello"
+                        android:src="@drawable/profile_img" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/notificationTextLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.8">
+
+                        <TextView
+                            android:id="@+id/tvSenderName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="@dimen/activity_vertical_margin"
+                            android:paddingTop="2dp"
+                            android:paddingRight="@dimen/activity_vertical_margin"
+                            android:text="Name"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/_11ssp"
+                            android:visibility="visible"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+
+                        <com.borjabravo.readmoretextview.ReadMoreTextView
+                            android:id="@+id/text_comment_body"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="@dimen/_4sdp"
+                            android:text="English Text"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            app:colorClickableText="@color/colorSkyBlue"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/tvSenderName"
+                            app:trimCollapsedText="show more"
+                            app:trimExpandedText="show less"
+                            app:trimLength="50"
+                            app:trimMode="trimModeLength" />
+
+                        <!-- <TextView
+                             android:id="@+id/text_comment_body"
+                             android:layout_width="match_parent"
+                             android:layout_height="wrap_content"
+                             android:padding="@dimen/_4sdp"
+                             android:text="English Text"
+                             android:textAppearance="?android:attr/textAppearanceSmall"
+                             app:layout_constraintLeft_toLeftOf="parent"
+                             app:layout_constraintTop_toBottomOf="@+id/tvSenderName" />-->
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_20sdp"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/text_comment_body">
+
+                            <TextView
+                                android:id="@+id/tvLikes"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:drawableLeft="@drawable/card_like_icon"
+                                android:gravity="center"
+                                android:padding="@dimen/_2sdp"
+                                android:text="0"
+                                android:textSize="@dimen/_8ssp"
+                                android:visibility="visible"
+                                app:layout_constraintLeft_toLeftOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/tvLike"
+                                android:layout_width="@dimen/_40sdp"
+                                android:layout_height="match_parent"
+                                android:layout_marginLeft="@dimen/_25sdp"
+                                android:foreground="?attr/selectableItemBackground"
+                                android:gravity="center"
+                                android:padding="@dimen/_2sdp"
+                                android:text="Like"
+                                android:textSize="@dimen/_8ssp"
+                                app:layout_constraintLeft_toRightOf="@+id/tvLikes"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/tvReply"
+                                android:layout_width="@dimen/_40sdp"
+                                android:layout_height="match_parent"
+                                android:layout_marginLeft="@dimen/_10sdp"
+                                android:foreground="?attr/selectableItemBackground"
+                                android:gravity="center"
+                                android:padding="@dimen/_2sdp"
+                                android:text="Reply"
+                                android:textSize="@dimen/_8ssp"
+                                app:layout_constraintLeft_toRightOf="@+id/tvLike"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/text_comment_time"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:padding="@dimen/_2sdp"
+                                android:text="19 March 2020"
+                                android:textSize="@dimen/_8ssp"
+                                app:layout_constraintRight_toRightOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                </LinearLayout>
+
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -91,19 +189,19 @@
                 android:id="@+id/comment_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/_25sdp"
                 android:padding="@dimen/_10sdp"
-                app:layout_constraintBottom_toTopOf="@+id/sendlayout"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/top_layout_dup" />
-        </com.facebook.shimmer.ShimmerFrameLayout>
+                tools:listitem="@layout/comment_item" />
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/sendlayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/_5sdp"
-            android:paddingTop="@dimen/_5sdp"
+            android:layout_alignParentBottom="true"
             android:orientation="horizontal"
+            android:paddingTop="@dimen/_5sdp"
+            android:paddingBottom="@dimen/_5sdp"
             android:weightSum="1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent">
@@ -147,5 +245,5 @@
                 app:tint="@color/colorSkyBlue" />
         </LinearLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
 </layout>

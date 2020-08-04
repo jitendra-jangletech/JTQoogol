@@ -12,6 +12,11 @@ import com.jangletech.qoogol.util.Constant;
 @Entity
 public class Comments {
 
+    public Comments(String userName, String commentText) {
+        this.userFirstName = userName;
+        this.tlc_comment_text = commentText;
+    }
+
     @PrimaryKey
     @SerializedName(Constant.qlc_id)
     private String commentId;
@@ -41,10 +46,30 @@ public class Comments {
     private String profile_image;
 
 
+    public int getLikeCount() {
+        return likeCount;
+    }
+
+    public void setLikeCount(int likeCount) {
+        this.likeCount = likeCount;
+    }
+
     /***
      * New Fields Added For Test Comment By Jitendra
      * @return
      */
+
+    private int likeCount;
+    private boolean isLiked;
+
+
+    public boolean isLiked() {
+        return isLiked;
+    }
+
+    public void setLiked(boolean liked) {
+        isLiked = liked;
+    }
 
     @SerializedName(Constant.tlc_id)
     private String tlc_id;
@@ -89,7 +114,7 @@ public class Comments {
     }
 
     public String getTlc_cdatetime() {
-        return tlc_cdatetime!=null?tlc_cdatetime:"";
+        return tlc_cdatetime != null ? tlc_cdatetime : "";
     }
 
     public void setTlc_cdatetime(String tlc_cdatetime) {
@@ -137,7 +162,7 @@ public class Comments {
     }
 
     public String getTime() {
-        return time!=null?time:"";
+        return time != null ? time : "";
     }
 
     public void setTime(String time) {

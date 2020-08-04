@@ -19,6 +19,7 @@ import com.jangletech.qoogol.model.ProcessQuestion;
 import com.jangletech.qoogol.model.TestModelNew;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
+import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.DateUtils;
 import com.jangletech.qoogol.util.PreferenceManager;
@@ -147,11 +148,13 @@ public class TestListAdapter extends RecyclerView.Adapter<TestListAdapter.ViewHo
         });
 
         holder.itemBinding.favorite.setOnClickListener(v -> {
+            AppUtils.bounceAnim(activity,holder.itemBinding.favorite);
             favTest(position, testModelNew);
             //testClickListener.onFavouriteClick(testModelNew, testModelNew.isFavourite(), position);
         });
 
         holder.itemBinding.like.setOnClickListener(v -> {
+            AppUtils.bounceAnim(activity,holder.itemBinding.like);
             doLikeTest(position, testModelNew);
             //testClickListener.onLikeClick(testModelNew, position, testModelNew.isLike());
         });

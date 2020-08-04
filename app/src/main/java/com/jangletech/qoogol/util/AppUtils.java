@@ -5,6 +5,9 @@ import android.content.Context;
 import android.provider.Settings;
 import android.util.Base64;
 import android.util.Log;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
@@ -82,6 +85,14 @@ public class AppUtils {
     public static void showToast(Context context, String msg) {
         Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
     }
+
+    public static void bounceAnim(Context context, View view) {
+        Animation anim = AnimationUtils.loadAnimation(context, R.anim.bounce);
+        BounceInterpolator interpolator = new BounceInterpolator(0.1, 20);
+        anim.setInterpolator(interpolator);
+        view.startAnimation(anim);
+    }
+
 
     public static void apiCallFailureDialog(Activity activity, Throwable t) {
         if (t instanceof UnknownHostException) {
