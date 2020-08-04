@@ -1,5 +1,6 @@
 package com.jangletech.qoogol.ui.home;
 
+import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -115,7 +116,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
             public void onChanged(@Nullable final DashBoard dashBoard1) {
                 if (dashBoard1 != null) {
                     globalDashboard = dashBoard1;
-                    //setTestAnalytics(dashBoard1);
                     setDashBoardData(dashBoard1);
                 }
             }
@@ -162,37 +162,42 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
     }
 
     private void fetchDashboardDetails() {
-        HashMap<String, String> params = new HashMap<>();
-        params.put(Constant.u_user_id, getUserId(getActivity()));
-        params.put(Constant.device_id, getDeviceId(getActivity()));
-        Log.d(TAG, "fetchDashboardDetails UserId : " + getUserId(getActivity()));
-        //ProgressDialog.getInstance().show(getActivity());
-        mBinding.swipeToRefresh.setRefreshing(true);
-        Call<DashBoard> call = apiService.fetchDashBoardDetails(
-                params.get(Constant.u_user_id),
-                params.get(Constant.device_id)
-        );
-        call.enqueue(new Callback<DashBoard>() {
-            @Override
-            public void onResponse(Call<DashBoard> call, Response<DashBoard> response) {
-                //ProgressDialog.getInstance().dismiss();
-                mBinding.swipeToRefresh.setRefreshing(false);
-                Log.d(TAG, "onResponse Done: " + response.body().getResponse());
-                if (response.body() != null) {
-                    DashBoard dashBoard = response.body();
-                    dashBoard.setUserId(getUserId(getActivity()));
-                    mViewModel.insert(dashBoard);
-                }
-            }
+      try {
+          HashMap<String, String> params = new HashMap<>();
+          params.put(Constant.u_user_id, getUserId(getActivity()));
+          params.put(Constant.device_id, getDeviceId(getActivity()));
+          Log.d(TAG, "fetchDashboardDetails UserId : " + getUserId(getActivity()));
+          //ProgressDialog.getInstance().show(getActivity());
+          mBinding.swipeToRefresh.setRefreshing(true);
+          Call<DashBoard> call = apiService.fetchDashBoardDetails(
+                  params.get(Constant.u_user_id),
+                  params.get(Constant.device_id)
+          );
+          Activity activity  = getActivity();
+          call.enqueue(new Callback<DashBoard>() {
+              @Override
+              public void onResponse(Call<DashBoard> call, Response<DashBoard> response) {
+                  //ProgressDialog.getInstance().dismiss();
+                  mBinding.swipeToRefresh.setRefreshing(false);
+                  Log.d(TAG, "onResponse Done: " + response.body().getResponse());
+                  if (response.body() != null) {
+                      DashBoard dashBoard = response.body();
+                      dashBoard.setUserId(getUserId(activity));
+                      mViewModel.insert(dashBoard);
+                  }
+              }
 
-            @Override
-            public void onFailure(Call<DashBoard> call, Throwable t) {
-                mBinding.swipeToRefresh.setRefreshing(false);
-                //ProgressDialog.getInstance().dismiss();
-                apiCallFailureDialog(t);
-                t.printStackTrace();
-            }
-        });
+              @Override
+              public void onFailure(Call<DashBoard> call, Throwable t) {
+                  mBinding.swipeToRefresh.setRefreshing(false);
+                  //ProgressDialog.getInstance().dismiss();
+                  apiCallFailureDialog(t);
+                  t.printStackTrace();
+              }
+          });
+      } catch (Exception e) {
+          e.printStackTrace();
+      }
     }
 
     @Override
