@@ -290,7 +290,7 @@ public class TestModelNew implements Serializable {
     }
 
     public String getShareCount() {
-        return shareCount;
+        return shareCount != null ? shareCount : "0";
     }
 
     public void setShareCount(String shareCount) {
@@ -298,7 +298,7 @@ public class TestModelNew implements Serializable {
     }
 
     public String getCommentsCount() {
-        return commentsCount;
+        return commentsCount != null ? commentsCount : "0";
     }
 
     public void setCommentsCount(String commentsCount) {
@@ -373,7 +373,7 @@ public class TestModelNew implements Serializable {
     }
 
     public String getTm_diff_level() {
-        return tm_diff_level!=null?tm_diff_level:"";
+        return tm_diff_level != null ? tm_diff_level : "";
     }
 
     public void setTm_diff_level(String tm_diff_level) {
@@ -461,7 +461,7 @@ public class TestModelNew implements Serializable {
     }
 
     public String getTm_avg_rating() {
-        return tm_avg_rating!=null?tm_avg_rating:"";
+        return tm_avg_rating != null ? tm_avg_rating : "";
     }
 
     public void setTm_avg_rating(String tm_avg_rating) {

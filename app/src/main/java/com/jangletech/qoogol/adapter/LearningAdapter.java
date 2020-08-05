@@ -144,7 +144,7 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         try {
             LearningQuestionsNew learningQuestions = learningQuestionsList.get(position);
-            learningItemBinding.setQuestion(learningQuestions);
+            holder.learningItemBinding.setQuestion(learningQuestions);
 
             hideLayouts();
 

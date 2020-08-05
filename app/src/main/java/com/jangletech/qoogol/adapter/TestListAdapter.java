@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -82,8 +83,12 @@ public class TestListAdapter extends RecyclerView.Adapter<TestListAdapter.ViewHo
         holder.itemBinding.tvRanking.setText(testModelNew.getTm_ranking());
         holder.itemBinding.tvQuestCount.setText(testModelNew.getQuest_count());
 
-        if (testModelNew.getAttemptedTests() != null)
+        if (testModelNew.getAttemptedTests() != null && testModelNew.getAttemptedTests().size() > 0) {
+            holder.itemBinding.tvNoOfAttempts.setVisibility(View.VISIBLE);
             holder.itemBinding.tvNoOfAttempts.setText(Html.fromHtml("<h>Attempts : " + testModelNew.getAttemptedTests().size() + "</h>"));
+        } else {
+            holder.itemBinding.tvNoOfAttempts.setVisibility(View.GONE);
+        }
 
         holder.itemBinding.tvNoOfAttempts.setOnClickListener(v -> {
             testClickListener.onAttemptsClick(testModelNew);
@@ -92,22 +97,27 @@ public class TestListAdapter extends RecyclerView.Adapter<TestListAdapter.ViewHo
         Log.e(TAG, "Like Count : " + testModelNew.getLikeCount());
         holder.itemBinding.likeValue.setText("" + testModelNew.getLikeCount());
 
-        if (testModelList.get(holder.getAdapterPosition()).getShareCount() != null) {
+        /*if (testModelList.get(holder.getAdapterPosition()).getShareCount() != null) {
             holder.itemBinding.shareValue.setText(testModelNew.getShareCount());
         } else {
             holder.itemBinding.shareValue.setText("0");
-        }
+        }*/
 
-        if (testModelNew.getCommentsCount() != null) {
+       /* if (testModelNew.getCommentsCount() != null) {
             holder.itemBinding.commentValue.setText(testModelNew.getCommentsCount());
         } else {
             holder.itemBinding.commentValue.setText("0");
-        }
+        }*/
+
+        holder.itemBinding.commentValue.setText(testModelNew.getCommentsCount());
+        holder.itemBinding.shareValue.setText(testModelNew.getShareCount());
 
         if (testModelNew.isFavourite()) {
             //itemBinding.favorite.setChecked(true);
+            AppUtils.bounceAnim(activity, holder.itemBinding.favorite);
             holder.itemBinding.favorite.setImageDrawable(activity.getDrawable(R.drawable.ic_favorite_filled));
         } else {
+            AppUtils.bounceAnim(activity, holder.itemBinding.favorite);
             holder.itemBinding.favorite.setImageDrawable(activity.getDrawable(R.drawable.ic_fav));
         }
 
@@ -118,8 +128,10 @@ public class TestListAdapter extends RecyclerView.Adapter<TestListAdapter.ViewHo
         }*/
 
         if (testModelNew.isLike()) {
+            AppUtils.bounceAnim(activity, holder.itemBinding.like);
             holder.itemBinding.like.setBackgroundDrawable(activity.getDrawable(R.drawable.ic_like_filled));
         } else {
+            AppUtils.bounceAnim(activity, holder.itemBinding.like);
             holder.itemBinding.like.setBackgroundDrawable(activity.getDrawable(R.drawable.ic_like));
         }
 
@@ -148,13 +160,13 @@ public class TestListAdapter extends RecyclerView.Adapter<TestListAdapter.ViewHo
         });
 
         holder.itemBinding.favorite.setOnClickListener(v -> {
-            AppUtils.bounceAnim(activity,holder.itemBinding.favorite);
+            AppUtils.bounceAnim(activity, holder.itemBinding.favorite);
             favTest(position, testModelNew);
             //testClickListener.onFavouriteClick(testModelNew, testModelNew.isFavourite(), position);
         });
 
         holder.itemBinding.like.setOnClickListener(v -> {
-            AppUtils.bounceAnim(activity,holder.itemBinding.like);
+            AppUtils.bounceAnim(activity, holder.itemBinding.like);
             doLikeTest(position, testModelNew);
             //testClickListener.onLikeClick(testModelNew, position, testModelNew.isLike());
         });
@@ -286,7 +298,7 @@ public class TestListAdapter extends RecyclerView.Adapter<TestListAdapter.ViewHo
         });
     }
 
-    public void updateList(List<TestModelNew> testList){
+    public void updateList(List<TestModelNew> testList) {
         testModelList = testList;
         notifyDataSetChanged();
     }

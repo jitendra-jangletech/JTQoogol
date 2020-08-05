@@ -31,10 +31,13 @@
                 android:layout_weight="1.6">
 
                 <TextView
+                    android:textColor="@color/colorBlack"
                     android:id="@+id/notificationText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/_4sdp"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-thin"
                     android:text=" Amey shared test with you. Amey shared test with you.Amey shared test with you Amey shared test with you. Amey shared test with you.Amey shared test with you Amey shared test with you. Amey shared test with you.Amey shared test with you"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     app:layout_constraintLeft_toLeftOf="parent"

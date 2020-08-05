@@ -1,28 +1,29 @@
 package com.jangletech.qoogol.adapter;
 
-import android.app.Activity;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+        import android.app.Activity;
+        import android.util.Log;
+        import android.view.LayoutInflater;
+        import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
-import androidx.databinding.DataBindingUtil;
-import androidx.recyclerview.widget.RecyclerView;
+        import androidx.annotation.NonNull;
+        import androidx.databinding.DataBindingUtil;
+        import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
-import com.jangletech.qoogol.R;
-import com.jangletech.qoogol.databinding.CommentItemBinding;
-import com.jangletech.qoogol.enums.Module;
-import com.jangletech.qoogol.model.Comments;
-import com.jangletech.qoogol.util.AppUtils;
-import com.jangletech.qoogol.util.Constant;
-import com.jangletech.qoogol.util.DateUtils;
+        import com.bumptech.glide.Glide;
+        import com.bumptech.glide.request.RequestOptions;
+        import com.jangletech.qoogol.R;
+        import com.jangletech.qoogol.databinding.CommentItemBinding;
+        import com.jangletech.qoogol.enums.Module;
+        import com.jangletech.qoogol.model.Comments;
+        import com.jangletech.qoogol.retrofit.ApiClient;
+        import com.jangletech.qoogol.retrofit.ApiInterface;
+        import com.jangletech.qoogol.util.AppUtils;
+        import com.jangletech.qoogol.util.Constant;
+        import com.jangletech.qoogol.util.DateUtils;
 
-import org.apache.commons.lang3.StringUtils;
+        import org.apache.commons.lang3.StringUtils;
 
-import java.util.List;
+        import java.util.List;
 
 /**
  * Created by Pritali on 4/6/2020.
@@ -34,13 +35,16 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     private Activity activity;
     private List<Comments> commentList;
     private String callingFrom;
+    private ApiInterface apiService = ApiClient.getInstance().getApi();
     private onCommentItemClickListener commentItemClickListener;
+    private String tmId = "";
 
-    public CommentAdapter(Activity activity, List<Comments> commentList, String callingFrom, onCommentItemClickListener commentItemClickListener) {
+    public CommentAdapter(Activity activity, List<Comments> commentList, String callingFrom, String tmId, onCommentItemClickListener commentItemClickListener) {
         this.activity = activity;
         this.commentList = commentList;
         this.callingFrom = callingFrom;
         this.commentItemClickListener = commentItemClickListener;
+        this.tmId = tmId;
     }
 
     @NonNull
@@ -102,17 +106,21 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         });
 
         holder.commentItemBinding.tvLike.setOnClickListener(v -> {
-            //commentItemClickListener.onLikeClick(position,comments);
             AppUtils.bounceAnim(activity, holder.commentItemBinding.tvLike);
-            Comments newComment = comments;
-            if (newComment.isLiked()) {
+            commentItemClickListener.onLikeClick(position, comments);
+
+            //Comments newComment = comments;
+            //if (callingFrom.equalsIgnoreCase(Module.Test.toString()))
+            //likeReplyComment(callingFrom, "I", comments.getCommentId(),);
+
+            /*if (newComment.isLiked()) {
                 newComment.setLikeCount(0);
                 newComment.setLiked(false);
             } else {
                 newComment.setLikeCount(1);
                 newComment.setLiked(true);
             }
-            notifyItemChanged(position, newComment);
+            notifyItemChanged(position, newComment);*/
         });
 
         holder.commentItemBinding.tvReply.setOnClickListener(v -> {
@@ -163,14 +171,12 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         }
     }
 
+
     public void updateLikeCount(int pos, Comments comments) {
         notifyItemChanged(pos, comments);
     }
 
     private String getProfileImageUrl(Comments comments) {
-        if (callingFrom.equals(Module.Test.toString()))
-            return Constant.PRODUCTION_BASE_FILE_API + comments.getProfile_image();
-        else
-            return Constant.PRODUCTION_BASE_FILE_API + comments.getProfile_image();
+        return Constant.PRODUCTION_BASE_FILE_API + comments.getProfile_image();
     }
 }

@@ -30,6 +30,7 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.Response;
 
 public class CommentDialog extends Dialog implements CommentAdapter.onCommentItemClickListener {
 
@@ -40,6 +41,8 @@ public class CommentDialog extends Dialog implements CommentAdapter.onCommentIte
     private CommentAdapter commentAdapter;
     private CommentViewModel mViewModel;
     private int id;
+    private int itemPosition;
+    private Call<ProcessQuestion> call;
     private boolean isCallFromTest;
     private CommentClickListener commentClickListener;
     private ApiInterface apiService = ApiClient.getInstance().getApi();
@@ -80,8 +83,8 @@ public class CommentDialog extends Dialog implements CommentAdapter.onCommentIte
 
     private void fetchCommentsAPI(int user_id, int que_id, String api_case, String comment_text) {
         ProgressDialog.getInstance().show(mContext);
-        Call<ProcessQuestion> call;
-
+        mBinding.emptytv.setText("Fetching Comments...");
+        mBinding.emptytv.setVisibility(View.VISIBLE);
         Log.d(TAG, "fetchCommentsAPI userId : " + user_id);
         Log.d(TAG, "fetchCommentsAPI Case : " + api_case);
 
@@ -91,7 +94,7 @@ public class CommentDialog extends Dialog implements CommentAdapter.onCommentIte
         try {
             if (isCallFromTest) {
                 if (api_case.equalsIgnoreCase("L"))
-                    call = apiService.fetchTestComments(user_id, que_id, api_case);
+                    call = apiService.fetchTestComments(user_id, que_id, api_case,1);
                 else
                     call = apiService.addTestCommentApi(user_id, que_id, "I", AppUtils.encodedString(comment_text));
             } else {
@@ -106,6 +109,7 @@ public class CommentDialog extends Dialog implements CommentAdapter.onCommentIte
                 public void onResponse(Call<ProcessQuestion> call, retrofit2.Response<ProcessQuestion> response) {
                     try {
                         ProgressDialog.getInstance().dismiss();
+                        mBinding.emptytv.setVisibility(View.GONE);
                         commentList.clear();
                         if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
                             commentList = response.body().getCommentList();
@@ -116,6 +120,7 @@ public class CommentDialog extends Dialog implements CommentAdapter.onCommentIte
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
+                        mBinding.emptytv.setVisibility(View.GONE);
                         mBinding.shimmerViewContainer.hideShimmer();
                         ProgressDialog.getInstance().dismiss();
                     }
@@ -130,15 +135,16 @@ public class CommentDialog extends Dialog implements CommentAdapter.onCommentIte
             });
         } catch (Exception e) {
             e.printStackTrace();
+            mBinding.shimmerViewContainer.hideShimmer();
             ProgressDialog.getInstance().dismiss();
         }
     }
 
     private void setCommentAdapter() {
         if (isCallFromTest)
-            commentAdapter = new CommentAdapter(mContext, commentList, Module.Test.toString(), this);
+            commentAdapter = new CommentAdapter(mContext, commentList, Module.Test.toString(), "", this);
         else
-            commentAdapter = new CommentAdapter(mContext, commentList, Module.Learning.toString(), this);
+            commentAdapter = new CommentAdapter(mContext, commentList, Module.Learning.toString(), "", this);
 
         mBinding.commentRecycler.setHasFixedSize(true);
         mBinding.commentRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -166,15 +172,78 @@ public class CommentDialog extends Dialog implements CommentAdapter.onCommentIte
 
     @Override
     public void onLikeClick(int pos, Comments comments) {
-        AppUtils.showToast(mContext, "Like");
-        comments.setLikeCount(1);
-        commentAdapter.updateLikeCount(pos,comments);
+        //AppUtils.showToast(mContext, "Like");
+        //comments.setLikeCount(1);
+        //commentAdapter.updateLikeCount(pos, comments);
+        itemPosition = pos;
+        if (isCallFromTest)
+            likeReplyComment("I", comments.getTlc_id(), "");
+        else
+            likeReplyComment("I", comments.getCommentId(), "");
+
     }
 
     @Override
     public void onReplyClick(int pos, Comments comments) {
         //AppUtils.showToast(mContext, "Reply");
-        new RepliesDialog(mContext,mContext,comments)
-                .show();
+        itemPosition = pos;
+        new RepliesDialog(mContext, mContext, comments, id, isCallFromTest).show();
+        //likeReplyComment("I", comments.getCommentId(), "");
+    }
+
+    private void likeReplyComment(String strCase,
+                                  String commentId, String text) {
+        ProgressDialog.getInstance().show(mContext);
+
+        Log.d(TAG, "likeReplyComment isCallFromTest : " + isCallFromTest);
+        Log.d(TAG, "likeReplyComment UserId : " + AppUtils.getUserId());
+        Log.d(TAG, "likeReplyComment TestQuestId : " + id);
+        Log.d(TAG, "likeReplyComment strCase : " + strCase);
+        Log.d(TAG, "likeReplyComment strCase : " + strCase);
+        Log.d(TAG, "likeReplyComment commentId : " + commentId);
+        Log.d(TAG, "likeReplyComment commentId : " + text);
+
+        if (isCallFromTest)
+            call = apiService.likeReplyTestComment(
+                    AppUtils.getUserId(),
+                    id,
+                    strCase,
+                    "1",
+                    commentId,
+                    text);
+        else
+            call = apiService.likeReplyQuestComment(
+                    AppUtils.getUserId(),
+                    id,
+                    strCase,
+                    "1",
+                    commentId,
+                    text);
+
+        call.enqueue(new Callback<ProcessQuestion>() {
+            @Override
+            public void onResponse(Call<ProcessQuestion> call, Response<ProcessQuestion> response) {
+                ProgressDialog.getInstance().dismiss();
+
+                if (response.body() != null &&
+                        response.body().getResponse().equals("200")) {
+                    updateCommentList(commentList);
+                } else {
+                    AppUtils.showToast(mContext, response.body().getResponse());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ProcessQuestion> call, Throwable t) {
+                ProgressDialog.getInstance().dismiss();
+                AppUtils.showToast(mContext, "Something went wrong!!");
+                t.printStackTrace();
+            }
+        });
+    }
+
+    private void updateCommentList(List<Comments> list){
+        //commentList = list;
+        //commentAdapter.notifyItemChanged(itemPosition,);
     }
 }

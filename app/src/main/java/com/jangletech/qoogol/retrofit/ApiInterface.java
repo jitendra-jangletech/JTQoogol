@@ -289,6 +289,24 @@ public interface ApiInterface {
                                       @Field(Constant.tlc_like_flag) int like);
 
     @FormUrlEncoded
+    @POST(Constant.PROCESS_QUESTION)
+    Call<ProcessQuestion> likeReplyQuestComment(@Field(Constant.u_user_id) String userid,
+                                                @Field(Constant.qlc_id) int qlcId,
+                                                @Field(Constant.CASE) String caseL,
+                                                @Field(Constant.qlc_like_flag) String questLike,
+                                                @Field(Constant.quest_comment_reply_id) String replyId,
+                                                @Field(Constant.qlc_comment_text) String text);
+
+    @FormUrlEncoded
+    @POST(Constant.PROCESS_TEST)
+    Call<ProcessQuestion> likeReplyTestComment(@Field(Constant.u_user_id) String userid,
+                                               @Field(Constant.tm_id) int tmId,
+                                               @Field(Constant.CASE) String caseL,
+                                               @Field(Constant.tlc_like_flag) String testLike,
+                                               @Field(Constant.test_comment_reply_id) String replyId,
+                                               @Field(Constant.tlc_comment_text) String text);
+
+    @FormUrlEncoded
     @POST(Constant.PROCESS_TEST)
     Call<ProcessQuestion> addFavTest(@Field(Constant.u_user_id) int userid,
                                      @Field(Constant.tm_id) int tmId,
@@ -356,9 +374,9 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST(Constant.PROCESS_QUESTION)
     Call<ProcessQuestion> fetchLikes(@Field(Constant.u_user_id) int userid,
-                                        @Field(Constant.q_id) int queId,
-                                        @Field(Constant.CASE) String caseL,
-                                        @Field(Constant.qlc_like_flag) int flag);
+                                     @Field(Constant.q_id) int queId,
+                                     @Field(Constant.CASE) String caseL,
+                                     @Field(Constant.qlc_like_flag) int flag);
 
     @FormUrlEncoded
     @POST(Constant.PROCESS_QUESTION)
@@ -385,7 +403,8 @@ public interface ApiInterface {
     @POST(Constant.PROCESS_TEST)
     Call<ProcessQuestion> fetchTestComments(@Field(Constant.u_user_id) int userid,
                                             @Field(Constant.tm_id) int tmId,
-                                            @Field(Constant.CASE) String caseL);
+                                            @Field(Constant.CASE) String caseL,
+                                            @Field(Constant.tlc_comment_flag) int flag);
 
     @FormUrlEncoded
     @POST(Constant.PROCESS_TEST)

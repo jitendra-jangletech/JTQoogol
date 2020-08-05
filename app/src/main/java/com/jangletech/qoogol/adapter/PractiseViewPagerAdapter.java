@@ -1681,12 +1681,20 @@ public class PractiseViewPagerAdapter extends PagerAdapter
         //set Answer in solution Layout
         solutionDesc.setText(testQuestionNew.getA_sub_ans());
 
-        if (favorite != null)
+        if (favorite != null) {
             favorite.setChecked(testQuestionNew.isQlc_fav_flag() ? true : false);
-        if (like != null)
+            AppUtils.bounceAnim(context, favorite);
+        }
+
+        if (like != null) {
             like.setChecked(testQuestionNew.isQlc_like_flag() ? true : false);
-        if (mark != null)
+            AppUtils.bounceAnim(context, like);
+        }
+
+        if (mark != null) {
             mark.setChecked(testQuestionNew.isTtqa_marked() ? true : false);
+            AppUtils.bounceAnim(context, mark);
+        }
 
         if (imgDoubts != null) {
             imgDoubts.setOnClickListener(v -> {

@@ -124,7 +124,7 @@ public class CommentFragment extends BaseFragment implements View.OnClickListene
         //String encodedComment = StringUtils.stripAccents(encoded);
         Log.d(TAG, "Encoded Test Comment : " + AppUtils.encodedString(comment_text));
         if (api_case.equalsIgnoreCase("L"))
-            call = apiService.fetchTestComments(user_id, tmId, api_case);
+            call = apiService.fetchTestComments(user_id, tmId, api_case,1);
         else
             call = apiService.addTestCommentApi(user_id, tmId, api_case, AppUtils.encodedString(comment_text));
 
@@ -188,10 +188,10 @@ public class CommentFragment extends BaseFragment implements View.OnClickListene
         mViewModel.getCommentList().observe(getActivity(), comments -> {
             Log.d(TAG, "onChanged Size : " + comments.size());
             if (bundle != null && bundle.getString(Constant.CALL_FROM).equals(Module.Learning.toString())) {
-                commentAdapter = new CommentAdapter(getActivity(), comments, Module.Learning.toString(), commentItemClickListener);
+                commentAdapter = new CommentAdapter(getActivity(), comments, Module.Learning.toString(),"" ,commentItemClickListener);
             }
             if (bundle != null && bundle.getString(Constant.CALL_FROM).equals(Module.Test.toString())) {
-                commentAdapter = new CommentAdapter(getActivity(), comments, Module.Test.toString(), commentItemClickListener);
+                commentAdapter = new CommentAdapter(getActivity(), comments, Module.Test.toString(), "",commentItemClickListener);
             }
             commentViewBinding.commentRecycler.setHasFixedSize(true);
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());

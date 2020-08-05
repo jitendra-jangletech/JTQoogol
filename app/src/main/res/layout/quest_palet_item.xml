@@ -10,6 +10,7 @@
         android:orientation="vertical">
 
         <TextView
+            android:fontFamily="sans-serif-thin"
             android:foreground="?attr/selectableItemBackground"
             android:id="@+id/tv_quest_no"
             android:layout_width="@dimen/_25sdp"

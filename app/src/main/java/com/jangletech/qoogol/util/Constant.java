@@ -561,6 +561,9 @@ public class Constant {
     public static final String a_ans_desc = "1378";
 
     // QLikesComments
+    public static final String quest_comment_reply_id = "1381R";
+    public static final String test_comment_reply_id = "1401R";
+
     public static final String qlc_id = "1381";
     public static final String qlc_q_id = "1382";
     public static final String qlc_like_flag = "1383";
