@@ -127,19 +127,19 @@ public class SavedQueAdapter extends RecyclerView.Adapter<SavedQueAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         try {
             LearningQuestions learningQuestions = learningQuestionsList.get(position);
-            learningItemBinding.setQuestion(learningQuestions);
+            holder.learningItemBinding.setQuestion(learningQuestions);
 
             hideLayouts();
 
             if (learningQuestions.getQuestion()!=null && learningQuestions.getQuestion().contains("$")) {
-                learningItemBinding.questionMathview.setVisibility(View.VISIBLE);
+                holder.learningItemBinding.questionMathview.setVisibility(View.VISIBLE);
             } else {
-                learningItemBinding.questionTextview.setVisibility(View.VISIBLE);
+                holder.learningItemBinding.questionTextview.setVisibility(View.VISIBLE);
             }
 
-            learningItemBinding.saveQue.setImageDrawable(learningQuestions.getIsSave().equalsIgnoreCase("true") ? activity.getResources().getDrawable(R.drawable.ic_save_black) : activity.getResources().getDrawable(R.drawable.ic_save_grey));
-            learningItemBinding.favorite.setImageDrawable(learningQuestions.getIs_fav().equalsIgnoreCase("true") ? activity.getResources().getDrawable(R.drawable.ic_favorite_black_24dp) : activity.getResources().getDrawable(R.drawable.ic_fav));
-            learningItemBinding.like.setImageDrawable(learningQuestions.getIs_liked().equalsIgnoreCase("true") ? activity.getResources().getDrawable(R.drawable.ic_thumb_up_black_24dp) : activity.getResources().getDrawable(R.drawable.ic_like));
+            holder.learningItemBinding.saveQue.setImageDrawable(learningQuestions.getIsSave().equalsIgnoreCase("true") ? activity.getResources().getDrawable(R.drawable.ic_save_black) : activity.getResources().getDrawable(R.drawable.ic_save_grey));
+            holder.learningItemBinding.favorite.setImageDrawable(learningQuestions.getIs_fav().equalsIgnoreCase("true") ? activity.getResources().getDrawable(R.drawable.ic_favorite_black_24dp) : activity.getResources().getDrawable(R.drawable.ic_fav));
+            holder.learningItemBinding.like.setImageDrawable(learningQuestions.getIs_liked().equalsIgnoreCase("true") ? activity.getResources().getDrawable(R.drawable.ic_thumb_up_black_24dp) : activity.getResources().getDrawable(R.drawable.ic_like));
 
             if (learningQuestions.getQue_media_typs() != null && learningQuestions.getQue_media_typs().equalsIgnoreCase(IMAGE) && learningQuestions.getQue_images() != null) {
                 String[] stringrray = learningQuestions.getQue_images().split(",");
@@ -148,10 +148,10 @@ public class SavedQueAdapter extends RecyclerView.Adapter<SavedQueAdapter.ViewHo
                 if (tempimgList != null && tempimgList.size() != 0) {
                     if (tempimgList.size() == 1) {
                         try {
-                            learningItemBinding.queImg1.setVisibility(View.VISIBLE);
-                            Glide.with(activity).load(new URL(tempimgList.get(0))).into(learningItemBinding.queImg1);
+                            holder.learningItemBinding.queImg1.setVisibility(View.VISIBLE);
+                            Glide.with(activity).load(new URL(tempimgList.get(0))).into(holder.learningItemBinding.queImg1);
                             List<String> finalTempimgList = tempimgList;
-                            learningItemBinding.queImg1.setOnClickListener(v -> {
+                            holder.learningItemBinding.queImg1.setOnClickListener(v -> {
                                 Bundle bundle = new Bundle();
                                 bundle.putSerializable("images", (Serializable) finalTempimgList);
                                 bundle.putInt("position", 0);
@@ -171,13 +171,13 @@ public class SavedQueAdapter extends RecyclerView.Adapter<SavedQueAdapter.ViewHo
                             e.printStackTrace();
                         }
                     } else if (tempimgList.size() > 1) {
-                        learningItemBinding.queImg1.setVisibility(View.GONE);
-                        learningItemBinding.imgRecycler.setVisibility(View.VISIBLE);
+                        holder.learningItemBinding.queImg1.setVisibility(View.GONE);
+                        holder.learningItemBinding.imgRecycler.setVisibility(View.VISIBLE);
                         ImageAdapter imageAdapter = new ImageAdapter(activity, tempimgList);
-                        learningItemBinding.imgRecycler.setHasFixedSize(true);
+                        holder.learningItemBinding.imgRecycler.setHasFixedSize(true);
                         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false);
-                        learningItemBinding.imgRecycler.setLayoutManager(linearLayoutManager);
-                        learningItemBinding.imgRecycler.setAdapter(imageAdapter);
+                        holder.learningItemBinding.imgRecycler.setLayoutManager(linearLayoutManager);
+                        holder.learningItemBinding.imgRecycler.setAdapter(imageAdapter);
                     }
                 }
             }

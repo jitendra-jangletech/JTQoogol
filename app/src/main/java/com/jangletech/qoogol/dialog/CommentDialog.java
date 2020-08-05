@@ -47,6 +47,7 @@ public class CommentDialog extends Dialog implements CommentAdapter.onCommentIte
     private CommentClickListener commentClickListener;
     private ApiInterface apiService = ApiClient.getInstance().getApi();
 
+
     public CommentDialog(@NonNull Activity mContext, int id, boolean isCallFromTest, CommentClickListener commentClickListener) {
         super(mContext, android.R.style.Theme_DeviceDefault_Light_DarkActionBar);
         this.mContext = mContext;
@@ -54,6 +55,7 @@ public class CommentDialog extends Dialog implements CommentAdapter.onCommentIte
         this.isCallFromTest = isCallFromTest;
         this.commentClickListener = commentClickListener;
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
