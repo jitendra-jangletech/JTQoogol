@@ -112,6 +112,7 @@ public class ConnectionListFragment extends BaseFragment implements ConnectionAd
                 if (connectionResponse != null)
                     pageCount = connectionResponse.getRow_count();
                 if (connections.size() > 0) {
+                    connectionsList.clear();
                     connectionsList.addAll(connections);
                     mAdapter.updateList(connectionsList);
                 } else {

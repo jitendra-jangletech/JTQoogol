@@ -527,6 +527,15 @@ public class AppRepository {
         return learningQuestionDao.getAllQuestions();
     }
 
+    public LiveData<List<LearningQuestionsNew>> getQuestionFromDb(String q_id) {
+        try {
+            return learningQuestionDao.getQuestion(String.valueOf(q_id));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public LiveData<List<LearningQuestionsNew>> getSharedQuestions(String CASE) {
         return learningQuestionDao.getSharedQuestions(CASE);
     }

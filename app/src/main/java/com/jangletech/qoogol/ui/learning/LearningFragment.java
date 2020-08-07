@@ -115,6 +115,12 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
                 ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Learning");
                 if (bundle.getString(Constant.FB_MS_ID) != null)
                     mViewModel.fetchQuestionData(bundle.getString(Constant.FB_MS_ID));
+
+                mViewModel.getQuestion(bundle.getString(Constant.FB_MS_ID)).observe(getViewLifecycleOwner(), questionsList -> {
+                    questionsNewList.clear();
+                    questionsNewList.addAll(questionsList);
+                    initRecycler();
+                });
             } else {
                 if (bundle.getString("call_from").equalsIgnoreCase("saved_questions")) {
                     ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Saved Questions");
@@ -123,13 +129,15 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
                     mViewModel.fetchQuestionData("");
                 }
             }
+
+            mViewModel.getQuestionList().observe(getViewLifecycleOwner(), questionsList -> {
+                questionsNewList.clear();
+                questionsNewList.addAll(questionsList);
+                initRecycler();
+            });
         }
 
-        mViewModel.getQuestionList().observe(getViewLifecycleOwner(), questionsList -> {
-            questionsNewList.clear();
-            questionsNewList.addAll(questionsList);
-            initRecycler();
-        });
+
 
         learningFragmentBinding.learningSwiperefresh.setOnRefreshListener(() -> mViewModel.fetchQuestionData(""));
     }
@@ -140,12 +148,14 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
         learningFragmentBinding.learningRecycler.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setAutoMeasureEnabled(false);
-        learningFragmentBinding.learningRecycler.setLayoutManager(linearLayoutManager);
-        learningFragmentBinding.learningRecycler.setAdapter(learningAdapter);
         learningFragmentBinding.learningRecycler.setNestedScrollingEnabled(false);
         learningFragmentBinding.learningRecycler.setItemViewCacheSize(20);
         learningFragmentBinding.learningRecycler.setDrawingCacheEnabled(true);
         learningFragmentBinding.learningRecycler.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
+        learningFragmentBinding.learningRecycler.setLayoutManager(linearLayoutManager);
+        learningAdapter.setHasStableIds(true);
+        learningFragmentBinding.learningRecycler.setAdapter(learningAdapter);
+
         if (learningFragmentBinding.learningSwiperefresh.isRefreshing())
             learningFragmentBinding.learningSwiperefresh.setRefreshing(false);
     }
@@ -218,6 +228,8 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
     public void onSubmitClick(int questionId, int isRight) {
         ProcessQuestionAPI(questionId, isRight, "submit", "", "");
     }
+
+
 
     @Override
     public void onLikeClick(String userId) {

@@ -523,7 +523,6 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
             });
 
             learningItemBinding.mcqImgtextImg4.setOnClickListener(v ->
-
             {
                 if (isMCQImgSubmited)
                     setMCQImgTextAnsIndicator();
@@ -2398,7 +2397,7 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
 
             learningQuestions.setCategory(learningQuestionsNew.getCategory());
             learningQuestions.setSubject(learningQuestionsNew.getSubject());
-            learningQuestions.setAns_media_names(learningQuestionsNew.getAns_media_names());
+//            learningQuestions.setAns_media_names(learningQuestionsNew.getAns_media_names());
             learningQuestions.setAns_mediaId(learningQuestionsNew.getAns_mediaId());
             learningQuestions.setAttended_by(learningQuestionsNew.getAttended_by());
             learningQuestions.setFeedback(learningQuestionsNew.getFeedback());
@@ -2413,7 +2412,7 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
             learningQuestions.setQue_option_type(learningQuestionsNew.getQue_option_type());
             learningQuestions.setMcq5(learningQuestionsNew.getMcq5());
             learningQuestions.setType(learningQuestionsNew.getType());
-            learningQuestions.setSolve_right(learningQuestionsNew.getSolve_right());
+//            learningQuestions.setSolve_right(learningQuestionsNew.getSolve_right());
             learningQuestions.setVisited(learningQuestionsNew.isVisited());
             learningQuestions.setSubject_id(learningQuestionsNew.getSubject_id());
             learningQuestions.setRating(learningQuestionsNew.getRating());
