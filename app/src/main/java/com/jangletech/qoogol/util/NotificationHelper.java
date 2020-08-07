@@ -46,7 +46,7 @@ public class NotificationHelper {
         String fromType = (body.get(Constant.FB_FROM_TYPE));
         String action = (body.get(Constant.FB_ACTION));
         String ms_id = (body.get(Constant.FB_MS_ID));
-        String message = StringEscapeUtils.unescapeJava(UtilHelper.decodedMessage(body.get(Constant.FB_MSG_BODY)));
+        String message = AppUtils.decodedString(body.get(Constant.FB_MSG_BODY));
         // Create the Foreground Service
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         // Create an Intent for the activity you want to start

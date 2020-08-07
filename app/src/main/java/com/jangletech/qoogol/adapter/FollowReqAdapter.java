@@ -2,6 +2,7 @@ package com.jangletech.qoogol.adapter;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.ViewGroup;
@@ -240,6 +241,12 @@ public class FollowReqAdapter extends RecyclerView.Adapter<FollowReqAdapter.View
     private void updateConnection(String user, String Processcase) {
         ApiInterface apiService = ApiClient.getInstance().getApi();
         ProgressDialog.getInstance().show(activity);
+        Log.d(TAG, "updateConnection: "+String.valueOf(new PreferenceManager(activity).getInt(Constant.USER_ID)));
+        Log.d(TAG, "updateConnection ProcessCase : "+Processcase);
+        Log.d(TAG, "updateConnection DeviceId : "+getDeviceId(activity));
+        Log.d(TAG, "updateConnection Qoogol : "+qoogol);
+        Log.d(TAG, "updateConnection User : "+user);
+
         Call<ResponseObj> call = apiService.updateConnections(String.valueOf(new PreferenceManager(activity).getInt(Constant.USER_ID)), Processcase, getDeviceId(activity), qoogol, user);
         call.enqueue(new Callback<ResponseObj>() {
             @Override
@@ -247,6 +254,7 @@ public class FollowReqAdapter extends RecyclerView.Adapter<FollowReqAdapter.View
                 try {
                     ProgressDialog.getInstance().dismiss();
                     if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
+                        Log.d(TAG, "onResponse: ");
                         listener.onUpdateConnection(user);
                     } else {
                         Toast.makeText(activity, UtilHelper.getAPIError(String.valueOf(response.body())), Toast.LENGTH_SHORT).show();

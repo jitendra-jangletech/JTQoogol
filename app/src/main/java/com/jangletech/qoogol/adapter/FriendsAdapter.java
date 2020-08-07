@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.ConnectionItemBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
+import com.jangletech.qoogol.model.Connections;
 import com.jangletech.qoogol.model.Friends;
 import com.jangletech.qoogol.model.ResponseObj;
 import com.jangletech.qoogol.retrofit.ApiClient;
@@ -273,5 +274,10 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             super(itemView.getRoot());
             this.connectionItemBinding = itemView;
         }
+    }
+
+    public void updateList(List<Friends> connections) {
+        connectionsList = connections;
+        notifyDataSetChanged();
     }
 }

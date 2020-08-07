@@ -88,6 +88,48 @@
                     android:background="@color/colorLightGrey" />
 
                 <RelativeLayout
+                    android:id="@+id/rightLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:padding="@dimen/_15sdp">
+
+                    <TextView
+                        android:id="@+id/right"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/ic_right_tick" />
+
+                    <TextView
+                        android:id="@+id/tvRight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_12sdp"
+                        android:layout_toRightOf="@+id/right"
+                        android:gravity="center_horizontal"
+                        android:text="Right"
+                        android:textSize="@dimen/_12ssp" />
+
+                    <TextView
+                        android:id="@+id/tvRightCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="@dimen/_20sdp"
+                        android:text="0"
+                        android:textColor="@color/colorBlack"
+                        android:textStyle="bold" />
+
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:background="@color/colorLightGrey" />
+
+                <RelativeLayout
                     android:id="@+id/wrongLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -172,6 +214,7 @@
                     android:background="@color/colorLightGrey" />
 
                 <RelativeLayout
+                    android:visibility="gone"
                     android:id="@+id/markedLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -182,7 +225,7 @@
                         android:id="@+id/marked"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/button_marked" />
+                        android:background="@drawable/ic_marked" />
 
                     <TextView
                         android:id="@+id/tvMarked"
@@ -196,6 +239,48 @@
 
                     <TextView
                         android:id="@+id/tvMarkedCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="@dimen/_20sdp"
+                        android:text="0"
+                        android:textColor="@color/colorBlack"
+                        android:textStyle="bold" />
+
+                </RelativeLayout>
+                <View
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:background="@color/colorLightGrey" />
+
+                <RelativeLayout
+                    android:id="@+id/otherLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:padding="@dimen/_15sdp">
+
+                    <TextView
+                        android:id="@+id/others"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/button_marked" />
+
+                    <TextView
+                        android:id="@+id/tvOthers"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_12sdp"
+                        android:layout_toRightOf="@+id/others"
+                        android:gravity="center_horizontal"
+                        android:text="Others"
+                        android:textSize="@dimen/_12ssp" />
+
+                    <TextView
+                        android:id="@+id/tvOthersCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"

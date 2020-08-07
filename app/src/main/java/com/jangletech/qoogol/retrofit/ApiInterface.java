@@ -299,12 +299,31 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST(Constant.PROCESS_TEST)
-    Call<ProcessQuestion> likeReplyTestComment(@Field(Constant.u_user_id) String userid,
-                                               @Field(Constant.tm_id) int tmId,
-                                               @Field(Constant.CASE) String caseL,
-                                               @Field(Constant.tlc_like_flag) String testLike,
-                                               @Field(Constant.test_comment_reply_id) String replyId,
-                                               @Field(Constant.tlc_comment_text) String text);
+    Call<ProcessQuestion> likeTestComment(@Field(Constant.u_user_id) String userid,
+                                          @Field(Constant.tm_id) int tmId,
+                                          @Field(Constant.CASE) String caseL,
+                                          @Field(Constant.tlc_like_flag) String flag,
+                                          @Field(Constant.test_comment_reply_id) String replyId,
+                                          @Field(Constant.tlc_comment_text) String text);
+
+    @FormUrlEncoded
+    @POST(Constant.PROCESS_TEST)
+    Call<ProcessQuestion> replyTestComment(@Field(Constant.u_user_id) String userid,
+                                           @Field(Constant.tm_id) int tmId,
+                                           @Field(Constant.CASE) String caseL,
+                                           @Field(Constant.tlc_comment_flag) String flag,
+                                           @Field(Constant.test_comment_reply_id) String replyId,
+                                           @Field(Constant.tlc_comment_text) String text);
+
+    @FormUrlEncoded
+    @POST(Constant.PROCESS_QUESTION)
+    Call<ProcessQuestion> replyQuestComment(@Field(Constant.u_user_id) String userid,
+                                            @Field(Constant.qlc_id) int qlcId,
+                                            @Field(Constant.CASE) String caseL,
+                                            @Field(Constant.qlc_comment_flag) String flag,
+                                            @Field(Constant.quest_comment_reply_id) String replyId,
+                                            @Field(Constant.qlc_comment_text) String text);
+
 
     @FormUrlEncoded
     @POST(Constant.PROCESS_TEST)
@@ -476,6 +495,50 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST(Constant.FETCH_CONNECTIONS)
+    Call<ConnectionResponse> searchConnections(@Field(Constant.u_user_id) String userid,
+                                               @Field("Case") String connectionCase,
+                                               @Field(Constant.device_id) String device_id,
+                                               @Field("200Q") String app,
+                                               @Field(Constant.SearchText) String searchText,
+                                               @Field(Constant.pagestart) String pagestart);
+
+    @FormUrlEncoded
+    @POST(Constant.FETCH_CONNECTIONS)
+    Call<FriendsResponse> searchFriends(@Field(Constant.u_user_id) String userid,
+                                        @Field("Case") String connectionCase,
+                                        @Field(Constant.device_id) String device_id,
+                                        @Field("200Q") String app,
+                                        @Field(Constant.SearchText) String searchText,
+                                        @Field(Constant.pagestart) String pagestart);
+
+    @FormUrlEncoded
+    @POST(Constant.FETCH_CONNECTIONS)
+    Call<FollowersResponse> searchFollowers(@Field(Constant.u_user_id) String userid,
+                                            @Field("Case") String connectionCase,
+                                            @Field(Constant.device_id) String device_id,
+                                            @Field("200Q") String app,
+                                            @Field(Constant.SearchText) String searchText,
+                                            @Field(Constant.pagestart) String pagestart);
+
+    @FormUrlEncoded
+    @POST(Constant.FETCH_CONNECTIONS)
+    Call<FollowingResponse> searchFollowing(@Field(Constant.u_user_id) String userid,
+                                            @Field("Case") String connectionCase,
+                                            @Field(Constant.device_id) String device_id,
+                                            @Field("200Q") String app,
+                                            @Field(Constant.SearchText) String searchText,
+                                            @Field(Constant.pagestart) String pagestart);
+
+    @FormUrlEncoded
+    @POST(Constant.FETCH_CONNECTIONS)
+    Call<FriendsResponse> fetchFriends(@Field(Constant.u_user_id) String userid,
+                                       @Field("Case") String connectionCase,
+                                       @Field(Constant.device_id) String device_id,
+                                       @Field("200Q") String app,
+                                       @Field(Constant.pagestart) String pagestart);
+
+    @FormUrlEncoded
+    @POST(Constant.FETCH_CONNECTIONS)
     Call<BlockedConnResp> fetchBlockedConnections(@Field(Constant.u_user_id) String userid,
                                                   @Field("Case") String connectionCase,
                                                   @Field(Constant.device_id) String device_id,
@@ -491,13 +554,7 @@ public interface ApiInterface {
                                                     @Field(Constant.pagestart) String pagestart,
                                                     @Field("ForceRefresh") String refresh);
 
-    @FormUrlEncoded
-    @POST(Constant.FETCH_CONNECTIONS)
-    Call<FriendsResponse> fetchFriends(@Field(Constant.u_user_id) String userid,
-                                       @Field("Case") String connectionCase,
-                                       @Field(Constant.device_id) String device_id,
-                                       @Field("200Q") String app,
-                                       @Field(Constant.pagestart) String pagestart);
+
 
     @FormUrlEncoded
     @POST(Constant.FETCH_CONNECTIONS)

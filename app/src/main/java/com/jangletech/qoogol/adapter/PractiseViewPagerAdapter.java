@@ -109,7 +109,6 @@ public class PractiseViewPagerAdapter extends PagerAdapter
     private boolean isB1Selected = false, isB2Selected = false, isB3Selected = false, isB4Selected = false;
     public static String scq_ans = "", scqimgtext_ans = "", scqimg_ans = "", mcq_ans = "";
 
-
     public PractiseViewPagerAdapter(Activity context,
                                     ViewPagerClickListener viewPagerClickListener, StartResumeTestResponse startResumeTestResponse, String flag) {
         this.context = context;

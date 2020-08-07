@@ -17,7 +17,6 @@ import androidx.viewpager.widget.ViewPager;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.FavouriteFragmentBinding;
 import com.jangletech.qoogol.ui.BaseFragment;
-import com.jangletech.qoogol.ui.learning.LearningFragment;
 import com.jangletech.qoogol.ui.test.favourite.TestFavouriteFragment;
 
 import java.util.ArrayList;

@@ -197,7 +197,7 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
         bundle.putInt("QuestionId", questionId);
         NavHostFragment.findNavController(this).navigate(R.id.nav_comments, bundle);*/
         Log.d(TAG, "onCommentClick questionId : " + questionId);
-        CommentDialog commentDialog = new CommentDialog(getActivity(), questionId, false,this);
+        CommentDialog commentDialog = new CommentDialog(getActivity(), questionId, false, this);
         commentDialog.show();
     }
 

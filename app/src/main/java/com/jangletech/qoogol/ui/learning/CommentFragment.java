@@ -80,40 +80,40 @@ public class CommentFragment extends BaseFragment implements View.OnClickListene
         Log.d(TAG, "Encoded : " + encodedAns);
         Call<ProcessQuestion> call;
 
-     try {
-         if (api_case.equalsIgnoreCase("L"))
-             call = apiService.fetchComments(Integer.parseInt(user_id), que_id, api_case,1);
-         else
-             call = apiService.addCommentApi(user_id, que_id, api_case, encodedAns);
+        try {
+            if (api_case.equalsIgnoreCase("L"))
+                call = apiService.fetchComments(Integer.parseInt(user_id), que_id, api_case, 1);
+            else
+                call = apiService.addCommentApi(user_id, que_id, api_case, encodedAns);
 
-         call.enqueue(new Callback<ProcessQuestion>() {
-             @Override
-             public void onResponse(Call<ProcessQuestion> call, retrofit2.Response<ProcessQuestion> response) {
-                 try {
-                     ProgressDialog.getInstance().dismiss();
-                     commentList.clear();
-                     if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
-                         commentList = response.body().getCommentList();
-                         mViewModel.setCommentList(commentList);
-                         emptyView();
-                     } else {
-                         Toast.makeText(getActivity(), UtilHelper.getAPIError(String.valueOf(response.body())), Toast.LENGTH_SHORT).show();
-                     }
-                 } catch (Exception e) {
-                     e.printStackTrace();
-                     ProgressDialog.getInstance().dismiss();
-                 }
-             }
+            call.enqueue(new Callback<ProcessQuestion>() {
+                @Override
+                public void onResponse(Call<ProcessQuestion> call, retrofit2.Response<ProcessQuestion> response) {
+                    try {
+                        ProgressDialog.getInstance().dismiss();
+                        commentList.clear();
+                        if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
+                            commentList = response.body().getCommentList();
+                            mViewModel.setCommentList(commentList);
+                            emptyView();
+                        } else {
+                            Toast.makeText(getActivity(), UtilHelper.getAPIError(String.valueOf(response.body())), Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        ProgressDialog.getInstance().dismiss();
+                    }
+                }
 
-             @Override
-             public void onFailure(Call<ProcessQuestion> call, Throwable t) {
-                 t.printStackTrace();
-                 ProgressDialog.getInstance().dismiss();
-             }
-         });
-     } catch (Exception e) {
-         e.printStackTrace();
-     }
+                @Override
+                public void onFailure(Call<ProcessQuestion> call, Throwable t) {
+                    t.printStackTrace();
+                    ProgressDialog.getInstance().dismiss();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void fetchTestCommentsAPI(int user_id, int tmId, String api_case, String comment_text) {
@@ -124,7 +124,7 @@ public class CommentFragment extends BaseFragment implements View.OnClickListene
         //String encodedComment = StringUtils.stripAccents(encoded);
         Log.d(TAG, "Encoded Test Comment : " + AppUtils.encodedString(comment_text));
         if (api_case.equalsIgnoreCase("L"))
-            call = apiService.fetchTestComments(user_id, tmId, api_case,1);
+            call = apiService.fetchTestComments(user_id, tmId, api_case, 1);
         else
             call = apiService.addTestCommentApi(user_id, tmId, api_case, AppUtils.encodedString(comment_text));
 
@@ -188,10 +188,10 @@ public class CommentFragment extends BaseFragment implements View.OnClickListene
         mViewModel.getCommentList().observe(getActivity(), comments -> {
             Log.d(TAG, "onChanged Size : " + comments.size());
             if (bundle != null && bundle.getString(Constant.CALL_FROM).equals(Module.Learning.toString())) {
-                commentAdapter = new CommentAdapter(getActivity(), comments, Module.Learning.toString(),"" ,commentItemClickListener);
+                commentAdapter = new CommentAdapter(getActivity(), comments, Module.Learning.toString(), "", false, commentItemClickListener);
             }
             if (bundle != null && bundle.getString(Constant.CALL_FROM).equals(Module.Test.toString())) {
-                commentAdapter = new CommentAdapter(getActivity(), comments, Module.Test.toString(), "",commentItemClickListener);
+                commentAdapter = new CommentAdapter(getActivity(), comments, Module.Test.toString(), "", false, commentItemClickListener);
             }
             commentViewBinding.commentRecycler.setHasFixedSize(true);
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());

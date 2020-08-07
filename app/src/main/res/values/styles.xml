@@ -3,6 +3,8 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.Light">
         <!-- Customize your theme here. -->
+        <!--<item name="android:windowDisablePreview">false</item>
+        <item name="android:windowIsTranslucent">true</item>-->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="otpViewStyle">@style/OtpWidget.OtpView</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -64,9 +66,9 @@
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-<!--
-        <item name="android:statusBarColor">@android:color/transparent</item>
--->
+        <!--
+                <item name="android:statusBarColor">@android:color/transparent</item>
+        -->
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
@@ -167,7 +169,7 @@
         <item name="android:gravity">center_vertical</item>
         <item name="android:layout_height">35dp</item>
         <item name="android:layout_width">match_parent</item>
-        <item name="android:textColor">@color/sub_menu_item_text_color</item>
+        <item name="android:textColor">@color/colorBlack</item>
         <item name="android:layout_marginLeft">30dp</item>
     </style>
 
@@ -253,25 +255,25 @@
         <item name="android:fontFamily">@font/roboto_medium</item>
     </style>
 
-   <!-- <style name="TextViewHeadStyle">
-        <item name="android:textSize">@dimen/small_text</item>
-        <item name="android:layout_marginLeft">@dimen/margin_30</item>
-        <item name="android:layout_marginRight">@dimen/margin_30</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginTop">@dimen/activity_vertical_margin</item>
-        <item name="android:fontFamily">@font/roboto_regular</item>
-        &lt;!&ndash;<item name="android:textColor">?attr/textColorBlack</item>&ndash;&gt;
-    </style>-->
+    <!-- <style name="TextViewHeadStyle">
+         <item name="android:textSize">@dimen/small_text</item>
+         <item name="android:layout_marginLeft">@dimen/margin_30</item>
+         <item name="android:layout_marginRight">@dimen/margin_30</item>
+         <item name="android:layout_width">match_parent</item>
+         <item name="android:layout_height">wrap_content</item>
+         <item name="android:layout_marginTop">@dimen/activity_vertical_margin</item>
+         <item name="android:fontFamily">@font/roboto_regular</item>
+         &lt;!&ndash;<item name="android:textColor">?attr/textColorBlack</item>&ndash;&gt;
+     </style>-->
 
-   <!-- <style name="RadioButtonStyle">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">@dimen/textSizexSmall</item>
-        <item name="android:fontFamily">@font/roboto_regular</item>
-        <item name="android:buttonTint">?attr/colorPrimary</item>-->
-        <!--<item name="android:textColor">?attr/textColorBlack</item>
-    </style> -->
+    <!-- <style name="RadioButtonStyle">
+         <item name="android:layout_width">wrap_content</item>
+         <item name="android:layout_height">wrap_content</item>
+         <item name="android:textSize">@dimen/textSizexSmall</item>
+         <item name="android:fontFamily">@font/roboto_regular</item>
+         <item name="android:buttonTint">?attr/colorPrimary</item>-->
+    <!--<item name="android:textColor">?attr/textColorBlack</item>
+</style> -->
 
     <style name="EditTextViewStyle">
         <item name="android:layout_width">match_parent</item>

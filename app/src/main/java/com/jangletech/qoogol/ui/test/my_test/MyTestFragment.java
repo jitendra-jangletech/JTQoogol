@@ -28,13 +28,13 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.jangletech.qoogol.R;
+import com.jangletech.qoogol.activities.MainActivity;
 import com.jangletech.qoogol.activities.PracticeTestActivity;
 import com.jangletech.qoogol.adapter.TestListAdapter;
 import com.jangletech.qoogol.databinding.FragmentTestMyBinding;
 import com.jangletech.qoogol.dialog.CommentDialog;
 import com.jangletech.qoogol.dialog.PublicProfileDialog;
 import com.jangletech.qoogol.dialog.ShareQuestionDialog;
-import com.jangletech.qoogol.enums.Module;
 import com.jangletech.qoogol.model.FetchSubjectResponse;
 import com.jangletech.qoogol.model.FetchSubjectResponseList;
 import com.jangletech.qoogol.model.TestListResponse;
@@ -375,7 +375,8 @@ public class MyTestFragment extends BaseFragment
                         List<TestModelNew> testList = response.body().getTestList();
                         for (TestModelNew testModelNew : testList) {
                             testModelNew.setFlag("PRACTICE");
-                            testModelNew.setUserId(getUserId(getActivity()));
+                            Log.d(TAG, "PRACTICE UserId : " + MainActivity.userId);
+                            testModelNew.setUserId(MainActivity.userId);
                         }
                         mViewModel.insert(testList);
                     }
@@ -420,7 +421,7 @@ public class MyTestFragment extends BaseFragment
         bundle.putString(Constant.CALL_FROM, Module.Test.toString());
         NavHostFragment.findNavController(this).navigate(R.id.nav_comments, bundle);*/
         Log.d(TAG, "onCommentClick TmId : " + testModel.getTm_id());
-        CommentDialog commentDialog = new CommentDialog(getActivity(), testModel.getTm_id(),true,this);
+        CommentDialog commentDialog = new CommentDialog(getActivity(), testModel.getTm_id(), true, this);
         commentDialog.show();
     }
 

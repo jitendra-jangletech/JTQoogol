@@ -2,13 +2,19 @@ package com.jangletech.qoogol.ui.connections;
 
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.MenuItemCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
@@ -39,11 +45,12 @@ import static com.jangletech.qoogol.util.Constant.qoogol;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ConnectionListFragment extends BaseFragment implements ConnectionAdapter.updateConnectionListener, PublicProfileDialog.PublicProfileClickListener {
+public class ConnectionListFragment extends BaseFragment implements ConnectionAdapter.updateConnectionListener, PublicProfileDialog.PublicProfileClickListener, SearchView.OnQueryTextListener {
 
     private static final String TAG = "ConnectionListFragment";
     private FragmentFriendsBinding mBinding;
     private List<Connections> connectionsList = new ArrayList<>();
+    private List<Connections> filteredList = new ArrayList<>();
     private ConnectionAdapter mAdapter;
     private Boolean isVisible = false;
     private String pageCount = "0";
@@ -55,11 +62,38 @@ public class ConnectionListFragment extends BaseFragment implements ConnectionAd
     private ApiInterface apiService = ApiClient.getInstance().getApi();
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+        Log.d(TAG, "Android Id : " + getDeviceId(getActivity()));
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_friends, container, false);
         linearLayoutManager = new LinearLayoutManager(getContext());
         return mBinding.getRoot();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.action_conn_search, menu);
+        final MenuItem item = menu.findItem(R.id.action_search);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
+        searchView.setOnQueryTextListener(this);
+
+        item.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                return true;
+            }
+        });
     }
 
 
@@ -188,5 +222,75 @@ public class ConnectionListFragment extends BaseFragment implements ConnectionAd
     public void onDetach() {
         super.onDetach();
         mAdapter = null;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        if (newText.trim().toLowerCase().isEmpty()) {
+            mAdapter.updateList(connectionsList);
+        } else {
+            filteredList.clear();
+            for (Connections connections : connectionsList) {
+                if (connections.getU_first_name().toLowerCase().contains(newText.trim().toLowerCase()) ||
+                        connections.getU_last_name().toLowerCase().contains(newText.trim().toLowerCase())) {
+                    filteredList.add(connections);
+                }
+            }
+            if (filteredList.size() > 0) {
+                mAdapter.updateList(filteredList);
+            } else {
+                //search from server
+                searchFromServer(newText.trim().toLowerCase());
+            }
+        }
+        return true;
+    }
+
+    private void searchFromServer(String text) {
+        Call<ConnectionResponse> call = apiService.searchConnections(
+                getUserId(getActivity()),
+                connections,
+                getDeviceId(getActivity()),
+                qoogol,
+                text,
+                pageCount);
+        call.enqueue(new Callback<ConnectionResponse>() {
+            @Override
+            public void onResponse(Call<ConnectionResponse> call, retrofit2.Response<ConnectionResponse> response) {
+                dismissRefresh(mBinding.connectionSwiperefresh);
+                if (response.body().getResponse().equalsIgnoreCase("200")) {
+                    connectionResponse = response.body();
+                    //mViewModel.insert(response.body().getConnection_list());
+                    setSearchData(connectionResponse);
+                } else if (response.body().getResponse().equals("501")) {
+                    resetSettingAndLogout();
+                } else {
+                    showToast("Error Code : " + response.body().getResponse());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ConnectionResponse> call, Throwable t) {
+                t.printStackTrace();
+                dismissRefresh(mBinding.connectionSwiperefresh);
+                showToast("Something went wrong!!");
+                apiCallFailureDialog(t);
+            }
+        });
+    }
+
+    private void setSearchData(ConnectionResponse connectionResponse) {
+        if (connectionResponse != null && connectionResponse.getConnection_list().size() > 0) {
+            filteredList.clear();
+            mAdapter.updateList(connectionResponse.getConnection_list());
+        } else {
+            //no search results found
+            showToast("No Search Results Found.");
+        }
     }
 }

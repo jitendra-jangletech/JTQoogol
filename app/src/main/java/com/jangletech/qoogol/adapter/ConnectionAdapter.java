@@ -238,7 +238,7 @@ public class ConnectionAdapter extends RecyclerView.Adapter<ConnectionAdapter.Vi
     }
 
     public void updateList(List<Connections> connections) {
-        connectionsList = connectionsList;
+        connectionsList = connections;
         notifyDataSetChanged();
     }
 

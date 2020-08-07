@@ -25,6 +25,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatMultiAutoCompleteTextView;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -613,6 +614,7 @@ public class PersonalInfoFragment extends BaseFragment {
             mBinding.etMobile.setError(null);
             mBinding.etTagLine.setError(null);
             mBinding.etPassword.setError(null);
+
             if (mBinding.etFirstName.getText().toString().trim().isEmpty()) {
                 mBinding.etFirstName.setError("Required");
                 return;
@@ -709,8 +711,8 @@ public class PersonalInfoFragment extends BaseFragment {
             final String name = ((TextView) view).getText().toString();
             int key = getKeyFromValue(mMapLanguage, name);
             if (key != -1) {
-                mBinding.langAutocompleteView.setTag(key);
                 Log.i(TAG, "Language selected : " + key + " name: " + name);
+                getLanguageTag();
             }
         });
 
@@ -784,13 +786,13 @@ public class PersonalInfoFragment extends BaseFragment {
 
         userProfileMap.put(Constant.u_user_id, String.valueOf(userid));
         userProfileMap.put(Constant.u_app_version, Constant.APP_VERSION);
-        userProfileMap.put(Constant.device_id, getSingleQuoteString(getDeviceId(getActivity())));
-        userProfileMap.put(Constant.appName, getSingleQuoteString(Constant.APP_NAME));
-        userProfileMap.put(Constant.u_first_name, getSingleQuoteString(mBinding.etFirstName.getText().toString().trim()));
-        userProfileMap.put(Constant.u_last_name, getSingleQuoteString(mBinding.etLastName.getText().toString().trim()));
-        userProfileMap.put(Constant.CASE, getSingleQuoteString("n"));
-        userProfileMap.put(Constant.STATUS, getSingleQuoteString("i"));
-        userProfileMap.put(Constant.u_tagline, getSingleQuoteString(mBinding.etTagLine.getText().toString().trim()));
+        userProfileMap.put(Constant.device_id, getDeviceId(getActivity()));
+        userProfileMap.put(Constant.appName, Constant.APP_NAME);
+        userProfileMap.put(Constant.u_first_name, mBinding.etFirstName.getText().toString().trim());
+        userProfileMap.put(Constant.u_last_name, mBinding.etLastName.getText().toString().trim());
+        userProfileMap.put(Constant.CASE, "n");
+        userProfileMap.put(Constant.STATUS, "i");
+        userProfileMap.put(Constant.u_tagline, mBinding.etTagLine.getText().toString().trim());
 
         userProfileMap.put(Constant.u_native_ct_id, getEmptyStringIfNull(String.valueOf(mBinding.cityAutocompleteView.getTag())));
         userProfileMap.put(Constant.u_native_s_id, getEmptyStringIfNull(String.valueOf(mBinding.stateAutocompleteView.getTag())));
@@ -801,7 +803,6 @@ public class PersonalInfoFragment extends BaseFragment {
 
         updateUserProfile(userProfileMap);
     }
-
 
     private void updateUserProfile(HashMap<String, String> userProfileMap) {
         Log.d(TAG, "updateUserProfile: " + userProfileMap);
@@ -1121,6 +1122,7 @@ public class PersonalInfoFragment extends BaseFragment {
         Log.d(TAG, "populateLanguage: " + list.size());
         ArrayAdapter<String> languageAdapter = new ArrayAdapter<>(requireActivity(), R.layout.textview_dropdown, list);
         mBinding.langAutocompleteView.setThreshold(0);
+        mBinding.langAutocompleteView.setTokenizer(new AppCompatMultiAutoCompleteTextView.CommaTokenizer());
         mBinding.langAutocompleteView.setAdapter(languageAdapter);
     }
 
@@ -1349,6 +1351,19 @@ public class PersonalInfoFragment extends BaseFragment {
                 showToast("Something went wrong!!");
             }
         });
+    }
+
+    private void getLanguageTag(){
+        String keys = mBinding.langAutocompleteView.getText()
+                .toString();
+        Log.d(TAG, "getLanguageTag Keys : "+keys);
+        String languageKey ="";
+        for(String s:keys.split(",",-1)){
+             languageKey = languageKey +","+getKeyFromValue(mMapLanguage,s.trim());
+            Log.d(TAG, "Key : "+getKeyFromValue(mMapLanguage,s.trim()));
+        }
+        Log.d(TAG, "getLanguageTag Final : "+languageKey.replace("-1",""));
+        mBinding.langAutocompleteView.setTag(languageKey.replace("-1",""));
     }
 
    /* @Override

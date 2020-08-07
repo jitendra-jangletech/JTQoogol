@@ -1,6 +1,7 @@
 package com.jangletech.qoogol.ui.connections;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -31,6 +32,7 @@ import static com.jangletech.qoogol.util.Constant.qoogol;
  * Created by Pritali on 6/10/2020.
  */
 public class FollowReqViewModel extends AndroidViewModel {
+    private static final String TAG = "FollowReqViewModel";
     private ApiInterface apiService;
     public final AppRepository mAppRepository;
     private Call<FollowRequestResponse> call;
@@ -74,6 +76,7 @@ public class FollowReqViewModel extends AndroidViewModel {
             public void onResponse(Call<FollowRequestResponse> call, retrofit2.Response<FollowRequestResponse> response) {
                 try {
                     if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
+                        Log.d(TAG, "onResponse Follow Request : "+response.body().getFollowreq_list().size());
                         ExecutorService executor = Executors.newSingleThreadExecutor();
                         executor.execute(() -> mAppRepository.insertFollowdReq(response.body().getFollowreq_list()));
                     }

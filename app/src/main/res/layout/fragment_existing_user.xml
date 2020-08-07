@@ -53,6 +53,7 @@
                     android:layout_marginLeft="@dimen/_1sdp"
                     android:layout_weight="1.4"
                     android:hint="@string/otp_password"
+                    app:passwordToggleEnabled="true"
                     app:errorEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText

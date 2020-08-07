@@ -399,7 +399,7 @@ public class Constant {
     public static final String dt_name = "231";
 
     //Fetch connections cases
-    public static final String connections = "CC";
+    public static final String connections = "C";
     public static final String friends = "C";
     public static final String friends_and_groups = "A";
     public static final String followers = "FL";

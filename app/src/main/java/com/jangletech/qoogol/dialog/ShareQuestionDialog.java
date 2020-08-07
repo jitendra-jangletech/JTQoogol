@@ -84,6 +84,12 @@ public class ShareQuestionDialog extends Dialog implements ShareAdapter.OnItemCl
         mBinding.shareRecycler.setLayoutManager(linearLayoutManager);
         mBinding.shareRecycler.setAdapter(mAdapter);
 
+        mBinding.searchView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mBinding.searchView.setIconified(false);
+            }
+        });
 
         mBinding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -175,7 +181,6 @@ public class ShareQuestionDialog extends Dialog implements ShareAdapter.OnItemCl
                     isSearching = false;
                     mBinding.progress.setVisibility(View.GONE);
                     AppUtils.showToast(mContext, "Something went wrong!!");
-                    //ProgressDialog.getInstance().dismiss();
                 }
             }
 

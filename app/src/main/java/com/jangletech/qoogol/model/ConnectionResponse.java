@@ -15,7 +15,6 @@ public class ConnectionResponse {
     @SerializedName(Constant.row_count)
     private String row_count;
 
-
     @SerializedName(Constant.connection_list)
     private List<Connections> connection_list;
 

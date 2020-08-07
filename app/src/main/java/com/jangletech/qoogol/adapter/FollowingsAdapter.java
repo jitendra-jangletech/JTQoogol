@@ -19,6 +19,7 @@ import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.ConnectionItemBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.model.Following;
+import com.jangletech.qoogol.model.Friends;
 import com.jangletech.qoogol.model.ResponseObj;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
@@ -78,6 +79,11 @@ public class FollowingsAdapter extends RecyclerView.Adapter<FollowingsAdapter.Vi
                 LayoutInflater.from(parent.getContext()),
                 R.layout.connection_item, parent, false);
         return new ViewHolder(connectionItemBinding);
+    }
+
+    public void updateList(List<Following> connections) {
+        connectionsList = connections;
+        notifyDataSetChanged();
     }
 
     @Override

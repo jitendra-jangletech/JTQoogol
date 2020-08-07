@@ -21,8 +21,8 @@ import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.activities.PracticeTestActivity;
 import com.jangletech.qoogol.adapter.TestListAdapter;
 import com.jangletech.qoogol.databinding.TestFavouriteFragmentBinding;
-import com.jangletech.qoogol.dialog.ProgressDialog;
-import com.jangletech.qoogol.enums.Module;
+import com.jangletech.qoogol.dialog.CommentDialog;
+import com.jangletech.qoogol.dialog.PublicProfileDialog;
 import com.jangletech.qoogol.model.TestListResponse;
 import com.jangletech.qoogol.model.TestModelNew;
 import com.jangletech.qoogol.retrofit.ApiClient;
@@ -39,7 +39,7 @@ import retrofit2.Response;
 
 import static com.jangletech.qoogol.util.Constant.test;
 
-public class TestFavouriteFragment extends BaseFragment implements TestListAdapter.TestClickListener {
+public class TestFavouriteFragment extends BaseFragment implements TestListAdapter.TestClickListener, CommentDialog.CommentClickListener, PublicProfileDialog.PublicProfileClickListener {
 
     private static final String TAG = "TestFavouriteFragment";
     private MyTestViewModel mViewModel;
@@ -155,10 +155,13 @@ public class TestFavouriteFragment extends BaseFragment implements TestListAdapt
 
     @Override
     public void onCommentClick(TestModelNew testModel) {
-        Bundle bundle = new Bundle();
-        bundle.putInt("tmId", testModel.getTm_id());
-        bundle.putString(Constant.CALL_FROM, Module.Test.toString());
-        NavHostFragment.findNavController(this).navigate(R.id.nav_comments, bundle);
+//        Bundle bundle = new Bundle();
+//        bundle.putInt("tmId", testModel.getTm_id());
+//        bundle.putString(Constant.CALL_FROM, Module.Test.toString());
+        //NavHostFragment.findNavController(this).navigate(R.id.nav_comments, bundle);
+        Log.d(TAG, "onCommentClick TmId : " + testModel.getTm_id());
+        CommentDialog commentDialog = new CommentDialog(getActivity(), testModel.getTm_id(), true, this);
+        commentDialog.show();
     }
 
     @Override
@@ -181,5 +184,16 @@ public class TestFavouriteFragment extends BaseFragment implements TestListAdapt
         Bundle bundle = new Bundle();
         bundle.putSerializable("PARAMS", testModel);
         NavHostFragment.findNavController(this).navigate(R.id.nav_test_attempt_history, bundle);
+    }
+
+    @Override
+    public void onCommentClick(String userId) {
+        PublicProfileDialog publicProfileDialog = new PublicProfileDialog(getActivity(), userId, this);
+        publicProfileDialog.show();
+    }
+
+    @Override
+    public void onViewImage(String path) {
+        showFullScreen(path);
     }
 }

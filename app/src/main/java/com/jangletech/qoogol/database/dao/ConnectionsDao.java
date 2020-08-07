@@ -8,9 +8,7 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Transaction;
 import androidx.room.Update;
-
 import com.jangletech.qoogol.model.Connections;
-import com.jangletech.qoogol.model.Friends;
 
 import java.util.List;
 

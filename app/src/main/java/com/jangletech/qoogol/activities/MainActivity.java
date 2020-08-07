@@ -69,6 +69,7 @@ public class MainActivity extends BaseActivity {
     private String navigateFlag = "";
     private ApiInterface apiService = ApiClient.getInstance().getApi();
     private BottomNavigationView bottomNavigationView;
+    public static String userId = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +89,7 @@ public class MainActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         setMargins(mBinding.marginLayout);
         getNotificationIntent(getIntent());
+        userId = getUserId(this);
         NavigationView navigationView = findViewById(R.id.nav_view);
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_test_popular, R.id.nav_attended_by_friends, R.id.nav_shared_with_you,
@@ -122,7 +124,6 @@ public class MainActivity extends BaseActivity {
             if (item.getItemId() == R.id.nav_home) {
                 if (navController.getCurrentDestination() != null &&
                         navController.getCurrentDestination().getId() != R.id.nav_home) {
-                    //navigateFlag = Nav.HOME.toString();
                     if (navController.popBackStack(R.id.nav_home, false)) {
                     } else {
                         navController.navigate(R.id.nav_home);
@@ -534,11 +535,11 @@ public class MainActivity extends BaseActivity {
         });
     }
 
-    @Override
+    /*@Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         getNotificationIntent(intent);
-    }
+    }*/
 
     private void getNotificationIntent(Intent intent) {
         if (intent != null) {
@@ -554,6 +555,11 @@ public class MainActivity extends BaseActivity {
                         navToFragment(R.id.nav_test_my, bundle);
                     } else if (action != null && action.equalsIgnoreCase("Q")) {
                         navToFragment(R.id.nav_learning, bundle);
+                    } else if (action != null && action.equalsIgnoreCase("CF")) {
+                        navToFragment(R.id.nav_requests, bundle);
+                    } else if (action != null && action.equalsIgnoreCase("CAF") ||
+                            action.equalsIgnoreCase("CA")) {
+                        navToFragment(R.id.nav_connections, bundle);
                     }
                 }
             }

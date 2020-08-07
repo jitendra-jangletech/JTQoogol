@@ -30,7 +30,9 @@ import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.activities.PracticeTestActivity;
 import com.jangletech.qoogol.adapter.TestListAdapter;
 import com.jangletech.qoogol.databinding.FragmentTestMyBinding;
+import com.jangletech.qoogol.dialog.CommentDialog;
 import com.jangletech.qoogol.dialog.ProgressDialog;
+import com.jangletech.qoogol.dialog.PublicProfileDialog;
 import com.jangletech.qoogol.dialog.ShareQuestionDialog;
 import com.jangletech.qoogol.enums.Module;
 import com.jangletech.qoogol.model.FetchSubjectResponse;
@@ -57,7 +59,7 @@ import static com.jangletech.qoogol.util.Constant.CASE;
 import static com.jangletech.qoogol.util.Constant.test;
 
 public class TestPopularFragment extends BaseFragment
-        implements TestListAdapter.TestClickListener, SearchView.OnQueryTextListener {
+        implements TestListAdapter.TestClickListener, SearchView.OnQueryTextListener, CommentDialog.CommentClickListener, PublicProfileDialog.PublicProfileClickListener {
 
     private static final String TAG = "TestPopularFragment";
     private MyTestViewModel mViewModel;
@@ -363,11 +365,15 @@ public class TestPopularFragment extends BaseFragment
 
     @Override
     public void onCommentClick(TestModelNew testModel) {
-        Bundle bundle = new Bundle();
+       /* Bundle bundle = new Bundle();
         tmId = testModel.getTm_id();
         bundle.putInt("tmId", tmId);
         bundle.putString(Constant.CALL_FROM, Module.Test.toString());
-        NavHostFragment.findNavController(this).navigate(R.id.nav_comments, bundle);
+        NavHostFragment.findNavController(this).navigate(R.id.nav_comments, bundle);*/
+
+        Log.d(TAG, "onCommentClick TmId : " + testModel.getTm_id());
+        CommentDialog commentDialog = new CommentDialog(getActivity(), testModel.getTm_id(), true, this);
+        commentDialog.show();
     }
 
     @Override
@@ -495,5 +501,16 @@ public class TestPopularFragment extends BaseFragment
     public void onDetach() {
         super.onDetach();
         mAdapter = null;
+    }
+
+    @Override
+    public void onCommentClick(String userId) {
+        PublicProfileDialog publicProfileDialog = new PublicProfileDialog(getActivity(), userId, this);
+        publicProfileDialog.show();
+    }
+
+    @Override
+    public void onViewImage(String path) {
+        showFullScreen(path);
     }
 }

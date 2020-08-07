@@ -96,7 +96,7 @@ public class CommentDialog extends Dialog implements CommentAdapter.onCommentIte
         try {
             if (isCallFromTest) {
                 if (api_case.equalsIgnoreCase("L"))
-                    call = apiService.fetchTestComments(user_id, que_id, api_case,1);
+                    call = apiService.fetchTestComments(user_id, que_id, api_case, 1);
                 else
                     call = apiService.addTestCommentApi(user_id, que_id, "I", AppUtils.encodedString(comment_text));
             } else {
@@ -144,9 +144,9 @@ public class CommentDialog extends Dialog implements CommentAdapter.onCommentIte
 
     private void setCommentAdapter() {
         if (isCallFromTest)
-            commentAdapter = new CommentAdapter(mContext, commentList, Module.Test.toString(), "", this);
+            commentAdapter = new CommentAdapter(mContext, commentList, Module.Test.toString(), "", false,this);
         else
-            commentAdapter = new CommentAdapter(mContext, commentList, Module.Learning.toString(), "", this);
+            commentAdapter = new CommentAdapter(mContext, commentList, Module.Learning.toString(), "", false,this);
 
         mBinding.commentRecycler.setHasFixedSize(true);
         mBinding.commentRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -157,10 +157,12 @@ public class CommentDialog extends Dialog implements CommentAdapter.onCommentIte
     private void emptyView() {
         setCommentAdapter();
         mBinding.etComment.setText("");
-        if (commentList.size() == 0)
+        if (commentList.size() == 0) {
+            mBinding.emptytv.setText("No Comments added yet.");
             mBinding.emptytv.setVisibility(View.VISIBLE);
-        else
+        } else {
             mBinding.emptytv.setVisibility(View.GONE);
+        }
     }
 
     public interface CommentClickListener {
@@ -206,7 +208,7 @@ public class CommentDialog extends Dialog implements CommentAdapter.onCommentIte
         Log.d(TAG, "likeReplyComment commentId : " + text);
 
         if (isCallFromTest)
-            call = apiService.likeReplyTestComment(
+            call = apiService.likeTestComment(
                     AppUtils.getUserId(),
                     id,
                     strCase,
@@ -244,8 +246,16 @@ public class CommentDialog extends Dialog implements CommentAdapter.onCommentIte
         });
     }
 
-    private void updateCommentList(List<Comments> list){
-        //commentList = list;
-        //commentAdapter.notifyItemChanged(itemPosition,);
+    private void updateCommentList(List<Comments> list) {
+        Comments comments = list.get(itemPosition);
+        int preLikeCount = comments.getLikeCount();
+        if (comments.isLiked()) {
+            comments.setLiked(false);
+            comments.setLikeCount(preLikeCount - preLikeCount);
+        } else {
+            comments.setLiked(true);
+            comments.setLikeCount(preLikeCount + preLikeCount);
+        }
+        commentAdapter.notifyItemChanged(itemPosition, comments);
     }
 }

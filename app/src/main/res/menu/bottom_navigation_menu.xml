@@ -2,31 +2,31 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        app:showAsAction="always"
         android:id="@+id/nav_home"
         android:icon="@drawable/ic_home"
-        android:title="Home" />
+        android:title="Home"
+        app:showAsAction="always" />
     <item
-        app:showAsAction="always"
         android:id="@+id/nav_learning"
         android:icon="@drawable/ic_learning"
-        android:title="@string/menu_learning" />
+        android:title="@string/menu_learning"
+        app:showAsAction="always" />
     <item
-        app:showAsAction="always"
         android:id="@+id/nav_test_my"
         android:icon="@drawable/ic_test"
-        android:title="@string/menu_test" />
+        android:title="@string/menu_test"
+        app:showAsAction="always" />
 
-   <!-- <item
-        android:visible="false"
-        app:showAsAction="always"
-        android:id="@+id/nav_doubts"
-        android:icon="@drawable/ic_saved_drafts"
-        android:title="@string/menu_ask_doubts" />-->
+    <!-- <item
+         android:visible="false"
+         app:showAsAction="always"
+         android:id="@+id/nav_doubts"
+         android:icon="@drawable/ic_saved_drafts"
+         android:title="@string/menu_ask_doubts" />-->
 
     <item
-        app:showAsAction="always"
         android:id="@+id/nav_notifications"
         android:icon="@drawable/ic_notifications"
-        android:title="@string/menu_notifications" />
+        android:title="@string/menu_notifications"
+        app:showAsAction="always" />
 </menu>

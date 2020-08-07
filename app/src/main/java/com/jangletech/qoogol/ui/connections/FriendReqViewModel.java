@@ -1,6 +1,7 @@
 package com.jangletech.qoogol.ui.connections;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -29,6 +30,8 @@ import static com.jangletech.qoogol.util.Constant.qoogol;
  * Created by Pritali on 6/10/2020.
  */
 public class FriendReqViewModel extends AndroidViewModel {
+
+    private static final String TAG = "FriendReqViewModel";
     ApiInterface apiService;
     public final AppRepository mAppRepository;
     Call<FriendRequestResponse> call;
@@ -74,6 +77,7 @@ public class FriendReqViewModel extends AndroidViewModel {
             public void onResponse(Call<FriendRequestResponse> call, retrofit2.Response<FriendRequestResponse> response) {
                 try {
                     if (response.body()!=null && response.body().getResponse().equalsIgnoreCase("200")){
+                        Log.d(TAG, "onResponse: ");
                         ExecutorService executor = Executors.newSingleThreadExecutor();
                         executor.execute(() -> mAppRepository.insertFriendReq(response.body().getFriend_req_list()));
 

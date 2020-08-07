@@ -133,11 +133,12 @@
                                 android:padding="@dimen/_2sdp"
                                 android:text="0"
                                 android:textSize="@dimen/_8ssp"
-                                android:visibility="visible"
+                                android:visibility="gone"
                                 app:layout_constraintLeft_toLeftOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
 
                             <TextView
+                                android:visibility="gone"
                                 android:id="@+id/tvLike"
                                 android:layout_width="@dimen/_40sdp"
                                 android:layout_height="match_parent"
@@ -151,6 +152,7 @@
                                 app:layout_constraintTop_toTopOf="parent" />
 
                             <TextView
+                                android:visibility="gone"
                                 android:id="@+id/tvReply"
                                 android:layout_width="@dimen/_40sdp"
                                 android:layout_height="match_parent"

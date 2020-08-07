@@ -3,6 +3,7 @@ package com.jangletech.qoogol.dialog;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.Editable;
@@ -11,6 +12,7 @@ import android.text.Spanned;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Window;
 import android.view.WindowManager;
@@ -25,9 +27,6 @@ import androidx.databinding.DataBindingUtil;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.DialogSubjectiveAnsBinding;
 import com.jangletech.qoogol.util.AppUtils;
-
-import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
-import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener;
 
 public class SubjectiveAnsDialog extends Dialog {
     private static final String TAG = "SubjectiveAnsDialog";
@@ -60,7 +59,7 @@ public class SubjectiveAnsDialog extends Dialog {
         answerCharCounter(mBinding.etAns, mBinding.tvWordCounter, 200);
         mBinding.etAns.append(strAns);
 
-        KeyboardVisibilityEvent.setEventListener((Activity) mContext,
+        /*KeyboardVisibilityEvent.setEventListener((Activity) mContext,
                 new KeyboardVisibilityEventListener() {
                     @Override
                     public void onVisibilityChanged(boolean isOpen) {
@@ -73,18 +72,19 @@ public class SubjectiveAnsDialog extends Dialog {
                         }
                     }
                 });
-
-       /* setOnKeyListener(new Dialog.OnKeyListener() {
+*/
+        setOnKeyListener(new Dialog.OnKeyListener() {
             @Override
             public boolean onKey(DialogInterface arg0, int keyCode,
                                  KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_BACK) {
-                    getAnsListener.onAnswerEntered(mBinding.etAns.getText().toString().trim());
+                    Log.d(TAG, "onKey Executed : ");
+                    getAnsListener.onAnswerEntered(AppUtils.encodedString(mBinding.etAns.getText().toString().trim()));
                     dismiss();
                 }
                 return true;
             }
-        });*/
+        });
     }
 
     private void setTimer(TextView tvTimer, int seconds, int minutes) {

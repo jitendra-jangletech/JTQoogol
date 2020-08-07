@@ -42,7 +42,7 @@ public class SubmitTestDialog extends Dialog {
     private String testRating = "", testFeedback = "";
     private HashMap<String, String> params = new HashMap<>();
     private Activity activity;
-    private int totalQuest, wrongQuest, unAttemptedQuest, markedQuest;
+    private int totalQuest, wrongQuest, unAttemptedQuest, markedQuest, otherQuest,rightQuest;
 
     public SubmitTestDialog(@NonNull Context context, Activity activity, SubmitDialogClickListener submitDialogClickListener, StartResumeTestResponse startResumeTestResponse) {
         super(context);
@@ -120,12 +120,14 @@ public class SubmitTestDialog extends Dialog {
                         wrongQuest++;
                     } else {
                         //right answer
+                        rightQuest ++;
                         obtainMarks = obtainMarks + testQuestionNew.getTq_marks();
                     }
                 } else {
                     //Questions other than subjective
                     if (testQuestionNew.getA_sub_ans().equalsIgnoreCase(testQuestionNew.getTtqa_sub_ans())) {
                         //Right answer
+                        rightQuest++;
                         obtainMarks = obtainMarks + testQuestionNew.getTq_marks();
                     } else {
                         wrongQuest++;
@@ -135,6 +137,8 @@ public class SubmitTestDialog extends Dialog {
             } else {
                 if (testQuestionNew.isTtqa_visited()) {
                     unAttemptedQuest++;
+                } else {
+                    otherQuest++;
                 }
             }
             if (testQuestionNew.isTtqa_marked()) {
@@ -142,9 +146,13 @@ public class SubmitTestDialog extends Dialog {
             }
         }
 
+        //int totalCount = markedQuest + wrongQuest + unAttemptedQuest + otherQuest;
+        //Log.d(TAG, "Total Quest Count : " + totalCount);
+
         Log.d(TAG, "setQuestCounts Wrong : " + wrongQuest);
         Log.d(TAG, "setQuestCounts UnAttempted : " + unAttemptedQuest);
         Log.d(TAG, "setQuestCounts Marked : " + markedQuest);
+        Log.d(TAG, "Total Quest Count : " + otherQuest);
 
         //Dialog Title Test name
         mBinding.tvTitle.setText(startResumeTestResponse.getTm_name());
@@ -155,8 +163,11 @@ public class SubmitTestDialog extends Dialog {
         mBinding.tvObtainMarksValue.setText(String.valueOf(obtainMarks));
 
         mBinding.tvWrongCount.setText(Html.fromHtml("<u>" + String.valueOf(wrongQuest) + "</u>"));
+        mBinding.tvRightCount.setText(Html.fromHtml("<u>" + String.valueOf(rightQuest) + "</u>"));
         mBinding.tvUnAttemptedCount.setText(Html.fromHtml("<u>" + String.valueOf(unAttemptedQuest) + "</u>"));
         mBinding.tvMarkedCount.setText(Html.fromHtml("<u>" + String.valueOf(markedQuest) + "</u>"));
+        mBinding.tvOthersCount.setText(Html.fromHtml("<u>" + String.valueOf(otherQuest) + "</u>"));
+
     }
 
     private void submitTestFeedBack(HashMap<String, String> params) {
@@ -193,25 +204,6 @@ public class SubmitTestDialog extends Dialog {
         });
     }
 
-
-//    public void startTimer(long timeLengthMilli) {
-//        timer = new CountDownTimer(timeLengthMilli, 1000) {
-//            @Override
-//            public void onTick(long milliTillFinish) {
-//                milliLeft = milliTillFinish;
-//                hrs = (milliTillFinish / (1000 * 60 * 60));
-//                min = ((milliTillFinish / (1000 * 60)) - hrs * 60);
-//                sec = ((milliTillFinish / 1000) - min * 60);
-//                String time = String.format("%02d:%02d:%02d", hrs, min, sec);
-//                mBinding.tvTimerCount.setText(time);
-//            }
-//
-//            @Override
-//            public void onFinish() {
-//
-//            }
-//        }.start();
-//    }
 
     public interface SubmitDialogClickListener {
         void onYesClick();

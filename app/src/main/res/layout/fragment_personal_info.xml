@@ -176,6 +176,9 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:hint="First Name"
+                                    android:importantForAutofill="no"
+                                    android:maxLength="50"
+                                    android:singleLine="true"
                                     android:text='@{userProfile.firstName}'
                                     android:textColor="@color/colorBlack" />
 
@@ -200,9 +203,11 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:hint="Last Name"
+                                    android:importantForAutofill="no"
+                                    android:maxLength="50"
+                                    android:singleLine="true"
                                     android:text='@{userProfile.lastName}'
                                     android:textColor="@color/colorBlack" />
-
                             </LinearLayout>
                         </LinearLayout>
 
@@ -232,7 +237,9 @@
                                 <com.jangletech.qoogol.view.CustomAutoCompleteTextView
                                     android:id="@+id/userNameAutoCompleteTextView"
                                     style="@style/AutoCompleteTextViewStyle"
+                                    android:digits="@string/user_name_params"
                                     android:hint="UserName"
+                                    android:maxLength="40"
                                     android:tag="@{userProfile.userName}"
                                     android:text='@{userProfile.userName}' />
 
@@ -515,8 +522,15 @@
                                 android:text="@string/language"
                                 android:textColor="@color/colorSkyBlue" />
 
-                            <com.jangletech.qoogol.view.CustomAutoCompleteTextView
+                            <!--<com.jangletech.qoogol.view.CustomAutoCompleteTextView
                                 app:endIconMode="none"
+                                android:id="@+id/langAutocompleteView"
+                                style="@style/AutoCompleteTextViewStyle"
+                                android:layout_below="@+id/tvHobby"
+                                android:hint="@string/select_language"
+                                android:text='@{userProfile.u_language}' />-->
+
+                            <androidx.appcompat.widget.AppCompatMultiAutoCompleteTextView
                                 android:id="@+id/langAutocompleteView"
                                 style="@style/AutoCompleteTextViewStyle"
                                 android:layout_below="@+id/tvHobby"

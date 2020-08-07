@@ -68,7 +68,11 @@ public class ConnectionsViewModel extends AndroidViewModel {
         if (isRefresh)
             call = apiService.fetchRefreshedConnections(userId, connections, getDeviceId(getApplication()), qoogol, pagestart, forcerefresh);
         else
-            call = apiService.fetchConnections(userId, connections, getDeviceId(getApplication()), qoogol, pagestart);
+            call = apiService.fetchConnections(userId,
+                    connections,
+                    getDeviceId(getApplication()),
+                    qoogol,
+                    pagestart);
         call.enqueue(new Callback<ConnectionResponse>() {
             @Override
             public void onResponse(Call<ConnectionResponse> call, retrofit2.Response<ConnectionResponse> response) {

@@ -146,7 +146,7 @@ dependencies {
     //implementation 'com.google.firebase:firebase-perf:19.0.5'
     implementation 'com.android.support:multidex:1.0.3'
 
-    implementation 'net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:3.0.0-RC2'
+    //implementation 'net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:3.0.0-RC2'
 
     // Add the Firebase Crashlytics SDK.
     implementation 'com.google.firebase:firebase-messaging:20.1.6'

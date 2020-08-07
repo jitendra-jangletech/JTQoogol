@@ -3,6 +3,7 @@ package com.jangletech.qoogol.adapter;
         import android.app.Activity;
         import android.util.Log;
         import android.view.LayoutInflater;
+        import android.view.View;
         import android.view.ViewGroup;
 
         import androidx.annotation.NonNull;
@@ -38,13 +39,16 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     private ApiInterface apiService = ApiClient.getInstance().getApi();
     private onCommentItemClickListener commentItemClickListener;
     private String tmId = "";
+    private boolean isReply = false;
 
-    public CommentAdapter(Activity activity, List<Comments> commentList, String callingFrom, String tmId, onCommentItemClickListener commentItemClickListener) {
+    public CommentAdapter(Activity activity, List<Comments> commentList,
+                          String callingFrom, String tmId, boolean isReply,onCommentItemClickListener commentItemClickListener) {
         this.activity = activity;
         this.commentList = commentList;
         this.callingFrom = callingFrom;
         this.commentItemClickListener = commentItemClickListener;
         this.tmId = tmId;
+        this.isReply = isReply;
     }
 
     @NonNull
@@ -88,6 +92,13 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             //holder.commentItemBinding.tvLikes.setVisibility(View.GONE);
             holder.commentItemBinding.tvLikes.setText("0");
             holder.commentItemBinding.tvLike.setTextColor(activity.getResources().getColor(android.R.color.tab_indicator_text));
+        }
+
+        if(isReply){
+            //hide Like and Reply For Replies Elements
+            holder.commentItemBinding.tvLike.setVisibility(View.GONE);
+            holder.commentItemBinding.tvReply.setVisibility(View.GONE);
+            holder.commentItemBinding.tvLikes.setVisibility(View.GONE);
         }
 
         Glide.with(activity)
