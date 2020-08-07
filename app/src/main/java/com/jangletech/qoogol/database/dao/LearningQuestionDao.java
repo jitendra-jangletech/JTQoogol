@@ -23,6 +23,9 @@ public interface LearningQuestionDao {
     @Query("SELECT * FROM LearningQuestionsNew")
     LiveData<List<LearningQuestionsNew>> getAllQuestions();
 
+    @Query("SELECT * FROM LearningQuestionsNew where question_id=:q_id")
+    LiveData<List<LearningQuestionsNew>> getQuestion(String q_id);
+
     @Query("SELECT * FROM LearningQuestionsNew where is_fav=:fav")
     LiveData<List<LearningQuestionsNew>> getFavQuestions(String fav);
 

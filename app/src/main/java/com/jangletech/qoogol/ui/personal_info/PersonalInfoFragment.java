@@ -205,7 +205,7 @@ public class PersonalInfoFragment extends BaseFragment {
             if (mBinding.userNameAutoCompleteTextView.getText().toString().trim().isEmpty()) {
                 mBinding.userNameAutoCompleteTextView.setError("Enter valid username.");
                 //showToast("Please enter any unique username.");
-            } else if (profile.getUserName().equals(mBinding.userNameAutoCompleteTextView.getText().toString().trim())) {
+            } else if (profile.getUserName()!=null && profile.getUserName().equals(mBinding.userNameAutoCompleteTextView.getText().toString().trim())) {
                 showToast("You have already taken this username.");
             } else {
                 generateVerifyUserName(params);
@@ -399,12 +399,14 @@ public class PersonalInfoFragment extends BaseFragment {
     }
 
     private void getUserNames(GenerateVerifyUserName generateVerifyUserName) {
-        String[] names = generateVerifyUserName.getUserNames().split(",", -1);
-        List<String> userNames = new ArrayList<>();
-        for (int i = 0; i < names.length; i++) {
-            userNames.add(names[i]);
+        if (generateVerifyUserName.getUserNames() !=null) {
+            String[] names = generateVerifyUserName.getUserNames().split(",", -1);
+            List<String> userNames = new ArrayList<>();
+            for (int i = 0; i < names.length; i++) {
+                userNames.add(names[i]);
+            }
+            populateUserNames(userNames);
         }
-        populateUserNames(userNames);
     }
 
     private void verifyMobile(String mobile, String verify) {

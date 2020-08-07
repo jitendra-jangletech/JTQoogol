@@ -215,6 +215,7 @@
                         <TextView
                             android:id="@+id/nav_doubts"
                             style="@style/menu_item_style"
+                            android:visibility="gone"
                             android:drawableLeft="@drawable/nav_learning"
                             android:foreground="?attr/selectableItemBackground"
                             android:text="Doubts" />
