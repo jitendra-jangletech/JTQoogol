@@ -33,6 +33,7 @@ import com.jangletech.qoogol.activities.PracticeTestActivity;
 import com.jangletech.qoogol.adapter.TestListAdapter;
 import com.jangletech.qoogol.databinding.FragmentTestMyBinding;
 import com.jangletech.qoogol.dialog.CommentDialog;
+import com.jangletech.qoogol.dialog.FilterDialog;
 import com.jangletech.qoogol.dialog.PublicProfileDialog;
 import com.jangletech.qoogol.dialog.ShareQuestionDialog;
 import com.jangletech.qoogol.model.FetchSubjectResponse;
@@ -63,6 +64,7 @@ public class MyTestFragment extends BaseFragment
     private FragmentTestMyBinding mBinding;
     private TestListAdapter mAdapter;
     private List<TestModelNew> testList;
+    private List<String> subjectList;
     private Context mContext;
     private HashMap<String, String> params;
     private int tmId;
@@ -123,9 +125,10 @@ public class MyTestFragment extends BaseFragment
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_filter:
-                Bundle bundle = new Bundle();
-                bundle.putString("call_from", "test");
-                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_test_filter, bundle);
+//                Bundle bundle = new Bundle();
+//                bundle.putString("call_from", "test");
+//                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_test_filter, bundle);
+                new FilterDialog(getActivity(), subjectList).show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -133,6 +136,7 @@ public class MyTestFragment extends BaseFragment
     }
 
     private void initViews() {
+        subjectList = new ArrayList<>();
         if (getArguments() != null && getArguments().getSerializable("PARAMS") != null) {
             HashMap<String, String> filterArgs = new HashMap<>();
             filterArgs = (HashMap<String, String>) getArguments().getSerializable("PARAMS");
@@ -169,7 +173,7 @@ public class MyTestFragment extends BaseFragment
             public void onChanged(@Nullable final List<FetchSubjectResponse> subjects) {
                 if (subjects != null) {
                     Log.d(TAG, "onChanged Subjects Size : " + subjects.size());
-                    ArrayList<String> subjectList = new ArrayList<>();
+                    subjectList.clear();
                     for (FetchSubjectResponse obj : subjects) {
                         if (!subjectList.contains(obj.getSm_sub_name()))
                             subjectList.add(obj.getSm_sub_name());
@@ -252,7 +256,7 @@ public class MyTestFragment extends BaseFragment
         }
     }
 
-    private void prepareSubjectChips(ArrayList<String> subjects) {
+    private void prepareSubjectChips(List<String> subjects) {
         mBinding.subjectsChipGrp.removeAllViews();
         int idCounter = 0;
         for (String subject : subjects) {

@@ -7,9 +7,7 @@ import androidx.room.TypeConverters;
 import com.google.gson.annotations.SerializedName;
 import com.jangletech.qoogol.database.converter.Converters;
 import com.jangletech.qoogol.util.Constant;
-
 import org.jetbrains.annotations.NotNull;
-
 import java.io.Serializable;
 import java.util.List;
 
@@ -779,6 +777,5 @@ public class TestModelNew implements Serializable {
     public void setU_user_id(String u_user_id) {
         this.u_user_id = u_user_id;
     }
-
 
 }

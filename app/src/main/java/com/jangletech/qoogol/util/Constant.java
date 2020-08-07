@@ -85,7 +85,6 @@ public class Constant {
     public static final String GroupMembersList = "70"; /// List of master data id, desc
     public static final String u_fcm_token = "178Q"; /// List of master data id, desc
 
-
     // Firebase notification Constant
     public static final String FB_FROM_TYPE = "fromtype";
     public static final String FB_U_G_ID = "userID";
@@ -93,7 +92,6 @@ public class Constant {
     public static final String FB_TITLE = "title";
     public static final String FB_MS_ID = "msID";
     public static final String FB_ACTION = "action";
-
 
     //Work fields
     public static final String w_contact_name = "541";
@@ -706,7 +704,6 @@ public class Constant {
     public static final String n_ref_id = "302";
     public static final String n_ref_type = "303";
     public static final String n_cdatetime = "305";
-    //public static final String w_user_profile_image_name = "507";
 
     public static final String CALL_FROM = "CALL_FROM";
     public static final String POPULAR_TEST = "POPULAR_TEST";
@@ -740,6 +737,5 @@ public class Constant {
     public static final String w_ans_text = "1701";
     public static final String w_media_names = "1702";
     public static final String w_media_paths = "1703";
-
     public static final String SCR_CO_ID = "2672";
 }

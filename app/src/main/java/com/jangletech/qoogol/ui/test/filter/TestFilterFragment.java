@@ -471,8 +471,6 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
     }
 
     private void setSelectedChapterChips(Chip chip) {

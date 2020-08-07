@@ -229,10 +229,14 @@ public class FollowersFragment extends BaseFragment implements FollowersAdapter.
     private void setSearchData(FollowersResponse response) {
         if (response != null && response.getFollowers_list().size() > 0) {
             filteredList.clear();
+            mBinding.tvEmptySearch.setVisibility(View.GONE);
+            mBinding.connectionRecycler.setVisibility(View.VISIBLE);
             mAdapter.updateList(response.getFollowers_list());
         } else {
             //no search results found
-            showToast("No Search Results Found.");
+            mBinding.tvEmptySearch.setVisibility(View.VISIBLE);
+            mBinding.connectionRecycler.setVisibility(View.GONE);
+            //showToast("No Search Results Found.");
         }
     }
 }

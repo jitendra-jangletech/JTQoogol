@@ -1702,7 +1702,6 @@ public class PractiseViewPagerAdapter extends PagerAdapter
             });
         }
 
-
         tvLikeValue.setOnClickListener(v -> {
             if (!testQuestionNew.getLikes().equalsIgnoreCase("0")) {
                 LikeListingDialog listingDialog = new LikeListingDialog(context, testQuestionNew.getTq_q_id(), this);

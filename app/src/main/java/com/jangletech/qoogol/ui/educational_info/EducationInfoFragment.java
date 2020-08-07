@@ -54,7 +54,6 @@ public class EducationInfoFragment extends BaseFragment implements EducationAdap
     private PreferenceManager mSettings;
     Call<FetchEducationResponse> call;
 
-
     public static EducationInfoFragment newInstance() {
         return new EducationInfoFragment();
     }
@@ -121,8 +120,8 @@ public class EducationInfoFragment extends BaseFragment implements EducationAdap
 
     }
 
-    private void deleteEdu(HashMap<String,String> params,int pos){
-        Log.d(TAG, "deleteEdu: "+params);
+    private void deleteEdu(HashMap<String, String> params, int pos) {
+        Log.d(TAG, "deleteEdu: " + params);
         ProgressDialog.getInstance().show(mContext);
         Call<VerifyResponse> call = apiService.deleteEdu(
                 params.get(Constant.u_user_id),
@@ -140,7 +139,7 @@ public class EducationInfoFragment extends BaseFragment implements EducationAdap
                 } else if (response.body().getResponse().equals("501")) {
                     resetSettingAndLogout();
                 } else {
-                    showErrorDialog(getActivity(), response.body().getResponse(),"");
+                    showErrorDialog(getActivity(), response.body().getResponse(), "");
                 }
             }
 
@@ -160,7 +159,6 @@ public class EducationInfoFragment extends BaseFragment implements EducationAdap
             call = apiService.fetchUserEdu(userid, "L", getDeviceId(getActivity()), Constant.APP_NAME);
         else
             call = apiService.fetchOtherUSersUserEdu(mSettings.getUserId(), "L", getDeviceId(getActivity()), Constant.APP_NAME, userid);
-
 
         call.enqueue(new Callback<FetchEducationResponse>() {
             @Override
@@ -211,20 +209,20 @@ public class EducationInfoFragment extends BaseFragment implements EducationAdap
     }
 
     @Override
-    public void onDeleteClick(Education education,int pos) {
+    public void onDeleteClick(Education education, int pos) {
         androidx.appcompat.app.AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity(), R.style.AlertDialogStyle);
         builder.setTitle("Confirm")
                 .setMessage("Are you sure you want to delete education?")
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        HashMap<String,String> params = new HashMap<>();
-                        params.put(Constant.u_user_id,getUserId(getActivity()));
-                        params.put(Constant.ue_id,education.getUe_id());
-                        params.put(Constant.CASE,"D");
-                        deleteEdu(params,pos);
+                        HashMap<String, String> params = new HashMap<>();
+                        params.put(Constant.u_user_id, getUserId(getActivity()));
+                        params.put(Constant.ue_id, education.getUe_id());
+                        params.put(Constant.CASE, "D");
+                        deleteEdu(params, pos);
                     }
-                }).setNegativeButton("No",null)
+                }).setNegativeButton("No", null)
                 .show();
     }
 

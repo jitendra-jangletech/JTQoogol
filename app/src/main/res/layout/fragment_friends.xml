@@ -9,13 +9,25 @@
         tools:context=".ui.learning.ShareFragment">
 
         <TextView
+            android:id="@+id/tvEmptySearch"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_35sdp"
+            android:fontFamily="sans-serif-thin"
+            android:gravity="center"
+            android:background="@color/background_color"
             android:visibility="gone"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textColor="@color/colorSkyBlue"
-            android:text="No Connections Added."
+            android:text="No Search Results Found."
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
             android:id="@+id/emptyview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="No Connections Added."
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="@color/colorSkyBlue"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -24,16 +36,15 @@
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/connection_swiperefresh"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toBottomOf="@+id/tvEmptySearch">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/connection_recycler"
+                tools:listitem="@layout/connection_item"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_height="match_parent" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -35,7 +35,6 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 
-import static com.jangletech.qoogol.util.Constant.connections;
 import static com.jangletech.qoogol.util.Constant.following;
 import static com.jangletech.qoogol.util.Constant.qoogol;
 
@@ -153,6 +152,8 @@ public class FollowingFragment extends BaseFragment implements FollowingsAdapter
     @Override
     public boolean onQueryTextChange(String newText) {
         if (newText.trim().toLowerCase().isEmpty()) {
+            mBinding.tvEmptySearch.setVisibility(View.GONE);
+            mBinding.connectionRecycler.setVisibility(View.VISIBLE);
             mAdapter.updateList(connectionsList);
         } else {
             filteredList.clear();
@@ -163,6 +164,8 @@ public class FollowingFragment extends BaseFragment implements FollowingsAdapter
                 }
             }
             if (filteredList.size() > 0) {
+                mBinding.tvEmptySearch.setVisibility(View.GONE);
+                mBinding.connectionRecycler.setVisibility(View.VISIBLE);
                 mAdapter.updateList(filteredList);
             } else {
                 //search from server
@@ -206,10 +209,14 @@ public class FollowingFragment extends BaseFragment implements FollowingsAdapter
     private void setSearchData(FollowingResponse response) {
         if (response != null && response.getFollowing_list().size() > 0) {
             filteredList.clear();
+            mBinding.tvEmptySearch.setVisibility(View.GONE);
+            mBinding.connectionRecycler.setVisibility(View.VISIBLE);
             mAdapter.updateList(response.getFollowing_list());
         } else {
             //no search results found
-            showToast("No Search Results Found.");
+            mBinding.tvEmptySearch.setVisibility(View.VISIBLE);
+            mBinding.connectionRecycler.setVisibility(View.GONE);
+            //showToast("No Search Results Found.");
         }
     }
 

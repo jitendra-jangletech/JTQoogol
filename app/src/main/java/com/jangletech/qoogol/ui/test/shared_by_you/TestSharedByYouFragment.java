@@ -139,7 +139,7 @@ public class TestSharedByYouFragment extends BaseFragment
     }
 
     private void initViews() {
-        setTitle("Shared Tests");
+        //setTitle("Shared Tests");
         mBinding.swipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -189,10 +189,10 @@ public class TestSharedByYouFragment extends BaseFragment
                         List<TestModelNew> filteredModelList = filterBySubject(testList, chip.getText().toString());
                         if (filteredModelList.size() > 0) {
                             mAdapter.setSearchResult(filteredModelList);
-                            mBinding.tvNoTest.setVisibility(View.GONE);
+                            //mBinding.tvNoTest.setVisibility(View.GONE);
                         } else {
                             mAdapter.setSearchResult(filteredModelList);
-                            mBinding.tvNoTest.setVisibility(View.VISIBLE);
+                            //mBinding.tvNoTest.setVisibility(View.VISIBLE);
                         }
                     }
                 } catch (NullPointerException npe) {
@@ -204,6 +204,7 @@ public class TestSharedByYouFragment extends BaseFragment
 
     public void setMyTestList(List<TestModelNew> testList) {
         if (testList.size() > 0) {
+            mBinding.tvNoTest.setVisibility(View.GONE);
             mAdapter = new TestListAdapter(requireActivity(), testList, this, "");
             mBinding.testListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             mBinding.testListRecyclerView.setAdapter(mAdapter);

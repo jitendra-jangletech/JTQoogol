@@ -22,7 +22,6 @@ import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.FriendsAdapter;
 import com.jangletech.qoogol.databinding.FragmentFriendsBinding;
 import com.jangletech.qoogol.dialog.PublicProfileDialog;
-import com.jangletech.qoogol.model.Connections;
 import com.jangletech.qoogol.model.Friends;
 import com.jangletech.qoogol.model.FriendsResponse;
 import com.jangletech.qoogol.retrofit.ApiClient;
@@ -37,7 +36,6 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 
-import static com.jangletech.qoogol.util.Constant.connections;
 import static com.jangletech.qoogol.util.Constant.friends;
 import static com.jangletech.qoogol.util.Constant.qoogol;
 
@@ -150,17 +148,21 @@ public class FriendsFragment extends BaseFragment implements FriendsAdapter.upda
     private void setSearchData(FriendsResponse response) {
         if (response != null && response.getFriends_list().size() > 0) {
             filteredList.clear();
+            mBinding.tvEmptySearch.setVisibility(View.GONE);
+            mBinding.connectionRecycler.setVisibility(View.VISIBLE);
             mAdapter.updateList(response.getFriends_list());
         } else {
             //no search results found
-            showToast("No Search Results Found.");
+            mBinding.tvEmptySearch.setVisibility(View.VISIBLE);
+            mBinding.connectionRecycler.setVisibility(View.GONE);
+            //showToast("No Search Results Found.");
         }
     }
 
     private void searchFromServer(String text) {
         Call<FriendsResponse> call = apiService.searchFriends(
                 getUserId(getActivity()),
-                connections,
+                friends,
                 getDeviceId(getActivity()),
                 qoogol,
                 text,
@@ -221,6 +223,8 @@ public class FriendsFragment extends BaseFragment implements FriendsAdapter.upda
     @Override
     public boolean onQueryTextChange(String newText) {
         if (newText.trim().toLowerCase().isEmpty()) {
+            mBinding.tvEmptySearch.setVisibility(View.GONE);
+            mBinding.connectionRecycler.setVisibility(View.VISIBLE);
             mAdapter.updateList(connectionsList);
         } else {
             filteredList.clear();
@@ -231,6 +235,8 @@ public class FriendsFragment extends BaseFragment implements FriendsAdapter.upda
                 }
             }
             if (filteredList.size() > 0) {
+                mBinding.tvEmptySearch.setVisibility(View.GONE);
+                mBinding.connectionRecycler.setVisibility(View.VISIBLE);
                 mAdapter.updateList(filteredList);
             } else {
                 //search from server

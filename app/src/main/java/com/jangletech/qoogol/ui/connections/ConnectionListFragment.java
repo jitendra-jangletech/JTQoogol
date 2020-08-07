@@ -112,6 +112,7 @@ public class ConnectionListFragment extends BaseFragment implements ConnectionAd
                 if (connectionResponse != null)
                     pageCount = connectionResponse.getRow_count();
                 if (connections.size() > 0) {
+                    connectionsList.clear();
                     connectionsList.addAll(connections);
                     mAdapter.updateList(connectionsList);
                 } else {
@@ -232,9 +233,14 @@ public class ConnectionListFragment extends BaseFragment implements ConnectionAd
     @Override
     public boolean onQueryTextChange(String newText) {
         if (newText.trim().toLowerCase().isEmpty()) {
+            Log.d(TAG, "onQueryTextChange Length : "+newText.trim().length());
+            mBinding.tvEmptySearch.setVisibility(View.GONE);
+            mBinding.connectionRecycler.setVisibility(View.VISIBLE);
             mAdapter.updateList(connectionsList);
         } else {
             filteredList.clear();
+            mBinding.tvEmptySearch.setVisibility(View.GONE);
+            mBinding.connectionRecycler.setVisibility(View.VISIBLE);
             for (Connections connections : connectionsList) {
                 if (connections.getU_first_name().toLowerCase().contains(newText.trim().toLowerCase()) ||
                         connections.getU_last_name().toLowerCase().contains(newText.trim().toLowerCase())) {
@@ -264,7 +270,7 @@ public class ConnectionListFragment extends BaseFragment implements ConnectionAd
             public void onResponse(Call<ConnectionResponse> call, retrofit2.Response<ConnectionResponse> response) {
                 dismissRefresh(mBinding.connectionSwiperefresh);
                 if (response.body().getResponse().equalsIgnoreCase("200")) {
-                    connectionResponse = response.body();
+                    //connectionResponse = response.body();
                     //mViewModel.insert(response.body().getConnection_list());
                     setSearchData(connectionResponse);
                 } else if (response.body().getResponse().equals("501")) {
@@ -287,10 +293,14 @@ public class ConnectionListFragment extends BaseFragment implements ConnectionAd
     private void setSearchData(ConnectionResponse connectionResponse) {
         if (connectionResponse != null && connectionResponse.getConnection_list().size() > 0) {
             filteredList.clear();
+            mBinding.tvEmptySearch.setVisibility(View.GONE);
+            mBinding.connectionRecycler.setVisibility(View.VISIBLE);
             mAdapter.updateList(connectionResponse.getConnection_list());
         } else {
             //no search results found
-            showToast("No Search Results Found.");
+            //showToast("No Search Results Found.");
+            mBinding.tvEmptySearch.setVisibility(View.VISIBLE);
+            mBinding.connectionRecycler.setVisibility(View.GONE);
         }
     }
 }

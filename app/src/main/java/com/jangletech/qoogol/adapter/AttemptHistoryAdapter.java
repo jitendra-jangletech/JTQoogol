@@ -12,8 +12,6 @@ import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.ItemAttemptHistoryBinding;
 import com.jangletech.qoogol.model.AttemptedTest;
 import com.jangletech.qoogol.util.DateUtils;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class AttemptHistoryAdapter extends RecyclerView.Adapter<AttemptHistoryAdapter.ViewHolder> {
