@@ -18,6 +18,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.LearningAdapter;
@@ -116,30 +117,37 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
                 if (bundle.getString(Constant.FB_MS_ID) != null)
                     mViewModel.fetchQuestionData(bundle.getString(Constant.FB_MS_ID));
 
+                learningFragmentBinding.learningSwiperefresh.setRefreshing(true);
                 mViewModel.getQuestion(bundle.getString(Constant.FB_MS_ID)).observe(getViewLifecycleOwner(), questionsList -> {
-                    questionsNewList.clear();
-                    questionsNewList.addAll(questionsList);
-                    initRecycler();
+                    setData(questionsList);
                 });
             } else {
+                learningFragmentBinding.learningSwiperefresh.setRefreshing(true);
                 if (bundle.getString("call_from").equalsIgnoreCase("saved_questions")) {
                     ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Saved Questions");
-                } else {
+                }  else {
                     ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Practice Questions");
                     mViewModel.fetchQuestionData("");
                 }
+
+                mViewModel.getQuestionList().observe(getViewLifecycleOwner(), questionsList -> {
+                    setData(questionsList);
+                });
             }
-
-            mViewModel.getQuestionList().observe(getViewLifecycleOwner(), questionsList -> {
-                questionsNewList.clear();
-                questionsNewList.addAll(questionsList);
-                initRecycler();
-            });
         }
+        learningFragmentBinding.learningSwiperefresh.setOnRefreshListener(() -> {
+            mViewModel.fetchQuestionData("");
+            mViewModel.getQuestionList().observe(getViewLifecycleOwner(), questionsList -> {
+                setData(questionsList);
+            });
+        });
 
+    }
 
-
-        learningFragmentBinding.learningSwiperefresh.setOnRefreshListener(() -> mViewModel.fetchQuestionData(""));
+    private void setData(List<LearningQuestionsNew> questionsList) {
+        questionsNewList.clear();
+        questionsNewList.addAll(questionsList);
+        initRecycler();
     }
 
 
