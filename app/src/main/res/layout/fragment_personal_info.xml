@@ -99,6 +99,7 @@
                             app:layout_constraintTop_toTopOf="parent">
 
                             <TextView
+                                style="@style/font_style"
                                 android:id="@+id/tvReferralTitle"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -109,6 +110,7 @@
                                 android:textColor="@color/colorSkyBlue" />
 
                             <TextView
+                                style="@style/font_style"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/_10sdp"
@@ -128,6 +130,7 @@
                             app:layout_constraintTop_toTopOf="parent">
 
                             <TextView
+                                style="@style/font_style"
                                 android:id="@+id/tvPointsTitle"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -138,6 +141,7 @@
                                 android:textColor="@color/colorSkyBlue" />
 
                             <TextView
+                                style="@style/font_style"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/_10sdp"
@@ -165,6 +169,7 @@
                                 android:padding="@dimen/_2sdp">
 
                                 <TextView
+                                    style="@style/font_style"
                                     android:id="@+id/tvFirstName"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -192,6 +197,7 @@
                                 android:padding="@dimen/_2sdp">
 
                                 <TextView
+                                    style="@style/font_style"
                                     android:id="@+id/tvLastName"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -228,6 +234,7 @@
                                 android:padding="@dimen/_2sdp">
 
                                 <TextView
+                                    style="@style/font_style"
                                     android:id="@+id/tvUserName"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -256,11 +263,12 @@
 
                             </LinearLayout>
 
-                            <com.google.android.material.button.MaterialButton
+                            <TextView
+                                android:background="@color/background"
+                                style="@style/font_style"
                                 android:id="@+id/btnGenerate"
-                                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                                 android:layout_width="0dp"
-                                android:layout_height="wrap_content"
+                                android:layout_height="@dimen/_31sdp"
                                 android:layout_gravity="center"
                                 android:layout_marginRight="@dimen/_5sdp"
                                 android:layout_weight="0.5"
@@ -269,11 +277,11 @@
                                 android:text="Generate"
                                 android:textAllCaps="false" />
 
-                            <com.google.android.material.button.MaterialButton
+                            <TextView
+                                android:background="@color/background"
                                 android:id="@+id/btnCheckExist"
-                                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                                 android:layout_width="0dp"
-                                android:layout_height="wrap_content"
+                                android:layout_height="@dimen/_31sdp"
                                 android:layout_gravity="center"
                                 android:layout_weight="0.5"
                                 android:gravity="center"
@@ -300,6 +308,7 @@
                                 android:padding="@dimen/_2sdp">
 
                                 <TextView
+                                    style="@style/font_style"
                                     android:id="@+id/tvMobile"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -322,6 +331,8 @@
                             <com.google.android.material.button.MaterialButton
                                 android:id="@+id/btnMobileVerify"
                                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                                android:textStyle="bold"
+                                android:fontFamily="sans-serif-thin"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
@@ -351,6 +362,7 @@
                                 android:padding="@dimen/_2sdp">
 
                                 <TextView
+                                    style="@style/font_style"
                                     android:id="@+id/tvEmail"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -395,6 +407,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="@string/password"
+                                style="@style/font_style"
                                 app:hintTextColor="@color/colorSkyBlue"
                                 app:passwordToggleEnabled="true">
 
@@ -454,6 +467,7 @@
                             app:layout_constraintTop_toBottomOf="@+id/passwordLayout">
 
                             <RadioButton
+                                style="@style/font_style"
                                 android:id="@+id/radioMale"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
@@ -462,6 +476,7 @@
                                 android:textColor="@color/colorSkyBlue" />
 
                             <RadioButton
+                                style="@style/font_style"
                                 android:id="@+id/radioFemale"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
@@ -470,6 +485,7 @@
                                 android:textColor="@color/colorSkyBlue" />
 
                             <RadioButton
+                                style="@style/font_style"
                                 android:id="@+id/radioOthers"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
@@ -487,6 +503,7 @@
                             app:layout_constraintTop_toBottomOf="@+id/genderGrp">
 
                             <TextView
+                                style="@style/font_style"
                                 android:id="@+id/tvDob"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -515,6 +532,7 @@
                             app:layout_constraintTop_toBottomOf="@+id/dobLayout">
 
                             <TextView
+                                style="@style/font_style"
                                 android:id="@+id/tvLanguage"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -556,9 +574,10 @@
                             <com.google.android.material.button.MaterialButton
                                 android:id="@+id/btnImportContacts"
                                 android:layout_width="wrap_content"
+                                style="@style/font_style"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/_10sdp"
-                                android:backgroundTint="@color/color_red"
+                                android:backgroundTint="@color/colorPrimary"
                                 android:text="Import Contacts"
                                 android:textAllCaps="false" />
 
@@ -571,6 +590,7 @@
                                 app:layout_constraintTop_toBottomOf="@+id/mobileEmailLayout">
 
                                 <TextView
+                                    style="@style/font_style"
                                     android:id="@+id/tvTagLine"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -589,6 +609,7 @@
 
                             <TextView
                                 android:id="@+id/tvNationality"
+                                style="@style/font_style"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/_15sdp"
@@ -603,6 +624,7 @@
                                 android:text='@{userProfile.u_Nationality}' />
 
                             <TextView
+                                style="@style/font_style"
                                 android:id="@+id/tvState"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -618,6 +640,7 @@
                                 android:text='@{userProfile.u_State}' />
 
                             <TextView
+                                style="@style/font_style"
                                 android:id="@+id/tvDivision"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -633,6 +656,7 @@
                                 android:text='@{userProfile.u_District}' />
 
                             <TextView
+                                style="@style/font_style"
                                 android:id="@+id/tvCity"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -919,6 +943,7 @@
         </ScrollView>
 
         <TextView
+            style="@style/font_style"
             android:id="@+id/btnSave"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_35sdp"

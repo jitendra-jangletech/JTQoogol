@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -8,11 +8,23 @@
         android:background="@color/colorWhite"
         tools:context=".ui.notifications.NotificationsFragment">
 
+        <TextView
+            android:id="@+id/tvEmptySearch"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_35sdp"
+            android:fontFamily="sans-serif-thin"
+            android:gravity="center"
+            android:background="@color/background_color"
+            android:visibility="gone"
+            android:text="No Search Results Found."
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            app:layout_constraintTop_toBottomOf="@+id/tvEmptySearch"
             android:id="@+id/swipeToRefresh"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentTop="true">
+            android:layout_height="0dp">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/notificationRecyclerView"

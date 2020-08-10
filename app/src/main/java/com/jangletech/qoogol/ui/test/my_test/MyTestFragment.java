@@ -11,6 +11,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
@@ -23,6 +24,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.chip.Chip;
@@ -57,7 +59,7 @@ import retrofit2.Response;
 import static com.jangletech.qoogol.util.Constant.CASE;
 
 public class MyTestFragment extends BaseFragment
-        implements TestListAdapter.TestClickListener, SearchView.OnQueryTextListener, CommentDialog.CommentClickListener, PublicProfileDialog.PublicProfileClickListener {
+        implements TestListAdapter.TestClickListener, SearchView.OnQueryTextListener, CommentDialog.CommentClickListener, PublicProfileDialog.PublicProfileClickListener, FilterDialog.FilterClickListener {
 
     private static final String TAG = "MyTestFragment";
     private MyTestViewModel mViewModel;
@@ -66,8 +68,12 @@ public class MyTestFragment extends BaseFragment
     private List<TestModelNew> testList;
     private List<String> subjectList;
     private Context mContext;
-    private HashMap<String, String> params;
+    private HashMap<String, String> params = new HashMap<>();
     private int tmId;
+    private Boolean isScrolling = false;
+    private String pageStart = "0";
+    private LinearLayoutManager linearLayoutManager;
+    private int currentItems, scrolledOutItems, totalItems;
     private String flag = "";
     private String diffLevel = "";
     private LiveData<List<TestModelNew>> testModelNewLiveData;
@@ -81,7 +87,6 @@ public class MyTestFragment extends BaseFragment
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         mContext = context.getApplicationContext();
-        params = new HashMap<>();
     }
 
     @Override
@@ -128,7 +133,9 @@ public class MyTestFragment extends BaseFragment
 //                Bundle bundle = new Bundle();
 //                bundle.putString("call_from", "test");
 //                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_test_filter, bundle);
-                new FilterDialog(getActivity(), subjectList).show();
+                FilterDialog bottomSheetFragment = new FilterDialog(getActivity(), subjectList, params, this);
+                bottomSheetFragment.setCancelable(false);
+                bottomSheetFragment.show(getActivity().getSupportFragmentManager(), bottomSheetFragment.getTag());
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -136,6 +143,7 @@ public class MyTestFragment extends BaseFragment
     }
 
     private void initViews() {
+        linearLayoutManager = new LinearLayoutManager(getActivity());
         subjectList = new ArrayList<>();
         if (getArguments() != null && getArguments().getSerializable("PARAMS") != null) {
             HashMap<String, String> filterArgs = new HashMap<>();
@@ -144,10 +152,35 @@ public class MyTestFragment extends BaseFragment
             Log.d(TAG, "Filter DiffLevel : " + diffLevel);
             Log.d(TAG, "Filter Avg Rating : " + filterArgs.get(Constant.tm_avg_rating));
         }
+
+        mBinding.testListRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                    isScrolling = true;
+                }
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                currentItems = linearLayoutManager.getChildCount();
+                totalItems = linearLayoutManager.getItemCount();
+                scrolledOutItems = linearLayoutManager.findFirstVisibleItemPosition();
+                if (dy > 0) {
+                    if (isScrolling && (currentItems + scrolledOutItems == totalItems)) {
+                        isScrolling = false;
+                        fetchTestList(params, pageStart);
+                    }
+                }
+            }
+        });
+
         mBinding.swipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                fetchTestList(params);
+                fetchTestList(params, pageStart);
             }
         });
 
@@ -167,7 +200,7 @@ public class MyTestFragment extends BaseFragment
             params.put(Constant.tm_avg_rating, getString(Constant.tm_avg_rating));
 
         fetchSubjectList(new PreferenceManager(requireActivity()).getString(Constant.scr_co_id));
-        fetchTestList(params);
+        fetchTestList(params, pageStart);
         mViewModel.getAllSubjects().observe(getViewLifecycleOwner(), new Observer<List<FetchSubjectResponse>>() {
             @Override
             public void onChanged(@Nullable final List<FetchSubjectResponse> subjects) {
@@ -248,7 +281,7 @@ public class MyTestFragment extends BaseFragment
         if (testList.size() > 0) {
             mBinding.tvNoTest.setVisibility(View.GONE);
             mAdapter = new TestListAdapter(requireActivity(), testList, this, "");
-            mBinding.testListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            mBinding.testListRecyclerView.setLayoutManager(linearLayoutManager);
             mBinding.testListRecyclerView.setAdapter(mAdapter);
         } else {
             Log.d(TAG, "setMyTestList size : " + testList.size());
@@ -349,9 +382,10 @@ public class MyTestFragment extends BaseFragment
         });
     }
 
-    private void fetchTestList(HashMap<String, String> params) {
+    private void fetchTestList(HashMap<String, String> params, String pageStart) {
         Log.d(TAG, "fetchTestList Params : " + params);
         Log.d(TAG, "initViews Flag : " + flag);
+        Log.d(TAG, "fetchTestList PageStart : " + pageStart);
         mBinding.swipeToRefresh.setRefreshing(true);
         Call<TestListResponse> call = apiService.fetchTestList(
                 params.get(Constant.u_user_id),
@@ -469,5 +503,17 @@ public class MyTestFragment extends BaseFragment
     @Override
     public void onViewImage(String path) {
         showFullScreen(path);
+    }
+
+    @Override
+    public void onResetClick(HashMap<String, String> params) {
+        showToast("Filters Reset");
+    }
+
+    @Override
+    public void onDoneClick(HashMap<String, String> params) {
+        showToast("Filters Applied");
+        this.params = params;
+        Log.d(TAG, "onDoneClick DiffLevel : " + params.get(Constant.tm_diff_level));
     }
 }

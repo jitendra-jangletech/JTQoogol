@@ -134,7 +134,6 @@ public class PersonalInfoFragment extends BaseFragment {
         userProfileMap = new HashMap();
     }
 
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {

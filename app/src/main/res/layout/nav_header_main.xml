@@ -34,13 +34,13 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
-                android:clickable="true"
-                android:foreground="?attr/selectableItemBackground"
                 android:id="@+id/profilePic"
                 android:layout_width="75dp"
                 android:layout_height="75dp"
                 android:background="@drawable/image_border"
+                android:clickable="true"
                 android:contentDescription="Hello"
+                android:foreground="?attr/selectableItemBackground"
                 android:padding="1dp"
                 android:paddingTop="@dimen/nav_header_vertical_spacing"
                 app:layout_constraintBottom_toBottomOf="@+id/header_text_container"
@@ -63,13 +63,13 @@
             app:layout_constraintLeft_toRightOf="@+id/profilePicLayout"
             app:layout_constraintTop_toTopOf="parent">
 
-
             <TextView
-                android:clickable="true"
-                android:foreground="?attr/selectableItemBackground"
                 android:id="@+id/tvName"
+                style="@style/font_style"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:clickable="true"
+                android:foreground="?attr/selectableItemBackground"
                 android:text="Qoogol User"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:textSize="@dimen/_15ssp"
@@ -108,12 +108,12 @@
                 app:layout_constraintTop_toBottomOf="@+id/rating">
 
                 <LinearLayout
-                    android:clickable="true"
-                    android:foreground="?attr/selectableItemBackground"
                     android:id="@+id/creditpotints_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/_9sdp"
+                    android:clickable="true"
+                    android:foreground="?attr/selectableItemBackground"
                     android:gravity="center"
                     android:orientation="vertical"
                     app:layout_constraintEnd_toStartOf="@+id/friends_layout"
@@ -133,6 +133,7 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        style="@style/font_style"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_2sdp"
@@ -142,12 +143,12 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:clickable="true"
-                    android:foreground="?attr/selectableItemBackground"
                     android:id="@+id/friends_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/_9sdp"
+                    android:clickable="true"
+                    android:foreground="?attr/selectableItemBackground"
                     android:gravity="center"
                     android:orientation="vertical"
                     app:layout_constraintEnd_toStartOf="@+id/followers_layout"
@@ -167,6 +168,7 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        style="@style/font_style"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_2sdp"
@@ -176,12 +178,12 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:clickable="true"
-                    android:foreground="?attr/selectableItemBackground"
                     android:id="@+id/followers_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/_9sdp"
+                    android:clickable="true"
+                    android:foreground="?attr/selectableItemBackground"
                     android:gravity="center"
                     android:orientation="vertical"
                     app:layout_constraintEnd_toStartOf="@+id/following_layout"
@@ -201,6 +203,7 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        style="@style/font_style"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_2sdp"

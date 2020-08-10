@@ -4,11 +4,17 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.MenuItemCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -27,6 +33,7 @@ import com.jangletech.qoogol.model.ResponseObj;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
+import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 
@@ -41,13 +48,18 @@ import static com.jangletech.qoogol.util.Constant.fromTest;
 import static com.jangletech.qoogol.util.Constant.from_question;
 import static com.jangletech.qoogol.util.Constant.from_user;
 
-public class NotificationsFragment extends BaseFragment implements NotificationAdapter.onItemClickListener, PublicProfileDialog.PublicProfileClickListener {
+public class NotificationsFragment extends BaseFragment implements NotificationAdapter.onItemClickListener, PublicProfileDialog.PublicProfileClickListener, SearchView.OnQueryTextListener {
 
     private static final String TAG = "NotificationsFragment";
     private NotificationsViewModel mViewModel;
     private FragmentNotificationsBinding mBinding;
     private Context mContext;
+    private NotificationResponse notificationResponse;
     private NotificationAdapter notificationAdapter;
+    private Boolean isScrolling = false;
+    private String pageStart = "0";
+    private LinearLayoutManager linearLayoutManager;
+    private int currentItems, scrolledOutItems, totalItems;
     private ApiInterface apiService = ApiClient.getInstance().getApi();
     private NotificationAdapter.onItemClickListener onItemClickListener;
     private List<Notification> notificationList = new ArrayList<>();
@@ -63,10 +75,17 @@ public class NotificationsFragment extends BaseFragment implements NotificationA
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_notifications, container, false);
         mBinding.setLifecycleOwner(this);
+        linearLayoutManager = new LinearLayoutManager(getContext());
         return mBinding.getRoot();
     }
 
@@ -74,7 +93,7 @@ public class NotificationsFragment extends BaseFragment implements NotificationA
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(NotificationsViewModel.class);
-        fetchNotifications();
+        fetchNotifications(pageStart);
         onItemClickListener = this;
         mViewModel.getAllNotifications(getUserId(getActivity())).observe(getViewLifecycleOwner(), new Observer<List<Notification>>() {
             @Override
@@ -84,18 +103,64 @@ public class NotificationsFragment extends BaseFragment implements NotificationA
                     //showToast("Data Updated");
                     if (mBinding.swipeToRefresh.isRefreshing())
                         mBinding.swipeToRefresh.setRefreshing(false);
+                    if (notificationResponse != null)
+                        pageStart = notificationResponse.getPage();
+
                     notificationList.clear();
                     notificationList.addAll(notifications);
                     mBinding.notificationRecyclerView.setHasFixedSize(true);
-                    mBinding.notificationRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                    mBinding.notificationRecyclerView.setLayoutManager(linearLayoutManager);
                     notificationAdapter = new NotificationAdapter(getActivity(), notifications, onItemClickListener);
                     mBinding.notificationRecyclerView.setAdapter(notificationAdapter);
                 }
             }
         });
-        mBinding.swipeToRefresh.setOnRefreshListener(() -> fetchNotifications());
+        mBinding.swipeToRefresh.setOnRefreshListener(() -> fetchNotifications(pageStart));
 
+        mBinding.notificationRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                    isScrolling = true;
+                }
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                currentItems = linearLayoutManager.getChildCount();
+                totalItems = linearLayoutManager.getItemCount();
+                scrolledOutItems = linearLayoutManager.findFirstVisibleItemPosition();
+                if (dy > 0) {
+                    if (isScrolling && (currentItems + scrolledOutItems == totalItems)) {
+                        isScrolling = false;
+                        fetchNotifications(pageStart);
+                    }
+                }
+            }
+        });
         enableSwipe();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.action_conn_search, menu);
+        final MenuItem item = menu.findItem(R.id.action_search);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
+        searchView.setOnQueryTextListener(this);
+
+        item.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                return true;
+            }
+        });
     }
 
     private void enableSwipe() {
@@ -128,7 +193,7 @@ public class NotificationsFragment extends BaseFragment implements NotificationA
                 if (response.body() != null && response.body().getResponse().equals("200")) {
                     deleteFromdb(n_id);
                     showToast("Notification deleted.");
-                    fetchNotifications();
+                    fetchNotifications(pageStart);
                 }
             }
 
@@ -147,10 +212,16 @@ public class NotificationsFragment extends BaseFragment implements NotificationA
         mViewModel.deleteNotification(n_id);
     }
 
-    private void fetchNotifications() {
+    private void fetchNotifications(String pageStart) {
         //ProgressDialog.getInstance().show(getActivity());
+        Log.d(TAG, "fetchNotifications PageStart : " + pageStart);
         mBinding.swipeToRefresh.setRefreshing(true);
-        Call<NotificationResponse> call = apiService.fetchNotifications(new PreferenceManager(getActivity()).getUserId(), getDeviceId(getActivity()), "Q");
+        Call<NotificationResponse> call = apiService.fetchNotifications(
+                AppUtils.getUserId(),
+                getDeviceId(getActivity()),
+                "Q",
+                pageStart
+        );
         call.enqueue(new Callback<NotificationResponse>() {
             @Override
             public void onResponse(Call<NotificationResponse> call, Response<NotificationResponse> response) {
@@ -159,6 +230,7 @@ public class NotificationsFragment extends BaseFragment implements NotificationA
                 if (response.body() != null && response.body().getResponse().equals("200")) {
                     //mViewModel.setNotificationList(response.body().getNotifications());
                     //mViewModel.delete();
+                    notificationResponse = response.body();
                     mViewModel.insert(response.body().getNotifications());
                 } else {
                     showErrorDialog(getActivity(), response.body().getResponse(), response.body().getMessage());
@@ -207,5 +279,39 @@ public class NotificationsFragment extends BaseFragment implements NotificationA
     @Override
     public void onViewImage(String path) {
         showFullScreen(path);
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        Log.d(TAG, "onQueryTextChange Text : " + newText.trim().toLowerCase());
+        searchNotification(newText.trim().toLowerCase());
+        return true;
+    }
+
+    private void searchNotification(String searchTxt) {
+        List<Notification> filteredNotifications = new ArrayList<>();
+        if (searchTxt.isEmpty()) {
+            //empty search text
+            notificationAdapter.updateNotificationList(notificationList);
+        } else {
+            //search for text
+            for (Notification notification : notificationList) {
+                if (searchTxt.contains(notification.getW_notification_desc().toLowerCase())) {
+                    filteredNotifications.add(notification);
+                }
+            }
+
+            if (filteredNotifications.size() > 0) {
+                mBinding.tvEmptySearch.setVisibility(View.GONE);
+                notificationAdapter.updateNotificationList(filteredNotifications);
+            } else {
+                mBinding.tvEmptySearch.setVisibility(View.VISIBLE);
+            }
+        }
     }
 }

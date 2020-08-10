@@ -42,6 +42,7 @@ public class TestDetailsFragment extends BaseFragment {
     private TestDetailsViewModel mViewModel;
     private TestDetailsFragmentBinding mBinding;
     private List<QSet> qSets;
+    private TestDetailsResponse testDetailsResponse;
     private TestModelNew testModelNew;
     private ApiInterface apiService = ApiClient.getInstance().getApi();
 
@@ -74,6 +75,8 @@ public class TestDetailsFragment extends BaseFragment {
                 if (qSetList != null) {
                     Log.d(TAG, "onChanged Size : " + qSetList.size());
                     qSets = qSetList;
+                    Log.d(TAG, "onChanged Test Details : "+testDetailsResponse.getTest_description());
+                    mBinding.tvTestDescription.setText(testDetailsResponse.getTest_description());
                     sortQSetList(qSetList);
                 }
             }
@@ -91,7 +94,7 @@ public class TestDetailsFragment extends BaseFragment {
 
         //set Test Title & Description
         mBinding.tvTestTitle.setText(testModelNew.getTm_name());
-        mBinding.tvTestDescription.setText(testModelNew.getTest_description());
+        //mBinding.tvTestDescription.setText(testModelNew.getTest_description());
 
         List<QSet> qsetRecentList = new ArrayList<>();
         List<QSet> qsetTopScoreList = new ArrayList<>();
@@ -164,6 +167,7 @@ public class TestDetailsFragment extends BaseFragment {
             public void onResponse(Call<TestDetailsResponse> call, Response<TestDetailsResponse> response) {
                 ProgressDialog.getInstance().dismiss();
                 if (response.body() != null && response.body().getResponseCode().equals("200")) {
+                    testDetailsResponse = response.body();
                     mViewModel.setQsetList(response.body().getqSetList());
                 } else if (response.body().getResponseCode().equals("501")) {
                     resetSettingAndLogout();

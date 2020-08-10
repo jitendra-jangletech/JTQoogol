@@ -155,6 +155,7 @@
     </style>
 
     <style name="menu_item_style">
+        <item name="fontFamily">sans-serif-thin</item>
         <item name="android:layout_marginTop">10dp</item>
         <item name="android:layout_height">@dimen/_32sdp</item>
         <item name="android:layout_width">match_parent</item>
@@ -166,6 +167,8 @@
     </style>
 
     <style name="sub_menu_item_style">
+        <item name="android:textStyle">bold</item>
+        <item name="fontFamily">sans-serif-thin</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:layout_height">35dp</item>
         <item name="android:layout_width">match_parent</item>
@@ -219,6 +222,11 @@
         <item name="android:windowExitAnimation">@anim/exit_to_right</item>
     </style>
 
+    <style name="font_style">
+        <item name="fontFamily">sans-serif-thin</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
     <style name="chipTitleStyle">
         <item name="fontFamily">sans-serif-thin</item>
         <item name="android:textStyle">bold</item>
@@ -226,7 +234,7 @@
         <item name="android:textSize">@dimen/_12ssp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:textColor">@color/colorSkyBlue</item>
+        <item name="android:textColor">@color/colorBlack</item>
     </style>
 
     <style name="Custom_Slider_Style" parent="Widget.MaterialComponents.Slider">

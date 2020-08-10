@@ -31,7 +31,9 @@
 
                 <androidx.core.widget.NestedScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    tools:layout_editor_absoluteX="31dp"
+                    tools:layout_editor_absoluteY="-312dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -61,6 +63,7 @@
                             android:foreground="?attr/selectableItemBackground">
 
                             <TextView
+                                style="@style/font_style"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:layout_alignParentLeft="true"
@@ -100,7 +103,6 @@
                                 android:text="@string/practice_questions" />
 
 
-
                             <TextView
                                 android:id="@+id/nav_shared_by_you_que"
                                 style="@style/sub_menu_item_style"
@@ -112,7 +114,6 @@
                                 style="@style/sub_menu_item_style"
                                 android:foreground="?attr/selectableItemBackground"
                                 android:text="@string/shared_with_you" />
-
 
 
                         </LinearLayout>
@@ -132,6 +133,7 @@
                                 android:layout_marginTop="@dimen/_10sdp"
                                 android:drawableLeft="@drawable/nav_test"
                                 android:drawablePadding="@dimen/_10sdp"
+                                android:fontFamily="sans-serif-thin"
                                 android:gravity="center_vertical"
                                 android:text="@string/test"
                                 android:textColor="@color/menu_item_text_color"
@@ -215,10 +217,10 @@
                         <TextView
                             android:id="@+id/nav_doubts"
                             style="@style/menu_item_style"
-                            android:visibility="gone"
                             android:drawableLeft="@drawable/nav_learning"
                             android:foreground="?attr/selectableItemBackground"
-                            android:text="Doubts" />
+                            android:text="Doubts"
+                            android:visibility="gone" />
 
                         <TextView
                             android:id="@+id/tvNavDoubt"

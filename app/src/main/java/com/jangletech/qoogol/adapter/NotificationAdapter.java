@@ -24,9 +24,9 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     private List<Notification> notifications;
     private Context mContext;
     private NotificationItemBinding itemBinding;
-    onItemClickListener onItemClickListener;
+    private onItemClickListener onItemClickListener;
 
-    public NotificationAdapter(Context context,List<Notification> notifications, onItemClickListener onItemClickListener){
+    public NotificationAdapter(Context context, List<Notification> notifications, onItemClickListener onItemClickListener) {
         this.mContext = context;
         this.notifications = notifications;
         this.onItemClickListener = onItemClickListener;
@@ -36,7 +36,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     @Override
     public NotificationAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         itemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
-                R.layout.notification_item,parent,false);
+                R.layout.notification_item, parent, false);
         return new NotificationAdapter.ViewHolder(itemBinding);
     }
 
@@ -44,8 +44,8 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     public void onBindViewHolder(@NonNull NotificationAdapter.ViewHolder holder, int position) {
         Notification notification = notifications.get(position);
         holder.itemBinding.notificationText.setText(notification.getW_notification_desc());
-        if(notification.getN_cdatetime()!=null )
-        holder.itemBinding.tvDate.setText(DateUtils.localeDateFormat(notification.getN_cdatetime()));
+        if (notification.getN_cdatetime() != null)
+            holder.itemBinding.tvDate.setText(DateUtils.localeDateFormat(notification.getN_cdatetime()));
         //holder.itemBinding.tvDate.setText(DateUtils.getFormattedDate(notification.getN_cdatetime().substring(0,10)));
         Glide.with(mContext)
                 .load(getImageUrl(notification))
@@ -72,15 +72,21 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         NotificationItemBinding itemBinding;
+
         public ViewHolder(@NonNull NotificationItemBinding itemView) {
             super(itemView.getRoot());
             this.itemBinding = itemView;
         }
     }
 
-    public String getImageUrl(Notification notification){
+    public void updateNotificationList(List<Notification> notificationsList) {
+        notifications = notificationsList;
+        notifyDataSetChanged();
+    }
+
+    public String getImageUrl(Notification notification) {
         String paddedString = "";
-        if(!notification.getW_user_profile_image_name().isEmpty()) {
+        if (!notification.getW_user_profile_image_name().isEmpty()) {
             paddedString = Constant.PRODUCTION_BASE_FILE_API
                     + notification.getW_user_profile_image_name();
         }
