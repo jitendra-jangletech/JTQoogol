@@ -17,7 +17,6 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 
-import com.androidbuts.multispinnerfilter.KeyPairBoolData;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.jangletech.qoogol.R;
@@ -236,16 +235,16 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
             }
         });
 
-        List<String> list = Arrays.asList(getResources().getStringArray(R.array.author));
-        List<KeyPairBoolData> listArray0 = new ArrayList<>();
-
-        for (int i = 0; i < list.size(); i++) {
-            KeyPairBoolData h = new KeyPairBoolData();
-            h.setId(i + 1);
-            h.setName(list.get(i));
-            h.setSelected(false);
-            listArray0.add(h);
-        }
+//        List<String> list = Arrays.asList(getResources().getStringArray(R.array.author));
+//        List<KeyPairBoolData> listArray0 = new ArrayList<>();
+//
+//        for (int i = 0; i < list.size(); i++) {
+//            KeyPairBoolData h = new KeyPairBoolData();
+//            h.setId(i + 1);
+//            h.setName(list.get(i));
+//            h.setSelected(false);
+//            listArray0.add(h);
+//        }
 
 //        mBinding.spinnerSearchAuthor.setItems(listArray0, -1, new SpinnerListener() {
 //

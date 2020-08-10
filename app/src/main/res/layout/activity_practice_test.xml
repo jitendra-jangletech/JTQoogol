@@ -126,7 +126,7 @@
                         android:layout_height="match_parent"
                         android:layout_below="@+id/seperator"
                         android:layout_marginTop="@dimen/_1sdp"
-                        android:background="@color/white"
+                        android:background="@color/colorWhite"
                         android:fillViewport="true"
                         android:padding="@dimen/_5sdp"
                         android:scrollbars="none">
@@ -136,7 +136,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_marginTop="@dimen/_1sdp"
-                            android:background="@color/white">
+                            android:background="@color/colorWhite">
 
                             <LinearLayout
                                 android:id="@+id/indicatorLayout"

@@ -23,7 +23,7 @@
                 android:gravity="center"
                 android:src="?attr/homeAsUpIndicator"
                 android:textColor="@color/colorWhite"
-                android:tint="@color/white"
+                android:tint="@color/colorWhite"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -78,7 +78,7 @@
             app:layout_constraintRight_toRightOf="parent"
             android:backgroundTint="@color/colorSkyBlue"
             android:src="@drawable/ic_add_white"
-            android:tint="@color/white"
+            android:tint="@color/colorWhite"
             android:id="@+id/create_group"
             android:layout_marginRight="@dimen/_10sdp"
             android:layout_marginBottom="@dimen/_10sdp"

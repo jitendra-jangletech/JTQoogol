@@ -109,7 +109,7 @@ dependencies {
     implementation 'org.apache.commons:commons-text:1.8'
 
     //multiselectionspinner Library
-    implementation 'com.github.pratikbutani:MultiSelectSpinner:-SNAPSHOT'
+    //implementation 'com.github.pratikbutani:MultiSelectSpinner:-SNAPSHOT'
 
     //gson
     implementation 'com.google.code.gson:gson:2.8.5'
@@ -136,10 +136,10 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
 
     //show more text
-    implementation 'com.github.mahimrocky:ShowMoreText:1.0.2'
+    //implementation 'com.github.mahimrocky:ShowMoreText:1.0.2'
     //implementation 'com.azoft.carousellayoutmanager:carousel:1.2.4'
 
-    implementation 'com.borjabravo:readmoretextview:2.1.0'
+    //implementation 'com.borjabravo:readmoretextview:2.1.0'
 
     implementation 'com.karumi:dexter:6.0.0'
     // performance monitoring

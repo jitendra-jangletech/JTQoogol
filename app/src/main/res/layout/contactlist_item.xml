@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
         app:cardUseCompatPadding="true"
-        app:cardBackgroundColor="@color/white"
+        app:cardBackgroundColor="@color/colorWhite"
         card_view:cardCornerRadius="10dp"
         card_view:cardElevation="3dp">
 
@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:text="@{contacts.userName}"
-                android:textColor="@color/black"
+                android:textColor="@color/colorBlack"
                 android:textSize="16sp" />
 
             <TextView
@@ -52,7 +52,7 @@
                 android:layout_below="@+id/userName"
                 android:text="@{contacts.mobileNum}"
                 android:layout_alignParentStart="true"
-                android:textColor="@color/black"
+                android:textColor="@color/colorBlack"
                 android:textSize="14sp" />
 
             <TextView

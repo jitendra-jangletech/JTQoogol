@@ -17,8 +17,6 @@ import com.jangletech.qoogol.BuildConfig;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.activities.MainActivity;
 
-import org.apache.commons.text.StringEscapeUtils;
-
 import java.util.Map;
 
 import static androidx.core.app.NotificationCompat.PRIORITY_MAX;
@@ -70,7 +68,7 @@ public class NotificationHelper {
             NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, channelId);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 notificationBuilder.setSmallIcon(R.drawable.ic_star);
-                notificationBuilder.setColor(context.getResources().getColor(R.color.primary));
+                notificationBuilder.setColor(context.getResources().getColor(R.color.colorPrimary));
             } else {
                 notificationBuilder.setSmallIcon(R.mipmap.ic_launcher);
             }

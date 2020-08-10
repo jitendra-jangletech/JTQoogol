@@ -92,20 +92,15 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
 
-                        <com.borjabravo.readmoretextview.ReadMoreTextView
+                        <com.jangletech.qoogol.view.ExpandableTextView
                             android:id="@+id/text_comment_body"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:padding="@dimen/_4sdp"
                             android:text="English Text"
                             android:textAppearance="?android:attr/textAppearanceSmall"
-                            app:colorClickableText="@color/colorSkyBlue"
                             app:layout_constraintLeft_toLeftOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/tvSenderName"
-                            app:trimCollapsedText="show more"
-                            app:trimExpandedText="show less"
-                            app:trimLength="50"
-                            app:trimMode="trimModeLength" />
+                            app:layout_constraintTop_toBottomOf="@+id/tvSenderName" />
 
                         <!-- <TextView
                              android:id="@+id/text_comment_body"
@@ -138,7 +133,6 @@
                                 app:layout_constraintTop_toTopOf="parent" />
 
                             <TextView
-                                android:visibility="gone"
                                 android:id="@+id/tvLike"
                                 android:layout_width="@dimen/_40sdp"
                                 android:layout_height="match_parent"
@@ -148,11 +142,11 @@
                                 android:padding="@dimen/_2sdp"
                                 android:text="Like"
                                 android:textSize="@dimen/_8ssp"
+                                android:visibility="gone"
                                 app:layout_constraintLeft_toRightOf="@+id/tvLikes"
                                 app:layout_constraintTop_toTopOf="parent" />
 
                             <TextView
-                                android:visibility="gone"
                                 android:id="@+id/tvReply"
                                 android:layout_width="@dimen/_40sdp"
                                 android:layout_height="match_parent"
@@ -162,6 +156,7 @@
                                 android:padding="@dimen/_2sdp"
                                 android:text="Reply"
                                 android:textSize="@dimen/_8ssp"
+                                android:visibility="gone"
                                 app:layout_constraintLeft_toRightOf="@+id/tvLike"
                                 app:layout_constraintTop_toTopOf="parent" />
 

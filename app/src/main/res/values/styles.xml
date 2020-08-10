@@ -16,7 +16,7 @@
     </style>
 
     <style name="myPopupMenuTextAppearanceSmall" parent="@style/TextAppearance.AppCompat.Light.Widget.PopupMenu.Small">
-        <item name="android:textColor">@color/black</item>
+        <item name="android:textColor">@color/colorBlack</item>
     </style>
 
     <style name="SettingTextViewStyle">
@@ -60,7 +60,7 @@
     </style>
 
     <style name="myPopupMenuTextAppearanceLarge" parent="@style/TextAppearance.AppCompat.Light.Widget.PopupMenu.Large">
-        <item name="android:textColor">@color/black</item>
+        <item name="android:textColor">@color/colorBlack</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -183,7 +183,7 @@
     <style name="CustomTextAppearanceTab" parent="TextAppearance.Design.Tab">
         <item name="textAllCaps">false</item>
         <item name="android:textAllCaps">false</item>
-        <item name="android:textColor">@color/gray</item>
+        <item name="android:textColor">@color/grey</item>
     </style>
 
     <style name="ChipStyle">

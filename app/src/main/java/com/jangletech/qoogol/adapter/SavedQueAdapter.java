@@ -277,11 +277,11 @@ public class SavedQueAdapter extends RecyclerView.Adapter<SavedQueAdapter.ViewHo
             MTP_ans.put("a3", "b1");
             MTP_ans.put("a4", "b2");
 
-            learningItemBinding.questiondescTextview.setShowingLine(2);
-            learningItemBinding.questiondescTextview.addShowLessText("Show Less");
-            learningItemBinding.questiondescTextview.addShowMoreText("Show More");
-            learningItemBinding.questiondescTextview.setShowMoreColor(Color.RED);
-            learningItemBinding.questiondescTextview.setShowLessTextColor(Color.RED);
+//            learningItemBinding.questiondescTextview.setShowingLine(2);
+//            learningItemBinding.questiondescTextview.addShowLessText("Show Less");
+//            learningItemBinding.questiondescTextview.addShowMoreText("Show More");
+//            learningItemBinding.questiondescTextview.setShowMoreColor(Color.RED);
+//            learningItemBinding.questiondescTextview.setShowLessTextColor(Color.RED);
 
 
             //set touch listeners

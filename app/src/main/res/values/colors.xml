@@ -5,6 +5,10 @@
     <color name="colorAccent">#0682FF</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorBlack">#000000</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+
     <color name="color_button_background">#0682FF</color>
     <color name="colorOrange">#FF0000</color>
     <color name="colorNavyBlue">#6642E0</color>
@@ -18,6 +22,7 @@
     <color name="wrong_ans">#f46a79</color>
 
     <color name="background">#dddddd</color>
+    <color name="background_color">#dddddd</color>
 
     <color name="color_green">#FFA2E9A2</color>
     <color name="colorLightGray">#e2e2e2</color>

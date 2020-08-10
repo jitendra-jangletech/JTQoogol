@@ -35,10 +35,9 @@
            android:layout_below="@+id/filter_recycler"
             android:text="Select All"
             android:layout_marginRight="@dimen/_20sdp"
-            android:textColor="@color/black"
+            android:textColor="@color/colorBlack"
             android:gravity="center_vertical"
             android:textSize="14sp" />
-
 
         <LinearLayout
             android:visibility="gone"
@@ -55,14 +54,14 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@color/white"
+                android:background="@color/colorWhite"
                 android:gravity="center"
                 android:paddingLeft="@dimen/margin_30"
                 android:paddingTop="@dimen/margin_10"
                 android:paddingRight="@dimen/margin_30"
                 android:paddingBottom="@dimen/margin_10"
                 android:text="@string/deselect_all"
-                android:textColor="@color/black"
+                android:textColor="@color/colorBlack"
                 android:textSize="@dimen/textSizeMedium"
                 android:visibility="visible" />
 
@@ -71,14 +70,14 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@color/white"
+                android:background="@color/colorWhite"
                 android:gravity="center"
                 android:paddingLeft="@dimen/margin_30"
                 android:paddingTop="@dimen/margin_10"
                 android:paddingRight="@dimen/margin_30"
                 android:paddingBottom="@dimen/margin_10"
                 android:text="@string/select_all"
-                android:textColor="@color/black"
+                android:textColor="@color/colorBlack"
                 android:textSize="@dimen/textSizeMedium"
                 android:visibility="visible" />
         </LinearLayout>
@@ -94,7 +93,7 @@
                 android:layout_below="@+id/selectCheckBox"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/white" />
+                android:background="@color/colorWhite" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <TextView

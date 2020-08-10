@@ -306,11 +306,11 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
             this.learningItemBinding = itemView;
             MTP_ans.clear();
 
-            learningItemBinding.questiondescTextview.setShowingLine(2);
-            learningItemBinding.questiondescTextview.addShowLessText("Show Less");
-            learningItemBinding.questiondescTextview.addShowMoreText("Show More");
-            learningItemBinding.questiondescTextview.setShowMoreColor(Color.RED);
-            learningItemBinding.questiondescTextview.setShowLessTextColor(Color.RED);
+//            learningItemBinding.questiondescTextview.setShowingLine(2);
+//            learningItemBinding.questiondescTextview.addShowLessText("Show Less");
+//            learningItemBinding.questiondescTextview.addShowMoreText("Show More");
+//            learningItemBinding.questiondescTextview.setShowMoreColor(Color.RED);
+//            learningItemBinding.questiondescTextview.setShowLessTextColor(Color.RED);
 
             //set touch listeners
             learningItemBinding.a1.setOnTouchListener(new
