@@ -177,6 +177,62 @@
                             android:background="@color/colorLightGray" />
                     </LinearLayout>
 
+                    <LinearLayout
+                        android:id="@+id/que_type_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone"
+                        app:layout_constraintTop_toBottomOf="@+id/rating_layout">
+
+                        <TextView
+                            style="@style/chipTitleStyle"
+                            android:text="Select Type" />
+
+                        <com.google.android.material.chip.ChipGroup
+                            android:id="@+id/que_typeChipGrp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_10sdp"
+                            app:selectionRequired="true" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_1sdp"
+                            android:layout_marginLeft="@dimen/_10sdp"
+                            android:layout_marginTop="@dimen/_15sdp"
+                            android:layout_marginRight="@dimen/_10sdp"
+                            android:background="@color/colorLightGray" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/que_category_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone"
+                        app:layout_constraintTop_toBottomOf="@+id/que_type_layout">
+
+                        <TextView
+                            style="@style/chipTitleStyle"
+                            android:text="Select Question Category" />
+
+                        <com.google.android.material.chip.ChipGroup
+                            android:id="@+id/que_categoryChipGrp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_10sdp"
+                            app:selectionRequired="true" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_1sdp"
+                            android:layout_marginLeft="@dimen/_10sdp"
+                            android:layout_marginTop="@dimen/_15sdp"
+                            android:layout_marginRight="@dimen/_10sdp"
+                            android:background="@color/colorLightGray" />
+                    </LinearLayout>
+
 
                     <LinearLayout
                         android:id="@+id/testcat_layout"
@@ -184,7 +240,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:visibility="gone"
-                        app:layout_constraintTop_toBottomOf="@+id/rating_layout">
+                        app:layout_constraintTop_toBottomOf="@+id/que_category_layout">
 
 
                         <TextView

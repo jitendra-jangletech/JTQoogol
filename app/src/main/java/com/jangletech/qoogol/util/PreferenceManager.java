@@ -31,9 +31,30 @@ public class PreferenceManager {
         return sharedPreferences.getStringSet("rating",new HashSet<>());
     }
 
+    public Set<String> getTypeFilter(){
+        return sharedPreferences.getStringSet("type",new HashSet<>());
+    }
+
+    public Set<String> getQueCategoryFilter(){
+        return sharedPreferences.getStringSet("que_category",new HashSet<>());
+    }
+
+
     public void setRatingsFilter(Set subject) {
         sharedPreferences.edit()
                 .putStringSet("rating",subject)
+                .apply();
+    }
+
+    public void setTypeFilter(Set type) {
+        sharedPreferences.edit()
+                .putStringSet("type",type)
+                .apply();
+    }
+
+    public void setQueCategoryFilter(Set type) {
+        sharedPreferences.edit()
+                .putStringSet("que_category",type)
                 .apply();
     }
 

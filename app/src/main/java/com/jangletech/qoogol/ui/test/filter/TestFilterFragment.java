@@ -52,6 +52,8 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
     private HashMap<Integer, Chip> mapSubjectChips = new HashMap();
     private HashMap<Integer, Chip> mapChapterChips = new HashMap();
     private HashMap<Integer, Chip> mapRatingsChips = new HashMap();
+    private HashMap<Integer, Chip> mapTypeChips = new HashMap();
+    private HashMap<Integer, Chip> mapQueCategoryChips = new HashMap();
     private ApiInterface apiService = ApiClient.getInstance().getApi();
     private PreferenceManager mSettings;
     private String diffLevel = "";
@@ -61,6 +63,8 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
     private Set subjectset = new HashSet<String>();
     private Set chapterset = new HashSet<String>();
     private Set ratingset = new HashSet<String>();
+    private Set typeset = new HashSet<String>();
+    private Set que_categoryset = new HashSet<String>();
     private String call_from = "";
 
     public static TestFilterFragment newInstance() {
@@ -102,7 +106,8 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
         if (bundle != null) {
             if (bundle.getString("call_from").equalsIgnoreCase("learning")) {
                 mBinding.chapterLayout.setVisibility(View.VISIBLE);
-                mBinding.ratingLayout.setVisibility(View.VISIBLE);
+                mBinding.queTypeLayout.setVisibility(View.VISIBLE);
+                mBinding.queCategoryLayout.setVisibility(View.VISIBLE);
                 call_from = "learning";
             } else if (bundle.getString("call_from").equalsIgnoreCase("test")) {
                 //mBinding.autherLayout.setVisibility(View.VISIBLE);
@@ -146,18 +151,15 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
             fetchSubjectList(getString(Constant.scr_co_id));
         }
         fetchchapterList();
-        mViewModel.getAllSubjects().observe(getViewLifecycleOwner(), new Observer<List<FetchSubjectResponse>>() {
-            @Override
-            public void onChanged(@Nullable final List<FetchSubjectResponse> subjects) {
-                if (subjects != null) {
-                    Log.d(TAG, "onChanged Subjects Size : " + subjects.size());
-                    ArrayList<String> subjectList = new ArrayList<>();
-                    for (FetchSubjectResponse obj : subjects) {
-                        if (!subjectList.contains(obj.getSm_sub_name()))
-                            subjectList.add(obj.getSm_sub_name());
-                    }
-                    prepareSubjectChips(subjectList);
+        mViewModel.getAllSubjects().observe(getViewLifecycleOwner(), subjects -> {
+            if (subjects != null) {
+                Log.d(TAG, "onChanged Subjects Size : " + subjects.size());
+                ArrayList<String> subjectList = new ArrayList<>();
+                for (FetchSubjectResponse obj : subjects) {
+                    if (!subjectList.contains(obj.getSm_sub_name()))
+                        subjectList.add(obj.getSm_sub_name());
                 }
+                prepareSubjectChips(subjectList);
             }
         });
 
@@ -165,17 +167,14 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
             AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity(), R.style.AlertDialogStyle);
             builder.setTitle("Confirm")
                     .setMessage("Are you sure, you want to reset filters?")
-                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            clearFilters();
-                            mBinding.rating.setRating(0);
-                            mBinding.testDifficultyLevelChipGrp.clearCheck();
-                            mBinding.subjectsChipGrp.clearCheck();
-                            mBinding.chapterChipGrp.clearCheck();
-                            mBinding.ratingChipGrp.clearCheck();
-                            mBinding.testCategoryChipGrp.clearCheck();
-                        }
+                    .setPositiveButton("Yes", (dialog, which) -> {
+                        clearFilters();
+                        mBinding.rating.setRating(0);
+                        mBinding.testDifficultyLevelChipGrp.clearCheck();
+                        mBinding.subjectsChipGrp.clearCheck();
+                        mBinding.chapterChipGrp.clearCheck();
+                        mBinding.ratingChipGrp.clearCheck();
+                        mBinding.testCategoryChipGrp.clearCheck();
                     })
                     .setNegativeButton("No", null)
                     .show();
@@ -187,19 +186,18 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
         });
 
         prepareRatingChips();
+        prepareTypeChips();
+        prepareQueCategory();
         prepareTestCategoryChips();
         prepareDiffLevelChips();
 
-        mBinding.rating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
-            public void onRatingChanged(RatingBar ratingBar, float rating,
-                                        boolean fromUser) {
-                Log.d(TAG, "onRatingChanged: " + rating);
-                if (rating == 0) {
-                    saveString(getActivity(),Constant.tm_avg_rating, "");
-                } else {
-                    params.put(Constant.tm_avg_rating, String.valueOf(rating));
-                    saveString(getActivity(),Constant.tm_avg_rating, String.valueOf(rating));
-                }
+        mBinding.rating.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {
+            Log.d(TAG, "onRatingChanged: " + rating);
+            if (rating == 0) {
+                saveString(getActivity(),Constant.tm_avg_rating, "");
+            } else {
+                params.put(Constant.tm_avg_rating, String.valueOf(rating));
+                saveString(getActivity(),Constant.tm_avg_rating, String.valueOf(rating));
             }
         });
 
@@ -214,6 +212,13 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
 
                 if (ratingset != null && ratingset.size() > 0)
                     mSettings.setRatingsFilter(ratingset);
+
+                if (typeset != null && typeset.size() > 0)
+                    mSettings.setTypeFilter(typeset);
+
+                if (que_categoryset != null && que_categoryset.size() > 0)
+                    mSettings.setQueCategoryFilter(que_categoryset);
+
                 Bundle bundle = new Bundle();
 
                 if (call_from.equalsIgnoreCase("test")) {
@@ -300,6 +305,60 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
                 setCheckedChip(mBinding.testDifficultyLevelChipGrp);
             }
         });
+    }
+
+    private void prepareQueCategory() {
+        if (mSettings.getQueCategoryFilter() != null) {
+            que_categoryset = mSettings.getQueCategoryFilter();
+        }
+        List que_categoryList = new ArrayList();
+        que_categoryList.add("SCQ");
+        que_categoryList.add("MCQ");
+        que_categoryList.add("Fill in the Blanks");
+        que_categoryList.add("True False");
+        que_categoryList.add("Match the Pair");
+        que_categoryList.add("Short Answer");
+        que_categoryList.add("Long Answer");
+
+        mBinding.queCategoryChipGrp.removeAllViews();
+        for (int i = 0; i < que_categoryList.size(); i++) {
+            Chip chip = (Chip) LayoutInflater.from(mBinding.queCategoryChipGrp.getContext()).inflate(R.layout.chip_layout, mBinding.queCategoryChipGrp, false);
+            chip.setText(que_categoryList.get(i).toString());
+            chip.setTag("Question_Category");
+            chip.setId(i);
+            if (que_categoryset.contains(que_categoryList.get(i).toString()))
+                chip.setChecked(true);
+            chip.setClickable(true);
+            chip.setCheckable(true);
+            mapQueCategoryChips.put(i, chip);
+            chip.setOnClickListener(this);
+            mBinding.queCategoryChipGrp.addView(chip);
+        }
+    }
+
+    private void prepareTypeChips() {
+        if (mSettings.getTypeFilter() != null) {
+            typeset = mSettings.getTypeFilter();
+        }
+        List typeList = new ArrayList();
+        typeList.add("Trending");
+        typeList.add("Popular");
+        typeList.add("Recent");
+
+        mBinding.queTypeChipGrp.removeAllViews();
+        for (int i = 0; i < typeList.size(); i++) {
+            Chip chip = (Chip) LayoutInflater.from(mBinding.queTypeChipGrp.getContext()).inflate(R.layout.chip_layout, mBinding.queTypeChipGrp, false);
+            chip.setText(typeList.get(i).toString());
+            chip.setTag("Type");
+            chip.setId(i);
+            if (typeset.contains(typeList.get(i).toString()))
+                chip.setChecked(true);
+            chip.setClickable(true);
+            chip.setCheckable(true);
+            mapTypeChips.put(i, chip);
+            chip.setOnClickListener(this);
+            mBinding.queTypeChipGrp.addView(chip);
+        }
     }
 
     private void fetchchapterList() {
@@ -445,8 +504,6 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
     }
 
     private void setSelectedSubjectsChips(Chip chip) {
@@ -520,6 +577,7 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
         }
     }
 
+
     private void setCheckedChip(ChipGroup chipGroup) {
         for (int i = 0; i < chipGroup.getChildCount(); i++) {
             Chip chip = (Chip) chipGroup.getChildAt(i);
@@ -530,6 +588,7 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
             }
         }
     }
+
 
     @Override
     public void onClick(View v) {
@@ -543,7 +602,69 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
             } else if (v.getTag().toString().equalsIgnoreCase("Ratings")) {
                 Chip chip = (Chip) v;
                 setSelectedRatingChips(chip);
+            } else if (v.getTag().toString().equalsIgnoreCase("Type")) {
+                Chip chip = (Chip) v;
+                setSelecteTypeChips(chip);
+            } else if (v.getTag().toString().equalsIgnoreCase("Question_Category")) {
+                Chip chip = (Chip) v;
+                setSelecteQueCategoryChips(chip);
             }
         }
     }
+
+    private void setSelecteQueCategoryChips(Chip chip) {
+        try {
+            que_categoryset.clear();
+            if (mSettings.getQueCategoryFilter() != null) {
+                que_categoryset = mSettings.getQueCategoryFilter(); }
+
+            for (int i = 0; i < mapQueCategoryChips.size(); i++) {
+                String text = mapQueCategoryChips.get(i).getText().toString();
+                if (mapQueCategoryChips.get(i).isChecked()) {
+                    if (!que_categoryset.contains(text)) {
+                        que_categoryset.add(text);
+                        mapQueCategoryChips.get(i).setTextColor(Color.WHITE);
+                    } else {
+                        que_categoryset.remove(text);
+                        mapQueCategoryChips.get(i).setTextColor(Color.BLACK);
+                    }
+                } else {
+                    mapQueCategoryChips.get(i).setTextColor(Color.BLACK);
+                    if (que_categoryset.contains(text))
+                        que_categoryset.remove(text);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setSelecteTypeChips(Chip chip) {
+        try {
+            typeset.clear();
+            if (mSettings.getTypeFilter() != null) {
+                typeset = mSettings.getTypeFilter(); }
+
+            for (int i = 0; i < mapTypeChips.size(); i++) {
+                String text = mapTypeChips.get(i).getText().toString();
+                if (mapTypeChips.get(i).isChecked()) {
+                    if (!typeset.contains(text)) {
+                        typeset.add(text);
+                        mapTypeChips.get(i).setTextColor(Color.WHITE);
+                    } else {
+                        typeset.remove(text);
+                        mapTypeChips.get(i).setTextColor(Color.BLACK);
+                    }
+                } else {
+                    mapTypeChips.get(i).setTextColor(Color.BLACK);
+                    if (typeset.contains(text))
+                        typeset.remove(text);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }
