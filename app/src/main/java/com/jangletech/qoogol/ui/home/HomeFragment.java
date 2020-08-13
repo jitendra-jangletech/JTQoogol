@@ -179,7 +179,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
               public void onResponse(Call<DashBoard> call, Response<DashBoard> response) {
                   //ProgressDialog.getInstance().dismiss();
                   mBinding.swipeToRefresh.setRefreshing(false);
-                  Log.d(TAG, "onResponse Done: " + response.body().getResponse());
+                  //Log.d(TAG, "onResponse Done: " + response.body().getResponse());
                   if (response.body() != null) {
                       DashBoard dashBoard = response.body();
                       dashBoard.setUserId(getUserId(activity));

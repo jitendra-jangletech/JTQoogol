@@ -1,30 +1,30 @@
 package com.jangletech.qoogol.adapter;
 
-        import android.app.Activity;
-        import android.util.Log;
-        import android.view.LayoutInflater;
-        import android.view.View;
-        import android.view.ViewGroup;
+import android.app.Activity;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
-        import androidx.annotation.NonNull;
-        import androidx.databinding.DataBindingUtil;
-        import androidx.recyclerview.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.RecyclerView;
 
-        import com.bumptech.glide.Glide;
-        import com.bumptech.glide.request.RequestOptions;
-        import com.jangletech.qoogol.R;
-        import com.jangletech.qoogol.databinding.CommentItemBinding;
-        import com.jangletech.qoogol.enums.Module;
-        import com.jangletech.qoogol.model.Comments;
-        import com.jangletech.qoogol.retrofit.ApiClient;
-        import com.jangletech.qoogol.retrofit.ApiInterface;
-        import com.jangletech.qoogol.util.AppUtils;
-        import com.jangletech.qoogol.util.Constant;
-        import com.jangletech.qoogol.util.DateUtils;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.jangletech.qoogol.R;
+import com.jangletech.qoogol.databinding.CommentItemBinding;
+import com.jangletech.qoogol.enums.Module;
+import com.jangletech.qoogol.model.Comments;
+import com.jangletech.qoogol.retrofit.ApiClient;
+import com.jangletech.qoogol.retrofit.ApiInterface;
+import com.jangletech.qoogol.util.AppUtils;
+import com.jangletech.qoogol.util.Constant;
+import com.jangletech.qoogol.util.DateUtils;
 
-        import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
-        import java.util.List;
+import java.util.List;
 
 /**
  * Created by Pritali on 4/6/2020.
@@ -42,7 +42,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     private boolean isReply = false;
 
     public CommentAdapter(Activity activity, List<Comments> commentList,
-                          String callingFrom, String tmId, boolean isReply,onCommentItemClickListener commentItemClickListener) {
+                          String callingFrom, String tmId, boolean isReply, onCommentItemClickListener commentItemClickListener) {
         this.activity = activity;
         this.commentList = commentList;
         this.callingFrom = callingFrom;
@@ -63,6 +63,27 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Comments comments = commentList.get(position);
+
+        if (comments.getReplyCommentCount() > 0) {
+            holder.commentItemBinding.tvCommentCount.setVisibility(View.VISIBLE);
+        } else {
+            holder.commentItemBinding.tvCommentCount.setVisibility(View.GONE);
+        }
+
+        if (comments.getReplyLikeCount() > 0) {
+            holder.commentItemBinding.tvLikes.setVisibility(View.VISIBLE);
+        } else {
+            holder.commentItemBinding.tvLikes.setVisibility(View.GONE);
+        }
+
+        if (comments.getTlc_user_id().equalsIgnoreCase(AppUtils.getUserId())) {
+            //self comment
+            holder.commentItemBinding.tvDelete.setVisibility(View.VISIBLE);
+        } else {
+            //other user comment
+            holder.commentItemBinding.tvDelete.setVisibility(View.GONE);
+        }
+
         if (callingFrom.equals(Module.Learning.toString())) {
             String decoded = AppUtils.decodedString(comments.getComment());
             holder.commentItemBinding.tvSenderName.setText(comments.getUserFirstName() + " " + comments.getUserLastName());
@@ -82,29 +103,38 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             //commentItemBinding.textCommentTime.setText(DateUtils.getFormattedDate(comments.getTlc_cdatetime().substring(0, 10)));//todo change data & time format
         }
 
+        holder.commentItemBinding.tvLikes.setText(String.valueOf(comments.getReplyLikeCount()));
+        holder.commentItemBinding.tvCommentCount.setText(String.valueOf(comments.getReplyCommentCount()));
+
         if (comments.isLiked()) {
             AppUtils.bounceAnim(activity, holder.commentItemBinding.tvLikes);
             //holder.commentItemBinding.tvLikes.setVisibility(View.VISIBLE);
-            holder.commentItemBinding.tvLikes.setText("1");
+            //holder.commentItemBinding.tvLikes.setText(String.valueOf(comments.getReplyLikeCount()));
             holder.commentItemBinding.tvLike.setTextColor(activity.getResources().getColor(R.color.colorSkyBlue));
         } else {
             AppUtils.bounceAnim(activity, holder.commentItemBinding.tvLikes);
             //holder.commentItemBinding.tvLikes.setVisibility(View.GONE);
-            holder.commentItemBinding.tvLikes.setText("0");
+            //holder.commentItemBinding.tvLikes.setText("0");
             holder.commentItemBinding.tvLike.setTextColor(activity.getResources().getColor(android.R.color.tab_indicator_text));
         }
 
-        if(isReply){
+        if (isReply) {
             //hide Like and Reply For Replies Elements
             holder.commentItemBinding.tvLike.setVisibility(View.GONE);
             holder.commentItemBinding.tvReply.setVisibility(View.GONE);
             holder.commentItemBinding.tvLikes.setVisibility(View.GONE);
+            holder.commentItemBinding.tvCommentCount.setVisibility(View.GONE);
         }
 
         Glide.with(activity)
                 .load(getProfileImageUrl(comments))
                 .apply(RequestOptions.circleCropTransform())
                 .into(holder.commentItemBinding.profilePic);
+
+        holder.commentItemBinding.tvDelete.setOnClickListener(v -> {
+            //delete comment callback
+            commentItemClickListener.onCommentDelete(position, comments);
+        });
 
         holder.commentItemBinding.commentlayouyt.setOnClickListener(v -> {
             //Comments comments = commentList.get(getAdapterPosition());
@@ -119,32 +149,16 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         holder.commentItemBinding.tvLike.setOnClickListener(v -> {
             AppUtils.bounceAnim(activity, holder.commentItemBinding.tvLike);
             commentItemClickListener.onLikeClick(position, comments);
-
-            //Comments newComment = comments;
-            //if (callingFrom.equalsIgnoreCase(Module.Test.toString()))
-            //likeReplyComment(callingFrom, "I", comments.getCommentId(),);
-
-            /*if (newComment.isLiked()) {
-                newComment.setLikeCount(0);
-                newComment.setLiked(false);
-            } else {
-                newComment.setLikeCount(1);
-                newComment.setLiked(true);
-            }
-            notifyItemChanged(position, newComment);*/
         });
 
         holder.commentItemBinding.tvReply.setOnClickListener(v -> {
             commentItemClickListener.onReplyClick(position, comments);
         });
+
+        holder.commentItemBinding.tvCommentCount.setOnClickListener(v -> {
+            commentItemClickListener.onCommentsClick(position, comments);
+        });
     }
-
-
-    /*public void updateList(List<Comments> commentList) {
-        this.commentList.clear();
-        this.commentList = commentList;
-        notifyDataSetChanged();
-    }*/
 
 
     @Override
@@ -155,9 +169,18 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     public interface onCommentItemClickListener {
         void onItemClick(String userId);
 
+        void onCommentDelete(int pos, Comments comments);
+
+        void onCommentsClick(int pos, Comments comments);
+
         void onLikeClick(int pos, Comments comments);
 
         void onReplyClick(int pos, Comments comments);
+    }
+
+    public void deleteComment(int pos) {
+        commentList.remove(pos);
+        notifyItemRemoved(pos);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -166,7 +189,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         public ViewHolder(@NonNull CommentItemBinding itemView) {
             super(itemView.getRoot());
             this.commentItemBinding = itemView;
-
             /*commentItemBinding.getRoot().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -187,7 +209,23 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         notifyItemChanged(pos, comments);
     }
 
+    public void updateList(List<Comments> comments) {
+        commentList = comments;
+        notifyDataSetChanged();
+    }
+
     private String getProfileImageUrl(Comments comments) {
         return Constant.PRODUCTION_BASE_FILE_API + comments.getProfile_image();
     }
+
+    /*public void removeReplyItems(int position) {
+        // Remove specified position
+        commentList.remove(position);
+        // Notify adapter to remove the position
+        notifyItemRemoved(position);
+        // Notify adapter about data changed
+        notifyItemChanged(position);
+        // Notify adapter about item range changed
+        notifyItemRangeChanged(position, commentList.size());
+    }*/
 }

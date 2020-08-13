@@ -315,6 +315,7 @@ public class TestPopularFragment extends BaseFragment
                 params.get(Constant.tm_popular_test),
                 params.get(Constant.tm_diff_level),
                 params.get(Constant.tm_avg_rating),
+                params.get(Constant.tm_catg),
                 params.get(Constant.tm_id)
         );
         call.enqueue(new Callback<TestListResponse>() {

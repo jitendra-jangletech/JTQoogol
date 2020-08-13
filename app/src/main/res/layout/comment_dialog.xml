@@ -68,7 +68,7 @@
             android:text="No Comments added yet."
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textColor="@color/colorSkyBlue"
+            android:textColor="@color/colorLightGray"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"

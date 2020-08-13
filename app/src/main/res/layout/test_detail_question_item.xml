@@ -23,6 +23,7 @@
                 android:weightSum="2">
 
                 <TextView
+                    style="@style/font_style"
                     android:id="@+id/tv_quest_no"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -41,6 +42,7 @@
                     android:layout_weight="1.8">
 
                     <io.github.kexanie.library.MathView
+                        style="@style/font_style"
                         android:visibility="gone"
                         android:id="@+id/tvQuestMath"
                         android:layout_width="match_parent"
@@ -51,6 +53,7 @@
                         android:textSize="@dimen/_12ssp" />
 
                     <TextView
+                        style="@style/font_style"
                         android:visibility="visible"
                         android:id="@+id/tvQuest"
                         android:layout_width="match_parent"

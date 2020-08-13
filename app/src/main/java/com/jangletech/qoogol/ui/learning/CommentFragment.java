@@ -233,6 +233,16 @@ public class CommentFragment extends BaseFragment implements View.OnClickListene
     }
 
     @Override
+    public void onCommentDelete(int pos, Comments comments) {
+
+    }
+
+    @Override
+    public void onCommentsClick(int pos, Comments comments) {
+
+    }
+
+    @Override
     public void onLikeClick(int pos, Comments comments) {
 
     }

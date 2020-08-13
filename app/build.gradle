@@ -17,12 +17,14 @@ android {
 
     buildTypes {
         release {
+            buildConfigField "String", "SECRET_KEY", '"ChatchilliJangle"'
             minifyEnabled false
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
 
         debug {
+            buildConfigField "String", "SECRET_KEY", '"ChatchilliJangle"'
             minifyEnabled false
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'

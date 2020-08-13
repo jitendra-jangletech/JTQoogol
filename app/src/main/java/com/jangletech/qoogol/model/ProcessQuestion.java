@@ -10,8 +10,8 @@ import java.util.List;
  */
 public class ProcessQuestion {
 
-    @SerializedName(Constant._1223G)
-    private int _1223G;
+//    @SerializedName(Constant._1223G)
+//    private int _1223G;
 
     @SerializedName(Constant.q_likes)
     private String likeCount;
@@ -97,10 +97,6 @@ public class ProcessQuestion {
     public void setMessage(String message) {
         this.message = message;
     }
-
-
-
-
 
     public String getResponse() {
         return response;
