@@ -363,11 +363,28 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST(Constant.FETCH_QA)
-    Call<LearningQuestResponse> fetchQAApi(@Field(Constant.u_user_id) String userid, @Field(Constant.q_id) String question);
+    Call<LearningQuestResponse> fetchQAApi(@Field(Constant.u_user_id) String userid,
+                                           @Field(Constant.q_id) String question,
+                                           @Field(Constant.q_avg_ratings) String ratings,
+                                           @Field(Constant.q_diff_level) String diff_level,
+                                           @Field(Constant.q_trending) String trending,
+                                           @Field(Constant.q_popular) String popular,
+                                           @Field(Constant.q_recent) String recent,
+                                           @Field(Constant.q_type) String question_type,
+                                           @Field(Constant.q_option_type) String option_type
+                                            );
 
     @FormUrlEncoded
     @POST(Constant.FETCH_QA)
-    Call<LearningQuestResponse> fetchQAApi(@Field(Constant.u_user_id) String userid, @Field(Constant.q_id) String question, @Field(Constant.CASE) String CASE);
+    Call<LearningQuestResponse> fetchQAApi(@Field(Constant.u_user_id) String userid, @Field(Constant.q_id) String question,
+                                           @Field(Constant.CASE) String CASE,
+                                           @Field(Constant.q_avg_ratings) String ratings,
+                                           @Field(Constant.q_diff_level) String diff_level,
+                                           @Field(Constant.q_trending) String trending,
+                                           @Field(Constant.q_popular) String popular,
+                                           @Field(Constant.q_recent) String recent,
+                                           @Field(Constant.q_type) String question_type,
+                                           @Field(Constant.q_option_type) String option_type);
 
 
     @FormUrlEncoded

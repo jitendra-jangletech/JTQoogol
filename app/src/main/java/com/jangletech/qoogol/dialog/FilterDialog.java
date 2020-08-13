@@ -37,6 +37,7 @@ public class FilterDialog extends BottomSheetDialogFragment implements View.OnCl
     private HashMap<String, String> params = new HashMap<>();
     private String avgRating = "", strDiffLevel = "", subject = "";
 
+
     public FilterDialog(@NonNull Activity mContext, List<String> subjectList, HashMap<String, String> params, FilterClickListener filterClickListener) {
         this.mContext = mContext;
         this.subjectList = subjectList;
@@ -44,14 +45,12 @@ public class FilterDialog extends BottomSheetDialogFragment implements View.OnCl
         this.filterClickListener = filterClickListener;
     }
 
-    public FilterDialog() {
-
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -108,12 +107,9 @@ public class FilterDialog extends BottomSheetDialogFragment implements View.OnCl
             }
         });
 
-        mBinding.rating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
-            public void onRatingChanged(RatingBar ratingBar, float rating,
-                                        boolean fromUser) {
-                Log.d(TAG, "onRatingChanged: " + rating);
-                params.put(Constant.tm_avg_rating, String.valueOf(rating));
-            }
+        mBinding.rating.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {
+            Log.d(TAG, "onRatingChanged: " + rating);
+            params.put(Constant.tm_avg_rating, String.valueOf(rating));
         });
     }
 

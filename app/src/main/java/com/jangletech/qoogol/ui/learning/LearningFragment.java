@@ -15,10 +15,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.LearningAdapter;
@@ -26,6 +24,7 @@ import com.jangletech.qoogol.databinding.LearningFragmentBinding;
 import com.jangletech.qoogol.dialog.CommentDialog;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.dialog.PublicProfileDialog;
+import com.jangletech.qoogol.dialog.QuestionFilterDialog;
 import com.jangletech.qoogol.dialog.ShareQuestionDialog;
 import com.jangletech.qoogol.model.LearningQuestionsNew;
 import com.jangletech.qoogol.model.ProcessQuestion;
@@ -47,7 +46,8 @@ import static com.jangletech.qoogol.util.Constant.CALL_FROM;
 import static com.jangletech.qoogol.util.Constant.learning;
 import static com.jangletech.qoogol.util.Constant.profile;
 
-public class LearningFragment extends BaseFragment implements LearningAdapter.onIconClick, PublicProfileDialog.PublicProfileClickListener, CommentDialog.CommentClickListener {
+public class LearningFragment extends BaseFragment implements LearningAdapter.onIconClick, PublicProfileDialog.PublicProfileClickListener,
+        CommentDialog.CommentClickListener, QuestionFilterDialog.FilterClickListener {
 
     private static final String TAG = "LearningFragment";
     private LearningViewModel mViewModel;
@@ -66,7 +66,6 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-
         learningFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.learning_fragment, container, false);
         setHasOptionsMenu(true);
         return learningFragmentBinding.getRoot();
@@ -89,9 +88,9 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_filter:
-                Bundle bundle = new Bundle();
-                bundle.putString("call_from", "learning");
-                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_test_filter, bundle);
+                QuestionFilterDialog bottomSheetFragment = new QuestionFilterDialog(getActivity(), this);
+                bottomSheetFragment.setCancelable(false);
+                bottomSheetFragment.show(getActivity().getSupportFragmentManager(), bottomSheetFragment.getTag());
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -112,6 +111,7 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
 
         Bundle bundle = getArguments();
         if (bundle != null) {
+            mViewModel.getFilters();
             if (bundle.getBoolean("fromNotification")) {
                 ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Learning");
                 if (bundle.getString(Constant.FB_MS_ID) != null)
@@ -125,10 +125,10 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
                 learningFragmentBinding.learningSwiperefresh.setRefreshing(true);
                 if (bundle.getString("call_from").equalsIgnoreCase("saved_questions")) {
                     ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Saved Questions");
-                }  else {
+                } else {
                     ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Practice Questions");
-                    mViewModel.fetchQuestionData("");
                 }
+                mViewModel.fetchQuestionData("");
 
                 mViewModel.getQuestionList().observe(getViewLifecycleOwner(), questionsList -> {
                     setData(questionsList);
@@ -238,7 +238,6 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
     }
 
 
-
     @Override
     public void onLikeClick(String userId) {
         Bundle bundle = new Bundle();
@@ -262,5 +261,16 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
     public void onCommentClick(String userId) {
         PublicProfileDialog publicProfileDialog = new PublicProfileDialog(getActivity(), userId, this);
         publicProfileDialog.show();
+    }
+
+    @Override
+    public void onResetClick() {
+
+    }
+
+    @Override
+    public void onDoneClick() {
+        mViewModel.getFilters();
+        mViewModel.fetchQuestionData("");
     }
 }

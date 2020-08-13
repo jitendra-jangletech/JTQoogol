@@ -418,6 +418,20 @@ public class Constant {
     public static final String follow = "F";
     public static final String unfollow = "UF";
 
+
+    //Filters
+    public static final String trending = "Trending";
+    public static final String popular = "Popular";
+    public static final String recent = "Recent";
+    public static final String short_ans = "Short Answer";
+    public static final String long_ans = "Long Answer";
+    public static final String scq = "SCQ";
+    public static final String mcq = "MCQ";
+    public static final String fill_the_blanks = "Fill in the Blanks";
+    public static final String true_false = "True False";
+    public static final String match_pair = "Match the Pair";
+
+
     //Status code
     public static final String DB_TIMEOUT_ERROR = "Database Timeout error. Close app and try again.";
     public static final String DB_NETWORK_ERROR = "Database Network issue. Try again later..";

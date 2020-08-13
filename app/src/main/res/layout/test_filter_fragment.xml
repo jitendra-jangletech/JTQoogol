@@ -147,26 +147,6 @@
                             app:layout_constraintRight_toRightOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/rating_heading" />
 
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/rating_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:visibility="gone"
-                        app:layout_constraintTop_toBottomOf="@+id/testRatingLayout">
-
-                        <TextView
-                            style="@style/chipTitleStyle"
-                            android:text="Select Rating" />
-
-                        <com.google.android.material.chip.ChipGroup
-                            android:id="@+id/ratingChipGrp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_10sdp"
-                            app:selectionRequired="true" />
 
                         <View
                             android:layout_width="match_parent"
@@ -177,13 +157,15 @@
                             android:background="@color/colorLightGray" />
                     </LinearLayout>
 
+
+
                     <LinearLayout
                         android:id="@+id/que_type_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:visibility="gone"
-                        app:layout_constraintTop_toBottomOf="@+id/rating_layout">
+                        app:layout_constraintTop_toBottomOf="@+id/testRatingLayout">
 
                         <TextView
                             style="@style/chipTitleStyle"
@@ -194,6 +176,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_10sdp"
+                            app:singleSelection="false"
                             app:selectionRequired="true" />
 
                         <View
@@ -222,6 +205,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_10sdp"
+                            app:singleSelection="false"
                             app:selectionRequired="true" />
 
                         <View

@@ -1,6 +1,7 @@
 package com.jangletech.qoogol.ui.learning;
 
 import android.app.Application;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import androidx.lifecycle.AndroidViewModel;
@@ -35,11 +36,14 @@ public class LearningViewModel extends AndroidViewModel {
     ApiInterface apiService;
     public final AppRepository mAppRepository;
     Call<LearningQuestResponse> call;
+    String ratings="", diff_level="", q_type="", q_category="", trending="",popular="",recent="",main_catg,sub_catg;
+    PreferenceManager mSettings;
 
     public LearningViewModel(Application application) {
         super(application);
         apiService = ApiClient.getInstance().getApi();
         mAppRepository = new AppRepository(application);
+        mSettings = new PreferenceManager(application);
     }
 
     LiveData<List<LearningQuestionsNew>> getQuestionList() {
@@ -63,11 +67,66 @@ public class LearningViewModel extends AndroidViewModel {
         getDataFromApi(q_id, CASE);
     }
 
-    private void getDataFromApi(String q_id, String CASE) {
-        if (CASE.equalsIgnoreCase(""))
-            call = apiService.fetchQAApi(new PreferenceManager(getApplication()).getUserId(), q_id);
+    public void getFilters() {
+        trending="";
+        popular="";
+        recent="";
+        main_catg="";
+        sub_catg="";
+        ratings = mSettings.getRatingsFilter();
+        diff_level = TextUtils.join(", ", mSettings.getQueDiffLevelFilter()).replace("Easy","E").replace("Medium","M").replace("Hard","H");
+        q_type = TextUtils.join(", ", mSettings.getTypeFilter());
+        q_category = TextUtils.join(", ", mSettings.getQueCategoryFilter());
+        if (q_type.contains(Constant.trending))
+            trending="1";
+        if (q_type.contains(Constant.popular))
+            popular="1";
+        if (q_type.contains(Constant.recent))
+            recent="1";
+        if (q_category.contains(Constant.short_ans))
+            addMainCatg(Constant.SHORT_ANSWER);
+        if (q_category.contains(Constant.long_ans))
+            addMainCatg(Constant.LONG_ANSWER);
+        if (q_category.contains(Constant.fill_the_blanks))
+            addMainCatg(Constant.FILL_THE_BLANKS);
+
+        if (q_category.contains(Constant.scq))
+            addSubCatg(Constant.SCQ);
+
+        if (q_category.contains(Constant.mcq))
+            addSubCatg(Constant.MCQ);
+
+        if (q_category.contains(Constant.true_false))
+            addSubCatg(Constant.TRUE_FALSE);
+
+        if (q_category.contains(Constant.match_pair))
+            addSubCatg(Constant.MATCH_PAIR);
+
+
+
+    }
+
+    private void addMainCatg(String catg) {
+        if (main_catg.isEmpty())
+            main_catg=catg;
         else
-            call = apiService.fetchQAApi(new PreferenceManager(getApplication()).getUserId(), q_id, CASE);
+            main_catg = ","+catg;
+    }
+
+    private void addSubCatg(String catg) {
+        if (sub_catg.isEmpty())
+            sub_catg=catg;
+        else
+            sub_catg = ","+catg;
+    }
+
+
+    private void getDataFromApi(String q_id, String CASE) {
+
+        if (CASE.equalsIgnoreCase(""))
+            call = apiService.fetchQAApi(new PreferenceManager(getApplication()).getUserId(), q_id, ratings, diff_level,trending,popular,recent,main_catg,sub_catg);
+        else
+            call = apiService.fetchQAApi(new PreferenceManager(getApplication()).getUserId(), q_id, CASE,ratings, diff_level,trending,popular,recent,main_catg,sub_catg);
         call.enqueue(new Callback<LearningQuestResponse>() {
             @Override
             public void onResponse(Call<LearningQuestResponse> call, retrofit2.Response<LearningQuestResponse> response) {

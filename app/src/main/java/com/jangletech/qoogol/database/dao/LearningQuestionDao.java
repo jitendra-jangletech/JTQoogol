@@ -23,6 +23,15 @@ public interface LearningQuestionDao {
     @Query("SELECT * FROM LearningQuestionsNew")
     LiveData<List<LearningQuestionsNew>> getAllQuestions();
 
+
+//    @Query("SELECT * FROM LearningQuestionsNew where (:qtrending!=null AND trending=:qtrending) OR (:qpopular!=null AND popular=:qpopular) OR (:qrecent!=null AND recent=:qrecent) " +
+//            "OR (:ratings!=null AND rating>=:ratings) OR (:short_ans!=null AND type=:short_ans) OR (:long_ans!=null AND type=:long_ans)" +
+//            "OR (:fill_the_blanks!=null AND type=:fill_the_blanks) OR (:scq!=null AND que_option_type=:scq) OR (:mcq!=null AND que_option_type=:mcq) " +
+//            "OR (:true_false!=null AND que_option_type=:true_false) OR (:match_pair!=null AND que_option_type=:match_pair)")
+//    LiveData<List<LearningQuestionsNew>> getAllQuestions(String qtrending, String qpopular, String qrecent, String ratings,
+//                                                         String short_ans, String long_ans,String fill_the_blanks,
+//                                                         String scq, String mcq, String true_false, String match_pair);
+
     @Query("SELECT * FROM LearningQuestionsNew where question_id=:q_id")
     LiveData<List<LearningQuestionsNew>> getQuestion(String q_id);
 

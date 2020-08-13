@@ -81,6 +81,15 @@ public class LearningQuestionsNew  implements Cloneable{
     @SerializedName(Constant.q_category)
     private String category;
 
+    @SerializedName(Constant.q_trending)
+    private String trending;
+
+    @SerializedName(Constant.q_popular)
+    private String popular;
+
+    @SerializedName(Constant.q_recent)
+    private String recent;
+
     @SerializedName(Constant.sm_id)
     private String subject_id;
 
@@ -513,6 +522,29 @@ public class LearningQuestionsNew  implements Cloneable{
         this.chapter_id = chapter_id;
     }
 
+    public String getTrending() {
+        return trending!=null?trending:"";
+    }
+
+    public void setTrending(String trending) {
+        this.trending = trending;
+    }
+
+    public String getPopular() {
+        return popular!=null?popular:"";
+    }
+
+    public void setPopular(String popular) {
+        this.popular = popular;
+    }
+
+    public String getRecent() {
+        return recent!=null?recent:"";
+    }
+
+    public void setRecent(String recent) {
+        this.recent = recent;
+    }
 
     public int getQueTextviwVisibility() {
         return getQuestion().contains("$") ? 2 :0;

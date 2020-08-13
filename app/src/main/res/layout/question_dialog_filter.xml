@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:scrollbars="none">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/_5sdp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <Button
+                android:drawableTint="@color/colorWhite"
+                android:drawableLeft="@drawable/ic_close"
+                android:textAllCaps="false"
+                style="@style/font_style"
+                android:background="@color/background"
+                android:id="@+id/reset"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-thin"
+                android:foreground="?attr/selectableItemBackground"
+                android:text="Reset All"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:drawableLeft="@drawable/ic_check"
+                android:textAllCaps="false"
+                android:drawableTint="@color/colorWhite"
+                style="@style/font_style"
+                android:background="@color/background"
+                android:id="@+id/done"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-thin"
+                android:foreground="?attr/selectableItemBackground"
+                android:text="Done"
+
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+
+            <LinearLayout
+                android:id="@+id/difflevel_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@+id/reset">
+
+
+                <TextView
+                    style="@style/chipTitleStyle"
+                    android:text="Difficulty Level" />
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/testDifficultyLevelChipGrp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_1sdp"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:layout_marginRight="@dimen/_10sdp"
+                    android:background="@color/colorLightGray" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/testRatingLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="visible"
+                app:layout_constraintTop_toBottomOf="@+id/difflevel_layout">
+
+                <TextView
+                    style="@style/chipTitleStyle"
+                    android:text="Select Average Rating" />
+
+                <androidx.appcompat.widget.AppCompatRatingBar
+                    android:id="@+id/rating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:numStars="5"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/rating_heading" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/que_type_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@+id/testRatingLayout">
+
+                <TextView
+                    style="@style/chipTitleStyle"
+                    android:text="Select Type" />
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/que_typeChipGrp"
+                    android:layout_width="wrap_content"
+                    app:singleSelection="false"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_1sdp"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:layout_marginRight="@dimen/_10sdp"
+                    android:background="@color/colorLightGray" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/que_category_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@+id/que_type_layout">
+
+                <TextView
+                    style="@style/chipTitleStyle"
+                    android:text="Select Question Category" />
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/que_categoryChipGrp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_1sdp"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:layout_marginRight="@dimen/_10sdp"
+                    android:background="@color/colorLightGray" />
+            </LinearLayout>
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</layout>

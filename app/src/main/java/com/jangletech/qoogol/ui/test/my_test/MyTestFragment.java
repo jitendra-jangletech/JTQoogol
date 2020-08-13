@@ -201,18 +201,15 @@ public class MyTestFragment extends BaseFragment
 
         fetchSubjectList(new PreferenceManager(requireActivity()).getString(Constant.scr_co_id));
         fetchTestList(params, pageStart);
-        mViewModel.getAllSubjects().observe(getViewLifecycleOwner(), new Observer<List<FetchSubjectResponse>>() {
-            @Override
-            public void onChanged(@Nullable final List<FetchSubjectResponse> subjects) {
-                if (subjects != null) {
-                    Log.d(TAG, "onChanged Subjects Size : " + subjects.size());
-                    subjectList.clear();
-                    for (FetchSubjectResponse obj : subjects) {
-                        if (!subjectList.contains(obj.getSm_sub_name()))
-                            subjectList.add(obj.getSm_sub_name());
-                    }
-                    prepareSubjectChips(subjectList);
+        mViewModel.getAllSubjects().observe(getViewLifecycleOwner(), subjects -> {
+            if (subjects != null) {
+                Log.d(TAG, "onChanged Subjects Size : " + subjects.size());
+                subjectList.clear();
+                for (FetchSubjectResponse obj : subjects) {
+                    if (!subjectList.contains(obj.getSm_sub_name()))
+                        subjectList.add(obj.getSm_sub_name());
                 }
+                prepareSubjectChips(subjectList);
             }
         });
 
@@ -434,6 +431,7 @@ public class MyTestFragment extends BaseFragment
             }
         });
     }
+
 
     @Override
     public void onTestItemClick(TestModelNew testModel) {

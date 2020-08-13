@@ -27,12 +27,16 @@ public class PreferenceManager {
                 .apply();
     }
 
-    public Set<String> getRatingsFilter(){
-        return sharedPreferences.getStringSet("rating",new HashSet<>());
+    public String getRatingsFilter(){
+        return sharedPreferences.getString("rating","");
     }
 
     public Set<String> getTypeFilter(){
         return sharedPreferences.getStringSet("type",new HashSet<>());
+    }
+
+    public Set<String> getQueDiffLevelFilter(){
+        return sharedPreferences.getStringSet("Diff_level",new HashSet<>());
     }
 
     public Set<String> getQueCategoryFilter(){
@@ -40,11 +44,18 @@ public class PreferenceManager {
     }
 
 
-    public void setRatingsFilter(Set subject) {
+    public void setRatingsFilter(String ratings) {
         sharedPreferences.edit()
-                .putStringSet("rating",subject)
+                .putString("rating",ratings)
                 .apply();
     }
+
+    public void setQueDiffLevelFilter(Set type) {
+        sharedPreferences.edit()
+                .putStringSet("Diff_level",type)
+                .apply();
+    }
+
 
     public void setTypeFilter(Set type) {
         sharedPreferences.edit()
