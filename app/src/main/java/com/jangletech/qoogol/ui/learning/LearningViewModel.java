@@ -101,9 +101,6 @@ public class LearningViewModel extends AndroidViewModel {
 
         if (q_category.contains(Constant.match_pair))
             addSubCatg(Constant.MATCH_PAIR);
-
-
-
     }
 
     private void addMainCatg(String catg) {

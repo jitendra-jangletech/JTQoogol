@@ -7,8 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RatingBar;
+
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
+
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
@@ -33,8 +35,6 @@ public class FilterDialog extends BottomSheetDialogFragment implements View.OnCl
     //private String avgRating = "", strDiffLevel = "", subject = "";
 
     public FilterDialog(@NonNull Activity mContext, HashMap<String, String> params, FilterClickListener filterClickListener) {
-
-    public FilterDialog(@NonNull Activity mContext, List<String> subjectList, HashMap<String, String> params, FilterClickListener filterClickListener) {
         this.mContext = mContext;
         //this.subjectList = subjectList;
         this.params = params;
@@ -42,12 +42,14 @@ public class FilterDialog extends BottomSheetDialogFragment implements View.OnCl
         Log.d(TAG, "FilterDialog: " + params);
     }
 
+    public FilterDialog() {
+
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -77,12 +79,12 @@ public class FilterDialog extends BottomSheetDialogFragment implements View.OnCl
             params.put(Constant.tm_diff_level, getSelectedChipValues(mBinding.testDifficultyLevelChipGrp));
             params.put(Constant.tm_catg, getSelectedChipValues(mBinding.testCategoryChipGrp));
             params.put(Constant.test_recent_popular, getSelectedChipValues(mBinding.testRecentPopularChipGrp));
-            if(getSelectedChipValues(mBinding.testRecentPopularChipGrp).contains("P"))
+            if (getSelectedChipValues(mBinding.testRecentPopularChipGrp).contains("P"))
                 params.put(Constant.tm_popular_test, "1");
             else
                 params.put(Constant.tm_popular_test, "");
 
-            if(getSelectedChipValues(mBinding.testRecentPopularChipGrp).contains("R"))
+            if (getSelectedChipValues(mBinding.testRecentPopularChipGrp).contains("R"))
                 params.put(Constant.tm_recent_test, "1");
             else
                 params.put(Constant.tm_recent_test, "");
@@ -96,9 +98,12 @@ public class FilterDialog extends BottomSheetDialogFragment implements View.OnCl
             setCheckedChip(chip);
         });*/
 
-        mBinding.rating.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {
-            Log.d(TAG, "onRatingChanged: " + rating);
-            params.put(Constant.tm_avg_rating, String.valueOf(rating));
+        mBinding.rating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            public void onRatingChanged(RatingBar ratingBar, float rating,
+                                        boolean fromUser) {
+                Log.d(TAG, "onRatingChanged: " + rating);
+                params.put(Constant.tm_avg_rating, String.valueOf(rating));
+            }
         });
     }
 
@@ -140,6 +145,10 @@ public class FilterDialog extends BottomSheetDialogFragment implements View.OnCl
             String diffLevel = params.get(Constant.tm_diff_level);
             String category = params.get(Constant.tm_catg);
             String recentPopular = params.get(Constant.test_recent_popular);
+            Log.d(TAG, "setFilters avgRating : " + avgRating);
+            Log.d(TAG, "setFilters diffLevel : " + diffLevel);
+            Log.d(TAG, "setFilters category : " + category);
+            Log.d(TAG, "setFilters recentPopular : " + recentPopular);
             if (avgRating != null && !avgRating.isEmpty()) {
                 mBinding.rating.setRating(Float.parseFloat(avgRating));
             }
@@ -147,11 +156,11 @@ public class FilterDialog extends BottomSheetDialogFragment implements View.OnCl
                 String[] diff = diffLevel.split(",", -1);
                 for (String strDiff : diff) {
                     if (!strDiff.isEmpty()) {
-                        if (strDiff.equalsIgnoreCase("E"))
+                        if (strDiff.equalsIgnoreCase("'E'"))
                             mBinding.chipEasy.setChecked(true);
-                        if (strDiff.equalsIgnoreCase("M"))
+                        if (strDiff.equalsIgnoreCase("'M'"))
                             mBinding.chipMedium.setChecked(true);
-                        if (strDiff.equalsIgnoreCase("H"))
+                        if (strDiff.equalsIgnoreCase("'H'"))
                             mBinding.chipHard.setChecked(true);
                     }
                 }
@@ -161,9 +170,9 @@ public class FilterDialog extends BottomSheetDialogFragment implements View.OnCl
                 String[] recentPoplr = recentPopular.split(",", -1);
                 for (String strData : recentPoplr) {
                     if (!strData.isEmpty()) {
-                        if (strData.equalsIgnoreCase("R"))
+                        if (strData.equalsIgnoreCase("'R'"))
                             mBinding.chipRecent.setChecked(true);
-                        if (strData.equalsIgnoreCase("P"))
+                        if (strData.equalsIgnoreCase("'P'"))
                             mBinding.chipPopular.setChecked(true);
                     }
                 }
@@ -173,11 +182,11 @@ public class FilterDialog extends BottomSheetDialogFragment implements View.OnCl
                 for (String categ : categories) {
                     Log.d(TAG, "categories Checked : " + categ);
                     if (!categ.isEmpty()) {
-                        if (categ.equalsIgnoreCase("U"))
+                        if (categ.equalsIgnoreCase("'U'"))
                             mBinding.chipUnitTest.setChecked(true);
-                        if (categ.equalsIgnoreCase("S"))
+                        if (categ.equalsIgnoreCase("'S'"))
                             mBinding.chipSemester.setChecked(true);
-                        if (categ.equalsIgnoreCase("A"))
+                        if (categ.equalsIgnoreCase("'A'"))
                             mBinding.chipAnnual.setChecked(true);
                     }
                 }
@@ -267,6 +276,7 @@ public class FilterDialog extends BottomSheetDialogFragment implements View.OnCl
 
     public interface FilterClickListener {
         void onResetClick(HashMap<String, String> params);
+
         void onDoneClick(HashMap<String, String> params);
     }
 }
