@@ -22,6 +22,7 @@ import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.LearningAdapter;
 import com.jangletech.qoogol.databinding.LearningFragmentBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
+import com.jangletech.qoogol.dialog.QuestionFilterDialog;
 import com.jangletech.qoogol.enums.Module;
 import com.jangletech.qoogol.enums.Nav;
 import com.jangletech.qoogol.model.LearningQuestionsNew;
@@ -47,7 +48,7 @@ import static com.jangletech.qoogol.util.Constant.learning;
 import static com.jangletech.qoogol.util.Constant.profile;
 import static com.jangletech.qoogol.util.Constant.sharedto;
 
-public class SharedWithYouFragment extends BaseFragment implements LearningAdapter.onIconClick {
+public class SharedWithYouFragment extends BaseFragment implements LearningAdapter.onIconClick, QuestionFilterDialog.FilterClickListener  {
 
     private LearningViewModel mViewModel;
     LearningFragmentBinding learningFragmentBinding;
@@ -89,9 +90,9 @@ public class SharedWithYouFragment extends BaseFragment implements LearningAdapt
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_filter:
-                Bundle bundle = new Bundle();
-                bundle.putString("call_from", "learning");
-                Navigation.findNavController(requireActivity(),R.id.nav_host_fragment).navigate(R.id.nav_test_filter,bundle);
+                QuestionFilterDialog bottomSheetFragment = new QuestionFilterDialog(getActivity(), this);
+                bottomSheetFragment.setCancelable(false);
+                bottomSheetFragment.show(getActivity().getSupportFragmentManager(), bottomSheetFragment.getTag());
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -115,6 +116,7 @@ public class SharedWithYouFragment extends BaseFragment implements LearningAdapt
             ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Shared with You");
         }
 
+        mViewModel.getFilters();
         mViewModel.fetchQuestionData("",SHARED_WITH_ME);
 
         mViewModel.getSharedQuestionList(SHARED_WITH_ME).observe(getViewLifecycleOwner(), questionsList -> {
@@ -220,4 +222,14 @@ public class SharedWithYouFragment extends BaseFragment implements LearningAdapt
     }
 
 
+    @Override
+    public void onResetClick() {
+
+    }
+
+    @Override
+    public void onDoneClick() {
+        mViewModel.getFilters();
+        mViewModel.fetchQuestionData("",SHARED_WITH_ME);
+    }
 }

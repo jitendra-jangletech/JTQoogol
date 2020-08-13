@@ -527,7 +527,13 @@ public class AppRepository {
         return learningQuestionDao.getAllQuestions();
     }
 
-    public LiveData<List<LearningQuestionsNew>> getQuestionFromDb(String q_id) {
+//    public LiveData<List<LearningQuestionsNew>> getQuestionsFromDb(String qtrending, String qpopular, String qrecent,
+//                                                                   String ratings, String short_ans, String long_ans, String fill_the_blanks,
+//                                                                   String scq, String mcq, String true_false, String match_pair) {
+//        return learningQuestionDao.getAllQuestions(qtrending,qpopular,qrecent,ratings,short_ans,long_ans,fill_the_blanks,scq,mcq,true_false,match_pair);
+//    }
+
+    public LiveData<List<LearningQuestionsNew>> getQuestionFromDb(String q_id){
         try {
             return learningQuestionDao.getQuestion(String.valueOf(q_id));
         } catch (Exception e) {

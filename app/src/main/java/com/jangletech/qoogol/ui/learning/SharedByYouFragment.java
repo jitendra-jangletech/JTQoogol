@@ -22,6 +22,7 @@ import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.LearningAdapter;
 import com.jangletech.qoogol.databinding.LearningFragmentBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
+import com.jangletech.qoogol.dialog.QuestionFilterDialog;
 import com.jangletech.qoogol.enums.Module;
 import com.jangletech.qoogol.enums.Nav;
 import com.jangletech.qoogol.model.LearningQuestionsNew;
@@ -46,7 +47,7 @@ import static com.jangletech.qoogol.util.Constant.learning;
 import static com.jangletech.qoogol.util.Constant.profile;
 import static com.jangletech.qoogol.util.Constant.sharedby;
 
-public class SharedByYouFragment extends BaseFragment implements LearningAdapter.onIconClick {
+public class SharedByYouFragment extends BaseFragment implements LearningAdapter.onIconClick, QuestionFilterDialog.FilterClickListener {
 
     private LearningViewModel mViewModel;
     LearningFragmentBinding learningFragmentBinding;
@@ -113,6 +114,7 @@ public class SharedByYouFragment extends BaseFragment implements LearningAdapter
         if (bundle != null) {
             ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Shared by You");
         }
+        mViewModel.getFilters();
         mViewModel.fetchQuestionData("",SHARED_BY_ME);
         mViewModel.getSharedQuestionList(SHARED_BY_ME).observe(getViewLifecycleOwner(), questionsList -> {
             questionsNewList.clear();
@@ -217,4 +219,13 @@ public class SharedByYouFragment extends BaseFragment implements LearningAdapter
     }
 
 
+    @Override
+    public void onResetClick() {
+    }
+
+    @Override
+    public void onDoneClick() {
+        mViewModel.getFilters();
+        mViewModel.fetchQuestionData("",SHARED_BY_ME);
+    }
 }
