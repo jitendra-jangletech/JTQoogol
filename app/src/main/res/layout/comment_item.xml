@@ -45,7 +45,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingLeft="@dimen/activity_vertical_margin"
-                    android:paddingTop="2dp"
                     android:paddingRight="@dimen/activity_vertical_margin"
                     android:text="Name"
                     android:textColor="@color/black"
@@ -54,11 +53,26 @@
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
+                <TextView
+                    android:id="@+id/tvDelete"
+                    android:layout_width="@dimen/_40sdp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/_25sdp"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:padding="@dimen/_2sdp"
+                    android:text="Delete"
+                    android:textSize="@dimen/_8ssp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintRight_toRightOf="parent" />
+
+
                 <com.jangletech.qoogol.view.ExpandableTextView
                     android:id="@+id/text_comment_body"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/_4sdp"
+                    android:layout_marginLeft="@dimen/_8sdp"
                     android:text="English Text"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     app:layout_constraintLeft_toLeftOf="parent"
@@ -121,6 +135,21 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
+                        android:id="@+id/tvCommentCount"
+                        android:drawableLeft="@drawable/ic_comment"
+                        android:layout_width="@dimen/_40sdp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="@dimen/_10sdp"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:gravity="center"
+                        android:padding="@dimen/_2sdp"
+                        android:text="0"
+                        android:textSize="@dimen/_8ssp"
+                        app:layout_constraintLeft_toRightOf="@+id/tvReply"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                    <TextView
                         android:id="@+id/text_comment_time"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -135,7 +164,6 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-
 
         </LinearLayout>
 

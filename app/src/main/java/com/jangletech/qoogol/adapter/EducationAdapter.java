@@ -18,7 +18,7 @@ import java.util.List;
 
 import static com.jangletech.qoogol.util.Constant.fetch_loged_in_user;
 
-public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.ViewHolder>  {
+public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.ViewHolder> {
 
     private List<Education> educationList;
     private Context mContext;
@@ -26,7 +26,7 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.View
     private EducationItemClickListener educationItemClickListener;
     int call_from;
 
-    public EducationAdapter(Context mContext,List<Education> educationList,EducationItemClickListener educationItemClickListener, int call_from){
+    public EducationAdapter(Context mContext, List<Education> educationList, EducationItemClickListener educationItemClickListener, int call_from) {
         this.mContext = mContext;
         this.educationList = educationList;
         this.educationItemClickListener = educationItemClickListener;
@@ -37,7 +37,7 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.View
     @Override
     public EducationAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         itemEducationBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
-                R.layout.item_education,parent,false);
+                R.layout.item_education, parent, false);
         return new ViewHolder(itemEducationBinding);
     }
 
@@ -50,15 +50,15 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.View
         holder.itemEducationBinding.tvDegree.setText(education.getDm_degree_name());
         holder.itemEducationBinding.tvCourse.setText(education.getCo_name());
         holder.itemEducationBinding.tvCourseYear.setText(education.getUe_cy_num());
-        holder.itemEducationBinding.tvStartDate.setText(education.getUe_startdate()!=null?DateUtils.getFormattedDate(education.getUe_startdate()):"");
-        holder.itemEducationBinding.tvEndDate.setText(education.getUe_enddate()!=null?DateUtils.getFormattedDate(education.getUe_enddate()):"");
+        holder.itemEducationBinding.tvStartDate.setText(education.getUe_startdate() != null ? DateUtils.getFormattedDate(education.getUe_startdate()) : "");
+        holder.itemEducationBinding.tvEndDate.setText(education.getUe_enddate() != null ? DateUtils.getFormattedDate(education.getUe_enddate()) : "");
 
-        if (call_from==fetch_loged_in_user) {
-            holder.itemEducationBinding.rootLayout.setOnClickListener(v->{
+        if (call_from == fetch_loged_in_user) {
+            holder.itemEducationBinding.rootLayout.setOnClickListener(v -> {
                 educationItemClickListener.onItemClick(education);
             });
-            holder.itemEducationBinding.delete.setOnClickListener(v->{
-                educationItemClickListener.onDeleteClick(education,position);
+            holder.itemEducationBinding.delete.setOnClickListener(v -> {
+                educationItemClickListener.onDeleteClick(education, position);
             });
         } else {
             itemEducationBinding.delete.setVisibility(View.GONE);
@@ -70,20 +70,22 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.View
         return educationList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
         ItemEducationBinding itemEducationBinding;
+
         public ViewHolder(@NonNull ItemEducationBinding itemView) {
             super(itemView.getRoot());
             this.itemEducationBinding = itemView;
         }
     }
 
-    public interface EducationItemClickListener{
+    public interface EducationItemClickListener {
         void onItemClick(Education education);
-        void onDeleteClick(Education education,int position);
+
+        void onDeleteClick(Education education, int position);
     }
 
-    public void deleteEducation(int pos){
+    public void deleteEducation(int pos) {
         educationList.remove(pos);
         notifyItemRemoved(pos);
     }

@@ -10,7 +10,7 @@
 
         <HorizontalScrollView
             android:background="@color/bg_recycler"
-            android:visibility="visible"
+            android:visibility="gone"
             android:fillViewport="true"
             android:padding="@dimen/_5sdp"
             android:id="@+id/horizontalScrollView"

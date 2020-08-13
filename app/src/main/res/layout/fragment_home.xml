@@ -54,6 +54,7 @@
                                 android:src="@drawable/connections" />
 
                             <TextView
+                                style="@style/font_style"
                                 android:id="@+id/tvConnections"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -64,6 +65,7 @@
                                 android:textStyle="bold" />
 
                             <TextView
+                                style="@style/font_style"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/_2sdp"
@@ -93,6 +95,7 @@
                                 android:src="@drawable/ic_friends" />
 
                             <TextView
+                                style="@style/font_style"
                                 android:id="@+id/friends"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -103,6 +106,7 @@
                                 android:textStyle="bold" />
 
                             <TextView
+                                style="@style/font_style"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/_2sdp"
@@ -131,6 +135,7 @@
                                 android:src="@drawable/followers" />
 
                             <TextView
+                                style="@style/font_style"
                                 android:id="@+id/followers"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -141,6 +146,7 @@
                                 android:textStyle="bold" />
 
                             <TextView
+                                style="@style/font_style"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/_2sdp"
@@ -170,6 +176,7 @@
                                 android:src="@drawable/following" />
 
                             <TextView
+                                style="@style/font_style"
                                 android:id="@+id/following"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -180,6 +187,7 @@
                                 android:textStyle="bold" />
 
                             <TextView
+                                style="@style/font_style"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/_2sdp"

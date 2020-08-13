@@ -105,6 +105,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ProgressBar
+            android:background="@color/colorLightGray"
             android:id="@+id/progress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

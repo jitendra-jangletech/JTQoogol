@@ -26,11 +26,14 @@
 
                 <TextView
                     android:id="@+id/tvTestNameSubject"
+                    style="@style/font_style"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
-                    android:layout_centerInParent="true"
-                    android:layout_margin="@dimen/_2sdp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginStart="@dimen/_2sdp"
+                    android:layout_marginTop="@dimen/_2sdp"
+                    android:layout_marginEnd="@dimen/_2sdp"
                     android:padding="@dimen/_5sdp"
                     android:text="Test Name(Subject)"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
@@ -47,6 +50,7 @@
                 android:weightSum="3">
 
                 <TextView
+                    style="@style/font_style"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -56,6 +60,7 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    style="@style/font_style"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -65,6 +70,7 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    style="@style/font_style"
                     android:id="@+id/tvNegativeMarks"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -86,6 +92,7 @@
                 android:weightSum="3">
 
                 <TextView
+                    style="@style/font_style"
                     android:id="@+id/tvQuestCount"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -95,6 +102,7 @@
                     android:textColor="@color/colorBlack" />
 
                 <TextView
+                    style="@style/font_style"
                     android:id="@+id/tvDuration"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -104,6 +112,7 @@
                     android:textColor="@color/colorBlack" />
 
                 <TextView
+                    style="@style/font_style"
                     android:id="@+id/tvTotalMarks"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -130,6 +139,7 @@
                 android:weightSum="3">
 
                 <TextView
+                    style="@style/font_style"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -139,6 +149,7 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    style="@style/font_style"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -148,6 +159,7 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    style="@style/font_style"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -167,6 +179,7 @@
                 android:weightSum="3">
 
                 <TextView
+                    style="@style/font_style"
                     android:id="@+id/tvDifficultyLevel"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -177,6 +190,7 @@
 
 
                 <TextView
+                    style="@style/font_style"
                     android:id="@+id/tvRanking"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -186,6 +200,7 @@
                     android:textColor="@color/colorBlack" />
 
                 <TextView
+                    style="@style/font_style"
                     android:id="@+id/tvAttendedBy"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -211,6 +226,7 @@
                 android:weightSum="3">
 
                 <TextView
+                    style="@style/font_style"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -220,6 +236,7 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    style="@style/font_style"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -229,6 +246,7 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    style="@style/font_style"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -247,6 +265,7 @@
                 android:weightSum="3">
 
                 <TextView
+                    style="@style/font_style"
                     android:id="@+id/tvPublishedDate"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -257,6 +276,7 @@
 
 
                 <TextView
+                    style="@style/font_style"
                     android:id="@+id/tvAuthorName"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -266,6 +286,7 @@
                     android:textColor="@color/colorBlack" />
 
                 <TextView
+                    style="@style/font_style"
                     android:id="@+id/tvCategory"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -314,6 +335,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
+                        style="@style/font_style"
                         android:id="@+id/ratingvalue"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -360,6 +382,7 @@
                                             app:layout_constraintTop_toTopOf="parent" />-->
 
                     <TextView
+                        style="@style/font_style"
                         android:id="@+id/like_value"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -393,6 +416,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
+                        style="@style/font_style"
                         android:id="@+id/comment_value"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -426,6 +450,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
+                        style="@style/font_style"
                         android:id="@+id/share_value"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -478,6 +503,7 @@
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btnStartTest"
+                    style="@style/font_style"
                     android:layout_width="@dimen/_100sdp"
                     android:layout_height="@dimen/_30sdp"
                     android:background="@drawable/button_background"
@@ -492,6 +518,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
+                    style="@style/font_style"
                     android:visibility="visible"
                     android:id="@+id/tvNoOfAttempts"
                     android:layout_width="wrap_content"

@@ -196,7 +196,7 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
                         fetchCourseData(Integer.parseInt(userPreferences.getDm_id()));
                     if (userPreferences.getCo_id() != null)
                         fetchClassList(userPreferences.getCo_id());
-                    prepareExamChips(userPreferences.getExamList());
+                    prepareChapterChips(userPreferences.getExamList());
                 }
             }
         });
@@ -571,11 +571,11 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
         });
     }
 
-    private void prepareExamChips(String exams) {
-        mBinding.examsChipGroup.removeAllViews();
+    private void prepareChapterChips(String chapters) {
+        mBinding.chaptersChipGroup.removeAllViews();
         ArrayList<String> examNames = new ArrayList<>();
         HashMap<String, String> examMap = new HashMap<>();
-        String[] strExams = exams.split(",", -1);
+        String[] strExams = chapters.split(",", -1);
         for (int i = 0; i < strExams.length; i++) {
             if (!strExams[i].isEmpty()) {
                 String key = strExams[i].split(":0:")[0];
@@ -589,11 +589,11 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
                 chip.setOnClickListener(this);
                 chip.setClickable(true);
                 chip.setCheckable(true);
-                mBinding.examsChipGroup.addView(chip);
+                mBinding.chaptersChipGroup.addView(chip);
             }
         }
-        if (mBinding.examsChipGroup.getChildCount() > 0) {
-            mBinding.examsLayout.setVisibility(View.VISIBLE);
+        if (mBinding.chaptersChipGroup.getChildCount() > 0) {
+            mBinding.chaptersLayout.setVisibility(View.VISIBLE);
         }
     }
 

@@ -422,18 +422,18 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
     }
 
     private void prepareTestCategoryChips() {
-        List subjectList = new ArrayList();
-        subjectList.add("Unit Test-Practice");
-        subjectList.add("Semester-Practice");
-        subjectList.add("Annual-Practice");
-        subjectList.add("Unit Test-Final");
-        subjectList.add("Semester-Final");
-        subjectList.add("Annual-Final");
+        List categoryList = new ArrayList();
+        categoryList.add("Unit Test-Practice");
+        categoryList.add("Semester-Practice");
+        categoryList.add("Annual-Practice");
+        categoryList.add("Unit Test-Final");
+        categoryList.add("Semester-Final");
+        categoryList.add("Annual-Final");
 
         mBinding.testCategoryChipGrp.removeAllViews();
-        for (int i = 0; i < subjectList.size(); i++) {
+        for (int i = 0; i < categoryList.size(); i++) {
             Chip chip = (Chip) LayoutInflater.from(mBinding.testCategoryChipGrp.getContext()).inflate(R.layout.chip_layout, mBinding.testCategoryChipGrp, false);
-            chip.setText(subjectList.get(i).toString());
+            chip.setText(categoryList.get(i).toString());
             chip.setTag("Categories");
             chip.setId(i);
             chip.setClickable(true);

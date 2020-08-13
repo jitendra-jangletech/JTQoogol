@@ -226,6 +226,10 @@ public class Constant {
     public static final String tlc_like_flag = "1403";
     public static final String tlc_comment_flag = "1404";
     public static final String tlc_comment_text = "1405";
+
+    public static final String like_reply_count = "1415";
+    public static final String comment_reply_count = "1416";
+
     public static final String tlc_user_id = "1406";
     public static final String tlc_share_flag = "1407";
     public static final String tlc_cdatetime = "1408";
@@ -540,6 +544,8 @@ public class Constant {
     public static final String stq_mst_id = "1472";
     public static final String group_name = "386";
 
+    public static final String lc_user_id = "3434";
+
     //Answers
     public static final String a_id = "1363";
     public static final String a_q_id = "1364";
@@ -593,6 +599,7 @@ public class Constant {
     public static final String scr_sem_id = "1429";
     public static final String scr_cy_num = "1430";
     public static final String SearchText = "SearchText";
+    public static final String test_recent_popular = "0011";            //Test Category
 
     //TestQuestion Api Start/Resume Test Constants
     public static final String tm_id = "1200";
@@ -738,4 +745,6 @@ public class Constant {
     public static final String w_media_names = "1702";
     public static final String w_media_paths = "1703";
     public static final String SCR_CO_ID = "2672";
+
+    public static final String comment_like_flag = "1705";
 }

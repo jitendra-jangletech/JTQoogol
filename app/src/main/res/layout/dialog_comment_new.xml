@@ -6,6 +6,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <TextView
+            android:id="@+id/tvNoReplies"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="No Replies Added Yet."
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="@color/colorLightGray"
+            android:visibility="gone" />
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/top_layout"
             android:layout_width="match_parent"
@@ -48,139 +59,144 @@
             android:layout_below="@+id/top_layout"
             android:orientation="vertical">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/rootComment"
+            <ScrollView
+                android:fillViewport="true"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/_5sdp">
+                android:layout_height="wrap_content">
 
-                <LinearLayout
-                    android:id="@+id/commentLayout"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/rootComment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:foreground="?attr/selectableItemBackground"
-                    android:orientation="horizontal"
-                    android:weightSum="2"
-                    app:layout_constraintTop_toTopOf="parent">
+                    android:padding="@dimen/_8sdp">
 
-                    <ImageView
-                        android:id="@+id/profilePic"
-                        android:layout_width="@dimen/_30sdp"
-                        android:layout_height="@dimen/_30sdp"
-                        android:layout_weight="0.2"
-                        android:contentDescription="Hello"
-                        android:src="@drawable/profile_img" />
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/notificationTextLayout"
+                    <LinearLayout
+                        android:id="@+id/commentLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1.8">
+                        android:foreground="?attr/selectableItemBackground"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/_10sdp"
+                        android:weightSum="2"
+                        app:layout_constraintTop_toTopOf="parent">
 
-                        <TextView
-                            android:id="@+id/tvSenderName"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingLeft="@dimen/activity_vertical_margin"
-                            android:paddingTop="2dp"
-                            android:paddingRight="@dimen/activity_vertical_margin"
-                            android:text="Name"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/_11ssp"
-                            android:visibility="visible"
-                            app:layout_constraintLeft_toLeftOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-
-                        <com.jangletech.qoogol.view.ExpandableTextView
-                            android:id="@+id/text_comment_body"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:padding="@dimen/_4sdp"
-                            android:text="English Text"
-                            android:textAppearance="?android:attr/textAppearanceSmall"
-                            app:layout_constraintLeft_toLeftOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/tvSenderName" />
-
-                        <!-- <TextView
-                             android:id="@+id/text_comment_body"
-                             android:layout_width="match_parent"
-                             android:layout_height="wrap_content"
-                             android:padding="@dimen/_4sdp"
-                             android:text="English Text"
-                             android:textAppearance="?android:attr/textAppearanceSmall"
-                             app:layout_constraintLeft_toLeftOf="parent"
-                             app:layout_constraintTop_toBottomOf="@+id/tvSenderName" />-->
+                        <ImageView
+                            android:id="@+id/profilePic"
+                            android:layout_width="@dimen/_30sdp"
+                            android:layout_height="@dimen/_30sdp"
+                            android:layout_weight="0.2"
+                            android:contentDescription="Hello"
+                            android:src="@drawable/profile_img" />
 
                         <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/notificationTextLayout"
                             android:layout_width="match_parent"
-                            android:layout_height="@dimen/_20sdp"
-                            app:layout_constraintLeft_toLeftOf="parent"
-                            app:layout_constraintRight_toRightOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/text_comment_body">
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.8">
 
                             <TextView
-                                android:id="@+id/tvLikes"
+                                android:id="@+id/tvSenderName"
                                 android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:drawableLeft="@drawable/card_like_icon"
-                                android:gravity="center"
-                                android:padding="@dimen/_2sdp"
-                                android:text="0"
-                                android:textSize="@dimen/_8ssp"
-                                android:visibility="gone"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="@dimen/activity_vertical_margin"
+                                android:paddingTop="2dp"
+                                android:paddingRight="@dimen/activity_vertical_margin"
+                                android:text="Name"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/_11ssp"
+                                android:visibility="visible"
                                 app:layout_constraintLeft_toLeftOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
 
-                            <TextView
-                                android:id="@+id/tvLike"
-                                android:layout_width="@dimen/_40sdp"
-                                android:layout_height="match_parent"
-                                android:layout_marginLeft="@dimen/_25sdp"
-                                android:foreground="?attr/selectableItemBackground"
-                                android:gravity="center"
-                                android:padding="@dimen/_2sdp"
-                                android:text="Like"
-                                android:textSize="@dimen/_8ssp"
-                                android:visibility="gone"
-                                app:layout_constraintLeft_toRightOf="@+id/tvLikes"
-                                app:layout_constraintTop_toTopOf="parent" />
+                            <com.jangletech.qoogol.view.ExpandableTextView
+                                android:id="@+id/text_comment_body"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:padding="@dimen/_4sdp"
+                                android:text="English Text"
+                                android:textAppearance="?android:attr/textAppearanceSmall"
+                                app:layout_constraintLeft_toLeftOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/tvSenderName" />
 
-                            <TextView
-                                android:id="@+id/tvReply"
-                                android:layout_width="@dimen/_40sdp"
-                                android:layout_height="match_parent"
-                                android:layout_marginLeft="@dimen/_10sdp"
-                                android:foreground="?attr/selectableItemBackground"
-                                android:gravity="center"
-                                android:padding="@dimen/_2sdp"
-                                android:text="Reply"
-                                android:textSize="@dimen/_8ssp"
-                                android:visibility="gone"
-                                app:layout_constraintLeft_toRightOf="@+id/tvLike"
-                                app:layout_constraintTop_toTopOf="parent" />
+                            <!-- <TextView
+                                 android:id="@+id/text_comment_body"
+                                 android:layout_width="match_parent"
+                                 android:layout_height="wrap_content"
+                                 android:padding="@dimen/_4sdp"
+                                 android:text="English Text"
+                                 android:textAppearance="?android:attr/textAppearanceSmall"
+                                 app:layout_constraintLeft_toLeftOf="parent"
+                                 app:layout_constraintTop_toBottomOf="@+id/tvSenderName" />-->
 
-                            <TextView
-                                android:id="@+id/text_comment_time"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:gravity="center"
-                                android:padding="@dimen/_2sdp"
-                                android:text="19 March 2020"
-                                android:textSize="@dimen/_8ssp"
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/_20sdp"
+                                app:layout_constraintLeft_toLeftOf="parent"
                                 app:layout_constraintRight_toRightOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
+                                app:layout_constraintTop_toBottomOf="@+id/text_comment_body">
 
+                                <TextView
+                                    android:id="@+id/tvLikes"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:drawableLeft="@drawable/card_like_icon"
+                                    android:gravity="center"
+                                    android:padding="@dimen/_2sdp"
+                                    android:text="0"
+                                    android:textSize="@dimen/_8ssp"
+                                    android:visibility="gone"
+                                    app:layout_constraintLeft_toLeftOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/tvLike"
+                                    android:layout_width="@dimen/_40sdp"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginLeft="@dimen/_25sdp"
+                                    android:foreground="?attr/selectableItemBackground"
+                                    android:gravity="center"
+                                    android:padding="@dimen/_2sdp"
+                                    android:text="Like"
+                                    android:textSize="@dimen/_8ssp"
+                                    android:visibility="gone"
+                                    app:layout_constraintLeft_toRightOf="@+id/tvLikes"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/tvReply"
+                                    android:layout_width="@dimen/_40sdp"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginLeft="@dimen/_10sdp"
+                                    android:foreground="?attr/selectableItemBackground"
+                                    android:gravity="center"
+                                    android:padding="@dimen/_2sdp"
+                                    android:text="Reply"
+                                    android:textSize="@dimen/_8ssp"
+                                    android:visibility="gone"
+                                    app:layout_constraintLeft_toRightOf="@+id/tvLike"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/text_comment_time"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center"
+                                    android:padding="@dimen/_2sdp"
+                                    android:text="19 March 2020"
+                                    android:textSize="@dimen/_8ssp"
+                                    app:layout_constraintRight_toRightOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+                    </LinearLayout>
 
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </ScrollView>
 
-                </LinearLayout>
-
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/comment_recycler"
@@ -188,6 +204,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="@dimen/_25sdp"
                 android:padding="@dimen/_10sdp"
+                android:visibility="visible"
                 tools:listitem="@layout/comment_item" />
         </LinearLayout>
 
@@ -221,7 +238,7 @@
                     android:layout_marginStart="@dimen/btn_padding"
                     android:layout_weight="0.9"
                     android:backgroundTint="@color/colorWhite"
-                    android:hint="Enter Comment"
+                    android:hint="Enter Reply"
                     android:imeOptions="normal"
                     android:textColor="@color/colorBlack"
                     android:textColorHint="@color/grey" />

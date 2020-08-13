@@ -146,7 +146,7 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
             LearningQuestionsNew learningQuestions = learningQuestionsList.get(position);
             holder.learningItemBinding.setQuestion(learningQuestions);
 
-            hideLayouts();
+            hideLayouts(holder);
 
             if (learningQuestions.getQuestion().contains("\\")) {
                 holder.learningItemBinding.questionMathview.setVisibility(View.VISIBLE);
@@ -177,7 +177,7 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
                     if (tempimgList.size() == 1) {
                         try {
                             holder.learningItemBinding.queImg1.setVisibility(View.VISIBLE);
-                            Glide.with(activity).load(new URL(tempimgList.get(0))).into(learningItemBinding.queImg1);
+                            Glide.with(activity).load(new URL(tempimgList.get(0))).into(holder.learningItemBinding.queImg1);
                             List<String> finalTempimgList = tempimgList;
                             holder.learningItemBinding.queImg1.setOnClickListener(v -> {
                                 Bundle bundle = new Bundle();
@@ -247,30 +247,30 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
         });
     }
 
-    public void hideLayouts() {
+    public void hideLayouts(ViewHolder holder) {
         if (call_from == test) {
-            learningItemBinding.expandableLayout.setVisibility(View.VISIBLE);
-            learningItemBinding.expand.setVisibility(View.GONE);
-            learningItemBinding.close.setVisibility(View.GONE);
+            holder.learningItemBinding.expandableLayout.setVisibility(View.VISIBLE);
+            holder.learningItemBinding.expand.setVisibility(View.GONE);
+            holder.learningItemBinding.close.setVisibility(View.GONE);
         }
-        learningItemBinding.reset.setVisibility(View.GONE);
-        learningItemBinding.resetLabel.setVisibility(View.GONE);
-        learningItemBinding.queImg1.setVisibility(View.GONE);
-        learningItemBinding.imgRecycler.setVisibility(View.GONE);
-        learningItemBinding.matchThePairs.setVisibility(View.GONE);
-        learningItemBinding.trueFalse.setVisibility(View.GONE);
-        learningItemBinding.fillInTheBlanks.setVisibility(View.GONE);
-        learningItemBinding.singleLine.setVisibility(View.GONE);
-        learningItemBinding.singleLineCounter.setVisibility(View.GONE);
-        learningItemBinding.multiChoice.setVisibility(View.GONE);
-        learningItemBinding.multiLine.setVisibility(View.GONE);
-        learningItemBinding.multiLineCounter.setVisibility(View.GONE);
-        learningItemBinding.singleChoice.setVisibility(View.GONE);
-        learningItemBinding.scqImgLayout.setVisibility(View.GONE);
-        learningItemBinding.mcqImgLayout.setVisibility(View.GONE);
-        learningItemBinding.scqImgtextLayout.setVisibility(View.GONE);
-        learningItemBinding.mcqImgtextLayout.setVisibility(View.GONE);
-        learningItemBinding.mtpImgLayout.setVisibility(View.GONE);
+        holder.learningItemBinding.reset.setVisibility(View.GONE);
+        holder.learningItemBinding.resetLabel.setVisibility(View.GONE);
+        holder.learningItemBinding.queImg1.setVisibility(View.GONE);
+        holder.learningItemBinding.imgRecycler.setVisibility(View.GONE);
+        holder.learningItemBinding.matchThePairs.setVisibility(View.GONE);
+        holder.learningItemBinding.trueFalse.setVisibility(View.GONE);
+        holder.learningItemBinding.fillInTheBlanks.setVisibility(View.GONE);
+        holder.learningItemBinding.singleLine.setVisibility(View.GONE);
+        holder.learningItemBinding.singleLineCounter.setVisibility(View.GONE);
+        holder.learningItemBinding.multiChoice.setVisibility(View.GONE);
+        holder.learningItemBinding.multiLine.setVisibility(View.GONE);
+        holder.learningItemBinding.multiLineCounter.setVisibility(View.GONE);
+        holder.learningItemBinding.singleChoice.setVisibility(View.GONE);
+        holder.learningItemBinding.scqImgLayout.setVisibility(View.GONE);
+        holder.learningItemBinding.mcqImgLayout.setVisibility(View.GONE);
+        holder.learningItemBinding.scqImgtextLayout.setVisibility(View.GONE);
+        holder.learningItemBinding.mcqImgtextLayout.setVisibility(View.GONE);
+        holder.learningItemBinding.mtpImgLayout.setVisibility(View.GONE);
     }
 
     @Override

@@ -346,6 +346,7 @@ public class PracticeTestActivity extends BaseActivity implements
         }*/
         practiseViewPagerAdapter = new PractiseViewPagerAdapter(PracticeTestActivity.this, this, startResumeTestResponse, flag);
         practiceViewPager.setAdapter(practiseViewPagerAdapter);
+        setTimerToSelectedPage(0);
     }
 
     private void setQuestPaletAdapter() {
@@ -432,7 +433,7 @@ public class PracticeTestActivity extends BaseActivity implements
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             //finish();
-                            submitTestQuestions();
+                            submitTestQuestions("P");
                         }
                     })
                     .setNegativeButton("Cancel", null)
@@ -451,11 +452,10 @@ public class PracticeTestActivity extends BaseActivity implements
 
     @Override
     public void onYesClick() {
-        submitTestQuestions();
-        //finish();
+        submitTestQuestions("C");
     }
 
-    private void submitTestQuestions() {
+    private void submitTestQuestions(String testStatus) {
         SubmitTest submitTest = new SubmitTest();
         List<TestQuestionNew> submitTestQuestionList = new ArrayList<>();
         submitTest.setTm_id(startTestResponse.getTm_id());
@@ -469,6 +469,8 @@ public class PracticeTestActivity extends BaseActivity implements
 
         HashMap<String, String> params = new HashMap<>();
         params.put(Constant.tt_id, String.valueOf(startTestResponse.getTtId()));
+        params.put(Constant.tt_obtain_marks, "100");
+        params.put(Constant.tt_status, testStatus);
         params.put(Constant.u_user_id, String.valueOf(new PreferenceManager(this).getInt(Constant.USER_ID)));
         params.put(Constant.DataList, json);
 

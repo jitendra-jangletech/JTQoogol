@@ -25,8 +25,8 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-
             <TextView
+                style="@style/font_style"
                 android:id="@+id/tvUniversity"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -38,6 +38,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                style="@style/font_style"
                 android:textColor="@color/colorSkyBlue"
                 android:id="@+id/tvInstitute"
                 android:layout_width="wrap_content"
@@ -51,6 +52,7 @@
 
 
             <TextView
+                style="@style/font_style"
                 android:id="@+id/tvDegree"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -63,6 +65,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/tvInstitute" />
 
             <TextView
+                style="@style/font_style"
                 android:id="@+id/tvCourse"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -75,6 +78,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/tvDegree" />
 
             <TextView
+                style="@style/font_style"
                 android:id="@+id/tvCourseYear"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -94,6 +98,7 @@
 
 
                 <TextView
+                    style="@style/font_style"
                     android:id="@+id/tvStartDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -106,6 +111,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
+                    style="@style/font_style"
                     android:layout_marginLeft="@dimen/_5sdp"
                     android:layout_marginRight="@dimen/_5sdp"
                     app:layout_constraintLeft_toRightOf="@+id/tvStartDate"
@@ -119,6 +125,7 @@
                     android:layout_height="wrap_content"/>
 
                 <TextView
+                    style="@style/font_style"
                     android:id="@+id/tvEndDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -133,9 +140,7 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-
         </androidx.constraintlayout.widget.ConstraintLayout>
-
 
     </com.google.android.material.card.MaterialCardView>
 

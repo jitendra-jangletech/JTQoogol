@@ -14,12 +14,14 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.jangletech.qoogol.R;
+import com.jangletech.qoogol.activities.BaseActivity;
 import com.jangletech.qoogol.databinding.TestItemBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.model.ProcessQuestion;
 import com.jangletech.qoogol.model.TestModelNew;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
+import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.DateUtils;
@@ -74,7 +76,7 @@ public class TestListAdapter extends RecyclerView.Adapter<TestListAdapter.ViewHo
         TestModelNew testModelNew = testModelList.get(position);
         //map.put(position, itemBinding.likeValue);
         holder.itemBinding.tvTestNameSubject.setText(testModelNew.getTm_name() + "(" + testModelNew.getSm_sub_name() + ")");
-        holder.itemBinding.tvCategory.setText(testModelNew.getTm_catg());
+        holder.itemBinding.tvCategory.setText(BaseFragment.getDefinedTestCategory(testModelNew.getTm_catg()));
         holder.itemBinding.tvDuration.setText(testModelNew.getTm_duration() + " Min.");
         holder.itemBinding.tvTotalMarks.setText(testModelNew.getTm_tot_marks());
         holder.itemBinding.tvDifficultyLevel.setText(mapDiffLevel.get(testModelNew.getTm_diff_level()));

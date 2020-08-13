@@ -17,6 +17,31 @@ public class Comments {
         this.tlc_comment_text = commentText;
     }
 
+    @SerializedName(Constant.test_comment_reply_id)
+    private int replyCommentId;
+
+    @SerializedName(Constant.like_reply_count)
+    private int replyLikeCount;
+
+    public int getReplyLikeCount() {
+        return replyLikeCount;
+    }
+
+    public void setReplyLikeCount(int replyLikeCount) {
+        this.replyLikeCount = replyLikeCount;
+    }
+
+    public int getReplyCommentCount() {
+        return replyCommentCount;
+    }
+
+    public void setReplyCommentCount(int replyCommentCount) {
+        this.replyCommentCount = replyCommentCount;
+    }
+
+    @SerializedName(Constant.comment_reply_count)
+    private int replyCommentCount;
+
     @PrimaryKey
     @SerializedName(Constant.qlc_id)
     private String commentId;

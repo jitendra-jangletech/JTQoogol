@@ -144,9 +144,9 @@ public class CommentDialog extends Dialog implements CommentAdapter.onCommentIte
 
     private void setCommentAdapter() {
         if (isCallFromTest)
-            commentAdapter = new CommentAdapter(mContext, commentList, Module.Test.toString(), "", false,this);
+            commentAdapter = new CommentAdapter(mContext, commentList, Module.Test.toString(), "", false, this);
         else
-            commentAdapter = new CommentAdapter(mContext, commentList, Module.Learning.toString(), "", false,this);
+            commentAdapter = new CommentAdapter(mContext, commentList, Module.Learning.toString(), "", false, this);
 
         mBinding.commentRecycler.setHasFixedSize(true);
         mBinding.commentRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -175,10 +175,22 @@ public class CommentDialog extends Dialog implements CommentAdapter.onCommentIte
     }
 
     @Override
+    public void onCommentDelete(int pos, Comments comments) {
+        //AppUtils.showToast(mContext, "Delete " + pos);
+        if (isCallFromTest)
+            deleteComment(comments.getTlc_id(), pos);
+        else
+            deleteComment(comments.getCommentId(), pos);
+    }
+
+    @Override
+    public void onCommentsClick(int pos, Comments comments) {
+        itemPosition = pos;
+        new RepliesDialog(mContext, mContext, comments, id, isCallFromTest).show();
+    }
+
+    @Override
     public void onLikeClick(int pos, Comments comments) {
-        //AppUtils.showToast(mContext, "Like");
-        //comments.setLikeCount(1);
-        //commentAdapter.updateLikeCount(pos, comments);
         itemPosition = pos;
         if (isCallFromTest)
             likeReplyComment("I", comments.getTlc_id(), "");
@@ -193,6 +205,49 @@ public class CommentDialog extends Dialog implements CommentAdapter.onCommentIte
         itemPosition = pos;
         new RepliesDialog(mContext, mContext, comments, id, isCallFromTest).show();
         //likeReplyComment("I", comments.getCommentId(), "");
+    }
+
+    private void deleteComment(String commentId, int pos) {
+        ProgressDialog.getInstance().show(mContext);
+
+        if (isCallFromTest)
+            call = apiService.deleteTestComment(
+                    AppUtils.getUserId(),
+                    id,
+                    "D",
+                    "1",
+                    commentId
+            );
+        else
+            call = apiService.deleteTestComment(
+                    AppUtils.getUserId(),
+                    id,
+                    "D",
+                    "1",
+                    commentId
+            );
+
+        call.enqueue(new Callback<ProcessQuestion>() {
+            @Override
+            public void onResponse(Call<ProcessQuestion> call, Response<ProcessQuestion> response) {
+                ProgressDialog.getInstance().dismiss();
+
+                if (response.body() != null &&
+                        response.body().getResponse().equals("200")) {
+                    //remove deleted item from recyclerview
+                    commentAdapter.deleteComment(pos);
+                } else {
+                    AppUtils.showToast(mContext, response.body().getResponse());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ProcessQuestion> call, Throwable t) {
+                ProgressDialog.getInstance().dismiss();
+                AppUtils.showToast(mContext, "Something went wrong!!");
+                t.printStackTrace();
+            }
+        });
     }
 
     private void likeReplyComment(String strCase,
@@ -248,13 +303,13 @@ public class CommentDialog extends Dialog implements CommentAdapter.onCommentIte
 
     private void updateCommentList(List<Comments> list) {
         Comments comments = list.get(itemPosition);
-        int preLikeCount = comments.getLikeCount();
+        int preLikeCount = comments.getReplyLikeCount();
         if (comments.isLiked()) {
             comments.setLiked(false);
-            comments.setLikeCount(preLikeCount - preLikeCount);
+            comments.setReplyLikeCount(preLikeCount - 1);
         } else {
             comments.setLiked(true);
-            comments.setLikeCount(preLikeCount + preLikeCount);
+            comments.setReplyLikeCount(preLikeCount + 1);
         }
         commentAdapter.notifyItemChanged(itemPosition, comments);
     }

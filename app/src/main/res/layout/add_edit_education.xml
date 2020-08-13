@@ -55,14 +55,15 @@
                 android:padding="@dimen/_10sdp">
 
                 <TextView
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
                     android:id="@+id/tvUniversity"
+                    style="@style/font_style"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_15sdp"
                     android:text="@string/university"
-                    android:textColor="@color/colorSkyBlue" />
+                    android:textColor="@color/colorSkyBlue"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <com.jangletech.qoogol.view.CustomAutoCompleteTextView
                     android:id="@+id/universityBoardAutocompleteView"
@@ -85,14 +86,15 @@
 
 
                 <TextView
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/universityBoardAutocompleteView"
                     android:id="@+id/tvInstitute"
+                    style="@style/font_style"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_15sdp"
                     android:text="@string/institute"
-                    android:textColor="@color/colorSkyBlue" />
+                    android:textColor="@color/colorSkyBlue"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/universityBoardAutocompleteView" />
 
                 <com.jangletech.qoogol.view.CustomAutoCompleteTextView
                     android:id="@+id/instituteAutocompleteView"
@@ -115,14 +117,15 @@
                     app:layout_constraintTop_toBottomOf="@+id/universityBoardAutocompleteView" />
 
                 <TextView
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/instituteAutocompleteView"
                     android:id="@+id/tvDegree"
+                    style="@style/font_style"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_15sdp"
                     android:text="@string/degree"
-                    android:textColor="@color/colorSkyBlue" />
+                    android:textColor="@color/colorSkyBlue"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/instituteAutocompleteView" />
 
                 <com.jangletech.qoogol.view.CustomAutoCompleteTextView
                     android:id="@+id/degreeAutocompleteView"
@@ -132,14 +135,15 @@
                     app:layout_constraintTop_toBottomOf="@+id/tvDegree" />
 
                 <TextView
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/degreeAutocompleteView"
-                android:id="@+id/tvCourse"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_15sdp"
-                android:text="@string/course"
-                android:textColor="@color/colorSkyBlue" />
+                    android:id="@+id/tvCourse"
+                    style="@style/font_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:text="@string/course"
+                    android:textColor="@color/colorSkyBlue"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/degreeAutocompleteView" />
 
                 <com.jangletech.qoogol.view.CustomAutoCompleteTextView
                     android:id="@+id/courseAutocompleteView"
@@ -149,14 +153,15 @@
                     app:layout_constraintTop_toBottomOf="@+id/tvCourse" />
 
                 <TextView
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/courseAutocompleteView"
+                    style="@style/font_style"
                     android:id="@+id/tvCourseYear"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_15sdp"
                     android:text="@string/course_year"
-                    android:textColor="@color/colorSkyBlue" />
+                    android:textColor="@color/colorSkyBlue"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/courseAutocompleteView" />
 
                 <com.jangletech.qoogol.view.CustomAutoCompleteTextView
                     android:id="@+id/courseYearAutocompleteView"
@@ -178,13 +183,13 @@
                         android:id="@+id/til_startdate"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
-                        app:hintTextColor="@color/colorSkyBlue"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="@dimen/_2sdp"
                         android:layout_marginBottom="@dimen/_10sdp"
                         android:layout_weight="1"
                         android:hint="@string/start_date"
-                        app:errorEnabled="true">
+                        app:errorEnabled="true"
+                        app:hintTextColor="@color/colorSkyBlue">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etstartdate"
@@ -201,10 +206,10 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/_2sdp"
                         android:layout_marginBottom="@dimen/_5sdp"
-                        app:hintTextColor="@color/colorSkyBlue"
                         android:layout_weight="1"
                         android:hint="@string/end_date"
-                        app:errorEnabled="true">
+                        app:errorEnabled="true"
+                        app:hintTextColor="@color/colorSkyBlue">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etenddate"
@@ -220,6 +225,7 @@
         </ScrollView>
 
         <TextView
+            style="@style/font_style"
             android:id="@+id/btnSave"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_38sdp"

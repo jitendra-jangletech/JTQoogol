@@ -234,7 +234,19 @@ public interface ApiInterface {
                                          @Field(Constant.tm_popular_test) String popularTest,
                                          @Field(Constant.tm_diff_level) String diffLevel,
                                          @Field(Constant.tm_avg_rating) String avgRating,
-                                         @Field(Constant.tm_id) String tmId);
+                                         @Field(Constant.tm_id) String tmId,
+                                         @Field(Constant.tm_catg) String cat);
+
+    @FormUrlEncoded
+    @POST(Constant.FETCH_TEST_LIST)
+    Call<TestListResponse> fetchFilteredTestList(@Field(Constant.u_user_id) String userId,
+                                                 @Field(Constant.tm_id) String tmId,
+                                                 @Field(Constant.tm_recent_test) String recentTest,
+                                                 @Field(Constant.tm_popular_test) String popularTest,
+                                                 @Field(Constant.tm_diff_level) String diffLevel,
+                                                 @Field(Constant.tm_catg) String categories,
+                                                 @Field(Constant.tm_avg_rating) String avgRating);
+
 
     @FormUrlEncoded
     @POST(Constant.FETCH_NOTIFICATIONS)
@@ -306,6 +318,24 @@ public interface ApiInterface {
                                           @Field(Constant.tlc_like_flag) String flag,
                                           @Field(Constant.test_comment_reply_id) String replyId,
                                           @Field(Constant.tlc_comment_text) String text);
+
+
+    @FormUrlEncoded
+    @POST(Constant.PROCESS_TEST)
+    Call<ProcessQuestion> deleteTestComment(@Field(Constant.u_user_id) String userid,
+                                          @Field(Constant.tm_id) int tmId,
+                                          @Field(Constant.CASE) String caseL,
+                                          @Field(Constant.tlc_comment_flag) String flag,
+                                          @Field(Constant.tlc_id) String commentId);
+
+    @FormUrlEncoded
+    @POST(Constant.PROCESS_QUESTION)
+    Call<ProcessQuestion> deleteQuestComment(@Field(Constant.u_user_id) String userid,
+                                            @Field(Constant.q_id) int qId,
+                                            @Field(Constant.CASE) String caseL,
+                                            @Field(Constant.qlc_comment_flag) String flag,
+                                            @Field(Constant.qlc_id) String commentId);
+
 
     @FormUrlEncoded
     @POST(Constant.PROCESS_TEST)
@@ -554,7 +584,6 @@ public interface ApiInterface {
                                                     @Field("200Q") String app,
                                                     @Field(Constant.pagestart) String pagestart,
                                                     @Field("ForceRefresh") String refresh);
-
 
 
     @FormUrlEncoded

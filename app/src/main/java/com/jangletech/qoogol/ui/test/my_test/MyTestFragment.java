@@ -45,6 +45,7 @@ import com.jangletech.qoogol.model.TestModelNew;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
+import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 
@@ -65,10 +66,14 @@ public class MyTestFragment extends BaseFragment
     private MyTestViewModel mViewModel;
     private FragmentTestMyBinding mBinding;
     private TestListAdapter mAdapter;
-    private List<TestModelNew> testList;
+    private List<TestModelNew> testList = new ArrayList<>();
+    private List<TestModelNew> filteredTestList = new ArrayList<>();
     private List<String> subjectList;
+    private TestListResponse testListResponse;
     private Context mContext;
+    private boolean isFilterApplied = false;
     private HashMap<String, String> params = new HashMap<>();
+    private HashMap<String, String> filterParams = new HashMap<>();
     private int tmId;
     private Boolean isScrolling = false;
     private String pageStart = "0";
@@ -133,8 +138,8 @@ public class MyTestFragment extends BaseFragment
 //                Bundle bundle = new Bundle();
 //                bundle.putString("call_from", "test");
 //                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_test_filter, bundle);
-                FilterDialog bottomSheetFragment = new FilterDialog(getActivity(), subjectList, params, this);
-                bottomSheetFragment.setCancelable(false);
+                FilterDialog bottomSheetFragment = new FilterDialog(getActivity(), filterParams, this);
+                //bottomSheetFragment.setCancelable(false);
                 bottomSheetFragment.show(getActivity().getSupportFragmentManager(), bottomSheetFragment.getTag());
                 return true;
             default:
@@ -188,6 +193,9 @@ public class MyTestFragment extends BaseFragment
         params.put(CASE, "");
         params.put(Constant.tm_popular_test, "");
         params.put(Constant.tm_recent_test, "");
+        params.put(Constant.tm_recent_test, "");
+        params.put(Constant.tm_catg, "");
+        params.put(Constant.tm_diff_level, "");
         if (getArguments() != null && getArguments().getBoolean("fromNotification")) {
             Log.d(TAG, "initViews msId : " + getArguments().getString(Constant.FB_MS_ID));
             params.put(Constant.tm_id, getArguments().getString(Constant.FB_MS_ID));
@@ -198,6 +206,11 @@ public class MyTestFragment extends BaseFragment
 
         if (getString(Constant.tm_avg_rating) != null && !getString(Constant.tm_avg_rating).isEmpty())
             params.put(Constant.tm_avg_rating, getString(Constant.tm_avg_rating));
+
+        mAdapter = new TestListAdapter(requireActivity(), testList, this, "");
+        mBinding.testListRecyclerView.setLayoutManager(linearLayoutManager);
+        mBinding.testListRecyclerView.setAdapter(mAdapter);
+        //mAdapter = new TestListAdapter(requireActivity(), testList, this, "");
 
         fetchSubjectList(new PreferenceManager(requireActivity()).getString(Constant.scr_co_id));
         fetchTestList(params, pageStart);
@@ -223,7 +236,7 @@ public class MyTestFragment extends BaseFragment
                 @Override
                 public void onChanged(@Nullable final List<TestModelNew> tests) {
                     if (tests != null) {
-                        Log.d(TAG, "onChanged Size : " + tests.size());
+                        Log.d(TAG, "onChanged Size DiffLevel: " + tests.size());
                         testList = tests;
                         setMyTestList(tests);
                     }
@@ -236,7 +249,7 @@ public class MyTestFragment extends BaseFragment
                 @Override
                 public void onChanged(@Nullable final List<TestModelNew> tests) {
                     if (tests != null) {
-                        Log.d(TAG, "onChanged Size : " + tests.size());
+                        Log.d(TAG, "onChanged Size AvgRating: " + tests.size());
                         testList = tests;
                         setMyTestList(tests);
                     }
@@ -247,9 +260,16 @@ public class MyTestFragment extends BaseFragment
                 @Override
                 public void onChanged(@Nullable final List<TestModelNew> tests) {
                     if (tests != null) {
-                        Log.d(TAG, "onChanged Size : " + tests.size());
+                        if (testListResponse != null)
+                            pageStart = testListResponse.getPageCount();
+                        Log.d(TAG, "onChanged Size AllTests: " + tests.size());
                         testList = tests;
-                        setMyTestList(tests);
+                        if (isFilterApplied) {
+                            //set filtered List Method
+                            setFilteredTestList(tests);
+                        } else {
+                            setMyTestList(tests);
+                        }
                     }
                 }
             });
@@ -277,12 +297,16 @@ public class MyTestFragment extends BaseFragment
         });
     }
 
+    private void setFilteredTestList(List<TestModelNew> list) {
+        filteredTestList.addAll(list);
+        mAdapter.updateList(filteredTestList);
+    }
+
     public void setMyTestList(List<TestModelNew> testList) {
         if (testList.size() > 0) {
             mBinding.tvNoTest.setVisibility(View.GONE);
-            mAdapter = new TestListAdapter(requireActivity(), testList, this, "");
-            mBinding.testListRecyclerView.setLayoutManager(linearLayoutManager);
-            mBinding.testListRecyclerView.setAdapter(mAdapter);
+            mAdapter.updateList(testList);
+            //mAdapter = new TestListAdapter(requireActivity(), testList, this, "");
         } else {
             Log.d(TAG, "setMyTestList size : " + testList.size());
             mBinding.tvNoTest.setVisibility(View.VISIBLE);
@@ -382,6 +406,19 @@ public class MyTestFragment extends BaseFragment
         });
     }
 
+    private void fetchFilteredRecords() {
+        /*mViewModel.getAllFilteredTests("PRACTICE", getUserId(getActivity()), params.get(Constant.tm_diff_level)).observe(getViewLifecycleOwner(), new Observer<List<TestModelNew>>() {
+            @Override
+            public void onChanged(@Nullable final List<TestModelNew> tests) {
+                if (tests != null) {
+                    Log.d(TAG, "onChanged Size : " + tests.size());
+                    testList = tests;
+                    setMyTestList(tests);
+                }
+            }
+        });*/
+    }
+
     private void fetchTestList(HashMap<String, String> params, String pageStart) {
         Log.d(TAG, "fetchTestList Params : " + params);
         Log.d(TAG, "initViews Flag : " + flag);
@@ -394,7 +431,8 @@ public class MyTestFragment extends BaseFragment
                 params.get(Constant.tm_popular_test),
                 params.get(Constant.tm_diff_level),
                 params.get(Constant.tm_avg_rating),
-                params.get(Constant.tm_id)
+                params.get(Constant.tm_id),
+                params.get(Constant.tm_catg)
         );
         call.enqueue(new Callback<TestListResponse>() {
             @Override
@@ -402,6 +440,7 @@ public class MyTestFragment extends BaseFragment
                 //ProgressDialog.getInstance().dismiss();
                 mBinding.swipeToRefresh.setRefreshing(false);
                 if (response.body() != null && response.body().getResponse().equals("200")) {
+                    testListResponse = response.body();
                     if (params.get(Constant.tm_id) != null &&
                             !(params.get(Constant.tm_id).isEmpty())) {
                         if (response.body().getTestList().size() > 0) {
@@ -410,6 +449,7 @@ public class MyTestFragment extends BaseFragment
                             mBinding.tvNoTest.setVisibility(View.VISIBLE);
                         }
                     } else {
+
                         List<TestModelNew> testList = response.body().getTestList();
                         for (TestModelNew testModelNew : testList) {
                             testModelNew.setFlag("PRACTICE");
@@ -507,13 +547,33 @@ public class MyTestFragment extends BaseFragment
 
     @Override
     public void onResetClick(HashMap<String, String> params) {
-        showToast("Filters Reset");
+        //showToast("Filters Reset");
+        isFilterApplied = false;
     }
 
     @Override
-    public void onDoneClick(HashMap<String, String> params) {
+    public void onDoneClick(HashMap<String, String> map) {
         showToast("Filters Applied");
-        this.params = params;
-        Log.d(TAG, "onDoneClick DiffLevel : " + params.get(Constant.tm_diff_level));
+        //pageStart = "0";
+        isFilterApplied = true;
+        this.params = map;
+        params.put(CASE, "");
+        params.put(Constant.u_user_id, AppUtils.getUserId());
+        params.put(Constant.tm_id, "");
+        params.put(Constant.u_user_id, AppUtils.getUserId());
+        String recpop = params.get(Constant.test_recent_popular);
+
+        if (recpop != null && !recpop.isEmpty() && recpop.contains("P"))
+            params.put(Constant.tm_popular_test, "1");
+        else
+            params.put(Constant.tm_popular_test, "");
+
+        if (recpop != null && !recpop.isEmpty() && recpop.contains("R"))
+            params.put(Constant.tm_recent_test, "1");
+        else
+            params.put(Constant.tm_recent_test, "");
+
+        Log.d(TAG, "onDoneClick Filtered Params : " + filterParams);
+        fetchTestList(params, "0");
     }
 }

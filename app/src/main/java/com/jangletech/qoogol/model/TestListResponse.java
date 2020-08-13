@@ -1,10 +1,22 @@
 package com.jangletech.qoogol.model;
 
 import com.google.gson.annotations.SerializedName;
+import com.jangletech.qoogol.util.Constant;
 
 import java.util.List;
 
 public class TestListResponse {
+
+    @SerializedName(Constant.row_count)
+    private String pageCount;
+
+    public String getPageCount() {
+        return pageCount;
+    }
+
+    public void setPageCount(String pageCount) {
+        this.pageCount = pageCount;
+    }
 
     @SerializedName("Response")
     private String response;

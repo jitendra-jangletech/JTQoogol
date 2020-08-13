@@ -59,6 +59,22 @@ public class BaseFragment extends Fragment {
         return result;
     }
 
+    public static String getDefinedTestCategory(String strCat) {
+        String defCat = "";
+        if (strCat != null) {
+            if (strCat.equalsIgnoreCase("A")) {
+                defCat = "Annual-Practice";
+            }
+            if (strCat.equalsIgnoreCase("U")) {
+                defCat = "Unit Test-Practice";
+            }
+            if (strCat.equalsIgnoreCase("S")) {
+                defCat = "Semester-Practice";
+            }
+        }
+        return defCat;
+    }
+
     public boolean isAppInstalled() {
         PackageManager pm = getActivity().getPackageManager();
         try {
