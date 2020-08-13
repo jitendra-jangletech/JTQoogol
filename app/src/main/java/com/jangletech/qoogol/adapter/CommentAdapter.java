@@ -72,7 +72,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
 
         if (comments.getReplyLikeCount() > 0) {
             holder.commentItemBinding.tvLikes.setVisibility(View.VISIBLE);
-        } else {
+        }else {
             holder.commentItemBinding.tvLikes.setVisibility(View.GONE);
         }
 
