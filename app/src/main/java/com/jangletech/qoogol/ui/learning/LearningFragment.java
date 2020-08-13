@@ -37,6 +37,7 @@ import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -55,8 +56,11 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
     LearningAdapter learningAdapter;
     List<LearningQuestionsNew> learningQuestionsList;
     List<LearningQuestionsNew> questionsNewList;
+    List<LearningQuestionsNew> questionsFilteredList;
     ApiInterface apiService = ApiClient.getInstance().getApi();
     String userId = "";
+    private HashMap<String, String> params = new HashMap<>();
+    boolean isFilterApplied = false;
 
 
     public static LearningFragment newInstance() {
@@ -107,15 +111,22 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
         learningFragmentBinding.learningSwiperefresh.setRefreshing(true);
         learningQuestionsList = new ArrayList<>();
         questionsNewList = new ArrayList<>();
+        questionsFilteredList=new ArrayList<>();
         userId = String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));
 
+        params.put(Constant.q_trending,"");
+        params.put(Constant.q_popular,"");
+        params.put(Constant.q_recent,"");
+        params.put(Constant.q_diff_level,"");
+        params.put(Constant.q_type,"");
+        params.put(Constant.q_option_type,"");
+        params.put(Constant.q_avg_ratings,"");
         Bundle bundle = getArguments();
         if (bundle != null) {
-            mViewModel.getFilters();
             if (bundle.getBoolean("fromNotification")) {
                 ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Learning");
                 if (bundle.getString(Constant.FB_MS_ID) != null)
-                    mViewModel.fetchQuestionData(bundle.getString(Constant.FB_MS_ID));
+                    mViewModel.fetchQuestionData(bundle.getString(Constant.FB_MS_ID),params);
 
                 learningFragmentBinding.learningSwiperefresh.setRefreshing(true);
                 mViewModel.getQuestion(bundle.getString(Constant.FB_MS_ID)).observe(getViewLifecycleOwner(), questionsList -> {
@@ -128,17 +139,23 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
                 } else {
                     ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Practice Questions");
                 }
-                mViewModel.fetchQuestionData("");
+                mViewModel.fetchQuestionData("",params);
 
                 mViewModel.getQuestionList().observe(getViewLifecycleOwner(), questionsList -> {
-                    setData(questionsList);
+                    if (isFilterApplied)
+                        setData(questionsFilteredList);
+                    else
+                        setData(questionsList);
                 });
             }
         }
         learningFragmentBinding.learningSwiperefresh.setOnRefreshListener(() -> {
-            mViewModel.fetchQuestionData("");
+            mViewModel.fetchQuestionData("",params);
             mViewModel.getQuestionList().observe(getViewLifecycleOwner(), questionsList -> {
-                setData(questionsList);
+                if (isFilterApplied)
+                    setData(questionsFilteredList);
+                else
+                    setData(questionsList);
             });
         });
 
@@ -265,12 +282,19 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
 
     @Override
     public void onResetClick() {
-
+        isFilterApplied=false;
     }
 
     @Override
-    public void onDoneClick() {
-        mViewModel.getFilters();
-        mViewModel.fetchQuestionData("");
+    public void onDoneClick(HashMap<String, String> map) {
+        params = map;
+        mViewModel.fetchQuestionData("",params);
+
+        questionsFilteredList.clear();
+        questionsFilteredList.addAll(mViewModel.getFilterQuestionList());
+        setData(questionsFilteredList);
+
     }
+
+
 }

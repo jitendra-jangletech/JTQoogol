@@ -98,12 +98,9 @@ public class FilterDialog extends BottomSheetDialogFragment implements View.OnCl
             setCheckedChip(chip);
         });*/
 
-        mBinding.rating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
-            public void onRatingChanged(RatingBar ratingBar, float rating,
-                                        boolean fromUser) {
-                Log.d(TAG, "onRatingChanged: " + rating);
-                params.put(Constant.tm_avg_rating, String.valueOf(rating));
-            }
+        mBinding.rating.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {
+            Log.d(TAG, "onRatingChanged: " + rating);
+            params.put(Constant.tm_avg_rating, String.valueOf(rating));
         });
     }
 
@@ -136,7 +133,6 @@ public class FilterDialog extends BottomSheetDialogFragment implements View.OnCl
             Log.d(TAG, "getSelectedChipValues : " + res);
             return res;
         }
-
     }
 
     private void setFilters() {
