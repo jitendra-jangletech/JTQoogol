@@ -386,7 +386,6 @@ public interface ApiInterface {
                                            @Field(Constant.q_type) String question_type,
                                            @Field(Constant.q_option_type) String option_type);
 
-
     @FormUrlEncoded
     @POST(Constant.FETCH_QA)
     Call<SaveQuestResponse> fetchSavedQAApi(@Field(Constant.u_user_id) String userid,
@@ -571,7 +570,6 @@ public interface ApiInterface {
                                                     @Field("200Q") String app,
                                                     @Field(Constant.pagestart) String pagestart,
                                                     @Field("ForceRefresh") String refresh);
-
 
 
     @FormUrlEncoded
