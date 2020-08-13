@@ -138,7 +138,8 @@ public class MyTestFragment extends BaseFragment
 //                Bundle bundle = new Bundle();
 //                bundle.putString("call_from", "test");
 //                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_test_filter, bundle);
-                FilterDialog bottomSheetFragment = new FilterDialog(getActivity(), filterParams, this);
+                Log.d(TAG, "onOptionsItemSelected Filter : "+params);
+                FilterDialog bottomSheetFragment = new FilterDialog(getActivity(), params, this);
                 //bottomSheetFragment.setCancelable(false);
                 bottomSheetFragment.show(getActivity().getSupportFragmentManager(), bottomSheetFragment.getTag());
                 return true;
@@ -454,6 +455,14 @@ public class MyTestFragment extends BaseFragment
                             testModelNew.setUserId(MainActivity.userId);
                         }
                         mViewModel.insert(testList);
+                        if(testList.size() == 0){
+                            mBinding.testListRecyclerView.setVisibility(View.GONE);
+                            mBinding.tvNoTest.setText("No Tests Found, Modify Filters.");
+                            mBinding.tvNoTest.setVisibility(View.VISIBLE);
+                        }else{
+                            mBinding.testListRecyclerView.setVisibility(View.VISIBLE);
+                            mBinding.tvNoTest.setVisibility(View.GONE);
+                        }
                     }
                 } else if (response.body().getResponse().equals("501")) {
                     resetSettingAndLogout();
@@ -554,7 +563,7 @@ public class MyTestFragment extends BaseFragment
         showToast("Filters Applied");
         //pageStart = "0";
         isFilterApplied = true;
-        this.params = map;
+        params = map;
         params.put(CASE, "");
         params.put(Constant.u_user_id, AppUtils.getUserId());
         params.put(Constant.tm_id, "");
