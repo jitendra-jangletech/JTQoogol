@@ -222,7 +222,6 @@ public class TestSharedByYouFragment extends BaseFragment
             }
         });
 
-
         mBinding.subjectsChipGrp.setOnCheckedChangeListener((chipGroup, id) -> {
             Chip chip = ((Chip) chipGroup.getChildAt(chipGroup.getCheckedChipId()));
             if (chip != null) {
@@ -260,11 +259,11 @@ public class TestSharedByYouFragment extends BaseFragment
     }
 
     public void setMyTestList(List<TestModelNew> testList) {
-        Log.d(TAG, "setMyTestList: ");
         if (testList.size() > 0) {
             mBinding.tvNoTest.setVisibility(View.GONE);
             mAdapter.updateList(testList);
         } else {
+            mBinding.tvNoTest.setText("No Tests Found.");
             mBinding.tvNoTest.setVisibility(View.VISIBLE);
         }
     }
@@ -368,14 +367,14 @@ public class TestSharedByYouFragment extends BaseFragment
         mBinding.swipeToRefresh.setRefreshing(true);
         Call<TestListResponse> call = apiService.fetchTestList(
                 params.get(Constant.u_user_id),
-                params.get(CASE),
+                "SH",
                 params.get(Constant.tm_recent_test),
                 params.get(Constant.tm_popular_test),
                 params.get(Constant.tm_diff_level),
                 params.get(Constant.tm_avg_rating),
                 params.get(Constant.tm_id),
                 params.get(Constant.tm_catg),
-                "0"
+                pageStart
         );
         call.enqueue(new Callback<TestListResponse>() {
             @Override
@@ -392,12 +391,6 @@ public class TestSharedByYouFragment extends BaseFragment
                     mViewModel.insert(newList);
                     if (isFilterApplied) {
                         setFilteredTestList(response.body());
-                        if (newList.size() == 0) {
-                            mBinding.tvNoTest.setText("No Tests Found, Modify Filters.");
-                            mBinding.tvNoTest.setVisibility(View.VISIBLE);
-                        } else {
-                            mBinding.tvNoTest.setVisibility(View.GONE);
-                        }
                     }
                 } else if (response.body().getResponse().equals("501")) {
                     resetSettingAndLogout();

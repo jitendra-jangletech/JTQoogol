@@ -243,7 +243,7 @@ public class ConnectionListFragment extends BaseFragment implements ConnectionAd
     @Override
     public boolean onQueryTextChange(String newText) {
         if (newText.trim().toLowerCase().isEmpty()) {
-            Log.d(TAG, "onQueryTextChange Length : "+newText.trim().length());
+            Log.d(TAG, "onQueryTextChange Length : " + newText.trim().length());
             mBinding.tvEmptySearch.setVisibility(View.GONE);
             mBinding.connectionRecycler.setVisibility(View.VISIBLE);
             mAdapter.updateList(connectionsList);
@@ -274,7 +274,8 @@ public class ConnectionListFragment extends BaseFragment implements ConnectionAd
                 getDeviceId(getActivity()),
                 qoogol,
                 text,
-                pageCount);
+                pageCount
+        );
         call.enqueue(new Callback<ConnectionResponse>() {
             @Override
             public void onResponse(Call<ConnectionResponse> call, retrofit2.Response<ConnectionResponse> response) {

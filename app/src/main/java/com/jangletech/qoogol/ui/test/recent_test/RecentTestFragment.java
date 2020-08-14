@@ -250,6 +250,7 @@ public class RecentTestFragment extends BaseFragment
             mBinding.tvNoTest.setVisibility(View.GONE);
             mAdapter.updateList(testList);
         } else {
+            mBinding.tvNoTest.setText("No Tests Found.");
             mBinding.tvNoTest.setVisibility(View.VISIBLE);
         }
     }
@@ -349,10 +350,11 @@ public class RecentTestFragment extends BaseFragment
         Log.d(TAG, "fetchTestList Params : " + params);
         Log.d(TAG, "initViews Flag : " + flag);
         mBinding.swipeToRefresh.setRefreshing(true);
+        mBinding.progress.setVisibility(View.GONE);
         Call<TestListResponse> call = apiService.fetchTestList(
                 params.get(Constant.u_user_id),
                 params.get(CASE),
-                params.get(Constant.tm_recent_test),
+                "1",
                 params.get(Constant.tm_popular_test),
                 params.get(Constant.tm_diff_level),
                 params.get(Constant.tm_avg_rating),
@@ -367,6 +369,7 @@ public class RecentTestFragment extends BaseFragment
                 mBinding.swipeToRefresh.setRefreshing(false);
                 if (response.body() != null && response.body().getResponse().equals("200")) {
                     //mViewModel.setAllTestList(response.body().getTestList());
+                    mBinding.progress.setVisibility(View.GONE);
                     List<TestModelNew> newList = response.body().getTestList();
                     for (TestModelNew testModelNew : newList) {
                         testModelNew.setFlag("R");
@@ -386,6 +389,7 @@ public class RecentTestFragment extends BaseFragment
             @Override
             public void onFailure(Call<TestListResponse> call, Throwable t) {
                 mBinding.swipeToRefresh.setRefreshing(false);
+                mBinding.progress.setVisibility(View.GONE);
                 showToast("Something went wrong!!");
                 apiCallFailureDialog(t);
                 t.printStackTrace();

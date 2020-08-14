@@ -150,7 +150,11 @@ public class TestPopularFragment extends BaseFragment
 
     private void initViews() {
         setTitle("Popular Test");
-        //flag = "P";
+        linearLayoutManager = new LinearLayoutManager(getContext());
+        mAdapter = new TestListAdapter(requireActivity(), testList, this, "");
+        mBinding.testListRecyclerView.setLayoutManager(linearLayoutManager);
+        mBinding.testListRecyclerView.setAdapter(mAdapter);
+
         mBinding.swipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -259,9 +263,12 @@ public class TestPopularFragment extends BaseFragment
 
     public void setMyTestList(List<TestModelNew> testList) {
         if (testList.size() > 0) {
-            mAdapter = new TestListAdapter(requireActivity(), testList, this, "");
-            mBinding.testListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            mBinding.testListRecyclerView.setAdapter(mAdapter);
+
+            mBinding.tvNoTest.setVisibility(View.GONE);
+            mAdapter.updateList(testList);
+        } else {
+            mBinding.tvNoTest.setText("No Tests Found.");
+            mBinding.tvNoTest.setVisibility(View.VISIBLE);
         }
     }
 
@@ -364,7 +371,7 @@ public class TestPopularFragment extends BaseFragment
                 params.get(Constant.u_user_id),
                 params.get(CASE),
                 params.get(Constant.tm_recent_test),
-                params.get(Constant.tm_popular_test),
+                "1",
                 params.get(Constant.tm_diff_level),
                 params.get(Constant.tm_avg_rating),
                 params.get(Constant.tm_id),
@@ -376,6 +383,7 @@ public class TestPopularFragment extends BaseFragment
             public void onResponse(Call<TestListResponse> call, Response<TestListResponse> response) {
                 //ProgressDialog.getInstance().dismiss();
                 mBinding.swipeToRefresh.setRefreshing(false);
+                mBinding.progress.setVisibility(View.GONE);
                 if (response.body() != null && response.body().getResponse().equals("200")) {
                     //mViewModel.setAllTestList(response.body().getTestList());
                     List<TestModelNew> testList = response.body().getTestList();
@@ -397,6 +405,7 @@ public class TestPopularFragment extends BaseFragment
             @Override
             public void onFailure(Call<TestListResponse> call, Throwable t) {
                 mBinding.swipeToRefresh.setRefreshing(false);
+                mBinding.progress.setVisibility(View.GONE);
                 showToast("Something went wrong!!");
                 apiCallFailureDialog(t);
                 t.printStackTrace();

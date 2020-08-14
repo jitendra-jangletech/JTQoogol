@@ -29,8 +29,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.activities.MainActivity;
 import com.jangletech.qoogol.activities.PracticeTestActivity;
@@ -50,7 +48,6 @@ import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -179,6 +176,7 @@ public class MyTestFragment extends BaseFragment
                 if (dy > 0) {
                     if (isScrolling && (currentItems + scrolledOutItems == totalItems)) {
                         isScrolling = false;
+                        mBinding.progress.setVisibility(View.VISIBLE);
                         fetchTestList(params, pageStart);
                     }
                 }
@@ -313,7 +311,7 @@ public class MyTestFragment extends BaseFragment
             mBinding.tvNoTest.setVisibility(View.GONE);
             mAdapter.updateList(testList);
         } else {
-            Log.d(TAG, "setMyTestList size : " + testList.size());
+            mBinding.tvNoTest.setText("No Tests Found.");
             mBinding.tvNoTest.setVisibility(View.VISIBLE);
         }
     }
@@ -445,6 +443,7 @@ public class MyTestFragment extends BaseFragment
             public void onResponse(Call<TestListResponse> call, Response<TestListResponse> response) {
                 //ProgressDialog.getInstance().dismiss();
                 mBinding.swipeToRefresh.setRefreshing(false);
+                mBinding.progress.setVisibility(View.GONE);
                 if (response.body() != null && response.body().getResponse().equals("200")) {
                     testListResponse = response.body();
                     if (params.get(Constant.tm_id) != null &&
@@ -477,6 +476,7 @@ public class MyTestFragment extends BaseFragment
             @Override
             public void onFailure(Call<TestListResponse> call, Throwable t) {
                 mBinding.swipeToRefresh.setRefreshing(false);
+                mBinding.progress.setVisibility(View.GONE);
                 showToast("Something went wrong!!");
                 apiCallFailureDialog(t);
                 t.printStackTrace();

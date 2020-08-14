@@ -254,8 +254,10 @@ public class TestSharedWithYouFragment extends BaseFragment
 
     public void setMyTestList(List<TestModelNew> testList) {
         if (testList.size() > 0) {
+            mBinding.tvNoTest.setVisibility(View.GONE);
             mAdapter.updateList(testList);
         } else {
+            mBinding.tvNoTest.setText("No Tests Found.");
             mBinding.tvNoTest.setVisibility(View.VISIBLE);
         }
     }
@@ -358,7 +360,7 @@ public class TestSharedWithYouFragment extends BaseFragment
         mBinding.swipeToRefresh.setRefreshing(true);
         Call<TestListResponse> call = apiService.fetchTestList(
                 params.get(Constant.u_user_id),
-                params.get(CASE),
+                "SHTO",
                 params.get(Constant.tm_recent_test),
                 params.get(Constant.tm_popular_test),
                 params.get(Constant.tm_diff_level),
@@ -371,6 +373,7 @@ public class TestSharedWithYouFragment extends BaseFragment
             @Override
             public void onResponse(Call<TestListResponse> call, Response<TestListResponse> response) {
                 mBinding.swipeToRefresh.setRefreshing(false);
+                mBinding.progress.setVisibility(View.GONE);
                 if (response.body() != null && response.body().getResponse().equals("200")) {
                     //mViewModel.setAllTestList(response.body().getTestList());
                     List<TestModelNew> newList = response.body().getTestList();
@@ -392,6 +395,7 @@ public class TestSharedWithYouFragment extends BaseFragment
             @Override
             public void onFailure(Call<TestListResponse> call, Throwable t) {
                 mBinding.swipeToRefresh.setRefreshing(false);
+                mBinding.progress.setVisibility(View.GONE);
                 showToast("Something went wrong!!");
                 t.printStackTrace();
             }
