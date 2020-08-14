@@ -316,7 +316,6 @@ public class QuestionFilterDialog extends BottomSheetDialogFragment implements V
 
     public interface FilterClickListener {
         void onResetClick();
-
         void onDoneClick();
     }
 }

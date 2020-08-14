@@ -215,6 +215,16 @@ public class ConnectionListFragment extends BaseFragment implements ConnectionAd
     }
 
     @Override
+    public void onFriendUnFriendClick() {
+
+    }
+
+    @Override
+    public void onFollowUnfollowClick() {
+
+    }
+
+    @Override
     public void onViewImage(String path) {
         showFullScreen(path);
     }

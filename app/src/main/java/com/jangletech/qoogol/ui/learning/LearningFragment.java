@@ -150,7 +150,6 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
         initRecycler();
     }
 
-
     private void initRecycler() {
         learningAdapter = new LearningAdapter(getActivity(), questionsNewList, this, learning);
         learningFragmentBinding.learningRecycler.setHasFixedSize(true);
@@ -222,10 +221,6 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
 
     @Override
     public void onShareClick(int questionId) {
-        /*Bundle bundle = new Bundle();
-        bundle.putInt("QuestionId", questionId);
-        bundle.putInt("call_from", learning);
-        NavHostFragment.findNavController(this).navigate(R.id.nav_share, bundle);*/
         new ShareQuestionDialog(getActivity(), String.valueOf(questionId), AppUtils.getUserId()
                 , getDeviceId(getActivity()), "Q")
                 .show();
@@ -250,6 +245,16 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
 //            bundle.putInt(CALL_FROM, connectonId);
 //            bundle.putString(Constant.fetch_profile_id,userId);
         }
+    }
+
+    @Override
+    public void onFriendUnFriendClick() {
+
+    }
+
+    @Override
+    public void onFollowUnfollowClick() {
+
     }
 
     @Override

@@ -76,7 +76,6 @@ public class NotificationsFragment extends BaseFragment implements NotificationA
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setHasOptionsMenu(true);
     }
 
     @Override
@@ -85,6 +84,10 @@ public class NotificationsFragment extends BaseFragment implements NotificationA
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_notifications, container, false);
         mBinding.setLifecycleOwner(this);
         linearLayoutManager = new LinearLayoutManager(getContext());
+        mBinding.notificationRecyclerView.setHasFixedSize(true);
+        mBinding.notificationRecyclerView.setLayoutManager(linearLayoutManager);
+        notificationAdapter = new NotificationAdapter(getActivity(), notificationList, onItemClickListener);
+        mBinding.notificationRecyclerView.setAdapter(notificationAdapter);
         return mBinding.getRoot();
     }
 
@@ -104,13 +107,7 @@ public class NotificationsFragment extends BaseFragment implements NotificationA
                         mBinding.swipeToRefresh.setRefreshing(false);
                     if (notificationResponse != null)
                         pageStart = notificationResponse.getPage();
-
-                    notificationList.clear();
-                    notificationList.addAll(notifications);
-                    mBinding.notificationRecyclerView.setHasFixedSize(true);
-                    mBinding.notificationRecyclerView.setLayoutManager(linearLayoutManager);
-                    notificationAdapter = new NotificationAdapter(getActivity(), notifications, onItemClickListener);
-                    mBinding.notificationRecyclerView.setAdapter(notificationAdapter);
+                    notificationAdapter.updateNotificationList(notifications);
                 }
             }
         });
@@ -273,6 +270,16 @@ public class NotificationsFragment extends BaseFragment implements NotificationA
         } else if (notification.getN_ref_type().equalsIgnoreCase(fromTest)) {
             NavHostFragment.findNavController(this).navigate(R.id.nav_test_my, bundle);
         }
+    }
+
+    @Override
+    public void onFriendUnFriendClick() {
+
+    }
+
+    @Override
+    public void onFollowUnfollowClick() {
+
     }
 
     @Override

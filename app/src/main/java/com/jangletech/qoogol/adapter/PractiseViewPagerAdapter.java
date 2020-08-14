@@ -1900,6 +1900,16 @@ public class PractiseViewPagerAdapter extends PagerAdapter
 
 
     @Override
+    public void onFriendUnFriendClick() {
+
+    }
+
+    @Override
+    public void onFollowUnfollowClick() {
+
+    }
+
+    @Override
     public void onViewImage(String path) {
         Dialog dialog = new Dialog(context, android.R.style.Theme_Light);
         Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawableResource(android.R.color.transparent);

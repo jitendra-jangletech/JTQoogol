@@ -39,6 +39,7 @@ import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.doubts.DoubtListingDialog;
 import com.jangletech.qoogol.ui.personal_info.PersonalInfoViewModel;
+import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 
@@ -751,4 +752,28 @@ public class MainActivity extends BaseActivity {
             e.printStackTrace();
         }
     }
+
+//    private void getEducationInfoList() {
+//        //ProgressDialog.getInstance().show(getActivity());
+//        Call<FetchEducationResponse> call = apiService.fetchUserEdu(userid, "L", getDeviceId(getActivity()), Constant.APP_NAME);
+//
+//        call.enqueue(new Callback<FetchEducationResponse>() {
+//            @Override
+//            public void onResponse(Call<FetchEducationResponse> call, Response<FetchEducationResponse> response) {
+//                ProgressDialog.getInstance().dismiss();
+//                if (response.body() != null && response.body().getResponseCode().equals("200")) {
+//
+//                } else {
+//                    showErrorDialog(requireActivity(), response.body().getResponseCode(), "");
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<FetchEducationResponse> call, Throwable t) {
+//                showToast("Something went wrong!!");
+//                ProgressDialog.getInstance().dismiss();
+//                t.printStackTrace();
+//            }
+//        });
+//    }
 }

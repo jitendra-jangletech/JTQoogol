@@ -29,6 +29,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                style="@style/font_style"
                 android:id="@+id/tvUserName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -36,12 +37,10 @@
                 android:layout_marginLeft="8dp"
                 android:layout_toEndOf="@+id/userProfileImage"
                 android:ellipsize="end"
-                android:fontFamily="sans-serif-black"
                 android:text="Qoogol User"
                 android:textAlignment="viewStart"
                 android:textColor="@color/colorBlack"
                 android:textSize="@dimen/textSizexSmall"
-                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toRightOf="@+id/userProfileImage"
                 app:layout_constraintTop_toTopOf="parent" />

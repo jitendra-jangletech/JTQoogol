@@ -237,7 +237,16 @@ public class FollowingFragment extends BaseFragment implements FollowingsAdapter
         String otherUserId = bundle.getString(Constant.fetch_profile_id);
         PublicProfileDialog publicProfileDialog = new PublicProfileDialog(getActivity(), otherUserId, this);
         publicProfileDialog.show();
-        //NavHostFragment.findNavController(this).navigate(R.id.nav_edit_profile, bundle);
+    }
+
+    @Override
+    public void onFriendUnFriendClick() {
+
+    }
+
+    @Override
+    public void onFollowUnfollowClick() {
+
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.jangletech.qoogol.dialog;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,11 +15,14 @@ import androidx.databinding.DataBindingUtil;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.google.gson.Gson;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.DialogFilterBinding;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
+import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
+import com.jangletech.qoogol.util.PreferenceManager;
 
 import java.util.HashMap;
 
@@ -36,7 +40,6 @@ public class FilterDialog extends BottomSheetDialogFragment implements View.OnCl
 
     public FilterDialog(@NonNull Activity mContext, HashMap<String, String> params, FilterClickListener filterClickListener) {
         this.mContext = mContext;
-        //this.subjectList = subjectList;
         this.params = params;
         this.filterClickListener = filterClickListener;
         Log.d(TAG, "FilterDialog: " + params);
@@ -88,15 +91,19 @@ public class FilterDialog extends BottomSheetDialogFragment implements View.OnCl
                 params.put(Constant.tm_recent_test, "1");
             else
                 params.put(Constant.tm_recent_test, "");
-
+            Log.d(TAG, "initViews Before Navigation : " + params);
+            AppUtils.saveHashMap(params,mContext);
             filterClickListener.onDoneClick(params);
             dismiss();
         });
 
-       /* mBinding.testDifficultyLevelChipGrp.setOnCheckedChangeListener((chipGroup, id) -> {
+        mBinding.testDifficultyLevelChipGrp.setOnCheckedChangeListener((chipGroup, id) -> {
             Chip chip = ((Chip) chipGroup.getChildAt(chipGroup.getCheckedChipId()));
-            setCheckedChip(chip);
-        });*/
+            if (chip != null) {
+                Log.d(TAG, "initViews : " + chip.getText().toString());
+                chip.setTextColor(Color.WHITE);
+            }
+        });
 
         mBinding.rating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             public void onRatingChanged(RatingBar ratingBar, float rating,

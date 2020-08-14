@@ -104,6 +104,7 @@ public class TestFavouriteFragment extends BaseFragment implements TestListAdapt
                 "",
                 "",
                 "",
+                "",
                 ""
         );
         call.enqueue(new Callback<TestListResponse>() {
@@ -191,6 +192,16 @@ public class TestFavouriteFragment extends BaseFragment implements TestListAdapt
     public void onCommentClick(String userId) {
         PublicProfileDialog publicProfileDialog = new PublicProfileDialog(getActivity(), userId, this);
         publicProfileDialog.show();
+    }
+
+    @Override
+    public void onFriendUnFriendClick() {
+
+    }
+
+    @Override
+    public void onFollowUnfollowClick() {
+
     }
 
     @Override

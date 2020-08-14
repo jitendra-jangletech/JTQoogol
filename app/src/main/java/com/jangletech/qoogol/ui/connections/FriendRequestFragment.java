@@ -189,6 +189,16 @@ public class FriendRequestFragment extends BaseFragment implements FriendReqAdap
     }
 
     @Override
+    public void onFriendUnFriendClick() {
+
+    }
+
+    @Override
+    public void onFollowUnfollowClick() {
+
+    }
+
+    @Override
     public void onViewImage(String path) {
         showFullScreen(path);
     }

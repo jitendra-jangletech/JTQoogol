@@ -164,6 +164,16 @@ public class FollowersFragment extends BaseFragment implements FollowersAdapter.
     }
 
     @Override
+    public void onFriendUnFriendClick() {
+
+    }
+
+    @Override
+    public void onFollowUnfollowClick() {
+
+    }
+
+    @Override
     public void onViewImage(String path) {
         showFullScreen(path);
     }

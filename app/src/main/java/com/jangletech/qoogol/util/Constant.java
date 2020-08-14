@@ -226,7 +226,6 @@ public class Constant {
     public static final String tlc_like_flag = "1403";
     public static final String tlc_comment_flag = "1404";
     public static final String tlc_comment_text = "1405";
-
     public static final String like_reply_count = "1415";
     public static final String comment_reply_count = "1416";
 

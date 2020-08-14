@@ -260,6 +260,16 @@ public class CommentFragment extends BaseFragment implements View.OnClickListene
     }
 
     @Override
+    public void onFriendUnFriendClick() {
+
+    }
+
+    @Override
+    public void onFollowUnfollowClick() {
+
+    }
+
+    @Override
     public void onViewImage(String path) {
         showFullScreen(path);
     }
