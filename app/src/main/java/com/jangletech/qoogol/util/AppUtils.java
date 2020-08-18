@@ -2,7 +2,6 @@ package com.jangletech.qoogol.util;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.provider.Settings;
 import android.util.Base64;
 import android.util.Log;
@@ -10,16 +9,17 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AlertDialog;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.jangletech.qoogol.R;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringEscapeUtils;
 import org.joda.time.LocalDate;
 import org.joda.time.Period;
-import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.net.UnknownHostException;
@@ -28,10 +28,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Locale;
-
-import static android.content.Context.MODE_PRIVATE;
 
 
 public class AppUtils {
@@ -41,15 +38,16 @@ public class AppUtils {
 
     public static void saveHashMap(HashMap<String, String> inputMap, Context mContext) {
         String converted = new Gson().toJson(inputMap);
-        new PreferenceManager(mContext).saveString("FILTER",converted);
-        Log.d(TAG, "Converted String : "+converted);
+        new PreferenceManager(mContext).saveString(Constant.FILTER, converted);
+        Log.d(TAG, "Converted String : " + converted);
     }
 
     public static HashMap<String, String> loadHashMap(Context mContext) {
         Gson gson = new Gson();
-        Type type = new TypeToken<HashMap<String, String>>() {}.getType();
+        Type type = new TypeToken<HashMap<String, String>>() {
+        }.getType();
         HashMap<String, String> newMap = new HashMap<String, String>();
-        newMap = (HashMap<String, String>) gson.fromJson(new PreferenceManager(mContext).getString("FILTER"), newMap.getClass());
+        newMap = (HashMap<String, String>) gson.fromJson(new PreferenceManager(mContext).getString(Constant.FILTER), newMap.getClass());
         Log.d(TAG, "Saved Hashmaps : " + newMap);
         return newMap;
     }

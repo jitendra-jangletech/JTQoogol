@@ -1,6 +1,7 @@
 package com.jangletech.qoogol.ui.home;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +15,7 @@ import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.view.MenuItemCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
@@ -33,12 +35,17 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.activities.MainActivity;
 import com.jangletech.qoogol.databinding.FragmentHomeBinding;
+import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.model.DashBoard;
+import com.jangletech.qoogol.model.Education;
+import com.jangletech.qoogol.model.FetchEducationResponse;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.ui.QuestionAnalyticsFragment;
 import com.jangletech.qoogol.ui.TestAnalyticsFragment;
+import com.jangletech.qoogol.ui.educational_info.AddEduDialog;
+import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 
@@ -51,7 +58,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class HomeFragment extends BaseFragment implements View.OnClickListener,
-        OnChartValueSelectedListener, SearchView.OnQueryTextListener {
+        OnChartValueSelectedListener, SearchView.OnQueryTextListener, AddEduDialog.ApiCallListener {
 
     private double total;
     private HomeViewModel mViewModel;
@@ -70,11 +77,17 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
         return mBinding.getRoot();
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        getEducationInfoList();
+    }
+
     private void setupViewPager(ViewPager viewPager, DashBoard dashBoard) {
         mBinding.tabs.setupWithViewPager(viewPager);
         Adapter adapter = new Adapter(getChildFragmentManager());
-        adapter.addFragment(new TestAnalyticsFragment(dashBoard),"Test");
-        adapter.addFragment(new QuestionAnalyticsFragment(dashBoard),"Questions");
+        adapter.addFragment(new TestAnalyticsFragment(dashBoard), "Test");
+        adapter.addFragment(new QuestionAnalyticsFragment(dashBoard), "Questions");
         viewPager.setAdapter(adapter);
     }
 
@@ -138,7 +151,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
         MainActivity.tvNavFollowing.setText(dashBoard.getFollowings());
 
         if (dashBoard.getFirstName() != null || dashBoard.getLastName() != null) {
-            saveString(getActivity(),Constant.u_first_name, dashBoard.getFirstName());
+            saveString(getActivity(), Constant.u_first_name, dashBoard.getFirstName());
             MainActivity.textViewDisplayName.setText(dashBoard.getFirstName() + " " + dashBoard.getLastName());
         } else {
             MainActivity.textViewDisplayName.setText("Qoogol User");
@@ -162,42 +175,42 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
     }
 
     private void fetchDashboardDetails() {
-      try {
-          HashMap<String, String> params = new HashMap<>();
-          params.put(Constant.u_user_id, getUserId(getActivity()));
-          params.put(Constant.device_id, getDeviceId(getActivity()));
-          Log.d(TAG, "fetchDashboardDetails UserId : " + getUserId(getActivity()));
-          //ProgressDialog.getInstance().show(getActivity());
-          mBinding.swipeToRefresh.setRefreshing(true);
-          Call<DashBoard> call = apiService.fetchDashBoardDetails(
-                  params.get(Constant.u_user_id),
-                  params.get(Constant.device_id)
-          );
-          Activity activity  = getActivity();
-          call.enqueue(new Callback<DashBoard>() {
-              @Override
-              public void onResponse(Call<DashBoard> call, Response<DashBoard> response) {
-                  //ProgressDialog.getInstance().dismiss();
-                  mBinding.swipeToRefresh.setRefreshing(false);
-                  //Log.d(TAG, "onResponse Done: " + response.body().getResponse());
-                  if (response.body() != null) {
-                      DashBoard dashBoard = response.body();
-                      dashBoard.setUserId(getUserId(activity));
-                      mViewModel.insert(dashBoard);
-                  }
-              }
+        try {
+            HashMap<String, String> params = new HashMap<>();
+            params.put(Constant.u_user_id, getUserId(getActivity()));
+            params.put(Constant.device_id, getDeviceId(getActivity()));
+            Log.d(TAG, "fetchDashboardDetails UserId : " + getUserId(getActivity()));
+            //ProgressDialog.getInstance().show(getActivity());
+            mBinding.swipeToRefresh.setRefreshing(true);
+            Call<DashBoard> call = apiService.fetchDashBoardDetails(
+                    params.get(Constant.u_user_id),
+                    params.get(Constant.device_id)
+            );
+            Activity activity = getActivity();
+            call.enqueue(new Callback<DashBoard>() {
+                @Override
+                public void onResponse(Call<DashBoard> call, Response<DashBoard> response) {
+                    //ProgressDialog.getInstance().dismiss();
+                    mBinding.swipeToRefresh.setRefreshing(false);
+                    //Log.d(TAG, "onResponse Done: " + response.body().getResponse());
+                    if (response.body() != null) {
+                        DashBoard dashBoard = response.body();
+                        dashBoard.setUserId(getUserId(activity));
+                        mViewModel.insert(dashBoard);
+                    }
+                }
 
-              @Override
-              public void onFailure(Call<DashBoard> call, Throwable t) {
-                  mBinding.swipeToRefresh.setRefreshing(false);
-                  //ProgressDialog.getInstance().dismiss();
-                  apiCallFailureDialog(t);
-                  t.printStackTrace();
-              }
-          });
-      } catch (Exception e) {
-          e.printStackTrace();
-      }
+                @Override
+                public void onFailure(Call<DashBoard> call, Throwable t) {
+                    mBinding.swipeToRefresh.setRefreshing(false);
+                    //ProgressDialog.getInstance().dismiss();
+                    apiCallFailureDialog(t);
+                    t.printStackTrace();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -222,6 +235,47 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
         Bundle bundle = new Bundle();
         bundle.putInt("position", position);
         NavHostFragment.findNavController(this).navigate(R.id.nav_connections, bundle);
+    }
+
+    private void showEducationDialog(Education education) {
+        AddEduDialog addEduDialog = new AddEduDialog(getActivity(), education, true, this);
+        addEduDialog.show();
+    }
+
+    private void getEducationInfoList() {
+        ProgressDialog.getInstance().show(getActivity());
+        Call<FetchEducationResponse> call = apiService.fetchUserEdu(AppUtils.getUserId(), "L", getDeviceId(getActivity()), Constant.APP_NAME);
+
+        call.enqueue(new Callback<FetchEducationResponse>() {
+            @Override
+            public void onResponse(Call<FetchEducationResponse> call, Response<FetchEducationResponse> response) {
+                ProgressDialog.getInstance().dismiss();
+                if (response.body() != null && response.body().getResponseCode().equals("200")) {
+                    if (response.body().getEducationList().size() == 0) {
+                        androidx.appcompat.app.AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogStyle);
+                        builder.setTitle("Alert")
+                                .setMessage("You have Not Added Education Details, To explore this app more you need" +
+                                        " to add atleast one education details.")
+                                .setPositiveButton("Proceed To Add Education", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        showEducationDialog(null);
+                                    }
+                                })
+                                .setCancelable(false).show();
+                    }
+                } else {
+                    showErrorDialog(getActivity(), response.body().getResponseCode(), "");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<FetchEducationResponse> call, Throwable t) {
+                showToast("Something went wrong!!");
+                ProgressDialog.getInstance().dismiss();
+                t.printStackTrace();
+            }
+        });
     }
 
     @Override
@@ -271,6 +325,11 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
     @Override
     public boolean onQueryTextChange(String newText) {
         return false;
+    }
+
+    @Override
+    public void onSuccess() {
+
     }
 
     public static class Adapter extends FragmentPagerAdapter {

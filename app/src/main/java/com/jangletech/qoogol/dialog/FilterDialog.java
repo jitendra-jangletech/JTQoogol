@@ -1,6 +1,7 @@
 package com.jangletech.qoogol.dialog;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,14 +16,12 @@ import androidx.databinding.DataBindingUtil;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
-import com.google.gson.Gson;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.DialogFilterBinding;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
-import com.jangletech.qoogol.util.PreferenceManager;
 
 import java.util.HashMap;
 
@@ -30,6 +29,7 @@ public class FilterDialog extends BottomSheetDialogFragment implements View.OnCl
 
     private static final String TAG = "FilterDialog";
     private Activity mContext;
+    private SharedPreferences preferences;
     //private List<String> subjectList;
     private FilterClickListener filterClickListener;
     private DialogFilterBinding mBinding;
@@ -69,16 +69,24 @@ public class FilterDialog extends BottomSheetDialogFragment implements View.OnCl
         mBinding.reset.setOnClickListener(v -> {
             mBinding.testDifficultyLevelChipGrp.clearCheck();
             mBinding.testCategoryChipGrp.clearCheck();
+            mBinding.testRecentPopularChipGrp.clearCheck();
             mBinding.rating.setRating(0);
             params.put(Constant.tm_diff_level, "");
             params.put(Constant.tm_catg, "");
             params.put(Constant.tm_avg_rating, "");
             params.put(Constant.test_recent_popular, "");
+            params.put(Constant.tm_recent_test, "");
+            params.put(Constant.tm_popular_test, "");
+            AppUtils.saveHashMap(params, mContext);
+            saveFilter(false);
             filterClickListener.onResetClick(params);
             dismiss();
         });
 
         mBinding.done.setOnClickListener(v -> {
+            params.put(Constant.u_user_id, AppUtils.getUserId());
+            params.put(Constant.tm_id, "");
+            params.put(Constant.CASE, "");
             params.put(Constant.tm_diff_level, getSelectedChipValues(mBinding.testDifficultyLevelChipGrp));
             params.put(Constant.tm_catg, getSelectedChipValues(mBinding.testCategoryChipGrp));
             params.put(Constant.test_recent_popular, getSelectedChipValues(mBinding.testRecentPopularChipGrp));
@@ -92,7 +100,8 @@ public class FilterDialog extends BottomSheetDialogFragment implements View.OnCl
             else
                 params.put(Constant.tm_recent_test, "");
             Log.d(TAG, "initViews Before Navigation : " + params);
-            AppUtils.saveHashMap(params,mContext);
+            AppUtils.saveHashMap(params, mContext);
+            saveFilter(true);
             filterClickListener.onDoneClick(params);
             dismiss();
         });
@@ -279,6 +288,49 @@ public class FilterDialog extends BottomSheetDialogFragment implements View.OnCl
     @Override
     public void onClick(View v) {
 
+    }
+
+    public void saveFilter(boolean value) {
+        preferences = android.preference.PreferenceManager.getDefaultSharedPreferences(getActivity());
+        preferences.edit()
+                .putBoolean(Constant.TEST_FILTER_APPLIED, value)
+                .apply();
+    }
+
+    public boolean getFilter(String key) {
+        preferences = android.preference.PreferenceManager.getDefaultSharedPreferences(getActivity());
+        return preferences.getBoolean(key, false);
+    }
+
+    public boolean checkEmptyMapValues(HashMap<String, String> filterMap) {
+        boolean isFilterEmpty = true;
+        if (filterMap != null) {
+            for (String key : filterMap.keySet()) {
+                System.out.println("key : " + key);
+                System.out.println("value : " + filterMap.get(key));
+                if (key.equals(Constant.test_recent_popular) &&
+                        filterMap.get(key).isEmpty()) {
+                    isFilterEmpty = false;
+                    break;
+                }
+                if (key.equals(Constant.tm_avg_rating) &&
+                        filterMap.get(key).isEmpty()) {
+                    isFilterEmpty = false;
+                    break;
+                }
+                if (key.equals(Constant.tm_diff_level) &&
+                        filterMap.get(key).isEmpty()) {
+                    isFilterEmpty = false;
+                    break;
+                }
+                if (key.equals(Constant.tm_catg) &&
+                        filterMap.get(key).isEmpty()) {
+                    isFilterEmpty = false;
+                    break;
+                }
+            }
+        }
+        return isFilterEmpty;
     }
 
     public interface FilterClickListener {

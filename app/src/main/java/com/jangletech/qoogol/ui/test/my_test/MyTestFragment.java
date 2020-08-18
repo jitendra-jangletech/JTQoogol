@@ -2,6 +2,7 @@ package com.jangletech.qoogol.ui.test.my_test;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,6 +17,7 @@ import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.MenuItemCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.LiveData;
@@ -65,12 +67,14 @@ public class MyTestFragment extends BaseFragment
     private MyTestViewModel mViewModel;
     private FragmentTestMyBinding mBinding;
     private TestListAdapter mAdapter;
+    private MenuItem filterMenuItem;
+    private Menu filterMenu;
     private List<TestModelNew> testList = new ArrayList<>();
     private List<TestModelNew> filteredTestList = new ArrayList<>();
     private List<String> subjectList;
     private TestListResponse testListResponse;
     private Context mContext;
-    private boolean isFilterApplied = false;
+    private Boolean isFilterApplied = false;
     private HashMap<String, String> params = new HashMap<>();
     private HashMap<String, String> filterParams = new HashMap<>();
     private int tmId;
@@ -78,7 +82,7 @@ public class MyTestFragment extends BaseFragment
     private LinearLayoutManager linearLayoutManager;
     private int currentItems, scrolledOutItems, totalItems;
     private String pageStart = "0";
-
+    private SharedPreferences prefs;
     private String flag = "";
     private String diffLevel = "";
     private LiveData<List<TestModelNew>> testModelNewLiveData;
@@ -111,10 +115,16 @@ public class MyTestFragment extends BaseFragment
         return mBinding.getRoot();
     }
 
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.action_search, menu);
-        final MenuItem item = menu.findItem(R.id.action_search);
+        filterMenu = menu;
+        MenuItem item = menu.findItem(R.id.action_search);
+        filterMenuItem = menu.findItem(R.id.action_filter);
+        if (isFilterApplied) {
+            setFilterIcon(menu,mContext,true);
+        }
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
         searchView.setOnQueryTextListener(this);
 
@@ -139,7 +149,7 @@ public class MyTestFragment extends BaseFragment
 //                bundle.putString("call_from", "test");
 //                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_test_filter, bundle);
                 Log.d(TAG, "onOptionsItemSelected Filter : " + params);
-                FilterDialog bottomSheetFragment = new FilterDialog(getActivity(), params, this);
+                FilterDialog bottomSheetFragment = new FilterDialog(getActivity(), AppUtils.loadHashMap(mContext), this);
                 bottomSheetFragment.show(getActivity().getSupportFragmentManager(), bottomSheetFragment.getTag());
                 return true;
             default:
@@ -148,6 +158,10 @@ public class MyTestFragment extends BaseFragment
     }
 
     private void initViews() {
+        Log.d(TAG, "initViews Params : " + AppUtils.loadHashMap(mContext));
+        //prefs = android.preference.PreferenceManager.getDefaultSharedPreferences(mContext);
+        params = AppUtils.loadHashMap(mContext);
+        isFilterApplied = getFilter(Constant.TEST_FILTER_APPLIED);
         linearLayoutManager = new LinearLayoutManager(getActivity());
         subjectList = new ArrayList<>();
         if (getArguments() != null && getArguments().getSerializable("PARAMS") != null) {
@@ -177,7 +191,7 @@ public class MyTestFragment extends BaseFragment
                     if (isScrolling && (currentItems + scrolledOutItems == totalItems)) {
                         isScrolling = false;
                         mBinding.progress.setVisibility(View.VISIBLE);
-                        fetchTestList(params, pageStart);
+                        fetchTestList(AppUtils.loadHashMap(mContext), pageStart);
                     }
                 }
             }
@@ -190,13 +204,13 @@ public class MyTestFragment extends BaseFragment
             }
         });
 
-        params.put(Constant.u_user_id, getUserId(getActivity()));
-        params.put(CASE, "");
-        params.put(Constant.tm_popular_test, "");
-        params.put(Constant.tm_recent_test, "");
-        params.put(Constant.tm_recent_test, "");
-        params.put(Constant.tm_catg, "");
-        params.put(Constant.tm_diff_level, "");
+        //params.put(Constant.u_user_id, getUserId(getActivity()));
+//        params.put(CASE, "");
+//        params.put(Constant.tm_popular_test, "");
+//        params.put(Constant.tm_recent_test, "");
+//        params.put(Constant.tm_recent_test, "");
+//        params.put(Constant.tm_catg, "");
+//        params.put(Constant.tm_diff_level, "");
         if (getArguments() != null && getArguments().getBoolean("fromNotification")) {
             Log.d(TAG, "initViews msId : " + getArguments().getString(Constant.FB_MS_ID));
             params.put(Constant.tm_id, getArguments().getString(Constant.FB_MS_ID));
@@ -227,8 +241,8 @@ public class MyTestFragment extends BaseFragment
 //        });
 
 
-        fetchTestList(params, pageStart);
-        if (params.get(Constant.tm_diff_level) != null && !params.get(Constant.tm_diff_level).isEmpty()) {
+        fetchTestList(AppUtils.loadHashMap(mContext), pageStart);
+        /*if (params.get(Constant.tm_diff_level) != null && !params.get(Constant.tm_diff_level).isEmpty()) {
             Log.d(TAG, "initViews Diff Level: " + params.get(Constant.tm_diff_level));
             mViewModel.getAllTestByDifficultyLevel("PRACTICE", getUserId(getActivity()), params.get(Constant.tm_diff_level)).observe(getViewLifecycleOwner(), new Observer<List<TestModelNew>>() {
                 @Override
@@ -253,22 +267,22 @@ public class MyTestFragment extends BaseFragment
                     }
                 }
             });
-        } else {
-            mViewModel.getAllTests("PRACTICE", getUserId(getActivity())).observe(getViewLifecycleOwner(), new Observer<List<TestModelNew>>() {
-                @Override
-                public void onChanged(@Nullable final List<TestModelNew> tests) {
-                    if (tests != null) {
-                        Log.d(TAG, "onChanged Size AllTests: " + tests.size());
-                        testList = tests;
-                        if (!isFilterApplied) {
-                            if (testListResponse != null)
-                                pageStart = testListResponse.getPrev_tm_id();
-                            setMyTestList(tests);
-                        }
+        } else {*/
+        mViewModel.getAllTests("PRACTICE", getUserId(getActivity())).observe(getViewLifecycleOwner(), new Observer<List<TestModelNew>>() {
+            @Override
+            public void onChanged(@Nullable final List<TestModelNew> tests) {
+                if (tests != null) {
+                    Log.d(TAG, "onChanged Size AllTests: " + tests.size());
+                    testList = tests;
+                    if (!isFilterApplied) {
+                        if (testListResponse != null)
+                            pageStart = testListResponse.getPrev_tm_id();
+                        setMyTestList(tests);
                     }
                 }
-            });
-        }
+            }
+        });
+        //}
 
         mBinding.subjectsChipGrp.setOnCheckedChangeListener((chipGroup, id) -> {
             Chip chip = ((Chip) chipGroup.getChildAt(chipGroup.getCheckedChipId()));
@@ -567,11 +581,11 @@ public class MyTestFragment extends BaseFragment
 
     @Override
     public void onResetClick(HashMap<String, String> map) {
-        //showToast("Filters Reset");
         isFilterApplied = false;
         params = map;
         params.put(Constant.u_user_id, AppUtils.getUserId());
         params.put(Constant.tm_id, "");
+        setFilterIcon(filterMenu, mContext, false);
         fetchTestList(params, "0");
     }
 
@@ -580,22 +594,8 @@ public class MyTestFragment extends BaseFragment
         isFilterApplied = true;
         filteredTestList.clear();
         params = map;
-        params.put(CASE, "");
-        params.put(Constant.u_user_id, AppUtils.getUserId());
-        params.put(Constant.tm_id, "");
-        String recpop = params.get(Constant.test_recent_popular);
-
-        if (recpop != null && !recpop.isEmpty() && recpop.contains("P"))
-            params.put(Constant.tm_popular_test, "1");
-        else
-            params.put(Constant.tm_popular_test, "");
-
-        if (recpop != null && !recpop.isEmpty() && recpop.contains("R"))
-            params.put(Constant.tm_recent_test, "1");
-        else
-            params.put(Constant.tm_recent_test, "");
-
-        Log.d(TAG, "onDoneClick Filtered Params : " + filterParams);
+        setFilterIcon(filterMenu, mContext, true);
+        Log.d(TAG, "onDoneClick Filtered Params : " + params);
         fetchTestList(params, "0");
     }
 }

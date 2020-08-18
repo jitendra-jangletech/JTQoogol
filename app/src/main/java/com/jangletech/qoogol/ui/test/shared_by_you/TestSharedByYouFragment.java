@@ -44,6 +44,7 @@ import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.ui.test.my_test.MyTestViewModel;
+import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 
@@ -61,9 +62,11 @@ public class TestSharedByYouFragment extends BaseFragment
         implements TestListAdapter.TestClickListener, SearchView.OnQueryTextListener, CommentDialog.CommentClickListener, PublicProfileDialog.PublicProfileClickListener, FilterDialog.FilterClickListener {
 
     private static final String TAG = "TestSharedByYouFragment";
+    private ApiInterface apiService = ApiClient.getInstance().getApi();
     private MyTestViewModel mViewModel;
     private FragmentTestMyBinding mBinding;
     private TestListAdapter mAdapter;
+    private Menu filterMenu;
     private TestListResponse testListResponse;
     private List<TestModelNew> testList = new ArrayList<>();
     private List<TestModelNew> filteredTestList = new ArrayList<>();
@@ -75,9 +78,8 @@ public class TestSharedByYouFragment extends BaseFragment
     private String pageStart = "0";
     private HashMap<String, String> params = new HashMap<>();
     private int tmId;
-
     private String flag = "";
-    private ApiInterface apiService = ApiClient.getInstance().getApi();
+
 
     public static TestSharedByYouFragment newInstance() {
         return new TestSharedByYouFragment();
@@ -110,9 +112,17 @@ public class TestSharedByYouFragment extends BaseFragment
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.action_search, menu);
+        filterMenu = menu;
         final MenuItem item = menu.findItem(R.id.action_search);
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
+        if (isFilterApplied) {
+            setFilterIcon(menu, mContext, true);
+        }
         searchView.setOnQueryTextListener(this);
+        Log.d(TAG, "onCreateOptionsMenu isFilterApplied : " + isFilterApplied);
+        if (isFilterApplied) {
+            setFilterIcon(menu, mContext, true);
+        }
 
         item.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
             @Override
@@ -135,7 +145,7 @@ public class TestSharedByYouFragment extends BaseFragment
 //                bundle.putString("call_from", "test");
 //                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_test_filter, bundle);
                 //MainActivity.navController.navigate(R.id.nav_test_filter, bundle);
-                FilterDialog bottomSheetFragment = new FilterDialog(getActivity(), params, this);
+                FilterDialog bottomSheetFragment = new FilterDialog(getActivity(), AppUtils.loadHashMap(mContext), this);
                 bottomSheetFragment.show(getActivity().getSupportFragmentManager(), bottomSheetFragment.getTag());
                 return true;
             default:
@@ -149,6 +159,8 @@ public class TestSharedByYouFragment extends BaseFragment
 
     private void initViews() {
         linearLayoutManager = new LinearLayoutManager(getActivity());
+        params = AppUtils.loadHashMap(mContext);
+        isFilterApplied = getFilter(Constant.TEST_FILTER_APPLIED);
         mAdapter = new TestListAdapter(requireActivity(), testList, this, "");
         mBinding.testListRecyclerView.setLayoutManager(linearLayoutManager);
         mBinding.testListRecyclerView.setAdapter(mAdapter);
@@ -160,10 +172,10 @@ public class TestSharedByYouFragment extends BaseFragment
             }
         });
 
-        params.put(Constant.u_user_id, getUserId(getActivity()));
-        params.put(CASE, "SH");
-        params.put(Constant.tm_popular_test, "");
-        params.put(Constant.tm_recent_test, "");
+//        params.put(Constant.u_user_id, getUserId(getActivity()));
+//        params.put(CASE, "SH");
+//        params.put(Constant.tm_popular_test, "");
+//        params.put(Constant.tm_recent_test, "");
 
         /*fetchSubjectList(new PreferenceManager(requireActivity()).getString(Constant.scr_co_id));
         mViewModel.getAllSubjects().observe(getViewLifecycleOwner(), new Observer<List<FetchSubjectResponse>>() {
@@ -181,7 +193,7 @@ public class TestSharedByYouFragment extends BaseFragment
             }
         });*/
 
-        fetchTestList(params, pageStart);
+        fetchTestList(AppUtils.loadHashMap(mContext), pageStart);
         mViewModel.getAllTests("SH", getUserId(getActivity())).observe(getViewLifecycleOwner(), new Observer<List<TestModelNew>>() {
             @Override
             public void onChanged(@Nullable final List<TestModelNew> tests) {
@@ -216,7 +228,7 @@ public class TestSharedByYouFragment extends BaseFragment
                     if (isScrolling && (currentItems + scrolledOutItems == totalItems)) {
                         isScrolling = false;
                         mBinding.progress.setVisibility(View.VISIBLE);
-                        fetchTestList(params, pageStart);
+                        fetchTestList(AppUtils.loadHashMap(mContext), pageStart);
                     }
                 }
             }
@@ -588,6 +600,8 @@ public class TestSharedByYouFragment extends BaseFragment
     public void onResetClick(HashMap<String, String> map) {
         isFilterApplied = false;
         params = map;
+        saveFilter(false);
+        setFilterIcon(filterMenu, mContext, false);
         params.put(Constant.u_user_id, getUserId(getActivity()));
         params.put(CASE, Constant.SHARED_BY_YOU);
         fetchTestList(params, "0");
@@ -598,6 +612,7 @@ public class TestSharedByYouFragment extends BaseFragment
         Log.d(TAG, "onDoneClick: " + map);
         filteredTestList.clear();
         isFilterApplied = true;
+        setFilterIcon(filterMenu, mContext, true);
         params = map;
         params.put(Constant.u_user_id, getUserId(getActivity()));
         params.put(CASE, Constant.SHARED_BY_YOU);

@@ -183,7 +183,7 @@ public class EducationInfoFragment extends BaseFragment implements EducationAdap
     }
 
     private void showEducationDialog(Education education) {
-        AddEduDialog addEduDialog = new AddEduDialog(getActivity(), education, this);
+        AddEduDialog addEduDialog = new AddEduDialog(getActivity(), education, false,this);
         addEduDialog.show();
     }
 

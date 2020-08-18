@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.Window;
@@ -74,12 +75,14 @@ public class AddEduDialog extends Dialog {
     List<Course> courseList;
     private HashMap<String, String> params;
     private ApiCallListener apiCallListener;
+    private boolean flag;
 
-    public AddEduDialog(@NonNull Activity context, Education education, ApiCallListener apiCallListener) {
+    public AddEduDialog(@NonNull Activity context, Education education, boolean flag, ApiCallListener apiCallListener) {
         super(context, android.R.style.Theme_DeviceDefault_Light_DarkActionBar);
         this.context = context;
         this.education = education;
         this.apiCallListener = apiCallListener;
+        this.flag = flag;
         params = new HashMap<>();
     }
 
@@ -175,7 +178,8 @@ public class AddEduDialog extends Dialog {
         });
 
         addEditEducationBinding.btnClose.setOnClickListener(v -> {
-            dismiss();
+            if (!flag)
+                dismiss();
         });
 
         addEditEducationBinding.universityBoardAutocompleteView.setOnItemClickListener((parent, view, position, id) -> {
@@ -602,6 +606,18 @@ public class AddEduDialog extends Dialog {
                 ProgressDialog.getInstance().dismiss();
             }
         });
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+            if (!flag)
+                dismiss();
+            else
+                //do nothing
+                return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     public interface ApiCallListener {

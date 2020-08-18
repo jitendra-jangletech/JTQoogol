@@ -42,6 +42,7 @@ import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.ui.test.my_test.MyTestViewModel;
+import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 
@@ -54,6 +55,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.jangletech.qoogol.util.Constant.CASE;
+import static com.jangletech.qoogol.util.Constant.TEST_FILTER_APPLIED;
 
 public class TestSharedWithYouFragment extends BaseFragment
         implements TestListAdapter.TestClickListener, SearchView.OnQueryTextListener, CommentDialog.CommentClickListener, PublicProfileDialog.PublicProfileClickListener, FilterDialog.FilterClickListener {
@@ -62,6 +64,7 @@ public class TestSharedWithYouFragment extends BaseFragment
     private MyTestViewModel mViewModel;
     private FragmentTestMyBinding mBinding;
     private TestListAdapter mAdapter;
+    private Menu filterMenu;
     private List<TestModelNew> filteredTestList = new ArrayList<>();
     private boolean isFilterApplied = false;
     private List<TestModelNew> testList = new ArrayList<>();
@@ -106,10 +109,13 @@ public class TestSharedWithYouFragment extends BaseFragment
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.action_search, menu);
+        filterMenu = menu;
         final MenuItem item = menu.findItem(R.id.action_search);
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
         searchView.setOnQueryTextListener(this);
-
+        if (isFilterApplied) {
+            setFilterIcon(menu, mContext, true);
+        }
         item.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
             @Override
             public boolean onMenuItemActionExpand(MenuItem item) {
@@ -127,7 +133,7 @@ public class TestSharedWithYouFragment extends BaseFragment
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_filter:
-                FilterDialog bottomSheetFragment = new FilterDialog(getActivity(), params, this);
+                FilterDialog bottomSheetFragment = new FilterDialog(getActivity(), AppUtils.loadHashMap(mContext), this);
                 bottomSheetFragment.show(getActivity().getSupportFragmentManager(), bottomSheetFragment.getTag());
                 return true;
             default:
@@ -155,6 +161,8 @@ public class TestSharedWithYouFragment extends BaseFragment
 
     private void initViews() {
         setTitle("Shared With You");
+        params = AppUtils.loadHashMap(mContext);
+        isFilterApplied = getFilter(TEST_FILTER_APPLIED);
         linearLayoutManager = new LinearLayoutManager(getContext());
         mAdapter = new TestListAdapter(requireActivity(), testList, this, "");
         mBinding.testListRecyclerView.setLayoutManager(linearLayoutManager);
@@ -166,10 +174,10 @@ public class TestSharedWithYouFragment extends BaseFragment
             }
         });
 
-        params.put(Constant.u_user_id, getUserId(getActivity()));
-        params.put(CASE, Constant.SHARED_WITH_YOU);
-        params.put(Constant.tm_popular_test, "");
-        params.put(Constant.tm_recent_test, "");
+//        params.put(Constant.u_user_id, getUserId(getActivity()));
+//        params.put(CASE, Constant.SHARED_WITH_YOU);
+//        params.put(Constant.tm_popular_test, "");
+//        params.put(Constant.tm_recent_test, "");
 
 //        fetchSubjectList(new PreferenceManager(requireActivity()).getString(Constant.scr_co_id));
 //        fetchTestList(params,pagestart);
@@ -187,7 +195,7 @@ public class TestSharedWithYouFragment extends BaseFragment
 //                }
 //            }
 //        });
-        fetchTestList(params, pageStart);
+        fetchTestList(AppUtils.loadHashMap(mContext), pageStart);
         mViewModel.getAllTests("SHTO", getUserId(getActivity())).observe(getViewLifecycleOwner(), new Observer<List<TestModelNew>>() {
             @Override
             public void onChanged(@Nullable final List<TestModelNew> tests) {
@@ -223,7 +231,7 @@ public class TestSharedWithYouFragment extends BaseFragment
                     if (isScrolling && (currentItems + scrolledOutItems == totalItems)) {
                         isScrolling = false;
                         mBinding.progress.setVisibility(View.VISIBLE);
-                        fetchTestList(params, pageStart);
+                        fetchTestList(AppUtils.loadHashMap(mContext), pageStart);
                     }
                 }
             }
@@ -474,6 +482,8 @@ public class TestSharedWithYouFragment extends BaseFragment
     @Override
     public void onResetClick(HashMap<String, String> map) {
         isFilterApplied = false;
+        saveFilter(false);
+        setFilterIcon(filterMenu, mContext, false);
         params = map;
         params.put(Constant.u_user_id, getUserId(getActivity()));
         params.put(CASE, Constant.SHARED_WITH_YOU);
@@ -485,6 +495,8 @@ public class TestSharedWithYouFragment extends BaseFragment
         Log.d(TAG, "onDoneClick: " + map);
         filteredTestList.clear();
         isFilterApplied = true;
+        saveFilter(true);
+        setFilterIcon(filterMenu, mContext, true);
         params = map;
         params.put(Constant.u_user_id, getUserId(getActivity()));
         params.put(CASE, Constant.SHARED_WITH_YOU);
