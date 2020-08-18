@@ -92,7 +92,7 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_filter:
-                QuestionFilterDialog bottomSheetFragment = new QuestionFilterDialog(getActivity(), this);
+                QuestionFilterDialog bottomSheetFragment = new QuestionFilterDialog(getActivity(), this,params);
                 bottomSheetFragment.setCancelable(false);
                 bottomSheetFragment.show(getActivity().getSupportFragmentManager(), bottomSheetFragment.getTag());
                 return true;
@@ -151,12 +151,12 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
         }
         learningFragmentBinding.learningSwiperefresh.setOnRefreshListener(() -> {
             mViewModel.fetchQuestionData("",params);
-            mViewModel.getQuestionList().observe(getViewLifecycleOwner(), questionsList -> {
-                if (isFilterApplied)
-                    setData(questionsFilteredList);
-                else
-                    setData(questionsList);
-            });
+            if (isFilterApplied)
+            setData(questionsFilteredList);
+                else {
+                mViewModel.getQuestionList().observe(getViewLifecycleOwner(), questionsList -> setData(questionsList));
+            }
+
         });
 
     }
@@ -283,6 +283,7 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
     @Override
     public void onResetClick() {
         isFilterApplied=false;
+        mViewModel.fetchQuestionData("",params);
     }
 
     @Override

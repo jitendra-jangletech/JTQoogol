@@ -14,10 +14,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.LearningAdapter;
@@ -25,7 +23,6 @@ import com.jangletech.qoogol.databinding.LearningFragmentBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.dialog.QuestionFilterDialog;
 import com.jangletech.qoogol.enums.Module;
-import com.jangletech.qoogol.enums.Nav;
 import com.jangletech.qoogol.model.LearningQuestionsNew;
 import com.jangletech.qoogol.model.ProcessQuestion;
 import com.jangletech.qoogol.retrofit.ApiClient;
@@ -43,7 +40,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 
 import static com.jangletech.qoogol.util.Constant.CALL_FROM;
-import static com.jangletech.qoogol.util.Constant.SHARED_BY_ME;
 import static com.jangletech.qoogol.util.Constant.SHARED_WITH_ME;
 import static com.jangletech.qoogol.util.Constant.connectonId;
 import static com.jangletech.qoogol.util.Constant.learning;
@@ -95,7 +91,7 @@ public class SharedWithYouFragment extends BaseFragment implements LearningAdapt
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_filter:
-                QuestionFilterDialog bottomSheetFragment = new QuestionFilterDialog(getActivity(), this);
+                QuestionFilterDialog bottomSheetFragment = new QuestionFilterDialog(getActivity(), this, params);
                 bottomSheetFragment.setCancelable(false);
                 bottomSheetFragment.show(getActivity().getSupportFragmentManager(), bottomSheetFragment.getTag());
                 return true;

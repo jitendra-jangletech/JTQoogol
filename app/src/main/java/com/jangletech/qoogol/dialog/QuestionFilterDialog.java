@@ -42,12 +42,12 @@ public class QuestionFilterDialog extends BottomSheetDialogFragment implements V
     private HashMap<Integer, Chip> mapTypeChips = new HashMap();
     private HashMap<Integer, Chip> mapQueCategoryChips = new HashMap();
     private HashMap<Integer, Chip> mapDiffLevelChips = new HashMap();
-    boolean isFilterApplied =false;
 
 
 
-    public QuestionFilterDialog(@NonNull Activity mContext, FilterClickListener filterClickListener) {
+    public QuestionFilterDialog(@NonNull Activity mContext, FilterClickListener filterClickListener, HashMap<String, String> params) {
         this.filterClickListener = filterClickListener;
+        this.params = params;
     }
 
 
@@ -68,12 +68,16 @@ public class QuestionFilterDialog extends BottomSheetDialogFragment implements V
 
     private void initViews() {
         mSettings = new PreferenceManager(getActivity());
+
+        setFilters();
         prepareDiffLevelChips();
         prepareTypeChips();
         prepareQueCategory();
-        setFilters();
+
         mBinding.reset.setOnClickListener(v -> {
             mBinding.testDifficultyLevelChipGrp.clearCheck();
+            mBinding.queTypeChipGrp.clearCheck();
+            mBinding.queCategoryChipGrp.clearCheck();
             mSettings.setQueCategoryFilter(null);
             mSettings.setTypeFilter(null);
             mSettings.setQueDiffLevelFilter(null);
@@ -118,11 +122,6 @@ public class QuestionFilterDialog extends BottomSheetDialogFragment implements V
                 params.put(Constant.q_type,results.toString());
             }
 
-            if (results.toString().startsWith(",")) {
-                params.put(Constant.q_type,results.toString().substring(1));
-            } else {
-                params.put(Constant.q_type,results.toString());
-            }
 
             StringBuilder option_results = new StringBuilder();
             if (catg.contains(Constant.scq)) {
@@ -173,7 +172,6 @@ public class QuestionFilterDialog extends BottomSheetDialogFragment implements V
             for (int i = 0; i < selectedChipCount; i++) {
                 Chip chip = (Chip) chipGroup.getChildAt(i);
                 if (chip.isChecked()) {
-                    //results = results + "','" + chip.getTag().toString();
                     results.append(",'" + chip.getText().toString() + "'");
                 }
             }
@@ -197,12 +195,65 @@ public class QuestionFilterDialog extends BottomSheetDialogFragment implements V
 
     private void setFilters() {
         if (params != null) {
+            que_categoryset.clear();
+            typeset.clear();
+            que_difflevelset.clear();
+
             String avgRating = params.get(Constant.q_avg_ratings);
             String diffLevel = params.get(Constant.q_diff_level);
+            String q_type = params.get(Constant.q_type);
+            String option_type = params.get(Constant.q_option_type);
             if (avgRating != null && !avgRating.isEmpty()) {
                 mBinding.rating.setRating(Float.parseFloat(avgRating));
             }
+
+            if (diffLevel!=null && !diffLevel.isEmpty()){
+                if (diffLevel.contains("E"))
+                    que_difflevelset.add("Easy");
+                if (diffLevel.contains("M"))
+                    que_difflevelset.add("Medium");
+                if (diffLevel.contains("H"))
+                    que_difflevelset.add("Hard");
+            }
+
+
+            if (q_type!=null && !q_type.isEmpty()) {
+                if (q_type.contains(Constant.SHORT_ANSWER))
+                    que_categoryset.add(Constant.short_ans);
+                if (q_type.contains(Constant.LONG_ANSWER))
+                    que_categoryset.add(Constant.long_ans);
+                if (q_type.contains(Constant.FILL_THE_BLANKS))
+                    que_categoryset.add(Constant.fill_the_blanks);
+            }
+
+            if (option_type!=null && !option_type.isEmpty()) {
+                if (option_type.contains(Constant.SCQ))
+                    que_categoryset.add(Constant.scq);
+                if (option_type.contains(Constant.MCQ))
+                    que_categoryset.add(Constant.mcq);
+                if (option_type.contains(Constant.TRUE_FALSE))
+                    que_categoryset.add(Constant.true_false);
+                if (option_type.contains(Constant.MATCH_PAIR))
+                    que_categoryset.add(Constant.match_pair);
+            }
+            if (params.get(Constant.q_trending).equalsIgnoreCase("1"))
+                typeset.add(Constant.trending);
+            if (params.get(Constant.q_popular).equalsIgnoreCase("1"))
+                typeset.add(Constant.popular);
+            if (params.get(Constant.q_recent).equalsIgnoreCase("1"))
+                typeset.add(Constant.recent);
+
+
+
         }
+    }
+
+    private String getResult(String result, String str) {
+            if (result.isEmpty())
+                return  str;
+            else
+               return result + "," + str;
+
     }
 
     private void prepareTypeChips() {
@@ -218,6 +269,8 @@ public class QuestionFilterDialog extends BottomSheetDialogFragment implements V
             chip.setTag("Type");
             chip.setId(i);
             chip.setClickable(true);
+            if (typeset.contains(typeList.get(i).toString()))
+                chip.setChecked(true);
             mapTypeChips.put(i, chip);
             chip.setCheckable(true);
             chip.setOnClickListener(this);
@@ -242,6 +295,8 @@ public class QuestionFilterDialog extends BottomSheetDialogFragment implements V
             chip.setTag("Question_Category");
             chip.setId(i);
             chip.setClickable(true);
+            if (que_categoryset.contains(que_categoryList.get(i).toString()))
+                chip.setChecked(true);
             mapQueCategoryChips.put(i, chip);
             chip.setCheckable(true);
             chip.setOnClickListener(this);
@@ -275,6 +330,8 @@ public class QuestionFilterDialog extends BottomSheetDialogFragment implements V
             chip.setId(i);
             chip.setClickable(true);
             mapDiffLevelChips.put(i, chip);
+            if (que_difflevelset.contains(que_difflevelList.get(i).toString()))
+                chip.setChecked(true);
             chip.setCheckable(true);
             chip.setOnClickListener(this);
             mBinding.testDifficultyLevelChipGrp.addView(chip);
