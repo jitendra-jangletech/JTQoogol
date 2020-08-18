@@ -76,7 +76,6 @@ public class ContactListFragment extends BaseFragment implements ContactListAdap
     private static final String TAG = "ContactListFragment";
 
     private ContactListViewModel mViewModel;
-
     private ContactListFragmentBinding mBinding;
     private FragmentActivity activity;
     private ContactListAdapter mAdapter;
