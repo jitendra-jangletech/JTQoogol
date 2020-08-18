@@ -243,13 +243,13 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
     }
 
     private void getEducationInfoList() {
-        ProgressDialog.getInstance().show(getActivity());
+        //ProgressDialog.getInstance().show(getActivity());
         Call<FetchEducationResponse> call = apiService.fetchUserEdu(AppUtils.getUserId(), "L", getDeviceId(getActivity()), Constant.APP_NAME);
 
         call.enqueue(new Callback<FetchEducationResponse>() {
             @Override
             public void onResponse(Call<FetchEducationResponse> call, Response<FetchEducationResponse> response) {
-                ProgressDialog.getInstance().dismiss();
+                //ProgressDialog.getInstance().dismiss();
                 if (response.body() != null && response.body().getResponseCode().equals("200")) {
                     if (response.body().getEducationList().size() == 0) {
                         androidx.appcompat.app.AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogStyle);
@@ -272,7 +272,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
             @Override
             public void onFailure(Call<FetchEducationResponse> call, Throwable t) {
                 showToast("Something went wrong!!");
-                ProgressDialog.getInstance().dismiss();
+                //ProgressDialog.getInstance().dismiss();
                 t.printStackTrace();
             }
         });

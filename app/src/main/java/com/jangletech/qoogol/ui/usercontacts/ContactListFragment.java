@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Dialog;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
@@ -25,6 +26,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.jangletech.qoogol.R;
@@ -52,7 +54,6 @@ import com.karumi.dexter.listener.single.PermissionListener;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 import retrofit2.Call;
@@ -74,7 +75,6 @@ import static com.jangletech.qoogol.util.Constant.qoogol;
 public class ContactListFragment extends BaseFragment implements ContactListAdapter.OnContactItemClickListener, ContactFilterAdapter.OnFilterItemClickListener {
 
     private static final String TAG = "ContactListFragment";
-
     private ContactListViewModel mViewModel;
 
     private ContactListFragmentBinding mBinding;
@@ -115,7 +115,7 @@ public class ContactListFragment extends BaseFragment implements ContactListAdap
             if (!isContactFetched) {
                 getContactList();
             } else {
-                isContactFetched=true;
+                isContactFetched = true;
                 if (letter.equalsIgnoreCase(""))
                     CallFetchAllContactsAPI();
                 else
@@ -132,15 +132,15 @@ public class ContactListFragment extends BaseFragment implements ContactListAdap
     private void prepareFilterList() {
         filterList = new ArrayList<>();
         filterList.add("All");
-        for (char i='A'; i<='Z'; i++)
+        for (char i = 'A'; i <= 'Z'; i++)
             filterList.add(String.valueOf(i));
         setFilterRecycler("A", 0, 10);
 
     }
 
     private void setFilterRecycler(String letter, int position, int offset) {
-        filterlinear = new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false);
-        filterAdapter = new ContactFilterAdapter(filterList,this);
+        filterlinear = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        filterAdapter = new ContactFilterAdapter(filterList, this);
         mBinding.filterRecycler.setHasFixedSize(true);
 
         mBinding.filterRecycler.setLayoutManager(filterlinear);
@@ -247,7 +247,7 @@ public class ContactListFragment extends BaseFragment implements ContactListAdap
                     try {
                         if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
                             Toast.makeText(activity, "Invitations sent successfully.", Toast.LENGTH_LONG).show();
-                            getVerifyDetails(mViewModel.pageFetch,null);
+                            getVerifyDetails(mViewModel.pageFetch, null);
                             contactsSet.clear();
                         } else {
                             contactsSet.clear();
@@ -278,7 +278,7 @@ public class ContactListFragment extends BaseFragment implements ContactListAdap
                 if (!isContactFetched) {
                     getContactList();
                 } else {
-                    isContactFetched=true;
+                    isContactFetched = true;
                     if (letter.equalsIgnoreCase(""))
                         CallFetchAllContactsAPI();
                     else
@@ -329,12 +329,12 @@ public class ContactListFragment extends BaseFragment implements ContactListAdap
     }
 
 
-
     private boolean checkWriteExternalPermission() {
         String permission = android.Manifest.permission.READ_CONTACTS;
         int res = requireContext().checkCallingOrSelfPermission(permission);
         return (res == PackageManager.PERMISSION_GRANTED);
     }
+
     private void askUserPermission() {
         final Dialog dialog = new Dialog(requireActivity());
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
@@ -345,56 +345,60 @@ public class ContactListFragment extends BaseFragment implements ContactListAdap
         TextView tvDesc = dialog.findViewById(R.id.txt_dia);
         tvDesc.setText(requireContext().getResources().getString(R.string.import_permission_desc));
         btnCancel.setText(getString(R.string.cancel));
-        btnCancel.setVisibility(View.GONE);
-        btnCancel.setOnClickListener(view -> dialog.dismiss());
-        TextView btnExit = dialog.findViewById(R.id.btnExit);
-        btnExit.setText(getString(R.string.ok));
-        btnExit.setOnClickListener(view -> {
+        btnCancel.setTextColor(Color.WHITE);
+        TextView btnYes = dialog.findViewById(R.id.btnExit);
+        btnYes.setText(getString(R.string.proceed));
+        btnYes.setOnClickListener(view -> {
             enableRuntimePermission();
             dialog.dismiss();
         });
+        btnCancel.setOnClickListener(v -> {
+            dialog.dismiss();
+            Navigation.findNavController(activity, R.id.nav_host_fragment).navigate(R.id.nav_home, Bundle.EMPTY);
+        });
         if (!dialog.isShowing() && isAdded()) {
+            dialog.setCancelable(false);
             dialog.show();
         }
+
     }
 
 
-
-        private void enableRuntimePermission() {
-            Dexter.withActivity(activity)
-                    .withPermission(Manifest.permission.READ_CONTACTS)
-                    .withListener(new PermissionListener() {
-                        @Override
-                        public void onPermissionGranted(PermissionGrantedResponse response) {
-                            mBinding.swipeToRefresh.setRefreshing(true);
-                            if (!isContactFetched) {
-                                getContactList();
-                            } else {
-                                isContactFetched=true;
-                                if (letter.equalsIgnoreCase(""))
-                                    CallFetchAllContactsAPI();
-                                else
-                                    callFetchAPI(letter);
-                            }
-
+    private void enableRuntimePermission() {
+        Dexter.withActivity(activity)
+                .withPermission(Manifest.permission.READ_CONTACTS)
+                .withListener(new PermissionListener() {
+                    @Override
+                    public void onPermissionGranted(PermissionGrantedResponse response) {
+                        mBinding.swipeToRefresh.setRefreshing(true);
+                        if (!isContactFetched) {
+                            getContactList();
+                        } else {
+                            isContactFetched = true;
+                            if (letter.equalsIgnoreCase(""))
+                                CallFetchAllContactsAPI();
+                            else
+                                callFetchAPI(letter);
                         }
 
-                        @Override
-                        public void onPermissionDenied(PermissionDeniedResponse response) {
-                            mBinding.swipeToRefresh.setRefreshing(false);
-                            Toast.makeText(activity, "CONTACTS permission denied.", Toast.LENGTH_LONG).show();
-                        }
+                    }
 
-                        @Override
-                        public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
-                            token.continuePermissionRequest();
-                        }
-                    })
-                    .withErrorListener(error ->
-                            Toast.makeText(activity, "Error occurred! ", Toast.LENGTH_SHORT).show())
-                    .onSameThread()
-                    .check();
-        }
+                    @Override
+                    public void onPermissionDenied(PermissionDeniedResponse response) {
+                        mBinding.swipeToRefresh.setRefreshing(false);
+                        Toast.makeText(activity, "CONTACTS permission denied.", Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+                        token.continuePermissionRequest();
+                    }
+                })
+                .withErrorListener(error ->
+                        Toast.makeText(activity, "Error occurred! ", Toast.LENGTH_SHORT).show())
+                .onSameThread()
+                .check();
+    }
 
     private void getContactList() {
         try {
@@ -430,7 +434,7 @@ public class ContactListFragment extends BaseFragment implements ContactListAdap
         mViewModel.firstIndex = 0;
         mBinding.selectCheckBox.setChecked(false);
         mViewModel.lastIndex = 100;
-        mViewModel.pageFetch="0";
+        mViewModel.pageFetch = "0";
         letter = "";
         mViewModel.filteredList.clear();
         contactsList.clear();
@@ -448,7 +452,7 @@ public class ContactListFragment extends BaseFragment implements ContactListAdap
         mViewModel.firstIndex = 0;
         mBinding.selectCheckBox.setChecked(false);
         mViewModel.lastIndex = 100;
-        mViewModel.pageFetch="0";
+        mViewModel.pageFetch = "0";
         letter = selected_letter;
         mViewModel.filteredList.clear();
         contactsList.clear();
@@ -466,7 +470,7 @@ public class ContactListFragment extends BaseFragment implements ContactListAdap
     }
 
     public void manageEmptyView() {
-        if (contactsList.size()==0) {
+        if (contactsList.size() == 0) {
             mBinding.selectCheckBox.setVisibility(View.GONE);
             mBinding.tvNoContacts.setVisibility(View.VISIBLE);
         } else {
@@ -479,12 +483,12 @@ public class ContactListFragment extends BaseFragment implements ContactListAdap
         String modelAction = "";
 
         if (!mBinding.swipeToRefresh.isRefreshing())
-        mBinding.swipeToRefresh.setRefreshing(true);
+            mBinding.swipeToRefresh.setRefreshing(true);
 
         if (contacts != null)
             modelAction = TextUtils.join(",", contacts);
 
-        Call<ContactResponse> call = apiService.fetchVerifiedContacts(String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID)), getDeviceId(getActivity()), qoogol, pagestart, modelAction, "N", letter,"100");
+        Call<ContactResponse> call = apiService.fetchVerifiedContacts(String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID)), getDeviceId(getActivity()), qoogol, pagestart, modelAction, "N", letter, "100");
         call.enqueue(new Callback<ContactResponse>() {
             @Override
             public void onResponse(Call<ContactResponse> call, retrofit2.Response<ContactResponse> response) {
@@ -492,7 +496,7 @@ public class ContactListFragment extends BaseFragment implements ContactListAdap
                     if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
                         contactsList.addAll(response.body().getContactList());
                         mViewModel.pageFetch = response.body().getPagefetch();
-                        mViewModel.firstIndex = mViewModel.lastIndex+1;
+                        mViewModel.firstIndex = mViewModel.lastIndex + 1;
                         mViewModel.lastIndex = mViewModel.lastIndex + 100;
                         mAdapter.updateList(contactsList);
                         manageEmptyView();
@@ -598,8 +602,8 @@ public class ContactListFragment extends BaseFragment implements ContactListAdap
                 if (mViewModel.filteredList.size() >= mViewModel.lastIndex) {
                     getVerifyDetails(mViewModel.pageFetch, mViewModel.filteredList.subList(mViewModel.firstIndex, mViewModel.lastIndex));
                 } else {
-                    if (mViewModel.filteredList.size()>=mViewModel.firstIndex)
-                    getVerifyDetails(mViewModel.pageFetch,mViewModel.filteredList.subList(mViewModel.firstIndex, mViewModel.lastIndex));
+                    if (mViewModel.filteredList.size() >= mViewModel.firstIndex)
+                        getVerifyDetails(mViewModel.pageFetch, mViewModel.filteredList.subList(mViewModel.firstIndex, mViewModel.lastIndex));
                 }
             } else {
                 Toast.makeText(requireActivity(),
@@ -617,8 +621,8 @@ public class ContactListFragment extends BaseFragment implements ContactListAdap
             if (!isContactFetched) {
                 getContactList();
             } else {
-                isContactFetched=true;
-                if (position==0)
+                isContactFetched = true;
+                if (position == 0)
                     CallFetchAllContactsAPI();
                 else
                     callFetchAPI(letter);

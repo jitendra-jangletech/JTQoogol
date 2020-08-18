@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/rootLayout"
@@ -17,17 +16,18 @@
             android:padding="@dimen/_5sdp">
 
             <ImageView
-                android:layout_margin="@dimen/_2sdp"
                 android:id="@+id/delete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_2sdp"
                 android:src="@drawable/ic_delete"
+                android:tint="@color/colorSkyBlue"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                style="@style/font_style"
                 android:id="@+id/tvUniversity"
+                style="@style/font_style"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/_2sdp"
@@ -38,22 +38,22 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                style="@style/font_style"
-                android:textColor="@color/colorSkyBlue"
                 android:id="@+id/tvInstitute"
+                style="@style/font_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_2sdp"
                 android:padding="@dimen/_2sdp"
                 android:text="Nalla Malla Raddy Engineering College"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="@color/colorSkyBlue"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvUniversity" />
 
 
             <TextView
-                style="@style/font_style"
                 android:id="@+id/tvDegree"
+                style="@style/font_style"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_2sdp"
@@ -65,8 +65,8 @@
                 app:layout_constraintTop_toBottomOf="@+id/tvInstitute" />
 
             <TextView
-                style="@style/font_style"
                 android:id="@+id/tvCourse"
+                style="@style/font_style"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_2sdp"
@@ -77,29 +77,52 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvDegree" />
 
-            <TextView
-                style="@style/font_style"
-                android:id="@+id/tvCourseYear"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/tvCourseYearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_2sdp"
-                android:padding="@dimen/_2sdp"
-                android:text="2nd Year"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textColor="@color/colorSkyBlue"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvCourse" />
+                app:layout_constraintTop_toBottomOf="@+id/tvCourse">
+
+                <TextView
+                    android:id="@+id/tvCourseYearTitle"
+                    style="@style/font_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_2sdp"
+                    android:padding="@dimen/_2sdp"
+                    android:text="Class OR Year : "
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textColor="@color/colorSkyBlue"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvCourseYear"
+                    style="@style/font_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_2sdp"
+                    android:padding="@dimen/_2sdp"
+                    android:text="4"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textColor="@color/colorSkyBlue"
+                    app:layout_constraintLeft_toRightOf="@+id/tvCourseYearTitle"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvCourseYear">
+                app:layout_constraintTop_toBottomOf="@+id/tvCourseYearLayout">
 
 
                 <TextView
-                    style="@style/font_style"
                     android:id="@+id/tvStartDate"
+                    style="@style/font_style"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_2sdp"
@@ -111,22 +134,22 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    style="@style/font_style"
-                    android:layout_marginLeft="@dimen/_5sdp"
-                    android:layout_marginRight="@dimen/_5sdp"
-                    app:layout_constraintLeft_toRightOf="@+id/tvStartDate"
-                    app:layout_constraintTop_toTopOf="parent"
                     android:id="@+id/tvToDate"
+                    style="@style/font_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_5sdp"
                     android:layout_marginTop="@dimen/_2sdp"
+                    android:layout_marginRight="@dimen/_5sdp"
                     android:padding="@dimen/_2sdp"
                     android:text="To"
                     android:textColor="@color/colorSkyBlue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    app:layout_constraintLeft_toRightOf="@+id/tvStartDate"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    style="@style/font_style"
                     android:id="@+id/tvEndDate"
+                    style="@style/font_style"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/_10sdp"

@@ -54,11 +54,12 @@ public class ConnectionListFragment extends BaseFragment implements ConnectionAd
     private ConnectionAdapter mAdapter;
     private Boolean isVisible = false;
     private String pageCount = "0";
+    private LinearLayoutManager linearLayoutManager;
     private int currentItems, scrolledOutItems, totalItems;
     private Boolean isScrolling = false;
     private ConnectionResponse connectionResponse;
     private ConnectionsViewModel mViewModel;
-    private LinearLayoutManager linearLayoutManager;
+
     private ApiInterface apiService = ApiClient.getInstance().getApi();
 
     @Override
@@ -101,7 +102,6 @@ public class ConnectionListFragment extends BaseFragment implements ConnectionAd
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(ConnectionsViewModel.class);
-        mBinding.emptyview.setVisibility(View.GONE);
         fetchConnections(pageCount);
         mAdapter = new ConnectionAdapter(getActivity(), connectionsList, friends, this);
         mBinding.connectionRecycler.setHasFixedSize(true);
@@ -111,7 +111,9 @@ public class ConnectionListFragment extends BaseFragment implements ConnectionAd
             if (connections != null) {
                 if (connectionResponse != null)
                     pageCount = connectionResponse.getRow_count();
+
                 if (connections.size() > 0) {
+                    mBinding.emptyview.setVisibility(View.GONE);
                     connectionsList.clear();
                     connectionsList.addAll(connections);
                     mAdapter.updateList(connectionsList);

@@ -1,20 +1,17 @@
 package com.jangletech.qoogol.ui.connections;
 
 import android.app.Application;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import com.jangletech.qoogol.database.repo.AppRepository;
-import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.model.Followers;
 import com.jangletech.qoogol.model.FollowersResponse;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.util.PreferenceManager;
-import com.jangletech.qoogol.util.UtilHelper;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -22,7 +19,6 @@ import java.util.concurrent.Executors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
-
 
 import static com.jangletech.qoogol.ui.BaseFragment.getDeviceId;
 import static com.jangletech.qoogol.util.Constant.followers;
@@ -32,7 +28,7 @@ import static com.jangletech.qoogol.util.Constant.qoogol;
 /**
  * Created by Pritali on 6/10/2020.
  */
-public class FollowersViewModel  extends AndroidViewModel {
+public class FollowersViewModel extends AndroidViewModel {
 
     ApiInterface apiService;
     public final AppRepository mAppRepository;
@@ -59,14 +55,16 @@ public class FollowersViewModel  extends AndroidViewModel {
 
     public void deleteUpdatedConnection(String user) {
         ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.execute(() -> mAppRepository.deleteFollowers(userId,user));
+        executor.execute(() -> mAppRepository.deleteFollowers(userId, user));
     }
 
     private void getData(boolean isRefresh) {
-        if (isRefresh)
-            call = apiService.fetchRefreshedFollowers(userId, followers, getDeviceId(getApplication()), qoogol, pagestart,forcerefresh);
-        else
+        if (isRefresh) {
+            pagestart = "0";
+            call = apiService.fetchRefreshedFollowers(userId, followers, getDeviceId(getApplication()), qoogol, pagestart, forcerefresh);
+        } else {
             call = apiService.fetchFollowers(userId, followers, getDeviceId(getApplication()), qoogol, pagestart);
+        }
 
 
         call.enqueue(new Callback<FollowersResponse>() {

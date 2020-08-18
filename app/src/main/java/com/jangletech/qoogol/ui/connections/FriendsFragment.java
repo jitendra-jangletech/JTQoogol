@@ -9,14 +9,17 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.SearchView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.MenuItemCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.FriendsAdapter;
@@ -28,7 +31,6 @@ import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.util.Constant;
-import com.jangletech.qoogol.util.PreferenceManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,9 +52,11 @@ public class FriendsFragment extends BaseFragment implements FriendsAdapter.upda
     private List<Friends> filteredList = new ArrayList<>();
     private FriendsAdapter mAdapter;
     private Boolean isVisible = false;
-    private String userId = "";
-    private FriendsViewModel mViewModel;
     private String pageCount = "0";
+    private LinearLayoutManager linearLayoutManager;
+    private int currentItems, scrolledOutItems, totalItems;
+    private Boolean isScrolling = false;
+    private FriendsViewModel mViewModel;
     private ApiInterface apiService = ApiClient.getInstance().getApi();
 
     @Override
@@ -76,11 +80,40 @@ public class FriendsFragment extends BaseFragment implements FriendsAdapter.upda
     }
 
     private void init() {
-        userId = String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));
+        linearLayoutManager = new LinearLayoutManager(getContext());
+        mAdapter = new FriendsAdapter(getActivity(), connectionsList, friends, this);
+        mBinding.connectionRecycler.setHasFixedSize(true);
+        mBinding.connectionRecycler.setLayoutManager(linearLayoutManager);
+        mBinding.connectionRecycler.setAdapter(mAdapter);
         if (!isVisible) {
             isVisible = true;
             mViewModel.fetchFriendsData(false);
         }
+
+        mBinding.connectionRecycler.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                    isScrolling = true;
+                }
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                currentItems = linearLayoutManager.getChildCount();
+                totalItems = linearLayoutManager.getItemCount();
+                scrolledOutItems = linearLayoutManager.findFirstVisibleItemPosition();
+                if (dy > 0) {
+                    if (isScrolling && (currentItems + scrolledOutItems == totalItems)) {
+                        isScrolling = false;
+                        mViewModel.fetchFriendsData(false);
+                    }
+                }
+            }
+        });
+
         mBinding.connectionSwiperefresh.setOnRefreshListener(() -> mViewModel.fetchFriendsData(true));
     }
 
@@ -110,12 +143,22 @@ public class FriendsFragment extends BaseFragment implements FriendsAdapter.upda
         mViewModel = ViewModelProviders.of(this).get(FriendsViewModel.class);
         init();
         mViewModel.getFriendList().observe(getViewLifecycleOwner(), friendsList -> {
-            connectionsList.clear();
-            connectionsList.addAll(friendsList);
-            initView();
             checkRefresh();
+            if (friendsList != null) {
+                setFriendsList(friendsList);
+            }
         });
 
+    }
+
+    private void setFriendsList(List<Friends> friendsList) {
+        if (friendsList.size() > 0) {
+            mBinding.emptyview.setVisibility(View.GONE);
+            mAdapter.updateList(friendsList);
+        } else {
+            mBinding.emptyview.setText("No Friends Added.");
+            mBinding.emptyview.setVisibility(View.VISIBLE);
+        }
     }
 
     public void checkRefresh() {
@@ -131,19 +174,18 @@ public class FriendsFragment extends BaseFragment implements FriendsAdapter.upda
             mViewModel.fetchFriendsData(false);
     }
 
-    private void initView() {
-        if (connectionsList.size() > 0) {
-            mAdapter = new FriendsAdapter(getActivity(), connectionsList, friends, this);
-            mBinding.connectionRecycler.setHasFixedSize(true);
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-            mBinding.connectionRecycler.setLayoutManager(linearLayoutManager);
-            mBinding.connectionRecycler.setAdapter(mAdapter);
-            mBinding.emptyview.setVisibility(View.GONE);
-        } else {
-            mBinding.emptyview.setText("No Friends Added.");
-            mBinding.emptyview.setVisibility(View.VISIBLE);
-        }
-    }
+//    private void initView() {
+//
+//        if (connectionsList.size() > 0) {
+//            mBinding.connectionRecycler.setHasFixedSize(true);
+//            mBinding.connectionRecycler.setLayoutManager(linearLayoutManager);
+//            mBinding.connectionRecycler.setAdapter(mAdapter);
+//            mBinding.emptyview.setVisibility(View.GONE);
+//        } else {
+//            mBinding.emptyview.setText("No Friends Added.");
+//            mBinding.emptyview.setVisibility(View.VISIBLE);
+//        }
+//    }
 
     private void setSearchData(FriendsResponse response) {
         if (response != null && response.getFriends_list().size() > 0) {
@@ -199,7 +241,7 @@ public class FriendsFragment extends BaseFragment implements FriendsAdapter.upda
 
     @Override
     public void onBottomReached(int size) {
-        mViewModel.fetchFriendsData(false);
+        //mViewModel.fetchFriendsData(false);
     }
 
     @Override
@@ -255,5 +297,4 @@ public class FriendsFragment extends BaseFragment implements FriendsAdapter.upda
         }
         return true;
     }
-
 }

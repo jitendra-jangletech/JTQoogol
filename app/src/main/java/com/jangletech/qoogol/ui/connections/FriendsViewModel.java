@@ -34,14 +34,14 @@ public class FriendsViewModel extends AndroidViewModel {
     public final AppRepository mAppRepository;
     private Call<FriendsResponse> call;
     private String userId;
-    private String pagestart;
+    private String pageStart = "0";
 
     public FriendsViewModel(@NonNull Application application) {
         super(application);
         apiService = ApiClient.getInstance().getApi();
         mAppRepository = new AppRepository(application);
         userId = new PreferenceManager(getApplication()).getUserId();
-        pagestart = "0";
+        pageStart = "0";
     }
 
     LiveData<List<Friends>> getFriendList() {
@@ -50,7 +50,7 @@ public class FriendsViewModel extends AndroidViewModel {
 
     void deleteUpdatedConnection(String user) {
         ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.execute(() -> mAppRepository.deleteFriends(userId,user));
+        executor.execute(() -> mAppRepository.deleteFriends(userId, user));
     }
 
     void fetchFriendsData(boolean isRefresh) {
@@ -59,19 +59,22 @@ public class FriendsViewModel extends AndroidViewModel {
 
 
     private void getData(boolean isRefresh) {
-        if (isRefresh)
-            call = apiService.fetchRefreshedFriendss(userId, friends, getDeviceId(getApplication()), qoogol, pagestart, forcerefresh);
-        else
-            call = apiService.fetchFriends(userId, friends, getDeviceId(getApplication()), qoogol, pagestart);
+        if (isRefresh) {
+            pageStart = "0";
+            call = apiService.fetchRefreshedFriendss(userId, friends, getDeviceId(getApplication()), qoogol, pageStart, forcerefresh);
+        } else {
+            call = apiService.fetchFriends(userId, friends, getDeviceId(getApplication()), qoogol, pageStart);
+        }
         call.enqueue(new Callback<FriendsResponse>() {
             @Override
             public void onResponse(Call<FriendsResponse> call, retrofit2.Response<FriendsResponse> response) {
                 try {
                     ProgressDialog.getInstance().dismiss();
                     if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
+                        pageStart = response.body().getRow_count();
                         ExecutorService executor = Executors.newSingleThreadExecutor();
                         executor.execute(() -> mAppRepository.insertFriends(response.body().getFriends_list()));
-                    }else if (response.body().getResponse().equals("501")) {
+                    } else if (response.body().getResponse().equals("501")) {
                         //resetSettingAndLogout();
                     }
                 } catch (Exception e) {

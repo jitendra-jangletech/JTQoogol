@@ -370,6 +370,7 @@
     <string name="more_settings">More Settings</string>
     <string name="blocked_list">Blocked List</string>
     <string name="yes">Yes</string>
+    <string name="proceed">Proceed</string>
     <string name="type_message">Type message</string>
     <string name="fetching_your_connections">Fetching your friends.</string>
     <string name="donot_have_connections">Import contacts and send invites to connect with your contacts.</string>

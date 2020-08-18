@@ -76,6 +76,7 @@
                     android:id="@+id/addUniversity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:tint="@color/colorSkyBlue"
                     android:layout_alignEnd="@+id/universityBoardAutocompleteView"
                     android:layout_marginTop="@dimen/_18sdp"
                     android:contentDescription="@string/app_name"
@@ -105,6 +106,7 @@
 
 
                 <ImageView
+                    android:tint="@color/colorSkyBlue"
                     android:id="@+id/addInstitute"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -194,6 +196,7 @@
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etstartdate"
                             style="@style/EditTextStyle"
+                            android:drawableTint="@color/colorSkyBlue"
                             android:drawableRight="@drawable/ic_date_calender"
                             android:focusable="false"
                             android:maxLength="15" />
@@ -214,6 +217,7 @@
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etenddate"
                             style="@style/EditTextStyle"
+                            android:drawableTint="@color/colorSkyBlue"
                             android:drawableRight="@drawable/ic_date_calender"
                             android:focusable="false"
                             android:maxLength="15" />

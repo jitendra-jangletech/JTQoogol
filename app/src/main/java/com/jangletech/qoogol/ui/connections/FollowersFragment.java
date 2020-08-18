@@ -8,14 +8,17 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.SearchView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.MenuItemCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.FollowersAdapter;
@@ -48,9 +51,12 @@ public class FollowersFragment extends BaseFragment implements FollowersAdapter.
     private List<Followers> connectionsList = new ArrayList<>();
     private List<Followers> filteredList = new ArrayList<>();
     private FollowersAdapter mAdapter;
+    private LinearLayoutManager linearLayoutManager;
+    private String pageCount = "0";
+    private int currentItems, scrolledOutItems, totalItems;
+    private Boolean isScrolling = false;
     private Boolean isVisible = false;
     private String userId = "";
-    private String pageCount = "0";
     private FollowersViewModel mViewModel;
     private ApiInterface apiService = ApiClient.getInstance().getApi();
 
@@ -90,10 +96,38 @@ public class FollowersFragment extends BaseFragment implements FollowersAdapter.
 
     private void init() {
         userId = String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));
+        mAdapter = new FollowersAdapter(getActivity(), connectionsList, followers, this);
+        mBinding.connectionRecycler.setHasFixedSize(true);
+        linearLayoutManager = new LinearLayoutManager(getContext());
+        mBinding.connectionRecycler.setLayoutManager(linearLayoutManager);
+        mBinding.connectionRecycler.setAdapter(mAdapter);
         if (!isVisible) {
             isVisible = true;
             mViewModel.fetchFollowersData(false);
         }
+        mBinding.connectionRecycler.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                    isScrolling = true;
+                }
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                currentItems = linearLayoutManager.getChildCount();
+                totalItems = linearLayoutManager.getItemCount();
+                scrolledOutItems = linearLayoutManager.findFirstVisibleItemPosition();
+                if (dy > 0) {
+                    if (isScrolling && (currentItems + scrolledOutItems == totalItems)) {
+                        isScrolling = false;
+                        mViewModel.fetchFollowersData(false);
+                    }
+                }
+            }
+        });
         mBinding.connectionSwiperefresh.setOnRefreshListener(() -> mViewModel.fetchFollowersData(true));
     }
 
@@ -102,13 +136,21 @@ public class FollowersFragment extends BaseFragment implements FollowersAdapter.
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(FollowersViewModel.class);
         init();
-
         mViewModel.getFollowersList().observe(getViewLifecycleOwner(), followersList -> {
-            connectionsList.clear();
-            connectionsList.addAll(followersList);
-            initView();
-            checkRefresh();
+            if (followersList != null) {
+                checkRefresh();
+                setFollowersList(followersList);
+            }
         });
+    }
+
+    private void setFollowersList(List<Followers> followersList) {
+        if (followersList.size() > 0) {
+            mBinding.emptyview.setVisibility(View.GONE);
+            mAdapter.updateList(followersList);
+        } else {
+            mBinding.emptyview.setVisibility(View.VISIBLE);
+        }
     }
 
 
@@ -131,7 +173,7 @@ public class FollowersFragment extends BaseFragment implements FollowersAdapter.
         }
     }
 
-    private void initView() {
+    /*private void initView() {
         if(connectionsList.size() > 0) {
             mAdapter = new FollowersAdapter(getActivity(), connectionsList, followers, this);
             mBinding.connectionRecycler.setHasFixedSize(true);
@@ -143,7 +185,7 @@ public class FollowersFragment extends BaseFragment implements FollowersAdapter.
             mBinding.emptyview.setText("No Followers Yet.");
             mBinding.emptyview.setVisibility(View.VISIBLE);
         }
-    }
+    }*/
 
     @Override
     public void onUpdateConnection(String user) {
@@ -153,13 +195,13 @@ public class FollowersFragment extends BaseFragment implements FollowersAdapter.
 
     @Override
     public void onBottomReached(int size) {
-        mViewModel.fetchFollowersData(false);
+        //mViewModel.fetchFollowersData(false);
     }
 
     @Override
     public void showProfileClick(Bundle bundle) {
         String otherUserId = bundle.getString(Constant.fetch_profile_id);
-        PublicProfileDialog publicProfileDialog = new PublicProfileDialog(getActivity(),otherUserId,this);
+        PublicProfileDialog publicProfileDialog = new PublicProfileDialog(getActivity(), otherUserId, this);
         publicProfileDialog.show();
     }
 
