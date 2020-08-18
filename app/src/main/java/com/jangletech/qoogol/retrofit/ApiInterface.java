@@ -235,7 +235,9 @@ public interface ApiInterface {
                                          @Field(Constant.tm_diff_level) String diffLevel,
                                          @Field(Constant.tm_avg_rating) String avgRating,
                                          @Field(Constant.tm_id) String tmId,
-                                         @Field(Constant.tm_catg) String cat);
+                                         @Field(Constant.tm_catg) String cat,
+                                         @Field(Constant.pagestart) String pageCount
+    );
 
     @FormUrlEncoded
     @POST(Constant.FETCH_TEST_LIST)

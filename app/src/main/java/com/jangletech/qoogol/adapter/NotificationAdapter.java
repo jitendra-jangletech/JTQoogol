@@ -32,6 +32,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         this.onItemClickListener = onItemClickListener;
     }
 
+
     @NonNull
     @Override
     public NotificationAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

@@ -6,11 +6,14 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
@@ -20,6 +23,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -45,6 +49,7 @@ import java.util.Objects;
 public class BaseFragment extends Fragment {
 
     private static final String TAG = "BaseFragment";
+    private SharedPreferences preferences;
 
     public static boolean hasError(ViewGroup viewGroup) {
         boolean result = false;
@@ -274,6 +279,27 @@ public class BaseFragment extends Fragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void saveFilter(boolean value) {
+        preferences = android.preference.PreferenceManager.getDefaultSharedPreferences(getActivity());
+        preferences.edit()
+                .putBoolean(Constant.TEST_FILTER_APPLIED, value)
+                .apply();
+    }
+
+    public boolean getFilter(String key) {
+        preferences = android.preference.PreferenceManager.getDefaultSharedPreferences(getActivity());
+        return preferences.getBoolean(key, false);
+    }
+
+    public void setFilterIcon(Menu menu,Context mContext,boolean flag) {
+        if (flag)
+            menu.getItem(1).setIcon(ContextCompat.getDrawable(mContext, R.drawable.ic_filter_applied));
+            //menuItem.setIcon(getActivity().getResources().getDrawable(R.drawable.ic_filter_applied));
+        else
+            menu.getItem(1).setIcon(ContextCompat.getDrawable(mContext, R.drawable.ic_filter));
+            //menuItem.setIcon(getActivity().getResources().getDrawable(R.drawable.ic_filter));
     }
 
     public void apiCallFailureDialog(Throwable t) {

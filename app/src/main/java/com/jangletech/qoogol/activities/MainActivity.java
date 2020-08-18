@@ -744,7 +744,6 @@ public class MainActivity extends BaseActivity {
             shareMessage = shareMessage + "https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID + "\n";
             sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Qoogol");
             sendIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
-
             startActivity(Intent.createChooser(sendIntent, "Share app link via..."));
 
         } catch (Exception e) {

@@ -14,7 +14,6 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.jangletech.qoogol.R;
-import com.jangletech.qoogol.activities.BaseActivity;
 import com.jangletech.qoogol.databinding.TestItemBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.model.ProcessQuestion;
@@ -26,10 +25,8 @@ import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.DateUtils;
 import com.jangletech.qoogol.util.PreferenceManager;
-
 import java.util.HashMap;
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

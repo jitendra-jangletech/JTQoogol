@@ -11,6 +11,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
@@ -22,6 +23,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.chip.Chip;
@@ -31,12 +33,10 @@ import com.jangletech.qoogol.activities.PracticeTestActivity;
 import com.jangletech.qoogol.adapter.TestListAdapter;
 import com.jangletech.qoogol.databinding.FragmentTestMyBinding;
 import com.jangletech.qoogol.dialog.CommentDialog;
+import com.jangletech.qoogol.dialog.FilterDialog;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.dialog.PublicProfileDialog;
 import com.jangletech.qoogol.dialog.ShareQuestionDialog;
-import com.jangletech.qoogol.enums.Module;
-import com.jangletech.qoogol.model.FetchSubjectResponse;
-import com.jangletech.qoogol.model.FetchSubjectResponseList;
 import com.jangletech.qoogol.model.ProcessQuestion;
 import com.jangletech.qoogol.model.TestListResponse;
 import com.jangletech.qoogol.model.TestModelNew;
@@ -44,6 +44,7 @@ import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.ui.test.my_test.MyTestViewModel;
+import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 
@@ -56,21 +57,29 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.jangletech.qoogol.util.Constant.CASE;
-import static com.jangletech.qoogol.util.Constant.test;
 
 public class TestSharedByYouFragment extends BaseFragment
-        implements TestListAdapter.TestClickListener, SearchView.OnQueryTextListener, CommentDialog.CommentClickListener, PublicProfileDialog.PublicProfileClickListener {
+        implements TestListAdapter.TestClickListener, SearchView.OnQueryTextListener, CommentDialog.CommentClickListener, PublicProfileDialog.PublicProfileClickListener, FilterDialog.FilterClickListener {
 
     private static final String TAG = "TestSharedByYouFragment";
+    private ApiInterface apiService = ApiClient.getInstance().getApi();
     private MyTestViewModel mViewModel;
     private FragmentTestMyBinding mBinding;
     private TestListAdapter mAdapter;
-    private List<TestModelNew> testList;
+    private Menu filterMenu;
+    private TestListResponse testListResponse;
+    private List<TestModelNew> testList = new ArrayList<>();
+    private List<TestModelNew> filteredTestList = new ArrayList<>();
+    private boolean isFilterApplied = false;
     private Context mContext;
-    private HashMap<String, String> params;
+    private Boolean isScrolling = false;
+    private LinearLayoutManager linearLayoutManager;
+    private int currentItems, scrolledOutItems, totalItems;
+    private String pageStart = "0";
+    private HashMap<String, String> params = new HashMap<>();
     private int tmId;
     private String flag = "";
-    private ApiInterface apiService = ApiClient.getInstance().getApi();
+
 
     public static TestSharedByYouFragment newInstance() {
         return new TestSharedByYouFragment();
@@ -80,7 +89,7 @@ public class TestSharedByYouFragment extends BaseFragment
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         mContext = context.getApplicationContext();
-        params = new HashMap<>();
+        //params = new HashMap<>();
     }
 
     @Override
@@ -103,9 +112,17 @@ public class TestSharedByYouFragment extends BaseFragment
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.action_search, menu);
+        filterMenu = menu;
         final MenuItem item = menu.findItem(R.id.action_search);
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
+        if (isFilterApplied) {
+            setFilterIcon(menu, mContext, true);
+        }
         searchView.setOnQueryTextListener(this);
+        Log.d(TAG, "onCreateOptionsMenu isFilterApplied : " + isFilterApplied);
+        if (isFilterApplied) {
+            setFilterIcon(menu, mContext, true);
+        }
 
         item.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
             @Override
@@ -124,10 +141,12 @@ public class TestSharedByYouFragment extends BaseFragment
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_filter:
-                Bundle bundle = new Bundle();
-                bundle.putString("call_from", "test");
-                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_test_filter, bundle);
+//                Bundle bundle = new Bundle();
+//                bundle.putString("call_from", "test");
+//                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_test_filter, bundle);
                 //MainActivity.navController.navigate(R.id.nav_test_filter, bundle);
+                FilterDialog bottomSheetFragment = new FilterDialog(getActivity(), AppUtils.loadHashMap(mContext), this);
+                bottomSheetFragment.show(getActivity().getSupportFragmentManager(), bottomSheetFragment.getTag());
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -139,21 +158,26 @@ public class TestSharedByYouFragment extends BaseFragment
     }
 
     private void initViews() {
-        //setTitle("Shared Tests");
+        linearLayoutManager = new LinearLayoutManager(getActivity());
+        params = AppUtils.loadHashMap(mContext);
+        isFilterApplied = getFilter(Constant.TEST_FILTER_APPLIED);
+        mAdapter = new TestListAdapter(requireActivity(), testList, this, "");
+        mBinding.testListRecyclerView.setLayoutManager(linearLayoutManager);
+        mBinding.testListRecyclerView.setAdapter(mAdapter);
+
         mBinding.swipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                fetchTestList(params);
+                fetchTestList(params, pageStart);
             }
         });
 
-        params.put(Constant.u_user_id, getUserId(getActivity()));
-        params.put(CASE, "SH");
-        params.put(Constant.tm_popular_test, "");
-        params.put(Constant.tm_recent_test, "");
+//        params.put(Constant.u_user_id, getUserId(getActivity()));
+//        params.put(CASE, "SH");
+//        params.put(Constant.tm_popular_test, "");
+//        params.put(Constant.tm_recent_test, "");
 
-        fetchSubjectList(new PreferenceManager(requireActivity()).getString(Constant.scr_co_id));
-        fetchTestList(params);
+        /*fetchSubjectList(new PreferenceManager(requireActivity()).getString(Constant.scr_co_id));
         mViewModel.getAllSubjects().observe(getViewLifecycleOwner(), new Observer<List<FetchSubjectResponse>>() {
             @Override
             public void onChanged(@Nullable final List<FetchSubjectResponse> subjects) {
@@ -167,18 +191,48 @@ public class TestSharedByYouFragment extends BaseFragment
                     prepareSubjectChips(subjectList);
                 }
             }
-        });
+        });*/
+
+        fetchTestList(AppUtils.loadHashMap(mContext), pageStart);
         mViewModel.getAllTests("SH", getUserId(getActivity())).observe(getViewLifecycleOwner(), new Observer<List<TestModelNew>>() {
             @Override
             public void onChanged(@Nullable final List<TestModelNew> tests) {
                 if (tests != null) {
                     Log.d(TAG, "onChanged Size : " + tests.size());
-                    testList = tests;
-                    setMyTestList(tests);
+                    if (!isFilterApplied) {
+                        if (testListResponse != null)
+                            pageStart = testListResponse.getPrev_tm_id();
+                        testList = tests;
+                        setMyTestList(tests);
+                    }
                 }
             }
         });
 
+        mBinding.testListRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                    isScrolling = true;
+                }
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                currentItems = linearLayoutManager.getChildCount();
+                totalItems = linearLayoutManager.getItemCount();
+                scrolledOutItems = linearLayoutManager.findFirstVisibleItemPosition();
+                if (dy > 0) {
+                    if (isScrolling && (currentItems + scrolledOutItems == totalItems)) {
+                        isScrolling = false;
+                        mBinding.progress.setVisibility(View.VISIBLE);
+                        fetchTestList(AppUtils.loadHashMap(mContext), pageStart);
+                    }
+                }
+            }
+        });
 
         mBinding.subjectsChipGrp.setOnCheckedChangeListener((chipGroup, id) -> {
             Chip chip = ((Chip) chipGroup.getChildAt(chipGroup.getCheckedChipId()));
@@ -202,13 +256,26 @@ public class TestSharedByYouFragment extends BaseFragment
         });
     }
 
+    private void setFilteredTestList(TestListResponse response) {
+        if (response != null) {
+            pageStart = response.getPrev_tm_id();
+            filteredTestList.addAll(response.getTestList());
+            mAdapter.updateList(filteredTestList);
+            if (filteredTestList.size() == 0) {
+                mBinding.tvNoTest.setText("No Tests Found, Modify Filters.");
+                mBinding.tvNoTest.setVisibility(View.VISIBLE);
+            } else {
+                mBinding.tvNoTest.setVisibility(View.GONE);
+            }
+        }
+    }
+
     public void setMyTestList(List<TestModelNew> testList) {
         if (testList.size() > 0) {
             mBinding.tvNoTest.setVisibility(View.GONE);
-            mAdapter = new TestListAdapter(requireActivity(), testList, this, "");
-            mBinding.testListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            mBinding.testListRecyclerView.setAdapter(mAdapter);
+            mAdapter.updateList(testList);
         } else {
+            mBinding.tvNoTest.setText("No Tests Found.");
             mBinding.tvNoTest.setVisibility(View.VISIBLE);
         }
     }
@@ -282,54 +349,61 @@ public class TestSharedByYouFragment extends BaseFragment
         return filteredModelList;
     }
 
-    private void fetchSubjectList(String scrCoId) {
-        Log.d(TAG, "fetchSubjectList ScrCoId : " + scrCoId);
-        mBinding.swipeToRefresh.setRefreshing(true);
-        Call<FetchSubjectResponseList> call = apiService.fetchSubjectList(Constant.SCR_CO_ID);
-        call.enqueue(new Callback<FetchSubjectResponseList>() {
-            @Override
-            public void onResponse(Call<FetchSubjectResponseList> call, Response<FetchSubjectResponseList> response) {
-                //ProgressDialog.getInstance().dismiss();
-                mBinding.swipeToRefresh.setRefreshing(false);
-                mViewModel.setAllSubjectList(response.body().getFetchSubjectResponseList());
-            }
+//    private void fetchSubjectList(String scrCoId) {
+//        Log.d(TAG, "fetchSubjectList ScrCoId : " + scrCoId);
+//        mBinding.swipeToRefresh.setRefreshing(true);
+//        Call<FetchSubjectResponseList> call = apiService.fetchSubjectList(Constant.SCR_CO_ID);
+//        call.enqueue(new Callback<FetchSubjectResponseList>() {
+//            @Override
+//            public void onResponse(Call<FetchSubjectResponseList> call, Response<FetchSubjectResponseList> response) {
+//                //ProgressDialog.getInstance().dismiss();
+//                mBinding.swipeToRefresh.setRefreshing(false);
+//                mViewModel.setAllSubjectList(response.body().getFetchSubjectResponseList());
+//            }
+//
+//            @Override
+//            public void onFailure(Call<FetchSubjectResponseList> call, Throwable t) {
+//                //ProgressDialog.getInstance().dismiss();
+//                mBinding.swipeToRefresh.setRefreshing(false);
+//                showToast("Something went wrong!!");
+//                t.printStackTrace();
+//            }
+//        });
+//    }
 
-            @Override
-            public void onFailure(Call<FetchSubjectResponseList> call, Throwable t) {
-                //ProgressDialog.getInstance().dismiss();
-                mBinding.swipeToRefresh.setRefreshing(false);
-                showToast("Something went wrong!!");
-                t.printStackTrace();
-            }
-        });
-    }
-
-    private void fetchTestList(HashMap<String, String> params) {
+    private void fetchTestList(HashMap<String, String> params, String pageStart) {
         Log.d(TAG, "fetchTestList Params : " + params);
         Log.d(TAG, "initViews Flag : " + flag);
+        Log.d(TAG, "initViews PageStart : " + pageStart);
+
         mBinding.swipeToRefresh.setRefreshing(true);
         Call<TestListResponse> call = apiService.fetchTestList(
                 params.get(Constant.u_user_id),
-                params.get(CASE),
+                "SH",
                 params.get(Constant.tm_recent_test),
                 params.get(Constant.tm_popular_test),
                 params.get(Constant.tm_diff_level),
                 params.get(Constant.tm_avg_rating),
+                params.get(Constant.tm_id),
                 params.get(Constant.tm_catg),
-                params.get(Constant.tm_id)
+                pageStart
         );
         call.enqueue(new Callback<TestListResponse>() {
             @Override
             public void onResponse(Call<TestListResponse> call, Response<TestListResponse> response) {
                 mBinding.swipeToRefresh.setRefreshing(false);
+                mBinding.progress.setVisibility(View.GONE);
                 if (response.body() != null && response.body().getResponse().equals("200")) {
-                    //mViewModel.setAllTestList(response.body().getTestList());
-                    List<TestModelNew> testList = response.body().getTestList();
-                    for (TestModelNew testModelNew : testList) {
+                    testListResponse = response.body();
+                    List<TestModelNew> newList = response.body().getTestList();
+                    for (TestModelNew testModelNew : newList) {
                         testModelNew.setFlag("SH");
                         testModelNew.setUserId(getUserId(getActivity()));
                     }
-                    mViewModel.insert(testList);
+                    mViewModel.insert(newList);
+                    if (isFilterApplied) {
+                        setFilteredTestList(response.body());
+                    }
                 } else if (response.body().getResponse().equals("501")) {
                     resetSettingAndLogout();
                 } else {
@@ -340,6 +414,7 @@ public class TestSharedByYouFragment extends BaseFragment
             @Override
             public void onFailure(Call<TestListResponse> call, Throwable t) {
                 mBinding.swipeToRefresh.setRefreshing(false);
+                mBinding.progress.setVisibility(View.GONE);
                 showToast("Something went wrong!!");
                 t.printStackTrace();
             }
@@ -351,7 +426,6 @@ public class TestSharedByYouFragment extends BaseFragment
         Bundle bundle = new Bundle();
         bundle.putSerializable(Constant.TEST_NAME, testModel);
         Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_test_details, bundle);
-        //MainActivity.navController.navigate(R.id.nav_test_details, bundle);
     }
 
     @Override
@@ -508,7 +582,40 @@ public class TestSharedByYouFragment extends BaseFragment
     }
 
     @Override
+    public void onFriendUnFriendClick() {
+
+    }
+
+    @Override
+    public void onFollowUnfollowClick() {
+
+    }
+
+    @Override
     public void onViewImage(String path) {
         showFullScreen(path);
+    }
+
+    @Override
+    public void onResetClick(HashMap<String, String> map) {
+        isFilterApplied = false;
+        params = map;
+        saveFilter(false);
+        setFilterIcon(filterMenu, mContext, false);
+        params.put(Constant.u_user_id, getUserId(getActivity()));
+        params.put(CASE, Constant.SHARED_BY_YOU);
+        fetchTestList(params, "0");
+    }
+
+    @Override
+    public void onDoneClick(HashMap<String, String> map) {
+        Log.d(TAG, "onDoneClick: " + map);
+        filteredTestList.clear();
+        isFilterApplied = true;
+        setFilterIcon(filterMenu, mContext, true);
+        params = map;
+        params.put(Constant.u_user_id, getUserId(getActivity()));
+        params.put(CASE, Constant.SHARED_BY_YOU);
+        fetchTestList(params, "0");
     }
 }

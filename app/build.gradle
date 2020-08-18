@@ -21,6 +21,10 @@ android {
             minifyEnabled false
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+            applicationVariants.all { variant ->
+                renameAPK(variant, defaultConfig, "-release")
+            }
         }
 
         debug {
@@ -28,6 +32,10 @@ android {
             minifyEnabled false
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+            applicationVariants.all { variant ->
+                renameAPK(variant, defaultConfig, "-debug")
+            }
         }
 
         shrunk {
@@ -51,6 +59,18 @@ android {
     }
     googleServices {
         disableVersionCheck = true
+    }
+}
+
+def renameAPK(variant, defaultConfig, type) {
+    variant.outputs.each { output ->
+        project.ext { appName = 'qoogol' }
+        def formattedDate = new Date().format('yyyy-MM-dd')
+        def newName = output.outputFileName
+        newName = newName.replace("app-", "$project.ext.appName-")
+        newName = newName.replace(type, "-" + formattedDate + " v" + defaultConfig.getVersionName())
+        //noinspection GroovyAssignabilityCheck
+        output.outputFileName = newName
     }
 }
 

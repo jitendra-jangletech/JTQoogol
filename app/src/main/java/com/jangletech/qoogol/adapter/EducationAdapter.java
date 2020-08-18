@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -58,7 +59,15 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.View
                 educationItemClickListener.onItemClick(education);
             });
             holder.itemEducationBinding.delete.setOnClickListener(v -> {
-                educationItemClickListener.onDeleteClick(education, position);
+                if (educationList.size() == 1) {
+                    androidx.appcompat.app.AlertDialog.Builder builder = new AlertDialog.Builder(mContext, R.style.AlertDialogStyle);
+                    builder.setTitle("Alert")
+                            .setMessage("You can't delete this item, Atleast one education is mandatory.")
+                            .setPositiveButton("Ok", null)
+                            .show();
+                } else {
+                    educationItemClickListener.onDeleteClick(education, position);
+                }
             });
         } else {
             itemEducationBinding.delete.setVisibility(View.GONE);

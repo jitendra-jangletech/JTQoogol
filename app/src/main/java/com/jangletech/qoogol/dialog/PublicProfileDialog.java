@@ -212,7 +212,6 @@ public class PublicProfileDialog extends Dialog {
                 .into(mBinding.userProfilePic);
     }
 
-
     private void updateConnection(String user, String Processcase) {
         ApiInterface apiService = ApiClient.getInstance().getApi();
         ProgressDialog.getInstance().show(activity);
@@ -251,8 +250,8 @@ public class PublicProfileDialog extends Dialog {
     }
 
     public interface PublicProfileClickListener {
-        //void onAddFriendClick();
-        //void onFollowClick();
+        void onFriendUnFriendClick();
+        void onFollowUnfollowClick();
         void onViewImage(String path);
     }
 }

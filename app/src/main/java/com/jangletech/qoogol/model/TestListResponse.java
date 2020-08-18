@@ -7,16 +7,26 @@ import java.util.List;
 
 public class TestListResponse {
 
-    @SerializedName(Constant.row_count)
-    private String pageCount;
+    private String prev_tm_id;
 
-    public String getPageCount() {
-        return pageCount;
+    public String getPrev_tm_id() {
+        return prev_tm_id;
     }
 
-    public void setPageCount(String pageCount) {
-        this.pageCount = pageCount;
+    public void setPrev_tm_id(String prev_tm_id) {
+        this.prev_tm_id = prev_tm_id;
     }
+
+//    @SerializedName(Constant.row_count)
+//    private String pageCount;
+//
+//    public String getPageCount() {
+//        return pageCount;
+//    }
+//
+//    public void setPageCount(String pageCount) {
+//        this.pageCount = pageCount;
+//    }
 
     @SerializedName("Response")
     private String response;

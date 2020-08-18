@@ -47,6 +47,7 @@ public class FollowingFragment extends BaseFragment implements FollowingsAdapter
     private FragmentFriendsBinding mBinding;
     private List<Following> connectionsList = new ArrayList<>();
     private List<Following> filteredList = new ArrayList<>();
+    private LinearLayoutManager linearLayoutManager;
     private FollowingsAdapter mAdapter;
     private Boolean isVisible = false;
     private String pageCount = "0";
@@ -102,6 +103,11 @@ public class FollowingFragment extends BaseFragment implements FollowingsAdapter
     }
 
     private void init() {
+        linearLayoutManager = new LinearLayoutManager(getContext());
+        mAdapter = new FollowingsAdapter(getActivity(), connectionsList, following, this);
+        mBinding.connectionRecycler.setHasFixedSize(true);
+        mBinding.connectionRecycler.setLayoutManager(linearLayoutManager);
+        mBinding.connectionRecycler.setAdapter(mAdapter);
         userId = String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));
         if (!isVisible) {
             isVisible = true;
@@ -137,11 +143,7 @@ public class FollowingFragment extends BaseFragment implements FollowingsAdapter
 
     private void initView() {
         if (connectionsList.size() > 0) {
-            mAdapter = new FollowingsAdapter(getActivity(), connectionsList, following, this);
-            mBinding.connectionRecycler.setHasFixedSize(true);
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-            mBinding.connectionRecycler.setLayoutManager(linearLayoutManager);
-            mBinding.connectionRecycler.setAdapter(mAdapter);
+            mAdapter.updateList(connectionsList);
             mBinding.emptyview.setVisibility(View.GONE);
         } else {
             mBinding.emptyview.setText("No Connections Found.");
@@ -237,7 +239,16 @@ public class FollowingFragment extends BaseFragment implements FollowingsAdapter
         String otherUserId = bundle.getString(Constant.fetch_profile_id);
         PublicProfileDialog publicProfileDialog = new PublicProfileDialog(getActivity(), otherUserId, this);
         publicProfileDialog.show();
-        //NavHostFragment.findNavController(this).navigate(R.id.nav_edit_profile, bundle);
+    }
+
+    @Override
+    public void onFriendUnFriendClick() {
+
+    }
+
+    @Override
+    public void onFollowUnfollowClick() {
+
     }
 
     @Override

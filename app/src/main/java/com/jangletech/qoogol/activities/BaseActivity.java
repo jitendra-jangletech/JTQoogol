@@ -2,6 +2,7 @@ package com.jangletech.qoogol.activities;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -31,6 +32,10 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import com.jangletech.qoogol.R;
+import com.jangletech.qoogol.dialog.ProgressDialog;
+import com.jangletech.qoogol.model.FetchEducationResponse;
+import com.jangletech.qoogol.retrofit.ApiClient;
+import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.NetworkUtil;
@@ -39,10 +44,15 @@ import com.jangletech.qoogol.util.PreferenceManager;
 import java.net.UnknownHostException;
 import java.util.Objects;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 
 public class BaseActivity extends AppCompatActivity {
 
     private static final String TAG = "BaseActivity";
+    private ApiInterface apiService = ApiClient.getInstance().getApi();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

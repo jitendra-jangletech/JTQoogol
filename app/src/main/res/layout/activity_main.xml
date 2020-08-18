@@ -186,12 +186,14 @@
                                 android:visibility="visible" />
 
                             <TextView
+                                android:visibility="gone"
                                 android:id="@+id/nav_test_popular"
                                 style="@style/sub_menu_item_style"
                                 android:foreground="?attr/selectableItemBackground"
                                 android:text="@string/popular_test" />
 
                             <TextView
+                                android:visibility="gone"
                                 android:id="@+id/nav_recent_test"
                                 style="@style/sub_menu_item_style"
                                 android:foreground="?attr/selectableItemBackground"

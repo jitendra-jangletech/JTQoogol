@@ -6,6 +6,7 @@ package com.jangletech.qoogol.util;
  */
 public class Constant {
 
+    public static final String FILTER = "FILTER";
     public static final int LIKE = 1;
     public static final int FAVOURITE = 0;
 
@@ -53,6 +54,7 @@ public class Constant {
     public static final String PRODUCTION_MALE_PROFILE_API = "https://jtmobileappstorage.blob.core.windows.net/spotmeets/media/images/male.png";
     public static final String PRODUCTION_FEMALE_PROFILE_API = "https://jtmobileappstorage.blob.core.windows.net/spotmeets/media/images/female.png";
 
+    public static final String TEST_FILTER_APPLIED = "TEST_FILTER_APPLIED";
     //Question Filter Type
     public static final String FILTER_APPLIED = "FILTER_APPLIED";
     public static final String SORT_APPLIED = "SORT_APPLIED";
@@ -226,7 +228,6 @@ public class Constant {
     public static final String tlc_like_flag = "1403";
     public static final String tlc_comment_flag = "1404";
     public static final String tlc_comment_text = "1405";
-
     public static final String like_reply_count = "1415";
     public static final String comment_reply_count = "1416";
 
