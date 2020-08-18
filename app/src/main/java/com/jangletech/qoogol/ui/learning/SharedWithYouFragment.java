@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.LearningAdapter;
@@ -35,6 +36,7 @@ import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -57,6 +59,9 @@ public class SharedWithYouFragment extends BaseFragment implements LearningAdapt
     List<LearningQuestionsNew> questionsNewList;
     ApiInterface apiService = ApiClient.getInstance().getApi();
     String userId = "";
+    private HashMap<String, String> params = new HashMap<>();
+    boolean isFilterApplied = false;
+    List<LearningQuestionsNew> questionsFilteredList;
 
 
     public static SharedWithYouFragment newInstance() {
@@ -110,24 +115,44 @@ public class SharedWithYouFragment extends BaseFragment implements LearningAdapt
         learningQuestionsList = new ArrayList<>();
         questionsNewList = new ArrayList<>();
         userId = String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));
-
+        params.put(Constant.q_trending,"");
+        params.put(Constant.q_popular,"");
+        params.put(Constant.q_recent,"");
+        params.put(Constant.q_diff_level,"");
+        params.put(Constant.q_type,"");
+        params.put(Constant.q_option_type,"");
+        params.put(Constant.q_avg_ratings,"");
         Bundle bundle = getArguments();
         if (bundle != null) {
             ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Shared with You");
         }
 
-        mViewModel.getFilters();
-        mViewModel.fetchQuestionData("",SHARED_WITH_ME);
+        mViewModel.fetchQuestionData("",SHARED_WITH_ME,params);
 
         mViewModel.getSharedQuestionList(SHARED_WITH_ME).observe(getViewLifecycleOwner(), questionsList -> {
-            questionsNewList.clear();
-            questionsNewList.addAll(questionsList);
-            initRecycler();
+            if (isFilterApplied)
+                setData(questionsFilteredList);
+            else
+                setData(questionsList);
         });
 
-        learningFragmentBinding.learningSwiperefresh.setOnRefreshListener(() -> mViewModel.fetchQuestionData("",SHARED_WITH_ME));
+        learningFragmentBinding.learningSwiperefresh.setOnRefreshListener(() -> {
+            mViewModel.fetchQuestionData("",SHARED_WITH_ME,params);
+            mViewModel.getSharedQuestionList(SHARED_WITH_ME).observe(getViewLifecycleOwner(), questionsList -> {
+                if (isFilterApplied)
+                    setData(questionsFilteredList);
+                else
+                    setData(questionsList);
+            });
+        });
+
     }
 
+    private void setData(List<LearningQuestionsNew> questionsList) {
+        questionsNewList.clear();
+        questionsNewList.addAll(questionsList);
+        initRecycler();
+    }
 
     private void initRecycler() {
         learningAdapter = new LearningAdapter(getActivity(), questionsNewList, this, sharedto);
@@ -224,12 +249,16 @@ public class SharedWithYouFragment extends BaseFragment implements LearningAdapt
 
     @Override
     public void onResetClick() {
-
+        isFilterApplied=false;
     }
 
     @Override
-    public void onDoneClick() {
-        mViewModel.getFilters();
-        mViewModel.fetchQuestionData("",SHARED_WITH_ME);
+    public void onDoneClick(HashMap<String, String> map) {
+        params=map;
+        mViewModel.fetchQuestionData("",SHARED_WITH_ME,params);
+        questionsFilteredList.clear();
+        questionsFilteredList.addAll(mViewModel.getFilterQuestionList());
+        setData(questionsFilteredList);
     }
+
 }

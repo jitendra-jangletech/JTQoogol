@@ -24,6 +24,8 @@ import com.jangletech.qoogol.util.UtilHelper;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -38,12 +40,14 @@ public class LearningViewModel extends AndroidViewModel {
     Call<LearningQuestResponse> call;
     String ratings="", diff_level="", q_type="", q_category="", trending="",popular="",recent="",main_catg,sub_catg;
     PreferenceManager mSettings;
+    List<LearningQuestionsNew> questionsFilteredList;
 
     public LearningViewModel(Application application) {
         super(application);
         apiService = ApiClient.getInstance().getApi();
         mAppRepository = new AppRepository(application);
         mSettings = new PreferenceManager(application);
+        questionsFilteredList=new ArrayList<>();
     }
 
     LiveData<List<LearningQuestionsNew>> getQuestionList() {
@@ -54,17 +58,20 @@ public class LearningViewModel extends AndroidViewModel {
         return mAppRepository.getQuestionFromDb(q_id);
     }
 
+    public List<LearningQuestionsNew> getFilterQuestionList() {
+        return questionsFilteredList;
+    }
 
     LiveData<List<LearningQuestionsNew>> getSharedQuestionList(String CASE) {
         return mAppRepository.getSharedQuestions(CASE);
     }
 
-    void fetchQuestionData(String q_id) {
-        getDataFromApi(q_id, "");
+    void fetchQuestionData(String q_id, HashMap<String, String> params) {
+        getDataFromApi(q_id, "",params);
     }
 
-    void fetchQuestionData(String q_id, String CASE) {
-        getDataFromApi(q_id, CASE);
+    void fetchQuestionData(String q_id, String CASE,HashMap<String, String> params) {
+        getDataFromApi(q_id, CASE,params);
     }
 
     public void getFilters() {
@@ -101,9 +108,6 @@ public class LearningViewModel extends AndroidViewModel {
 
         if (q_category.contains(Constant.match_pair))
             addSubCatg(Constant.MATCH_PAIR);
-
-
-
     }
 
     private void addMainCatg(String catg) {
@@ -121,12 +125,14 @@ public class LearningViewModel extends AndroidViewModel {
     }
 
 
-    private void getDataFromApi(String q_id, String CASE) {
+    private void getDataFromApi(String q_id, String CASE,HashMap<String, String> params) {
 
         if (CASE.equalsIgnoreCase(""))
-            call = apiService.fetchQAApi(new PreferenceManager(getApplication()).getUserId(), q_id, ratings, diff_level,trending,popular,recent,main_catg,sub_catg);
+            call = apiService.fetchQAApi(new PreferenceManager(getApplication()).getUserId(), q_id, params.get(Constant.q_avg_ratings), params.get(Constant.q_diff_level),params.get(Constant.q_trending),params.get(Constant.q_popular)
+                    ,params.get(Constant.q_recent),params.get(Constant.q_type),params.get(Constant.q_option_type));
         else
-            call = apiService.fetchQAApi(new PreferenceManager(getApplication()).getUserId(), q_id, CASE,ratings, diff_level,trending,popular,recent,main_catg,sub_catg);
+            call = apiService.fetchQAApi(new PreferenceManager(getApplication()).getUserId(), q_id, CASE,params.get(Constant.q_avg_ratings), params.get(Constant.q_diff_level),params.get(Constant.q_trending),params.get(Constant.q_popular)
+                    ,params.get(Constant.q_recent),params.get(Constant.q_type),params.get(Constant.q_option_type));
         call.enqueue(new Callback<LearningQuestResponse>() {
             @Override
             public void onResponse(Call<LearningQuestResponse> call, retrofit2.Response<LearningQuestResponse> response) {
@@ -134,6 +140,8 @@ public class LearningViewModel extends AndroidViewModel {
                     if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
                         ExecutorService executor = Executors.newSingleThreadExecutor();
                         executor.execute(() -> mAppRepository.insertQuestions(response.body().getQuestion_list()));
+                        questionsFilteredList.clear();
+                        questionsFilteredList.addAll(response.body().getQuestion_list());
                         Thread thread = new Thread() {
                             @Override
                             public void run() {
