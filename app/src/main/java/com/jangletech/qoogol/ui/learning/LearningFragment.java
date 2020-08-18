@@ -294,8 +294,8 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
     @Override
     public void onDoneClick(HashMap<String, String> map) {
         params = map;
+        isFilterApplied=true;
         mViewModel.fetchQuestionData("",params);
-
         questionsFilteredList.clear();
         questionsFilteredList.addAll(mViewModel.getFilterQuestionList());
         setData(questionsFilteredList);
