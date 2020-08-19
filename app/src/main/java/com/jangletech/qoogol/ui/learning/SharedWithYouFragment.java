@@ -134,12 +134,14 @@ public class SharedWithYouFragment extends BaseFragment implements LearningAdapt
 
         learningFragmentBinding.learningSwiperefresh.setOnRefreshListener(() -> {
             mViewModel.fetchQuestionData("",SHARED_WITH_ME,params);
-            mViewModel.getSharedQuestionList(SHARED_WITH_ME).observe(getViewLifecycleOwner(), questionsList -> {
-                if (isFilterApplied)
-                    setData(questionsFilteredList);
-                else
+            if (isFilterApplied)
+                setData(questionsFilteredList);
+            else {
+                mViewModel.getSharedQuestionList(SHARED_WITH_ME).observe(getViewLifecycleOwner(), questionsList -> {
                     setData(questionsList);
-            });
+                });
+            }
+
         });
 
     }
@@ -251,6 +253,7 @@ public class SharedWithYouFragment extends BaseFragment implements LearningAdapt
     @Override
     public void onDoneClick(HashMap<String, String> map) {
         params=map;
+        isFilterApplied =true;
         mViewModel.fetchQuestionData("",SHARED_WITH_ME,params);
         questionsFilteredList.clear();
         questionsFilteredList.addAll(mViewModel.getFilterQuestionList());
