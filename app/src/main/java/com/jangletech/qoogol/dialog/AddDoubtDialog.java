@@ -2,7 +2,6 @@ package com.jangletech.qoogol.dialog;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +23,7 @@ import java.util.List;
 /**
  * Created by Pritali on 7/27/2020.
  */
-public class AddDoubtDialog  extends Dialog {
+public class AddDoubtDialog extends Dialog{
 
     AddDoubtBinding addDoubtBinding;
     private Activity context;

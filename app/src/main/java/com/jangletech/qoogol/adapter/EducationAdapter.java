@@ -45,6 +45,11 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.View
         this.call_from = call_from;
     }
 
+    public void updateList(List<Education> educationList){
+        this.educationList = educationList;
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public EducationAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

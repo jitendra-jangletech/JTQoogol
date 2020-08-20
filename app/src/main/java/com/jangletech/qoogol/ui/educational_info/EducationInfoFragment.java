@@ -49,8 +49,8 @@ public class EducationInfoFragment extends BaseFragment implements EducationAdap
     private List<Education> educationList;
     private Context mContext;
     private List<FetchEducationResponse> fetchEducationResponseList = new ArrayList();
-    ApiInterface apiService = ApiClient.getInstance().getApi();
-    String userid = "";
+    private ApiInterface apiService = ApiClient.getInstance().getApi();
+    private String userid = "";
     private PreferenceManager mSettings;
     Call<FetchEducationResponse> call;
 
