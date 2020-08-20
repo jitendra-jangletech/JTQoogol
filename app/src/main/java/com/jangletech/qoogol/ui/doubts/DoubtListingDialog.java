@@ -71,6 +71,8 @@ public class DoubtListingDialog extends Dialog {
         getData();
     }
 
+
+
     private void getData() {
         doubtsList.clear();
 
@@ -80,8 +82,8 @@ public class DoubtListingDialog extends Dialog {
         doubts.setProfile("000000/00000010650001.png");
         doubts.setPosted_date("1 hour ago");
         doubts.setPosted_group("Chemistry");
-        doubts.setDoubt("I have doubt about some chemical equations");
-        doubts.setDoubt_link("I have doubt about some chemical equations");
+        doubts.setDoubt("Doubt text will be here");
+        doubts.setDoubt_link("Doubt link will be here");
         doubtsList.add(doubts);
 
         Doubts doubts1 = new Doubts();
@@ -90,8 +92,8 @@ public class DoubtListingDialog extends Dialog {
         doubts1.setProfile("000000/00000010650001.png");
         doubts1.setPosted_date("1 hour ago");
         doubts1.setPosted_group("Chemistry");
-        doubts1.setDoubt("I have doubt about some chemical equations");
-        doubts1.setDoubt_link("I have doubt about some chemical equations");
+        doubts1.setDoubt("Doubt text will be here");
+        doubts1.setDoubt_link("Doubt link will be here");
         doubtsList.add(doubts1);
 
 
@@ -101,8 +103,8 @@ public class DoubtListingDialog extends Dialog {
         doubts2.setProfile("000000/00000010650001.png");
         doubts2.setPosted_date("1 hour ago");
         doubts2.setPosted_group("Chemistry");
-        doubts2.setDoubt("I have doubt about some chemical equations");
-        doubts2.setDoubt_link("I have doubt about some chemical equations");
+        doubts2.setDoubt("Doubt text will be here");
+        doubts2.setDoubt_link("Doubt link will be here");
         doubtsList.add(doubts2);
 
         Doubts doubts3 = new Doubts();
@@ -111,8 +113,8 @@ public class DoubtListingDialog extends Dialog {
         doubts3.setProfile("000000/00000010650001.png");
         doubts3.setPosted_date("1 hour ago");
         doubts3.setPosted_group("Chemistry");
-        doubts3.setDoubt("I have doubt about some chemical equations");
-        doubts3.setDoubt_link("I have doubt about some chemical equations");
+        doubts3.setDoubt("Doubt text will be here");
+        doubts3.setDoubt_link("Doubt link will be here");
         doubtsList.add(doubts3);
 
         Doubts doubts4 = new Doubts();
@@ -121,8 +123,8 @@ public class DoubtListingDialog extends Dialog {
         doubts4.setProfile("000000/00000010650001.png");
         doubts4.setPosted_date("1 hour ago");
         doubts4.setPosted_group("Chemistry");
-        doubts4.setDoubt("I have doubt about some chemical equations");
-        doubts4.setDoubt_link("I have doubt about some chemical equations");
+        doubts4.setDoubt("Doubt text will be here");
+        doubts4.setDoubt_link("Doubt link will be here");
         doubtsList.add(doubts4);
 
         initRecycler();
