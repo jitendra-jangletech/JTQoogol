@@ -24,10 +24,12 @@ public class DoubtGroupAdapter extends RecyclerView.Adapter<DoubtGroupAdapter.Vi
     private Activity activity;
     private List<DoubtGroups> doubtGroupsList;
     DoubtGroupItemBinding doubtGroupItemBinding;
+    onItemCliclListener onItemCliclListener;
 
-    public DoubtGroupAdapter(Activity activity, List<DoubtGroups> doubtGroupsList) {
+    public DoubtGroupAdapter(Activity activity, List<DoubtGroups> doubtGroupsList, onItemCliclListener onItemCliclListener) {
         this.activity = activity;
         this.doubtGroupsList = doubtGroupsList;
+        this.onItemCliclListener = onItemCliclListener;
     }
 
     @NonNull
@@ -43,18 +45,13 @@ public class DoubtGroupAdapter extends RecyclerView.Adapter<DoubtGroupAdapter.Vi
     public void onBindViewHolder(@NonNull DoubtGroupAdapter.ViewHolder holder, int position) {
 
         DoubtGroups doubtGroups = doubtGroupsList.get(position);
-        if (doubtGroups.getProfile() != null && !doubtGroups.getProfile().isEmpty()) {
-            Glide.with(activity).load(UtilHelper.getProfileImageUrl(doubtGroups.getProfile().trim())).circleCrop().placeholder(R.drawable.profile).into(doubtGroupItemBinding.userProfileImage);
-        }
+        doubtGroupItemBinding.tvsubjectName.setText(doubtGroups.getDoubt_group());
 
-        doubtGroupItemBinding.tvUserName.setText(doubtGroups.getDoubt_group());
-        if (!doubtGroups.getIs_joined().equalsIgnoreCase("true")) {
-            doubtGroupItemBinding.join.setVisibility(View.VISIBLE);
-        } else {
-            doubtGroupItemBinding.join.setVisibility(View.GONE);
-        }
     }
 
+    public interface onItemCliclListener{
+        void onItemClick(String sub_id);
+    }
     @Override
     public int getItemCount() {
         return doubtGroupsList.size();
