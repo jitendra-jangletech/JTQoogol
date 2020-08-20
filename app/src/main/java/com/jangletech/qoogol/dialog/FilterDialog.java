@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RatingBar;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
@@ -84,6 +83,8 @@ public class FilterDialog extends BottomSheetDialogFragment implements View.OnCl
         });
 
         mBinding.done.setOnClickListener(v -> {
+            if (params == null)
+                params = new HashMap<>();
             params.put(Constant.u_user_id, AppUtils.getUserId());
             params.put(Constant.tm_id, "");
             params.put(Constant.CASE, "");
@@ -116,7 +117,10 @@ public class FilterDialog extends BottomSheetDialogFragment implements View.OnCl
 
         mBinding.rating.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {
             Log.d(TAG, "onRatingChanged: " + rating);
-            params.put(Constant.tm_avg_rating, String.valueOf(rating));
+            if (rating == 0)
+                params.put(Constant.tm_avg_rating, "");
+            else
+                params.put(Constant.tm_avg_rating, String.valueOf(rating));
         });
     }
 

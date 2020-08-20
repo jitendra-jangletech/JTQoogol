@@ -4,7 +4,10 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.Toast;
@@ -62,6 +65,15 @@ public class FollowersAdapter extends RecyclerView.Adapter<FollowersAdapter.View
     private List<Followers> filteredConnectionsList;
     private String call_from;
     private updateConnectionListener listener;
+    private int lastPosition = -1;
+
+    private void setAnimation(View viewToAnimate, int position) {
+        if (position > lastPosition) {
+            Animation animation = AnimationUtils.loadAnimation(activity, R.anim.fall_down);
+            viewToAnimate.startAnimation(animation);
+            lastPosition = position;
+        }
+    }
 
     public FollowersAdapter(Activity activity, List<Followers> connectionsList, String call_from, updateConnectionListener listener) {
         this.activity = activity;
@@ -188,6 +200,8 @@ public class FollowersAdapter extends RecyclerView.Adapter<FollowersAdapter.View
         if (position == connectionsList.size() && connectionsList.size() >= 25) {
             listener.onBottomReached(connectionsList.size());
         }
+
+        setAnimation(holder.connectionItemBinding.getRoot(), position);
     }
 
     @Override

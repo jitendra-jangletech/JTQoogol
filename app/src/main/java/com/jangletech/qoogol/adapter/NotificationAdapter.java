@@ -3,7 +3,10 @@ package com.jangletech.qoogol.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
@@ -25,6 +28,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     private Context mContext;
     private NotificationItemBinding itemBinding;
     private onItemClickListener onItemClickListener;
+    private int lastPosition = -1;
 
     public NotificationAdapter(Context context, List<Notification> notifications, onItemClickListener onItemClickListener) {
         this.mContext = context;
@@ -59,6 +63,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         holder.itemBinding.getRoot().setOnClickListener(v ->
                 onItemClickListener.onItemClick(notifications.get(position)));
 
+        setAnimation(holder.itemBinding.getRoot(), position);
     }
 
 
@@ -77,6 +82,14 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         public ViewHolder(@NonNull NotificationItemBinding itemView) {
             super(itemView.getRoot());
             this.itemBinding = itemView;
+        }
+    }
+
+    private void setAnimation(View viewToAnimate, int position) {
+        if (position > lastPosition) {
+            Animation animation = AnimationUtils.loadAnimation(mContext,R.anim.fall_down);
+            viewToAnimate.startAnimation(animation);
+            lastPosition = position;
         }
     }
 

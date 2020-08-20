@@ -22,6 +22,7 @@ import com.jangletech.qoogol.activities.PracticeTestActivity;
 import com.jangletech.qoogol.adapter.TestListAdapter;
 import com.jangletech.qoogol.databinding.TestFavouriteFragmentBinding;
 import com.jangletech.qoogol.dialog.CommentDialog;
+import com.jangletech.qoogol.dialog.LikeListingDialog;
 import com.jangletech.qoogol.dialog.PublicProfileDialog;
 import com.jangletech.qoogol.model.TestListResponse;
 import com.jangletech.qoogol.model.TestModelNew;
@@ -39,7 +40,7 @@ import retrofit2.Response;
 
 import static com.jangletech.qoogol.util.Constant.test;
 
-public class TestFavouriteFragment extends BaseFragment implements TestListAdapter.TestClickListener, CommentDialog.CommentClickListener, PublicProfileDialog.PublicProfileClickListener {
+public class TestFavouriteFragment extends BaseFragment implements TestListAdapter.TestClickListener, CommentDialog.CommentClickListener, PublicProfileDialog.PublicProfileClickListener, LikeListingDialog.onItemClickListener {
 
     private static final String TAG = "TestFavouriteFragment";
     private MyTestViewModel mViewModel;
@@ -175,6 +176,12 @@ public class TestFavouriteFragment extends BaseFragment implements TestListAdapt
     }
 
     @Override
+    public void onLikeCountClick(TestModelNew testModel) {
+        new LikeListingDialog(true, getActivity(), testModel.getTm_id(), this)
+                .show();
+    }
+
+    @Override
     public void favClick(TestModelNew testModelNew) {
         Log.d(TAG, "favClick Value : " + testModelNew.isFavourite());
         mViewModel.updateFav("PRACTICE", getUserId(getActivity()), testModelNew.getTm_id(), testModelNew.isFavourite());
@@ -207,5 +214,11 @@ public class TestFavouriteFragment extends BaseFragment implements TestListAdapt
     @Override
     public void onViewImage(String path) {
         showFullScreen(path);
+    }
+
+    @Override
+    public void onItemCLick(String user_id) {
+        PublicProfileDialog publicProfileDialog = new PublicProfileDialog(getActivity(), user_id, this);
+        publicProfileDialog.show();
     }
 }

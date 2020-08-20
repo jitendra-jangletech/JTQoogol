@@ -350,7 +350,7 @@ public class SavedQueAdapter extends RecyclerView.Adapter<SavedQueAdapter.ViewHo
             learningItemBinding.likeValue.setOnClickListener(v -> {
                 LearningQuestions learningQuestions = learningQuestionsList.get(getAdapterPosition());
                 if (!learningQuestions.getLikes().equalsIgnoreCase("0")) {
-                    LikeListingDialog listingDialog = new LikeListingDialog(activity,learningQuestions.getQuestion_id(),this::onItemCLick);
+                    LikeListingDialog listingDialog = new LikeListingDialog(false,activity,learningQuestions.getQuestion_id(),this::onItemCLick);
                     listingDialog.show();
                 }
             });

@@ -232,6 +232,7 @@
                             android:visibility="gone" />
 
                         <TextView
+                            
                             android:id="@+id/nav_fav"
                             style="@style/menu_item_style"
                             android:drawableLeft="@drawable/nav_fav"
@@ -260,6 +261,7 @@
                             android:visibility="gone" />
 
                         <TextView
+                            android:visibility="gone"
                             android:id="@+id/nav_import_contacts"
                             style="@style/menu_item_style"
                             android:drawableLeft="@drawable/ic_phone_contacts"

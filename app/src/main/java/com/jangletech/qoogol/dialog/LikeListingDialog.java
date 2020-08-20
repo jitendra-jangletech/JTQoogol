@@ -3,19 +3,18 @@ package com.jangletech.qoogol.dialog;
 import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.LikeAdapter;
 import com.jangletech.qoogol.databinding.LikeDialogBinding;
-import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.model.Like;
 import com.jangletech.qoogol.model.ProcessQuestion;
 import com.jangletech.qoogol.retrofit.ApiClient;
@@ -33,19 +32,23 @@ import retrofit2.Callback;
  * Created by Pritali on 6/4/2020.
  */
 public class LikeListingDialog extends Dialog implements LikeAdapter.onItemClickListener {
-    LikeDialogBinding likeDialogBinding;
+    private static final String TAG = "LikeListingDialog";
+    private LikeDialogBinding likeDialogBinding;
     private Activity context;
-    ApiInterface apiService = ApiClient.getInstance().getApi();
-    List<Like> likeList;
+    private boolean isCallFromTest;
+    private ApiInterface apiService = ApiClient.getInstance().getApi();
+    private List<Like> likeList;
     private PreferenceManager mSettings;
-    int questionId;
-    LikeAdapter likeAdapter;
-    onItemClickListener onItemClickListener;
+    private int questionId;
+    private LikeAdapter likeAdapter;
+    private Call<ProcessQuestion> call;
+    private onItemClickListener onItemClickListener;
 
-    public LikeListingDialog(@NonNull Activity context, int questionId, onItemClickListener onItemClickListener) {
+    public LikeListingDialog(boolean isCallFromTest, Activity context, int questionId, onItemClickListener onItemClickListener) {
         super(context, android.R.style.Theme_DeviceDefault_Light_DarkActionBar);
         this.questionId = questionId;
         this.context = context;
+        this.isCallFromTest = isCallFromTest;
         this.onItemClickListener = onItemClickListener;
     }
 
@@ -70,8 +73,10 @@ public class LikeListingDialog extends Dialog implements LikeAdapter.onItemClick
 
     private void getData() {
         try {
-            Call<ProcessQuestion> call;
-            call = apiService.fetchLikes(Integer.parseInt(mSettings.getUserId()), questionId, "L",1);
+            if (isCallFromTest)
+                call = apiService.fetchTestLikes(Integer.parseInt(mSettings.getUserId()), questionId, "L", 1);
+            else
+                call = apiService.fetchLikes(Integer.parseInt(mSettings.getUserId()), questionId, "L", 1);
 
             call.enqueue(new Callback<ProcessQuestion>() {
                 @Override
@@ -113,7 +118,7 @@ public class LikeListingDialog extends Dialog implements LikeAdapter.onItemClick
     }
 
     private void initRecycler() {
-        likeAdapter = new LikeAdapter(context, likeList, this);
+        likeAdapter = new LikeAdapter(context, likeList,isCallFromTest,this);
         likeDialogBinding.likeRecycler.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setAutoMeasureEnabled(false);
@@ -124,6 +129,7 @@ public class LikeListingDialog extends Dialog implements LikeAdapter.onItemClick
 
     @Override
     public void onItemCLick(String user_id) {
+        Log.d(TAG, "onItemCLick userId : " + user_id);
         onItemClickListener.onItemCLick(user_id);
         dismiss();
     }

@@ -23,6 +23,7 @@ import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.model.RegisterLoginModel;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
+import com.jangletech.qoogol.util.AESSecurities;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 
@@ -33,8 +34,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-
-public class ExistingUserFragment extends BaseFragment{
+public class ExistingUserFragment extends BaseFragment {
 
     private static final String TAG = "ExistingUserFragment";
     private FragmentExistingUserBinding mBinding;
@@ -163,7 +163,16 @@ public class ExistingUserFragment extends BaseFragment{
     private void doRegisterLogin(String mobile, String caseR, int countryCode, String passwordOtp, String deviceId, String appName) {
         Log.d(TAG, "Mobile : " + mobile);
         ProgressDialog.getInstance().show(getActivity());
-        Call<RegisterLoginModel> call = apiService.doRegisterLogin(mobile, caseR, countryCode, passwordOtp, deviceId, appName, new PreferenceManager(getActivity()).getToken(), "E");
+        Call<RegisterLoginModel> call = apiService.doRegisterLogin(
+                AESSecurities.getInstance().encrypt(mobile),
+                caseR,
+                countryCode,
+                AESSecurities.getInstance().encrypt(passwordOtp),
+                deviceId,
+                appName,
+                new PreferenceManager(getActivity()).getToken(),
+                "E"
+        );
         call.enqueue(new Callback<RegisterLoginModel>() {
             @Override
             public void onResponse(Call<RegisterLoginModel> call, Response<RegisterLoginModel> response) {

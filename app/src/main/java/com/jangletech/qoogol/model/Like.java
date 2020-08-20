@@ -3,23 +3,42 @@ package com.jangletech.qoogol.model;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
+import com.jangletech.qoogol.util.AESSecurities;
 import com.jangletech.qoogol.util.Constant;
 
 /**
  * Created by Pritali on 4/29/2020.
  */
 public class Like {
+
+    public String getTlcUserId() {
+        return tlcUserId;
+    }
+
+    public void setTlcUserId(String tlcUserId) {
+        this.tlcUserId = tlcUserId;
+    }
+
     @PrimaryKey
     @SerializedName(Constant.qlc_id)
     private String likeId;
 
+    @SerializedName(Constant.tlc_user_id)
+    private String tlcUserId;
+
     @SerializedName(Constant.qlc_user_id)
     private String userId;
 
-    @SerializedName(Constant.u_first_name)
+   /* @SerializedName(Constant.u_first_name)
     private String userFirstName;
 
     @SerializedName(Constant.u_last_name)
+    private String userLastName;*/
+
+    @SerializedName(Constant.u_first_name_encrypted)
+    private String userFirstName;
+
+    @SerializedName(Constant.u_last_name_encrypted)
     private String userLastName;
 
     @SerializedName(Constant.qlc_cdatetime)
@@ -51,7 +70,7 @@ public class Like {
     }
 
     public String getUserFirstName() {
-        return userFirstName;
+        return AESSecurities.getInstance().decrypt(userFirstName);
     }
 
     public void setUserFirstName(String userFirstName) {
@@ -59,7 +78,7 @@ public class Like {
     }
 
     public String getUserLastName() {
-        return userLastName;
+        return AESSecurities.getInstance().decrypt(userLastName);
     }
 
     public void setUserLastName(String userLastName) {
@@ -91,7 +110,7 @@ public class Like {
     }
 
     public String getProfile_image() {
-        return profile_image!=null?profile_image:"";
+        return profile_image != null ? profile_image : "";
     }
 
     public void setProfile_image(String profile_image) {

@@ -13,6 +13,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="userProfile"
             type="com.jangletech.qoogol.model.UserProfile" />
@@ -98,8 +99,8 @@
                             app:layout_constraintTop_toTopOf="parent">
 
                             <TextView
-                                style="@style/font_style"
                                 android:id="@+id/tvReferralTitle"
+                                style="@style/font_style"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/_10sdp"
@@ -129,8 +130,8 @@
                             app:layout_constraintTop_toTopOf="parent">
 
                             <TextView
-                                style="@style/font_style"
                                 android:id="@+id/tvPointsTitle"
+                                style="@style/font_style"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/_10sdp"
@@ -168,23 +169,23 @@
                                 android:padding="@dimen/_2sdp">
 
                                 <TextView
-                                    style="@style/font_style"
                                     android:id="@+id/tvFirstName"
+                                    style="@style/font_style"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="@string/first_name_"
                                     android:textColor="@color/colorSkyBlue" />
 
                                 <EditText
-                                    style="@style/font_style"
                                     android:id="@+id/etFirstName"
+                                    style="@style/font_style"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:hint="First Name"
                                     android:importantForAutofill="no"
                                     android:maxLength="50"
                                     android:singleLine="true"
-                                    android:text='@{userProfile.firstName}'
+                                    android:text='@{UserProfileBindingAdapter.decryptedText(userProfile.firstName)}'
                                     android:textColor="@color/colorBlack" />
 
                             </LinearLayout>
@@ -197,23 +198,23 @@
                                 android:padding="@dimen/_2sdp">
 
                                 <TextView
-                                    style="@style/font_style"
                                     android:id="@+id/tvLastName"
+                                    style="@style/font_style"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="@string/last_name_"
                                     android:textColor="@color/colorSkyBlue" />
 
                                 <EditText
-                                    style="@style/font_style"
                                     android:id="@+id/etLastName"
+                                    style="@style/font_style"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:hint="Last Name"
                                     android:importantForAutofill="no"
                                     android:maxLength="50"
                                     android:singleLine="true"
-                                    android:text='@{userProfile.lastName}'
+                                    android:text='@{UserProfileBindingAdapter.decryptedText(userProfile.lastName)}'
                                     android:textColor="@color/colorBlack" />
                             </LinearLayout>
                         </LinearLayout>
@@ -235,8 +236,8 @@
                                 android:padding="@dimen/_2sdp">
 
                                 <TextView
-                                    style="@style/font_style"
                                     android:id="@+id/tvUserName"
+                                    style="@style/font_style"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="UserName"
@@ -265,27 +266,27 @@
                             </LinearLayout>
 
                             <TextView
-                                android:background="@color/background"
-                                style="@style/font_style"
                                 android:id="@+id/btnGenerate"
+                                style="@style/font_style"
                                 android:layout_width="0dp"
                                 android:layout_height="@dimen/_31sdp"
                                 android:layout_gravity="center"
                                 android:layout_marginRight="@dimen/_5sdp"
                                 android:layout_weight="0.5"
+                                android:background="@color/background"
                                 android:gravity="center"
                                 android:padding="@dimen/_2sdp"
                                 android:text="Generate"
                                 android:textAllCaps="false" />
 
                             <TextView
-                                style="@style/font_style"
-                                android:background="@color/background"
                                 android:id="@+id/btnCheckExist"
+                                style="@style/font_style"
                                 android:layout_width="0dp"
                                 android:layout_height="@dimen/_31sdp"
                                 android:layout_gravity="center"
                                 android:layout_weight="0.5"
+                                android:background="@color/background"
                                 android:gravity="center"
                                 android:padding="@dimen/_2sdp"
                                 android:text="Check if Exist"
@@ -310,23 +311,23 @@
                                 android:padding="@dimen/_2sdp">
 
                                 <TextView
-                                    style="@style/font_style"
                                     android:id="@+id/tvMobile"
+                                    style="@style/font_style"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="@string/mobile"
                                     android:textColor="@color/colorSkyBlue" />
 
                                 <EditText
-                                    style="@style/font_style"
                                     android:id="@+id/etMobile"
+                                    style="@style/font_style"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:alpha="@{TextUtils.isEmpty(userProfile.mobileNumber)?1f:0.5f}"
                                     android:hint="Mobile Number"
                                     android:inputType="number"
                                     android:maxLength="10"
-                                    android:text='@{userProfile.mobileNumber}'
+                                    android:text='@{UserProfileBindingAdapter.decryptedText(userProfile.mobileNumber)}'
                                     android:textColor="@color/colorBlack" />
 
                             </LinearLayout>
@@ -334,17 +335,17 @@
                             <com.google.android.material.button.MaterialButton
                                 android:id="@+id/btnMobileVerify"
                                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                                android:textStyle="bold"
-                                android:fontFamily="sans-serif-thin"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:layout_weight="0.6"
                                 android:enabled="@{TextUtils.isEmpty(userProfile.mobileNumber)}"
+                                android:fontFamily="sans-serif-thin"
                                 android:gravity="center"
                                 android:padding="@dimen/_2sdp"
                                 android:text="@{UserProfileBindingAdapter.getButtonText(userProfile.mobileNumber)}"
-                                android:textAllCaps="false" />
+                                android:textAllCaps="false"
+                                android:textStyle="bold" />
 
                         </LinearLayout>
 
@@ -365,21 +366,21 @@
                                 android:padding="@dimen/_2sdp">
 
                                 <TextView
-                                    style="@style/font_style"
                                     android:id="@+id/tvEmail"
+                                    style="@style/font_style"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="@string/email"
                                     android:textColor="@color/colorSkyBlue" />
 
                                 <EditText
-                                    style="@style/font_style"
                                     android:id="@+id/etEmail"
+                                    style="@style/font_style"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:alpha="@{TextUtils.isEmpty(userProfile.emailAddress)?1f:0.5f}"
                                     android:hint="Email"
-                                    android:text='@{userProfile.emailAddress}'
+                                    android:text='@{UserProfileBindingAdapter.decryptedText(userProfile.emailAddress)}'
                                     android:textColor="@color/colorBlack" />
 
                             </LinearLayout>
@@ -408,21 +409,21 @@
                             app:layout_constraintTop_toBottomOf="@+id/mobileEmailLayout">
 
                             <com.google.android.material.textfield.TextInputLayout
+                                style="@style/font_style"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="@string/password"
-                                style="@style/font_style"
                                 app:hintTextColor="@color/colorSkyBlue"
                                 app:passwordToggleEnabled="true">
 
                                 <com.google.android.material.textfield.TextInputEditText
                                     android:id="@+id/etPassword"
+                                    style="@style/font_style"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:background="@color/colorWhite"
                                     android:inputType="textPassword"
-                                    style="@style/font_style"
-                                    android:text="@{userProfile.password}"
+                                    android:text="@{UserProfileBindingAdapter.decryptedText(userProfile.password)}"
                                     android:textColor="@color/colorBlack" />
 
                             </com.google.android.material.textfield.TextInputLayout>
@@ -472,8 +473,8 @@
                             app:layout_constraintTop_toBottomOf="@+id/passwordLayout">
 
                             <RadioButton
-                                style="@style/font_style"
                                 android:id="@+id/radioMale"
+                                style="@style/font_style"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -481,8 +482,8 @@
                                 android:textColor="@color/colorSkyBlue" />
 
                             <RadioButton
-                                style="@style/font_style"
                                 android:id="@+id/radioFemale"
+                                style="@style/font_style"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -490,8 +491,8 @@
                                 android:textColor="@color/colorSkyBlue" />
 
                             <RadioButton
-                                style="@style/font_style"
                                 android:id="@+id/radioOthers"
+                                style="@style/font_style"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -508,16 +509,16 @@
                             app:layout_constraintTop_toBottomOf="@+id/genderGrp">
 
                             <TextView
-                                style="@style/font_style"
                                 android:id="@+id/tvDob"
+                                style="@style/font_style"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="Date of Birth"
                                 android:textColor="@color/colorSkyBlue" />
 
                             <EditText
-                                style="@style/font_style"
                                 android:id="@+id/etDob"
+                                style="@style/font_style"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:alpha="0.5"
@@ -525,9 +526,8 @@
                                 android:drawablePadding="@dimen/_10sdp"
                                 android:focusable="false"
                                 android:hint="Date of Birth"
-                                android:text='@{DateUtils.getFormattedDate(userProfile.dob)}'
+                                android:text='@{DateUtils.getFormattedDate(UserProfileBindingAdapter.decryptedText(userProfile.dob))}'
                                 android:textColor="@color/colorBlack" />
-
                         </LinearLayout>
 
                         <LinearLayout
@@ -538,8 +538,8 @@
                             app:layout_constraintTop_toBottomOf="@+id/dobLayout">
 
                             <TextView
-                                style="@style/font_style"
                                 android:id="@+id/tvLanguage"
+                                style="@style/font_style"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/_15sdp"
@@ -579,8 +579,8 @@
 
                             <com.google.android.material.button.MaterialButton
                                 android:id="@+id/btnImportContacts"
-                                android:layout_width="wrap_content"
                                 style="@style/font_style"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/_10sdp"
                                 android:backgroundTint="@color/colorPrimary"
@@ -596,16 +596,16 @@
                                 app:layout_constraintTop_toBottomOf="@+id/mobileEmailLayout">
 
                                 <TextView
-                                    style="@style/font_style"
                                     android:id="@+id/tvTagLine"
+                                    style="@style/font_style"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="@string/tag_lines"
                                     android:textColor="@color/colorSkyBlue" />
 
                                 <EditText
-                                    style="@style/font_style"
                                     android:id="@+id/etTagLine"
+                                    style="@style/font_style"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:hint="TagLine"
@@ -631,8 +631,8 @@
                                 android:text='@{userProfile.u_Nationality}' />
 
                             <TextView
-                                style="@style/font_style"
                                 android:id="@+id/tvState"
+                                style="@style/font_style"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/_15sdp"
@@ -647,8 +647,8 @@
                                 android:text='@{userProfile.u_State}' />
 
                             <TextView
-                                style="@style/font_style"
                                 android:id="@+id/tvDivision"
+                                style="@style/font_style"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/_15sdp"
@@ -663,8 +663,8 @@
                                 android:text='@{userProfile.u_District}' />
 
                             <TextView
-                                style="@style/font_style"
                                 android:id="@+id/tvCity"
+                                style="@style/font_style"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/_15sdp"
@@ -950,8 +950,8 @@
         </ScrollView>
 
         <TextView
-            style="@style/font_style"
             android:id="@+id/btnSave"
+            style="@style/font_style"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_35sdp"
             android:layout_gravity="center_vertical"

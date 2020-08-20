@@ -34,6 +34,7 @@ import com.jangletech.qoogol.adapter.TestListAdapter;
 import com.jangletech.qoogol.databinding.FragmentTestMyBinding;
 import com.jangletech.qoogol.dialog.CommentDialog;
 import com.jangletech.qoogol.dialog.FilterDialog;
+import com.jangletech.qoogol.dialog.LikeListingDialog;
 import com.jangletech.qoogol.dialog.PublicProfileDialog;
 import com.jangletech.qoogol.dialog.ShareQuestionDialog;
 import com.jangletech.qoogol.model.TestListResponse;
@@ -58,7 +59,7 @@ import static com.jangletech.qoogol.util.Constant.CASE;
 import static com.jangletech.qoogol.util.Constant.TEST_FILTER_APPLIED;
 
 public class TestSharedWithYouFragment extends BaseFragment
-        implements TestListAdapter.TestClickListener, SearchView.OnQueryTextListener, CommentDialog.CommentClickListener, PublicProfileDialog.PublicProfileClickListener, FilterDialog.FilterClickListener {
+        implements TestListAdapter.TestClickListener, SearchView.OnQueryTextListener, CommentDialog.CommentClickListener, PublicProfileDialog.PublicProfileClickListener, FilterDialog.FilterClickListener, LikeListingDialog.onItemClickListener {
 
     private static final String TAG = "TestSharedWithYouFragme";
     private MyTestViewModel mViewModel;
@@ -238,26 +239,26 @@ public class TestSharedWithYouFragment extends BaseFragment
         });
 
 
-        mBinding.subjectsChipGrp.setOnCheckedChangeListener((chipGroup, id) -> {
-            Chip chip = ((Chip) chipGroup.getChildAt(chipGroup.getCheckedChipId()));
-            if (chip != null) {
-                try {
-                    if (chip.isChecked()) {
-                        setCheckedChip(mBinding.subjectsChipGrp);
-                        List<TestModelNew> filteredModelList = filterBySubject(testList, chip.getText().toString());
-                        if (filteredModelList.size() > 0) {
-                            mAdapter.setSearchResult(filteredModelList);
-                            mBinding.tvNoTest.setVisibility(View.GONE);
-                        } else {
-                            mAdapter.setSearchResult(filteredModelList);
-                            mBinding.tvNoTest.setVisibility(View.VISIBLE);
-                        }
-                    }
-                } catch (NullPointerException npe) {
-                    showToast("Something went wrong!!");
-                }
-            }
-        });
+//        mBinding.subjectsChipGrp.setOnCheckedChangeListener((chipGroup, id) -> {
+//            Chip chip = ((Chip) chipGroup.getChildAt(chipGroup.getCheckedChipId()));
+//            if (chip != null) {
+//                try {
+//                    if (chip.isChecked()) {
+//                        setCheckedChip(mBinding.subjectsChipGrp);
+//                        List<TestModelNew> filteredModelList = filterBySubject(testList, chip.getText().toString());
+//                        if (filteredModelList.size() > 0) {
+//                            mAdapter.setSearchResult(filteredModelList);
+//                            mBinding.tvNoTest.setVisibility(View.GONE);
+//                        } else {
+//                            mAdapter.setSearchResult(filteredModelList);
+//                            mBinding.tvNoTest.setVisibility(View.VISIBLE);
+//                        }
+//                    }
+//                } catch (NullPointerException npe) {
+//                    showToast("Something went wrong!!");
+//                }
+//            }
+//        });
     }
 
     public void setMyTestList(List<TestModelNew> testList) {
@@ -270,20 +271,20 @@ public class TestSharedWithYouFragment extends BaseFragment
         }
     }
 
-    private void prepareSubjectChips(ArrayList<String> subjects) {
-        mBinding.subjectsChipGrp.removeAllViews();
-        int idCounter = 0;
-        for (String subject : subjects) {
-            Chip chip = (Chip) LayoutInflater.from(mBinding.subjectsChipGrp.getContext()).inflate(R.layout.chip_layout, mBinding.subjectsChipGrp, false);
-            chip.setText(subject);
-            chip.setId(idCounter);
-            chip.setTag("Subjects");
-            chip.setClickable(true);
-            chip.setCheckable(true);
-            mBinding.subjectsChipGrp.addView(chip);
-            idCounter++;
-        }
-    }
+//    private void prepareSubjectChips(ArrayList<String> subjects) {
+//        mBinding.subjectsChipGrp.removeAllViews();
+//        int idCounter = 0;
+//        for (String subject : subjects) {
+//            Chip chip = (Chip) LayoutInflater.from(mBinding.subjectsChipGrp.getContext()).inflate(R.layout.chip_layout, mBinding.subjectsChipGrp, false);
+//            chip.setText(subject);
+//            chip.setId(idCounter);
+//            chip.setTag("Subjects");
+//            chip.setClickable(true);
+//            chip.setCheckable(true);
+//            mBinding.subjectsChipGrp.addView(chip);
+//            idCounter++;
+//        }
+//    }
 
     private void setCheckedChip(ChipGroup chipGroup) {
         for (int i = 0; i < chipGroup.getChildCount(); i++) {
@@ -365,6 +366,16 @@ public class TestSharedWithYouFragment extends BaseFragment
         Log.d(TAG, "fetchTestList Params : " + params);
         Log.d(TAG, "initViews Flag : " + flag);
         Log.d(TAG, "initViews PageStart : " + pageStart);
+        if (params == null) {
+            params = new HashMap<>();
+            params.put(Constant.u_user_id, getUserId(mContext));
+            params.put(Constant.tm_recent_test, "");
+            params.put(Constant.tm_popular_test, "");
+            params.put(Constant.tm_diff_level, "");
+            params.put(Constant.tm_avg_rating, "");
+            params.put(Constant.tm_id, "");
+            params.put(Constant.tm_catg, "");
+        }
         mBinding.swipeToRefresh.setRefreshing(true);
         Call<TestListResponse> call = apiService.fetchTestList(
                 params.get(Constant.u_user_id),
@@ -440,6 +451,12 @@ public class TestSharedWithYouFragment extends BaseFragment
     }
 
     @Override
+    public void onLikeCountClick(TestModelNew testModel) {
+        new LikeListingDialog(true, getActivity(), testModel.getTm_id(), this)
+                .show();
+    }
+
+    @Override
     public void favClick(TestModelNew testModelNew) {
 
     }
@@ -501,5 +518,11 @@ public class TestSharedWithYouFragment extends BaseFragment
         params.put(Constant.u_user_id, getUserId(getActivity()));
         params.put(CASE, Constant.SHARED_WITH_YOU);
         fetchTestList(params, "0");
+    }
+
+    @Override
+    public void onItemCLick(String user_id) {
+        PublicProfileDialog publicProfileDialog = new PublicProfileDialog(getActivity(), user_id, this);
+        publicProfileDialog.show();
     }
 }

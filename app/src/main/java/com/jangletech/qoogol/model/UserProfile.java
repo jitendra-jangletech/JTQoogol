@@ -83,15 +83,15 @@ public class UserProfile {
     @ColumnInfo
     private String ms_count;
 
-    @SerializedName(Constant.u_first_name)
+    @SerializedName(Constant.u_first_name_encrypted)
     @ColumnInfo
     private String firstName;
 
-    @SerializedName(Constant.u_last_name)
+    @SerializedName(Constant.u_last_name_encrypted)
     @ColumnInfo
     private String lastName;
 
-    @SerializedName(Constant.u_birth_date)
+    @SerializedName(Constant.u_birth_date_encrypted)
     @ColumnInfo(name = "date_of_birth")
     private String dob;
 
@@ -300,15 +300,15 @@ public class UserProfile {
     @SerializedName(Constant.u_Message_alerts)
     private String messageAlertsEnabled;
 
-    @SerializedName(Constant.u_mob_1)
+    @SerializedName(Constant.u_mob_1_encrypted)
     @ColumnInfo(name = "mobileNumber")
     private String mobileNumber;
 
-    @SerializedName(Constant.u_Password)
+    @SerializedName(Constant.u_Password_encrypted)
     @ColumnInfo(name = "password")
     private String password;
 
-    @SerializedName(Constant.u_Email)
+    @SerializedName(Constant.u_Email_encrypted)
     @ColumnInfo(name = "email")
     private String emailAddress;
 

@@ -166,12 +166,12 @@ public interface ApiInterface {
                                             @Part MultipartBody.Part image);
 
     @FormUrlEncoded
-    @POST(Constant.REGISTER_LOGIN)
+    @POST(Constant.VERIFY_MOBILE_EMAIL)
     Call<VerifyResponse> verifyMobileEmail(@Field(Constant.appName) String appName,
                                            @Field(Constant.u_app_version) String appVersion,
                                            @Field(Constant.device_id) String deviceId,
                                            @Field(Constant.u_user_type) String userType,
-                                           @Field(Constant.u_mob_1) String email,
+                                           @Field(Constant.u_mob_1_encrypted) String email,
                                            @Field(Constant.VERIFY) String Verify,
                                            @Field(Constant.CASE) String caseL);
 
@@ -181,14 +181,14 @@ public interface ApiInterface {
                                                 @Field(Constant.appName) String appName,
                                                 @Field(Constant.u_app_version) String appVersion,
                                                 @Field(Constant.device_id) String deviceId,
-                                                @Field(Constant.u_first_name) String firstName,
-                                                @Field(Constant.u_last_name) String lastName,
+                                                @Field(Constant.u_first_name_encrypted) String firstName,
+                                                @Field(Constant.u_last_name_encrypted) String lastName,
                                                 @Field(Constant.CASE) String caseU,
-                                                @Field(Constant.u_mob_1) String mobile,
-                                                @Field(Constant.u_Email) String email,
+                                                @Field(Constant.u_mob_1_encrypted) String mobile,
+                                                @Field(Constant.u_Email_encrypted) String email,
                                                 @Field(Constant.STATUS) String status,
-                                                @Field(Constant.u_Password) String password,
-                                                @Field(Constant.u_birth_date) String dob,
+                                                @Field(Constant.u_Password_encrypted) String password,
+                                                @Field(Constant.u_birth_date_encrypted) String dob,
                                                 @Field(Constant.u_tagline) String tagLine,
                                                 @Field(Constant.u_native_ct_id) String u_native_ct_id,
                                                 @Field(Constant.u_native_s_id) String u_native_s_id,
@@ -325,18 +325,18 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST(Constant.PROCESS_TEST)
     Call<ProcessQuestion> deleteTestComment(@Field(Constant.u_user_id) String userid,
-                                          @Field(Constant.tm_id) int tmId,
-                                          @Field(Constant.CASE) String caseL,
-                                          @Field(Constant.tlc_comment_flag) String flag,
-                                          @Field(Constant.tlc_id) String commentId);
+                                            @Field(Constant.tm_id) int tmId,
+                                            @Field(Constant.CASE) String caseL,
+                                            @Field(Constant.tlc_comment_flag) String flag,
+                                            @Field(Constant.tlc_id) String commentId);
 
     @FormUrlEncoded
     @POST(Constant.PROCESS_QUESTION)
     Call<ProcessQuestion> deleteQuestComment(@Field(Constant.u_user_id) String userid,
-                                            @Field(Constant.q_id) int qId,
-                                            @Field(Constant.CASE) String caseL,
-                                            @Field(Constant.qlc_comment_flag) String flag,
-                                            @Field(Constant.qlc_id) String commentId);
+                                             @Field(Constant.q_id) int qId,
+                                             @Field(Constant.CASE) String caseL,
+                                             @Field(Constant.qlc_comment_flag) String flag,
+                                             @Field(Constant.qlc_id) String commentId);
 
 
     @FormUrlEncoded
@@ -365,13 +365,12 @@ public interface ApiInterface {
                                      @Field(Constant.CASE) String caseL,
                                      @Field(Constant.isFavourite) int fav);
 
-
     @FormUrlEncoded
     @POST(Constant.REGISTER_LOGIN)
-    Call<RegisterLoginModel> doRegisterLogin(@Field(Constant.u_mob_1) String mobile,
+    Call<RegisterLoginModel> doRegisterLogin(@Field(Constant.u_mob_1_encrypted) String mobile,
                                              @Field(Constant.CASE) String caseR,
                                              @Field(Constant.u_calling_code) int countryCode,
-                                             @Field(Constant.u_Password) String password,
+                                             @Field(Constant.u_Password_encrypted) String password,
                                              @Field(Constant.device_id) String deviceId,
                                              @Field(Constant.appName) String appName,
                                              @Field(Constant.u_fcm_token) String token,
@@ -379,13 +378,13 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST(Constant.REGISTER_LOGIN)
-    Call<RegisterLoginModel> doRegister(@Field(Constant.u_first_name) String fname,
-                                        @Field(Constant.u_last_name) String lname,
+    Call<RegisterLoginModel> doRegister(@Field(Constant.u_first_name_encrypted) String fname,
+                                        @Field(Constant.u_last_name_encrypted) String lname,
                                         @Field(Constant.u_gender) String gender,
-                                        @Field(Constant.u_birth_date) String dob,
-                                        @Field(Constant.u_mob_1) String mobileEmail,
+                                        @Field(Constant.u_birth_date_encrypted) String dob,
+                                        @Field(Constant.u_mob_1_encrypted) String mobileEmail,
                                         @Field(Constant.OTP) String otp,
-                                        @Field(Constant.u_Password) String password,
+                                        @Field(Constant.u_Password_encrypted) String password,
                                         @Field(Constant.CASE) String caseR,
                                         @Field(Constant.u_calling_code) int countryCode,
                                         @Field(Constant.device_id) String deviceId,
@@ -404,7 +403,7 @@ public interface ApiInterface {
                                            @Field(Constant.q_recent) String recent,
                                            @Field(Constant.q_type) String question_type,
                                            @Field(Constant.q_option_type) String option_type
-                                            );
+    );
 
     @FormUrlEncoded
     @POST(Constant.FETCH_QA)
@@ -434,8 +433,8 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST(Constant.REFER)
-    Call<GenerateVerifyUserName> generateVerifyUserName(@Field(Constant.u_first_name) String fName,
-                                                        @Field(Constant.u_last_name) String lName,
+    Call<GenerateVerifyUserName> generateVerifyUserName(@Field(Constant.u_first_name_encrypted) String fName,
+                                                        @Field(Constant.u_last_name_encrypted) String lName,
                                                         @Field(Constant.CASE) String caseG,
                                                         @Field(Constant.userName) String userName);
 
@@ -445,6 +444,14 @@ public interface ApiInterface {
                                      @Field(Constant.q_id) int queId,
                                      @Field(Constant.CASE) String caseL,
                                      @Field(Constant.qlc_like_flag) int flag);
+
+    @FormUrlEncoded
+    @POST(Constant.PROCESS_TEST)
+    Call<ProcessQuestion> fetchTestLikes(@Field(Constant.u_user_id) int userid,
+                                         @Field(Constant.tm_id) int queId,
+                                         @Field(Constant.CASE) String caseL,
+                                         @Field(Constant.tlc_like_flag) int flag);
+
 
     @FormUrlEncoded
     @POST(Constant.PROCESS_QUESTION)
