@@ -57,6 +57,7 @@ import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.ui.connections.FollowingViewModel;
 import com.jangletech.qoogol.ui.connections.FriendReqViewModel;
+import com.jangletech.qoogol.util.AESSecurities;
 import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.DateUtils;
@@ -157,6 +158,9 @@ public class PersonalInfoFragment extends BaseFragment {
             Log.d(TAG, "onChanged : " + userProfile);
             if (userProfile != null) {
                 profile = userProfile;
+                Log.d(TAG, "initViews FName : " + userProfile.getFirstName());
+                Log.d(TAG, "initViews LName : " + userProfile.getLastName());
+                Log.d(TAG, "initViews Dob : " + userProfile.getDob());
                 mBinding.setUserProfile(userProfile);
                 //save User Badge Info
                 new PreferenceManager(getActivity()).saveString("BADGE", userProfile.getBadge());
@@ -204,7 +208,7 @@ public class PersonalInfoFragment extends BaseFragment {
             if (mBinding.userNameAutoCompleteTextView.getText().toString().trim().isEmpty()) {
                 mBinding.userNameAutoCompleteTextView.setError("Enter valid username.");
                 //showToast("Please enter any unique username.");
-            } else if (profile.getUserName()!=null && profile.getUserName().equals(mBinding.userNameAutoCompleteTextView.getText().toString().trim())) {
+            } else if (profile.getUserName() != null && profile.getUserName().equals(mBinding.userNameAutoCompleteTextView.getText().toString().trim())) {
                 showToast("You have already taken this username.");
             } else {
                 generateVerifyUserName(params);
@@ -241,7 +245,7 @@ public class PersonalInfoFragment extends BaseFragment {
                 mBinding.etEmail.setError("Please enter valid email.");
                 return;
             } else {
-                verifyMobile(mBinding.etEmail.getText().toString().trim(), "E");
+                verifyMobile(AESSecurities.getInstance().encrypt(mBinding.etEmail.getText().toString().trim()), "E");
             }
         });
         mBinding.btnMobileVerify.setOnClickListener(v -> {
@@ -251,7 +255,7 @@ public class PersonalInfoFragment extends BaseFragment {
                 mBinding.etMobile.setError("Please enter mobile number");
                 return;
             }
-            verifyMobile(mBinding.etMobile.getText().toString().trim(), "M");
+            verifyMobile(AESSecurities.getInstance().encrypt(mBinding.etMobile.getText().toString().trim()), "M");
         });
 
         if (userid.equalsIgnoreCase(mSettings.getUserId())) {
@@ -398,7 +402,7 @@ public class PersonalInfoFragment extends BaseFragment {
     }
 
     private void getUserNames(GenerateVerifyUserName generateVerifyUserName) {
-        if (generateVerifyUserName.getUserNames() !=null) {
+        if (generateVerifyUserName.getUserNames() != null) {
             String[] names = generateVerifyUserName.getUserNames().split(",", -1);
             List<String> userNames = new ArrayList<>();
             for (int i = 0; i < names.length; i++) {
@@ -774,10 +778,10 @@ public class PersonalInfoFragment extends BaseFragment {
 
         UserProfile userProfile = new UserProfile();
 
-        userProfileMap.put(Constant.u_mob_1, mBinding.etMobile.getText().toString().trim());
-        userProfileMap.put(Constant.u_Email, mBinding.etEmail.getText().toString().trim());
-        userProfileMap.put(Constant.u_birth_date, convertDateToDataBaseFormat(mBinding.etDob.getText().toString()));
-        userProfileMap.put(Constant.u_Password, mBinding.etPassword.getText().toString().trim());
+        userProfileMap.put(Constant.u_mob_1_encrypted, AESSecurities.getInstance().encrypt(mBinding.etMobile.getText().toString().trim()));
+        userProfileMap.put(Constant.u_Email_encrypted, AESSecurities.getInstance().encrypt(mBinding.etEmail.getText().toString().trim()));
+        userProfileMap.put(Constant.u_birth_date_encrypted, AESSecurities.getInstance().encrypt(convertDateToDataBaseFormat(mBinding.etDob.getText().toString())));
+        userProfileMap.put(Constant.u_Password_encrypted, AESSecurities.getInstance().encrypt(mBinding.etPassword.getText().toString().trim()));
 
         if (mBinding.userNameAutoCompleteTextView.getText().toString().trim().isEmpty())
             userProfileMap.put(Constant.userName, mBinding.userNameAutoCompleteTextView.getTag().toString());
@@ -789,8 +793,8 @@ public class PersonalInfoFragment extends BaseFragment {
         userProfileMap.put(Constant.u_app_version, Constant.APP_VERSION);
         userProfileMap.put(Constant.device_id, getDeviceId(getActivity()));
         userProfileMap.put(Constant.appName, Constant.APP_NAME);
-        userProfileMap.put(Constant.u_first_name, mBinding.etFirstName.getText().toString().trim());
-        userProfileMap.put(Constant.u_last_name, mBinding.etLastName.getText().toString().trim());
+        userProfileMap.put(Constant.u_first_name_encrypted, AESSecurities.getInstance().encrypt(mBinding.etFirstName.getText().toString().trim()));
+        userProfileMap.put(Constant.u_last_name_encrypted, AESSecurities.getInstance().encrypt(mBinding.etLastName.getText().toString().trim()));
         userProfileMap.put(Constant.CASE, "n");
         userProfileMap.put(Constant.STATUS, "i");
         userProfileMap.put(Constant.u_tagline, mBinding.etTagLine.getText().toString().trim());
@@ -813,14 +817,14 @@ public class PersonalInfoFragment extends BaseFragment {
                 userProfileMap.get(Constant.appName),
                 userProfileMap.get(Constant.u_app_version),
                 userProfileMap.get(Constant.device_id),
-                userProfileMap.get(Constant.u_first_name),
-                userProfileMap.get(Constant.u_last_name),
+                userProfileMap.get(Constant.u_first_name_encrypted),
+                userProfileMap.get(Constant.u_last_name_encrypted),
                 userProfileMap.get(Constant.CASE),
-                userProfileMap.get(Constant.u_mob_1),
-                userProfileMap.get(Constant.u_Email),
+                userProfileMap.get(Constant.u_mob_1_encrypted),
+                userProfileMap.get(Constant.u_Email_encrypted),
                 userProfileMap.get(Constant.STATUS),
-                userProfileMap.get(Constant.u_Password),
-                userProfileMap.get(Constant.u_birth_date),
+                userProfileMap.get(Constant.u_Password_encrypted),
+                userProfileMap.get(Constant.u_birth_date_encrypted),
                 userProfileMap.get(Constant.u_tagline),
 
                 String.valueOf(userProfileMap.get(Constant.u_native_ct_id)),
@@ -890,7 +894,8 @@ public class PersonalInfoFragment extends BaseFragment {
                 if (response.body() != null && response.body().getResponseCode().equals("200")) {
                     mViewModel.insert(response.body());
                     if (flag.equalsIgnoreCase("FINISH"))
-                        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_home);
+                        showToast("Successfully updated profile info.");
+                    //Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_home);
                 } else if (response.body().getResponseCode().equals("501")) {
                     resetSettingAndLogout();
                 } else {
@@ -1264,8 +1269,8 @@ public class PersonalInfoFragment extends BaseFragment {
         Log.d(TAG, "generateVerifyUserName: " + params);
         String strCase = params.get(Constant.CASE);
         Call<GenerateVerifyUserName> call = apiService.generateVerifyUserName(
-                params.get(Constant.u_first_name),
-                params.get(Constant.u_last_name),
+                AESSecurities.getInstance().encrypt(params.get(Constant.u_first_name)),
+                AESSecurities.getInstance().encrypt(params.get(Constant.u_last_name)),
                 params.get(Constant.CASE),
                 params.get(Constant.userName)
         );
@@ -1354,17 +1359,17 @@ public class PersonalInfoFragment extends BaseFragment {
         });
     }
 
-    private void getLanguageTag(){
+    private void getLanguageTag() {
         String keys = mBinding.langAutocompleteView.getText()
                 .toString();
-        Log.d(TAG, "getLanguageTag Keys : "+keys);
-        String languageKey ="";
-        for(String s:keys.split(",",-1)){
-             languageKey = languageKey +","+getKeyFromValue(mMapLanguage,s.trim());
-            Log.d(TAG, "Key : "+getKeyFromValue(mMapLanguage,s.trim()));
+        Log.d(TAG, "getLanguageTag Keys : " + keys);
+        String languageKey = "";
+        for (String s : keys.split(",", -1)) {
+            languageKey = languageKey + "," + getKeyFromValue(mMapLanguage, s.trim());
+            Log.d(TAG, "Key : " + getKeyFromValue(mMapLanguage, s.trim()));
         }
-        Log.d(TAG, "getLanguageTag Final : "+languageKey.replace("-1",""));
-        mBinding.langAutocompleteView.setTag(languageKey.replace("-1",""));
+        Log.d(TAG, "getLanguageTag Final : " + languageKey.replace("-1", ""));
+        mBinding.langAutocompleteView.setTag(languageKey.replace("-1", ""));
     }
 
    /* @Override

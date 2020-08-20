@@ -415,7 +415,7 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
             learningItemBinding.likeValue.setOnClickListener(v -> {
                 LearningQuestionsNew learningQuestions = learningQuestionsList.get(getAdapterPosition());
                 if (!learningQuestions.getLikes().equalsIgnoreCase("0")) {
-                    LikeListingDialog listingDialog = new LikeListingDialog(activity, learningQuestions.getQuestion_id(), this::onItemCLick);
+                    LikeListingDialog listingDialog = new LikeListingDialog(false,activity, learningQuestions.getQuestion_id(), this::onItemCLick);
                     listingDialog.show();
                 }
             });

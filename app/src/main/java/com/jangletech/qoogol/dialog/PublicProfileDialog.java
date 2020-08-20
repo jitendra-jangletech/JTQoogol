@@ -22,6 +22,7 @@ import com.jangletech.qoogol.model.ResponseObj;
 import com.jangletech.qoogol.model.UserProfile;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
+import com.jangletech.qoogol.util.AESSecurities;
 import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.UtilHelper;
@@ -138,7 +139,7 @@ public class PublicProfileDialog extends Dialog {
             if (userProfile.getBadge() != null && userProfile.getBadge().equalsIgnoreCase("P"))
                 mBinding.imgBadge.setImageDrawable(activity.getDrawable(R.drawable.platinum));
 
-            mBinding.tvName.setText(userProfile.getFirstName() + " " + userProfile.getLastName());
+            mBinding.tvName.setText(AESSecurities.getInstance().decrypt(userProfile.getFirstName()) + " " + AESSecurities.getInstance().decrypt(userProfile.getLastName()));
             if (userProfile.getStrGender() != null && userProfile.getStrGender().equalsIgnoreCase("M")) {
                 mBinding.tvGender.setText("Male");
             } else if (userProfile.getStrGender() != null && userProfile.getStrGender().equalsIgnoreCase("F")) {

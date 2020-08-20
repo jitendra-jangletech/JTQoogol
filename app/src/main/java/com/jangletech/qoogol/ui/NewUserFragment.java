@@ -28,6 +28,7 @@ import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.model.RegisterLoginModel;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
+import com.jangletech.qoogol.util.AESSecurities;
 import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.DateUtils;
@@ -388,13 +389,13 @@ public class NewUserFragment extends BaseFragment {
 
         ProgressDialog.getInstance().show(getActivity());
         Call<RegisterLoginModel> call = apiService.doRegister(
-                mBinding.tilFirstName.getEditText().getText().toString(),
-                mBinding.tilLastName.getEditText().getText().toString(),
+                AESSecurities.getInstance().encrypt(mBinding.tilFirstName.getEditText().getText().toString().trim()),
+                AESSecurities.getInstance().encrypt(mBinding.tilLastName.getEditText().getText().toString().trim()),
                 gender,
-                mBinding.tilDob.getEditText().getText().toString().trim(),
-                mBinding.tilEmailMobile.getEditText().getText().toString().trim(),
+                AESSecurities.getInstance().encrypt(mBinding.tilDob.getEditText().getText().toString().trim()),
+                AESSecurities.getInstance().encrypt(mBinding.tilEmailMobile.getEditText().getText().toString().trim()),
                 mBinding.tilOtp.getEditText().getText().toString().trim(),
-                mBinding.tilPassword.getEditText().getText().toString().trim(),
+                AESSecurities.getInstance().encrypt(mBinding.tilPassword.getEditText().getText().toString().trim()),
                 caseR,
                 countryCode,
                 deviceId,

@@ -5,6 +5,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
@@ -36,6 +38,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     private Activity activity;
     private List<Comments> commentList;
     private String callingFrom;
+    private int lastPosition = -1;
     private ApiInterface apiService = ApiClient.getInstance().getApi();
     private onCommentItemClickListener commentItemClickListener;
     private String tmId = "";
@@ -72,17 +75,26 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
 
         if (comments.getReplyLikeCount() > 0) {
             holder.commentItemBinding.tvLikes.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             holder.commentItemBinding.tvLikes.setVisibility(View.GONE);
         }
 
-        if (comments.getTlc_user_id().equalsIgnoreCase(AppUtils.getUserId())) {
-            //self comment
-            holder.commentItemBinding.tvDelete.setVisibility(View.VISIBLE);
-        } else {
-            //other user comment
-            holder.commentItemBinding.tvDelete.setVisibility(View.GONE);
-        }
+        if (callingFrom.equals(Module.Test.toString()))
+            if (comments.getTlc_user_id().equalsIgnoreCase(AppUtils.getUserId())) {
+                //self comment
+                holder.commentItemBinding.tvDelete.setVisibility(View.VISIBLE);
+            } else {
+                //other user comment
+                holder.commentItemBinding.tvDelete.setVisibility(View.GONE);
+            }
+
+        if (callingFrom.equals(Module.Learning.toString()))
+            if (comments.getUserId().equalsIgnoreCase(AppUtils.getUserId())) {
+                holder.commentItemBinding.tvDelete.setVisibility(View.VISIBLE);
+            } else {
+                //other user comment
+                holder.commentItemBinding.tvDelete.setVisibility(View.GONE);
+            }
 
         if (callingFrom.equals(Module.Learning.toString())) {
             String decoded = AppUtils.decodedString(comments.getComment());
@@ -158,6 +170,15 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         holder.commentItemBinding.tvCommentCount.setOnClickListener(v -> {
             commentItemClickListener.onCommentsClick(position, comments);
         });
+        setAnimation(holder.commentItemBinding.getRoot(), position);
+    }
+
+    private void setAnimation(View viewToAnimate, int position) {
+        if (position > lastPosition) {
+            Animation animation = AnimationUtils.loadAnimation(activity, R.anim.fall_down);
+            viewToAnimate.startAnimation(animation);
+            lastPosition = position;
+        }
     }
 
 

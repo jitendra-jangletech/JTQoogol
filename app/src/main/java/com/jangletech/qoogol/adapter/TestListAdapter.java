@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,6 +19,7 @@ import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.TestItemBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.model.ProcessQuestion;
+import com.jangletech.qoogol.model.TestModel;
 import com.jangletech.qoogol.model.TestModelNew;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
@@ -42,6 +45,15 @@ public class TestListAdapter extends RecyclerView.Adapter<TestListAdapter.ViewHo
     private TestListAdapter.TestClickListener testClickListener;
     private String flag = "";
     private HashMap<String, String> mapDiffLevel = new HashMap<>();
+    private int lastPosition = -1;
+
+    private void setAnimation(View viewToAnimate, int position) {
+        if (position > lastPosition) {
+            Animation animation = AnimationUtils.loadAnimation(activity, R.anim.fall_down);
+            viewToAnimate.startAnimation(animation);
+            lastPosition = position;
+        }
+    }
 
     public TestListAdapter(Activity activity, List<TestModelNew> itemlist, TestListAdapter.TestClickListener testClickListener, String flag) {
         this.activity = activity;
@@ -92,6 +104,12 @@ public class TestListAdapter extends RecyclerView.Adapter<TestListAdapter.ViewHo
         holder.itemBinding.tvNoOfAttempts.setOnClickListener(v -> {
             testClickListener.onAttemptsClick(testModelNew);
         });
+
+        holder.itemBinding.likeValue.setOnClickListener(v -> {
+            testClickListener.onLikeCountClick(testModelNew);
+        });
+
+
 
         Log.e(TAG, "Like Count : " + testModelNew.getLikeCount());
         holder.itemBinding.likeValue.setText("" + testModelNew.getLikeCount());
@@ -169,6 +187,8 @@ public class TestListAdapter extends RecyclerView.Adapter<TestListAdapter.ViewHo
             doLikeTest(position, testModelNew);
             //testClickListener.onLikeClick(testModelNew, position, testModelNew.isLike());
         });
+
+        setAnimation(holder.itemBinding.getRoot(), position);
     }
 
     @Override
@@ -193,6 +213,8 @@ public class TestListAdapter extends RecyclerView.Adapter<TestListAdapter.ViewHo
         void onCommentClick(TestModelNew testModel);
 
         void onShareClick(int testid);
+
+        void onLikeCountClick(TestModelNew testModel);
 
         void favClick(TestModelNew testModelNew);
 

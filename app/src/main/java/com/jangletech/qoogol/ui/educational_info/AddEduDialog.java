@@ -387,7 +387,7 @@ public class AddEduDialog extends Dialog {
     }
 
     private void updateUserEducation(HashMap<String, String> params) {
-        Log.d(TAG, "Params : " + params);
+        Log.d(TAG, "Update User Education Params : " + params);
         Log.e(TAG, "Save Degree Id : " + params.get(Constant.dm_id));
         ProgressDialog.getInstance().show(context);
         Call<VerifyResponse> call = apiService.updateUserEdu(

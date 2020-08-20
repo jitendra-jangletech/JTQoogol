@@ -2,7 +2,10 @@ package com.jangletech.qoogol.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
@@ -12,6 +15,7 @@ import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.ItemAttemptHistoryBinding;
 import com.jangletech.qoogol.model.AttemptedTest;
 import com.jangletech.qoogol.util.DateUtils;
+
 import java.util.List;
 
 public class AttemptHistoryAdapter extends RecyclerView.Adapter<AttemptHistoryAdapter.ViewHolder> {
@@ -20,11 +24,20 @@ public class AttemptHistoryAdapter extends RecyclerView.Adapter<AttemptHistoryAd
     private List<AttemptedTest> attemptedTests;
     private AttemptedTestClickListener attemptedTestClickListener;
     private ItemAttemptHistoryBinding itemBinding;
+    private int lastPosition = -1;
 
     public AttemptHistoryAdapter(Context mContext, List<AttemptedTest> attemptedTests, AttemptedTestClickListener attemptedTestClickListener) {
         this.mContext = mContext;
         this.attemptedTests = attemptedTests;
         this.attemptedTestClickListener = attemptedTestClickListener;
+    }
+
+    private void setAnimation(View viewToAnimate, int position) {
+        if (position > lastPosition) {
+            Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.fall_down);
+            viewToAnimate.startAnimation(animation);
+            lastPosition = position;
+        }
     }
 
     @NonNull
@@ -45,10 +58,11 @@ public class AttemptHistoryAdapter extends RecyclerView.Adapter<AttemptHistoryAd
         holder.itemAttemptHistoryBinding.tvStatus.setText(attemptedTest.getTt_status());
         holder.itemAttemptHistoryBinding.tvPauseDuration.setText(attemptedTest.getTt_duration_taken());
 
-        holder.itemAttemptHistoryBinding.rootLayout.setOnClickListener(v->{
+        holder.itemAttemptHistoryBinding.rootLayout.setOnClickListener(v -> {
             attemptedTestClickListener.onItemClick(attemptedTest);
         });
 
+        setAnimation(holder.itemAttemptHistoryBinding.getRoot(), position);
     }
 
     @Override

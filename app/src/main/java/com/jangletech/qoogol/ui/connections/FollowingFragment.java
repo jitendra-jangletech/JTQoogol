@@ -8,14 +8,17 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.SearchView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.MenuItemCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.FollowingsAdapter;
@@ -51,6 +54,8 @@ public class FollowingFragment extends BaseFragment implements FollowingsAdapter
     private FollowingsAdapter mAdapter;
     private Boolean isVisible = false;
     private String pageCount = "0";
+    private int currentItems, scrolledOutItems, totalItems;
+    private Boolean isScrolling = false;
     private String userId = "";
     private FollowingViewModel mViewModel;
     private ApiInterface apiService = ApiClient.getInstance().getApi();
@@ -95,10 +100,12 @@ public class FollowingFragment extends BaseFragment implements FollowingsAdapter
         mViewModel = ViewModelProviders.of(this).get(FollowingViewModel.class);
         init();
         mViewModel.getFollowingList().observe(getViewLifecycleOwner(), followingList -> {
-            connectionsList.clear();
-            connectionsList.addAll(followingList);
-            initView();
-            checkRefresh();
+            if (followingList != null) {
+                connectionsList.clear();
+                connectionsList.addAll(followingList);
+                initView();
+                checkRefresh();
+            }
         });
     }
 
@@ -113,6 +120,29 @@ public class FollowingFragment extends BaseFragment implements FollowingsAdapter
             isVisible = true;
             mViewModel.fetchFollowingsData(false);
         }
+        mBinding.connectionRecycler.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                    isScrolling = true;
+                }
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                currentItems = linearLayoutManager.getChildCount();
+                totalItems = linearLayoutManager.getItemCount();
+                scrolledOutItems = linearLayoutManager.findFirstVisibleItemPosition();
+                if (dy > 0) {
+                    if (isScrolling && (currentItems + scrolledOutItems == totalItems)) {
+                        isScrolling = false;
+                        mViewModel.fetchFollowingsData(false);
+                    }
+                }
+            }
+        });
         mBinding.connectionSwiperefresh.setOnRefreshListener(() -> mViewModel.fetchFollowingsData(true));
     }
 
@@ -146,7 +176,7 @@ public class FollowingFragment extends BaseFragment implements FollowingsAdapter
             mAdapter.updateList(connectionsList);
             mBinding.emptyview.setVisibility(View.GONE);
         } else {
-            mBinding.emptyview.setText("No Connections Found.");
+            mBinding.emptyview.setText("No Followings Found.");
             mBinding.emptyview.setVisibility(View.VISIBLE);
         }
     }
@@ -231,7 +261,7 @@ public class FollowingFragment extends BaseFragment implements FollowingsAdapter
 
     @Override
     public void onBottomReached(int size) {
-        mViewModel.fetchFollowingsData(false);
+        //mViewModel.fetchFollowingsData(false);
     }
 
     @Override

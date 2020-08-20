@@ -4,6 +4,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
+import com.jangletech.qoogol.util.AESSecurities;
 import com.jangletech.qoogol.util.Constant;
 
 /**
@@ -195,7 +196,7 @@ public class Comments {
     }
 
     public String getUserFirstName() {
-        return userFirstName;
+        return AESSecurities.getInstance().decrypt(userFirstName);
     }
 
     public void setUserFirstName(String userFirstName) {
@@ -203,7 +204,7 @@ public class Comments {
     }
 
     public String getUserLastName() {
-        return userLastName;
+        return AESSecurities.getInstance().decrypt(userLastName);
     }
 
     public void setUserLastName(String userLastName) {

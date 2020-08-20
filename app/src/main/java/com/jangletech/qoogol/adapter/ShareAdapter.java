@@ -3,7 +3,10 @@ package com.jangletech.qoogol.adapter;
 import android.app.Activity;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
@@ -28,6 +31,15 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
     private List<ShareModel> filteredConnectionsList;
     private Activity activity;
     private OnItemClickListener onItemClickListener;
+    private int lastPosition = -1;
+
+    private void setAnimation(View viewToAnimate, int position) {
+        if (position > lastPosition) {
+            Animation animation = AnimationUtils.loadAnimation(activity, R.anim.fall_down);
+            viewToAnimate.startAnimation(animation);
+            lastPosition = position;
+        }
+    }
 
     public ShareAdapter(Activity activity, List<ShareModel> connectionsList, OnItemClickListener onItemClickListener) {
         this.activity = activity;
@@ -68,6 +80,8 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        setAnimation(holder.shareItemBinding.getRoot(), position);
     }
 
     @Override

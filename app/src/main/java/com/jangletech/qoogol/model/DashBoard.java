@@ -4,6 +4,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
+import com.jangletech.qoogol.util.AESSecurities;
 import com.jangletech.qoogol.util.Constant;
 
 import org.jetbrains.annotations.NotNull;
@@ -32,7 +33,6 @@ public class DashBoard {
 
     @SerializedName(Constant.up_tests_shares)
     private double testShares;
-
 
     public String getUserId() {
         return userId;
@@ -86,10 +86,10 @@ public class DashBoard {
     @PrimaryKey
     private String userId;
 
-    @SerializedName(Constant.u_first_name)
+    @SerializedName(Constant.u_first_name_encrypted)
     private String firstName;
 
-    @SerializedName(Constant.u_last_name)
+    @SerializedName(Constant.u_last_name_encrypted)
     private String lastName;
 
     @SerializedName(Constant.w_user_profile_image_name)
@@ -113,14 +113,14 @@ public class DashBoard {
     @SerializedName(Constant.up_fav_q)
     private double up_fav_q;
 
-    @SerializedName(Constant.up_fav_tests )
+    @SerializedName(Constant.up_fav_tests)
     private double up_fav_tests;
 
     @SerializedName(Constant.up_q_attempts)
     private double up_q_attempts;
 
     @SerializedName(Constant.up_q_likes)
-    private double up_q_likes ;
+    private double up_q_likes;
 
     @SerializedName(Constant.up_q_ratings_given)
     private double up_q_ratings_given;
@@ -243,7 +243,7 @@ public class DashBoard {
     }
 
     public String getFirstName() {
-        return firstName!=null?firstName:"";
+        return AESSecurities.getInstance().decrypt(firstName);
     }
 
     public void setFirstName(String firstName) {
@@ -251,7 +251,7 @@ public class DashBoard {
     }
 
     public String getLastName() {
-        return lastName!=null?lastName:"";
+        return AESSecurities.getInstance().decrypt(lastName);
     }
 
     public void setLastName(String lastName) {

@@ -272,20 +272,20 @@ public class TestPopularFragment extends BaseFragment
         }
     }
 
-    private void prepareSubjectChips(ArrayList<String> subjects) {
-        mBinding.subjectsChipGrp.removeAllViews();
-        int idCounter = 0;
-        for (String subject : subjects) {
-            Chip chip = (Chip) LayoutInflater.from(mBinding.subjectsChipGrp.getContext()).inflate(R.layout.chip_layout, mBinding.subjectsChipGrp, false);
-            chip.setText(subject);
-            chip.setId(idCounter);
-            chip.setTag("Subjects");
-            chip.setClickable(true);
-            chip.setCheckable(true);
-            mBinding.subjectsChipGrp.addView(chip);
-            idCounter++;
-        }
-    }
+//    private void prepareSubjectChips(ArrayList<String> subjects) {
+//        mBinding.subjectsChipGrp.removeAllViews();
+//        int idCounter = 0;
+//        for (String subject : subjects) {
+//            Chip chip = (Chip) LayoutInflater.from(mBinding.subjectsChipGrp.getContext()).inflate(R.layout.chip_layout, mBinding.subjectsChipGrp, false);
+//            chip.setText(subject);
+//            chip.setId(idCounter);
+//            chip.setTag("Subjects");
+//            chip.setClickable(true);
+//            chip.setCheckable(true);
+//            mBinding.subjectsChipGrp.addView(chip);
+//            idCounter++;
+//        }
+//    }
 
     private void setCheckedChip(ChipGroup chipGroup) {
         for (int i = 0; i < chipGroup.getChildCount(); i++) {
@@ -451,6 +451,11 @@ public class TestPopularFragment extends BaseFragment
         new ShareQuestionDialog(getActivity(), String.valueOf(testid), getUserId(mContext)
                 , getDeviceId(mContext), "T")
                 .show();
+    }
+
+    @Override
+    public void onLikeCountClick(TestModelNew testModel) {
+
     }
 
     @Override

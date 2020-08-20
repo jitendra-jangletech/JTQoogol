@@ -5,6 +5,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
@@ -28,6 +30,15 @@ public class PracticeTestQuestPaletAdapter extends RecyclerView.Adapter<Practice
     private QuestPaletItemBinding itemGridQuestBinding;
     private QuestClickListener questClickListener;
     private String strSortType;
+    private int lastPosition = -1;
+
+    private void setAnimation(View viewToAnimate, int position) {
+        if (position > lastPosition) {
+            Animation animation = AnimationUtils.loadAnimation(activity, R.anim.fall_down);
+            viewToAnimate.startAnimation(animation);
+            lastPosition = position;
+        }
+    }
 
     public PracticeTestQuestPaletAdapter(Activity activity, List<TestQuestionNew> questionList,
                                          QuestClickListener questClickListener, String sortType) {
@@ -110,6 +121,8 @@ public class PracticeTestQuestPaletAdapter extends RecyclerView.Adapter<Practice
             holder.itemBinding.questLayout.setOnClickListener(v -> {
                 questClickListener.onQuestionSelected(practiceQuestion, holder.getAdapterPosition());
             });
+
+            setAnimation(holder.itemBinding.getRoot(), position);
         }
 
         if (strSortType.equalsIgnoreCase(QuestionSortType.GRID.toString())) {
@@ -157,6 +170,7 @@ public class PracticeTestQuestPaletAdapter extends RecyclerView.Adapter<Practice
             holder.itemBindingGrid.tvQuestNo.setOnClickListener(v -> {
                 questClickListener.onQuestionSelected(practiceQuestion, holder.getAdapterPosition());
             });
+            setAnimation(holder.itemBindingGrid.getRoot(), position);
         }
     }
 

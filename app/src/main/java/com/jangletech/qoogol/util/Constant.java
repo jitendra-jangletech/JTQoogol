@@ -71,6 +71,15 @@ public class Constant {
     public static final String TRUE_FALSE = "TRUE_FALSE";
 */
 
+    //encrypted fields
+    public static final String u_birth_date_encrypted = "107E";
+    public static final String u_first_name_encrypted = "104E";
+    public static final String u_last_name_encrypted = "105E";
+    public static final String u_Password_encrypted = "199ME";
+    public static final String u_mob_1_encrypted = "108E";
+    public static final String u_Email_encrypted = "199LE";
+
+
     //User table
     public static final String qoogol = "Q";
     public static final String forcerefresh = "F";
@@ -248,8 +257,8 @@ public class Constant {
     public static final String TEST_DETAILS = "q132FetchTestDetails";
     public static final String SUBMIT_TEST = "q134SubmitTest";
     public static final String FETCH_TEST_LIST = "q152fetchtest";
-    public static final String FETCH_USER_INFO = "sm21FetchUserInfo";
-    public static final String FETCH_OTHER_USER_INFO = "sm51FetchOtherUserInfo";
+    public static final String FETCH_USER_INFO = "sm65FetchProfileInfo";
+    public static final String FETCH_OTHER_USER_INFO = "sm72FetchPublicProfile";
     public static final String FETCH_USER_EDU = "q112ProcessUserEdu";
     public static final String FETCH_USER_SETTINGS = "q113ProcessUserSetting";
 
@@ -264,7 +273,8 @@ public class Constant {
     public static final String STATE = "sm06StateData";
     public static final String CITY = "sm09CityData";
     public static final String UNIVERSITY = "sm12UBMData";
-    public static final String REGISTER_LOGIN = "sm01Signup";
+    public static final String REGISTER_LOGIN = "sm01SignupNew";
+    public static final String VERIFY_MOBILE_EMAIL = "sm01VerifyMobileEmail";
     public static final String UPDATE_PROFILE_IMAGE_API = "sm22UpdateProfilePic";
     public static final String COURSE = "sm15CourseData";
     public static final String INSTITUTE = "sm13InstOrgData";

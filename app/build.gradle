@@ -4,7 +4,8 @@ apply plugin: 'com.google.firebase.crashlytics'
 
 android {
     compileSdkVersion 29
-    buildToolsVersion "29.0.2"
+    //buildToolsVersion "29.0.2"
+
     defaultConfig {
         applicationId "com.jangletech.qoogol"
         minSdkVersion 21
@@ -14,6 +15,17 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
+
+    signingConfigs {
+        release {
+            storeFile file('C:\\Jitendra\\JTQoogol\\keystore.jks')
+            storePassword 'ganesha$2020'
+            keyAlias 'Android'
+            keyPassword 'ganesha$2020'
+        }
+    }
+
+
 
     buildTypes {
         release {
@@ -28,7 +40,7 @@ android {
         }
 
         debug {
-            buildConfigField "String", "SECRET_KEY", '"ChatchilliJangle"'
+            buildConfigField "String", "SECRET_KEY", '"3931520917431241"'
             minifyEnabled false
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'

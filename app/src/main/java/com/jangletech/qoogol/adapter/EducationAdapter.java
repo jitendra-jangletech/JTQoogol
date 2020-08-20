@@ -4,6 +4,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -25,7 +27,16 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.View
     private Context mContext;
     private ItemEducationBinding itemEducationBinding;
     private EducationItemClickListener educationItemClickListener;
-    int call_from;
+    private int call_from;
+    private int lastPosition = -1;
+
+    private void setAnimation(View viewToAnimate, int position) {
+        if (position > lastPosition) {
+            Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.fall_down);
+            viewToAnimate.startAnimation(animation);
+            lastPosition = position;
+        }
+    }
 
     public EducationAdapter(Context mContext, List<Education> educationList, EducationItemClickListener educationItemClickListener, int call_from) {
         this.mContext = mContext;
@@ -72,6 +83,8 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.View
         } else {
             itemEducationBinding.delete.setVisibility(View.GONE);
         }
+
+        setAnimation(holder.itemEducationBinding.getRoot(), position);
     }
 
     @Override
