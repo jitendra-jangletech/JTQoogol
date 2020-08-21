@@ -222,7 +222,7 @@
                             android:drawableLeft="@drawable/nav_learning"
                             android:foreground="?attr/selectableItemBackground"
                             android:text="Doubts"
-                            android:visibility="gone" />
+                            android:visibility="visible" />
 
                         <TextView
                             android:id="@+id/tvNavDoubt"

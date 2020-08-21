@@ -185,4 +185,9 @@ dependencies {
     // Add the Firebase Crashlytics SDK.
     implementation 'com.google.firebase:firebase-messaging:20.1.6'
     implementation 'com.google.firebase:firebase-crashlytics:17.1.1'
+    implementation 'com.google.firebase:firebase-dynamic-links:19.1.0'
+
+
+
+
 }

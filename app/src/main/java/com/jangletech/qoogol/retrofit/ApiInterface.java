@@ -12,6 +12,7 @@ import com.jangletech.qoogol.model.CourseResponse;
 import com.jangletech.qoogol.model.DashBoard;
 import com.jangletech.qoogol.model.DegreeResponse;
 import com.jangletech.qoogol.model.DistrictResponse;
+import com.jangletech.qoogol.model.DoubtResponse;
 import com.jangletech.qoogol.model.FaqResponse;
 import com.jangletech.qoogol.model.FetchEducationResponse;
 import com.jangletech.qoogol.model.FetchSubjectResponseList;
@@ -34,6 +35,7 @@ import com.jangletech.qoogol.model.ShareResponse;
 import com.jangletech.qoogol.model.ShareUserResponse;
 import com.jangletech.qoogol.model.StartResumeTestResponse;
 import com.jangletech.qoogol.model.StateResponse;
+import com.jangletech.qoogol.model.SubjectResponse;
 import com.jangletech.qoogol.model.TestDetailsResponse;
 import com.jangletech.qoogol.model.TestListResponse;
 import com.jangletech.qoogol.model.UniversityResponse;
@@ -111,6 +113,14 @@ public interface ApiInterface {
                                            @Field(Constant.device_id) String deviceId,
                                            @Field(Constant.appName) String appName,
                                            @Field(Constant.CASE) String CaseL);
+
+    @FormUrlEncoded
+    @POST(Constant.FETCH_USER_SETTINGS)
+    Call<SubjectResponse> fetchSubjectList(@Field(Constant.u_user_id) String userId,
+                                           @Field(Constant.device_id) String deviceId,
+                                           @Field(Constant.appName) String appName,
+                                           @Field(Constant.CASE) String CaseL);
+
 
     @FormUrlEncoded
     @POST(Constant.FETCH_USER_SETTINGS)
@@ -427,7 +437,12 @@ public interface ApiInterface {
     Call<LearningQuestResponse> fetchFavQAApi(@Field(Constant.u_user_id) String userid,
                                               @Field(Constant.CASE) String caseR);
 
+    @FormUrlEncoded
+    @POST(Constant.FETCH_DOUBTS)
+    Call<DoubtResponse> fetchDoubtApi(@Field(Constant.u_user_id) String userid,
+                                      @Field(Constant.CASE) String caseR);
 
+    @FormUrlEncoded
     Call<LearningQuestResponse> fetchQAApi(@Field(Constant.u_user_id) int userid,
                                            @Field(Constant.q_id) String question);
 
@@ -558,14 +573,7 @@ public interface ApiInterface {
                                                @Field(Constant.SearchText) String searchText,
                                                @Field(Constant.pagestart) String pagestart);
 
-    @FormUrlEncoded
-    @POST(Constant.FETCH_CONNECTIONS)
-    Call<FriendsResponse> searchFriends(@Field(Constant.u_user_id) String userid,
-                                        @Field("Case") String connectionCase,
-                                        @Field(Constant.device_id) String device_id,
-                                        @Field("200Q") String app,
-                                        @Field(Constant.SearchText) String searchText,
-                                        @Field(Constant.pagestart) String pagestart);
+
 
     @FormUrlEncoded
     @POST(Constant.FETCH_CONNECTIONS)
@@ -720,6 +728,16 @@ public interface ApiInterface {
                                                        @Field("200Q") String app,
                                                        @Field(Constant.pagestart) String pagestart,
                                                        @Field("ForceRefresh") String refresh);
+
+
+    @FormUrlEncoded
+    @POST(Constant.FETCH_CONNECTIONS)
+    Call<FriendsResponse> searchFriends(@Field(Constant.u_user_id) String userid,
+                                        @Field("Case") String connectionCase,
+                                        @Field(Constant.device_id) String device_id,
+                                        @Field("200Q") String app,
+                                        @Field(Constant.SearchText) String searchText,
+                                        @Field(Constant.pagestart) String pagestart);
 
 
     @FormUrlEncoded

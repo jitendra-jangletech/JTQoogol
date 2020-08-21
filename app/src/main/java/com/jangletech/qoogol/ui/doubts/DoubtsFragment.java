@@ -16,7 +16,6 @@ import com.jangletech.qoogol.ui.BaseFragment;
 
 public class DoubtsFragment extends BaseFragment {
 
-    private DoubtsViewModel mViewModel;
     private DoubtsFragmentBinding mBinding;
 
     public static DoubtsFragment newInstance() {
@@ -33,7 +32,6 @@ public class DoubtsFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(DoubtsViewModel.class);
 
     }
 

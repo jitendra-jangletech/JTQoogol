@@ -151,7 +151,7 @@ public class MainActivity extends BaseActivity {
                 //navigateFlag = Nav.ASK_DOUBTS.toString();
                 if (navController.getCurrentDestination() != null &&
                         navController.getCurrentDestination().getId() != R.id.nav_doubts) {
-                    navController.navigate(R.id.nav_doubts);
+//                    navController.navigate(R.id.nav_doubts);
                 }
             }
             if (item.getItemId() == R.id.nav_notifications) {
