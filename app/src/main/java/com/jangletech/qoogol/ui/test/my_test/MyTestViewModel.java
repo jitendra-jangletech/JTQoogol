@@ -16,6 +16,7 @@ import com.jangletech.qoogol.model.Degree;
 import com.jangletech.qoogol.model.FetchSubjectResponse;
 import com.jangletech.qoogol.model.Institute;
 import com.jangletech.qoogol.model.TestModelNew;
+import com.jangletech.qoogol.model.UserPreferenceResponse;
 import com.jangletech.qoogol.model.UserPreferences;
 
 import java.util.List;
@@ -26,7 +27,7 @@ public class MyTestViewModel extends AndroidViewModel {
     private AppRepository appRepository;
     private MutableLiveData<List<TestModelNew>> allTestList;
     private MutableLiveData<List<FetchSubjectResponse>> allSubjectList;
-    private MutableLiveData<UserPreferences> userPreference;
+    private MutableLiveData<UserPreferenceResponse> userPreference;
     private MutableLiveData<List<ClassResponse>> classes;
     private MutableLiveData<List<Degree>> degrees;
     private MutableLiveData<List<Course>> courses;
@@ -73,12 +74,12 @@ public class MyTestViewModel extends AndroidViewModel {
         this.classes.setValue(classList);
     }
 
-    public LiveData<UserPreferences> getPreferences() {
+    public LiveData<UserPreferenceResponse> getPreferences() {
         return userPreference;
     }
 
-    public void setUserPreference(UserPreferences userPreference) {
-        this.userPreference.setValue(userPreference);
+    public void setUserPreference(UserPreferenceResponse userPreferenceResponse) {
+        this.userPreference.setValue(userPreferenceResponse);
     }
 
     public LiveData<List<FetchSubjectResponse>> getAllSubjects() {
@@ -115,34 +116,34 @@ public class MyTestViewModel extends AndroidViewModel {
         appRepository.insertTests(testModelNewList);
     }
 
-    public LiveData<List<TestModelNew>> getAllTests(String flag,String userId) {
-        Log.d(TAG, "getAllTests Flag : "+flag);
-        Log.d(TAG, "getAllTests userId : "+userId);
-        return appRepository.getAllTests(flag,userId);
+    public LiveData<List<TestModelNew>> getAllTests(String flag, String userId) {
+        Log.d(TAG, "getAllTests Flag : " + flag);
+        Log.d(TAG, "getAllTests userId : " + userId);
+        return appRepository.getAllTests(flag, userId);
     }
 
-    public LiveData<List<TestModelNew>> getAllFavTests(String flag,String userId) {
-        Log.d(TAG, "getAllTests Flag : "+flag);
-        Log.d(TAG, "getAllTests userId : "+userId);
-        return appRepository.getAllFavTests(flag,userId);
+    public LiveData<List<TestModelNew>> getAllFavTests(String flag, String userId) {
+        Log.d(TAG, "getAllTests Flag : " + flag);
+        Log.d(TAG, "getAllTests userId : " + userId);
+        return appRepository.getAllFavTests(flag, userId);
     }
 
-    public void updateFav(String flag,String userId,int tmId,boolean value){
-        appRepository.updateFavTest(flag,userId,tmId,value);
+    public void updateFav(String flag, String userId, int tmId, boolean value) {
+        appRepository.updateFavTest(flag, userId, tmId, value);
     }
 
-    public LiveData<List<TestModelNew>> getAllTestByDifficultyLevel(String flag,String userId,String diffLevel) {
-        Log.d(TAG, "getAllTests Flag : "+flag);
-        Log.d(TAG, "getAllTests userId : "+userId);
-        Log.d(TAG, "getAllTests DiffLevel : "+diffLevel);
-        return appRepository.getAllTestsFiltered(flag,userId,diffLevel);
+    public LiveData<List<TestModelNew>> getAllTestByDifficultyLevel(String flag, String userId, String diffLevel) {
+        Log.d(TAG, "getAllTests Flag : " + flag);
+        Log.d(TAG, "getAllTests userId : " + userId);
+        Log.d(TAG, "getAllTests DiffLevel : " + diffLevel);
+        return appRepository.getAllTestsFiltered(flag, userId, diffLevel);
     }
 
-    public LiveData<List<TestModelNew>> getAllTestByAvgRating(String flag,String userId,String avgRating) {
-        Log.d(TAG, "getAllTests Flag : "+flag);
-        Log.d(TAG, "getAllTests userId : "+userId);
-        Log.d(TAG, "getAllTests Avg Rating : "+avgRating);
-        return appRepository.getAllTestsAvgRating(flag,userId,avgRating);
+    public LiveData<List<TestModelNew>> getAllTestByAvgRating(String flag, String userId, String avgRating) {
+        Log.d(TAG, "getAllTests Flag : " + flag);
+        Log.d(TAG, "getAllTests userId : " + userId);
+        Log.d(TAG, "getAllTests Avg Rating : " + avgRating);
+        return appRepository.getAllTestsAvgRating(flag, userId, avgRating);
     }
 
     /*public void insertAttemptedTest(List<AttemptedTest> attemptedTests) {

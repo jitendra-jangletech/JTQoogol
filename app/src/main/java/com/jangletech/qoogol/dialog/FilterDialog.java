@@ -22,6 +22,7 @@ import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 
+
 import java.util.HashMap;
 
 public class FilterDialog extends BottomSheetDialogFragment implements View.OnClickListener {

@@ -39,6 +39,7 @@ import com.jangletech.qoogol.model.SubjectResponse;
 import com.jangletech.qoogol.model.TestDetailsResponse;
 import com.jangletech.qoogol.model.TestListResponse;
 import com.jangletech.qoogol.model.UniversityResponse;
+import com.jangletech.qoogol.model.UserPreferenceResponse;
 import com.jangletech.qoogol.model.UserProfile;
 import com.jangletech.qoogol.model.UserProfileResponse;
 import com.jangletech.qoogol.model.VerifyResponse;
@@ -109,10 +110,10 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST(Constant.FETCH_USER_SETTINGS)
-    Call<VerifyResponse> fetchUserSettings(@Field(Constant.u_user_id) String userId,
-                                           @Field(Constant.device_id) String deviceId,
-                                           @Field(Constant.appName) String appName,
-                                           @Field(Constant.CASE) String CaseL);
+    Call<UserPreferenceResponse> fetchUserSyllabus(@Field(Constant.u_user_id) String userId,
+                                                   @Field(Constant.device_id) String deviceId,
+                                                   @Field(Constant.appName) String appName,
+                                                   @Field(Constant.CASE) String CaseL);
 
     @FormUrlEncoded
     @POST(Constant.FETCH_USER_SETTINGS)

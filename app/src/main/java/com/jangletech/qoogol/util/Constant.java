@@ -264,7 +264,7 @@ public class Constant {
     public static final String FETCH_USER_SETTINGS = "q113ProcessUserSetting";
 
     public static final String FETCH_FAQ = "sm18FAQ";
-    public static final String UPDATE_USER_PROFILE = "sm23UpdateUserDetails";
+    public static final String UPDATE_USER_PROFILE = "sm67UpdateProfileDetails";
     public static final String FETCH_SUBJECTS = "q111FetchSubjectMaster";
     public static final String FETCH_CHAPTERS = "q114FetchChapterMaster";
     public static final String FETCH_NOTIFICATIONS = "sm28FetchNotifications";
@@ -447,6 +447,17 @@ public class Constant {
     public static final String true_false = "True False";
     public static final String match_pair = "Match the Pair";
 
+    //Syllabus
+    public static final String selected_ue_id = "1516";
+    public static final String subjectId = "1517";
+    public static final String chapterId1 = "1518";
+    public static final String chapterId2 = "1519";
+    public static final String chapterId3 = "1520";
+
+    public static final String subjectName = "1301";
+    public static final String chapterName1 = "1316-1";
+    public static final String chapterName2 = "1316-2";
+    public static final String chapterName3 = "1316-3";
 
     //Status code
     public static final String DB_TIMEOUT_ERROR = "Database Timeout error. Close app and try again.";

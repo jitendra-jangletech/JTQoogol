@@ -160,7 +160,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_15sdp"
-                    android:text="@string/course_year"
+                    android:text="Course Year/Class"
                     android:textColor="@color/colorSkyBlue"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/courseAutocompleteView" />

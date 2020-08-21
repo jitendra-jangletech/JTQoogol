@@ -4,7 +4,6 @@ apply plugin: 'com.google.firebase.crashlytics'
 
 android {
     compileSdkVersion 29
-    //buildToolsVersion "29.0.2"
 
     defaultConfig {
         applicationId "com.jangletech.qoogol"
@@ -24,8 +23,6 @@ android {
             keyPassword 'ganesha$2020'
         }
     }
-
-
 
     buildTypes {
         release {

@@ -178,6 +178,10 @@ public class MyTestFragment extends BaseFragment
             Log.d(TAG, "Filter Avg Rating : " + filterArgs.get(Constant.tm_avg_rating));
         }
 
+        mBinding.topLayout.setOnClickListener(v->{
+            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_syllabus, Bundle.EMPTY);
+        });
+
         mBinding.testListRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {

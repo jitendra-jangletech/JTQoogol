@@ -12,7 +12,7 @@ import androidx.databinding.DataBindingUtil;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.LayoutChangePasswordBinding;
 
-public class ChangePasswordDialog extends Dialog {
+public class ChangePasswordDialog extends Dialog{
 
     public ChangeDialogClickListener changeDialogClickListener;
     private LayoutChangePasswordBinding layoutChangePasswordBinding;

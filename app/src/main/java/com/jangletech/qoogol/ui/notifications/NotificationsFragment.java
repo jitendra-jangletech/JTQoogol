@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.SearchView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.MenuItemCompat;
@@ -102,12 +103,17 @@ public class NotificationsFragment extends BaseFragment implements NotificationA
             public void onChanged(@Nullable final List<Notification> notifications) {
                 Log.d(TAG, "onChanged: " + notifications.size());
                 if (notifications != null) {
-                    //showToast("Data Updated");
                     if (mBinding.swipeToRefresh.isRefreshing())
                         mBinding.swipeToRefresh.setRefreshing(false);
                     if (notificationResponse != null)
                         pageStart = notificationResponse.getPage();
                     notificationAdapter.updateNotificationList(notifications);
+                    if (notifications.size() > 0) {
+                        mBinding.tvNoTest.setVisibility(View.GONE);
+                    } else {
+                        mBinding.tvNoTest.setText("No Notifications.");
+                        mBinding.tvNoTest.setVisibility(View.VISIBLE);
+                    }
                 }
             }
         });
@@ -224,8 +230,6 @@ public class NotificationsFragment extends BaseFragment implements NotificationA
                 //ProgressDialog.getInstance().dismiss();
                 mBinding.swipeToRefresh.setRefreshing(false);
                 if (response.body() != null && response.body().getResponse().equals("200")) {
-                    //mViewModel.setNotificationList(response.body().getNotifications());
-                    //mViewModel.delete();
                     notificationResponse = response.body();
                     mViewModel.insert(response.body().getNotifications());
                 } else {
@@ -295,29 +299,29 @@ public class NotificationsFragment extends BaseFragment implements NotificationA
     @Override
     public boolean onQueryTextChange(String newText) {
         Log.d(TAG, "onQueryTextChange Text : " + newText.trim().toLowerCase());
-        searchNotification(newText.trim().toLowerCase());
+        //searchNotification(newText.trim().toLowerCase());
         return true;
     }
 
-    private void searchNotification(String searchTxt) {
-        List<Notification> filteredNotifications = new ArrayList<>();
-        if (searchTxt.isEmpty()) {
-            //empty search text
-            notificationAdapter.updateNotificationList(notificationList);
-        } else {
-            //search for text
-            for (Notification notification : notificationList) {
-                if (searchTxt.contains(notification.getW_notification_desc().toLowerCase())) {
-                    filteredNotifications.add(notification);
-                }
-            }
-
-            if (filteredNotifications.size() > 0) {
-                mBinding.tvEmptySearch.setVisibility(View.GONE);
-                notificationAdapter.updateNotificationList(filteredNotifications);
-            } else {
-                mBinding.tvEmptySearch.setVisibility(View.VISIBLE);
-            }
-        }
-    }
+//    private void searchNotification(String searchTxt) {
+//        List<Notification> filteredNotifications = new ArrayList<>();
+//        if (searchTxt.isEmpty()) {
+//            //empty search text
+//            notificationAdapter.updateNotificationList(notificationList);
+//        } else {
+//            //search for text
+//            for (Notification notification : notificationList) {
+//                if (searchTxt.contains(notification.getW_notification_desc().toLowerCase())) {
+//                    filteredNotifications.add(notification);
+//                }
+//            }
+//
+//            if (filteredNotifications.size() > 0) {
+//                mBinding.tvEmptySearch.setVisibility(View.GONE);
+//                notificationAdapter.updateNotificationList(filteredNotifications);
+//            } else {
+//                mBinding.tvEmptySearch.setVisibility(View.VISIBLE);
+//            }
+//        }
+//    }
 }
