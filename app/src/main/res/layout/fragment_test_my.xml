@@ -17,6 +17,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
+                style="@style/font_style"
                 android:id="@+id/tvCourse"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -26,6 +27,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                style="@style/font_style"
                 android:id="@+id/tvCourseValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -37,6 +39,7 @@
 
 
             <TextView
+                style="@style/font_style"
                 android:id="@+id/tvSubject"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -46,6 +49,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                style="@style/font_style"
                 android:id="@+id/tvSubjectValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -56,6 +60,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                style="@style/font_style"
                 android:id="@+id/tvChapter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -65,6 +70,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/tvCourse" />
 
             <TextView
+                style="@style/font_style"
                 android:id="@+id/tvChapterValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

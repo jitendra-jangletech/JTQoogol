@@ -102,7 +102,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_2sdp"
                     android:padding="@dimen/_2sdp"
-                    android:text="Class OR Year : "
+                    android:text="Class / Year : "
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     android:textColor="@color/colorSkyBlue"
                     app:layout_constraintLeft_toLeftOf="parent"

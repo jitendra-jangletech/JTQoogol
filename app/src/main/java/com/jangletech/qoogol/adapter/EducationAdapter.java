@@ -14,12 +14,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.ItemEducationBinding;
+import com.jangletech.qoogol.enums.Module;
 import com.jangletech.qoogol.model.Education;
 import com.jangletech.qoogol.util.DateUtils;
 
 import java.util.List;
-
-import static com.jangletech.qoogol.util.Constant.fetch_loged_in_user;
 
 public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.ViewHolder> {
 
@@ -27,8 +26,9 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.View
     private Context mContext;
     private ItemEducationBinding itemEducationBinding;
     private EducationItemClickListener educationItemClickListener;
-    private int call_from;
+    private String CallingFrom = "";
     private int lastPosition = -1;
+    private int checkedPosition = 0;
 
     private void setAnimation(View viewToAnimate, int position) {
         if (position > lastPosition) {
@@ -38,15 +38,22 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.View
         }
     }
 
-    public EducationAdapter(Context mContext, List<Education> educationList, EducationItemClickListener educationItemClickListener, int call_from) {
+    public Education getSelectedItem() {
+        if (checkedPosition != -1) {
+            return educationList.get(checkedPosition);
+        }
+        return null;
+    }
+
+    public EducationAdapter(Context mContext, List<Education> educationList, EducationItemClickListener educationItemClickListener, String callingFrom) {
         this.mContext = mContext;
         this.educationList = educationList;
         this.educationItemClickListener = educationItemClickListener;
-        this.call_from = call_from;
+        this.CallingFrom = callingFrom;
     }
 
-    public void updateList(List<Education> educationList){
-        this.educationList = educationList;
+    public void updateList(List<Education> educations) {
+        educationList = educations;
         notifyDataSetChanged();
     }
 
@@ -62,6 +69,25 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.View
     public void onBindViewHolder(@NonNull EducationAdapter.ViewHolder holder, int position) {
         Education education = educationList.get(position);
 
+        if (CallingFrom.equalsIgnoreCase(Module.Syllabus.toString())) {
+            holder.itemEducationBinding.delete.setVisibility(View.GONE);
+            holder.itemEducationBinding.right.setVisibility(View.VISIBLE);
+
+            if (checkedPosition == -1) {
+                holder.itemEducationBinding.right.setVisibility(View.GONE);
+            } else {
+                if (checkedPosition == position) {
+                    holder.itemEducationBinding.right.setVisibility(View.VISIBLE);
+                } else {
+                    holder.itemEducationBinding.right.setVisibility(View.GONE);
+                }
+            }
+
+        } else {
+            holder.itemEducationBinding.delete.setVisibility(View.VISIBLE);
+            holder.itemEducationBinding.right.setVisibility(View.GONE);
+        }
+
         holder.itemEducationBinding.tvUniversity.setText(education.getUbm_board_name());
         holder.itemEducationBinding.tvInstitute.setText(education.getIom_name());
         holder.itemEducationBinding.tvDegree.setText(education.getDm_degree_name());
@@ -70,29 +96,37 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.View
         holder.itemEducationBinding.tvStartDate.setText(education.getUe_startdate() != null ? DateUtils.getFormattedDate(education.getUe_startdate()) : "");
         holder.itemEducationBinding.tvEndDate.setText(education.getUe_enddate() != null ? DateUtils.getFormattedDate(education.getUe_enddate()) : "");
 
-        if (call_from == fetch_loged_in_user) {
-            holder.itemEducationBinding.rootLayout.setOnClickListener(v -> {
-                educationItemClickListener.onItemClick(education);
-            });
-            holder.itemEducationBinding.delete.setOnClickListener(v -> {
-                if (educationList.size() == 1) {
-                    androidx.appcompat.app.AlertDialog.Builder builder = new AlertDialog.Builder(mContext, R.style.AlertDialogStyle);
-                    builder.setTitle("Alert")
-                            .setMessage("You can't delete this item, Atleast one education is mandatory.")
-                            .setPositiveButton("Ok", null)
-                            .show();
-                } else {
-                    educationItemClickListener.onDeleteClick(education, position);
+        holder.itemEducationBinding.rootLayout.setOnClickListener(v -> {
+            if (CallingFrom.equalsIgnoreCase(Module.Syllabus.toString())) {
+                holder.itemEducationBinding.right.setVisibility(View.VISIBLE);
+                if (checkedPosition != position) {
+                    notifyItemChanged(checkedPosition);
+                    checkedPosition = position;
+                    educationItemClickListener.onItemClick(education);
                 }
-            });
-        } else {
-            itemEducationBinding.delete.setVisibility(View.GONE);
-        }
+            } else {
+                educationItemClickListener.onItemClick(education);
+            }
+
+        });
+        holder.itemEducationBinding.delete.setOnClickListener(v -> {
+            if (educationList.size() == 1) {
+                androidx.appcompat.app.AlertDialog.Builder builder = new AlertDialog.Builder(mContext, R.style.AlertDialogStyle);
+                builder.setTitle("Alert")
+                        .setMessage("You can't delete this item, Atleast one education is mandatory.")
+                        .setPositiveButton("Ok", null)
+                        .show();
+            } else {
+                educationItemClickListener.onDeleteClick(education, position);
+            }
+        });
 
         setAnimation(holder.itemEducationBinding.getRoot(), position);
     }
 
+
     @Override
+
     public int getItemCount() {
         return educationList.size();
     }

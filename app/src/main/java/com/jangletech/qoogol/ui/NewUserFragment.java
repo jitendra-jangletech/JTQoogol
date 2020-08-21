@@ -373,13 +373,13 @@ public class NewUserFragment extends BaseFragment {
     }
 
     private void doRegisterLogin(String mobile, String caseR, int countryCode, String passwordOtp, String deviceId, String appName) {
-        Log.d(TAG, "First Name : " + mBinding.tilFirstName.getEditText().getText().toString());
-        Log.d(TAG, "Last Name : " + mBinding.tilLastName.getEditText().getText().toString());
+        Log.d(TAG, "First Name : " + AESSecurities.getInstance().encrypt(mBinding.tilFirstName.getEditText().getText().toString().trim()));
+        Log.d(TAG, "Last Name : " + AESSecurities.getInstance().encrypt(mBinding.tilLastName.getEditText().getText().toString().trim()));
         Log.d(TAG, "Gender Name : " + gender);
-        Log.d(TAG, "Dob : " + mBinding.tilDob.getEditText().getText().toString().trim());
-        Log.d(TAG, "Email Mobile : " + mBinding.tilEmailMobile.getEditText().getText().toString().trim());
+        Log.d(TAG, "Dob : " + AESSecurities.getInstance().encrypt(mBinding.tilDob.getEditText().getText().toString().trim()));
+        Log.d(TAG, "Email Mobile : " + AESSecurities.getInstance().encrypt(mBinding.tilEmailMobile.getEditText().getText().toString().trim()));
         Log.d(TAG, "Otp : " + mBinding.tilOtp.getEditText().getText().toString().trim());
-        Log.d(TAG, "Password  : " + mBinding.tilPassword.getEditText().getText().toString().trim());
+        Log.d(TAG, "Password  : " + AESSecurities.getInstance().encrypt(mBinding.tilPassword.getEditText().getText().toString().trim()));
         Log.d(TAG, "Case R  : " + caseR);
         Log.d(TAG, "Country Code : " + countryCode);
         Log.d(TAG, "Device Id : " + deviceId);
@@ -407,7 +407,8 @@ public class NewUserFragment extends BaseFragment {
             @Override
             public void onResponse(Call<RegisterLoginModel> call, Response<RegisterLoginModel> response) {
                 ProgressDialog.getInstance().dismiss();
-                if (response.body() != null && response.body().getResponse().equals("200")) {
+                if (response.body() != null && response.body().getResponse() != null &&
+                        response.body().getResponse().equals("200")) {
                     mViewModel.setRegisterLoginModel(response.body());
                     if (caseR.equals("1") || caseR.equals("R")) {
                         new PreferenceManager(getActivity()).saveString(Constant.MOBILE, mobile);

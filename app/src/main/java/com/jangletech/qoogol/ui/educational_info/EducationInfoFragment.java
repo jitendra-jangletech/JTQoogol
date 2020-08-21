@@ -114,10 +114,9 @@ public class EducationInfoFragment extends BaseFragment implements EducationAdap
 
     private void setEducationListAdapter(List<Education> educationList, int call_from) {
         Log.d(TAG, "setEducationListAdapter: " + educationList.size());
-        educationAdapter = new EducationAdapter(requireActivity(), educationList, this, call_from);
+        educationAdapter = new EducationAdapter(requireActivity(), educationList, this, "");
         mBinding.educationListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mBinding.educationListRecyclerView.setAdapter(educationAdapter);
-
     }
 
     private void deleteEdu(HashMap<String, String> params, int pos) {

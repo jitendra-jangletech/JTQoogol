@@ -5,6 +5,7 @@ import com.jangletech.qoogol.util.Constant;
 
 public class UserPreferences {
 
+
     @SerializedName(Constant.clm_cy)
     private String classId;
 

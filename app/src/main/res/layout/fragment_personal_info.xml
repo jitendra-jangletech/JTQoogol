@@ -579,6 +579,7 @@
 
                             <com.google.android.material.button.MaterialButton
                                 android:id="@+id/btnImportContacts"
+                                android:visibility="gone"
                                 style="@style/font_style"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
