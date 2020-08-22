@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.DoubtItemBinding;
+import com.jangletech.qoogol.model.DoubtInfo;
 import com.jangletech.qoogol.model.Doubts;
 import com.jangletech.qoogol.util.UtilHelper;
 
@@ -24,11 +25,11 @@ import static com.jangletech.qoogol.util.Constant.my_doubts;
  */
 public class DoubtAdapter extends RecyclerView.Adapter<DoubtAdapter.ViewHolder> {
     private Activity activity;
-    private List<Doubts> doubtsList;
+    private List<DoubtInfo> doubtsList;
     DoubtItemBinding doubtItemBinding;
     int call_from;
 
-    public DoubtAdapter(Activity activity, List<Doubts> doubtsList, int call_from) {
+    public DoubtAdapter(Activity activity, List<DoubtInfo> doubtsList, int call_from) {
         this.activity = activity;
         this.doubtsList = doubtsList;
         this.call_from = call_from;
@@ -45,18 +46,15 @@ public class DoubtAdapter extends RecyclerView.Adapter<DoubtAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull DoubtAdapter.ViewHolder holder, int position) {
-        Doubts doubts = doubtsList.get(position);
+        DoubtInfo doubts = doubtsList.get(position);
         if (doubts.getProfile() != null && !doubts.getProfile().isEmpty()) {
             Glide.with(activity).load(UtilHelper.getProfileImageUrl(doubts.getProfile().trim())).circleCrop().placeholder(R.drawable.profile).into(doubtItemBinding.imgUserProfile);
         }
-        if (call_from==my_doubts)
-            doubtItemBinding.tvName.setText(doubts.getNameWithPage());
-        else
             doubtItemBinding.tvName.setText(doubts.getName());
 
-        doubtItemBinding.tvTimeStamp.setText(doubts.getPosted_date());
-        doubtItemBinding.doubtText.setText(doubts.getDoubt());
-        doubtItemBinding.doubtLink.setText(doubts.getDoubt_link());
+        doubtItemBinding.tvTimeStamp.setText(doubts.getDate_time());
+        doubtItemBinding.doubtText.setText(doubts.getDoubt_text());
+        doubtItemBinding.doubtLink.setText(doubts.createDynamicLink());
     }
 
     @Override

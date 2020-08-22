@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.DoubtGroupItemBinding;
 import com.jangletech.qoogol.model.DoubtGroups;
+import com.jangletech.qoogol.model.SubjectClass;
 import com.jangletech.qoogol.util.UtilHelper;
 
 import java.util.List;
@@ -22,13 +23,13 @@ import java.util.List;
  */
 public class DoubtGroupAdapter extends RecyclerView.Adapter<DoubtGroupAdapter.ViewHolder> {
     private Activity activity;
-    private List<DoubtGroups> doubtGroupsList;
+    private List<SubjectClass> subjectClassList;
     DoubtGroupItemBinding doubtGroupItemBinding;
     onItemCliclListener onItemCliclListener;
 
-    public DoubtGroupAdapter(Activity activity, List<DoubtGroups> doubtGroupsList, onItemCliclListener onItemCliclListener) {
+    public DoubtGroupAdapter(Activity activity, List<SubjectClass> subjectClassList, onItemCliclListener onItemCliclListener) {
         this.activity = activity;
-        this.doubtGroupsList = doubtGroupsList;
+        this.subjectClassList = subjectClassList;
         this.onItemCliclListener = onItemCliclListener;
     }
 
@@ -44,8 +45,15 @@ public class DoubtGroupAdapter extends RecyclerView.Adapter<DoubtGroupAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull DoubtGroupAdapter.ViewHolder holder, int position) {
 
-        DoubtGroups doubtGroups = doubtGroupsList.get(position);
-        doubtGroupItemBinding.tvsubjectName.setText(doubtGroups.getDoubt_group());
+        SubjectClass subjectClass = subjectClassList.get(position);
+        doubtGroupItemBinding.tvsubjectName.setText(subjectClass.getSubjectName());
+
+        doubtGroupItemBinding.container.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onItemCliclListener.onItemClick(subjectClass.getSubjectId());
+            }
+        });
 
     }
 
@@ -54,7 +62,7 @@ public class DoubtGroupAdapter extends RecyclerView.Adapter<DoubtGroupAdapter.Vi
     }
     @Override
     public int getItemCount() {
-        return doubtGroupsList.size();
+        return subjectClassList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

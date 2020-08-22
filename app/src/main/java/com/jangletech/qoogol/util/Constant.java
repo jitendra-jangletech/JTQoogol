@@ -248,6 +248,7 @@ public class Constant {
     //learning
     public static final String QUESTION_IMAGES_API = "https://jtmobileappstorage.blob.core.windows.net/spotmeets/media/images/";
     public static final String FETCH_QA = "q151FetchQA";
+    public static final String FETCH_DOUBTS = "q154FetchDoubtsInfo";
     public static final String REFER = "sm01SignupReferredBy";
     public static final String DASHBOARD = "q110FetchDashboard";
     public static final String PROCESS_QUESTION = "q141ProcessQuestion";
@@ -782,4 +783,11 @@ public class Constant {
     public static final String SCR_CO_ID = "2672";
 
     public static final String comment_like_flag = "1705";
+
+
+    //Doubts
+    public static final String crms_id = "376";
+    public static final String crms_cdatetime = "380";
+    public static final String crms_likes = "383D";
+    public static final String crms_views = "383C";
 }

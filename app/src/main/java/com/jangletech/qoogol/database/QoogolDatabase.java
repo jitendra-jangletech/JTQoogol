@@ -12,6 +12,7 @@ import com.jangletech.qoogol.database.converter.Converters;
 import com.jangletech.qoogol.database.dao.BlockedDao;
 import com.jangletech.qoogol.database.dao.ConnectionsDao;
 import com.jangletech.qoogol.database.dao.DashboardDao;
+import com.jangletech.qoogol.database.dao.DoubtDao;
 import com.jangletech.qoogol.database.dao.EducationDetailsDao;
 import com.jangletech.qoogol.database.dao.FollowReqDao;
 import com.jangletech.qoogol.database.dao.FollowersDao;
@@ -25,6 +26,7 @@ import com.jangletech.qoogol.database.dao.UserProfileDao;
 import com.jangletech.qoogol.model.BlockedConnections;
 import com.jangletech.qoogol.model.Connections;
 import com.jangletech.qoogol.model.DashBoard;
+import com.jangletech.qoogol.model.DoubtInfo;
 import com.jangletech.qoogol.model.Education;
 import com.jangletech.qoogol.model.FollowRequest;
 import com.jangletech.qoogol.model.Followers;
@@ -41,7 +43,7 @@ import com.jangletech.qoogol.model.UserProfile;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {LearningQuestionsNew.class, DashBoard.class, TestModelNew.class,
+@Database(entities = {LearningQuestionsNew.class, DashBoard.class, TestModelNew.class, DoubtInfo.class,
         TestQuestion.class, UserProfile.class, Education.class, Friends.class, Followers.class, Following.class,
         FriendRequest.class, FollowRequest.class, Connections.class, LearningQuestions.class, BlockedConnections.class,
         Notification.class}, version = 10, exportSchema = false)
@@ -68,6 +70,7 @@ public abstract class QoogolDatabase extends RoomDatabase {
     public abstract NotificationDao notificationDao();
 
     public abstract DashboardDao dashboardDao();
+    public abstract DoubtDao doubtDao();
 
     //public abstract TestDetailsDao testDetailsDao();
     public abstract TestDao testDao();
@@ -89,6 +92,7 @@ public abstract class QoogolDatabase extends RoomDatabase {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             QoogolDatabase.class, DB_NAME)
                             .fallbackToDestructiveMigration()
+                            .allowMainThreadQueries()
                             .build();
                 }
             }

@@ -8,6 +8,7 @@ import com.jangletech.qoogol.database.QoogolDatabase;
 import com.jangletech.qoogol.database.dao.BlockedDao;
 import com.jangletech.qoogol.database.dao.ConnectionsDao;
 import com.jangletech.qoogol.database.dao.DashboardDao;
+import com.jangletech.qoogol.database.dao.DoubtDao;
 import com.jangletech.qoogol.database.dao.EducationDetailsDao;
 import com.jangletech.qoogol.database.dao.FollowReqDao;
 import com.jangletech.qoogol.database.dao.FollowersDao;
@@ -21,6 +22,7 @@ import com.jangletech.qoogol.database.dao.UserProfileDao;
 import com.jangletech.qoogol.model.BlockedConnections;
 import com.jangletech.qoogol.model.Connections;
 import com.jangletech.qoogol.model.DashBoard;
+import com.jangletech.qoogol.model.DoubtInfo;
 import com.jangletech.qoogol.model.Education;
 import com.jangletech.qoogol.model.FollowRequest;
 import com.jangletech.qoogol.model.Followers;
@@ -51,6 +53,7 @@ public class AppRepository {
     private final FollowReqDao followReqDao;
     private final ConnectionsDao connectionsDao;
     private final BlockedDao blockedDao;
+    private final DoubtDao doubtDao;
     //private final TestDetailsDao testDetailsDao;
 
     public AppRepository(Context context) {
@@ -68,6 +71,7 @@ public class AppRepository {
         followReqDao = db.followReqDao();
         connectionsDao = db.connectionsDao();
         blockedDao = db.blockedDao();
+        doubtDao = db.doubtDao();
         //testDetailsDao = db.testDetailsDao();
     }
 
@@ -432,6 +436,10 @@ public class AppRepository {
         learningQuestionDao.upsertQuestions(learningQuestions);
     }
 
+    public void insertDoubts(List<DoubtInfo> doubtInfoList) {
+        doubtDao.insertDoubts(doubtInfoList);
+    }
+
     public void insertSavedQuestions(List<LearningQuestions> learningQuestions) {
         learningQuestionDao.insertSavedQuestions(learningQuestions);
     }
@@ -540,6 +548,14 @@ public class AppRepository {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public List<DoubtInfo> getQuestionDoubts(String questionId) {
+        return doubtDao.getQuestionDoubts(questionId);
+    }
+
+    public List<DoubtInfo> getMyDoubts(String userId) {
+        return doubtDao.getMyDoubts(userId);
     }
 
     public LiveData<List<LearningQuestionsNew>> getSharedQuestions(String CASE) {
