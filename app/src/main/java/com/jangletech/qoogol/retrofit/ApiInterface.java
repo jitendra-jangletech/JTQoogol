@@ -111,7 +111,13 @@ public interface ApiInterface {
     Call<UserPreferenceResponse> fetchUserSyllabus(@Field(Constant.u_user_id) String userId,
                                                    @Field(Constant.device_id) String deviceId,
                                                    @Field(Constant.appName) String appName,
-                                                   @Field(Constant.CASE) String CaseL);
+                                                   @Field(Constant.CASE) String CaseL,
+                                                   @Field(Constant.selected_ue_id) String ueId,
+                                                   @Field(Constant.subjectId) String subjectId,
+                                                   @Field(Constant.chapterId1) String chapterId1,
+                                                   @Field(Constant.chapterId2) String chapterId2,
+                                                   @Field(Constant.chapterId3) String chapterId3
+    );
 
     @FormUrlEncoded
     @POST(Constant.FETCH_USER_SETTINGS)

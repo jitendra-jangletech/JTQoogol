@@ -35,7 +35,6 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.activities.MainActivity;
 import com.jangletech.qoogol.databinding.FragmentHomeBinding;
-import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.model.DashBoard;
 import com.jangletech.qoogol.model.Education;
 import com.jangletech.qoogol.model.FetchEducationResponse;
@@ -45,6 +44,7 @@ import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.ui.QuestionAnalyticsFragment;
 import com.jangletech.qoogol.ui.TestAnalyticsFragment;
 import com.jangletech.qoogol.ui.educational_info.AddEduDialog;
+import com.jangletech.qoogol.util.AESSecurities;
 import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
@@ -152,7 +152,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
 
         if (dashBoard.getFirstName() != null || dashBoard.getLastName() != null) {
             saveString(getActivity(), Constant.u_first_name, dashBoard.getFirstName());
-            MainActivity.textViewDisplayName.setText(dashBoard.getFirstName() + " " + dashBoard.getLastName());
+            String uName = AESSecurities.getInstance().decrypt(dashBoard.getFirstName()) + " " + AESSecurities.getInstance().decrypt(dashBoard.getLastName());
+            MainActivity.textViewDisplayName.setText(uName);
         } else {
             MainActivity.textViewDisplayName.setText("Qoogol User");
         }

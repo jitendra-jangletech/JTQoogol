@@ -51,6 +51,7 @@ public class EducationInfoFragment extends BaseFragment implements EducationAdap
     private List<FetchEducationResponse> fetchEducationResponseList = new ArrayList();
     private ApiInterface apiService = ApiClient.getInstance().getApi();
     private String userid = "";
+    private String ueId = "";
     private PreferenceManager mSettings;
     Call<FetchEducationResponse> call;
 
@@ -114,7 +115,7 @@ public class EducationInfoFragment extends BaseFragment implements EducationAdap
 
     private void setEducationListAdapter(List<Education> educationList, int call_from) {
         Log.d(TAG, "setEducationListAdapter: " + educationList.size());
-        educationAdapter = new EducationAdapter(requireActivity(), educationList, this, "");
+        educationAdapter = new EducationAdapter(requireActivity(), educationList, this, "","");
         mBinding.educationListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mBinding.educationListRecyclerView.setAdapter(educationAdapter);
     }

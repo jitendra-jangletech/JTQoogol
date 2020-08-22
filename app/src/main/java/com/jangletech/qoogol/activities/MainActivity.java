@@ -616,7 +616,6 @@ public class MainActivity extends BaseActivity {
             } else {
                 if (navController.getCurrentDestination().getId() == R.id.nav_edit_profile ||
                         navController.getCurrentDestination().getId() == R.id.nav_settings ||
-                        navController.getCurrentDestination().getId() == R.id.nav_syllabus ||
                         navController.getCurrentDestination().getId() == R.id.nav_about ||
                         navController.getCurrentDestination().getId() == R.id.nav_import_contacts ||
                         navController.getCurrentDestination().getId() == R.id.nav_code_conduct ||
@@ -632,6 +631,8 @@ public class MainActivity extends BaseActivity {
                         navController.getCurrentDestination().getId() == R.id.nav_connections ||
                         navController.getCurrentDestination().getId() == R.id.nav_requests) {
                     navController.navigate(R.id.nav_home);
+                } else if (navController.getCurrentDestination().getId() == R.id.nav_syllabus) {
+                    navController.navigate(R.id.nav_test_my);
                 } else {
                     navController.popBackStack();
                 }

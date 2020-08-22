@@ -22,6 +22,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -159,7 +160,17 @@ public class MyTestFragment extends BaseFragment
 
     private void initViews() {
         Log.d(TAG, "initViews Params : " + AppUtils.loadHashMap(mContext));
-        //prefs = android.preference.PreferenceManager.getDefaultSharedPreferences(mContext);
+        if (getString(Constant.subjectName) != null &&
+                !getString(Constant.subjectName).isEmpty()) {
+            String chapters = getString(Constant.chapterName1) + ","
+                    + getString(Constant.chapterName2) + ","
+                    + getString(Constant.chapterName3);
+            mBinding.tvSubjectValue.setText(getString(Constant.subjectName));
+            mBinding.tvChapterValue.setText(chapters);
+        } else {
+            mBinding.topLayout.setVisibility(View.GONE);
+        }
+
         params = new HashMap<>();
         if (params == null)
             params = AppUtils.loadHashMap(mContext);
@@ -178,8 +189,9 @@ public class MyTestFragment extends BaseFragment
             Log.d(TAG, "Filter Avg Rating : " + filterArgs.get(Constant.tm_avg_rating));
         }
 
-        mBinding.topLayout.setOnClickListener(v->{
-            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_syllabus, Bundle.EMPTY);
+        mBinding.tvInfo.setOnClickListener(v -> {
+            NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
+            navController.navigate(R.id.nav_syllabus, Bundle.EMPTY);
         });
 
         mBinding.testListRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {

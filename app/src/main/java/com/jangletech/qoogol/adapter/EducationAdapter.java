@@ -1,6 +1,7 @@
 package com.jangletech.qoogol.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,13 +23,15 @@ import java.util.List;
 
 public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.ViewHolder> {
 
+    private static final String TAG = "EducationAdapter";
     private List<Education> educationList;
     private Context mContext;
     private ItemEducationBinding itemEducationBinding;
     private EducationItemClickListener educationItemClickListener;
     private String CallingFrom = "";
+    private String ueId = "";
     private int lastPosition = -1;
-    private int checkedPosition = 0;
+    private int checkedPosition = -1;
 
     private void setAnimation(View viewToAnimate, int position) {
         if (position > lastPosition) {
@@ -45,15 +48,28 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.View
         return null;
     }
 
-    public EducationAdapter(Context mContext, List<Education> educationList, EducationItemClickListener educationItemClickListener, String callingFrom) {
+    public EducationAdapter(Context mContext, List<Education> educationList, EducationItemClickListener educationItemClickListener, String callingFrom, String ueId) {
         this.mContext = mContext;
         this.educationList = educationList;
         this.educationItemClickListener = educationItemClickListener;
         this.CallingFrom = callingFrom;
+        this.ueId = ueId;
+        checkedPosition = setUePosition(educationList, ueId);
+    }
+
+    private int setUePosition(List<Education> educations, String ueId) {
+        Log.d(TAG, "setUePosition UeId: " + ueId);
+        for (int i = 0; i < educations.size(); i++) {
+            if (educations.get(i).getUe_id().equals(ueId)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     public void updateList(List<Education> educations) {
         educationList = educations;
+        checkedPosition = setUePosition(educations, ueId);
         notifyDataSetChanged();
     }
 

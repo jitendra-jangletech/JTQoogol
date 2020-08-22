@@ -1,6 +1,5 @@
 package com.jangletech.qoogol.util;
 
-
 /**
  * Created by Pritali on 1/28/2020.
  */

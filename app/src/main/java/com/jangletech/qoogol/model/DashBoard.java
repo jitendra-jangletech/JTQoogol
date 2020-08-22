@@ -4,7 +4,6 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
-import com.jangletech.qoogol.util.AESSecurities;
 import com.jangletech.qoogol.util.Constant;
 
 import org.jetbrains.annotations.NotNull;
@@ -243,7 +242,8 @@ public class DashBoard {
     }
 
     public String getFirstName() {
-        return AESSecurities.getInstance().decrypt(firstName);
+        return firstName;
+        //return AESSecurities.getInstance().decrypt(firstName);
     }
 
     public void setFirstName(String firstName) {
@@ -251,7 +251,8 @@ public class DashBoard {
     }
 
     public String getLastName() {
-        return AESSecurities.getInstance().decrypt(lastName);
+        return lastName;
+        //return AESSecurities.getInstance().decrypt(lastName);
     }
 
     public void setLastName(String lastName) {

@@ -46,7 +46,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/_2sdp"
-                        android:src="@drawable/ic_right_mtp"
+                        android:src="@drawable/ic_edit_profile"
                         android:visibility="visible"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -239,7 +239,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_10sdp"
                         app:selectionRequired="false"
-                        app:singleSelection="true" />
+                        app:singleSelection="false" />
 
                     <View
                         android:layout_width="match_parent"
@@ -255,6 +255,7 @@
 
 
             <TextView
+                android:visibility="gone"
                 android:id="@+id/btnSave"
                 style="@style/font_style"
                 android:layout_width="match_parent"

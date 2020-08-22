@@ -16,69 +16,95 @@
             android:padding="@dimen/_2sdp"
             app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                style="@style/font_style"
-                android:id="@+id/tvCourse"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Course : "
-                android:textSize="15dp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:cardElevation="@dimen/_5sdp"
+                android:layout_height="match_parent">
 
-            <TextView
-                style="@style/font_style"
-                android:id="@+id/tvCourseValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Bachelor Of Technology"
-                android:textColor="@color/colorBlack"
-                android:textSize="15dp"
-                app:layout_constraintLeft_toRightOf="@+id/tvCourse"
-                app:layout_constraintTop_toTopOf="parent" />
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:padding="@dimen/_2sdp"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:visibility="gone"
+                        style="@style/font_style"
+                        android:id="@+id/tvCourse"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Course : "
+                        android:textSize="15dp"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:visibility="gone"
+                        style="@style/font_style"
+                        android:id="@+id/tvCourseValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Bachelor Of Technology"
+                        android:textColor="@color/colorBlack"
+                        app:layout_constraintLeft_toRightOf="@+id/tvCourse"
+                        app:layout_constraintTop_toTopOf="parent" />
 
 
-            <TextView
-                style="@style/font_style"
-                android:id="@+id/tvSubject"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Subject : "
-                android:textSize="15dp"
-                app:layout_constraintRight_toLeftOf="@+id/tvSubjectValue"
-                app:layout_constraintTop_toTopOf="parent" />
+                    <TextView
+                        style="@style/font_style"
+                        android:id="@+id/tvSubject"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Subject : "
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                style="@style/font_style"
-                android:id="@+id/tvSubjectValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Science"
-                android:textColor="@color/colorBlack"
-                android:textSize="15dp"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                    <TextView
+                        style="@style/font_style"
+                        android:id="@+id/tvSubjectValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Science"
+                        android:textColor="@color/colorBlack"
+                        app:layout_constraintStart_toEndOf="@+id/tvSubject"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                style="@style/font_style"
-                android:id="@+id/tvChapter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Chapters : "
-                android:textSize="15dp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvCourse" />
+                    <TextView
+                        style="@style/font_style"
+                        android:id="@+id/tvChapter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Chapters : "
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tvSubject" />
 
-            <TextView
-                style="@style/font_style"
-                android:id="@+id/tvChapterValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Math,Physics,Chemistry "
-                android:textColor="@color/colorBlack"
-                android:textSize="15dp"
-                app:layout_constraintLeft_toRightOf="@+id/tvChapter"
-                app:layout_constraintTop_toBottomOf="@+id/tvCourse" />
+                    <TextView
+                        style="@style/font_style"
+                        android:id="@+id/tvChapterValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Math,Physics,Chemistry "
+                        android:textColor="@color/colorBlack"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toRightOf="@+id/tvChapter" />
+
+                    <TextView
+                        android:padding="@dimen/_5sdp"
+                        android:clickable="true"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:drawableTint="@color/black"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        android:background="@android:drawable/ic_menu_info_details"
+                        android:id="@+id/tvInfo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.card.MaterialCardView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

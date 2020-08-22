@@ -18,6 +18,7 @@ import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.FragmentSyllabusBinding;
 import com.jangletech.qoogol.dialog.EducationListDialog;
 import com.jangletech.qoogol.dialog.ProgressDialog;
+import com.jangletech.qoogol.model.Education;
 import com.jangletech.qoogol.model.SyllabusChapter;
 import com.jangletech.qoogol.model.SyllabusSubject;
 import com.jangletech.qoogol.model.UserPreferenceResponse;
@@ -26,7 +27,9 @@ import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.ui.test.my_test.MyTestViewModel;
 import com.jangletech.qoogol.util.Constant;
+import com.jangletech.qoogol.util.DateUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -34,10 +37,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SyllabusFragment extends BaseFragment implements View.OnClickListener {
+public class SyllabusFragment extends BaseFragment implements View.OnClickListener, EducationListDialog.EducationDialogClickListener {
 
     private static final String TAG = "SettingsFragment";
     private MyTestViewModel mViewModel;
+    private boolean flag = false;
     private FragmentSyllabusBinding mBinding;
     private UserPreferenceResponse response;
     private ApiInterface apiService = ApiClient.getInstance().getApi();
@@ -52,34 +56,46 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
                              @Nullable Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_syllabus, container, false);
         mViewModel = ViewModelProviders.of(this).get(MyTestViewModel.class);
+        params.put(Constant.appName, Constant.APP_NAME);
+        params.put(Constant.u_user_id, getUserId(getActivity()));
+        params.put(Constant.device_id, getDeviceId(getActivity()));
+        params.put(Constant.CASE, "L");
+        params.put(Constant.selected_ue_id, "");
+        params.put(Constant.subjectId, "");
+        params.put(Constant.chapterId1, "");
+        params.put(Constant.chapterId2, "");
+        params.put(Constant.chapterId3, "");
         return mBinding.getRoot();
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        fetchUserPreferences();
+        fetchUpdatePreferences(params);
 
-        mBinding.chapterChipGrp.setOnCheckedChangeListener(new ChipGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(ChipGroup chipGroup, int checkedId) {
-                Chip chip = ((Chip) chipGroup.getChildAt(chipGroup.getCheckedChipId()));
-                if (chip != null) {
-                    Log.d(TAG, "initViews : " + chip.getTag().toString());
-                    String[] selectedChapterIds = getSelectedChapters().split(" ", -1);
-                    for (int i = 0; i < selectedChapterIds.length; i++) {
-                        if (selectedChapterIds[i] != null && !selectedChapterIds[i].isEmpty()) {
-                            if (selectedChapterIds.length == 1 && i == 0)
-                                params.put(Constant.chapterId1, selectedChapterIds[0]);
-                            if (selectedChapterIds.length == 2 && i == 1)
-                                params.put(Constant.chapterId2, selectedChapterIds[1]);
-                            if (selectedChapterIds.length == 3 && i == 2)
-                                params.put(Constant.chapterId3, selectedChapterIds[2]);
-                        }
-                    }
-                }
-            }
-        });
+//        mBinding.chapterChipGrp.setOnCheckedChangeListener(new ChipGroup.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(ChipGroup chipGroup, int checkedId) {
+//                Chip chip = ((Chip) chipGroup.getChildAt(chipGroup.getCheckedChipId()));
+//                if (chip != null) {
+//                    Log.d(TAG, "initViews : " + chip.getTag().toString());
+//                    String[] selectedChapterIds = getSelectedChapters().split(" ", -1);
+//                    //if(selectedChapterIds.length == 1)
+//                    Log.d(TAG, "onCheckedChanged Length : " + selectedChapterIds.length);
+//
+////                    for (int i = 0; i < selectedChapterIds.length; i++) {
+////                        if (selectedChapterIds[i] != null && !selectedChapterIds[i].isEmpty()) {
+////                            if (selectedChapterIds.length == 1 && i == 0)
+////                                params.put(Constant.chapterId1, selectedChapterIds[0]);
+////                            if (selectedChapterIds.length == 2 && i == 1)
+////                                params.put(Constant.chapterId2, selectedChapterIds[1]);
+////                            if (selectedChapterIds.length == 3 && i == 2)
+////                                params.put(Constant.chapterId3, selectedChapterIds[2]);
+////                        }
+////                    }
+//                }
+//            }
+//        });
 
         mBinding.subjectsChipGrp.setOnCheckedChangeListener(new ChipGroup.OnCheckedChangeListener() {
             @Override
@@ -91,6 +107,9 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
                         params.put(Constant.subjectId, chip.getTag().toString());
                     else
                         params.put(Constant.subjectId, null);
+
+                    params.put(Constant.CASE, "U");
+                    fetchUpdatePreferences(params);
                 }
             }
         });
@@ -100,20 +119,33 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
             public void onChanged(UserPreferenceResponse userPreferences) {
                 if (userPreferences != null) {
                     response = userPreferences;
-                    Log.d(TAG, "onChanged University : " + userPreferences.getSubjectName());
-                    Log.d(TAG, "onChanged Institute : " + userPreferences.getSubjectName());
-                    mBinding.tvUniversity.setText(userPreferences.getSubjectId());
-                    mBinding.tvInstitute.setText(userPreferences.getSubjectName());
+                    //Log.d(TAG, "onChanged University : " + userPreferences.getSubjectName());
+                    //Log.d(TAG, "onChanged Institute : " + userPreferences.getSubjectName());
+                    //mBinding.tvUniversity.setText(userPreferences.getSubjectId());
+                    //mBinding.tvInstitute.setText(userPreferences.getSubjectName());
+
+                    saveString(getActivity(), Constant.subjectName, userPreferences.getSubjectName());
+                    saveString(getActivity(), Constant.chapterName1, userPreferences.getChapterName1());
+                    saveString(getActivity(), Constant.chapterName2, userPreferences.getChapterName2());
+                    saveString(getActivity(), Constant.chapterName3, userPreferences.getChapterName3());
+
                     if (userPreferences.getSubjectList() != null)
                         prepareSubjectChips(userPreferences.getSubjectList());
                     if (userPreferences.getChapterList() != null)
                         prepareChapterChips(userPreferences.getChapterList());
+
+
+                    params.put(Constant.selected_ue_id, userPreferences.getSelectedUeId());
+                    params.put(Constant.subjectId, userPreferences.getSubjectId());
+                    params.put(Constant.chapterId1, userPreferences.getChapterId1());
+                    params.put(Constant.chapterId2, userPreferences.getChapterId2());
+                    params.put(Constant.chapterId3, userPreferences.getChapterId3());
                 }
             }
         });
 
         mBinding.rootLayout.setOnClickListener(v -> {
-            new EducationListDialog(getActivity())
+            new EducationListDialog(getActivity(), response.getSelectedUeId(), this)
                     .show();
         });
     }
@@ -127,7 +159,11 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
                     res = res + " " + chip.getTag().toString();
             }
         }
-        return res.trim();
+        Log.d(TAG, "getSelectedChapters: " + res.trim());
+        if (res != null)
+            return res.trim();
+        else
+            return "";
     }
 
     private void prepareSubjectChips(List<SyllabusSubject> list) {
@@ -137,11 +173,12 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
             chip.setText(list.get(i).getSubjectName());
             chip.setTag(list.get(i).getSubjectId());
             chip.setId(i);
-            chip.setOnClickListener(this);
             chip.setClickable(true);
             chip.setCheckable(true);
-            if (response.getSubjectId().equals(list.get(i).getSubjectId()))
+            if (response.getSubjectId().equals(list.get(i).getSubjectId())) {
+                Log.d(TAG, "prepareSubjectChips Checked : " + response.getSubjectName());
                 chip.setChecked(true);
+            }
             mBinding.subjectsChipGrp.addView(chip);
         }
     }
@@ -149,18 +186,18 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
     private void prepareChapterChips(List<SyllabusChapter> list) {
         mBinding.chapterChipGrp.removeAllViews();
         for (int i = 0; i < list.size(); i++) {
-            Chip chip = (Chip) LayoutInflater.from(mBinding.subjectsChipGrp.getContext()).inflate(R.layout.chip_new, mBinding.subjectsChipGrp, false);
+            Chip chip = (Chip) LayoutInflater.from(mBinding.chapterChipGrp.getContext()).inflate(R.layout.chip_new, mBinding.chapterChipGrp, false);
             chip.setText(list.get(i).getChapterName());
             chip.setTag(list.get(i).getChapterId());
             chip.setId(i);
             chip.setOnClickListener(this);
             chip.setClickable(true);
             chip.setCheckable(true);
-            if (response.getChapterId1().equalsIgnoreCase(list.get(i).getChapterId()) ||
-                    response.getChapterId2().equalsIgnoreCase(list.get(i).getChapterId()) ||
-                    response.getChapterId3().equalsIgnoreCase(list.get(i).getChapterId()))
+            if (response.getChapterId1().equals(list.get(i).getChapterId()) ||
+                    response.getChapterId2().equals(list.get(i).getChapterId()) ||
+                    response.getChapterId3().equals(list.get(i).getChapterId()))
                 chip.setChecked(true);
-            mBinding.subjectsChipGrp.addView(chip);
+            mBinding.chapterChipGrp.addView(chip);
         }
     }
 
@@ -201,13 +238,19 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
 //    }
 
 
-    private void fetchUserPreferences() {
+    private void fetchUpdatePreferences(HashMap<String, String> params) {
+        Log.d(TAG, "fetchUpdatePreferences PARAMS : " + params);
         ProgressDialog.getInstance().show(requireActivity());
         Call<UserPreferenceResponse> call = apiService.fetchUserSyllabus(
-                getUserId(getActivity()),
-                getDeviceId(getActivity()),
-                Constant.APP_NAME,
-                "L"
+                params.get(Constant.u_user_id),
+                params.get(Constant.device_id),
+                params.get(Constant.appName),
+                params.get(Constant.CASE),
+                params.get(Constant.selected_ue_id),
+                params.get(Constant.subjectId),
+                params.get(Constant.chapterId1),
+                params.get(Constant.chapterId2),
+                params.get(Constant.chapterId3)
         );
         call.enqueue(new Callback<UserPreferenceResponse>() {
             @Override
@@ -302,6 +345,62 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
 
     @Override
     public void onClick(View v) {
+        if (v != null) {
+            List<String> selectedChapterId = new ArrayList<>();
+            Chip chip = (Chip) v;
+            int Counter = 0;
+            String[] selectedIds = getSelectedChapters().split(" ", -1);
+            Log.d(TAG, "onClick: " + selectedIds);
+            for (int i = 0; i < selectedIds.length; i++) {
+                if (selectedIds[i] != null) {
+                    selectedIds[i].trim();
+                    if (!selectedIds[i].isEmpty()) {
+                        Counter++;
+                        selectedChapterId.add(selectedIds[i]);
+                    }
+                }
+            }
+            if (Counter > 3) {
+                chip.setChecked(false);
+                showToast("You can select only 3 chapters.");
+            } else {
+                //update chapter ids
+                for (int i = 0; i < selectedChapterId.size(); i++) {
+                    Log.d(TAG, "\n onClick Id : " + selectedChapterId.get(i));
+                }
+                if (selectedChapterId.size() == 1) {
+                    params.put(Constant.chapterId1, selectedChapterId.get(0));
+                    params.put(Constant.chapterId2, null);
+                    params.put(Constant.chapterId3, null);
+                }
+                if (selectedChapterId.size() == 2) {
+                    params.put(Constant.chapterId1, selectedChapterId.get(0));
+                    params.put(Constant.chapterId2, selectedChapterId.get(1));
+                    params.put(Constant.chapterId3, null);
+                }
+                if (selectedChapterId.size() == 3) {
+                    params.put(Constant.chapterId1, selectedChapterId.get(0));
+                    params.put(Constant.chapterId2, selectedChapterId.get(1));
+                    params.put(Constant.chapterId3, selectedChapterId.get(2));
+                }
+                params.put(Constant.CASE, "U");
+                fetchUpdatePreferences(params);
+            }
+        }
+    }
 
+    @Override
+    public void onSaveButtonClick(Education education) {
+        mBinding.tvUniversity.setText(education.getUbm_board_name());
+        mBinding.tvInstitute.setText(education.getIom_name());
+        mBinding.tvDegree.setText(education.getDm_degree_name());
+        mBinding.tvCourse.setText(education.getCo_name());
+        mBinding.tvCourseYear.setText(education.getUe_cy_num());
+        mBinding.tvStartDate.setText(DateUtils.getFormattedDate(education.getUe_startdate()));
+        mBinding.tvEndDate.setText(DateUtils.getFormattedDate(education.getUe_enddate()));
+        params.put(Constant.CASE, "U");
+        params.put(Constant.selected_ue_id, education.getUe_id());
+        fetchUpdatePreferences(params);
+        showToast("Education Preference Updated.");
     }
 }
