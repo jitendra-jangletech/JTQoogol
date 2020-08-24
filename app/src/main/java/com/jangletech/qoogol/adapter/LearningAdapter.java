@@ -378,7 +378,7 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
 
             learningItemBinding.askDoubt.setOnClickListener(v -> {
                 LearningQuestionsNew learningQuestions = learningQuestionsList.get(getAdapterPosition());
-                DoubtListingDialog doubtListingDialog = new DoubtListingDialog(activity, String.valueOf(learningQuestions.getQuestion_id()), tq_doubts);
+                DoubtListingDialog doubtListingDialog = new DoubtListingDialog(activity, String.valueOf(learningQuestions.getQuestion_id()), learningQuestions.getSubject_id(),tq_doubts);
                 doubtListingDialog.show();
             });
 

@@ -14,6 +14,7 @@ import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.dynamiclinks.ShortDynamicLink;
 import com.google.gson.annotations.SerializedName;
 import com.jangletech.qoogol.util.AESSecurities;
+import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import java.util.Locale;
 import java.util.concurrent.Executor;
@@ -115,7 +116,7 @@ public class DoubtInfo {
     }
 
     public String getDoubt_text() {
-        return doubt_text!=null?doubt_text:"";
+        return doubt_text!=null? AppUtils.decodedString(doubt_text) :"";
     }
 
     public void setDoubt_text(String doubt_text) {
@@ -142,26 +143,4 @@ public class DoubtInfo {
         return String.format(Locale.ENGLISH, "%s %s", AESSecurities.getInstance().decrypt(first_name), AESSecurities.getInstance().decrypt(last_name));
     }
 
-    public String createDynamicLink() {
-        String link = "https://www.chatchilli.com/?postId=" + doubt_id;
-        final String[] sharelink = {""};
-        FirebaseDynamicLinks.getInstance().createDynamicLink()
-                .setLink(Uri.parse(link))
-                .setDomainUriPrefix("https://chatchilli.page.link")
-                .setAndroidParameters(new DynamicLink.AndroidParameters.Builder().build())
-                .setIosParameters(new DynamicLink.IosParameters.Builder("com.jangletech.chatchilli")
-                        .setAppStoreId("1524294565").build())
-                .buildShortDynamicLink()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        // Short link created
-                        Uri shortLink = task.getResult().getShortLink();
-                        Uri flowchartLink = task.getResult().getPreviewLink();
-                        sharelink[0] = shortLink.toString();
-                    }
-                });
-
-
-        return sharelink[0];
-    }
 }

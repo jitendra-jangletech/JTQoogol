@@ -1697,7 +1697,7 @@ public class PractiseViewPagerAdapter extends PagerAdapter
 
         if (imgDoubts != null) {
             imgDoubts.setOnClickListener(v -> {
-                new DoubtListingDialog(context, null, Constant.my_doubts)
+                new DoubtListingDialog(context, null, "",Constant.my_doubts)
                         .show();
             });
         }

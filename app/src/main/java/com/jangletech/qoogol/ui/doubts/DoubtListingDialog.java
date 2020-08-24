@@ -2,12 +2,17 @@ package com.jangletech.qoogol.ui.doubts;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,6 +27,7 @@ import com.jangletech.qoogol.model.DoubtInfo;
 import com.jangletech.qoogol.model.DoubtResponse;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
+import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 
 import java.util.ArrayList;
@@ -48,13 +54,14 @@ public class DoubtListingDialog extends Dialog {
     AddDoubtDialog addDoubtDialog;
     private ApiInterface apiService = ApiClient.getInstance().getApi();
     AppRepository mAppRepository = new AppRepository(context);
+    String subject_id;
 
-
-    public DoubtListingDialog(@NonNull Activity context, String questionId, int call_from) {
+    public DoubtListingDialog(@NonNull Activity context, String questionId, String subject_id, int call_from) {
         super(context, android.R.style.Theme_DeviceDefault_Light_DarkActionBar);
         this.context = context;
         this.call_from = call_from;
         this.questionId = questionId;
+        this.subject_id = subject_id;
     }
 
     @Override
@@ -82,7 +89,7 @@ public class DoubtListingDialog extends Dialog {
                             if (call_from== tq_doubts) {
                                 initRecycler(mAppRepository.getQuestionDoubts(questionId));
                             } else {
-                                initRecycler(mAppRepository.getMyDoubts("1002"));
+                                initRecycler(mAppRepository.getMyDoubts(mSettings.getUserId()));
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -113,77 +120,63 @@ public class DoubtListingDialog extends Dialog {
         doubtListingBinding.btnCloseDialog.setOnClickListener(v -> dismiss());
 
         doubtListingBinding.addDoubt.setOnClickListener(v -> {
-            if (call_from==tq_doubts)
-                 addDoubtDialog = new AddDoubtDialog(context,questionId);
-            else
-                 addDoubtDialog = new AddDoubtDialog(context,null);
-            addDoubtDialog.show();
+            if (call_from==tq_doubts) {
+                Bundle bundle = new Bundle();
+                bundle.putString(Constant.u_user_id, new PreferenceManager(context).getUserId());
+                bundle.putString("SCREEN", "List_GROUPS");
+                bundle.putString(Constant.sm_id,subject_id);
+                bundle.putString(Constant.appName,"Q");
+                bundle.putString(Constant.q_id,questionId);
+                bundle.putString(Constant.TorQ,"Q");
+                callChatChilliApp(bundle);
+            } else {
+                addDoubtDialog = new AddDoubtDialog(context,null);
+                addDoubtDialog.show();
+            }
+
         });
         doubtListingBinding.doubtSwiperefresh.setOnRefreshListener(() -> getDataFromApi());
         getDataFromApi();
-
-
-
-
     }
 
 
-    private void getData() {
-        doubtsList.clear();
-
-//        Doubts doubts = new Doubts();
-//        doubts.setFirst_name("John");
-//        doubts.setLast_name("Miller");
-//        doubts.setProfile("000000/00000010650001.png");
-//        doubts.setPosted_date("1 hour ago");
-//        doubts.setPosted_group("Chemistry");
-//        doubts.setDoubt("Doubt text will be here");
-//        doubts.setDoubt_link("Doubt link will be here");
-//        doubtsList.add(doubts);
-//
-//        Doubts doubts1 = new Doubts();
-//        doubts1.setFirst_name("Angel");
-//        doubts1.setLast_name("Moses");
-//        doubts1.setProfile("000000/00000010650001.png");
-//        doubts1.setPosted_date("1 hour ago");
-//        doubts1.setPosted_group("Chemistry");
-//        doubts1.setDoubt("Doubt text will be here");
-//        doubts1.setDoubt_link("Doubt link will be here");
-//        doubtsList.add(doubts1);
-//
-//
-//        Doubts doubts2 = new Doubts();
-//        doubts2.setFirst_name("Tania");
-//        doubts2.setLast_name("Melvin");
-//        doubts2.setProfile("000000/00000010650001.png");
-//        doubts2.setPosted_date("1 hour ago");
-//        doubts2.setPosted_group("Chemistry");
-//        doubts2.setDoubt("Doubt text will be here");
-//        doubts2.setDoubt_link("Doubt link will be here");
-//        doubtsList.add(doubts2);
-//
-//        Doubts doubts3 = new Doubts();
-//        doubts3.setFirst_name("Dennis");
-//        doubts3.setLast_name("Swint");
-//        doubts3.setProfile("000000/00000010650001.png");
-//        doubts3.setPosted_date("1 hour ago");
-//        doubts3.setPosted_group("Chemistry");
-//        doubts3.setDoubt("Doubt text will be here");
-//        doubts3.setDoubt_link("Doubt link will be here");
-//        doubtsList.add(doubts3);
-//
-//        Doubts doubts4 = new Doubts();
-//        doubts4.setFirst_name("Erwin");
-//        doubts4.setLast_name("Delton");
-//        doubts4.setProfile("000000/00000010650001.png");
-//        doubts4.setPosted_date("1 hour ago");
-//        doubts4.setPosted_group("Chemistry");
-//        doubts4.setDoubt("Doubt text will be here");
-//        doubts4.setDoubt_link("Doubt link will be here");
-//        doubtsList.add(doubts4);
-
-        initRecycler(mAppRepository.getQuestionDoubts(questionId));
+    public boolean isAppInstalled() {
+        PackageManager pm = context.getPackageManager();
+        try {
+            pm.getPackageInfo("com.jangletech.chatchilli", PackageManager.GET_ACTIVITIES);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+        }
+        return false;
     }
+
+    private void callChatChilliApp(Bundle bundle) {
+        if (isAppInstalled()) {
+            //This intent will help you to launch if the package is already installed
+            Intent LaunchIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://chatchilli.com"));
+            LaunchIntent.putExtras(bundle);
+            LaunchIntent.putExtra(Intent.ACTION_VIEW, bundle);
+            context.startActivity(LaunchIntent);
+        } else {
+            Log.i("", "Application is not currently installed.");
+            AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.AlertDialogStyle);
+            builder.setTitle("Alert")
+                    .setMessage("Chatchilli App is not installed on this device.\n " +
+                            "Please install app to explore more things.")
+                    .setPositiveButton("Install", (dialog, which) -> {
+                        String appPackageName = "com.jangletech.chatchilli"; //
+                        try {
+                            context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+                        } catch (android.content.ActivityNotFoundException anfe) {
+                            context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+                        }
+                    })
+                    .setNegativeButton("Cancel", null)
+                    .show();
+        }
+    }
+
+
 
     private void initRecycler(List<DoubtInfo> doubtInfoList) {
         doubtsList.clear();

@@ -142,31 +142,6 @@ public class AddDoubtDialog  extends Dialog implements DoubtGroupAdapter.onItemC
             }
         });
 
-
-//        DoubtGroups doubtGroups = new DoubtGroups();
-//        doubtGroups.setDoubt_group("Physics");
-//        doubtGroups.setProfile("000000/00000010650001.png");
-//        doubtGroups.setIs_joined("true");
-//        doubtGroupsList.add(doubtGroups);
-//
-//        DoubtGroups doubtGroups1 = new DoubtGroups();
-//        doubtGroups1.setDoubt_group("Mathematics");
-//        doubtGroups1.setProfile("000000/00000010650001.png");
-//        doubtGroups1.setIs_joined("false");
-//        doubtGroupsList.add(doubtGroups1);
-//
-//        DoubtGroups doubtGroups3 = new DoubtGroups();
-//        doubtGroups3.setDoubt_group("Chemistry");
-//        doubtGroups3.setProfile("000000/00000010650001.png");
-//        doubtGroups3.setIs_joined("false");
-//        doubtGroupsList.add(doubtGroups3);
-//
-//        DoubtGroups doubtGroups4 = new DoubtGroups();
-//        doubtGroups4.setDoubt_group("Physics");
-//        doubtGroups4.setProfile("000000/00000010650001.png");
-//        doubtGroups4.setIs_joined("true");
-//        doubtGroupsList.add(doubtGroups4);
-
     }
 
     private void dismissRefresh(SwipeRefreshLayout doubtgroupSwiperefresh) {

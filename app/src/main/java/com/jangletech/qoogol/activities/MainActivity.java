@@ -384,7 +384,7 @@ public class MainActivity extends BaseActivity {
 
         findViewById(R.id.nav_doubts).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
-            DoubtListingDialog doubtListingDialog = new DoubtListingDialog(this, null, Constant.my_doubts);
+            DoubtListingDialog doubtListingDialog = new DoubtListingDialog(this, null, "",Constant.my_doubts);
             doubtListingDialog.show();
         });
 

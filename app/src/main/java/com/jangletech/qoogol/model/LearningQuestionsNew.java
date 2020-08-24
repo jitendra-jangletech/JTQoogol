@@ -507,7 +507,7 @@ public class LearningQuestionsNew  implements Cloneable{
     }
 
     public String getSubject_id() {
-        return subject_id;
+        return subject_id!=null?subject_id:"";
     }
 
     public void setSubject_id(String subject_id) {

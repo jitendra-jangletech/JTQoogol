@@ -30,6 +30,7 @@ public class Friends {
     @SerializedName(Constant.cn_user_id_2)
     private String cn_user_id_2;
 
+    
     @SerializedName(Constant.cn_connected)
     private String cn_connected;
 
