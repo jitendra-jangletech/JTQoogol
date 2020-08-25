@@ -293,6 +293,18 @@ public class BaseFragment extends Fragment {
         return preferences.getBoolean(key, false);
     }
 
+    public void saveQueFilter(boolean value) {
+        preferences = android.preference.PreferenceManager.getDefaultSharedPreferences(getActivity());
+        preferences.edit()
+                .putBoolean(Constant.QUESTION_FILTER_APPLIED, value)
+                .apply();
+    }
+
+    public boolean getQueFilter(String key) {
+        preferences = android.preference.PreferenceManager.getDefaultSharedPreferences(getActivity());
+        return preferences.getBoolean(key, false);
+    }
+
     public void setFilterIcon(Menu menu,Context mContext,boolean flag) {
         if (flag)
             menu.getItem(1).setIcon(ContextCompat.getDrawable(mContext, R.drawable.ic_filter_applied));

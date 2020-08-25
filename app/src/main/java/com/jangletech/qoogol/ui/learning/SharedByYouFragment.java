@@ -28,6 +28,7 @@ import com.jangletech.qoogol.model.ProcessQuestion;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
+import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
@@ -55,9 +56,10 @@ public class SharedByYouFragment extends BaseFragment implements LearningAdapter
     List<LearningQuestionsNew> questionsNewList;
     ApiInterface apiService = ApiClient.getInstance().getApi();
     String userId = "";
-    private HashMap<String, String> params = new HashMap<>();
+    private HashMap<String, String> params;
     boolean isFilterApplied = false;
     List<LearningQuestionsNew> questionsFilteredList;
+    private Menu filterMenu;
 
 
     public static SharedByYouFragment newInstance() {
@@ -84,6 +86,10 @@ public class SharedByYouFragment extends BaseFragment implements LearningAdapter
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.action_search, menu);
         super.onCreateOptionsMenu(menu, inflater);
+        filterMenu = menu;
+        if (isFilterApplied) {
+            setFilterIcon(menu, getActivity(), true);
+        }
     }
 
 
@@ -107,18 +113,15 @@ public class SharedByYouFragment extends BaseFragment implements LearningAdapter
     }
 
     private void initView() {
+        isFilterApplied = getFilter(Constant.QUESTION_FILTER_APPLIED);
         learningFragmentBinding.learningSwiperefresh.setRefreshing(true);
         learningQuestionsList = new ArrayList<>();
         questionsNewList = new ArrayList<>();
         questionsFilteredList = new ArrayList<>();
         userId = String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));
-        params.put(Constant.q_trending,"");
-        params.put(Constant.q_popular,"");
-        params.put(Constant.q_recent,"");
-        params.put(Constant.q_diff_level,"");
-        params.put(Constant.q_type,"");
-        params.put(Constant.q_option_type,"");
-        params.put(Constant.q_avg_ratings,"");
+        params = new HashMap<>();
+        params = new HashMap<>();
+        params = AppUtils.loadQueFilterHashMap(getActivity());
         Bundle bundle = getArguments();
         if (bundle != null) {
             ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Shared by You");
@@ -249,12 +252,14 @@ public class SharedByYouFragment extends BaseFragment implements LearningAdapter
     @Override
     public void onResetClick() {
         isFilterApplied=false;
+        setFilterIcon(filterMenu, getActivity(), false);
     }
 
     @Override
     public void onDoneClick(HashMap<String, String> map) {
         params=map;
         isFilterApplied=true;
+        setFilterIcon(filterMenu, getActivity(), true);
         mViewModel.fetchQuestionData("",SHARED_BY_ME,params);
         questionsFilteredList.clear();
         questionsFilteredList.addAll(mViewModel.getFilterQuestionList());

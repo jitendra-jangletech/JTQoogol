@@ -74,41 +74,41 @@ public class LearningViewModel extends AndroidViewModel {
         getDataFromApi(q_id, CASE,params);
     }
 
-    public void getFilters() {
-        trending="";
-        popular="";
-        recent="";
-        main_catg="";
-        sub_catg="";
-        ratings = mSettings.getRatingsFilter();
-        diff_level = TextUtils.join(", ", mSettings.getQueDiffLevelFilter()).replace("Easy","E").replace("Medium","M").replace("Hard","H");
-        q_type = TextUtils.join(", ", mSettings.getTypeFilter());
-        q_category = TextUtils.join(", ", mSettings.getQueCategoryFilter());
-        if (q_type.contains(Constant.trending))
-            trending="1";
-        if (q_type.contains(Constant.popular))
-            popular="1";
-        if (q_type.contains(Constant.recent))
-            recent="1";
-        if (q_category.contains(Constant.short_ans))
-            addMainCatg(Constant.SHORT_ANSWER);
-        if (q_category.contains(Constant.long_ans))
-            addMainCatg(Constant.LONG_ANSWER);
-        if (q_category.contains(Constant.fill_the_blanks))
-            addMainCatg(Constant.FILL_THE_BLANKS);
-
-        if (q_category.contains(Constant.scq))
-            addSubCatg(Constant.SCQ);
-
-        if (q_category.contains(Constant.mcq))
-            addSubCatg(Constant.MCQ);
-
-        if (q_category.contains(Constant.true_false))
-            addSubCatg(Constant.TRUE_FALSE);
-
-        if (q_category.contains(Constant.match_pair))
-            addSubCatg(Constant.MATCH_PAIR);
-    }
+//    public void getFilters() {
+//        trending="";
+//        popular="";
+//        recent="";
+//        main_catg="";
+//        sub_catg="";
+//        ratings = mSettings.getRatingsFilter();
+//        diff_level = TextUtils.join(", ", mSettings.getQueDiffLevelFilter()).replace("Easy","E").replace("Medium","M").replace("Hard","H");
+//        q_type = TextUtils.join(", ", mSettings.getTypeFilter());
+//        q_category = TextUtils.join(", ", mSettings.getQueCategoryFilter());
+//        if (q_type.contains(Constant.trending))
+//            trending="1";
+//        if (q_type.contains(Constant.popular))
+//            popular="1";
+//        if (q_type.contains(Constant.recent))
+//            recent="1";
+//        if (q_category.contains(Constant.short_ans))
+//            addMainCatg(Constant.SHORT_ANSWER);
+//        if (q_category.contains(Constant.long_ans))
+//            addMainCatg(Constant.LONG_ANSWER);
+//        if (q_category.contains(Constant.fill_the_blanks))
+//            addMainCatg(Constant.FILL_THE_BLANKS);
+//
+//        if (q_category.contains(Constant.scq))
+//            addSubCatg(Constant.SCQ);
+//
+//        if (q_category.contains(Constant.mcq))
+//            addSubCatg(Constant.MCQ);
+//
+//        if (q_category.contains(Constant.true_false))
+//            addSubCatg(Constant.TRUE_FALSE);
+//
+//        if (q_category.contains(Constant.match_pair))
+//            addSubCatg(Constant.MATCH_PAIR);
+//    }
 
     private void addMainCatg(String catg) {
         if (main_catg.isEmpty())

@@ -208,12 +208,12 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
                     mSettings.setChapterFilter(chapterset);
 
 
-
-                if (typeset != null && typeset.size() > 0)
-                    mSettings.setTypeFilter(typeset);
-
-                if (que_categoryset != null && que_categoryset.size() > 0)
-                    mSettings.setQueCategoryFilter(que_categoryset);
+//
+//                if (typeset != null && typeset.size() > 0)
+//                    mSettings.setTypeFilter(typeset);
+//
+//                if (que_categoryset != null && que_categoryset.size() > 0)
+//                    mSettings.setQueCategoryFilter(que_categoryset);
 
                 Bundle bundle = new Bundle();
 
@@ -303,9 +303,7 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
     }
 
     private void prepareQueCategory() {
-        if (mSettings.getQueCategoryFilter() != null) {
-            que_categoryset = mSettings.getQueCategoryFilter();
-        }
+
         List que_categoryList = new ArrayList();
         que_categoryList.add("SCQ");
         que_categoryList.add("MCQ");
@@ -332,9 +330,7 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
     }
 
     private void prepareTypeChips() {
-        if (mSettings.getTypeFilter() != null) {
-            typeset = mSettings.getTypeFilter();
-        }
+
         List typeList = new ArrayList();
         typeList.add("Trending");
         typeList.add("Popular");
@@ -556,8 +552,6 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
     private void setSelecteQueCategoryChips(Chip chip) {
         try {
             que_categoryset.clear();
-            if (mSettings.getQueCategoryFilter() != null) {
-                que_categoryset = mSettings.getQueCategoryFilter(); }
 
             for (int i = 0; i < mapQueCategoryChips.size(); i++) {
                 String text = mapQueCategoryChips.get(i).getText().toString();
@@ -583,8 +577,7 @@ public class TestFilterFragment extends BaseFragment implements View.OnClickList
     private void setSelecteTypeChips(Chip chip) {
         try {
             typeset.clear();
-            if (mSettings.getTypeFilter() != null) {
-                typeset = mSettings.getTypeFilter(); }
+
 
             for (int i = 0; i < mapTypeChips.size(); i++) {
                 String text = mapTypeChips.get(i).getText().toString();

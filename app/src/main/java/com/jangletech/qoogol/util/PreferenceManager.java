@@ -31,18 +31,48 @@ public class PreferenceManager {
         return sharedPreferences.getString("rating","");
     }
 
-    public Set<String> getTypeFilter(){
-        return sharedPreferences.getStringSet("type",new HashSet<>());
+    public String getOptionTypeFilter(){
+        return sharedPreferences.getString("option_type","");
     }
 
-    public Set<String> getQueDiffLevelFilter(){
-        return sharedPreferences.getStringSet("Diff_level",new HashSet<>());
+    public String getQuetionTypeFilter(){
+        return sharedPreferences.getString("que_type","");
     }
 
-    public Set<String> getQueCategoryFilter(){
-        return sharedPreferences.getStringSet("que_category",new HashSet<>());
+    public String getQueDiffLevelFilter(){
+        return sharedPreferences.getString("Diff_level","");
     }
 
+    public String getQueTrandingFilter(){
+        return sharedPreferences.getString("qtranding","");
+    }
+
+    public String getQuePopularFilter(){
+        return sharedPreferences.getString("qpopular","");
+    }
+
+    public String getQueRecentFilter(){
+        return sharedPreferences.getString("qrecent","");
+    }
+
+
+    public void setQueTrendingFilter(String ratings) {
+        sharedPreferences.edit()
+                .putString("qtranding",ratings)
+                .apply();
+    }
+
+    public void setQuePopularFilter(String ratings) {
+        sharedPreferences.edit()
+                .putString("qpopular",ratings)
+                .apply();
+    }
+
+    public void setQueRecentFilter(String ratings) {
+        sharedPreferences.edit()
+                .putString("qrecent",ratings)
+                .apply();
+    }
 
     public void setRatingsFilter(String ratings) {
         sharedPreferences.edit()
@@ -50,22 +80,23 @@ public class PreferenceManager {
                 .apply();
     }
 
-    public void setQueDiffLevelFilter(Set type) {
+    public void setQueDiffLevelFilter(String level) {
         sharedPreferences.edit()
-                .putStringSet("Diff_level",type)
+                .putString("Diff_level",level)
                 .apply();
     }
 
 
-    public void setTypeFilter(Set type) {
+
+    public void setQueTypeFilter(String type) {
         sharedPreferences.edit()
-                .putStringSet("type",type)
+                .putString("que_type",type)
                 .apply();
     }
 
-    public void setQueCategoryFilter(Set type) {
+    public void setOptionTypeFilter(String type) {
         sharedPreferences.edit()
-                .putStringSet("que_category",type)
+                .putString("option_type",type)
                 .apply();
     }
 

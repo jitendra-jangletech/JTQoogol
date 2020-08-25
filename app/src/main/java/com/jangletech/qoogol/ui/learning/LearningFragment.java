@@ -59,7 +59,8 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
     List<LearningQuestionsNew> questionsFilteredList;
     ApiInterface apiService = ApiClient.getInstance().getApi();
     String userId = "";
-    private HashMap<String, String> params = new HashMap<>();
+    private HashMap<String, String> params;
+    private Menu filterMenu;
     boolean isFilterApplied = false;
 
 
@@ -86,6 +87,10 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.action_search, menu);
         super.onCreateOptionsMenu(menu, inflater);
+        filterMenu = menu;
+        if (isFilterApplied) {
+            setFilterIcon(menu, getActivity(), true);
+        }
     }
 
     @Override
@@ -108,19 +113,16 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
     }
 
     private void initView() {
+        isFilterApplied = getFilter(Constant.QUESTION_FILTER_APPLIED);
         learningFragmentBinding.learningSwiperefresh.setRefreshing(true);
         learningQuestionsList = new ArrayList<>();
         questionsNewList = new ArrayList<>();
         questionsFilteredList=new ArrayList<>();
         userId = String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));
 
-        params.put(Constant.q_trending,"");
-        params.put(Constant.q_popular,"");
-        params.put(Constant.q_recent,"");
-        params.put(Constant.q_diff_level,"");
-        params.put(Constant.q_type,"");
-        params.put(Constant.q_option_type,"");
-        params.put(Constant.q_avg_ratings,"");
+        params = new HashMap<>();
+            params = AppUtils.loadQueFilterHashMap(getActivity());
+
         Bundle bundle = getArguments();
         if (bundle != null) {
             if (bundle.getBoolean("fromNotification")) {
@@ -288,6 +290,7 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
     @Override
     public void onResetClick() {
         isFilterApplied=false;
+        setFilterIcon(filterMenu, getActivity(), false);
         mViewModel.fetchQuestionData("",params);
     }
 
@@ -297,6 +300,7 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
         isFilterApplied=true;
         mViewModel.fetchQuestionData("",params);
         questionsFilteredList.clear();
+        setFilterIcon(filterMenu, getActivity(), true);
         questionsFilteredList.addAll(mViewModel.getFilterQuestionList());
         setData(questionsFilteredList);
 

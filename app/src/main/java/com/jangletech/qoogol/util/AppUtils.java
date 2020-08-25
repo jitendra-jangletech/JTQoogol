@@ -42,6 +42,30 @@ public class AppUtils {
         Log.d(TAG, "Converted String : " + converted);
     }
 
+    public static void saveQueFilterHashMap(HashMap<String, String> inputMap, Context mContext) {
+        PreferenceManager manager = new PreferenceManager(mContext);
+        manager.setRatingsFilter(inputMap.get(Constant.q_avg_ratings));
+        manager.setQueDiffLevelFilter(inputMap.get(Constant.q_diff_level));
+        manager.setQueTypeFilter(inputMap.get(Constant.q_type));
+        manager.setOptionTypeFilter(inputMap.get(Constant.q_option_type));
+        manager.setQueTrendingFilter(inputMap.get(Constant.q_trending));
+        manager.setQuePopularFilter(inputMap.get(Constant.q_popular));
+        manager.setQueRecentFilter(inputMap.get(Constant.q_recent));
+    }
+
+    public static HashMap<String, String> loadQueFilterHashMap(Context mContext) {
+        HashMap<String, String> newMap = new HashMap<String, String>();
+        PreferenceManager manager = new PreferenceManager(mContext);
+        newMap.put(Constant.q_avg_ratings,manager.getRatingsFilter());
+        newMap.put(Constant.q_diff_level,manager.getQueDiffLevelFilter());
+        newMap.put(Constant.q_type,manager.getQuetionTypeFilter());
+        newMap.put(Constant.q_option_type,manager.getOptionTypeFilter());
+        newMap.put(Constant.q_trending,manager.getQueTrandingFilter());
+        newMap.put(Constant.q_popular,manager.getQuePopularFilter());
+        newMap.put(Constant.q_recent,manager.getQueRecentFilter());
+        return newMap;
+    }
+
     public static HashMap<String, String> loadHashMap(Context mContext) {
         Gson gson = new Gson();
         Type type = new TypeToken<HashMap<String, String>>() {
@@ -49,7 +73,7 @@ public class AppUtils {
         HashMap<String, String> newMap = new HashMap<String, String>();
         newMap = (HashMap<String, String>) gson.fromJson(new PreferenceManager(mContext).getString(Constant.FILTER), newMap.getClass());
         Log.d(TAG, "Saved Hashmaps : " + newMap);
-        return newMap;
+            return newMap;
     }
 
     public static String getDateFormat(String strDate) throws ParseException {

@@ -1,6 +1,7 @@
 package com.jangletech.qoogol.dialog;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,6 +19,7 @@ import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.QuestionDialogFilterBinding;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
+import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 
@@ -42,12 +44,14 @@ public class QuestionFilterDialog extends BottomSheetDialogFragment implements V
     private HashMap<Integer, Chip> mapTypeChips = new HashMap();
     private HashMap<Integer, Chip> mapQueCategoryChips = new HashMap();
     private HashMap<Integer, Chip> mapDiffLevelChips = new HashMap();
-
+    Activity mContext;
+    private SharedPreferences preferences;
 
 
     public QuestionFilterDialog(@NonNull Activity mContext, FilterClickListener filterClickListener, HashMap<String, String> params) {
         this.filterClickListener = filterClickListener;
         this.params = params;
+        this.mContext = mContext;
     }
 
 
@@ -78,10 +82,9 @@ public class QuestionFilterDialog extends BottomSheetDialogFragment implements V
             mBinding.testDifficultyLevelChipGrp.clearCheck();
             mBinding.queTypeChipGrp.clearCheck();
             mBinding.queCategoryChipGrp.clearCheck();
-            mSettings.setQueCategoryFilter(null);
-            mSettings.setTypeFilter(null);
             mSettings.setQueDiffLevelFilter(null);
             filterClickListener.onResetClick();
+            saveQueFilter(false);
             dismiss();
         });
 
@@ -152,7 +155,8 @@ public class QuestionFilterDialog extends BottomSheetDialogFragment implements V
             else
                 params.put(Constant.q_avg_ratings,"");
 
-
+            AppUtils.saveQueFilterHashMap(params, mContext);
+           saveQueFilter(false);
             filterClickListener.onDoneClick(params);
             dismiss();
 
@@ -160,9 +164,17 @@ public class QuestionFilterDialog extends BottomSheetDialogFragment implements V
 
 
 
+
         mBinding.rating.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {
             Log.d(TAG, "onRatingChanged: " + rating);
         });
+    }
+
+    public void saveQueFilter(boolean value) {
+        preferences = android.preference.PreferenceManager.getDefaultSharedPreferences(getActivity());
+        preferences.edit()
+                .putBoolean(Constant.QUESTION_FILTER_APPLIED, value)
+                .apply();
     }
 
     private String getSelectedChipValues(ChipGroup chipGroup) {
@@ -236,14 +248,12 @@ public class QuestionFilterDialog extends BottomSheetDialogFragment implements V
                 if (option_type.contains(Constant.MATCH_PAIR))
                     que_categoryset.add(Constant.match_pair);
             }
-            if (params.get(Constant.q_trending).equalsIgnoreCase("1"))
+            if (params.get(Constant.q_trending)!=null &&params.get(Constant.q_trending).equalsIgnoreCase("1"))
                 typeset.add(Constant.trending);
-            if (params.get(Constant.q_popular).equalsIgnoreCase("1"))
+            if (params.get(Constant.q_popular)!=null &&params.get(Constant.q_popular).equalsIgnoreCase("1"))
                 typeset.add(Constant.popular);
-            if (params.get(Constant.q_recent).equalsIgnoreCase("1"))
+            if (params.get(Constant.q_recent)!=null &&params.get(Constant.q_recent).equalsIgnoreCase("1"))
                 typeset.add(Constant.recent);
-
-
 
         }
     }
