@@ -26,6 +26,7 @@ import com.jangletech.qoogol.model.GenerateVerifyUserName;
 import com.jangletech.qoogol.model.InstituteResponse;
 import com.jangletech.qoogol.model.Language;
 import com.jangletech.qoogol.model.LearningQuestResponse;
+import com.jangletech.qoogol.model.LocalDataResponse;
 import com.jangletech.qoogol.model.NotificationResponse;
 import com.jangletech.qoogol.model.ProcessQuestion;
 import com.jangletech.qoogol.model.RegisterLoginModel;
@@ -440,7 +441,13 @@ public interface ApiInterface {
                                            @Field(Constant.q_popular) String popular,
                                            @Field(Constant.q_recent) String recent,
                                            @Field(Constant.q_type) String question_type,
+
                                            @Field(Constant.q_option_type) String option_type);
+    @FormUrlEncoded
+    @POST(Constant.FETCH_LocalData)
+    Call<LocalDataResponse> fetchLocalDataApi(@Field(Constant.u_user_id) String userid,
+                                              @Field(Constant.device_id) String deviceId);
+
 
     @FormUrlEncoded
     @POST(Constant.FETCH_QA)
