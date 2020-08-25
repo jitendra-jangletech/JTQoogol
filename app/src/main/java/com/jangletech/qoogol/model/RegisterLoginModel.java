@@ -9,7 +9,7 @@ public class RegisterLoginModel {
     private String message;
 
     public String getMessage() {
-        return message;
+        return message != null ? message : "";
     }
 
     public void setMessage(String message) {

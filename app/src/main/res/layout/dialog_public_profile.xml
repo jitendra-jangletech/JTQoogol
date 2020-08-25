@@ -191,7 +191,6 @@
                             android:id="@+id/tvDobs"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@{DateUtils.getFormattedDate(UserProfileBindingAdapter.decryptedText(userProfile.dob))}"
                             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                             android:textColor="@color/colorBlack"
                             android:textSize="@dimen/_12ssp" />

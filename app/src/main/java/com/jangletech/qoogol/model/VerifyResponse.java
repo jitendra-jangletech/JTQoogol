@@ -7,6 +7,17 @@ import java.util.List;
 
 public class VerifyResponse {
 
+    @SerializedName("Message")
+    private String errorMsg;
+
+    public String getErrorMsg() {
+        return errorMsg != null ? errorMsg : "";
+    }
+
+    public void setErrorMsg(String errorMsg) {
+        this.errorMsg = errorMsg;
+    }
+
     @SerializedName("List1")
     private List<UserPreferences> preferencesList;
 

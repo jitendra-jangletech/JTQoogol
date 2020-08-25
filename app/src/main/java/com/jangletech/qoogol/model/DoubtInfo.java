@@ -139,8 +139,8 @@ public class DoubtInfo {
         this.question_id = question_id;
     }
 
-    public String getName() {
+    /*public String getName() {
         return String.format(Locale.ENGLISH, "%s %s", AESSecurities.getInstance().decrypt(first_name), AESSecurities.getInstance().decrypt(last_name));
-    }
+    }*/
 
 }

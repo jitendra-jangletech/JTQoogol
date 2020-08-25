@@ -34,10 +34,10 @@ public class Friends {
     @SerializedName(Constant.cn_connected)
     private String cn_connected;
 
-    @SerializedName(Constant.u_first_name)
+    @SerializedName(Constant.u_first_name_encrypted)
     private String u_first_name;
 
-    @SerializedName(Constant.u_last_name)
+    @SerializedName(Constant.u_last_name_encrypted)
     private String u_last_name;
 
     @SerializedName(Constant.u_gender)

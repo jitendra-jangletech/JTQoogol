@@ -4,7 +4,6 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
-import com.jangletech.qoogol.util.AESSecurities;
 import com.jangletech.qoogol.util.Constant;
 
 /**
@@ -53,10 +52,10 @@ public class Comments {
     @SerializedName(Constant.qlc_user_id)
     private String userId;
 
-    @SerializedName(Constant.u_first_name)
+    @SerializedName(Constant.u_first_name_encrypted)
     private String userFirstName;
 
-    @SerializedName(Constant.u_last_name)
+    @SerializedName(Constant.u_last_name_encrypted)
     private String userLastName;
 
     @SerializedName(Constant.qlc_cdatetime)
@@ -196,7 +195,7 @@ public class Comments {
     }
 
     public String getUserFirstName() {
-        return AESSecurities.getInstance().decrypt(userFirstName);
+        return userFirstName != null ? userFirstName : "";
     }
 
     public void setUserFirstName(String userFirstName) {
@@ -204,7 +203,7 @@ public class Comments {
     }
 
     public String getUserLastName() {
-        return AESSecurities.getInstance().decrypt(userLastName);
+        return userLastName != null ? userLastName : "";
     }
 
     public void setUserLastName(String userLastName) {

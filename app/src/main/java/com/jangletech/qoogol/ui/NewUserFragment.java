@@ -1,6 +1,7 @@
 package com.jangletech.qoogol.ui;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -33,6 +34,7 @@ import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.DateUtils;
 import com.jangletech.qoogol.util.PreferenceManager;
+import com.jangletech.qoogol.util.TinyDB;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -373,13 +375,13 @@ public class NewUserFragment extends BaseFragment {
     }
 
     private void doRegisterLogin(String mobile, String caseR, int countryCode, String passwordOtp, String deviceId, String appName) {
-        Log.d(TAG, "First Name : " + AESSecurities.getInstance().encrypt(mBinding.tilFirstName.getEditText().getText().toString().trim()));
-        Log.d(TAG, "Last Name : " + AESSecurities.getInstance().encrypt(mBinding.tilLastName.getEditText().getText().toString().trim()));
+        Log.d(TAG, "First Name : " + AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key1),mBinding.tilFirstName.getEditText().getText().toString().trim()));
+        Log.d(TAG, "Last Name : " + AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key2),mBinding.tilLastName.getEditText().getText().toString().trim()));
         Log.d(TAG, "Gender Name : " + gender);
-        Log.d(TAG, "Dob : " + AESSecurities.getInstance().encrypt(mBinding.tilDob.getEditText().getText().toString().trim()));
-        Log.d(TAG, "Email Mobile : " + AESSecurities.getInstance().encrypt(mBinding.tilEmailMobile.getEditText().getText().toString().trim()));
+        Log.d(TAG, "Dob : " + AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key3),mBinding.tilDob.getEditText().getText().toString().trim()));
+        Log.d(TAG, "Email: " + AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key1),mBinding.tilEmailMobile.getEditText().getText().toString().trim()));
         Log.d(TAG, "Otp : " + mBinding.tilOtp.getEditText().getText().toString().trim());
-        Log.d(TAG, "Password  : " + AESSecurities.getInstance().encrypt(mBinding.tilPassword.getEditText().getText().toString().trim()));
+        Log.d(TAG, "Password  : " + AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key6),mBinding.tilPassword.getEditText().getText().toString().trim()));
         Log.d(TAG, "Case R  : " + caseR);
         Log.d(TAG, "Country Code : " + countryCode);
         Log.d(TAG, "Device Id : " + deviceId);
@@ -389,13 +391,13 @@ public class NewUserFragment extends BaseFragment {
 
         ProgressDialog.getInstance().show(getActivity());
         Call<RegisterLoginModel> call = apiService.doRegister(
-                AESSecurities.getInstance().encrypt(mBinding.tilFirstName.getEditText().getText().toString().trim()),
-                AESSecurities.getInstance().encrypt(mBinding.tilLastName.getEditText().getText().toString().trim()),
+                AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key1),mBinding.tilFirstName.getEditText().getText().toString().trim()),
+                AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key2),mBinding.tilLastName.getEditText().getText().toString().trim()),
                 gender,
-                AESSecurities.getInstance().encrypt(mBinding.tilDob.getEditText().getText().toString().trim()),
-                AESSecurities.getInstance().encrypt(mBinding.tilEmailMobile.getEditText().getText().toString().trim()),
+                AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key3),mBinding.tilDob.getEditText().getText().toString().trim()),
+                AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key4),mBinding.tilEmailMobile.getEditText().getText().toString().trim()),
                 mBinding.tilOtp.getEditText().getText().toString().trim(),
-                AESSecurities.getInstance().encrypt(mBinding.tilPassword.getEditText().getText().toString().trim()),
+                AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key6),mBinding.tilPassword.getEditText().getText().toString().trim()),
                 caseR,
                 countryCode,
                 deviceId,

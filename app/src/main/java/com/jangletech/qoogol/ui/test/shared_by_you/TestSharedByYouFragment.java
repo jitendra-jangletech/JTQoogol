@@ -159,6 +159,7 @@ public class TestSharedByYouFragment extends BaseFragment
     }
 
     private void initViews() {
+        mBinding.topLayout.setVisibility(View.GONE);
         linearLayoutManager = new LinearLayoutManager(getActivity());
         params = AppUtils.loadHashMap(mContext);
         isFilterApplied = getFilter(Constant.TEST_FILTER_APPLIED);

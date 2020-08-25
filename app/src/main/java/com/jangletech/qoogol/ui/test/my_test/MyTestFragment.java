@@ -441,19 +441,6 @@ public class MyTestFragment extends BaseFragment
         });
     }
 
-    private void fetchFilteredRecords() {
-        /*mViewModel.getAllFilteredTests("PRACTICE", getUserId(getActivity()), params.get(Constant.tm_diff_level)).observe(getViewLifecycleOwner(), new Observer<List<TestModelNew>>() {
-            @Override
-            public void onChanged(@Nullable final List<TestModelNew> tests) {
-                if (tests != null) {
-                    Log.d(TAG, "onChanged Size : " + tests.size());
-                    testList = tests;
-                    setMyTestList(tests);
-                }
-            }
-        });*/
-    }
-
     private void fetchTestList(HashMap<String, String> parameters, String pageStart) {
         Log.d(TAG, "fetchTestList Params : " + parameters);
         Log.d(TAG, "initViews Flag : " + flag);
@@ -488,32 +475,34 @@ public class MyTestFragment extends BaseFragment
                 //ProgressDialog.getInstance().dismiss();
                 mBinding.swipeToRefresh.setRefreshing(false);
                 mBinding.progress.setVisibility(View.GONE);
-                if (response.body() != null && response.body().getResponse().equals("200")) {
-                    testListResponse = response.body();
-                    if (params.get(Constant.tm_id) != null &&
-                            !(params.get(Constant.tm_id).isEmpty())) {
-                        if (response.body().getTestList().size() > 0) {
-                            mAdapter.updateList(response.body().getTestList());
+                if(response.body()!=null){
+                    if (response.body().getResponse().equals("200")) {
+                        testListResponse = response.body();
+                        if (params.get(Constant.tm_id) != null &&
+                                !(params.get(Constant.tm_id).isEmpty())) {
+                            if (response.body().getTestList().size() > 0) {
+                                mAdapter.updateList(response.body().getTestList());
+                            } else {
+                                mBinding.tvNoTest.setVisibility(View.VISIBLE);
+                            }
                         } else {
-                            mBinding.tvNoTest.setVisibility(View.VISIBLE);
-                        }
-                    } else {
 
-                        List<TestModelNew> newList = response.body().getTestList();
-                        for (TestModelNew testModelNew : newList) {
-                            testModelNew.setFlag("PRACTICE");
-                            Log.d(TAG, "PRACTICE UserId : " + MainActivity.userId);
-                            testModelNew.setUserId(MainActivity.userId);
+                            List<TestModelNew> newList = response.body().getTestList();
+                            for (TestModelNew testModelNew : newList) {
+                                testModelNew.setFlag("PRACTICE");
+                                Log.d(TAG, "PRACTICE UserId : " + MainActivity.userId);
+                                testModelNew.setUserId(MainActivity.userId);
+                            }
+                            mViewModel.insert(newList);
+                            if (isFilterApplied) {
+                                setFilteredTestList(response.body());
+                            }
                         }
-                        mViewModel.insert(newList);
-                        if (isFilterApplied) {
-                            setFilteredTestList(response.body());
-                        }
+                    } else if (response.body().getResponse().equals("501")) {
+                        resetSettingAndLogout();
+                    } else {
+                        showErrorDialog(getActivity(), response.body().getResponse(), response.body().getMessage());
                     }
-                } else if (response.body().getResponse().equals("501")) {
-                    resetSettingAndLogout();
-                } else {
-                    showErrorDialog(getActivity(), response.body().getResponse(), response.body().getMessage());
                 }
             }
 

@@ -1,6 +1,7 @@
 package com.jangletech.qoogol.retrofit;
 
 import com.jangletech.qoogol.model.AddElementResponse;
+import com.jangletech.qoogol.model.AppConfigResponse;
 import com.jangletech.qoogol.model.BlockedConnResp;
 import com.jangletech.qoogol.model.ChapterResponse;
 import com.jangletech.qoogol.model.CityResponse;
@@ -94,6 +95,13 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST(Constant.CITY_API)
     Call<CityResponse> fetchCities(@Field(Constant.ct_dt_id) String ct_dt_id);
+
+    @FormUrlEncoded
+    @POST(Constant.APP_CONFIG)
+    Call<AppConfigResponse> fetchAppConfig(
+            @Field(Constant.appName) String appName,
+            @Field("126") String deviceId
+    );
 
 
     @FormUrlEncoded
@@ -579,7 +587,6 @@ public interface ApiInterface {
                                                @Field("200Q") String app,
                                                @Field(Constant.SearchText) String searchText,
                                                @Field(Constant.pagestart) String pagestart);
-
 
 
     @FormUrlEncoded

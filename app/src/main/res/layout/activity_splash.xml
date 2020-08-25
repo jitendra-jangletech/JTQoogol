@@ -50,6 +50,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/tvAppName" />
 
             <ProgressBar
+                android:id="@+id/progress"
                 android:backgroundTint="@color/white"
                 app:layout_constraintTop_toBottomOf="@+id/tvWelcomeMsg"
                 app:layout_constraintLeft_toLeftOf="parent"

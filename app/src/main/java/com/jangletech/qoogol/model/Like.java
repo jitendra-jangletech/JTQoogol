@@ -3,7 +3,6 @@ package com.jangletech.qoogol.model;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
-import com.jangletech.qoogol.util.AESSecurities;
 import com.jangletech.qoogol.util.Constant;
 
 /**
@@ -70,7 +69,7 @@ public class Like {
     }
 
     public String getUserFirstName() {
-        return AESSecurities.getInstance().decrypt(userFirstName);
+        return userFirstName != null ? userFirstName : "";
     }
 
     public void setUserFirstName(String userFirstName) {
@@ -78,7 +77,7 @@ public class Like {
     }
 
     public String getUserLastName() {
-        return AESSecurities.getInstance().decrypt(userLastName);
+        return userLastName != null ? userLastName : "";
     }
 
     public void setUserLastName(String userLastName) {

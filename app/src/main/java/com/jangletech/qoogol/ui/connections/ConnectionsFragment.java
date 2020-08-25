@@ -1,6 +1,5 @@
 package com.jangletech.qoogol.ui.connections;
 
-
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;

@@ -36,6 +36,8 @@ public class AppUtils {
     public static final String NOT_CONNECTED = "NOT_CONNECTED";
     public static final String CONNECTED = "CONNECTED";
 
+    public static TinyDB tinyDB;
+
     public static void saveHashMap(HashMap<String, String> inputMap, Context mContext) {
         String converted = new Gson().toJson(inputMap);
         new PreferenceManager(mContext).saveString(Constant.FILTER, converted);

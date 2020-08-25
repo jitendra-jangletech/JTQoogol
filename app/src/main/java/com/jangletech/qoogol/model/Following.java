@@ -32,10 +32,10 @@ public class Following {
     @SerializedName(Constant.cn_connected)
     private String cn_connected;
 
-    @SerializedName(Constant.u_first_name)
+    @SerializedName(Constant.u_first_name_encrypted)
     private String u_first_name;
 
-    @SerializedName(Constant.u_last_name)
+    @SerializedName(Constant.u_last_name_encrypted)
     private String u_last_name;
 
     @SerializedName(Constant.u_gender)
@@ -82,7 +82,6 @@ public class Following {
 
     @SerializedName(Constant.w_distance)
     private String w_distance;
-
 
 
     @SerializedName(Constant.w_user_profile_image_name)
@@ -150,7 +149,7 @@ public class Following {
     }
 
     public String getCn_blocked_by_u1() {
-        return cn_blocked_by_u1!=null?cn_blocked_by_u1:"";
+        return cn_blocked_by_u1 != null ? cn_blocked_by_u1 : "";
     }
 
     public void setCn_blocked_by_u1(String cn_blocked_by_u1) {
@@ -166,7 +165,7 @@ public class Following {
     }
 
     public String getCn_connected() {
-        return cn_connected!=null?cn_connected:"";
+        return cn_connected != null ? cn_connected : "";
     }
 
     public void setCn_connected(String cn_connected) {
@@ -302,7 +301,7 @@ public class Following {
     }
 
     public String getProf_pic() {
-        return prof_pic!=null?prof_pic:"";
+        return prof_pic != null ? prof_pic : "";
     }
 
     public void setProf_pic(String prof_pic) {
@@ -319,7 +318,7 @@ public class Following {
 
 
     public String getFriend_req_sent() {
-        return friend_req_sent!=null?friend_req_sent:"";
+        return friend_req_sent != null ? friend_req_sent : "";
     }
 
     public void setFriend_req_sent(String friend_req_sent) {
@@ -335,7 +334,7 @@ public class Following {
     }
 
     public String getFollow_req_sent() {
-        return follow_req_sent!=null?follow_req_sent:"";
+        return follow_req_sent != null ? follow_req_sent : "";
     }
 
     public void setFollow_req_sent(String follow_req_sent) {

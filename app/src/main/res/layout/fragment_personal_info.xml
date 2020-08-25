@@ -185,7 +185,6 @@
                                     android:importantForAutofill="no"
                                     android:maxLength="50"
                                     android:singleLine="true"
-                                    android:text='@{UserProfileBindingAdapter.decryptedText(userProfile.firstName)}'
                                     android:textColor="@color/colorBlack" />
 
                             </LinearLayout>
@@ -214,7 +213,6 @@
                                     android:importantForAutofill="no"
                                     android:maxLength="50"
                                     android:singleLine="true"
-                                    android:text='@{UserProfileBindingAdapter.decryptedText(userProfile.lastName)}'
                                     android:textColor="@color/colorBlack" />
                             </LinearLayout>
                         </LinearLayout>
@@ -327,7 +325,6 @@
                                     android:hint="Mobile Number"
                                     android:inputType="number"
                                     android:maxLength="10"
-                                    android:text='@{UserProfileBindingAdapter.decryptedText(userProfile.mobileNumber)}'
                                     android:textColor="@color/colorBlack" />
 
                             </LinearLayout>
@@ -380,7 +377,6 @@
                                     android:layout_height="wrap_content"
                                     android:alpha="@{TextUtils.isEmpty(userProfile.emailAddress)?1f:0.5f}"
                                     android:hint="Email"
-                                    android:text='@{UserProfileBindingAdapter.decryptedText(userProfile.emailAddress)}'
                                     android:textColor="@color/colorBlack" />
 
                             </LinearLayout>
@@ -423,7 +419,6 @@
                                     android:layout_height="wrap_content"
                                     android:background="@color/colorWhite"
                                     android:inputType="textPassword"
-                                    android:text="@{UserProfileBindingAdapter.decryptedText(userProfile.password)}"
                                     android:textColor="@color/colorBlack" />
 
                             </com.google.android.material.textfield.TextInputLayout>
@@ -526,7 +521,6 @@
                                 android:drawablePadding="@dimen/_10sdp"
                                 android:focusable="false"
                                 android:hint="Date of Birth"
-                                android:text='@{DateUtils.getFormattedDate(UserProfileBindingAdapter.decryptedText(userProfile.dob))}'
                                 android:textColor="@color/colorBlack" />
                         </LinearLayout>
 
@@ -579,14 +573,14 @@
 
                             <com.google.android.material.button.MaterialButton
                                 android:id="@+id/btnImportContacts"
-                                android:visibility="gone"
                                 style="@style/font_style"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/_10sdp"
                                 android:backgroundTint="@color/colorPrimary"
                                 android:text="Import Contacts"
-                                android:textAllCaps="false" />
+                                android:textAllCaps="false"
+                                android:visibility="gone" />
 
                             <LinearLayout
                                 android:id="@+id/taglineLayout"

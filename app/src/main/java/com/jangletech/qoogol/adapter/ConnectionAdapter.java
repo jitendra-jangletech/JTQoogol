@@ -2,6 +2,7 @@ package com.jangletech.qoogol.adapter;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -18,6 +19,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.jangletech.qoogol.BuildConfig;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.ConnectionItemBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
@@ -25,11 +27,12 @@ import com.jangletech.qoogol.model.Connections;
 import com.jangletech.qoogol.model.ResponseObj;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
+import com.jangletech.qoogol.util.AESSecurities;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
+import com.jangletech.qoogol.util.TinyDB;
 import com.jangletech.qoogol.util.UtilHelper;
 
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,6 +63,8 @@ import static com.jangletech.qoogol.util.Constant.unfollow;
  * Created by Pritali on 5/6/2020.
  */
 public class ConnectionAdapter extends RecyclerView.Adapter<ConnectionAdapter.ViewHolder> implements Filterable {
+
+    private static final String TAG = "ConnectionAdapter";
     private List<Connections> connectionsList;
     private Activity activity;
     private ConnectionItemBinding connectionItemBinding;
@@ -88,7 +93,10 @@ public class ConnectionAdapter extends RecyclerView.Adapter<ConnectionAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull ConnectionAdapter.ViewHolder holder, int position) {
         Connections connections = connectionsList.get(position);
-        holder.connectionItemBinding.tvUserName.setText(connections.getU_first_name() + " " + connections.getU_last_name());
+        //Log.d(TAG, "Connection Name : " + AESSecurities.getInstance().decrypt(BuildConfig.SECRET_KEY, connections.getU_first_name()));
+        holder.connectionItemBinding.tvUserName.setText(
+                AESSecurities.getInstance().decrypt(TinyDB.getInstance(activity).getString(Constant.cf_key1), connections.getU_first_name()) + " "
+                        + AESSecurities.getInstance().decrypt(TinyDB.getInstance(activity).getString(Constant.cf_key2), connections.getU_last_name()));
         if (connections.getBadge() != null && !connections.getBadge().isEmpty()) {
             String badge = connections.getBadge();
             if (badge.equalsIgnoreCase("B")) ;
@@ -211,6 +219,7 @@ public class ConnectionAdapter extends RecyclerView.Adapter<ConnectionAdapter.Vi
         setAnimation(holder.connectionItemBinding.getRoot(), position);
 
     }
+
     private void setAnimation(View viewToAnimate, int position) {
         if (position > lastPosition) {
             Animation animation = AnimationUtils.loadAnimation(activity, R.anim.fall_down);

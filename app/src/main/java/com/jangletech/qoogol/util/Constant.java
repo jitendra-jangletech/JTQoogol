@@ -217,6 +217,21 @@ public class Constant {
     public static String MATCH_PAIR = "11";
     public static String MATCH_PAIR_IMAGE = "12";
 
+    //App Config Fields
+    public static final String CF_VIDEO = "56V";
+    public static final String CF_IMAGE = "56I";
+    public static final String CF_DOC = "56D";
+    public static final String CF_AUDIO = "56A";
+
+    //For size of media
+    //Keys
+    public static final String cf_key1 = "57G"; // first name
+    public static final String cf_key2 = "57H"; // last name
+    public static final String cf_key3 = "57I"; // date of birth
+    public static final String cf_key4 = "57J"; // mobile number
+    public static final String cf_key5 = "57K"; // Email
+    public static final String cf_key6 = "57L"; // password
+
     //Register & Login Fields
     public static final String w_user_name = "539";
     public static final String u_mob_1 = "108";
@@ -251,7 +266,7 @@ public class Constant {
     public static final String QUESTION_IMAGES_API = "https://jtmobileappstorage.blob.core.windows.net/spotmeets/media/images/";
     public static final String FETCH_QA = "q151FetchQA";
     public static final String FETCH_DOUBTS = "q154FetchDoubtsInfo";
-    public static final String REFER = "sm01SignupReferredBy";
+    public static final String REFER = "sm01SignupReferredByN";
     public static final String DASHBOARD = "q110FetchDashboard";
     public static final String PROCESS_QUESTION = "q141ProcessQuestion";
     public static final String PROCESS_TEST = "q133ProcessTest";
@@ -259,41 +274,42 @@ public class Constant {
     public static final String TEST_DETAILS = "q132FetchTestDetails";
     public static final String SUBMIT_TEST = "q134SubmitTest";
     public static final String FETCH_TEST_LIST = "q152fetchtest";
-    public static final String FETCH_USER_INFO = "sm65FetchProfileInfo";
-    public static final String FETCH_OTHER_USER_INFO = "sm72FetchPublicProfile";
+    public static final String FETCH_USER_INFO = "sm65FetchProfileInfoN";
+    public static final String FETCH_OTHER_USER_INFO = "sm72FetchPublicProfileN";
     public static final String FETCH_USER_EDU = "q112ProcessUserEdu";
     public static final String FETCH_USER_SETTINGS = "q113ProcessUserSetting";
 
     public static final String FETCH_FAQ = "sm18FAQ";
-    public static final String UPDATE_USER_PROFILE = "sm67UpdateProfileDetails";
+    public static final String UPDATE_USER_PROFILE = "sm67UpdateProfileDetailsN";
     public static final String FETCH_SUBJECTS = "q111FetchSubjectMaster";
     public static final String FETCH_CHAPTERS = "q114FetchChapterMaster";
-    public static final String FETCH_NOTIFICATIONS = "sm28FetchNotifications";
+    public static final String FETCH_NOTIFICATIONS = "sm28FetchNotificationsN";
     public static final String FETCH_SHAREDTQ_USERS = "q153FetchSharedTQ";
     public static final String UPDATE_NOTIFICATIONS = "sm27UpdateNotifications";
     public static final String COUNTRY = "sm05CountryData";
     public static final String STATE = "sm06StateData";
     public static final String CITY = "sm09CityData";
     public static final String UNIVERSITY = "sm12UBMData";
-    public static final String REGISTER_LOGIN = "sm01SignupNew";
-    public static final String VERIFY_MOBILE_EMAIL = "sm01VerifyMobileEmail";
-    public static final String UPDATE_PROFILE_IMAGE_API = "sm22UpdateProfilePic";
+    public static final String REGISTER_LOGIN = "sm01SignupNewN";
+    public static final String VERIFY_MOBILE_EMAIL = "sm01VerifyMobileEmailN";
+    public static final String UPDATE_PROFILE_IMAGE_API = "sm22UpdateProfilePicN";
     public static final String COURSE = "sm15CourseData";
     public static final String INSTITUTE = "sm13InstOrgData";
     public static final String DEGREE = "sm14DegreeData";
-    public static final String FETCH_CONNECTIONS = "sm25FetchConnections";
+    public static final String FETCH_CONNECTIONS = "sm25FetchConnectionsN";
     public static final String UPDATE_CONNECTIONS = "sm24UpdateConnections";
     public static final String COUNTRY_API = "sm05CountryData";
     public static final String STATE_API = "sm06StateData";  /*Pass country id as params to fetch state s_c_id = ["94"]*/
     public static final String DISTRICT_API = "sm07DistrictData"; /*Pass state id as params to fetch district dt_s_id = ["12"]*/
     public static final String CITY_API = "sm09CityData";
     public static final String CLASS_MASTER = "q115FetchClassMaster";
+    public static final String APP_CONFIG = "sm03ConfigTable";
 
     public static final String ADD_UNIVERSITY = "sm37AddUBM";
     public static final String ADD_INSTITUTE = "sm38AddIOM";
     public static final String LANGUAGE_API = "sm11LanguageData";
     public static final String FETCH_VERIFIED_CONTACTLIST = "sm99ImportContacts";
-    public static final String SHARE_QUESTION_TEST = "sm34ShareMessages";
+    public static final String SHARE_QUESTION_TEST = "sm34ShareMessagesN";
     public static final String INVITE_CONTACTLIST = "sm98SendInvite";
     public static final String masterDataList = "61";
     public static final String likesList = "60";

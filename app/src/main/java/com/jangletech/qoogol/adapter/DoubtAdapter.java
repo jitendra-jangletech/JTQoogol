@@ -3,7 +3,6 @@ package com.jangletech.qoogol.adapter;
 import android.app.Activity;
 import android.net.Uri;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
@@ -17,12 +16,12 @@ import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.DoubtItemBinding;
 import com.jangletech.qoogol.model.DoubtInfo;
-import com.jangletech.qoogol.model.Doubts;
+import com.jangletech.qoogol.util.AESSecurities;
+import com.jangletech.qoogol.util.Constant;
+import com.jangletech.qoogol.util.TinyDB;
 import com.jangletech.qoogol.util.UtilHelper;
 
 import java.util.List;
-
-import static com.jangletech.qoogol.util.Constant.my_doubts;
 
 /**
  * Created by Pritali on 7/31/2020.
@@ -54,7 +53,10 @@ public class DoubtAdapter extends RecyclerView.Adapter<DoubtAdapter.ViewHolder> 
         if (doubts.getProfile() != null && !doubts.getProfile().isEmpty()) {
             Glide.with(activity).load(UtilHelper.getProfileImageUrl(doubts.getProfile().trim())).circleCrop().placeholder(R.drawable.profile).into(doubtItemBinding.imgUserProfile);
         }
-            doubtItemBinding.tvName.setText(doubts.getName());
+
+        String name = AESSecurities.getInstance().decrypt(TinyDB.getInstance(activity).getString(Constant.cf_key1), doubts.getFirst_name())
+                + " " + AESSecurities.getInstance().decrypt(TinyDB.getInstance(activity).getString(Constant.cf_key2), doubts.getLast_name());
+        doubtItemBinding.tvName.setText(name);
 
         doubtItemBinding.tvTimeStamp.setText(doubts.getDate_time());
         doubtItemBinding.doubtText.setText(doubts.getDoubt_text());

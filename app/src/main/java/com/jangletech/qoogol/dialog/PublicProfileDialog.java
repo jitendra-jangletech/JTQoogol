@@ -25,6 +25,7 @@ import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.util.AESSecurities;
 import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
+import com.jangletech.qoogol.util.TinyDB;
 import com.jangletech.qoogol.util.UtilHelper;
 
 import java.util.concurrent.ExecutorService;
@@ -139,7 +140,7 @@ public class PublicProfileDialog extends Dialog {
             if (userProfile.getBadge() != null && userProfile.getBadge().equalsIgnoreCase("P"))
                 mBinding.imgBadge.setImageDrawable(activity.getDrawable(R.drawable.platinum));
 
-            mBinding.tvName.setText(AESSecurities.getInstance().decrypt(userProfile.getFirstName()) + " " + AESSecurities.getInstance().decrypt(userProfile.getLastName()));
+            mBinding.tvName.setText(AESSecurities.getInstance().decrypt(TinyDB.getInstance(activity).getString(Constant.cf_key1), userProfile.getFirstName()) + " " + AESSecurities.getInstance().decrypt(TinyDB.getInstance(activity).getString(Constant.cf_key2), userProfile.getLastName()));
             if (userProfile.getStrGender() != null && userProfile.getStrGender().equalsIgnoreCase("M")) {
                 mBinding.tvGender.setText("Male");
             } else if (userProfile.getStrGender() != null && userProfile.getStrGender().equalsIgnoreCase("F")) {
@@ -252,7 +253,9 @@ public class PublicProfileDialog extends Dialog {
 
     public interface PublicProfileClickListener {
         void onFriendUnFriendClick();
+
         void onFollowUnfollowClick();
+
         void onViewImage(String path);
     }
 }

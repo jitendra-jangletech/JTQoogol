@@ -53,10 +53,19 @@ public class EducationInfoFragment extends BaseFragment implements EducationAdap
     private String userid = "";
     private String ueId = "";
     private PreferenceManager mSettings;
-    Call<FetchEducationResponse> call;
+    private Call<FetchEducationResponse> call;
+    private boolean isFragmentVisible = false;
 
     public static EducationInfoFragment newInstance() {
         return new EducationInfoFragment();
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser && isFragmentVisible) {
+            fetchEducationDetails(fetch_loged_in_user);
+        }
     }
 
     @Override
@@ -68,7 +77,6 @@ public class EducationInfoFragment extends BaseFragment implements EducationAdap
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_education_info, container, false);
         mBinding.setLifecycleOwner(this);
         return mBinding.getRoot();
@@ -79,17 +87,22 @@ public class EducationInfoFragment extends BaseFragment implements EducationAdap
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(EducationInfoViewModel.class);
         initViews();
+        if (isFragmentVisible && isFragmentVisible) {
+            fetchEducationDetails(fetch_loged_in_user);
+        }
     }
 
     private void initViews() {
         mSettings = new PreferenceManager(getActivity());
         userid = mSettings.getProfileFetchId();
-        if (userid.equalsIgnoreCase(mSettings.getUserId())) {
-            fetchEducationDetails(fetch_loged_in_user);
-            mBinding.addedu.setOnClickListener(this);
-        } else {
-            fetchEducationDetails(fetch_other_user);
-            mBinding.addedu.setVisibility(View.GONE);
+        if (!isFragmentVisible) {
+            if (userid.equalsIgnoreCase(mSettings.getUserId())) {
+                fetchEducationDetails(fetch_loged_in_user);
+                mBinding.addedu.setOnClickListener(this);
+            } else {
+                fetchEducationDetails(fetch_other_user);
+                mBinding.addedu.setVisibility(View.GONE);
+            }
         }
 
         mViewModel.getAllEducations(getUserId(getContext())).observe(getViewLifecycleOwner(), educations -> {
@@ -115,7 +128,7 @@ public class EducationInfoFragment extends BaseFragment implements EducationAdap
 
     private void setEducationListAdapter(List<Education> educationList, int call_from) {
         Log.d(TAG, "setEducationListAdapter: " + educationList.size());
-        educationAdapter = new EducationAdapter(requireActivity(), educationList, this, "","");
+        educationAdapter = new EducationAdapter(requireActivity(), educationList, this, "", "");
         mBinding.educationListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mBinding.educationListRecyclerView.setAdapter(educationAdapter);
     }
@@ -139,7 +152,7 @@ public class EducationInfoFragment extends BaseFragment implements EducationAdap
                 } else if (response.body().getResponse().equals("501")) {
                     resetSettingAndLogout();
                 } else {
-                    showErrorDialog(getActivity(), response.body().getResponse(), "");
+                    showErrorDialog(getActivity(), response.body().getResponse(), response.body().getErrorMsg());
                 }
             }
 
@@ -183,7 +196,7 @@ public class EducationInfoFragment extends BaseFragment implements EducationAdap
     }
 
     private void showEducationDialog(Education education) {
-        AddEduDialog addEduDialog = new AddEduDialog(getActivity(), education, false,this);
+        AddEduDialog addEduDialog = new AddEduDialog(getActivity(), education, false, this);
         addEduDialog.show();
     }
 

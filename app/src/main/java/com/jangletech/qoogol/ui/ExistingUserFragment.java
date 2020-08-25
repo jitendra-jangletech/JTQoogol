@@ -26,6 +26,7 @@ import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.util.AESSecurities;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
+import com.jangletech.qoogol.util.TinyDB;
 
 import java.util.Locale;
 
@@ -164,10 +165,10 @@ public class ExistingUserFragment extends BaseFragment {
         Log.d(TAG, "Mobile : " + mobile);
         ProgressDialog.getInstance().show(getActivity());
         Call<RegisterLoginModel> call = apiService.doRegisterLogin(
-                AESSecurities.getInstance().encrypt(mobile),
+                AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key4), mobile),
                 caseR,
                 countryCode,
-                AESSecurities.getInstance().encrypt(passwordOtp),
+                AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key6), passwordOtp),
                 deviceId,
                 appName,
                 new PreferenceManager(getActivity()).getToken(),
@@ -177,28 +178,30 @@ public class ExistingUserFragment extends BaseFragment {
             @Override
             public void onResponse(Call<RegisterLoginModel> call, Response<RegisterLoginModel> response) {
                 ProgressDialog.getInstance().dismiss();
-                if (response.body() != null && response.body().getResponse().equals("200")) {
-                    mViewModel.setRegisterLoginModel(response.body());
-                    if (caseR.equals("1") || caseR.equals("R")) {
-                        new PreferenceManager(getActivity()).saveString(Constant.MOBILE, mobile);
-                        isOtpSent = true;
-                        setTimer();
-                    } else {
-                        if (!response.body().getU_user_id().isEmpty()) {
-                            Log.d(TAG, "onResponse Launch UserId : " + response.body().getU_user_id());
-                            new PreferenceManager(getActivity()).saveInt(Constant.USER_ID, Integer.parseInt(response.body().getU_user_id()));
-                            new PreferenceManager(getActivity()).saveUserId(response.body().getU_user_id());
-                            new PreferenceManager(getActivity()).setIsLoggedIn(true);
-                            Intent i = new Intent(getActivity(), MainActivity.class);
-                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(i);
+                if (response.body() != null) {
+                    if (response.body().getResponse().equals("200")) {
+                        mViewModel.setRegisterLoginModel(response.body());
+                        if (caseR.equals("1") || caseR.equals("R")) {
+                            new PreferenceManager(getActivity()).saveString(Constant.MOBILE, mobile);
+                            isOtpSent = true;
+                            setTimer();
+                        } else {
+                            if (!response.body().getU_user_id().isEmpty()) {
+                                Log.d(TAG, "onResponse Launch UserId : " + response.body().getU_user_id());
+                                new PreferenceManager(getActivity()).saveInt(Constant.USER_ID, Integer.parseInt(response.body().getU_user_id()));
+                                new PreferenceManager(getActivity()).saveUserId(response.body().getU_user_id());
+                                new PreferenceManager(getActivity()).setIsLoggedIn(true);
+                                Intent i = new Intent(getActivity(), MainActivity.class);
+                                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(i);
+                            }
                         }
+                    } else if (response.body().getResponse().equals("315")) {
+                        showErrorDialog(getActivity(), response.body().getResponse(), response.body().getMessage(), "NEW_USER", mobile);
+                    } else {
+                        showErrorDialog(getActivity(), response.body().getResponse(), response.body().getMessage());
+                        showToast("Error Code : " + response.body().getResponse());
                     }
-                } else if (response != null && response.body().getResponse().equals("315")) {
-                    showErrorDialog(getActivity(), response.body().getResponse(), response.body().getMessage(), "NEW_USER", mobile);
-                } else {
-                    showErrorDialog(getActivity(), response.body().getResponse(), response.body().getMessage());
-                    showToast("Error Code : " + response.body().getResponse());
                 }
             }
 

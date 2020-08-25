@@ -107,6 +107,7 @@ public class PersonalInfoFragment extends BaseFragment {
     private android.app.ProgressDialog mDialog;
     private FragmentPersonalInfoBinding mBinding;
     private Dialog dialog;
+    private String masterKey = "";
     private Context mContext;
     private String gender = "";
     private Map<Integer, String> mMapNationality;
@@ -123,6 +124,7 @@ public class PersonalInfoFragment extends BaseFragment {
     private String userid = "";
     private PreferenceManager mSettings;
     private Call<UserProfile> call;
+    private boolean isFragmentVisible = false;
 
     public static PersonalInfoFragment newInstance() {
         return new PersonalInfoFragment();
@@ -136,12 +138,20 @@ public class PersonalInfoFragment extends BaseFragment {
     }
 
     @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser && isFragmentVisible) {
+            fetchUserProfile(fetch_loged_in_user, "");
+        }
+    }
+
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_personal_info, container, false);
         mViewModel = new ViewModelProvider(this).get(PersonalInfoViewModel.class);
         mBinding.setLifecycleOwner(this);
-        initViews();
+        masterKey = AESSecurities.getMasterKey(AppUtils.getDeviceId());
         return mBinding.getRoot();
     }
 
@@ -149,10 +159,13 @@ public class PersonalInfoFragment extends BaseFragment {
         mSettings = new PreferenceManager(getActivity());
         userid = mSettings.getProfileFetchId();
         Log.d(TAG, "initViews UserId : " + mSettings.getUserId());
-        if (userid.equalsIgnoreCase(mSettings.getUserId()))
-            fetchUserProfile(fetch_loged_in_user, "");
-        else
-            fetchUserProfile(fetch_other_user, "");
+        if (!isFragmentVisible) {
+            isFragmentVisible = true;
+            if (userid.equalsIgnoreCase(mSettings.getUserId()))
+                fetchUserProfile(fetch_loged_in_user, "");
+            else
+                fetchUserProfile(fetch_other_user, "");
+        }
 
         mViewModel.getUserProfile(userid).observe(getViewLifecycleOwner(), userProfile -> {
             Log.d(TAG, "onChanged : " + userProfile);
@@ -245,7 +258,7 @@ public class PersonalInfoFragment extends BaseFragment {
                 mBinding.etEmail.setError("Please enter valid email.");
                 return;
             } else {
-                verifyMobile(AESSecurities.getInstance().encrypt(mBinding.etEmail.getText().toString().trim()), "E");
+                verifyMobile(AESSecurities.getInstance().encrypt(masterKey, mBinding.etEmail.getText().toString().trim()), "E");
             }
         });
         mBinding.btnMobileVerify.setOnClickListener(v -> {
@@ -255,7 +268,7 @@ public class PersonalInfoFragment extends BaseFragment {
                 mBinding.etMobile.setError("Please enter mobile number");
                 return;
             }
-            verifyMobile(AESSecurities.getInstance().encrypt(mBinding.etMobile.getText().toString().trim()), "M");
+            verifyMobile(AESSecurities.getInstance().encrypt(masterKey, mBinding.etMobile.getText().toString().trim()), "M");
         });
 
         if (userid.equalsIgnoreCase(mSettings.getUserId())) {
@@ -775,13 +788,14 @@ public class PersonalInfoFragment extends BaseFragment {
     }
 
     private void userInfo() {
-
         UserProfile userProfile = new UserProfile();
+        Log.d(TAG, "Email : " + mBinding.etEmail.getText().toString().trim());
+        Log.d(TAG, "Encrypted Email : " + AESSecurities.getInstance().encrypt(masterKey, mBinding.etEmail.getText().toString().trim()));
 
-        userProfileMap.put(Constant.u_mob_1_encrypted, AESSecurities.getInstance().encrypt(mBinding.etMobile.getText().toString().trim()));
-        userProfileMap.put(Constant.u_Email_encrypted, AESSecurities.getInstance().encrypt(mBinding.etEmail.getText().toString().trim()));
-        userProfileMap.put(Constant.u_birth_date_encrypted, AESSecurities.getInstance().encrypt(convertDateToDataBaseFormat(mBinding.etDob.getText().toString())));
-        userProfileMap.put(Constant.u_Password_encrypted, AESSecurities.getInstance().encrypt(mBinding.etPassword.getText().toString().trim()));
+        userProfileMap.put(Constant.u_Email_encrypted, AESSecurities.getInstance().encrypt(masterKey, mBinding.etEmail.getText().toString().trim()));
+        userProfileMap.put(Constant.u_mob_1_encrypted, AESSecurities.getInstance().encrypt(masterKey, mBinding.etMobile.getText().toString().trim()));
+        userProfileMap.put(Constant.u_birth_date_encrypted, AESSecurities.getInstance().encrypt(masterKey, convertDateToDataBaseFormat(mBinding.etDob.getText().toString())));
+        userProfileMap.put(Constant.u_Password_encrypted, AESSecurities.getInstance().encrypt(masterKey, mBinding.etPassword.getText().toString().trim()));
 
         if (mBinding.userNameAutoCompleteTextView.getText().toString().trim().isEmpty())
             userProfileMap.put(Constant.userName, mBinding.userNameAutoCompleteTextView.getTag().toString());
@@ -793,8 +807,8 @@ public class PersonalInfoFragment extends BaseFragment {
         userProfileMap.put(Constant.u_app_version, Constant.APP_VERSION);
         userProfileMap.put(Constant.device_id, getDeviceId(getActivity()));
         userProfileMap.put(Constant.appName, Constant.APP_NAME);
-        userProfileMap.put(Constant.u_first_name_encrypted, AESSecurities.getInstance().encrypt(mBinding.etFirstName.getText().toString().trim()));
-        userProfileMap.put(Constant.u_last_name_encrypted, AESSecurities.getInstance().encrypt(mBinding.etLastName.getText().toString().trim()));
+        userProfileMap.put(Constant.u_first_name_encrypted, AESSecurities.getInstance().encrypt(masterKey, mBinding.etFirstName.getText().toString().trim()));
+        userProfileMap.put(Constant.u_last_name_encrypted, AESSecurities.getInstance().encrypt(masterKey, mBinding.etLastName.getText().toString().trim()));
         userProfileMap.put(Constant.CASE, "n");
         userProfileMap.put(Constant.STATUS, "i");
         userProfileMap.put(Constant.u_tagline, mBinding.etTagLine.getText().toString().trim());
@@ -803,9 +817,9 @@ public class PersonalInfoFragment extends BaseFragment {
         userProfileMap.put(Constant.u_native_s_id, getEmptyStringIfNull(String.valueOf(mBinding.stateAutocompleteView.getTag())));
         userProfileMap.put(Constant.u_native_dt_id, getEmptyStringIfNull(String.valueOf(mBinding.divisionAutocompleteView.getTag())));
         userProfileMap.put(Constant.u_nationality, getEmptyStringIfNull(String.valueOf(mBinding.nationalityAutocompleteView.getTag())));
-        userProfileMap.put(Constant.w_lm_id_array, getEmptyStringIfNull(String.valueOf(mBinding.langAutocompleteView.getTag())));
         userProfileMap.put(Constant.u_gender, getSingleQuoteString(gender));
-
+        Log.d(TAG, "Language Array : " + getLanguageArray(mBinding.langAutocompleteView.getTag()));
+        userProfileMap.put(Constant.w_lm_id_array, getLanguageArray(mBinding.langAutocompleteView.getTag()));
         updateUserProfile(userProfileMap);
     }
 
@@ -1168,7 +1182,7 @@ public class PersonalInfoFragment extends BaseFragment {
                 if (response.body() != null && response.body().getResponse().equals("200")) {
                     createVerifyOTPDialog(response.body().getNewOTP());
                 } else {
-                    showErrorDialog(requireActivity(), response.body().getResponse(), "");
+                    showErrorDialog(requireActivity(), response.body().getResponse(), response.body().getErrorMsg());
                 }
             }
 
@@ -1255,6 +1269,8 @@ public class PersonalInfoFragment extends BaseFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(PersonalInfoViewModel.class);
+        initViews();
+
     }
 
     private void loadImage() {
@@ -1269,8 +1285,8 @@ public class PersonalInfoFragment extends BaseFragment {
         Log.d(TAG, "generateVerifyUserName: " + params);
         String strCase = params.get(Constant.CASE);
         Call<GenerateVerifyUserName> call = apiService.generateVerifyUserName(
-                AESSecurities.getInstance().encrypt(params.get(Constant.u_first_name)),
-                AESSecurities.getInstance().encrypt(params.get(Constant.u_last_name)),
+                AESSecurities.getInstance().encrypt(masterKey, params.get(Constant.u_first_name)),
+                AESSecurities.getInstance().encrypt(masterKey, params.get(Constant.u_last_name)),
                 params.get(Constant.CASE),
                 params.get(Constant.userName)
         );

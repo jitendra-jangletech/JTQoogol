@@ -109,6 +109,9 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
                         params.put(Constant.subjectId, null);
 
                     params.put(Constant.CASE, "U");
+                    params.put(Constant.chapterId1, "");
+                    params.put(Constant.chapterId2, "");
+                    params.put(Constant.chapterId3, "");
                     fetchUpdatePreferences(params);
                 }
             }
@@ -400,6 +403,10 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
         mBinding.tvEndDate.setText(DateUtils.getFormattedDate(education.getUe_enddate()));
         params.put(Constant.CASE, "U");
         params.put(Constant.selected_ue_id, education.getUe_id());
+        params.put(Constant.subjectId, "");
+        params.put(Constant.chapterId1, "");
+        params.put(Constant.chapterId2, "");
+        params.put(Constant.chapterId3, "");
         fetchUpdatePreferences(params);
         showToast("Education Preference Updated.");
     }

@@ -162,6 +162,7 @@ public class TestSharedWithYouFragment extends BaseFragment
 
     private void initViews() {
         setTitle("Shared With You");
+        mBinding.topLayout.setVisibility(View.GONE);
         params = AppUtils.loadHashMap(mContext);
         isFilterApplied = getFilter(TEST_FILTER_APPLIED);
         linearLayoutManager = new LinearLayoutManager(getContext());

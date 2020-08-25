@@ -69,10 +69,10 @@ public class EducationListDialog extends Dialog implements EducationAdapter.Educ
 
         mBinding.tvSave.setOnClickListener(v -> {
             //AppUtils.showToast(mContext, "UEID : " + edu.getUe_id());
-            Log.d(TAG, "onCreate University : " + edu.getUbm_board_name());
+            /*Log.d(TAG, "onCreate University : " + edu.getUbm_board_name());
             Log.d(TAG, "onCreate Degree : " + edu.getDm_degree_name());
             Log.d(TAG, "onCreate Course : " + edu.getCo_name());
-            Log.d(TAG, "onCreate Institute : " + edu.getIom_name());
+            Log.d(TAG, "onCreate Institute : " + edu.getIom_name());*/
             listener.onSaveButtonClick(edu);
             dismiss();
         });

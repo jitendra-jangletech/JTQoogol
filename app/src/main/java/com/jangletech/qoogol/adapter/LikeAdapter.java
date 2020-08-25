@@ -15,8 +15,10 @@ import com.bumptech.glide.Glide;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.LikeitemBinding;
 import com.jangletech.qoogol.model.Like;
+import com.jangletech.qoogol.util.AESSecurities;
+import com.jangletech.qoogol.util.Constant;
+import com.jangletech.qoogol.util.TinyDB;
 import com.jangletech.qoogol.util.UtilHelper;
-
 import java.util.List;
 
 /**
@@ -61,7 +63,10 @@ public class LikeAdapter extends RecyclerView.Adapter<LikeAdapter.ViewHolder> {
             if (like.getProfile_image() != null && !like.getProfile_image().isEmpty()) {
                 Glide.with(activity).load(UtilHelper.getProfileImageUrl(like.getProfile_image().trim())).circleCrop().placeholder(R.drawable.profile).into(holder.likeitemBinding.userProfileImage);
             }
-            holder.likeitemBinding.tvUserName.setText(like.getUserFirstName() + " " + like.getUserLastName());
+            holder.likeitemBinding.tvUserName.setText(
+                    AESSecurities.getInstance().decrypt(TinyDB.getInstance(activity).getString(Constant.cf_key1), like.getUserFirstName()) + " "
+                            + AESSecurities.getInstance().decrypt(TinyDB.getInstance(activity).getString(Constant.cf_key2), like.getUserLastName())
+            );
         } catch (Exception e) {
             e.printStackTrace();
         }

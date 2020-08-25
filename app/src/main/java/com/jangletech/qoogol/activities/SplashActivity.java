@@ -2,23 +2,90 @@ package com.jangletech.qoogol.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.jangletech.qoogol.R;
+import com.jangletech.qoogol.model.AppConfigResponse;
+import com.jangletech.qoogol.retrofit.ApiClient;
+import com.jangletech.qoogol.retrofit.ApiInterface;
+import com.jangletech.qoogol.util.AESSecurities;
+import com.jangletech.qoogol.util.AppUtils;
+import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
+import com.jangletech.qoogol.util.TinyDB;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SplashActivity extends BaseActivity {
+
+    private static final String TAG = "SplashActivity";
+    private ApiInterface apiService = ApiClient.getInstance().getApi();
+    private SplashViewModel mViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        performAutoLogin();
+        mViewModel = new ViewModelProvider(this).get(SplashViewModel.class);
+        fetchAppConfig();
+        mViewModel.getAppConfigResponse().observe(this, new Observer<AppConfigResponse>() {
+            @Override
+            public void onChanged(AppConfigResponse appConfigResponse) {
+                if (appConfigResponse != null) {
+                    String masterKey = AESSecurities.getMasterKey(AppUtils.getDeviceId());
+                    Log.d(TAG, "onChanged MasterKey : " + masterKey);
+                    Log.d(TAG, "onChanged First Name key : " + AESSecurities.getInstance().decrypt("1" + masterKey, appConfigResponse.getFirstNameKey()));
+                    Log.d(TAG, "onChanged Last Name key : " + AESSecurities.getInstance().decrypt("2" + masterKey, appConfigResponse.getLastNameKey()));
+                    Log.d(TAG, "onChanged Dob key : " + AESSecurities.getInstance().decrypt("3" + masterKey, appConfigResponse.getDobKey()));
+                    Log.d(TAG, "onChanged Mobile key : " + AESSecurities.getInstance().decrypt("4" + masterKey, appConfigResponse.getMobileKey()));
+                    Log.d(TAG, "onChanged Email key : " + AESSecurities.getInstance().decrypt("5" + masterKey, appConfigResponse.getEmailKey()));
+                    Log.d(TAG, "onChanged Password key : " + AESSecurities.getInstance().decrypt("6" + masterKey, appConfigResponse.getPasswordKey()));
+
+                    TinyDB.getInstance(SplashActivity.this).putString(Constant.cf_key1, AESSecurities.getInstance().decrypt("1" + masterKey, appConfigResponse.getFirstNameKey()));
+                    TinyDB.getInstance(SplashActivity.this).putString(Constant.cf_key2, AESSecurities.getInstance().decrypt("2" + masterKey, appConfigResponse.getLastNameKey()));
+                    TinyDB.getInstance(SplashActivity.this).putString(Constant.cf_key3, AESSecurities.getInstance().decrypt("3" + masterKey, appConfigResponse.getDobKey()));
+                    TinyDB.getInstance(SplashActivity.this).putString(Constant.cf_key4, AESSecurities.getInstance().decrypt("4" + masterKey, appConfigResponse.getMobileKey()));
+                    TinyDB.getInstance(SplashActivity.this).putString(Constant.cf_key5, AESSecurities.getInstance().decrypt("5" + masterKey, appConfigResponse.getEmailKey()));
+                    TinyDB.getInstance(SplashActivity.this).putString(Constant.cf_key6, AESSecurities.getInstance().decrypt("6" + masterKey, appConfigResponse.getPasswordKey()));
+                    performAutoLogin();
+                }
+            }
+        });
         /*new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 performAutoLogin();
             }
         }, 1000);*/
+    }
+
+    private void fetchAppConfig() {
+        //ProgressDialog.getInstance().show(this);
+        Call<AppConfigResponse> call = apiService.fetchAppConfig(Constant.APP_NAME, AppUtils.getDeviceId());
+        call.enqueue(new Callback<AppConfigResponse>() {
+            @Override
+            public void onResponse(Call<AppConfigResponse> call, Response<AppConfigResponse> response) {
+                //ProgressDialog.getInstance().dismiss();
+                if (response.body() != null) {
+                    Log.d(TAG, "onResponse: " + response.body());
+                    mViewModel.setAppConfigResponse(response.body());
+                } else {
+                    showErrorDialog(SplashActivity.this, response.body().getResponse(), response.body().getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AppConfigResponse> call, Throwable t) {
+                //ProgressDialog.getInstance().dismiss();
+                showToast("Something went wrong!!");
+                t.printStackTrace();
+            }
+        });
     }
 
     private void performAutoLogin() {

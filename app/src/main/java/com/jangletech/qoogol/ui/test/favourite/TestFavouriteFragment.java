@@ -47,15 +47,22 @@ public class TestFavouriteFragment extends BaseFragment implements TestListAdapt
     private TestFavouriteFragmentBinding mBinding;
     private List<TestModelNew> testModelNewList;
     private TestListAdapter testListAdapter;
+    private boolean isFragmentVisible = false;
     private ApiInterface apiService = ApiClient.getInstance().getApi();
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser && isFragmentVisible) {
+            fetchTestList();
+        }
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.test_favourite_fragment, container, false);
-        //mBinding.setLifecycleOwner(this);
         mViewModel = ViewModelProviders.of(this).get(MyTestViewModel.class);
-        initViews();
         return mBinding.getRoot();
     }
 
@@ -72,13 +79,10 @@ public class TestFavouriteFragment extends BaseFragment implements TestListAdapt
             }
         });
 
-
-       /* HashMap<String, String> params = new HashMap<>();
-        params.put(Constant.u_user_id, getUserId());
-        params.put(Constant.CASE, "FV");
-        params.put(Constant.tm_recent_test, "");
-        params.put(Constant.tm_popular_test, "");*/
-        fetchTestList();
+        if (!isFragmentVisible) {
+            isFragmentVisible = true;
+            fetchTestList();
+        }
         mViewModel.getAllTestList().observe(getActivity(), new Observer<List<TestModelNew>>() {
             @Override
             public void onChanged(@Nullable final List<TestModelNew> favTests) {
@@ -186,6 +190,13 @@ public class TestFavouriteFragment extends BaseFragment implements TestListAdapt
         Log.d(TAG, "favClick Value : " + testModelNew.isFavourite());
         mViewModel.updateFav("PRACTICE", getUserId(getActivity()), testModelNew.getTm_id(), testModelNew.isFavourite());
         //fetchTestList();
+    }
+
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        initViews();
     }
 
     @Override

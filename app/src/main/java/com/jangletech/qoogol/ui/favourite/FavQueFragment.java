@@ -2,6 +2,7 @@ package com.jangletech.qoogol.ui.favourite;
 
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,12 +16,10 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.jangletech.qoogol.R;
-
 import com.jangletech.qoogol.adapter.LearningAdapter;
 import com.jangletech.qoogol.databinding.LearningFragmentBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.enums.Module;
-import com.jangletech.qoogol.model.LearningQuestResponse;
 import com.jangletech.qoogol.model.LearningQuestionsNew;
 import com.jangletech.qoogol.model.ProcessQuestion;
 import com.jangletech.qoogol.retrofit.ApiClient;
@@ -45,18 +44,29 @@ import static com.jangletech.qoogol.util.Constant.profile;
  */
 public class FavQueFragment extends Fragment implements LearningAdapter.onIconClick {
 
+    private static final String TAG = "FavQueFragment";
     private LearningFragmentBinding learningFragmentBinding;
     private LearningAdapter learingAdapter;
     private List<LearningQuestionsNew> learningQuestionsList;
     private List<LearningQuestionsNew> questionsNewList;
     private ApiInterface apiService = ApiClient.getInstance().getApi();
     private String userId = "";
+    private boolean isFragmentVisible = false;
     private FavouriteViewModel mViewModel;
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser && isFragmentVisible) {
+            mViewModel.fetchFavQuestionData();
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         learningFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.learning_fragment, container, false);
+        Log.d(TAG, "onCreateView QuestFav: ");
         return learningFragmentBinding.getRoot();
     }
 
@@ -66,6 +76,10 @@ public class FavQueFragment extends Fragment implements LearningAdapter.onIconCl
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(FavouriteViewModel.class);
         initView();
+        if (!isFragmentVisible) {
+            isFragmentVisible = true;
+            mViewModel.fetchFavQuestionData();
+        }
     }
 
 
@@ -130,7 +144,7 @@ public class FavQueFragment extends Fragment implements LearningAdapter.onIconCl
         int user_id = new PreferenceManager(getActivity()).getInt(Constant.USER_ID);
 
         if (call_from.equalsIgnoreCase("like"))
-            call = apiService.likeApi(user_id,que_id, "I", flag);
+            call = apiService.likeApi(user_id, que_id, "I", flag);
         else if (call_from.equalsIgnoreCase("fav"))
             call = apiService.favApi(user_id, que_id, "I", flag);
         else if (call_from.equalsIgnoreCase("submit"))

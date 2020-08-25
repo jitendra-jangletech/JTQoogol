@@ -13,7 +13,6 @@ import android.os.CountDownTimer;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
@@ -39,6 +38,7 @@ import com.jangletech.qoogol.activities.MainActivity;
 import com.jangletech.qoogol.activities.RegisterLoginActivity;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
+import com.jangletech.qoogol.util.TinyDB;
 
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
@@ -78,6 +78,10 @@ public class BaseFragment extends Fragment {
             }
         }
         return defCat;
+    }
+
+    public String getLocalString(String key) {
+        return TinyDB.getInstance(getActivity()).getString(key);
     }
 
     public boolean isAppInstalled() {
@@ -122,6 +126,28 @@ public class BaseFragment extends Fragment {
                 .into(imageView);
 
         dialog.show();
+    }
+
+
+    public String getLanguageArray(Object languages) {
+        String res = "";
+        if (languages != null) {
+            if (!languages.toString().isEmpty()) {
+                String[] lang = languages.toString().split(",", -1);
+                for (int i = 0; i < lang.length; i++) {
+                    if (lang != null && !lang[i].isEmpty()) {
+                        res = res + "," + lang[i];
+                    }
+                }
+            }
+        }
+
+        if (res.startsWith(","))
+            return res.replaceFirst(",", "");
+        else if (res.endsWith(","))
+            return res.substring(0, res.length() - 1);
+        else
+            return res;
     }
 
     public String getEmptyStringIfNull(String string) {
@@ -293,25 +319,13 @@ public class BaseFragment extends Fragment {
         return preferences.getBoolean(key, false);
     }
 
-    public void saveQueFilter(boolean value) {
-        preferences = android.preference.PreferenceManager.getDefaultSharedPreferences(getActivity());
-        preferences.edit()
-                .putBoolean(Constant.QUESTION_FILTER_APPLIED, value)
-                .apply();
-    }
-
-    public boolean getQueFilter(String key) {
-        preferences = android.preference.PreferenceManager.getDefaultSharedPreferences(getActivity());
-        return preferences.getBoolean(key, false);
-    }
-
-    public void setFilterIcon(Menu menu,Context mContext,boolean flag) {
+    public void setFilterIcon(Menu menu, Context mContext, boolean flag) {
         if (flag)
             menu.getItem(1).setIcon(ContextCompat.getDrawable(mContext, R.drawable.ic_filter_applied));
             //menuItem.setIcon(getActivity().getResources().getDrawable(R.drawable.ic_filter_applied));
         else
             menu.getItem(1).setIcon(ContextCompat.getDrawable(mContext, R.drawable.ic_filter));
-            //menuItem.setIcon(getActivity().getResources().getDrawable(R.drawable.ic_filter));
+        //menuItem.setIcon(getActivity().getResources().getDrawable(R.drawable.ic_filter));
     }
 
     public void apiCallFailureDialog(Throwable t) {

@@ -48,6 +48,7 @@ import com.jangletech.qoogol.util.AESSecurities;
 import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
+import com.jangletech.qoogol.util.TinyDB;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -152,7 +153,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
 
         if (dashBoard.getFirstName() != null || dashBoard.getLastName() != null) {
             saveString(getActivity(), Constant.u_first_name, dashBoard.getFirstName());
-            String uName = AESSecurities.getInstance().decrypt(dashBoard.getFirstName()) + " " + AESSecurities.getInstance().decrypt(dashBoard.getLastName());
+            String uName = AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key1),dashBoard.getFirstName()) + " " + AESSecurities.getInstance().decrypt(getLocalString(Constant.cf_key2),dashBoard.getLastName());
             MainActivity.textViewDisplayName.setText(uName);
         } else {
             MainActivity.textViewDisplayName.setText("Qoogol User");
