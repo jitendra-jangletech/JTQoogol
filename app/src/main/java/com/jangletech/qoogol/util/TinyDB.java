@@ -29,6 +29,7 @@ import java.util.Arrays;
 import java.util.Map;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -49,6 +50,13 @@ public class TinyDB {
     private static TinyDB instance = null;
 
     public static TinyDB getInstance(Activity activity) {
+        if (instance == null) {
+            instance = new TinyDB(activity);
+        }
+        return instance;
+    }
+
+    public static TinyDB getInstance(Application activity) {
         if (instance == null) {
             instance = new TinyDB(activity);
         }

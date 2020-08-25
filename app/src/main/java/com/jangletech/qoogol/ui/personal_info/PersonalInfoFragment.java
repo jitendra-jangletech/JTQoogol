@@ -62,6 +62,7 @@ import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.DateUtils;
 import com.jangletech.qoogol.util.PreferenceManager;
+import com.jangletech.qoogol.util.TinyDB;
 import com.jangletech.qoogol.util.UtilHelper;
 import com.mukesh.OtpView;
 import com.theartofdev.edmodo.cropper.CropImage;
@@ -171,13 +172,22 @@ public class PersonalInfoFragment extends BaseFragment {
             Log.d(TAG, "onChanged : " + userProfile);
             if (userProfile != null) {
                 profile = userProfile;
-                Log.d(TAG, "initViews FName : " + userProfile.getFirstName());
-                Log.d(TAG, "initViews LName : " + userProfile.getLastName());
-                Log.d(TAG, "initViews Dob : " + userProfile.getDob());
+                //Log.d(TAG, "initViews FName : " + userProfile.getFirstName());
+                //Log.d(TAG, "initViews LName : " + userProfile.getLastName());
+                //Log.d(TAG, "initViews Dob : " + userProfile.getDob());
                 mBinding.setUserProfile(userProfile);
                 //save User Badge Info
                 new PreferenceManager(getActivity()).saveString("BADGE", userProfile.getBadge());
                 new PreferenceManager(getActivity()).saveString(Constant.userName, userProfile.getUserName());
+
+                Log.d(TAG, "Focus Languages : "+userProfile);
+                //set First Name, Last Name, Mobile Number, Email, Password, Dob
+                mBinding.etFirstName.setText(AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key1), userProfile.getFirstName()));
+                mBinding.etLastName.setText(AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key2), userProfile.getLastName()));
+                mBinding.etDob.setText(DateUtils.getFormattedDate(AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key3), userProfile.getDob())));
+                mBinding.etMobile.setText(AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key4), userProfile.getMobileNumber()));
+                mBinding.etEmail.setText(AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key5), userProfile.getEmailAddress()));
+                mBinding.etPassword.setText(AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key6), userProfile.getPassword()));
 
                 if (!userid.equalsIgnoreCase(mSettings.getUserId())) {
                     //manageUnwantedFields(userProfile);
@@ -258,7 +268,9 @@ public class PersonalInfoFragment extends BaseFragment {
                 mBinding.etEmail.setError("Please enter valid email.");
                 return;
             } else {
-                verifyMobile(AESSecurities.getInstance().encrypt(masterKey, mBinding.etEmail.getText().toString().trim()), "E");
+                verifyMobile(AESSecurities.getInstance().encrypt(
+                        TinyDB.getInstance(getActivity()).getString(Constant.cf_key5),
+                        mBinding.etEmail.getText().toString().trim()), "E");
             }
         });
         mBinding.btnMobileVerify.setOnClickListener(v -> {
@@ -268,7 +280,9 @@ public class PersonalInfoFragment extends BaseFragment {
                 mBinding.etMobile.setError("Please enter mobile number");
                 return;
             }
-            verifyMobile(AESSecurities.getInstance().encrypt(masterKey, mBinding.etMobile.getText().toString().trim()), "M");
+            verifyMobile(AESSecurities.getInstance().encrypt(
+                    TinyDB.getInstance(getActivity()).getString(Constant.cf_key4),
+                    mBinding.etMobile.getText().toString().trim()), "M");
         });
 
         if (userid.equalsIgnoreCase(mSettings.getUserId())) {
@@ -790,12 +804,12 @@ public class PersonalInfoFragment extends BaseFragment {
     private void userInfo() {
         UserProfile userProfile = new UserProfile();
         Log.d(TAG, "Email : " + mBinding.etEmail.getText().toString().trim());
-        Log.d(TAG, "Encrypted Email : " + AESSecurities.getInstance().encrypt(masterKey, mBinding.etEmail.getText().toString().trim()));
+        Log.d(TAG, "Encrypted Email : " + AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key5), mBinding.etEmail.getText().toString().trim()));
 
-        userProfileMap.put(Constant.u_Email_encrypted, AESSecurities.getInstance().encrypt(masterKey, mBinding.etEmail.getText().toString().trim()));
-        userProfileMap.put(Constant.u_mob_1_encrypted, AESSecurities.getInstance().encrypt(masterKey, mBinding.etMobile.getText().toString().trim()));
-        userProfileMap.put(Constant.u_birth_date_encrypted, AESSecurities.getInstance().encrypt(masterKey, convertDateToDataBaseFormat(mBinding.etDob.getText().toString())));
-        userProfileMap.put(Constant.u_Password_encrypted, AESSecurities.getInstance().encrypt(masterKey, mBinding.etPassword.getText().toString().trim()));
+        userProfileMap.put(Constant.u_Email_encrypted, AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key5), mBinding.etEmail.getText().toString().trim()));
+        userProfileMap.put(Constant.u_mob_1_encrypted, AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key4), mBinding.etMobile.getText().toString().trim()));
+        userProfileMap.put(Constant.u_birth_date_encrypted, AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key3), convertDateToDataBaseFormat(mBinding.etDob.getText().toString())));
+        userProfileMap.put(Constant.u_Password_encrypted, AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key6), mBinding.etPassword.getText().toString().trim()));
 
         if (mBinding.userNameAutoCompleteTextView.getText().toString().trim().isEmpty())
             userProfileMap.put(Constant.userName, mBinding.userNameAutoCompleteTextView.getTag().toString());
@@ -807,8 +821,8 @@ public class PersonalInfoFragment extends BaseFragment {
         userProfileMap.put(Constant.u_app_version, Constant.APP_VERSION);
         userProfileMap.put(Constant.device_id, getDeviceId(getActivity()));
         userProfileMap.put(Constant.appName, Constant.APP_NAME);
-        userProfileMap.put(Constant.u_first_name_encrypted, AESSecurities.getInstance().encrypt(masterKey, mBinding.etFirstName.getText().toString().trim()));
-        userProfileMap.put(Constant.u_last_name_encrypted, AESSecurities.getInstance().encrypt(masterKey, mBinding.etLastName.getText().toString().trim()));
+        userProfileMap.put(Constant.u_first_name_encrypted, AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key1), mBinding.etFirstName.getText().toString().trim()));
+        userProfileMap.put(Constant.u_last_name_encrypted, AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key2), mBinding.etLastName.getText().toString().trim()));
         userProfileMap.put(Constant.CASE, "n");
         userProfileMap.put(Constant.STATUS, "i");
         userProfileMap.put(Constant.u_tagline, mBinding.etTagLine.getText().toString().trim());
@@ -825,6 +839,11 @@ public class PersonalInfoFragment extends BaseFragment {
 
     private void updateUserProfile(HashMap<String, String> userProfileMap) {
         Log.d(TAG, "updateUserProfile: " + userProfileMap);
+
+        Log.d(TAG, "Focus First Name : "+AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key1),userProfileMap.get(Constant.u_first_name_encrypted)));
+        Log.d(TAG, "Focus First Name : "+AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key2),userProfileMap.get(Constant.u_last_name_encrypted)));
+        Log.d(TAG, "Focus Mobile : "+AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key4),userProfileMap.get(Constant.u_mob_1_encrypted)));
+
         ProgressDialog.getInstance().show(requireActivity());
         Call<UserProfileResponse> call = apiService.updateUserProfile(
                 userProfileMap.get(Constant.u_user_id),
@@ -854,24 +873,21 @@ public class PersonalInfoFragment extends BaseFragment {
             @Override
             public void onResponse(Call<UserProfileResponse> call, Response<UserProfileResponse> response) {
                 ProgressDialog.getInstance().dismiss();
-                if (response.body() != null && response.body().getResponseCode().equals("200")) {
-                    //showToast("Profile Updated Successfully.");
-                    String displayName = mBinding.etFirstName.getText().toString().trim() + " " + mBinding.etLastName.getText().toString().trim();
-                    new PreferenceManager(requireActivity()).saveString(Constant.DISPLAY_NAME, displayName);
-                    new PreferenceManager(requireActivity()).saveString(Constant.GENDER, userProfileMap.get(Constant.u_gender));
-                    //todo update Local db
-                    fetchUserProfile(0, "FINISH");
-                    //Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_home);
-                    //MainActivity.navController.navigate(R.id.nav_home);
-                } else {
-                    showErrorDialog(requireActivity(), response.body().getResponseCode(), "");
+                if (response != null && response.body() != null) {
+                    if (response.body().getResponseCode().equals("200")) {
+                        String displayName = mBinding.etFirstName.getText().toString().trim() + " " + mBinding.etLastName.getText().toString().trim();
+                        new PreferenceManager(requireActivity()).saveString(Constant.DISPLAY_NAME, displayName);
+                        new PreferenceManager(requireActivity()).saveString(Constant.GENDER, userProfileMap.get(Constant.u_gender));
+                        fetchUserProfile(0, "FINISH");
+                    } else {
+                        showErrorDialog(requireActivity(), response.body().getResponseCode(), response.body().getMessage());
+                    }
                 }
             }
 
             @Override
             public void onFailure(Call<UserProfileResponse> call, Throwable t) {
                 ProgressDialog.getInstance().dismiss();
-                Log.e(TAG, "onFailure updateUserProfile : " + t.getMessage());
                 showToast("Something went wrong!!");
                 t.printStackTrace();
             }
@@ -1179,17 +1195,18 @@ public class PersonalInfoFragment extends BaseFragment {
             @Override
             public void onResponse(Call<VerifyResponse> call, Response<VerifyResponse> response) {
                 ProgressDialog.getInstance().dismiss();
-                if (response.body() != null && response.body().getResponse().equals("200")) {
-                    createVerifyOTPDialog(response.body().getNewOTP());
-                } else {
-                    showErrorDialog(requireActivity(), response.body().getResponse(), response.body().getErrorMsg());
+                if (response != null && response.body() != null) {
+                    if (response.body().getResponse().equals("200")) {
+                        createVerifyOTPDialog(response.body().getNewOTP());
+                    } else {
+                        showErrorDialog(requireActivity(), response.body().getResponse(), response.body().getErrorMsg());
+                    }
                 }
             }
 
             @Override
             public void onFailure(Call<VerifyResponse> call, Throwable t) {
                 ProgressDialog.getInstance().dismiss();
-                Log.e(TAG, "onFailure Verify Mobile: " + t.getMessage());
                 showToast("Something went wrong!!");
                 t.printStackTrace();
             }

@@ -22,7 +22,10 @@ import com.jangletech.qoogol.model.ProcessQuestion;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.learning.CommentViewModel;
+import com.jangletech.qoogol.util.AESSecurities;
 import com.jangletech.qoogol.util.AppUtils;
+import com.jangletech.qoogol.util.Constant;
+import com.jangletech.qoogol.util.TinyDB;
 import com.jangletech.qoogol.util.UtilHelper;
 
 import java.util.ArrayList;
@@ -114,8 +117,12 @@ public class CommentDialog extends Dialog implements CommentAdapter.onCommentIte
                         mBinding.emptytv.setVisibility(View.GONE);
                         commentList.clear();
                         if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
-                            commentList = response.body().getCommentList();
-                            Log.d(TAG, "onResponse commentList : " + commentList.size());
+                            List<Comments> newCommentList = response.body().getCommentList();
+                            for (Comments comments : newCommentList){
+                                comments.setUserFirstName(AESSecurities.getInstance().decrypt(TinyDB.getInstance(mContext).getString(Constant.cf_key1), comments.getUserFirstName()));
+                                comments.setUserLastName(AESSecurities.getInstance().decrypt(TinyDB.getInstance(mContext).getString(Constant.cf_key2), comments.getUserLastName()));
+                                commentList.add(comments);
+                            }
                             emptyView();
                         } else {
                             Toast.makeText(mContext, UtilHelper.getAPIError(String.valueOf(response.body())), Toast.LENGTH_SHORT).show();
