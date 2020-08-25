@@ -82,7 +82,13 @@ public class QuestionFilterDialog extends BottomSheetDialogFragment implements V
             mBinding.testDifficultyLevelChipGrp.clearCheck();
             mBinding.queTypeChipGrp.clearCheck();
             mBinding.queCategoryChipGrp.clearCheck();
-            mSettings.setQueDiffLevelFilter(null);
+            mSettings.setQueDiffLevelFilter("");
+            mSettings.setQueTypeFilter("");
+            mSettings.setOptionTypeFilter("");
+            mSettings.setQueTrendingFilter("");
+            mSettings.setQuePopularFilter("");
+            mSettings.setQueRecentFilter("");
+            mSettings.setRatingsFilter("");
             filterClickListener.onResetClick();
             saveQueFilter(false);
             dismiss();
@@ -156,7 +162,7 @@ public class QuestionFilterDialog extends BottomSheetDialogFragment implements V
                 params.put(Constant.q_avg_ratings,"");
 
             AppUtils.saveQueFilterHashMap(params, mContext);
-           saveQueFilter(false);
+           saveQueFilter(true);
             filterClickListener.onDoneClick(params);
             dismiss();
 
