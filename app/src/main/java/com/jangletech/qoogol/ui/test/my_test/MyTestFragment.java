@@ -166,6 +166,8 @@ public class MyTestFragment extends BaseFragment
             mBinding.topLayout.setVisibility(View.GONE);
         }
 
+
+
         params = new HashMap<>();
         if (params == null)
             params = AppUtils.loadHashMap(mContext);

@@ -15,6 +15,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -114,12 +116,23 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
 
     private void initView() {
         isFilterApplied = getFilter(Constant.QUESTION_FILTER_APPLIED);
+
         learningFragmentBinding.learningSwiperefresh.setRefreshing(true);
         learningQuestionsList = new ArrayList<>();
         questionsNewList = new ArrayList<>();
         questionsFilteredList=new ArrayList<>();
         userId = String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));
-
+        if (getString(Constant.subjectName) != null &&
+                !getString(Constant.subjectName).isEmpty()) {
+            String ch1 = !getString(Constant.chapterName1).isEmpty()? ","+ getString(Constant.chapterName1):"";
+            String ch2 = !getString(Constant.chapterName2).isEmpty()? ","+ getString(Constant.chapterName2):"";
+            String ch3 = !getString(Constant.chapterName3).isEmpty()? ","+ getString(Constant.chapterName3):"";
+            String chapters = ch1+ch2+ch3;
+            learningFragmentBinding.tvSubjectValue.setText(getString(Constant.subjectName));
+            learningFragmentBinding.tvChapterValue.setText(!chapters.isEmpty()?chapters.substring(1):"");
+        } else {
+            learningFragmentBinding.topLayout.setVisibility(View.GONE);
+        }
         params = new HashMap<>();
             params = AppUtils.loadQueFilterHashMap(getActivity());
 
@@ -159,6 +172,11 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
                 mViewModel.getQuestionList().observe(getViewLifecycleOwner(), questionsList -> setData(questionsList));
             }
 
+        });
+
+        learningFragmentBinding.tvInfo.setOnClickListener(v -> {
+            NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
+            navController.navigate(R.id.nav_syllabus, Bundle.EMPTY);
         });
 
     }
@@ -292,6 +310,13 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
         isFilterApplied=false;
         setFilterIcon(filterMenu, getActivity(), false);
         mViewModel.fetchQuestionData("",params);
+        params.put(Constant.q_trending,"");
+        params.put(Constant.q_popular,"");
+        params.put(Constant.q_recent,"");
+        params.put(Constant.q_option_type,"");
+        params.put(Constant.q_type,"");
+        params.put(Constant.q_avg_ratings,"");
+        params.put(Constant.q_diff_level,"");
     }
 
     @Override
