@@ -265,6 +265,7 @@ public class Constant {
     //learning
     public static final String QUESTION_IMAGES_API = "https://jtmobileappstorage.blob.core.windows.net/spotmeets/media/images/";
     public static final String FETCH_QA = "q151FetchQA";
+    public static final String FETCH_LocalData = "q150LoadLocalData";
     public static final String FETCH_DOUBTS = "q154FetchDoubtsInfo";
     public static final String REFER = "sm01SignupReferredByN";
     public static final String DASHBOARD = "q110FetchDashboard";

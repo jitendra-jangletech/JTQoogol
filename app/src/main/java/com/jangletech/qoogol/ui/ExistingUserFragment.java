@@ -18,17 +18,26 @@ import androidx.lifecycle.ViewModelProvider;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.activities.MainActivity;
 import com.jangletech.qoogol.activities.RegisterLoginViewModel;
+import com.jangletech.qoogol.database.repo.AppRepository;
 import com.jangletech.qoogol.databinding.FragmentExistingUserBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
+import com.jangletech.qoogol.model.LearningQuestionsNew;
+import com.jangletech.qoogol.model.LocalDataResponse;
 import com.jangletech.qoogol.model.RegisterLoginModel;
+import com.jangletech.qoogol.model.TestModelNew;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
+import com.jangletech.qoogol.service.DownloadAsyncTask;
 import com.jangletech.qoogol.util.AESSecurities;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.TinyDB;
+import com.jangletech.qoogol.util.UtilHelper;
 
+import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -46,7 +55,7 @@ public class ExistingUserFragment extends BaseFragment {
     private int countryCode = 91; //todo country code hardcoded
     private String strMobile = "";
     private String strPasswordOtp = "";
-
+    public AppRepository mAppRepository;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +65,6 @@ public class ExistingUserFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_existing_user, container, false);
-        //performAutoLogin();
         initViews();
         return mBinding.getRoot();
     }
@@ -74,6 +82,8 @@ public class ExistingUserFragment extends BaseFragment {
     }
 
     public void initViews() {
+        //performAutoLogin();
+        mAppRepository = new AppRepository(getActivity());
         Log.d(TAG, "initViews Args : " + getArguments().getString(Constant.u_mob_1));
         String mobile = getMobileFromBundle(getArguments());
         if (mobile != null && !mobile.isEmpty()) {
@@ -187,13 +197,18 @@ public class ExistingUserFragment extends BaseFragment {
                             setTimer();
                         } else {
                             if (!response.body().getU_user_id().isEmpty()) {
-                                Log.d(TAG, "onResponse Launch UserId : " + response.body().getU_user_id());
-                                new PreferenceManager(getActivity()).saveInt(Constant.USER_ID, Integer.parseInt(response.body().getU_user_id()));
-                                new PreferenceManager(getActivity()).saveUserId(response.body().getU_user_id());
-                                new PreferenceManager(getActivity()).setIsLoggedIn(true);
-                                Intent i = new Intent(getActivity(), MainActivity.class);
-                                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                startActivity(i);
+                               try {
+                                   Log.d(TAG, "onResponse Launch UserId : " + response.body().getU_user_id());
+                                   new PreferenceManager(getActivity()).saveInt(Constant.USER_ID, Integer.parseInt(response.body().getU_user_id()));
+                                   new PreferenceManager(getActivity()).saveUserId(response.body().getU_user_id());
+                                   new PreferenceManager(getActivity()).setIsLoggedIn(true);
+                                   callOfflineApi(response.body().getU_user_id());
+                                   Intent i = new Intent(getActivity(), MainActivity.class);
+                                   i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                   startActivity(i);
+                               } catch (Exception e) {
+                                   e.printStackTrace();
+                               }
                             }
                         }
                     } else if (response.body().getResponse().equals("315")) {
@@ -214,4 +229,76 @@ public class ExistingUserFragment extends BaseFragment {
         });
     }
 
+    private void callOfflineApi(String u_user_id) {
+        Call<LocalDataResponse>call = apiService.fetchLocalDataApi(u_user_id,getDeviceId(getActivity()));
+        call.enqueue(new Callback<LocalDataResponse>() {
+            @Override
+            public void onResponse(Call<LocalDataResponse> call, retrofit2.Response<LocalDataResponse> response) {
+                try {
+                    if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
+                        ExecutorService executor = Executors.newSingleThreadExecutor();
+                        executor.execute(() -> mAppRepository.insertQuestions(response.body().getQuestionDataList()));
+                        List<TestModelNew> newList = response.body().getTestDataList();
+                        for (TestModelNew testModelNew : newList) {
+                            testModelNew.setFlag("PRACTICE");
+                            Log.d(TAG, "PRACTICE UserId : " + MainActivity.userId);
+                            testModelNew.setUserId(MainActivity.userId);
+                        }
+                        executor.execute(() -> mAppRepository.insertTests(newList));
+
+                        Thread thread = new Thread() {
+                            @Override
+                            public void run() {
+                                downloadImages();
+                            }
+                        };
+
+                        thread.start();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<LocalDataResponse> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
+    }
+    private String getQuestionImages() {
+        try {
+            String images = "";
+            List<LearningQuestionsNew> list = mAppRepository.getQuestions();
+            for (LearningQuestionsNew learningQuestionsNew : list) {
+                images = images + learningQuestionsNew.getImageList();
+            }
+
+            return images;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    private void downloadImages() {
+        try {
+            DownloadAsyncTask downloadAsyncTask = new DownloadAsyncTask(UtilHelper.getDirectory(getActivity()));
+            downloadAsyncTask.execute(createMediaPathDownloaded((getQuestionImages())), "1");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    private String createMediaPathDownloaded(String img) {
+        String mediaPaths = "";
+        String[] imglist = img.split(",");
+        for (String mediaList1 : imglist) {
+            String path = Constant.QUESTION_IMAGES_API + mediaList1.trim();
+            mediaPaths = mediaPaths + path + ",";
+        }
+        return mediaPaths;
+    }
 }
