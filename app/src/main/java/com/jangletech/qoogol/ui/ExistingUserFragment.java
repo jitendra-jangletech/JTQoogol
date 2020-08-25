@@ -52,7 +52,7 @@ public class ExistingUserFragment extends BaseFragment {
     private boolean isOtpSent = false;
     private RegisterLoginViewModel mViewModel;
     private RegisterLoginModel registerLoginModel;
-    private int countryCode = 91; //todo country code hardcoded
+    private int countryCode = 91;
     private String strMobile = "";
     private String strPasswordOtp = "";
     public AppRepository mAppRepository;
@@ -82,7 +82,6 @@ public class ExistingUserFragment extends BaseFragment {
     }
 
     public void initViews() {
-        //performAutoLogin();
         mAppRepository = new AppRepository(getActivity());
         Log.d(TAG, "initViews Args : " + getArguments().getString(Constant.u_mob_1));
         String mobile = getMobileFromBundle(getArguments());

@@ -7,6 +7,83 @@ import java.util.List;
 
 public class UserPreferenceResponse {
 
+    @SerializedName(Constant.co_name)
+    private String courseName;
+
+    public String getCourseName() {
+        return courseName!=null?courseName:"";
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
+    }
+
+    public String getDegreeName() {
+        return degreeName!=null?degreeName:"";
+    }
+
+    public void setDegreeName(String degreeName) {
+        this.degreeName = degreeName;
+    }
+
+    public String getStartDate() {
+        return startDate!=null?startDate:"";
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public String getEndDate() {
+        return endDate!=null?endDate:"";
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
+
+    public String getClassYear() {
+        return classYear!=null?classYear:"";
+    }
+
+    public void setClassYear(String classYear) {
+        this.classYear = classYear;
+    }
+
+    public String getBoardName() {
+        return boardName!=null?boardName:"";
+    }
+
+    public void setBoardName(String boardName) {
+        this.boardName = boardName;
+    }
+
+    public String getInstituteName() {
+        return instituteName!=null?instituteName:"";
+    }
+
+    public void setInstituteName(String instituteName) {
+        this.instituteName = instituteName;
+    }
+
+    @SerializedName(Constant.dm_degree_name)
+    private String degreeName;
+
+    @SerializedName(Constant.ue_startdate)
+    private String startDate;
+
+    @SerializedName(Constant.ue_enddate)
+    private String endDate;
+
+    @SerializedName(Constant.ue_cy_num)
+    private String classYear;
+
+    @SerializedName(Constant.ubm_board_name)
+    private String boardName;
+
+    @SerializedName(Constant.iom_name)
+    private String instituteName;
+
     @SerializedName(Constant.selected_ue_id)
     private String selectedUeId;
 

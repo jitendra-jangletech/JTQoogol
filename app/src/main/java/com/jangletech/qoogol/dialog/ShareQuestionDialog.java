@@ -24,8 +24,10 @@ import com.jangletech.qoogol.model.ShareModel;
 import com.jangletech.qoogol.model.ShareResponse;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
+import com.jangletech.qoogol.util.AESSecurities;
 import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
+import com.jangletech.qoogol.util.TinyDB;
 import com.jangletech.qoogol.util.UtilHelper;
 
 import java.util.ArrayList;
@@ -171,10 +173,12 @@ public class ShareQuestionDialog extends Dialog implements ShareAdapter.OnItemCl
             public void onResponse(Call<ShareResponse> call, retrofit2.Response<ShareResponse> response) {
                 try {
                     mBinding.progress.setVisibility(View.GONE);
-                    if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
-                        setData(response.body());
-                    } else {
-                        AppUtils.showToast(mContext, "Something went wrong!!");
+                    if (response != null && response.body() != null) {
+                        if (response.body().getResponse().equalsIgnoreCase("200")) {
+                            setData(response.body());
+                        } else {
+                            AppUtils.showToast(mContext, " Error : " + response.body().getResponse());
+                        }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -197,24 +201,34 @@ public class ShareQuestionDialog extends Dialog implements ShareAdapter.OnItemCl
     private void setData(ShareResponse shareResponse) {
         Log.d(TAG, "setData PageStart : " + pageCount);
         Log.d(TAG, "setData List Size : " + shareResponse.getConnection_list().size());
-        if (!isSearching) {
+        if (shareResponse != null) {
+            List<ShareModel> sharingList = new ArrayList<>();
             if (shareResponse.getConnection_list().size() > 0) {
-                pageCount = shareResponse.getRow_count();
-                shareModelList.addAll(shareResponse.getConnection_list());
-                mAdapter.updateList(shareModelList);
-                //mAdapter.notifyDataSetChanged();
-            } else {
-                AppUtils.showToast(mContext, "No more connections available.");
+                for (ShareModel shareModel : shareResponse.getConnection_list()) {
+                    //Log.d(TAG, "setData First Name : " + AESSecurities.getInstance().decrypt(TinyDB.getInstance(mContext).getString(Constant.cf_key1), shareModel.getU_first_name()));
+                    shareModel.setU_first_name(AESSecurities.getInstance().decrypt(TinyDB.getInstance(mContext).getString(Constant.cf_key1), shareModel.getU_first_name()));
+                    shareModel.setU_last_name(AESSecurities.getInstance().decrypt(TinyDB.getInstance(mContext).getString(Constant.cf_key2), shareModel.getU_last_name()));
+                    sharingList.add(shareModel);
+                }
             }
-        } else {
-            isSearching = false;
-            filteredModelList.clear();
-            filteredModelList.addAll(shareResponse.getConnection_list());
-            if (filteredModelList.size() > 0) {
-                mAdapter.updateList(filteredModelList);
+            if (!isSearching) {
+                if (sharingList.size() > 0) {
+                    pageCount = shareResponse.getRow_count();
+                    shareModelList.addAll(sharingList);
+                    mAdapter.updateList(shareModelList);
+                } else {
+                    AppUtils.showToast(mContext, "No more connections available.");
+                }
             } else {
-                AppUtils.showToast(mContext, "No search results found.");
-                mAdapter.updateList(shareModelList);
+                isSearching = false;
+                filteredModelList.clear();
+                filteredModelList.addAll(sharingList);
+                if (filteredModelList.size() > 0) {
+                    mAdapter.updateList(filteredModelList);
+                } else {
+                    AppUtils.showToast(mContext, "No search results found.");
+                    mAdapter.updateList(shareModelList);
+                }
             }
         }
     }

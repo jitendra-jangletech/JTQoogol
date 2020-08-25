@@ -180,7 +180,7 @@ public class PersonalInfoFragment extends BaseFragment {
                 new PreferenceManager(getActivity()).saveString("BADGE", userProfile.getBadge());
                 new PreferenceManager(getActivity()).saveString(Constant.userName, userProfile.getUserName());
 
-                Log.d(TAG, "Focus Languages : "+userProfile);
+                Log.d(TAG, "Focus Languages : " + userProfile);
                 //set First Name, Last Name, Mobile Number, Email, Password, Dob
                 mBinding.etFirstName.setText(AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key1), userProfile.getFirstName()));
                 mBinding.etLastName.setText(AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key2), userProfile.getLastName()));
@@ -216,6 +216,25 @@ public class PersonalInfoFragment extends BaseFragment {
 
         mBinding.userProfilePic.setOnClickListener(v -> {
             loadImage();
+        });
+
+        mBinding.etDob.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!s.toString().isEmpty()) {
+                    mBinding.etDob.setError(null);
+                }
+            }
         });
 
         mBinding.btnCheckExist.setOnClickListener(v -> {
@@ -840,9 +859,9 @@ public class PersonalInfoFragment extends BaseFragment {
     private void updateUserProfile(HashMap<String, String> userProfileMap) {
         Log.d(TAG, "updateUserProfile: " + userProfileMap);
 
-        Log.d(TAG, "Focus First Name : "+AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key1),userProfileMap.get(Constant.u_first_name_encrypted)));
-        Log.d(TAG, "Focus First Name : "+AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key2),userProfileMap.get(Constant.u_last_name_encrypted)));
-        Log.d(TAG, "Focus Mobile : "+AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key4),userProfileMap.get(Constant.u_mob_1_encrypted)));
+        Log.d(TAG, "Focus First Name : " + AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key1), userProfileMap.get(Constant.u_first_name_encrypted)));
+        Log.d(TAG, "Focus First Name : " + AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key2), userProfileMap.get(Constant.u_last_name_encrypted)));
+        Log.d(TAG, "Focus Mobile : " + AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key4), userProfileMap.get(Constant.u_mob_1_encrypted)));
 
         ProgressDialog.getInstance().show(requireActivity());
         Call<UserProfileResponse> call = apiService.updateUserProfile(

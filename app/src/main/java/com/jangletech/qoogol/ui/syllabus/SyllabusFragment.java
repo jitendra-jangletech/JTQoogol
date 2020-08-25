@@ -5,11 +5,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.jangletech.qoogol.R;
@@ -27,9 +29,11 @@ import com.jangletech.qoogol.ui.educational_info.AddEduDialog;
 import com.jangletech.qoogol.ui.test.my_test.MyTestViewModel;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.DateUtils;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -119,11 +123,18 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
             public void onChanged(UserPreferenceResponse userPreferences) {
                 if (userPreferences != null) {
                     response = userPreferences;
-                    //Log.d(TAG, "onChanged University : " + userPreferences.getSubjectName());
-                    //Log.d(TAG, "onChanged Institute : " + userPreferences.getSubjectName());
-                    //mBinding.tvUniversity.setText(userPreferences.getSubjectId());
-                    //mBinding.tvInstitute.setText(userPreferences.getSubjectName());
 
+                    mBinding.tvUniversity.setText(userPreferences.getBoardName());
+                    mBinding.tvInstitute.setText(userPreferences.getInstituteName());
+                    mBinding.tvDegree.setText(userPreferences.getDegreeName());
+                    mBinding.tvCourse.setText(userPreferences.getCourseName());
+                    mBinding.tvCourseYear.setText(userPreferences.getClassYear());
+                    mBinding.tvStartDate.setText(DateUtils.getFormattedDate(userPreferences.getStartDate()));
+                    mBinding.tvEndDate.setText(DateUtils.getFormattedDate(userPreferences.getEndDate()));
+
+                    Log.d(TAG, "onChanged UeId : " + userPreferences.getSelectedUeId());
+
+                    saveString(getActivity(), Constant.selected_ue_id, userPreferences.getSelectedUeId());
                     saveString(getActivity(), Constant.subjectName, userPreferences.getSubjectName());
                     saveString(getActivity(), Constant.chapterName1, userPreferences.getChapterName1());
                     saveString(getActivity(), Constant.chapterName2, userPreferences.getChapterName2());
@@ -131,7 +142,7 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
 
                     if (userPreferences.getSubjectList() != null)
                         prepareSubjectChips(userPreferences.getSubjectList());
-                    if (userPreferences.getChapterList() != null)
+                    if (userPreferences.getChapterList() != null && userPreferences.getSubjectList().size() > 0)
                         prepareChapterChips(userPreferences.getChapterList());
 
 
@@ -145,8 +156,13 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
         });
 
         mBinding.rootLayout.setOnClickListener(v -> {
-            new EducationListDialog(getActivity(), response.getSelectedUeId(), this)
-                    .show();
+            if (response != null) {
+                new EducationListDialog(getActivity(), response.getSelectedUeId(), this)
+                        .show();
+            } else {
+                new EducationListDialog(getActivity(), "", this)
+                        .show();
+            }
         });
     }
 
@@ -391,21 +407,24 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
 
     @Override
     public void onSaveButtonClick(Education education) {
-        mBinding.tvUniversity.setText(education.getUbm_board_name());
-        mBinding.tvInstitute.setText(education.getIom_name());
-        mBinding.tvDegree.setText(education.getDm_degree_name());
-        mBinding.tvCourse.setText(education.getCo_name());
-        mBinding.tvCourseYear.setText(education.getUe_cy_num());
-        mBinding.tvStartDate.setText(DateUtils.getFormattedDate(education.getUe_startdate()));
-        mBinding.tvEndDate.setText(DateUtils.getFormattedDate(education.getUe_enddate()));
-        params.put(Constant.CASE, "U");
-        params.put(Constant.selected_ue_id, education.getUe_id());
-        params.put(Constant.subjectId, "");
-        params.put(Constant.chapterId1, "");
-        params.put(Constant.chapterId2, "");
-        params.put(Constant.chapterId3, "");
-        fetchUpdatePreferences(params);
-        showToast("Education Preference Updated.");
+        if (education != null) {
+            saveString(getActivity(), Constant.selected_ue_id, education.getUe_id());
+            mBinding.tvUniversity.setText(education.getUbm_board_name());
+            mBinding.tvInstitute.setText(education.getIom_name());
+            mBinding.tvDegree.setText(education.getDm_degree_name());
+            mBinding.tvCourse.setText(education.getCo_name());
+            mBinding.tvCourseYear.setText(education.getUe_cy_num());
+            mBinding.tvStartDate.setText(DateUtils.getFormattedDate(education.getUe_startdate()));
+            mBinding.tvEndDate.setText(DateUtils.getFormattedDate(education.getUe_enddate()));
+            params.put(Constant.CASE, "U");
+            params.put(Constant.selected_ue_id, education.getUe_id());
+            params.put(Constant.subjectId, "");
+            params.put(Constant.chapterId1, "");
+            params.put(Constant.chapterId2, "");
+            params.put(Constant.chapterId3, "");
+            fetchUpdatePreferences(params);
+            showToast("Education Preference Updated.");
+        }
     }
 
     @Override
