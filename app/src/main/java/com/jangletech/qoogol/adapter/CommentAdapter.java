@@ -20,11 +20,9 @@ import com.jangletech.qoogol.enums.Module;
 import com.jangletech.qoogol.model.Comments;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
-import com.jangletech.qoogol.util.AESSecurities;
 import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.DateUtils;
-import com.jangletech.qoogol.util.TinyDB;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -69,10 +67,13 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Comments comments = commentList.get(position);
 
-        holder.commentItemBinding.tvSenderName.setText(
-                AESSecurities.getInstance().decrypt(TinyDB.getInstance(activity).getString(Constant.cf_key1), comments.getUserFirstName()) + " "
-                        + AESSecurities.getInstance().decrypt(TinyDB.getInstance(activity).getString(Constant.cf_key2), comments.getUserLastName())
-        );
+//        holder.commentItemBinding.tvSenderName.setText(
+//                AESSecurities.getInstance().decrypt(TinyDB.getInstance(activity).getString(Constant.cf_key1), comments.getUserFirstName()) + " "
+//                        + AESSecurities.getInstance().decrypt(TinyDB.getInstance(activity).getString(Constant.cf_key2), comments.getUserLastName())
+//        );
+
+        holder.commentItemBinding.tvSenderName.setText(comments.getUserFirstName() + " " +
+                comments.getUserLastName());
 
         if (comments.getReplyCommentCount() > 0) {
             holder.commentItemBinding.tvCommentCount.setVisibility(View.VISIBLE);

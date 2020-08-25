@@ -6,6 +6,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.Window;
 
 import androidx.annotation.NonNull;
@@ -67,6 +68,11 @@ public class EducationListDialog extends Dialog implements EducationAdapter.Educ
             dismiss();
         });
 
+        mBinding.addedu.setOnClickListener(v -> {
+            listener.onAddEduClick();
+            dismiss();
+        });
+
         mBinding.tvSave.setOnClickListener(v -> {
             //AppUtils.showToast(mContext, "UEID : " + edu.getUe_id());
             /*Log.d(TAG, "onCreate University : " + edu.getUbm_board_name());
@@ -107,8 +113,15 @@ public class EducationListDialog extends Dialog implements EducationAdapter.Educ
     }
 
     private void setEducationList(List<Education> educationList) {
-        Log.d(TAG, "setEducationList Size : " + educationList.size());
-        educationAdapter.updateList(educationList);
+        if (educationList != null) {
+            if (educationList.size() > 0) {
+                mBinding.tvNoEducation.setVisibility(View.GONE);
+                educationAdapter.updateList(educationList);
+            } else {
+                mBinding.tvNoEducation.setText("Education Details Not Added.");
+            }
+        }
+
     }
 
     @Override
@@ -126,5 +139,7 @@ public class EducationListDialog extends Dialog implements EducationAdapter.Educ
 
     public interface EducationDialogClickListener {
         void onSaveButtonClick(Education education);
+
+        void onAddEduClick();
     }
 }

@@ -5,13 +5,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.jangletech.qoogol.R;
@@ -25,19 +23,18 @@ import com.jangletech.qoogol.model.UserPreferenceResponse;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
+import com.jangletech.qoogol.ui.educational_info.AddEduDialog;
 import com.jangletech.qoogol.ui.test.my_test.MyTestViewModel;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.DateUtils;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SyllabusFragment extends BaseFragment implements View.OnClickListener, EducationListDialog.EducationDialogClickListener {
+public class SyllabusFragment extends BaseFragment implements View.OnClickListener, EducationListDialog.EducationDialogClickListener, AddEduDialog.ApiCallListener {
 
     private static final String TAG = "SettingsFragment";
     private MyTestViewModel mViewModel;
@@ -409,5 +406,16 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
         params.put(Constant.chapterId3, "");
         fetchUpdatePreferences(params);
         showToast("Education Preference Updated.");
+    }
+
+    @Override
+    public void onAddEduClick() {
+        AddEduDialog addEduDialog = new AddEduDialog(getActivity(), null, false, this);
+        addEduDialog.show();
+    }
+
+    @Override
+    public void onSuccess() {
+        Log.d(TAG, "Educatio Added Successfully.");
     }
 }

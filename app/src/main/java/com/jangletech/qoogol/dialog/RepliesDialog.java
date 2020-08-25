@@ -24,9 +24,11 @@ import com.jangletech.qoogol.model.Comments;
 import com.jangletech.qoogol.model.ProcessQuestion;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
+import com.jangletech.qoogol.util.AESSecurities;
 import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.DateUtils;
+import com.jangletech.qoogol.util.TinyDB;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -82,6 +84,10 @@ public class RepliesDialog extends Dialog implements CommentAdapter.onCommentIte
         }
         mBinding.commentRecycler.setLayoutManager(new LinearLayoutManager(mContext));
         mBinding.commentRecycler.setAdapter(mAdapter);
+
+//        mBinding.tvSenderName.setText(
+//                AESSecurities.getInstance().decrypt(TinyDB.getInstance(activity).getString(Constant.cf_key1),comments.getUserFirstName() + " "
+//                        + AESSecurities.getInstance().decrypt(TinyDB.getInstance(activity).getString(Constant.cf_key2),comments.getUserLastName())));
 
         mBinding.tvSenderName.setText(comments.getUserFirstName() + " " + comments.getUserLastName());
 
@@ -231,8 +237,13 @@ public class RepliesDialog extends Dialog implements CommentAdapter.onCommentIte
                 mBinding.tvNoReplies.setVisibility(View.GONE);
                 if (response.body() != null &&
                         response.body().getResponse().equals("200")) {
-                    commentList = response.body().getCommentList();
-                    //mBinding.tvNoReplies.setVisibility(View.GONE);
+                    List<Comments> newCommentList = response.body().getCommentList();
+                    for (Comments comments : newCommentList) {
+                        comments.setUserFirstName(AESSecurities.getInstance().decrypt(TinyDB.getInstance(activity).getString(Constant.cf_key1), comments.getUserFirstName()));
+                        comments.setUserLastName(AESSecurities.getInstance().decrypt(TinyDB.getInstance(activity).getString(Constant.cf_key2), comments.getUserLastName()));
+                        commentList.add(comments);
+                    }
+
                     if (strCase.equalsIgnoreCase("L")) {
                         setCommentAdapter();
                     } else {

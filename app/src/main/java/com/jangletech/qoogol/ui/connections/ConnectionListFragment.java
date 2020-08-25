@@ -30,7 +30,9 @@ import com.jangletech.qoogol.model.Connections;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
+import com.jangletech.qoogol.util.AESSecurities;
 import com.jangletech.qoogol.util.Constant;
+import com.jangletech.qoogol.util.TinyDB;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -159,6 +161,14 @@ public class ConnectionListFragment extends BaseFragment implements ConnectionAd
                 dismissRefresh(mBinding.connectionSwiperefresh);
                 if (response.body().getResponse().equalsIgnoreCase("200")) {
                     connectionResponse = response.body();
+                    List<Connections> newConnections = new ArrayList<>();
+                    for (Connections connections : response.body().getConnection_list()) {
+                        String fName = AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key1),connections.getU_first_name());
+                        String lName = AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key2),connections.getU_last_name());
+                        connections.setU_first_name(fName);
+                        connections.setU_last_name(lName);
+                        newConnections.add(connections);
+                    }
                     mViewModel.insert(response.body().getConnection_list());
                 } else if (response.body().getResponse().equals("501")) {
                     resetSettingAndLogout();

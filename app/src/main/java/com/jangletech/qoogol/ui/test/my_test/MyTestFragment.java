@@ -50,11 +50,9 @@ import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -475,7 +473,7 @@ public class MyTestFragment extends BaseFragment
                 //ProgressDialog.getInstance().dismiss();
                 mBinding.swipeToRefresh.setRefreshing(false);
                 mBinding.progress.setVisibility(View.GONE);
-                if(response.body()!=null){
+                if (response.body() != null) {
                     if (response.body().getResponse().equals("200")) {
                         testListResponse = response.body();
                         if (params.get(Constant.tm_id) != null &&
@@ -486,7 +484,6 @@ public class MyTestFragment extends BaseFragment
                                 mBinding.tvNoTest.setVisibility(View.VISIBLE);
                             }
                         } else {
-
                             List<TestModelNew> newList = response.body().getTestList();
                             for (TestModelNew testModelNew : newList) {
                                 testModelNew.setFlag("PRACTICE");
