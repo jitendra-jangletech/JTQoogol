@@ -44,7 +44,7 @@ public class PreferenceManager {
     }
 
     public String getQueTrandingFilter(){
-        return sharedPreferences.getString("qtranding","");
+        return sharedPreferences.getString("qtrending","");
     }
 
     public String getQuePopularFilter(){
@@ -58,7 +58,7 @@ public class PreferenceManager {
 
     public void setQueTrendingFilter(String ratings) {
         sharedPreferences.edit()
-                .putString("qtranding",ratings)
+                .putString("qtrending",ratings)
                 .apply();
     }
 

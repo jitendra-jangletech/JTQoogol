@@ -128,22 +128,24 @@ public class SharedByYouFragment extends BaseFragment implements LearningAdapter
         }
         mViewModel.fetchQuestionData("",SHARED_BY_ME,params);
         mViewModel.getSharedQuestionList(SHARED_BY_ME).observe(getViewLifecycleOwner(), questionsList -> {
+            if (!isFilterApplied)
+                setData(questionsList);
+        });
+        mViewModel.getFilterQuestionList().observe(getViewLifecycleOwner(), questionsList -> {
             if (isFilterApplied)
-                setData(questionsFilteredList);
-            else
                 setData(questionsList);
         });
 
         learningFragmentBinding.learningSwiperefresh.setOnRefreshListener(() -> {
             mViewModel.fetchQuestionData("",SHARED_BY_ME,params);
-            if (isFilterApplied)
-                setData(questionsFilteredList);
-            else {
-                mViewModel.getSharedQuestionList(SHARED_BY_ME).observe(getViewLifecycleOwner(), questionsList -> {
+            mViewModel.getSharedQuestionList(SHARED_BY_ME).observe(getViewLifecycleOwner(), questionsList -> {
+                if (!isFilterApplied)
                     setData(questionsList);
-                });
-            }
-
+            });
+            mViewModel.getFilterQuestionList().observe(getViewLifecycleOwner(), questionsList -> {
+                if (isFilterApplied)
+                    setData(questionsList);
+            });
         });
 
 
@@ -261,9 +263,10 @@ public class SharedByYouFragment extends BaseFragment implements LearningAdapter
         isFilterApplied=true;
         setFilterIcon(filterMenu, getActivity(), true);
         mViewModel.fetchQuestionData("",SHARED_BY_ME,params);
-        questionsFilteredList.clear();
-        questionsFilteredList.addAll(mViewModel.getFilterQuestionList());
-        setData(questionsFilteredList);
+        mViewModel.getFilterQuestionList().observe(getViewLifecycleOwner(), questionsList -> {
+            if (isFilterApplied)
+                setData(questionsList);
+        });
     }
 
 

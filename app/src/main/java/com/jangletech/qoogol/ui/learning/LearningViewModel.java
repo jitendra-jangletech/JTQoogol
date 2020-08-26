@@ -41,6 +41,7 @@ public class LearningViewModel extends AndroidViewModel {
     String ratings="", diff_level="", q_type="", q_category="", trending="",popular="",recent="",main_catg,sub_catg;
     PreferenceManager mSettings;
     List<LearningQuestionsNew> questionsFilteredList;
+    MutableLiveData<List<LearningQuestionsNew>> filterQueList;
 
     public LearningViewModel(Application application) {
         super(application);
@@ -48,6 +49,7 @@ public class LearningViewModel extends AndroidViewModel {
         mAppRepository = new AppRepository(application);
         mSettings = new PreferenceManager(application);
         questionsFilteredList=new ArrayList<>();
+        filterQueList=new MutableLiveData<>();
     }
 
     LiveData<List<LearningQuestionsNew>> getQuestionList() {
@@ -58,9 +60,13 @@ public class LearningViewModel extends AndroidViewModel {
         return mAppRepository.getQuestionFromDb(q_id);
     }
 
-    public List<LearningQuestionsNew> getFilterQuestionList() {
-        return questionsFilteredList;
+    LiveData<List<LearningQuestionsNew>> getFilterQuestionList() {
+        return filterQueList;
     }
+
+//    public List<LearningQuestionsNew> getFilterQuestionList() {
+//        return questionsFilteredList;
+//    }
 
     LiveData<List<LearningQuestionsNew>> getSharedQuestionList(String CASE) {
         return mAppRepository.getSharedQuestions(CASE);
@@ -138,18 +144,23 @@ public class LearningViewModel extends AndroidViewModel {
             public void onResponse(Call<LearningQuestResponse> call, retrofit2.Response<LearningQuestResponse> response) {
                 try {
                     if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
-                        ExecutorService executor = Executors.newSingleThreadExecutor();
-                        executor.execute(() -> mAppRepository.insertQuestions(response.body().getQuestion_list()));
-                        questionsFilteredList.clear();
-                        questionsFilteredList.addAll(response.body().getQuestion_list());
-                        Thread thread = new Thread() {
-                            @Override
-                            public void run() {
-                                downloadImages();
-                            }
-                        };
 
-                        thread.start();
+                        if (response.body().getQuestion_list()!=null && response.body().getQuestion_list().size()>0) {
+                            ExecutorService executor = Executors.newSingleThreadExecutor();
+                            executor.execute(() -> mAppRepository.insertQuestions(response.body().getQuestion_list()));
+                            filterQueList.setValue(response.body().getQuestion_list());
+                            Thread thread = new Thread() {
+                                @Override
+                                public void run() {
+                                    downloadImages();
+                                }
+                            };
+
+                            thread.start();
+                        } else {
+                            filterQueList.setValue(null);
+                        }
+
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

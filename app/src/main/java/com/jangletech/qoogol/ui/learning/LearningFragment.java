@@ -157,21 +157,25 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
                 mViewModel.fetchQuestionData("",params);
 
                 mViewModel.getQuestionList().observe(getViewLifecycleOwner(), questionsList -> {
+                    if (!isFilterApplied)
+                        setData(questionsList);
+                });
+                mViewModel.getFilterQuestionList().observe(getViewLifecycleOwner(), questionsList -> {
                     if (isFilterApplied)
-                        setData(questionsFilteredList);
-                    else
                         setData(questionsList);
                 });
             }
         }
         learningFragmentBinding.learningSwiperefresh.setOnRefreshListener(() -> {
             mViewModel.fetchQuestionData("",params);
-            if (isFilterApplied)
-            setData(questionsFilteredList);
-                else {
-                mViewModel.getQuestionList().observe(getViewLifecycleOwner(), questionsList -> setData(questionsList));
-            }
-
+            mViewModel.getQuestionList().observe(getViewLifecycleOwner(), questionsList -> {
+                if (!isFilterApplied)
+                    setData(questionsList);
+            });
+            mViewModel.getFilterQuestionList().observe(getViewLifecycleOwner(), questionsList -> {
+                if (isFilterApplied)
+                    setData(questionsList);
+            });
         });
 
         learningFragmentBinding.tvInfo.setOnClickListener(v -> {
@@ -309,7 +313,6 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
     public void onResetClick() {
         isFilterApplied=false;
         setFilterIcon(filterMenu, getActivity(), false);
-        mViewModel.fetchQuestionData("",params);
         params.put(Constant.q_trending,"");
         params.put(Constant.q_popular,"");
         params.put(Constant.q_recent,"");
@@ -317,6 +320,7 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
         params.put(Constant.q_type,"");
         params.put(Constant.q_avg_ratings,"");
         params.put(Constant.q_diff_level,"");
+        mViewModel.fetchQuestionData("",params);
     }
 
     @Override
@@ -326,10 +330,9 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
         mViewModel.fetchQuestionData("",params);
         questionsFilteredList.clear();
         setFilterIcon(filterMenu, getActivity(), true);
-        questionsFilteredList.addAll(mViewModel.getFilterQuestionList());
-        setData(questionsFilteredList);
-
+        mViewModel.getFilterQuestionList().observe(getViewLifecycleOwner(), questionsList -> {
+            if (isFilterApplied)
+                setData(questionsList);
+        });
     }
-
-
 }
