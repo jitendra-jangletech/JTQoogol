@@ -135,7 +135,6 @@ public class EducationListDialog extends Dialog implements EducationAdapter.Educ
 
     public interface EducationDialogClickListener {
         void onSaveButtonClick(Education education);
-
         void onAddEduClick();
     }
 }

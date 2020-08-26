@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardElevation="@dimen/_10sdp"
+        app:cardUseCompatPadding="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:padding="@dimen/_5sdp"
+            android:layout_height="wrap_content">
+
+            <TextView
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:id="@+id/tvInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" fjhdf fdsfkds fijds fojdsfj ifjsdf kjfdkfj fjsd ijdf jfsd fjsdo fjsdof fjdsof fjdsf fsdijfis fkfj"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:text="Modify"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:id="@+id/tvModify"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/_30sdp"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.cardview.widget.CardView>
+</layout>
