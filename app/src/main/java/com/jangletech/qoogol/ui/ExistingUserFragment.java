@@ -34,7 +34,6 @@ import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.TinyDB;
 import com.jangletech.qoogol.util.UtilHelper;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
@@ -54,11 +53,9 @@ public class ExistingUserFragment extends BaseFragment {
     private RegisterLoginViewModel mViewModel;
     private RegisterLoginModel registerLoginModel;
     private int countryCode = 91;
-    private HashMap<String, String> params = new HashMap<>();
     private String strMobile = "";
     private String strPasswordOtp = "";
     public AppRepository mAppRepository;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -219,6 +216,16 @@ public class ExistingUserFragment extends BaseFragment {
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
+                               try {
+                                   Log.d(TAG, "onResponse Launch UserId : " + response.body().getU_user_id());
+                                   new PreferenceManager(getActivity()).saveInt(Constant.USER_ID, Integer.parseInt(response.body().getU_user_id()));
+                                   new PreferenceManager(getActivity()).saveUserId(response.body().getU_user_id());
+                                   new PreferenceManager(getActivity()).setIsLoggedIn(true);
+                                   callOfflineApi(response.body().getU_user_id());
+
+                               } catch (Exception e) {
+                                   e.printStackTrace();
+                               }
                             }
                         }
                     } else if (response.body().getResponse().equals("315")) {
@@ -238,6 +245,8 @@ public class ExistingUserFragment extends BaseFragment {
             }
         });
     }
+
+
 
     private void callOfflineApi(String u_user_id) {
         Call<LocalDataResponse> call = apiService.fetchLocalDataApi(u_user_id, getDeviceId(getActivity()));
@@ -264,17 +273,28 @@ public class ExistingUserFragment extends BaseFragment {
                         };
                         thread.start();
                     }
+
+                    navigateOnHomeScreen();
                 } catch (Exception e) {
                     e.printStackTrace();
+                    navigateOnHomeScreen();
                 }
             }
 
             @Override
             public void onFailure(Call<LocalDataResponse> call, Throwable t) {
                 t.printStackTrace();
+                navigateOnHomeScreen();
             }
         });
     }
+
+    private void navigateOnHomeScreen() {
+        Intent i = new Intent(getActivity(), MainActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(i);
+    }
+
 
     private String getQuestionImages() {
         try {
