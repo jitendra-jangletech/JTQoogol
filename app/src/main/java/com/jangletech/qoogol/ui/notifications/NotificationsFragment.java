@@ -117,8 +117,8 @@ public class NotificationsFragment extends BaseFragment implements NotificationA
                 }
             }
         });
-        mBinding.swipeToRefresh.setOnRefreshListener(() -> fetchNotifications(pageStart));
 
+        mBinding.swipeToRefresh.setOnRefreshListener(() -> fetchNotifications(pageStart));
         mBinding.notificationRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
@@ -227,13 +227,14 @@ public class NotificationsFragment extends BaseFragment implements NotificationA
         call.enqueue(new Callback<NotificationResponse>() {
             @Override
             public void onResponse(Call<NotificationResponse> call, Response<NotificationResponse> response) {
-                //ProgressDialog.getInstance().dismiss();
-                mBinding.swipeToRefresh.setRefreshing(false);
-                if (response.body() != null && response.body().getResponse().equals("200")) {
-                    notificationResponse = response.body();
-                    mViewModel.insert(response.body().getNotifications());
-                } else {
-                    showErrorDialog(getActivity(), response.body().getResponse(), response.body().getMessage());
+                if (response != null && response.body() != null) {
+                    if (response.body().getResponse().equals("200")) {
+                        notificationResponse = response.body();
+                        Log.d(TAG, "onResponse List Size :  " + response.body().getNotifications().size());
+                        mViewModel.insert(response.body().getNotifications());
+                    } else {
+                        showErrorDialog(getActivity(), response.body().getResponse(), response.body().getMessage());
+                    }
                 }
                 if (mBinding.swipeToRefresh.isRefreshing())
                     mBinding.swipeToRefresh.setRefreshing(false);
@@ -241,10 +242,8 @@ public class NotificationsFragment extends BaseFragment implements NotificationA
 
             @Override
             public void onFailure(Call<NotificationResponse> call, Throwable t) {
-                //ProgressDialog.getInstance().dismiss();
                 mBinding.swipeToRefresh.setRefreshing(false);
                 apiCallFailureDialog(t);
-                Log.e(TAG, "onFailure NOtifications : " + t.getMessage());
                 t.printStackTrace();
             }
         });
