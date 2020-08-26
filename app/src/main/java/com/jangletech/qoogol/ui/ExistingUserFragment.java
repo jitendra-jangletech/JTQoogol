@@ -171,7 +171,15 @@ public class ExistingUserFragment extends BaseFragment {
     }
 
     private void doRegisterLogin(String mobile, String caseR, int countryCode, String passwordOtp, String deviceId, String appName) {
-        Log.d(TAG, "Mobile : " + mobile);
+        Log.d(TAG, "Mobile = : " + AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key4), mobile));
+        Log.d(TAG, "Case = : " + caseR);
+        Log.d(TAG, "Country Code = : " + countryCode);
+        Log.d(TAG, "Password  = : " + AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key6), passwordOtp));
+        Log.d(TAG, "deviceId  = : " + deviceId);
+        Log.d(TAG, "appName  = : " + appName);
+        Log.d(TAG, "Token  = : " + new PreferenceManager(getActivity()).getToken());
+        Log.d(TAG, "Case2 = : E");
+
         ProgressDialog.getInstance().show(getActivity());
         Call<RegisterLoginModel> call = apiService.doRegisterLogin(
                 AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key4), mobile),
@@ -196,6 +204,18 @@ public class ExistingUserFragment extends BaseFragment {
                             setTimer();
                         } else {
                             if (!response.body().getU_user_id().isEmpty()) {
+                                try {
+                                    Log.d(TAG, "onResponse Launch UserId : " + response.body().getU_user_id());
+                                    new PreferenceManager(getActivity()).saveInt(Constant.USER_ID, Integer.parseInt(response.body().getU_user_id()));
+                                    new PreferenceManager(getActivity()).saveUserId(response.body().getU_user_id());
+                                    new PreferenceManager(getActivity()).setIsLoggedIn(true);
+                                    callOfflineApi(response.body().getU_user_id());
+                                    Intent i = new Intent(getActivity(), MainActivity.class);
+                                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    startActivity(i);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                                try {
                                    Log.d(TAG, "onResponse Launch UserId : " + response.body().getU_user_id());
                                    new PreferenceManager(getActivity()).saveInt(Constant.USER_ID, Integer.parseInt(response.body().getU_user_id()));
@@ -229,7 +249,7 @@ public class ExistingUserFragment extends BaseFragment {
 
 
     private void callOfflineApi(String u_user_id) {
-        Call<LocalDataResponse>call = apiService.fetchLocalDataApi(u_user_id,getDeviceId(getActivity()));
+        Call<LocalDataResponse> call = apiService.fetchLocalDataApi(u_user_id, getDeviceId(getActivity()));
         call.enqueue(new Callback<LocalDataResponse>() {
             @Override
             public void onResponse(Call<LocalDataResponse> call, retrofit2.Response<LocalDataResponse> response) {
@@ -251,7 +271,6 @@ public class ExistingUserFragment extends BaseFragment {
                                 downloadImages();
                             }
                         };
-
                         thread.start();
                     }
 
@@ -275,6 +294,7 @@ public class ExistingUserFragment extends BaseFragment {
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(i);
     }
+
 
     private String getQuestionImages() {
         try {

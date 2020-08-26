@@ -205,7 +205,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
                 @Override
                 public void onFailure(Call<DashBoard> call, Throwable t) {
                     mBinding.swipeToRefresh.setRefreshing(false);
-                    //ProgressDialog.getInstance().dismiss();
                     apiCallFailureDialog(t);
                     t.printStackTrace();
                 }
@@ -331,7 +330,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
 
     @Override
     public void onSuccess() {
-
+        //todo navigate to the Modify Syllabus Screen
     }
 
     public static class Adapter extends FragmentPagerAdapter {

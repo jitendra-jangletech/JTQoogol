@@ -280,7 +280,7 @@ public class QuestionFilterDialog extends BottomSheetDialogFragment implements V
 
         mBinding.queTypeChipGrp.removeAllViews();
         for (int i = 0; i < typeList.size(); i++) {
-            Chip chip = (Chip) LayoutInflater.from(mBinding.queTypeChipGrp.getContext()).inflate(R.layout.chip_layout, mBinding.queTypeChipGrp, false);
+            Chip chip = (Chip) LayoutInflater.from(mBinding.queTypeChipGrp.getContext()).inflate(R.layout.chip_new, mBinding.queTypeChipGrp, false);
             chip.setText(typeList.get(i).toString());
             chip.setTag("Type");
             chip.setId(i);
@@ -306,7 +306,7 @@ public class QuestionFilterDialog extends BottomSheetDialogFragment implements V
 
         mBinding.queCategoryChipGrp.removeAllViews();
         for (int i = 0; i < que_categoryList.size(); i++) {
-            Chip chip = (Chip) LayoutInflater.from(mBinding.queCategoryChipGrp.getContext()).inflate(R.layout.chip_layout, mBinding.queCategoryChipGrp, false);
+            Chip chip = (Chip) LayoutInflater.from(mBinding.queCategoryChipGrp.getContext()).inflate(R.layout.chip_new, mBinding.queCategoryChipGrp, false);
             chip.setText(que_categoryList.get(i).toString());
             chip.setTag("Question_Category");
             chip.setId(i);
@@ -340,7 +340,7 @@ public class QuestionFilterDialog extends BottomSheetDialogFragment implements V
 
         mBinding.testDifficultyLevelChipGrp.removeAllViews();
         for (int i = 0; i < que_difflevelList.size(); i++) {
-            Chip chip = (Chip) LayoutInflater.from(mBinding.testDifficultyLevelChipGrp.getContext()).inflate(R.layout.chip_layout, mBinding.testDifficultyLevelChipGrp, false);
+            Chip chip = (Chip) LayoutInflater.from(mBinding.testDifficultyLevelChipGrp.getContext()).inflate(R.layout.chip_new, mBinding.testDifficultyLevelChipGrp, false);
             chip.setText(que_difflevelList.get(i).toString());
             chip.setTag("Diff_Level");
             chip.setId(i);
@@ -378,13 +378,13 @@ public class QuestionFilterDialog extends BottomSheetDialogFragment implements V
                 if (mapDiffLevelChips.get(i).isChecked()) {
                     if (!que_difflevelset.contains(text)) {
                         que_difflevelset.add(text);
-                        mapDiffLevelChips.get(i).setTextColor(Color.WHITE);
+                        //mapDiffLevelChips.get(i).setTextColor(Color.WHITE);
                     } else {
                         que_difflevelset.remove(text);
-                        mapDiffLevelChips.get(i).setTextColor(Color.BLACK);
+                        //mapDiffLevelChips.get(i).setTextColor(Color.BLACK);
                     }
                 } else {
-                    mapDiffLevelChips.get(i).setTextColor(Color.BLACK);
+                    //mapDiffLevelChips.get(i).setTextColor(Color.BLACK);
                     if (que_difflevelset.contains(text))
                         que_difflevelset.remove(text);
                 }
@@ -402,13 +402,13 @@ public class QuestionFilterDialog extends BottomSheetDialogFragment implements V
                 if (mapQueCategoryChips.get(i).isChecked()) {
                     if (!que_categoryset.contains(text)) {
                         que_categoryset.add(text);
-                        mapQueCategoryChips.get(i).setTextColor(Color.WHITE);
+                        //mapQueCategoryChips.get(i).setTextColor(Color.WHITE);
                     } else {
                         que_categoryset.remove(text);
-                        mapQueCategoryChips.get(i).setTextColor(Color.BLACK);
+                        //mapQueCategoryChips.get(i).setTextColor(Color.BLACK);
                     }
                 } else {
-                    mapQueCategoryChips.get(i).setTextColor(Color.BLACK);
+                    //mapQueCategoryChips.get(i).setTextColor(Color.BLACK);
                     if (que_categoryset.contains(text))
                         que_categoryset.remove(text);
                 }
@@ -426,13 +426,13 @@ public class QuestionFilterDialog extends BottomSheetDialogFragment implements V
                 if (mapTypeChips.get(i).isChecked()) {
                     if (!typeset.contains(text)) {
                         typeset.add(text);
-                        mapTypeChips.get(i).setTextColor(Color.WHITE);
+                        //mapTypeChips.get(i).setTextColor(Color.WHITE);
                     } else {
                         typeset.remove(text);
-                        mapTypeChips.get(i).setTextColor(Color.BLACK);
+                        //mapTypeChips.get(i).setTextColor(Color.BLACK);
                     }
                 } else {
-                    mapTypeChips.get(i).setTextColor(Color.BLACK);
+                    //mapTypeChips.get(i).setTextColor(Color.BLACK);
                     if (typeset.contains(text))
                         typeset.remove(text);
                 }

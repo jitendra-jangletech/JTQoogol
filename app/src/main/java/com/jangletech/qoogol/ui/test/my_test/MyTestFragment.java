@@ -41,6 +41,7 @@ import com.jangletech.qoogol.dialog.FilterDialog;
 import com.jangletech.qoogol.dialog.LikeListingDialog;
 import com.jangletech.qoogol.dialog.PublicProfileDialog;
 import com.jangletech.qoogol.dialog.ShareQuestionDialog;
+import com.jangletech.qoogol.dialog.SyllabusInfoDialog;
 import com.jangletech.qoogol.model.FetchSubjectResponseList;
 import com.jangletech.qoogol.model.TestListResponse;
 import com.jangletech.qoogol.model.TestModelNew;
@@ -50,9 +51,12 @@ import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
+
+import java.text.DateFormatSymbols;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -155,6 +159,7 @@ public class MyTestFragment extends BaseFragment
 
     private void initViews() {
         Log.d(TAG, "initViews Params : " + AppUtils.loadHashMap(mContext));
+        //new SyllabusInfoDialog(getActivity()).show();
         if (getString(Constant.subjectName) != null &&
                 !getString(Constant.subjectName).isEmpty()) {
             String chapters = getString(Constant.chapterName1) + ","
@@ -165,7 +170,6 @@ public class MyTestFragment extends BaseFragment
         } else {
             mBinding.topLayout.setVisibility(View.GONE);
         }
-
 
 
         params = new HashMap<>();
