@@ -3,6 +3,7 @@ package com.jangletech.qoogol.model;
 import com.google.gson.annotations.SerializedName;
 import com.jangletech.qoogol.util.Constant;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -28,7 +29,7 @@ public class LocalDataResponse {
     }
 
     public List<LearningQuestionsNew> getQuestionDataList() {
-        return questionDataList;
+        return questionDataList!=null?questionDataList: Collections.<LearningQuestionsNew>emptyList();
     }
 
     public void setQuestionDataList(List<LearningQuestionsNew> questionDataList) {
@@ -36,7 +37,7 @@ public class LocalDataResponse {
     }
 
     public List<TestModelNew> getTestDataList() {
-        return testDataList;
+        return testDataList!=null?testDataList:Collections.<TestModelNew>emptyList();
     }
 
     public void setTestDataList(List<TestModelNew> testDataList) {
