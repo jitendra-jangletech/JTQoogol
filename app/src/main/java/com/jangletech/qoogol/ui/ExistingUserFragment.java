@@ -202,9 +202,7 @@ public class ExistingUserFragment extends BaseFragment {
                                    new PreferenceManager(getActivity()).saveUserId(response.body().getU_user_id());
                                    new PreferenceManager(getActivity()).setIsLoggedIn(true);
                                    callOfflineApi(response.body().getU_user_id());
-                                   Intent i = new Intent(getActivity(), MainActivity.class);
-                                   i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                   startActivity(i);
+
                                } catch (Exception e) {
                                    e.printStackTrace();
                                }
@@ -227,6 +225,8 @@ public class ExistingUserFragment extends BaseFragment {
             }
         });
     }
+
+
 
     private void callOfflineApi(String u_user_id) {
         Call<LocalDataResponse>call = apiService.fetchLocalDataApi(u_user_id,getDeviceId(getActivity()));
@@ -254,17 +254,28 @@ public class ExistingUserFragment extends BaseFragment {
 
                         thread.start();
                     }
+
+                    navigateOnHomeScreen();
                 } catch (Exception e) {
                     e.printStackTrace();
+                    navigateOnHomeScreen();
                 }
             }
 
             @Override
             public void onFailure(Call<LocalDataResponse> call, Throwable t) {
                 t.printStackTrace();
+                navigateOnHomeScreen();
             }
         });
     }
+
+    private void navigateOnHomeScreen() {
+        Intent i = new Intent(getActivity(), MainActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(i);
+    }
+
     private String getQuestionImages() {
         try {
             String images = "";
