@@ -204,18 +204,6 @@ public class ExistingUserFragment extends BaseFragment {
                             setTimer();
                         } else {
                             if (!response.body().getU_user_id().isEmpty()) {
-                                try {
-                                    Log.d(TAG, "onResponse Launch UserId : " + response.body().getU_user_id());
-                                    new PreferenceManager(getActivity()).saveInt(Constant.USER_ID, Integer.parseInt(response.body().getU_user_id()));
-                                    new PreferenceManager(getActivity()).saveUserId(response.body().getU_user_id());
-                                    new PreferenceManager(getActivity()).setIsLoggedIn(true);
-                                    callOfflineApi(response.body().getU_user_id());
-                                    Intent i = new Intent(getActivity(), MainActivity.class);
-                                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                    startActivity(i);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
                                try {
                                    Log.d(TAG, "onResponse Launch UserId : " + response.body().getU_user_id());
                                    new PreferenceManager(getActivity()).saveInt(Constant.USER_ID, Integer.parseInt(response.body().getU_user_id()));
