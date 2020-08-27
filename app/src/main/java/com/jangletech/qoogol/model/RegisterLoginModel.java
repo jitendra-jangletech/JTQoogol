@@ -29,7 +29,7 @@ public class RegisterLoginModel {
     private String Response;
 
     public String getNewOTP() {
-        return newOTP;
+        return newOTP!=null?newOTP:"";
     }
 
     public void setNewOTP(String newOTP) {
@@ -45,7 +45,7 @@ public class RegisterLoginModel {
     }
 
     public String getU_user_id() {
-        return u_user_id;
+        return u_user_id!=null?u_user_id:"";
     }
 
     public void setU_user_id(String u_user_id) {
@@ -53,7 +53,7 @@ public class RegisterLoginModel {
     }
 
     public String getResponse() {
-        return Response;
+        return Response!=null?Response:"";
     }
 
     public void setResponse(String response) {

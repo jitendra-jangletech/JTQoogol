@@ -77,6 +77,7 @@ public class Constant {
     public static final String u_first_name_encrypted = "104E";
     public static final String u_last_name_encrypted = "105E";
     public static final String u_Password_encrypted = "199ME";
+
     public static final String u_mob_1_encrypted = "108E";
     public static final String u_Email_encrypted = "199LE";
 
