@@ -9,6 +9,7 @@
         tools:context=".ui.notifications.NotificationsFragment">
 
         <TextView
+            style="@style/font_style"
             android:id="@+id/tvNoTest"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -32,7 +33,7 @@
                 android:id="@+id/notificationRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="gone"
+                android:visibility="visible"
                 tools:listitem="@layout/notification_item" />
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

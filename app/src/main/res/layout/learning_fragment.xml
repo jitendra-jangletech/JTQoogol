@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -50,13 +48,13 @@
                         app:layout_constraintLeft_toRightOf="@+id/tvCourse"
                         app:layout_constraintTop_toTopOf="parent" />
 
-
                     <TextView
                         android:id="@+id/tvSubject"
                         style="@style/font_style"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Subject : "
+                        android:textSize="@dimen/_9ssp"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -65,8 +63,9 @@
                         style="@style/font_style"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Science"
+                        android:text=""
                         android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/_9ssp"
                         app:layout_constraintStart_toEndOf="@+id/tvSubject"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -76,16 +75,18 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Chapters : "
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tvSubject" />
+                        android:textSize="@dimen/_9ssp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent" />
 
                     <TextView
                         android:id="@+id/tvChapterValue"
                         style="@style/font_style"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Math,Physics,Chemistry "
+                        android:text=""
                         android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/_9ssp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toRightOf="@+id/tvChapter" />
 
@@ -110,32 +111,32 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/learning_swiperefresh"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/topLayout"
-            android:id="@+id/learning_swiperefresh">
+            app:layout_constraintTop_toBottomOf="@+id/topLayout">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:layout_width="match_parent"
-                android:padding="@dimen/_10sdp"
-                android:background="@color/colorLightGrey"
                 android:id="@+id/learning_recycler"
-                android:layout_height="match_parent"/>
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/colorLightGrey"
+                android:padding="@dimen/_10sdp" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <TextView
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:visibility="gone"
-            android:textColor="@color/colorSkyBlue"
-            android:layout_centerInParent="true"
-            android:text="No Questions Added."
             android:id="@+id/tvNoQuest"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="No Questions Added."
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="@color/colorSkyBlue"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

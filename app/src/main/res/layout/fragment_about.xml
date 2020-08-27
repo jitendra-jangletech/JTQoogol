@@ -32,14 +32,14 @@
 
             <ImageView
                 android:id="@+id/imgLogo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/_60sdp"
+                android:layout_height="@dimen/_60sdp"
                 android:layout_below="@+id/imgFeatureGraphic"
                 android:layout_marginStart="@dimen/activity_vertical_margin"
                 android:contentDescription="@string/app_name"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="20dp"
-                android:src="@drawable/qoogol" />
+                android:src="@drawable/logo" />
 
             <View
                 android:id="@+id/view"

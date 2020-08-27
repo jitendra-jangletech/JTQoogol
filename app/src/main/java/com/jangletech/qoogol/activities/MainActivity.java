@@ -719,7 +719,7 @@ public class MainActivity extends BaseActivity {
     private void shareAction() {
         try {
             Bitmap bitmap;
-            Drawable drawable = ContextCompat.getDrawable(this, R.drawable.qoogol);
+            Drawable drawable = ContextCompat.getDrawable(this, R.drawable.logo);
             if (drawable instanceof BitmapDrawable) {
                 bitmap = ((BitmapDrawable) drawable).getBitmap();
             } else if (drawable instanceof VectorDrawable) {

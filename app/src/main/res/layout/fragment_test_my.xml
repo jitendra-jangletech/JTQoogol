@@ -33,7 +33,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Course : "
-                        android:textSize="15dp"
+                        android:textSize="@dimen/_9ssp"
                         android:visibility="gone"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -43,12 +43,12 @@
                         style="@style/font_style"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Bachelor Of Technology"
+                        android:text=""
                         android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/_9ssp"
                         android:visibility="gone"
                         app:layout_constraintLeft_toRightOf="@+id/tvCourse"
                         app:layout_constraintTop_toTopOf="parent" />
-
 
                     <TextView
                         android:id="@+id/tvSubject"
@@ -56,18 +56,20 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Subject : "
+                        android:textSize="@dimen/_9ssp"
                         app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toBottomOf="@+id/tvCourse" />
 
                     <TextView
                         android:id="@+id/tvSubjectValue"
                         style="@style/font_style"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Science"
+                        android:text="No Subject Selected"
                         android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/_9ssp"
                         app:layout_constraintStart_toEndOf="@+id/tvSubject"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toBottomOf="@+id/tvCourseValue" />
 
                     <TextView
                         android:id="@+id/tvChapter"
@@ -75,16 +77,18 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Chapters : "
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tvSubject" />
+                        android:textSize="@dimen/_9ssp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent" />
 
                     <TextView
                         android:id="@+id/tvChapterValue"
                         style="@style/font_style"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Math,Physics,Chemistry "
+                        android:text="No Chapters Selected"
                         android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/_9ssp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toRightOf="@+id/tvChapter" />
 

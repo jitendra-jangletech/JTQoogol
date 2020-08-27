@@ -56,6 +56,7 @@ public class ExistingUserFragment extends BaseFragment {
     private String strMobile = "";
     private String strPasswordOtp = "";
     public AppRepository mAppRepository;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -204,16 +205,28 @@ public class ExistingUserFragment extends BaseFragment {
                             setTimer();
                         } else {
                             if (!response.body().getU_user_id().isEmpty()) {
-                               try {
-                                   Log.d(TAG, "onResponse Launch UserId : " + response.body().getU_user_id());
-                                   new PreferenceManager(getActivity()).saveInt(Constant.USER_ID, Integer.parseInt(response.body().getU_user_id()));
-                                   new PreferenceManager(getActivity()).saveUserId(response.body().getU_user_id());
-                                   new PreferenceManager(getActivity()).setIsLoggedIn(true);
-                                   callOfflineApi(response.body().getU_user_id());
+                                try {
+                                    Log.d(TAG, "onResponse Launch UserId : " + response.body().getU_user_id());
+                                    new PreferenceManager(getActivity()).saveInt(Constant.USER_ID, Integer.parseInt(response.body().getU_user_id()));
+                                    new PreferenceManager(getActivity()).saveUserId(response.body().getU_user_id());
+                                    new PreferenceManager(getActivity()).setIsLoggedIn(true);
+                                    callOfflineApi(response.body().getU_user_id());
+                                    /*Intent i = new Intent(getActivity(), MainActivity.class);
+                                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    startActivity(i);*/
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                try {
+                                    Log.d(TAG, "onResponse Launch UserId : " + response.body().getU_user_id());
+                                    new PreferenceManager(getActivity()).saveInt(Constant.USER_ID, Integer.parseInt(response.body().getU_user_id()));
+                                    new PreferenceManager(getActivity()).saveUserId(response.body().getU_user_id());
+                                    new PreferenceManager(getActivity()).setIsLoggedIn(true);
+                                    callOfflineApi(response.body().getU_user_id());
 
-                               } catch (Exception e) {
-                                   e.printStackTrace();
-                               }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                             }
                         }
                     } else if (response.body().getResponse().equals("315")) {
@@ -235,8 +248,8 @@ public class ExistingUserFragment extends BaseFragment {
     }
 
 
-
     private void callOfflineApi(String u_user_id) {
+        Log.d(TAG, "PRACTICE UserId : " + u_user_id);
         Call<LocalDataResponse> call = apiService.fetchLocalDataApi(u_user_id, getDeviceId(getActivity()));
         call.enqueue(new Callback<LocalDataResponse>() {
             @Override
@@ -246,12 +259,14 @@ public class ExistingUserFragment extends BaseFragment {
                         ExecutorService executor = Executors.newSingleThreadExecutor();
                         executor.execute(() -> mAppRepository.insertQuestions(response.body().getQuestionDataList()));
                         List<TestModelNew> newList = response.body().getTestDataList();
-                        for (TestModelNew testModelNew : newList) {
-                            testModelNew.setFlag("PRACTICE");
-                            Log.d(TAG, "PRACTICE UserId : " + MainActivity.userId);
-                            testModelNew.setUserId(MainActivity.userId);
+                        if (response.body().getTestDataList() != null) {
+                            for (TestModelNew testModelNew : newList) {
+                                testModelNew.setFlag("PRACTICE");
+                                Log.d(TAG, "PRACTICE UserId : " + u_user_id);
+                                testModelNew.setUserId(u_user_id);
+                            }
+                            executor.execute(() -> mAppRepository.insertTests(newList));
                         }
-                        executor.execute(() -> mAppRepository.insertTests(newList));
 
                         Thread thread = new Thread() {
                             @Override

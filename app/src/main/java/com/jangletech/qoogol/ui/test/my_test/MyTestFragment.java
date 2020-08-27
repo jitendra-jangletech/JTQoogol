@@ -1,6 +1,7 @@
 package com.jangletech.qoogol.ui.test.my_test;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -17,6 +18,7 @@ import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.view.MenuItemCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.LiveData;
@@ -41,7 +43,6 @@ import com.jangletech.qoogol.dialog.FilterDialog;
 import com.jangletech.qoogol.dialog.LikeListingDialog;
 import com.jangletech.qoogol.dialog.PublicProfileDialog;
 import com.jangletech.qoogol.dialog.ShareQuestionDialog;
-import com.jangletech.qoogol.dialog.SyllabusInfoDialog;
 import com.jangletech.qoogol.model.FetchSubjectResponseList;
 import com.jangletech.qoogol.model.TestListResponse;
 import com.jangletech.qoogol.model.TestModelNew;
@@ -52,7 +53,6 @@ import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 
-import java.text.DateFormatSymbols;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -118,6 +118,15 @@ public class MyTestFragment extends BaseFragment
         return mBinding.getRoot();
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (mBinding.topLayout.getVisibility() == View.VISIBLE) {
+            //not show dialog
+        } else {
+            changeConfigurationAlert();
+        }
+    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -150,6 +159,7 @@ public class MyTestFragment extends BaseFragment
             case R.id.action_filter:
                 Log.d(TAG, "onOptionsItemSelected Filter : " + params);
                 FilterDialog bottomSheetFragment = new FilterDialog(getActivity(), AppUtils.loadHashMap(mContext), this);
+                bottomSheetFragment.setCancelable(false);
                 bottomSheetFragment.show(getActivity().getSupportFragmentManager(), bottomSheetFragment.getTag());
                 return true;
             default:
@@ -162,15 +172,29 @@ public class MyTestFragment extends BaseFragment
         //new SyllabusInfoDialog(getActivity()).show();
         if (getString(Constant.subjectName) != null &&
                 !getString(Constant.subjectName).isEmpty()) {
-            String chapters = getString(Constant.chapterName1) + ","
-                    + getString(Constant.chapterName2) + ","
-                    + getString(Constant.chapterName3);
-            mBinding.tvSubjectValue.setText(getString(Constant.subjectName));
-            mBinding.tvChapterValue.setText(chapters);
+            String chapters = "";
+            if (getString(Constant.chapterName1) != null &&
+                    !getString(Constant.chapterName1).isEmpty()) {
+                chapters = chapters + getString(Constant.chapterName1);
+            }
+            if (getString(Constant.chapterName2) != null &&
+                    !getString(Constant.chapterName2).isEmpty()) {
+                chapters = chapters + "," + getString(Constant.chapterName2);
+            }
+            if (getString(Constant.chapterName3) != null &&
+                    !getString(Constant.chapterName3).isEmpty()) {
+                chapters = chapters + "," + getString(Constant.chapterName3);
+            }
+
+            if (getString(Constant.subjectName) != null && !getString(Constant.subjectName).isEmpty())
+                mBinding.tvSubjectValue.setText(getString(Constant.subjectName));
+
+            if (!chapters.isEmpty())
+                mBinding.tvChapterValue.setText(chapters);
+
         } else {
             mBinding.topLayout.setVisibility(View.GONE);
         }
-
 
         params = new HashMap<>();
         if (params == null)
@@ -191,9 +215,13 @@ public class MyTestFragment extends BaseFragment
         }
 
         mBinding.tvInfo.setOnClickListener(v -> {
-            NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
-            navController.navigate(R.id.nav_syllabus, Bundle.EMPTY);
+            navigateToSyllabus();
         });
+
+        mBinding.topLayout.setOnClickListener(v -> {
+            navigateToSyllabus();
+        });
+
 
         mBinding.testListRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -633,5 +661,24 @@ public class MyTestFragment extends BaseFragment
         Log.d(TAG, "onItemCLick UserId : " + user_id);
         PublicProfileDialog publicProfileDialog = new PublicProfileDialog(getActivity(), user_id, this);
         publicProfileDialog.show();
+    }
+
+    private void changeConfigurationAlert() {
+        androidx.appcompat.app.AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogStyle);
+        builder.setTitle("Alert")
+                .setMessage("You have not selected education configuration (course,Subject,chapters).\n" +
+                        "would you like to set it?")
+                .setPositiveButton("Set Education Configuration", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        navigateToSyllabus();
+                    }
+                })
+                .setCancelable(true).show();
+    }
+
+    private void navigateToSyllabus() {
+        NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
+        navController.navigate(R.id.nav_syllabus, Bundle.EMPTY);
     }
 }

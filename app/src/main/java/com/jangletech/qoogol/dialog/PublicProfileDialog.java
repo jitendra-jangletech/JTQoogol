@@ -25,6 +25,7 @@ import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.util.AESSecurities;
 import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
+import com.jangletech.qoogol.util.DateUtils;
 import com.jangletech.qoogol.util.TinyDB;
 import com.jangletech.qoogol.util.UtilHelper;
 
@@ -141,6 +142,8 @@ public class PublicProfileDialog extends Dialog {
                 mBinding.imgBadge.setImageDrawable(activity.getDrawable(R.drawable.platinum));
 
             mBinding.tvName.setText(AESSecurities.getInstance().decrypt(TinyDB.getInstance(activity).getString(Constant.cf_key1), userProfile.getFirstName()) + " " + AESSecurities.getInstance().decrypt(TinyDB.getInstance(activity).getString(Constant.cf_key2), userProfile.getLastName()));
+            mBinding.tvDobs.setText(DateUtils.getFormattedDate(AESSecurities.getInstance().decrypt(TinyDB.getInstance(activity).getString(Constant.cf_key3), userProfile.getDob())));
+
             if (userProfile.getStrGender() != null && userProfile.getStrGender().equalsIgnoreCase("M")) {
                 mBinding.tvGender.setText("Male");
             } else if (userProfile.getStrGender() != null && userProfile.getStrGender().equalsIgnoreCase("F")) {
