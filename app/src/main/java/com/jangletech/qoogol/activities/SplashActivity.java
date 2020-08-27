@@ -17,6 +17,8 @@ import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.TinyDB;
 
+import java.text.ParseException;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -37,7 +39,14 @@ public class SplashActivity extends BaseActivity {
             @Override
             public void onChanged(AppConfigResponse appConfigResponse) {
                 if (appConfigResponse != null) {
-                    String masterKey = AESSecurities.getMasterKey(AppUtils.getDeviceId());
+                    //String masterKey = AESSecurities.getMasterKey(AppUtils.getDeviceId());
+                    String masterKey = "";
+                    try {
+                        masterKey = AESSecurities.getMasterKey(appConfigResponse.getAlgo(), AppUtils.getDeviceId(), appConfigResponse.getDateTime());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                        Log.e(TAG, "onChanged Error : " + e.getMessage());
+                    }
                     Log.d(TAG, "onChanged MasterKey : " + masterKey);
                     Log.d(TAG, "onChanged First Name key : " + AESSecurities.getInstance().decrypt("1" + masterKey, appConfigResponse.getFirstNameKey()));
                     Log.d(TAG, "onChanged Last Name key : " + AESSecurities.getInstance().decrypt("2" + masterKey, appConfigResponse.getLastNameKey()));

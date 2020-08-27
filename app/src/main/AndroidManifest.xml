@@ -14,7 +14,7 @@
         android:name=".util.QoogolApp"
         android:allowBackup="true"
         android:hardwareAccelerated="true"
-        android:icon="@drawable/qoogol"
+        android:icon="@drawable/logo"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"

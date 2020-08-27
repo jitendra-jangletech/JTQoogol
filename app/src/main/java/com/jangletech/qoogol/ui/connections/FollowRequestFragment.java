@@ -12,9 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.FollowReqAdapter;
@@ -25,8 +23,11 @@ import com.jangletech.qoogol.model.FollowRequestResponse;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
+import com.jangletech.qoogol.util.AESSecurities;
 import com.jangletech.qoogol.util.Constant;
+import com.jangletech.qoogol.util.TinyDB;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -72,12 +73,23 @@ public class FollowRequestFragment extends BaseFragment implements FollowReqAdap
         init();
         fetchFollowReq();
         mViewModel.getFollowReqdList().observe(getViewLifecycleOwner(), followRequestList -> {
-            if (followRequestList != null && followRequestList.size()>0) {
-                initView(followRequestList);
-                mBinding.emptyview.setVisibility(View.GONE);
-            } else {
-                mBinding.emptyview.setText("You don't not have any pending requests.");
-                mBinding.emptyview.setVisibility(View.VISIBLE);
+            if (followRequestList != null) {
+                if (followRequestList.size() > 0) {
+                    mBinding.emptyview.setVisibility(View.GONE);
+                    List<FollowRequest> list = new ArrayList<>();
+                    for (FollowRequest followRequest : followRequestList) {
+                        String fName = AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key1), followRequest.getU_first_name());
+                        String lName = AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key2), followRequest.getU_last_name());
+                        followRequest.setU_first_name(fName);
+                        followRequest.setU_last_name(lName);
+                        list.add(followRequest);
+                    }
+                    initView(list);
+
+                } else {
+                    mBinding.emptyview.setText("You don't not have any pending requests.");
+                    mBinding.emptyview.setVisibility(View.VISIBLE);
+                }
             }
             dismissRefresh(mBinding.requestsSwiperefresh);
         });
@@ -160,8 +172,8 @@ public class FollowRequestFragment extends BaseFragment implements FollowReqAdap
     public void showProfileClick(Bundle bundle) {
         //NavHostFragment.findNavController(this).navigate(R.id.nav_edit_profile, bundle);
         String userId = bundle.getString(Constant.fetch_profile_id);
-        Log.d(TAG, "showProfileClick User Id : "+userId);
-        PublicProfileDialog dialog = new PublicProfileDialog(getActivity(),userId,this);
+        Log.d(TAG, "showProfileClick User Id : " + userId);
+        PublicProfileDialog dialog = new PublicProfileDialog(getActivity(), userId, this);
         dialog.show();
     }
 

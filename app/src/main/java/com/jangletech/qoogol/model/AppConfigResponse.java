@@ -8,6 +8,28 @@ public class AppConfigResponse {
     private String Message;
     private String Response;
 
+    @SerializedName(Constant.GMT)
+    private String dateTime;
+
+    public int getAlgo() {
+        return algo;
+    }
+
+    public void setAlgo(int algo) {
+        this.algo = algo;
+    }
+
+    @SerializedName(Constant.ALGO)
+    private int algo;
+
+    public String getDateTime() {
+        return dateTime != null ? dateTime : "";
+    }
+
+    public void setDateTime(String dateTime) {
+        this.dateTime = dateTime;
+    }
+
     @SerializedName(Constant.CF_VIDEO)
     private String cf_video_mb;
 

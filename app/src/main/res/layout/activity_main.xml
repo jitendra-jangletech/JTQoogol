@@ -115,7 +115,6 @@
                                 android:foreground="?attr/selectableItemBackground"
                                 android:text="@string/shared_with_you" />
 
-
                         </LinearLayout>
 
                         <RelativeLayout
@@ -171,7 +170,6 @@
                                 android:text="@string/attended_by_friends"
                                 android:visibility="gone" />
 
-
                             <TextView
                                 android:id="@+id/nav_shared_by_you"
                                 style="@style/sub_menu_item_style"
@@ -186,18 +184,18 @@
                                 android:visibility="visible" />
 
                             <TextView
-                                android:visibility="gone"
                                 android:id="@+id/nav_test_popular"
                                 style="@style/sub_menu_item_style"
                                 android:foreground="?attr/selectableItemBackground"
-                                android:text="@string/popular_test" />
+                                android:text="@string/popular_test"
+                                android:visibility="gone" />
 
                             <TextView
-                                android:visibility="gone"
                                 android:id="@+id/nav_recent_test"
                                 style="@style/sub_menu_item_style"
                                 android:foreground="?attr/selectableItemBackground"
-                                android:text="@string/recent_test" />
+                                android:text="@string/recent_test"
+                                android:visibility="gone" />
 
 
                         </LinearLayout>
@@ -212,14 +210,14 @@
                         <TextView
                             android:id="@+id/nav_syllabus"
                             style="@style/menu_item_style"
-                            android:drawableLeft="@drawable/nav_learning"
+                            android:drawableLeft="@drawable/nav_syllabus"
                             android:foreground="?attr/selectableItemBackground"
                             android:text="@string/syllabus" />
 
                         <TextView
                             android:id="@+id/nav_doubts"
                             style="@style/menu_item_style"
-                            android:drawableLeft="@drawable/nav_learning"
+                            android:drawableLeft="@drawable/nav_doubts"
                             android:foreground="?attr/selectableItemBackground"
                             android:text="Doubts"
                             android:visibility="visible" />
@@ -232,7 +230,7 @@
                             android:visibility="gone" />
 
                         <TextView
-                            
+
                             android:id="@+id/nav_fav"
                             style="@style/menu_item_style"
                             android:drawableLeft="@drawable/nav_fav"
@@ -261,12 +259,12 @@
                             android:visibility="gone" />
 
                         <TextView
-                            android:visibility="gone"
                             android:id="@+id/nav_import_contacts"
                             style="@style/menu_item_style"
                             android:drawableLeft="@drawable/ic_phone_contacts"
                             android:foreground="?attr/selectableItemBackground"
-                            android:text="@string/importContacts" />
+                            android:text="@string/importContacts"
+                            android:visibility="gone" />
 
 
                         <!--<TextView

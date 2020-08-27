@@ -16,7 +16,6 @@ import androidx.appcompat.widget.SearchView;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.jangletech.qoogol.R;
@@ -28,8 +27,11 @@ import com.jangletech.qoogol.model.FriendRequestResponse;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
+import com.jangletech.qoogol.util.AESSecurities;
 import com.jangletech.qoogol.util.Constant;
+import com.jangletech.qoogol.util.TinyDB;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -68,7 +70,16 @@ public class FriendRequestFragment extends BaseFragment implements FriendReqAdap
         fetchFriendRequests();
         mViewModel.getFrienReqdList().observe(getViewLifecycleOwner(), friendRequestList -> {
             if (friendRequestList != null) {
-                initView(friendRequestList);
+                List<FriendRequest> list = new ArrayList<>();
+                for (FriendRequest friendRequest : friendRequestList) {
+                    String fName = AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key1), friendRequest.getU_first_name());
+                    String lName = AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key2), friendRequest.getU_last_name());
+                    Log.d(TAG, "uid : " + friendRequest.getCn_user_id_2() + " = " + AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key1), friendRequest.getU_first_name()));
+                    friendRequest.setU_first_name(fName);
+                    friendRequest.setU_last_name(lName);
+                    list.add(friendRequest);
+                }
+                initView(list);
             }
             dismissRefresh(mBinding.requestsSwiperefresh);
         });
@@ -181,10 +192,9 @@ public class FriendRequestFragment extends BaseFragment implements FriendReqAdap
 
     @Override
     public void showProfileClick(Bundle bundle) {
-        //NavHostFragment.findNavController(this).navigate(R.id.nav_edit_profile, bundle);
         String userId = bundle.getString(Constant.fetch_profile_id);
-        Log.d(TAG, "showProfileClick User Id : "+userId);
-        PublicProfileDialog dialog = new PublicProfileDialog(getActivity(),userId,this);
+        Log.d(TAG, "showProfileClick User Id : " + userId);
+        PublicProfileDialog dialog = new PublicProfileDialog(getActivity(), userId, this);
         dialog.show();
     }
 

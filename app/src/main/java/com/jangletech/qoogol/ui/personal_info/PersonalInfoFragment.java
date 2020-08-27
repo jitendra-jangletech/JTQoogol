@@ -152,7 +152,7 @@ public class PersonalInfoFragment extends BaseFragment {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_personal_info, container, false);
         mViewModel = new ViewModelProvider(this).get(PersonalInfoViewModel.class);
         mBinding.setLifecycleOwner(this);
-        masterKey = AESSecurities.getMasterKey(AppUtils.getDeviceId());
+        //masterKey = AESSecurities.getMasterKey(AppUtils.getDeviceId());
         return mBinding.getRoot();
     }
 

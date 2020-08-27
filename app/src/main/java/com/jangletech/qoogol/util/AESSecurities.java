@@ -15,8 +15,11 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
 import java.nio.charset.StandardCharsets;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
 import javax.crypto.Cipher;
@@ -35,6 +38,78 @@ public class AESSecurities {
             instance = new AESSecurities();
         }
         return instance;
+    }
+
+    private static int getmmddhh(Calendar calendar, int hr) {
+        int month;
+        month = calendar.get(Calendar.MONTH) + 1;
+        if (month == 13) {
+            month = 1;
+        }
+        return Integer.parseInt(String.format(Locale.ENGLISH, "%02d%02d%02d",
+                month, calendar.get(Calendar.DATE), hr == 23 ? hr : calendar.get(Calendar.HOUR)));// Convert.ToInt32(gmtdate.ToString("mmddhh"));
+    }
+
+    public static String getMasterKey(int algo, String in_imei_num, String dateTime) throws ParseException {
+        String key1 = "";
+        int mmddhh;
+        String dateString = "";
+        // SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        SimpleDateFormat outputFormat = new SimpleDateFormat("M/d/yyyy HH:mm:ss a");
+        Date date = outputFormat.parse(dateTime);
+        assert date != null;
+        dateString = outputFormat.format(date);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        if (calendar.get(Calendar.MINUTE) == 59 || calendar.get(Calendar.MINUTE) == 00) {
+            if ((calendar.get(Calendar.HOUR) == 23 || calendar.get(Calendar.MINUTE) == 59) ||
+                    (calendar.get(Calendar.HOUR) == 00 && calendar.get(Calendar.MINUTE) == 00)) {
+                mmddhh = 343567;
+            } else {
+                mmddhh = getmmddhh(calendar, 23);
+            }
+        } else {
+            mmddhh = getmmddhh(calendar, 0);
+        }
+        Log.i(TAG, "mmddhh: " + mmddhh);
+        //a = "8/27/2020 3:21:18 AM" or "08/27/2020 03:21:18 AM" or "8/1/2020 3:1:18 AM"
+        switch (algo) {
+            case 1:
+                key1 = (989753 ^ mmddhh) + in_imei_num.substring(0, 4) + dateString.substring(0, 5);
+                break;
+            case 2:
+                key1 = dateString.substring(0, 9) + (452683 >> mmddhh);
+                break;
+            case 3:
+                key1 = (813476 ^ mmddhh) + dateString.substring(0, 9);
+                break;
+            case 4:
+                key1 = dateString.substring(2, 5) + (343466 >> mmddhh) + in_imei_num.substring(0, 4);
+                break;
+            case 5:
+                key1 = dateString.substring(3, 5) + in_imei_num.substring(in_imei_num.length() - 4, 4) + (567835 << mmddhh);
+                break;
+            case 6:
+                key1 = dateString.substring(0, 5) + (457874 ^ mmddhh) + in_imei_num.substring(0, 4);
+                break;
+            case 7:
+                key1 = (743678 ^ mmddhh) + dateString.substring(2, 5) + in_imei_num.substring(0, 4);
+                break;
+            case 8:
+                key1 = dateString.substring(0, 5) + in_imei_num.substring(0, 4) + (565477 << mmddhh);
+                break;
+            case 9:
+                key1 = (546578 >> mmddhh) + dateString.substring(0, 9);
+                break;
+            default:
+                key1 = (989753 ^ mmddhh) + in_imei_num.substring(0, 4) + dateString.substring(0, 5);
+                break;
+        }
+    /*if (in_imei_num.length() >= 4)
+        key1 = ("989753" + in_imei_num.substring(0, 4) + dateString.substring(0, 5));
+    else
+        key1 = ("989753" + dateString.substring(0, 5));*/
+        return key1;
     }
 
     public static String getMasterKey(String deviceId) {

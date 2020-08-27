@@ -2,7 +2,6 @@ package com.jangletech.qoogol.dialog;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,7 +21,6 @@ import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 
-
 import java.util.HashMap;
 
 public class FilterDialog extends BottomSheetDialogFragment implements View.OnClickListener {
@@ -30,10 +28,8 @@ public class FilterDialog extends BottomSheetDialogFragment implements View.OnCl
     private static final String TAG = "FilterDialog";
     private Activity mContext;
     private SharedPreferences preferences;
-    //private List<String> subjectList;
     private FilterClickListener filterClickListener;
     private DialogFilterBinding mBinding;
-    //private HashMap<Integer, Chip> mapSubjectChips = new HashMap();
     private ApiInterface apiService = ApiClient.getInstance().getApi();
     private HashMap<String, String> params = new HashMap<>();
     //private String avgRating = "", strDiffLevel = "", subject = "";
@@ -66,19 +62,23 @@ public class FilterDialog extends BottomSheetDialogFragment implements View.OnCl
     private void initViews() {
         setFilters();
 
+        mBinding.chipRecent.setOnClickListener(this);
+        mBinding.chipPopular.setOnClickListener(this);
+
+        mBinding.chipUnitTest.setOnClickListener(this);
+        mBinding.chipAnnual.setOnClickListener(this);
+        mBinding.chipSemester.setOnClickListener(this);
+
+        mBinding.chipEasy.setOnClickListener(this);
+        mBinding.chipHard.setOnClickListener(this);
+        mBinding.chipMedium.setOnClickListener(this);
+
         mBinding.reset.setOnClickListener(v -> {
             mBinding.testDifficultyLevelChipGrp.clearCheck();
             mBinding.testCategoryChipGrp.clearCheck();
             mBinding.testRecentPopularChipGrp.clearCheck();
             mBinding.rating.setRating(0);
-            params.put(Constant.tm_diff_level, "");
-            params.put(Constant.tm_catg, "");
-            params.put(Constant.tm_avg_rating, "");
-            params.put(Constant.test_recent_popular, "");
-            params.put(Constant.tm_recent_test, "");
-            params.put(Constant.tm_popular_test, "");
-            AppUtils.saveHashMap(params, mContext);
-            saveFilter(false);
+            reset();
             filterClickListener.onResetClick(params);
             dismiss();
         });
@@ -112,12 +112,13 @@ public class FilterDialog extends BottomSheetDialogFragment implements View.OnCl
             Chip chip = ((Chip) chipGroup.getChildAt(chipGroup.getCheckedChipId()));
             if (chip != null) {
                 Log.d(TAG, "initViews : " + chip.getText().toString());
-                chip.setTextColor(Color.WHITE);
+                //chip.setTextColor(Color.WHITE);
             }
         });
 
         mBinding.rating.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {
             Log.d(TAG, "onRatingChanged: " + rating);
+            enableDisableButton();
             if (rating == 0)
                 params.put(Constant.tm_avg_rating, "");
             else
@@ -209,6 +210,7 @@ public class FilterDialog extends BottomSheetDialogFragment implements View.OnCl
                 }
             }
         }
+        enableDisableButton();
     }
 
    /* private void setCheckedChip(Chip chip) {
@@ -288,7 +290,10 @@ public class FilterDialog extends BottomSheetDialogFragment implements View.OnCl
 
     @Override
     public void onClick(View v) {
-
+        if (v != null) {
+            Log.d(TAG, "onClick: ");
+            enableDisableButton();
+        }
     }
 
     public void saveFilter(boolean value) {
@@ -332,6 +337,48 @@ public class FilterDialog extends BottomSheetDialogFragment implements View.OnCl
             }
         }
         return isFilterEmpty;
+    }
+
+    private void enableDisableButton() {
+        boolean isButtonEnable = false;
+
+        if (getSelectedChipValues(mBinding.testCategoryChipGrp) != null &&
+                !getSelectedChipValues(mBinding.testCategoryChipGrp).isEmpty()) {
+            isButtonEnable = true;
+        }
+        if (getSelectedChipValues(mBinding.testDifficultyLevelChipGrp) != null &&
+                !getSelectedChipValues(mBinding.testDifficultyLevelChipGrp).isEmpty()) {
+            isButtonEnable = true;
+        }
+        if (getSelectedChipValues(mBinding.testRecentPopularChipGrp) != null &&
+                !getSelectedChipValues(mBinding.testRecentPopularChipGrp).isEmpty()) {
+            isButtonEnable = true;
+        }
+
+        if (mBinding.rating.getRating() > 0) {
+            isButtonEnable = true;
+        }
+
+        if (isButtonEnable) {
+            mBinding.done.setEnabled(true);
+        } else {
+            mBinding.done.setEnabled(false);
+            reset();
+        }
+    }
+
+    private void reset() {
+        if (params == null) {
+            params = new HashMap<>();
+        }
+        params.put(Constant.tm_diff_level, "");
+        params.put(Constant.tm_catg, "");
+        params.put(Constant.tm_avg_rating, "");
+        params.put(Constant.test_recent_popular, "");
+        params.put(Constant.tm_recent_test, "");
+        params.put(Constant.tm_popular_test, "");
+        AppUtils.saveHashMap(params, mContext);
+        saveFilter(false);
     }
 
     public interface FilterClickListener {

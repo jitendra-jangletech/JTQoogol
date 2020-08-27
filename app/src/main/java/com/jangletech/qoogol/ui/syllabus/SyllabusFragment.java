@@ -113,6 +113,9 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
                     params.put(Constant.chapterId1, "");
                     params.put(Constant.chapterId2, "");
                     params.put(Constant.chapterId3, "");
+                    //saveString(getActivity(), Constant.chapterName1, "");
+                    //saveString(getActivity(), Constant.chapterName2, "");
+                    //saveString(getActivity(), Constant.chapterName3, "");
                     fetchUpdatePreferences(params);
                 }
             }
@@ -142,9 +145,8 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
 
                     if (userPreferences.getSubjectList() != null)
                         prepareSubjectChips(userPreferences.getSubjectList());
-                    if (userPreferences.getChapterList() != null && userPreferences.getSubjectList().size() > 0)
+                    if (userPreferences.getSubjectList().size() > 0 && userPreferences.getChapterList() != null)
                         prepareChapterChips(userPreferences.getChapterList());
-
 
                     params.put(Constant.selected_ue_id, userPreferences.getSelectedUeId());
                     params.put(Constant.subjectId, userPreferences.getSubjectId());
@@ -193,6 +195,7 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
             chip.setCheckable(true);
             if (response.getSubjectId().equals(list.get(i).getSubjectId())) {
                 Log.d(TAG, "prepareSubjectChips Checked : " + response.getSubjectName());
+                saveString(getActivity(), Constant.subjectName, response.getSubjectName());
                 chip.setChecked(true);
             }
             mBinding.subjectsChipGrp.addView(chip);

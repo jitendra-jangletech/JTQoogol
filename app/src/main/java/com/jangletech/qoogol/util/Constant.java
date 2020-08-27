@@ -223,6 +223,10 @@ public class Constant {
     public static final String CF_IMAGE = "56I";
     public static final String CF_DOC = "56D";
     public static final String CF_AUDIO = "56A";
+    public static final String ALGO = "57F";
+    public static final String GMT = "GMT";
+
+
 
     //For size of media
     //Keys
@@ -287,7 +291,7 @@ public class Constant {
     public static final String FETCH_CHAPTERS = "q114FetchChapterMaster";
     public static final String FETCH_NOTIFICATIONS = "sm28FetchNotificationsN";
     public static final String FETCH_SHAREDTQ_USERS = "q153FetchSharedTQ";
-    public static final String UPDATE_NOTIFICATIONS = "sm27UpdateNotifications";
+    public static final String UPDATE_NOTIFICATIONS = "sm27UpdateNotificationsN";
     public static final String COUNTRY = "sm05CountryData";
     public static final String STATE = "sm06StateData";
     public static final String CITY = "sm09CityData";

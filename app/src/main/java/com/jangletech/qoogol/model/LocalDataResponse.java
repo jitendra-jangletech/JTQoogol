@@ -2,7 +2,6 @@ package com.jangletech.qoogol.model;
 
 import com.google.gson.annotations.SerializedName;
 import com.jangletech.qoogol.util.Constant;
-
 import java.util.Collections;
 import java.util.List;
 
