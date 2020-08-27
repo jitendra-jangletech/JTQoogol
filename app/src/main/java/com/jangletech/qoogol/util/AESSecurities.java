@@ -10,10 +10,8 @@ package com.jangletech.qoogol.util;
 
 import android.util.Base64;
 import android.util.Log;
-
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
-
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -21,7 +19,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
-
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;

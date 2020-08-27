@@ -29,6 +29,7 @@ import com.jangletech.qoogol.ui.educational_info.AddEduDialog;
 import com.jangletech.qoogol.ui.test.my_test.MyTestViewModel;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.DateUtils;
+import com.jangletech.qoogol.util.TinyDB;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -61,7 +62,7 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
         params.put(Constant.u_user_id, getUserId(getActivity()));
         params.put(Constant.device_id, getDeviceId(getActivity()));
         params.put(Constant.CASE, "L");
-        params.put(Constant.selected_ue_id, "");
+        params.put(Constant.selected_ue_id, TinyDB.getInstance(getActivity()).getString(Constant.selected_ue_id));
         params.put(Constant.subjectId, "");
         params.put(Constant.chapterId1, "");
         params.put(Constant.chapterId2, "");

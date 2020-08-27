@@ -62,6 +62,7 @@ public class MainActivity extends BaseActivity {
     private ActivityMainBinding mBinding;
     private DrawerLayout drawerLayout;
     private NavController navController;
+    public static boolean isTestScreenEnabled = false;
     private PersonalInfoViewModel mViewmodel;
     public static ImageView profileImage, badgeImg;
     public static TextView textViewDisplayName;
@@ -384,7 +385,7 @@ public class MainActivity extends BaseActivity {
 
         findViewById(R.id.nav_doubts).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
-            DoubtListingDialog doubtListingDialog = new DoubtListingDialog(this, null, "",Constant.my_doubts);
+            DoubtListingDialog doubtListingDialog = new DoubtListingDialog(this, null, "", Constant.my_doubts);
             doubtListingDialog.show();
         });
 
@@ -632,7 +633,10 @@ public class MainActivity extends BaseActivity {
                         navController.getCurrentDestination().getId() == R.id.nav_requests) {
                     navController.navigate(R.id.nav_home);
                 } else if (navController.getCurrentDestination().getId() == R.id.nav_syllabus) {
-                    navController.navigate(R.id.nav_test_my);
+                    if (isTestScreenEnabled)
+                        navController.navigate(R.id.nav_test_my);
+                    else
+                        navController.navigate(R.id.nav_learning);
                 } else {
                     navController.popBackStack();
                 }

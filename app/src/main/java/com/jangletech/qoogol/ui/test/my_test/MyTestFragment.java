@@ -121,6 +121,7 @@ public class MyTestFragment extends BaseFragment
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        MainActivity.isTestScreenEnabled = true;
         if (mBinding.topLayout.getVisibility() == View.VISIBLE) {
             //not show dialog
         } else {
@@ -666,9 +667,8 @@ public class MyTestFragment extends BaseFragment
     private void changeConfigurationAlert() {
         androidx.appcompat.app.AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogStyle);
         builder.setTitle("Alert")
-                .setMessage("You have not selected education configuration (course,Subject,chapters).\n" +
-                        "would you like to set it?")
-                .setPositiveButton("Set Education Configuration", new DialogInterface.OnClickListener() {
+                .setMessage("You have not selected education configuration (course,Subject,chapters).would you like to set it?")
+                .setPositiveButton("Set Configuration", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         navigateToSyllabus();

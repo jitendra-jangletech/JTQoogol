@@ -75,6 +75,7 @@ public class FavQueFragment extends Fragment implements LearningAdapter.onIconCl
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(FavouriteViewModel.class);
+        learningFragmentBinding.topLayout.setVisibility(View.GONE);
         initView();
         if (!isFragmentVisible) {
             isFragmentVisible = true;

@@ -177,6 +177,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
+                        android:visibility="gone"
                         app:layout_constraintTop_toBottomOf="@+id/tvName">
 
                         <TextView
@@ -319,6 +320,54 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@{userProfile.u_City}"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/_12ssp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/universityLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_15sdp"
+                            android:text="@string/university_board"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                            android:textColor="@color/colorSkyBlue" />
+
+                        <TextView
+                            android:id="@+id/tvUniversity"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@{userProfile.u_Board}"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/_12ssp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/instituteLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_15sdp"
+                            android:text="@string/institute"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                            android:textColor="@color/colorSkyBlue" />
+
+                        <TextView
+                            android:id="@+id/tvInstitute"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@{userProfile.u_College}"
                             android:textColor="@color/colorBlack"
                             android:textSize="@dimen/_12ssp" />
 
