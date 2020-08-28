@@ -119,10 +119,8 @@ public class AddDoubtDialog  extends Dialog implements DoubtGroupAdapter.onItemC
         subjectClassList.clear();
 
         Call<SubjectResponse> call = apiService.fetchSubjectList(
-//                new PreferenceManager(context).getUserId(),
-//                getDeviceId(),
-                "7020",
-                "",
+                new PreferenceManager(context).getUserId(),
+                getDeviceId(),
                 "Q",
                 "L");
         call.enqueue(new Callback<SubjectResponse>() {
