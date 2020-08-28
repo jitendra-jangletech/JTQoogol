@@ -235,6 +235,7 @@ public class FriendsFragment extends BaseFragment implements FriendsAdapter.upda
 
     @Override
     public void onUpdateConnection(String user) {
+        Log.d(TAG, "onUpdateConnection: " + user);
         mViewModel.deleteUpdatedConnection(user);
         mViewModel.fetchFriendsData(true);
     }

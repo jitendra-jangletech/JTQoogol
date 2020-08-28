@@ -47,7 +47,6 @@ public class SavedQueFragment extends BaseFragment implements SavedQueAdapter.on
     private List<LearningQuestions> questionsNewList;
     private ApiInterface apiService = ApiClient.getInstance().getApi();
 
-
     public static SavedQueFragment newInstance() {
         return new SavedQueFragment();
     }
@@ -75,10 +74,10 @@ public class SavedQueFragment extends BaseFragment implements SavedQueAdapter.on
     }
 
     private void initView() {
+        learningFragmentBinding.topLayout.setVisibility(View.GONE);
         learningFragmentBinding.learningSwiperefresh.setRefreshing(true);
         learningQuestionsList = new ArrayList<>();
         questionsNewList = new ArrayList<>();
-
         mViewModel.fetchQuestionData();
 
         mViewModel.getQuestionList().observe(getViewLifecycleOwner(), questionsList -> {
@@ -93,9 +92,9 @@ public class SavedQueFragment extends BaseFragment implements SavedQueAdapter.on
 
 
     private void initRecycler() {
-        if(questionsNewList!=null && questionsNewList.size() > 0){
+        if (questionsNewList != null && questionsNewList.size() > 0) {
             learningFragmentBinding.tvNoQuest.setVisibility(View.GONE);
-        }else{
+        } else {
             learningFragmentBinding.tvNoQuest.setVisibility(View.VISIBLE);
         }
         learingAdapter = new SavedQueAdapter(getActivity(), questionsNewList, this, learning);

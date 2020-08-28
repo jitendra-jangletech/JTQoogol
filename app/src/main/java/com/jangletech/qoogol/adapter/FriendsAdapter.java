@@ -2,6 +2,7 @@ package com.jangletech.qoogol.adapter;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -62,6 +63,7 @@ import static com.jangletech.qoogol.util.Constant.unfollow;
  */
 public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHolder> implements Filterable {
 
+    private static final String TAG = "FriendsAdapter";
     private List<Friends> connectionsList;
     private Activity activity;
     private ConnectionItemBinding connectionItemBinding;
@@ -98,6 +100,9 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull FriendsAdapter.ViewHolder holder, int position) {
         Friends connections = connectionsList.get(position);
+        Log.d(TAG, "onBindViewHolder User : " + connections.getCn_user_id_2() + " = " +
+                AESSecurities.getInstance().decrypt(TinyDB.getInstance(activity).getString(Constant.cf_key1), connections.getU_first_name())
+                + " " + AESSecurities.getInstance().decrypt(TinyDB.getInstance(activity).getString(Constant.cf_key2), connections.getU_last_name()));
         holder.connectionItemBinding.tvUserName.setText(
                 AESSecurities.getInstance().decrypt(TinyDB.getInstance(activity).getString(Constant.cf_key1), connections.getU_first_name())
                         + " " + AESSecurities.getInstance().decrypt(TinyDB.getInstance(activity).getString(Constant.cf_key2), connections.getU_last_name()));
@@ -115,7 +120,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             listener.showProfileClick(bundle);
         });
 
-        PopupMenu popup = new PopupMenu(activity, connectionItemBinding.textViewOptions, END);
+        PopupMenu popup = new PopupMenu(activity, holder.connectionItemBinding.textViewOptions, END);
         popup.setGravity(END);
         popup.inflate(R.menu.connection_options);
         Menu popupMenu = popup.getMenu();
@@ -158,6 +163,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
         }
 
         popup.setOnMenuItemClickListener(item -> {
+            Log.d(TAG, "onBindViewHolder ID : " + connections.getCn_user_id_2());
             switch (item.getItemId()) {
                 case R.id.action_remove_connection:
                     updateConnection(connections.getCn_user_id_2(), remove_connection);
@@ -200,7 +206,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             }
             return false;
         });
-        connectionItemBinding.textViewOptions.setOnClickListener(v -> {
+        holder.connectionItemBinding.textViewOptions.setOnClickListener(v -> {
             popup.show();
         });
 
@@ -251,6 +257,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
     }
 
     private void updateConnection(String user, String Processcase) {
+        Log.d(TAG, "updateConnection Remove Id : " + user);
         ApiInterface apiService = ApiClient.getInstance().getApi();
         ProgressDialog.getInstance().show(activity);
         Call<ResponseObj> call = apiService.updateConnections(String.valueOf(new PreferenceManager(activity).getInt(Constant.USER_ID)), Processcase, getDeviceId(activity), qoogol, user);

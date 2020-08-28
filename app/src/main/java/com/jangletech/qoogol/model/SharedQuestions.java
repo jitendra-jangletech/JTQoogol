@@ -34,10 +34,10 @@ public class SharedQuestions implements Serializable {
     @SerializedName(Constant.stq_mst_id)
     private String stq_mst_id;
 
-    @SerializedName(Constant.u_first_name)
+    @SerializedName(Constant.u_first_name_encrypted)
     private String u_first_name;
 
-    @SerializedName(Constant.u_last_name)
+    @SerializedName(Constant.u_last_name_encrypted)
     private String u_last_name;
 
     @SerializedName(Constant.group_name)
@@ -47,7 +47,7 @@ public class SharedQuestions implements Serializable {
     private String w_user_profile_image_name;
 
     public String getU_first_name() {
-        return u_first_name;
+        return u_first_name!=null?u_first_name:"";
     }
 
     public void setU_first_name(String u_first_name) {
@@ -55,7 +55,7 @@ public class SharedQuestions implements Serializable {
     }
 
     public String getU_last_name() {
-        return u_last_name;
+        return u_last_name!=null?u_last_name:"";
     }
 
     public void setU_last_name(String u_last_name) {

@@ -107,6 +107,7 @@ public class NotificationsFragment extends BaseFragment implements NotificationA
                         mBinding.swipeToRefresh.setRefreshing(false);
                     if (notificationResponse != null)
                         pageStart = notificationResponse.getPage();
+                    notificationList = notifications;
                     notificationAdapter.updateNotificationList(notifications);
                     if (notifications.size() > 0) {
                         mBinding.tvNoTest.setVisibility(View.GONE);
@@ -182,7 +183,6 @@ public class NotificationsFragment extends BaseFragment implements NotificationA
                 }
             }
         }).attachToRecyclerView(mBinding.notificationRecyclerView);
-
     }
 
     private void deleteNotification(String n_id) {

@@ -99,7 +99,6 @@ public class ConnectionListFragment extends BaseFragment implements ConnectionAd
         });
     }
 
-
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -316,14 +315,14 @@ public class ConnectionListFragment extends BaseFragment implements ConnectionAd
     private void setSearchData(ConnectionResponse connectionResponse) {
         if (connectionResponse != null && connectionResponse.getConnection_list().size() > 0) {
             filteredList.clear();
-            mBinding.tvEmptySearch.setVisibility(View.GONE);
-            mBinding.connectionRecycler.setVisibility(View.VISIBLE);
+            //mBinding.tvEmptySearch.setVisibility(View.GONE);
+            //mBinding.connectionRecycler.setVisibility(View.VISIBLE);
             mAdapter.updateList(connectionResponse.getConnection_list());
         } else {
             //no search results found
-            //showToast("No Search Results Found.");
-            mBinding.tvEmptySearch.setVisibility(View.VISIBLE);
-            mBinding.connectionRecycler.setVisibility(View.GONE);
+            showToast("No Search Results Found.");
+            //mBinding.tvEmptySearch.setVisibility(View.VISIBLE);
+            //mBinding.connectionRecycler.setVisibility(View.GONE);
         }
     }
 }

@@ -90,7 +90,7 @@ public class FriendReqAdapter extends RecyclerView.Adapter<FriendReqAdapter.View
         holder.connectionItemBinding.tvUserName.setText(connections.getU_first_name() + " " + connections.getU_last_name());
         try {
             if (connections.getProf_pic() != null && !connections.getProf_pic().isEmpty()) {
-                Glide.with(activity).load(UtilHelper.getProfileImageUrl(connections.getProf_pic().trim())).circleCrop().placeholder(R.drawable.profile).into(connectionItemBinding.userProfileImage);
+                Glide.with(activity).load(UtilHelper.getProfileImageUrl(connections.getProf_pic().trim())).circleCrop().placeholder(R.drawable.profile).into(holder.connectionItemBinding.userProfileImage);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -103,7 +103,7 @@ public class FriendReqAdapter extends RecyclerView.Adapter<FriendReqAdapter.View
             listener.showProfileClick(bundle);
         });
 
-        PopupMenu popup = new PopupMenu(activity, connectionItemBinding.textViewOptions, END);
+        PopupMenu popup = new PopupMenu(activity, holder.connectionItemBinding.textViewOptions, END);
         popup.setGravity(END);
         popup.inflate(R.menu.connection_options);
         Menu popupMenu = popup.getMenu();
@@ -190,7 +190,8 @@ public class FriendReqAdapter extends RecyclerView.Adapter<FriendReqAdapter.View
             }
             return false;
         });
-        connectionItemBinding.textViewOptions.setOnClickListener(v -> {
+
+        holder.connectionItemBinding.textViewOptions.setOnClickListener(v -> {
             popup.show();
         });
 

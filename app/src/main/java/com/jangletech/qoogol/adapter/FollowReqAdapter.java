@@ -88,7 +88,7 @@ public class FollowReqAdapter extends RecyclerView.Adapter<FollowReqAdapter.View
         holder.connectionItemBinding.tvUserName.setText(connections.getU_first_name() + " " + connections.getU_last_name());
         try {
             if (connections.getProf_pic() != null && !connections.getProf_pic().isEmpty()) {
-                Glide.with(activity).load(UtilHelper.getProfileImageUrl(connections.getProf_pic().trim())).circleCrop().placeholder(R.drawable.profile).into(connectionItemBinding.userProfileImage);
+                Glide.with(activity).load(UtilHelper.getProfileImageUrl(connections.getProf_pic().trim())).circleCrop().placeholder(R.drawable.profile).into(holder.connectionItemBinding.userProfileImage);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -102,7 +102,7 @@ public class FollowReqAdapter extends RecyclerView.Adapter<FollowReqAdapter.View
         });
 
 
-        PopupMenu popup = new PopupMenu(activity, connectionItemBinding.textViewOptions, END);
+        PopupMenu popup = new PopupMenu(activity, holder.connectionItemBinding.textViewOptions, END);
         popup.setGravity(END);
         popup.inflate(R.menu.connection_options);
         Menu popupMenu = popup.getMenu();
@@ -189,7 +189,8 @@ public class FollowReqAdapter extends RecyclerView.Adapter<FollowReqAdapter.View
             }
             return false;
         });
-        connectionItemBinding.textViewOptions.setOnClickListener(v -> {
+
+        holder.connectionItemBinding.textViewOptions.setOnClickListener(v -> {
             popup.show();
         });
 
@@ -241,11 +242,11 @@ public class FollowReqAdapter extends RecyclerView.Adapter<FollowReqAdapter.View
     private void updateConnection(String user, String Processcase) {
         ApiInterface apiService = ApiClient.getInstance().getApi();
         ProgressDialog.getInstance().show(activity);
-        Log.d(TAG, "updateConnection: "+String.valueOf(new PreferenceManager(activity).getInt(Constant.USER_ID)));
-        Log.d(TAG, "updateConnection ProcessCase : "+Processcase);
-        Log.d(TAG, "updateConnection DeviceId : "+getDeviceId(activity));
-        Log.d(TAG, "updateConnection Qoogol : "+qoogol);
-        Log.d(TAG, "updateConnection User : "+user);
+        Log.d(TAG, "updateConnection: " + String.valueOf(new PreferenceManager(activity).getInt(Constant.USER_ID)));
+        Log.d(TAG, "updateConnection ProcessCase : " + Processcase);
+        Log.d(TAG, "updateConnection DeviceId : " + getDeviceId(activity));
+        Log.d(TAG, "updateConnection Qoogol : " + qoogol);
+        Log.d(TAG, "updateConnection User : " + user);
 
         Call<ResponseObj> call = apiService.updateConnections(String.valueOf(new PreferenceManager(activity).getInt(Constant.USER_ID)), Processcase, getDeviceId(activity), qoogol, user);
         call.enqueue(new Callback<ResponseObj>() {

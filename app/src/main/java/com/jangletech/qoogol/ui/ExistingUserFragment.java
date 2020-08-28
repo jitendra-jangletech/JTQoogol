@@ -210,7 +210,7 @@ public class ExistingUserFragment extends BaseFragment {
                                     new PreferenceManager(getActivity()).saveInt(Constant.USER_ID, Integer.parseInt(response.body().getU_user_id()));
                                     new PreferenceManager(getActivity()).saveUserId(response.body().getU_user_id());
                                     new PreferenceManager(getActivity()).setIsLoggedIn(true);
-                                    TinyDB.getInstance(getActivity()).putString(Constant.selected_ue_id, response.body().getU_user_id());
+                                    TinyDB.getInstance(getActivity()).putString(Constant.selected_ue_id, response.body().getUeId());
                                     Log.d(TAG, "onResponse UEID : " + response.body().getUeId());
                                     callOfflineApi(response.body().getU_user_id());
                                     /*Intent i = new Intent(getActivity(), MainActivity.class);

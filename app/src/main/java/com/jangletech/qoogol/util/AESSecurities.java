@@ -10,15 +10,12 @@ package com.jangletech.qoogol.util;
 
 import android.util.Base64;
 import android.util.Log;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-import java.util.TimeZone;
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
@@ -40,11 +37,11 @@ public class AESSecurities {
     private static int getmmddhh(Calendar calendar, int hr) {
         int month;
         month = calendar.get(Calendar.MONTH) + 1;
-        if (month == 13) {
+        if (month == 12) {
             month = 1;
         }
         return Integer.parseInt(String.format(Locale.ENGLISH, "%02d%02d%02d",
-                month, calendar.get(Calendar.DATE), hr == 23 ? hr : calendar.get(Calendar.HOUR)));// Convert.ToInt32(gmtdate.ToString("mmddhh"));
+                month, calendar.get(Calendar.DATE), hr == 23 ? hr : calendar.get(Calendar.HOUR_OF_DAY)));
     }
 
     public static String getMasterKey(int algo, String in_imei_num, String dateTime) throws ParseException {
@@ -53,14 +50,15 @@ public class AESSecurities {
         String dateString = "";
         // SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         SimpleDateFormat outputFormat = new SimpleDateFormat("M/d/yyyy HH:mm:ss a");
+        Log.i(TAG, "Date: " + dateTime);
         Date date = outputFormat.parse(dateTime);
         assert date != null;
         dateString = outputFormat.format(date);
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         if (calendar.get(Calendar.MINUTE) == 59 || calendar.get(Calendar.MINUTE) == 00) {
-            if ((calendar.get(Calendar.HOUR) == 23 || calendar.get(Calendar.MINUTE) == 59) ||
-                    (calendar.get(Calendar.HOUR) == 00 && calendar.get(Calendar.MINUTE) == 00)) {
+            if ((calendar.get(Calendar.HOUR_OF_DAY) == 23 || calendar.get(Calendar.MINUTE) == 59) ||
+                    (calendar.get(Calendar.HOUR_OF_DAY) == 00 && calendar.get(Calendar.MINUTE) == 00)) {
                 mmddhh = 343567;
             } else {
                 mmddhh = getmmddhh(calendar, 23);
@@ -102,26 +100,9 @@ public class AESSecurities {
                 key1 = (989753 ^ mmddhh) + in_imei_num.substring(0, 4) + dateString.substring(0, 5);
                 break;
         }
-    /*if (in_imei_num.length() >= 4)
-        key1 = ("989753" + in_imei_num.substring(0, 4) + dateString.substring(0, 5));
-    else
-        key1 = ("989753" + dateString.substring(0, 5));*/
         return key1;
     }
-
-    public static String getMasterKey(String deviceId) {
-        Log.d(TAG, "deviceId: "+deviceId);
-        String key1 = "";
-        SimpleDateFormat format = new SimpleDateFormat("M/d/yyyy HH:mm:ss a");
-        format.setTimeZone(TimeZone.getTimeZone("UTC"));
-        Date dateTime = DateTime.now(DateTimeZone.UTC).toDate();
-        String dateString = format.format(dateTime);
-        if (deviceId.length() >= 4)
-            key1 = ("989753" + deviceId.substring(0, 4) + dateString.substring(0, 5));
-        else
-            key1 = ("989753" + dateString.substring(0, 5));
-        return key1;
-    }
+    
 
     public String getDecryptAppConfigKey() {
         String key = "";

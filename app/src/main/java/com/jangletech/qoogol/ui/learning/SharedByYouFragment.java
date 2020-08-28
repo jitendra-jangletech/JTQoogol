@@ -113,6 +113,7 @@ public class SharedByYouFragment extends BaseFragment implements LearningAdapter
     }
 
     private void initView() {
+        learningFragmentBinding.topLayout.setVisibility(View.GONE);
         isFilterApplied = getFilter(Constant.QUESTION_FILTER_APPLIED);
         learningFragmentBinding.learningSwiperefresh.setRefreshing(true);
         learningQuestionsList = new ArrayList<>();

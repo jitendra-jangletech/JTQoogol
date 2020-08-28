@@ -258,6 +258,7 @@ public class ShareQuestionDialog extends Dialog implements ShareAdapter.OnItemCl
                     dismiss();
                     if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
                         Log.i(TAG, "shared successfully");
+                        AppUtils.showToast(getContext(), "Shared successfully...");
                     } else {
                         AppUtils.showToast(mContext, UtilHelper.getAPIError(String.valueOf(response.body())));
                     }

@@ -139,7 +139,7 @@ public class AddEduDialog extends Dialog {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(!s.toString().isEmpty()){
+                if (!s.toString().isEmpty()) {
                     addEditEducationBinding.etstartdate.setError(null);
                     addEditEducationBinding.tilStartdate.setError(null);
                 }
@@ -159,7 +159,7 @@ public class AddEduDialog extends Dialog {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(!s.toString().isEmpty()){
+                if (!s.toString().isEmpty()) {
                     addEditEducationBinding.etenddate.setError(null);
                     addEditEducationBinding.tilEnddate.setError(null);
                 }
@@ -386,7 +386,6 @@ public class AddEduDialog extends Dialog {
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
             dialog.show();
         }
-
     }
 
 

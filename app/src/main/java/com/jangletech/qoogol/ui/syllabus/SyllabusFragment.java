@@ -58,11 +58,12 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
                              @Nullable Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_syllabus, container, false);
         mViewModel = ViewModelProviders.of(this).get(MyTestViewModel.class);
+        Log.d(TAG, "onCreateView UEID : " + TinyDB.getInstance(getActivity()).getString(Constant.selected_ue_id));
         params.put(Constant.appName, Constant.APP_NAME);
         params.put(Constant.u_user_id, getUserId(getActivity()));
         params.put(Constant.device_id, getDeviceId(getActivity()));
         params.put(Constant.CASE, "L");
-        params.put(Constant.selected_ue_id, TinyDB.getInstance(getActivity()).getString(Constant.selected_ue_id));
+        params.put(Constant.selected_ue_id,"");
         params.put(Constant.subjectId, "");
         params.put(Constant.chapterId1, "");
         params.put(Constant.chapterId2, "");
@@ -412,6 +413,7 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void onSaveButtonClick(Education education) {
         if (education != null) {
+            Log.d(TAG, "onSaveButtonClick UEID : " + education.getUe_id());
             saveString(getActivity(), Constant.selected_ue_id, education.getUe_id());
             mBinding.tvUniversity.setText(education.getUbm_board_name());
             mBinding.tvInstitute.setText(education.getIom_name());
@@ -439,6 +441,6 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
 
     @Override
     public void onSuccess() {
-        Log.d(TAG, "Educatio Added Successfully.");
+        Log.d(TAG, "Education Added Successfully.");
     }
 }

@@ -3,7 +3,6 @@ package com.jangletech.qoogol.adapter;
 import android.app.Activity;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
@@ -11,11 +10,16 @@ import android.widget.Filterable;
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.ShareuseritemBinding;
 import com.jangletech.qoogol.model.SharedQuestions;
+import com.jangletech.qoogol.util.AESSecurities;
+import com.jangletech.qoogol.util.Constant;
+import com.jangletech.qoogol.util.TinyDB;
 import com.jangletech.qoogol.util.UtilHelper;
+
 import java.util.List;
 
 import static com.jangletech.qoogol.util.Constant.sharedby;
@@ -65,7 +69,9 @@ public class ShareUserAdapter extends RecyclerView.Adapter<ShareUserAdapter.View
                     Glide.with(activity).load(UtilHelper.getProfileImageUrl(sharedQuestions.getW_user_profile_image_name().trim())).circleCrop().placeholder(R.drawable.profile).into(shareuseritemBinding.userProfileImage);
                 }
             } else {
-                shareuseritemBinding.tvUserName.setText(sharedQuestions.getU_first_name() + " " + sharedQuestions.getU_last_name());
+                String userName = AESSecurities.getInstance().decrypt(TinyDB.getInstance(activity).getString(Constant.cf_key1), sharedQuestions.getU_first_name()) +
+                        " " + AESSecurities.getInstance().decrypt(TinyDB.getInstance(activity).getString(Constant.cf_key2), sharedQuestions.getU_last_name());
+                shareuseritemBinding.tvUserName.setText(userName);
                 if (sharedQuestions.getW_user_profile_image_name() != null && !sharedQuestions.getW_user_profile_image_name().isEmpty()) {
                     Glide.with(activity).load(UtilHelper.getProfileImageUrl(sharedQuestions.getW_user_profile_image_name().trim())).circleCrop().placeholder(R.drawable.profile).into(shareuseritemBinding.userProfileImage);
                 }

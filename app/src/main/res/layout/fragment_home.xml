@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeToRefresh"
@@ -54,8 +53,8 @@
                                 android:src="@drawable/connections" />
 
                             <TextView
-                                style="@style/font_style"
                                 android:id="@+id/tvConnections"
+                                style="@style/font_style"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/_3sdp"
@@ -70,7 +69,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/_2sdp"
                                 android:text="Connections"
-                                android:textColor="@color/colorOrange"
+                                android:textColor="@color/colorSkyBlue"
                                 android:textSize="@dimen/_11ssp" />
                         </LinearLayout>
 
@@ -95,8 +94,8 @@
                                 android:src="@drawable/ic_friends" />
 
                             <TextView
-                                style="@style/font_style"
                                 android:id="@+id/friends"
+                                style="@style/font_style"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/_3sdp"
@@ -111,7 +110,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/_2sdp"
                                 android:text="Friends"
-                                android:textColor="@color/colorOrange"
+                                android:textColor="@color/colorSkyBlue"
                                 android:textSize="@dimen/_11ssp" />
                         </LinearLayout>
 
@@ -135,8 +134,8 @@
                                 android:src="@drawable/followers" />
 
                             <TextView
-                                style="@style/font_style"
                                 android:id="@+id/followers"
+                                style="@style/font_style"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/_3sdp"
@@ -151,7 +150,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/_2sdp"
                                 android:text="Followers"
-                                android:textColor="@color/colorOrange"
+                                android:textColor="@color/colorSkyBlue"
                                 android:textSize="@dimen/_11ssp" />
                         </LinearLayout>
 
@@ -176,8 +175,8 @@
                                 android:src="@drawable/following" />
 
                             <TextView
-                                style="@style/font_style"
                                 android:id="@+id/following"
+                                style="@style/font_style"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/_3sdp"
@@ -192,7 +191,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/_2sdp"
                                 android:text="Following"
-                                android:textColor="@color/colorOrange"
+                                android:textColor="@color/colorSkyBlue"
                                 android:textSize="@dimen/_11ssp" />
                         </LinearLayout>
                     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -214,12 +213,12 @@
 
                     <com.google.android.material.tabs.TabLayout
                         android:id="@+id/tabs"
-                        app:tabIndicatorColor="@color/colorBlack"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/_20sdp"
-                        app:tabSelectedTextColor="@color/colorBlack"
                         app:layout_constraintTop_toBottomOf="@+id/tvCredits"
+                        app:tabIndicatorColor="@color/colorBlack"
+                        app:tabSelectedTextColor="@color/colorBlack"
                         app:tabTextAppearance="@style/CustomTextAppearanceTab"
                         app:tabTextColor="@color/grey" />
 

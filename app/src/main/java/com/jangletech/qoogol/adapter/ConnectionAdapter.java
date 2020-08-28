@@ -206,7 +206,7 @@ public class ConnectionAdapter extends RecyclerView.Adapter<ConnectionAdapter.Vi
             }
             return false;
         });
-        connectionItemBinding.textViewOptions.setOnClickListener(v -> {
+        holder.connectionItemBinding.textViewOptions.setOnClickListener(v -> {
             popup.show();
         });
 
