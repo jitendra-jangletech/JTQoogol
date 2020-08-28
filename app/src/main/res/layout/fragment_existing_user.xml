@@ -129,11 +129,11 @@
                 android:textSize="@dimen/_15ssp" />
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/_80sdp"
+                android:layout_height="@dimen/_80sdp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/_15sdp"
-                android:src="@drawable/qoogol"
+                android:src="@drawable/logo"
                 android:visibility="visible" />
 
         </LinearLayout>

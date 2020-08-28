@@ -81,7 +81,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        getEducationInfoList();
+        if (TinyDB.getInstance(getActivity()).getBoolean(Constant.IS_EDUCATION_ADDED)) {
+            getEducationInfoList();
+        }
     }
 
     private void setupViewPager(ViewPager viewPager, DashBoard dashBoard) {
@@ -153,7 +155,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
 
         if (dashBoard.getFirstName() != null || dashBoard.getLastName() != null) {
             saveString(getActivity(), Constant.u_first_name, dashBoard.getFirstName());
-            String uName = AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key1),dashBoard.getFirstName()) + " " + AESSecurities.getInstance().decrypt(getLocalString(Constant.cf_key2),dashBoard.getLastName());
+            String uName = AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key1), dashBoard.getFirstName()) + " " + AESSecurities.getInstance().decrypt(getLocalString(Constant.cf_key2), dashBoard.getLastName());
             MainActivity.textViewDisplayName.setText(uName);
         } else {
             MainActivity.textViewDisplayName.setText("Qoogol User");
@@ -330,7 +332,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
 
     @Override
     public void onSuccess() {
-        //todo navigate to the Modify Syllabus Screen
+        //Successfully Added new Education
+        TinyDB.getInstance(getActivity()).putBoolean(Constant.IS_EDUCATION_ADDED, false);
     }
 
     public static class Adapter extends FragmentPagerAdapter {

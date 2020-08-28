@@ -9,8 +9,8 @@
         tools:context=".ui.notifications.NotificationsFragment">
 
         <TextView
-            style="@style/font_style"
             android:id="@+id/tvNoTest"
+            style="@style/font_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -24,10 +24,10 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            app:layout_constraintTop_toTopOf="parent"
             android:id="@+id/swipeToRefresh"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintTop_toBottomOf="@+id/tvEmptySearch">
+            android:layout_height="0dp">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/notificationRecyclerView"

@@ -143,6 +143,7 @@
                         android:weightSum="2">
 
                         <com.google.android.material.textfield.TextInputLayout
+                            app:passwordToggleEnabled="true"
                             android:id="@+id/tilOtp"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"

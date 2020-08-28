@@ -5,6 +5,8 @@ package com.jangletech.qoogol.util;
  */
 public class Constant {
 
+    public static final String IS_EDUCATION_ADDED = "IS_EDUCATION_ADDED";
+
     public static final String FILTER = "FILTER";
     public static final String QUESTION_FILTER = "QUESTIONFILTER";
     public static final int LIKE = 1;
@@ -225,7 +227,6 @@ public class Constant {
     public static final String CF_AUDIO = "56A";
     public static final String ALGO = "57F";
     public static final String GMT = "GMT";
-
 
 
     //For size of media

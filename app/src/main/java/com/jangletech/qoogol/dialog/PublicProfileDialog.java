@@ -189,6 +189,26 @@ public class PublicProfileDialog extends Dialog {
                 }
             });
 
+            //Hide Empty Fields
+            if (userProfile.getU_language().isEmpty()) {
+                mBinding.languageLayout.setVisibility(View.GONE);
+            }
+            if (userProfile.getU_Board().isEmpty()) {
+                mBinding.universityLayout.setVisibility(View.GONE);
+            }
+            if (userProfile.getU_College().isEmpty()) {
+                mBinding.instituteLayout.setVisibility(View.GONE);
+            }
+            if (userProfile.getU_State().isEmpty()) {
+                mBinding.stateLayout.setVisibility(View.GONE);
+            }
+            if (userProfile.getU_District().isEmpty()) {
+                mBinding.divisionLayout.setVisibility(View.GONE);
+            }
+            if (userProfile.getU_City().isEmpty()) {
+                mBinding.cityLayout.setVisibility(View.GONE);
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
             mBinding.shimmerViewContainer.hideShimmer();

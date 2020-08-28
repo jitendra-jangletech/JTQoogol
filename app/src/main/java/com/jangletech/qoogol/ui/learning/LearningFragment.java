@@ -21,6 +21,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.jangletech.qoogol.R;
+import com.jangletech.qoogol.activities.MainActivity;
 import com.jangletech.qoogol.adapter.LearningAdapter;
 import com.jangletech.qoogol.databinding.LearningFragmentBinding;
 import com.jangletech.qoogol.dialog.CommentDialog;
@@ -82,6 +83,7 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(LearningViewModel.class);
+        MainActivity.isTestScreenEnabled = false;
         initView();
     }
 
@@ -99,7 +101,7 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_filter:
-                QuestionFilterDialog bottomSheetFragment = new QuestionFilterDialog(getActivity(), this,params);
+                QuestionFilterDialog bottomSheetFragment = new QuestionFilterDialog(getActivity(), this, params);
                 bottomSheetFragment.setCancelable(false);
                 bottomSheetFragment.show(getActivity().getSupportFragmentManager(), bottomSheetFragment.getTag());
                 return true;
@@ -120,28 +122,28 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
         learningFragmentBinding.learningSwiperefresh.setRefreshing(true);
         learningQuestionsList = new ArrayList<>();
         questionsNewList = new ArrayList<>();
-        questionsFilteredList=new ArrayList<>();
+        questionsFilteredList = new ArrayList<>();
         userId = String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));
         if (getString(Constant.subjectName) != null &&
                 !getString(Constant.subjectName).isEmpty()) {
-            String ch1 = !getString(Constant.chapterName1).isEmpty()? ","+ getString(Constant.chapterName1):"";
-            String ch2 = !getString(Constant.chapterName2).isEmpty()? ","+ getString(Constant.chapterName2):"";
-            String ch3 = !getString(Constant.chapterName3).isEmpty()? ","+ getString(Constant.chapterName3):"";
-            String chapters = ch1+ch2+ch3;
+            String ch1 = !getString(Constant.chapterName1).isEmpty() ? "," + getString(Constant.chapterName1) : "";
+            String ch2 = !getString(Constant.chapterName2).isEmpty() ? "," + getString(Constant.chapterName2) : "";
+            String ch3 = !getString(Constant.chapterName3).isEmpty() ? "," + getString(Constant.chapterName3) : "";
+            String chapters = ch1 + ch2 + ch3;
             learningFragmentBinding.tvSubjectValue.setText(getString(Constant.subjectName));
-            learningFragmentBinding.tvChapterValue.setText(!chapters.isEmpty()?chapters.substring(1):"");
+            learningFragmentBinding.tvChapterValue.setText(!chapters.isEmpty() ? chapters.substring(1) : "");
         } else {
             learningFragmentBinding.topLayout.setVisibility(View.GONE);
         }
         params = new HashMap<>();
-            params = AppUtils.loadQueFilterHashMap(getActivity());
+        params = AppUtils.loadQueFilterHashMap(getActivity());
 
         Bundle bundle = getArguments();
         if (bundle != null) {
             if (bundle.getBoolean("fromNotification")) {
                 ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Learning");
                 if (bundle.getString(Constant.FB_MS_ID) != null)
-                    mViewModel.fetchQuestionData(bundle.getString(Constant.FB_MS_ID),params);
+                    mViewModel.fetchQuestionData(bundle.getString(Constant.FB_MS_ID), params);
 
                 learningFragmentBinding.learningSwiperefresh.setRefreshing(true);
                 mViewModel.getQuestion(bundle.getString(Constant.FB_MS_ID)).observe(getViewLifecycleOwner(), questionsList -> {
@@ -154,7 +156,7 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
                 } else {
                     ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Practice Questions");
                 }
-                mViewModel.fetchQuestionData("",params);
+                mViewModel.fetchQuestionData("", params);
 
                 mViewModel.getQuestionList().observe(getViewLifecycleOwner(), questionsList -> {
                     if (!isFilterApplied)
@@ -167,7 +169,7 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
             }
         }
         learningFragmentBinding.learningSwiperefresh.setOnRefreshListener(() -> {
-            mViewModel.fetchQuestionData("",params);
+            mViewModel.fetchQuestionData("", params);
             mViewModel.getQuestionList().observe(getViewLifecycleOwner(), questionsList -> {
                 if (!isFilterApplied)
                     setData(questionsList);
@@ -311,23 +313,23 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
 
     @Override
     public void onResetClick() {
-        isFilterApplied=false;
+        isFilterApplied = false;
         setFilterIcon(filterMenu, getActivity(), false);
-        params.put(Constant.q_trending,"");
-        params.put(Constant.q_popular,"");
-        params.put(Constant.q_recent,"");
-        params.put(Constant.q_option_type,"");
-        params.put(Constant.q_type,"");
-        params.put(Constant.q_avg_ratings,"");
-        params.put(Constant.q_diff_level,"");
-        mViewModel.fetchQuestionData("",params);
+        params.put(Constant.q_trending, "");
+        params.put(Constant.q_popular, "");
+        params.put(Constant.q_recent, "");
+        params.put(Constant.q_option_type, "");
+        params.put(Constant.q_type, "");
+        params.put(Constant.q_avg_ratings, "");
+        params.put(Constant.q_diff_level, "");
+        mViewModel.fetchQuestionData("", params);
     }
 
     @Override
     public void onDoneClick(HashMap<String, String> map) {
         params = map;
-        isFilterApplied=true;
-        mViewModel.fetchQuestionData("",params);
+        isFilterApplied = true;
+        mViewModel.fetchQuestionData("", params);
         questionsFilteredList.clear();
         setFilterIcon(filterMenu, getActivity(), true);
         mViewModel.getFilterQuestionList().observe(getViewLifecycleOwner(), questionsList -> {
