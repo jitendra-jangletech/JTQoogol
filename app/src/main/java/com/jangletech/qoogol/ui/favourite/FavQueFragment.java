@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.LearningAdapter;
@@ -89,38 +90,24 @@ public class FavQueFragment extends Fragment implements LearningAdapter.onIconCl
         learningQuestionsList = new ArrayList<>();
         questionsNewList = new ArrayList<>();
         userId = String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));
+        learningFragmentBinding.learningSwiperefresh.setRefreshing(true);
         mViewModel.fetchFavQuestionData();
 
         mViewModel.geFavtQuestionList().observe(getViewLifecycleOwner(), questionsList -> {
+            if (learningFragmentBinding.learningSwiperefresh.isRefreshing())
+                learningFragmentBinding.learningSwiperefresh.setRefreshing(false);
             questionsNewList.clear();
             questionsNewList.addAll(questionsList);
             initRecycler();
         });
 
-        learningFragmentBinding.learningSwiperefresh.setOnRefreshListener(() -> mViewModel.fetchFavQuestionData());
-    }
+        learningFragmentBinding.learningSwiperefresh.setOnRefreshListener(() -> {
+            mViewModel.fetchFavQuestionData();
+            if (learningFragmentBinding.learningSwiperefresh.isRefreshing())
+                learningFragmentBinding.learningSwiperefresh.setRefreshing(false);
+        });
 
-//    private void getDataFromApi() {
-//        Call<LearningQuestResponse> call = apiService.fetchFavQAApi(new PreferenceManager(getApplicationContext()).getUserId(), "FV");
-//        call.enqueue(new Callback<LearningQuestResponse>() {
-//            @Override
-//            public void onResponse(Call<LearningQuestResponse> call, retrofit2.Response<LearningQuestResponse> response) {
-//                try {
-//                    if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
-//                        learningQuestionsList.addAll(response.body().getQuestion_list());
-//                        initRecycler();
-//                    }
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<LearningQuestResponse> call, Throwable t) {
-//                t.printStackTrace();
-//            }
-//        });
-//    }
+    }
 
 
     private void initRecycler() {
@@ -137,7 +124,6 @@ public class FavQueFragment extends Fragment implements LearningAdapter.onIconCl
         if (learningFragmentBinding.learningSwiperefresh.isRefreshing())
             learningFragmentBinding.learningSwiperefresh.setRefreshing(false);
     }
-
 
     private void ProcessQuestionAPI(int que_id, int flag, String call_from, String rating, String feedback) {
         ProgressDialog.getInstance().show(getActivity());
