@@ -635,8 +635,11 @@ public class MainActivity extends BaseActivity {
                 } else if (navController.getCurrentDestination().getId() == R.id.nav_syllabus) {
                     if (isTestScreenEnabled)
                         navController.navigate(R.id.nav_test_my);
-                    else
-                        navController.navigate(R.id.nav_learning);
+                    else {
+                        Bundle bundle = new Bundle();
+                        bundle.putString("call_from", "learning");
+                        navToFragment(R.id.nav_learning, bundle);
+                    }
                 } else {
                     navController.popBackStack();
                 }

@@ -2334,6 +2334,7 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
                                     learningQuestionsNew.setIs_fav("false");
                                     Glide.with(activity).load(activity.getResources().getDrawable(R.drawable.ic_fav)).into(learningItemBinding.favorite);
                                     executor.execute(() -> new AppRepository(activity).updateQuestion(learningQuestionsNew.getQuestion_id(), "false"));
+                                    onIconClick.onFavClick();
                                 } else {
                                     Glide.with(activity).load(activity.getResources().getDrawable(R.drawable.ic_favorite_black_24dp)).into(learningItemBinding.favorite);
                                     learningQuestionsNew.setIs_fav("true");

@@ -39,7 +39,7 @@ public class ApiClient {
 
     private static Retrofit retrofit() {
         return new Retrofit.Builder()
-                .baseUrl(BASE_URL_STAGING)
+                .baseUrl(BASE_URL_PROD)
                 .client(okHttpClient())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();

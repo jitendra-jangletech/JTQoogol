@@ -116,7 +116,7 @@ public class DoubtInfo {
     }
 
     public String getDoubt_text() {
-        return doubt_text!=null? AppUtils.decodedString(doubt_text) :"";
+        return doubt_text!=null? doubt_text :"";
     }
 
     public void setDoubt_text(String doubt_text) {

@@ -17,7 +17,9 @@ import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.DoubtItemBinding;
 import com.jangletech.qoogol.model.DoubtInfo;
 import com.jangletech.qoogol.util.AESSecurities;
+import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
+import com.jangletech.qoogol.util.DateUtils;
 import com.jangletech.qoogol.util.TinyDB;
 import com.jangletech.qoogol.util.UtilHelper;
 
@@ -58,8 +60,8 @@ public class DoubtAdapter extends RecyclerView.Adapter<DoubtAdapter.ViewHolder> 
                 + " " + AESSecurities.getInstance().decrypt(TinyDB.getInstance(activity).getString(Constant.cf_key2), doubts.getLast_name());
         doubtItemBinding.tvName.setText(name);
 
-        doubtItemBinding.tvTimeStamp.setText(doubts.getDate_time());
-        doubtItemBinding.doubtText.setText(doubts.getDoubt_text());
+        doubtItemBinding.tvTimeStamp.setText(DateUtils.getFormattedDate(doubts.getDate_time()));
+        doubtItemBinding.doubtText.setText(AppUtils.decodedString(doubts.getDoubt_text()));
         doubtItemBinding.doubtLink.setText(createDynamicLink(doubts.getDoubt_id()));
     }
 
@@ -69,7 +71,7 @@ public class DoubtAdapter extends RecyclerView.Adapter<DoubtAdapter.ViewHolder> 
         FirebaseDynamicLinks.getInstance().createDynamicLink()
                 .setLink(Uri.parse(link))
                 .setDomainUriPrefix("https://chatchilli.page.link")
-                .setAndroidParameters(new DynamicLink.AndroidParameters.Builder().build())
+                .setAndroidParameters(new DynamicLink.AndroidParameters.Builder("com.jangletech.chatchilli").build())
                 .setIosParameters(new DynamicLink.IosParameters.Builder("com.jangletech.chatchilli")
                         .setAppStoreId("1524294565").build())
                 .buildShortDynamicLink()
