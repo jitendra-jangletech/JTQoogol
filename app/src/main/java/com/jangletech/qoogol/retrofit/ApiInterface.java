@@ -134,6 +134,7 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST(Constant.FETCH_USER_SETTINGS)
     Call<SubjectResponse> fetchSubjectList(@Field(Constant.u_user_id) String userId,
+                                           @Field(Constant.ue_id) String ueId,
                                            @Field(Constant.device_id) String deviceId,
                                            @Field(Constant.appName) String appName,
                                            @Field(Constant.CASE) String CaseL);

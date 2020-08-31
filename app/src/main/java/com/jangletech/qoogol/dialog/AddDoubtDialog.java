@@ -29,6 +29,7 @@ import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
+import com.jangletech.qoogol.util.TinyDB;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -120,6 +121,7 @@ public class AddDoubtDialog  extends Dialog implements DoubtGroupAdapter.onItemC
 
         Call<SubjectResponse> call = apiService.fetchSubjectList(
                 new PreferenceManager(context).getUserId(),
+                TinyDB.getInstance(context).getString(Constant.selected_ue_id),
                 getDeviceId(),
                 "Q",
                 "L");
