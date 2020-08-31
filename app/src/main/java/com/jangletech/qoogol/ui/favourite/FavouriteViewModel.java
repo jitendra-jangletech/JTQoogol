@@ -4,6 +4,9 @@ import android.app.Application;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.jangletech.qoogol.database.repo.AppRepository;
 import com.jangletech.qoogol.model.LearningQuestResponse;
 import com.jangletech.qoogol.model.LearningQuestionsNew;
@@ -21,27 +24,32 @@ import java.util.concurrent.Executors;
 import retrofit2.Call;
 import retrofit2.Callback;
 
+import static com.jangletech.qoogol.ui.BaseFragment.getDeviceId;
+import static com.jangletech.qoogol.util.Constant.qoogol;
+
 
 public class FavouriteViewModel extends AndroidViewModel {
     ApiInterface apiService;
     public final AppRepository mAppRepository;
-
+    private MutableLiveData<List<LearningQuestionsNew>> favQueList;
     public FavouriteViewModel(Application application) {
         super(application);
         apiService = ApiClient.getInstance().getApi();
         mAppRepository = new AppRepository(application);
+        favQueList=new MutableLiveData<>();
     }
 
     LiveData<List<LearningQuestionsNew>> geFavtQuestionList() {
-        return mAppRepository.getFavQuestionsFromDb();
+        return favQueList;
     }
 
-   public void fetchFavQuestionData() {
-        getDataFromApi();
+
+   public void fetchFavQuestionData(SwipeRefreshLayout learningSwiperefresh) {
+        getDataFromApi(learningSwiperefresh);
     }
 
-    private void getDataFromApi() {
-        Call<LearningQuestResponse> call = apiService.fetchFavQAApi(new PreferenceManager(getApplication()).getUserId(), "FV");
+    private void getDataFromApi(SwipeRefreshLayout learningSwiperefresh) {
+        Call<LearningQuestResponse> call = apiService.fetchFavQAApi(new PreferenceManager(getApplication()).getUserId(), "FV",getDeviceId(getApplication()), qoogol);
         call.enqueue(new Callback<LearningQuestResponse>() {
             @Override
             public void onResponse(Call<LearningQuestResponse> call, retrofit2.Response<LearningQuestResponse> response) {
@@ -49,6 +57,10 @@ public class FavouriteViewModel extends AndroidViewModel {
                     if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
                         ExecutorService executor = Executors.newSingleThreadExecutor();
                         executor.execute(() -> mAppRepository.insertQuestions(response.body().getQuestion_list()));
+                        if (response.body().getQuestion_list()!=null&&response.body().getQuestion_list().size()>0) {
+                            favQueList.setValue(response.body().getQuestion_list());
+                        } else
+                            favQueList.setValue(null);
                         Thread thread = new Thread() {
                             @Override
                             public void run() {
@@ -57,17 +69,25 @@ public class FavouriteViewModel extends AndroidViewModel {
                         };
 
                         thread.start();
+                        dismissRefresh(learningSwiperefresh);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
+                    dismissRefresh(learningSwiperefresh);
                 }
             }
 
             @Override
             public void onFailure(Call<LearningQuestResponse> call, Throwable t) {
                 t.printStackTrace();
+                dismissRefresh(learningSwiperefresh);
             }
         });
+    }
+
+    private void dismissRefresh(SwipeRefreshLayout learningSwiperefresh) {
+        if (learningSwiperefresh.isRefreshing())
+            learningSwiperefresh.setRefreshing(true);
     }
 
     private String  getQuestionImages() {

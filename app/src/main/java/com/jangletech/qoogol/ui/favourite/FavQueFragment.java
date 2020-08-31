@@ -14,7 +14,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.LearningAdapter;
@@ -59,7 +58,7 @@ public class FavQueFragment extends Fragment implements LearningAdapter.onIconCl
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser && isFragmentVisible) {
-            mViewModel.fetchFavQuestionData();
+            mViewModel.fetchFavQuestionData(learningFragmentBinding.learningSwiperefresh);
         }
     }
 
@@ -80,18 +79,16 @@ public class FavQueFragment extends Fragment implements LearningAdapter.onIconCl
         initView();
         if (!isFragmentVisible) {
             isFragmentVisible = true;
-            mViewModel.fetchFavQuestionData();
+            mViewModel.fetchFavQuestionData(learningFragmentBinding.learningSwiperefresh);
         }
     }
 
 
     private void initView() {
-        learningFragmentBinding.learningSwiperefresh.setRefreshing(true);
         learningQuestionsList = new ArrayList<>();
         questionsNewList = new ArrayList<>();
         userId = String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));
-        learningFragmentBinding.learningSwiperefresh.setRefreshing(true);
-        mViewModel.fetchFavQuestionData();
+        mViewModel.fetchFavQuestionData(learningFragmentBinding.learningSwiperefresh);
 
         mViewModel.geFavtQuestionList().observe(getViewLifecycleOwner(), questionsList -> {
             if (learningFragmentBinding.learningSwiperefresh.isRefreshing())
@@ -102,7 +99,7 @@ public class FavQueFragment extends Fragment implements LearningAdapter.onIconCl
         });
 
         learningFragmentBinding.learningSwiperefresh.setOnRefreshListener(() -> {
-            mViewModel.fetchFavQuestionData();
+            mViewModel.fetchFavQuestionData(learningFragmentBinding.learningSwiperefresh);
             if (learningFragmentBinding.learningSwiperefresh.isRefreshing())
                 learningFragmentBinding.learningSwiperefresh.setRefreshing(false);
         });
@@ -195,5 +192,10 @@ public class FavQueFragment extends Fragment implements LearningAdapter.onIconCl
         }
 
         NavHostFragment.findNavController(this).navigate(R.id.nav_edit_profile, bundle);
+    }
+
+    @Override
+    public void onFavClick() {
+        mViewModel.fetchFavQuestionData(learningFragmentBinding.learningSwiperefresh);
     }
 }

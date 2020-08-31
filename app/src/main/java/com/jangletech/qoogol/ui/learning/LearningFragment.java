@@ -291,6 +291,11 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
     }
 
     @Override
+    public void onFavClick() {
+
+    }
+
+    @Override
     public void onFriendUnFriendClick() {
 
     }

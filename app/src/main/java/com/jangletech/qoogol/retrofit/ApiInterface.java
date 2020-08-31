@@ -459,7 +459,9 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST(Constant.FETCH_QA)
     Call<LearningQuestResponse> fetchFavQAApi(@Field(Constant.u_user_id) String userid,
-                                              @Field(Constant.CASE) String caseR);
+                                              @Field(Constant.CASE) String caseR,
+                                              @Field(Constant.device_id) String deviceId,
+                                              @Field(Constant.appName) String appName);
 
     @FormUrlEncoded
     @POST(Constant.FETCH_DOUBTS)

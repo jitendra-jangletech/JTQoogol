@@ -252,6 +252,11 @@ public class SharedWithYouFragment extends BaseFragment implements LearningAdapt
         NavHostFragment.findNavController(this).navigate(R.id.nav_edit_profile, bundle);
     }
 
+    @Override
+    public void onFavClick() {
+
+    }
+
 
     @Override
     public void onResetClick() {

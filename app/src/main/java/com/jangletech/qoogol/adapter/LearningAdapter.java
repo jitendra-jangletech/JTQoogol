@@ -286,6 +286,8 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
         void onSubmitClick(int questionId, int isRight);
 
         void onLikeClick(String userId);
+
+        void onFavClick();
     }
 
 
@@ -793,9 +795,7 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
                 learningItemBinding.scq2Layout.setBackground(activity.getResources().getDrawable(R.drawable.grey_border_grey_bg));
             });
 
-            learningItemBinding.scq3Layout.setOnClickListener(v ->
-
-            {
+            learningItemBinding.scq3Layout.setOnClickListener(v ->  {
                 setLayoutBg();
                 setSCQAnsIndicator();
                 scq_ans = "C";
@@ -2319,6 +2319,7 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
                                     learningQuestionsNew.setIsSave("false");
                                     Glide.with(activity).load(activity.getResources().getDrawable(R.drawable.ic_save_grey)).into(learningItemBinding.saveQue);
                                     executor.execute(() -> new AppRepository(activity).deleteQuestion(learningQuestionsNew.getQuestion_id()));
+                                    onIconClick.onFavClick();
 
                                 } else {
                                     learningQuestionsNew.setIsSave("true");
