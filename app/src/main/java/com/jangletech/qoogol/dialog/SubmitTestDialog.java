@@ -9,10 +9,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Window;
 import android.widget.RatingBar;
-
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
-
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.activities.PracticeTestActivity;
 import com.jangletech.qoogol.databinding.DialogSubmitTestBinding;
@@ -42,10 +40,10 @@ public class SubmitTestDialog extends Dialog {
     private String testRating = "", testFeedback = "";
     private HashMap<String, String> params = new HashMap<>();
     private Activity activity;
-    private int totalQuest, wrongQuest, unAttemptedQuest, markedQuest, otherQuest,rightQuest;
+    private int totalQuest, wrongQuest, unAttemptedQuest, markedQuest, otherQuest, rightQuest;
 
     public SubmitTestDialog(@NonNull Context context, Activity activity, SubmitDialogClickListener submitDialogClickListener, StartResumeTestResponse startResumeTestResponse) {
-        super(context);
+        super(context, android.R.style.Theme_DeviceDefault_Light_DarkActionBar);
         this.activity = activity;
         this.submitDialogClickListener = submitDialogClickListener;
         this.startResumeTestResponse = startResumeTestResponse;
@@ -120,7 +118,7 @@ public class SubmitTestDialog extends Dialog {
                         wrongQuest++;
                     } else {
                         //right answer
-                        rightQuest ++;
+                        rightQuest++;
                         obtainMarks = obtainMarks + testQuestionNew.getTq_marks();
                     }
                 } else {

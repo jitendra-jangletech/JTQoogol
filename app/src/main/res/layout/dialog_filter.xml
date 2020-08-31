@@ -279,6 +279,7 @@
 
                 <androidx.appcompat.widget.AppCompatRatingBar
                     android:id="@+id/rating"
+                    android:layout_marginLeft="@dimen/_25sdp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_10sdp"
