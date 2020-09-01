@@ -42,6 +42,7 @@ public class LearningViewModel extends AndroidViewModel {
     PreferenceManager mSettings;
     List<LearningQuestionsNew> questionsFilteredList;
     MutableLiveData<List<LearningQuestionsNew>> filterQueList;
+    String pageCount;
 
     public LearningViewModel(Application application) {
         super(application);
@@ -50,6 +51,7 @@ public class LearningViewModel extends AndroidViewModel {
         mSettings = new PreferenceManager(application);
         questionsFilteredList=new ArrayList<>();
         filterQueList=new MutableLiveData<>();
+        pageCount="0";
     }
 
     LiveData<List<LearningQuestionsNew>> getQuestionList() {
@@ -132,12 +134,11 @@ public class LearningViewModel extends AndroidViewModel {
 
 
     private void getDataFromApi(String q_id, String CASE,HashMap<String, String> params) {
-
         if (CASE.equalsIgnoreCase(""))
             call = apiService.fetchQAApi(new PreferenceManager(getApplication()).getUserId(), q_id, params.get(Constant.q_avg_ratings), params.get(Constant.q_diff_level),params.get(Constant.q_trending),params.get(Constant.q_popular)
-                    ,params.get(Constant.q_recent),params.get(Constant.q_type),params.get(Constant.q_option_type));
+                    ,params.get(Constant.q_recent),params.get(Constant.q_type),params.get(Constant.q_option_type),new PreferenceManager(getApplication()).getString(Constant.ue_id),String.valueOf(pageCount));
         else
-            call = apiService.fetchQAApi(new PreferenceManager(getApplication()).getUserId(), q_id, CASE,params.get(Constant.q_avg_ratings), params.get(Constant.q_diff_level),params.get(Constant.q_trending),params.get(Constant.q_popular)
+            call = apiService.fetchQAByCaseApi(new PreferenceManager(getApplication()).getUserId(), q_id, CASE,params.get(Constant.q_avg_ratings), params.get(Constant.q_diff_level),params.get(Constant.q_trending),params.get(Constant.q_popular)
                     ,params.get(Constant.q_recent),params.get(Constant.q_type),params.get(Constant.q_option_type));
         call.enqueue(new Callback<LearningQuestResponse>() {
             @Override
@@ -146,6 +147,7 @@ public class LearningViewModel extends AndroidViewModel {
                     if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
 
                         if (response.body().getQuestion_list()!=null && response.body().getQuestion_list().size()>0) {
+                            pageCount=response.body().getRow_count();
                             ExecutorService executor = Executors.newSingleThreadExecutor();
                             executor.execute(() -> mAppRepository.insertQuestions(response.body().getQuestion_list()));
                             filterQueList.setValue(response.body().getQuestion_list());

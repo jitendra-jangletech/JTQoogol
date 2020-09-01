@@ -13,8 +13,8 @@ public class LearningQuestResponse {
 
     private String Message;
 
-    @SerializedName(Constant.prev_q_id)
-    private String prev_q_id;
+    @SerializedName(Constant.row_count)
+    private String row_count;
 
     @SerializedName(Constant.Response)
     private String response;
@@ -22,12 +22,13 @@ public class LearningQuestResponse {
     @SerializedName(Constant.question_list)
     private List<LearningQuestionsNew> question_list;
 
-    public String getPrev_q_id() {
-        return prev_q_id;
+
+    public String getRow_count() {
+        return row_count;
     }
 
-    public void setPrev_q_id(String prev_q_id) {
-        this.prev_q_id = prev_q_id;
+    public void setRow_count(String row_count) {
+        this.row_count = row_count;
     }
 
     public String getResponse() {

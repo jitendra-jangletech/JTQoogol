@@ -3,6 +3,7 @@ package com.jangletech.qoogol.adapter;
 import android.app.Activity;
 import android.net.Uri;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
@@ -33,11 +34,13 @@ public class DoubtAdapter extends RecyclerView.Adapter<DoubtAdapter.ViewHolder> 
     private List<DoubtInfo> doubtsList;
     DoubtItemBinding doubtItemBinding;
     int call_from;
+    onItemClick onItemClick;
 
-    public DoubtAdapter(Activity activity, List<DoubtInfo> doubtsList, int call_from) {
+    public DoubtAdapter(Activity activity, List<DoubtInfo> doubtsList, int call_from, onItemClick onItemClick) {
         this.activity = activity;
         this.doubtsList = doubtsList;
         this.call_from = call_from;
+        this.onItemClick = onItemClick;
     }
 
     @NonNull
@@ -62,12 +65,18 @@ public class DoubtAdapter extends RecyclerView.Adapter<DoubtAdapter.ViewHolder> 
 
         doubtItemBinding.tvTimeStamp.setText(DateUtils.getFormattedDate(doubts.getDate_time()));
         doubtItemBinding.doubtText.setText(AppUtils.decodedString(doubts.getDoubt_text()));
-        doubtItemBinding.doubtLink.setText(createDynamicLink(doubts.getDoubt_id()));
+
+        doubtItemBinding.getRoot().setOnClickListener(v -> onItemClick.onItemClick(doubts.getDoubt_id()));
+
+    }
+
+    public interface onItemClick {
+        void onItemClick(String doubt_id);
     }
 
     private String createDynamicLink(String crId) {
         final String[] resultLink = {""};
-        String link = "https://www.chatchilli.com/?postId=" + crId;
+        String link = "https://chatchilli.page.link/?postId=" + crId;
         FirebaseDynamicLinks.getInstance().createDynamicLink()
                 .setLink(Uri.parse(link))
                 .setDomainUriPrefix("https://chatchilli.page.link")

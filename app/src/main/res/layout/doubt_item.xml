@@ -63,6 +63,7 @@
             android:layout_margin="@dimen/_5sdp"
             android:textSize="@dimen/_10ssp"
             android:id="@+id/doubt_link"
+            android:visibility="gone"
             android:textColor="@color/colorSkyBlue"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>

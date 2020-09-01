@@ -430,12 +430,14 @@ public interface ApiInterface {
                                            @Field(Constant.q_popular) String popular,
                                            @Field(Constant.q_recent) String recent,
                                            @Field(Constant.q_type) String question_type,
-                                           @Field(Constant.q_option_type) String option_type
+                                           @Field(Constant.q_option_type) String option_type,
+                                           @Field(Constant.ue_id) String ueId,
+                                           @Field(Constant.pagestart) String page
     );
 
     @FormUrlEncoded
     @POST(Constant.FETCH_QA)
-    Call<LearningQuestResponse> fetchQAApi(@Field(Constant.u_user_id) String userid, @Field(Constant.q_id) String question,
+    Call<LearningQuestResponse> fetchQAByCaseApi(@Field(Constant.u_user_id) String userid, @Field(Constant.q_id) String question,
                                            @Field(Constant.CASE) String CASE,
                                            @Field(Constant.q_avg_ratings) String ratings,
                                            @Field(Constant.q_diff_level) String diff_level,
@@ -443,7 +445,6 @@ public interface ApiInterface {
                                            @Field(Constant.q_popular) String popular,
                                            @Field(Constant.q_recent) String recent,
                                            @Field(Constant.q_type) String question_type,
-
                                            @Field(Constant.q_option_type) String option_type);
 
     @FormUrlEncoded

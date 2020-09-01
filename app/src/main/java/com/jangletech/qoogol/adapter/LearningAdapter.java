@@ -838,22 +838,26 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
         }
 
         private void loadImage(String img, ImageView imageView) {
-            if (!img.contains("http")) {
-                String fileName = img.substring(img.lastIndexOf('/') + 1);
-                File file = new File(UtilHelper.getDirectory(activity), fileName);
-                Log.d(TAG, "loadImage URL : " + file);
-                if (file.exists()) {
-                    Glide.with(activity).load(file).into(imageView);
-                } else {
-                    Glide.with(activity).load(Constant.PRODUCTION_BASE_FILE_API + img.replace(".png", ".PNG"))
-                            .placeholder(R.drawable.no_image)
-                            .error(R.drawable.no_image)
-                            .into(imageView);
-                }
-            } else {
-                //load image directly
-                Glide.with(activity).load(img).into(imageView);
-            }
+           try {
+               if (!img.contains("http")) {
+                   String fileName = img.substring(img.lastIndexOf('/') + 1);
+                   File file = new File(UtilHelper.getDirectory(activity), fileName);
+                   Log.d(TAG, "loadImage URL : " + file);
+                   if (file.exists()) {
+                       Glide.with(activity).load(file).into(imageView);
+                   } else {
+                       Glide.with(activity).load(Constant.PRODUCTION_BASE_FILE_API + img.replace(".png", ".PNG"))
+                               .placeholder(R.drawable.no_image)
+                               .error(R.drawable.no_image)
+                               .into(imageView);
+                   }
+               } else {
+                   //load image directly
+                   Glide.with(activity).load(img).into(imageView);
+               }
+           } catch (Exception e) {
+               e.printStackTrace();
+           }
         }
 
         private void showLayout() {

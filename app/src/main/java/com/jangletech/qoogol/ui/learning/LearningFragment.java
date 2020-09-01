@@ -8,6 +8,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,6 +20,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.activities.MainActivity;
@@ -65,7 +67,10 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
     private HashMap<String, String> params;
     private Menu filterMenu;
     boolean isFilterApplied = false;
-
+    boolean isSettingsApplied = false;
+    private Boolean isScrolling = false;
+    private int currentItems, scrolledOutItems, totalItems;
+    LinearLayoutManager linearLayoutManager;
 
     public static LearningFragment newInstance() {
         return new LearningFragment();
@@ -132,8 +137,10 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
             String chapters = ch1 + ch2 + ch3;
             learningFragmentBinding.tvSubjectValue.setText(getString(Constant.subjectName));
             learningFragmentBinding.tvChapterValue.setText(!chapters.isEmpty() ? chapters.substring(1) : "");
+            isSettingsApplied=true;
         } else {
             learningFragmentBinding.topLayout.setVisibility(View.GONE);
+            isSettingsApplied=false;
         }
         params = new HashMap<>();
         params = AppUtils.loadQueFilterHashMap(getActivity());
@@ -159,25 +166,26 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
                 mViewModel.fetchQuestionData("", params);
 
                 mViewModel.getQuestionList().observe(getViewLifecycleOwner(), questionsList -> {
-                    if (!isFilterApplied)
+                    if (!isFilterApplied && !isSettingsApplied)
                         setData(questionsList);
                 });
                 mViewModel.getFilterQuestionList().observe(getViewLifecycleOwner(), questionsList -> {
-                    if (isFilterApplied)
+                    if (isFilterApplied || isSettingsApplied)
                         setData(questionsList);
                 });
             }
         }
         learningFragmentBinding.learningSwiperefresh.setOnRefreshListener(() -> {
             mViewModel.fetchQuestionData("", params);
+            mViewModel.pageCount="0";
             mViewModel.getQuestionList().observe(getViewLifecycleOwner(), questionsList -> {
-                if (!isFilterApplied)
+                if (!isFilterApplied && !isSettingsApplied)
                     setData(questionsList);
             });
             mViewModel.getFilterQuestionList().observe(getViewLifecycleOwner(), questionsList -> {
-                if (isFilterApplied)
+                if (isFilterApplied || isSettingsApplied)
                     setData(questionsList);
-            });
+            });mViewModel.fetchQuestionData(bundle.getString(Constant.FB_MS_ID), params);
         });
 
         learningFragmentBinding.tvInfo.setOnClickListener(v -> {
@@ -185,6 +193,30 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
             navController.navigate(R.id.nav_syllabus, Bundle.EMPTY);
         });
 
+
+        learningFragmentBinding.learningRecycler.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                    isScrolling = true;
+                }
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                currentItems = linearLayoutManager.getChildCount();
+                totalItems = linearLayoutManager.getItemCount();
+                scrolledOutItems = linearLayoutManager.findFirstVisibleItemPosition();
+                if (dy > 0) {
+                    if (isScrolling && (currentItems + scrolledOutItems == totalItems)) {
+                        isScrolling = false;
+                        mViewModel.fetchQuestionData("", params);
+                    }
+                }
+            }
+        });
     }
 
     private void setData(List<LearningQuestionsNew> questionsList) {
@@ -196,7 +228,7 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
     private void initRecycler() {
         learningAdapter = new LearningAdapter(getActivity(), questionsNewList, this, learning);
         learningFragmentBinding.learningRecycler.setHasFixedSize(true);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setAutoMeasureEnabled(false);
         learningFragmentBinding.learningRecycler.setNestedScrollingEnabled(false);
         learningFragmentBinding.learningRecycler.setItemViewCacheSize(20);

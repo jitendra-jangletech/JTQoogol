@@ -22,6 +22,7 @@ import com.jangletech.qoogol.adapter.LearningAdapter;
 import com.jangletech.qoogol.databinding.LearningFragmentBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.dialog.QuestionFilterDialog;
+import com.jangletech.qoogol.dialog.ShareQuestionDialog;
 import com.jangletech.qoogol.enums.Module;
 import com.jangletech.qoogol.model.LearningQuestionsNew;
 import com.jangletech.qoogol.model.ProcessQuestion;
@@ -154,9 +155,16 @@ public class SharedByYouFragment extends BaseFragment implements LearningAdapter
 
 
     private void setData(List<LearningQuestionsNew> questionsList) {
-        questionsNewList.clear();
-        questionsNewList.addAll(questionsList);
-        initRecycler();
+        if (questionsList!=null && questionsList.size()>0) {
+            questionsNewList.clear();
+            questionsNewList.addAll(questionsList);
+            initRecycler();
+            learningFragmentBinding.tvNoQuest.setVisibility(View.GONE);
+        } else {
+            dismissRefresh(learningFragmentBinding.learningSwiperefresh);
+            learningFragmentBinding.tvNoQuest.setVisibility(View.VISIBLE);
+        }
+
     }
 
     private void initRecycler() {
@@ -226,10 +234,9 @@ public class SharedByYouFragment extends BaseFragment implements LearningAdapter
 
     @Override
     public void onShareClick(int questionId) {
-        Bundle bundle = new Bundle();
-        bundle.putInt("QuestionId", questionId);
-        bundle.putInt("call_from", learning);
-        NavHostFragment.findNavController(this).navigate(R.id.nav_share, bundle);
+        new ShareQuestionDialog(getActivity(), String.valueOf(questionId), AppUtils.getUserId()
+                , getDeviceId(getActivity()), "Q")
+                .show();
     }
 
 

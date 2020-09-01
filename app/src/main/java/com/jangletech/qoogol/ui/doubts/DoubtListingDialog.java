@@ -43,7 +43,7 @@ import static com.jangletech.qoogol.util.Constant.tq_doubts;
 /**
  * Created by Pritali on 7/31/2020.
  */
-public class DoubtListingDialog extends Dialog {
+public class DoubtListingDialog extends Dialog implements DoubtAdapter.onItemClick {
     private Activity context;
     private PreferenceManager mSettings;
     DoubtListingBinding doubtListingBinding;
@@ -185,7 +185,7 @@ public class DoubtListingDialog extends Dialog {
             doubtListingBinding.doubtSwiperefresh.setRefreshing(false);
 
         if (doubtsList!=null && doubtsList.size() > 0) {
-            doubtAdapter = new DoubtAdapter(context, doubtsList, call_from);
+            doubtAdapter = new DoubtAdapter(context, doubtsList, call_from,this);
             doubtListingBinding.doubtRecycler.setHasFixedSize(true);
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
             doubtListingBinding.doubtRecycler.setLayoutManager(linearLayoutManager);
@@ -195,5 +195,14 @@ public class DoubtListingDialog extends Dialog {
             doubtListingBinding.tvEmptyview.setText("No data available.");
             doubtListingBinding.tvEmptyview.setVisibility(View.VISIBLE);
         }
+    }
+
+    @Override
+    public void onItemClick(String doubt_id) {
+        Bundle bundle = new Bundle();
+        bundle.putString(Constant.u_user_id, new PreferenceManager(context).getUserId());
+        bundle.putString("SCREEN", "OPEN_POST ");
+        bundle.putString(Constant.crms_id,doubt_id);
+        callChatChilliApp(bundle);
     }
 }
