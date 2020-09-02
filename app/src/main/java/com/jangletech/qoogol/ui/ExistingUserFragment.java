@@ -252,7 +252,7 @@ public class ExistingUserFragment extends BaseFragment {
 
     private void callOfflineApi(String u_user_id) {
         Log.d(TAG, "PRACTICE UserId : " + u_user_id);
-        Call<LocalDataResponse> call = apiService.fetchLocalDataApi(u_user_id, getDeviceId(getActivity()));
+        Call<LocalDataResponse> call = apiService.fetchLocalDataApi(u_user_id, getDeviceId(getActivity()), Constant.forcerefresh);
         call.enqueue(new Callback<LocalDataResponse>() {
             @Override
             public void onResponse(Call<LocalDataResponse> call, retrofit2.Response<LocalDataResponse> response) {

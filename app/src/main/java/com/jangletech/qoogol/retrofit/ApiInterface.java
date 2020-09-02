@@ -450,7 +450,8 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST(Constant.FETCH_LocalData)
     Call<LocalDataResponse> fetchLocalDataApi(@Field(Constant.u_user_id) String userid,
-                                              @Field(Constant.device_id) String deviceId);
+                                              @Field(Constant.device_id) String deviceId,
+                                              @Field("ForceRefresh") String refresh);
 
 
     @FormUrlEncoded
