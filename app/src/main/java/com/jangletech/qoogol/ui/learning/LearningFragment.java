@@ -177,6 +177,7 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
                 });
             }
         }
+
         learningFragmentBinding.learningSwiperefresh.setOnRefreshListener(() -> {
             mViewModel.pageCount="0";
             mViewModel.fetchQuestionData("", params);
