@@ -101,13 +101,9 @@ public class ContactListFragment extends BaseFragment implements ContactListAdap
         activity = requireActivity();
         mViewModel = new ViewModelProvider(this).get(ContactListViewModel.class);
         mBinding = DataBindingUtil.inflate(inflater, R.layout.contact_list_fragment, container, false);
-
         prepareFilterList();
-
         initView();
-
         contactsSet = new HashSet<>();
-
         mSettings = new PreferenceManager(activity);
 
         if (checkWriteExternalPermission()) {
@@ -210,7 +206,7 @@ public class ContactListFragment extends BaseFragment implements ContactListAdap
     private void callInviteAPI() {
         if (NetworkUtility.isConnected(activity)) {
             if (isSelectedAll) {
-                AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(activity, R.style.AlertDialogStyle);
+                AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.AlertDialogStyle);
                 builder.setMessage("Are you sure you want to pause the Test?");
                 builder.setPositiveButton("Yes", (dialog, which) -> {
                     dialog.dismiss();
@@ -219,7 +215,7 @@ public class ContactListFragment extends BaseFragment implements ContactListAdap
                 builder.setNegativeButton("No", (dialog, which) -> dialog.dismiss()).show();
 
             } else {
-                AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(activity, R.style.AlertDialogStyle);
+                AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.AlertDialogStyle);
                 builder.setMessage("Do you want to send invite to selected contacts?");
                 builder.setPositiveButton("Yes", (dialog, which) -> {
                     dialog.dismiss();
@@ -329,7 +325,7 @@ public class ContactListFragment extends BaseFragment implements ContactListAdap
 
 
     private boolean checkWriteExternalPermission() {
-        String permission = android.Manifest.permission.READ_CONTACTS;
+        String permission = Manifest.permission.READ_CONTACTS;
         int res = requireContext().checkCallingOrSelfPermission(permission);
         return (res == PackageManager.PERMISSION_GRANTED);
     }

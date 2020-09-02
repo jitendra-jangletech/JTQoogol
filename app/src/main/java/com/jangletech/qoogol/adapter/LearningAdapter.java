@@ -846,7 +846,7 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
                    if (file.exists()) {
                        Glide.with(activity).load(file).into(imageView);
                    } else {
-                       Glide.with(activity).load(Constant.PRODUCTION_BASE_FILE_API + img.replace(".png", ".PNG"))
+                       Glide.with(activity).load(Constant.PRODUCTION_BASE_FILE_API + img.replace(".png", ".PNG").trim())
                                .placeholder(R.drawable.no_image)
                                .error(R.drawable.no_image)
                                .into(imageView);

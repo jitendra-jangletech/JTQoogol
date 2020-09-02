@@ -1,6 +1,9 @@
 package com.jangletech.qoogol.ui.learning;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.Application;
+import android.content.pm.PackageManager;
 import android.text.TextUtils;
 import android.widget.Toast;
 
@@ -21,6 +24,12 @@ import com.jangletech.qoogol.service.DownloadAsyncTask;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.single.PermissionListener;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -43,6 +52,7 @@ public class LearningViewModel extends AndroidViewModel {
     List<LearningQuestionsNew> questionsFilteredList;
     MutableLiveData<List<LearningQuestionsNew>> filterQueList;
     String pageCount;
+    Activity activity;
 
     public LearningViewModel(Application application) {
         super(application);
@@ -157,9 +167,13 @@ public class LearningViewModel extends AndroidViewModel {
                                     downloadImages();
                                 }
                             };
-
-                            thread.start();
+                            if (checkWriteExternalPermission()) {
+                                thread.start();
+                            } else {
+                                enableRuntimePermission(thread);
+                            }
                         } else {
+                            if (pageCount.equalsIgnoreCase("0"))
                             filterQueList.setValue(null);
                         }
 
@@ -175,6 +189,40 @@ public class LearningViewModel extends AndroidViewModel {
             }
         });
     }
+
+
+    private boolean checkWriteExternalPermission() {
+        String permission = android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+        int res = getApplication().checkCallingOrSelfPermission(permission);
+        return (res == PackageManager.PERMISSION_GRANTED);
+    }
+
+    private void enableRuntimePermission(Thread thread) {
+        Dexter.withActivity(activity)
+                .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .withListener(new PermissionListener() {
+                    @Override
+                    public void onPermissionGranted(PermissionGrantedResponse response) {
+                        thread.start();
+                    }
+
+                    @Override
+                    public void onPermissionDenied(PermissionDeniedResponse response) {
+                        Toast.makeText(activity, "Storage permission denied.", Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+                        token.continuePermissionRequest();
+                    }
+                })
+                .withErrorListener(error ->
+                        Toast.makeText(activity, "Error occurred! ", Toast.LENGTH_SHORT).show())
+                .onSameThread()
+                .check();
+    }
+
+
 
     private String getQuestionImages() {
         try {

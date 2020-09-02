@@ -88,7 +88,9 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(LearningViewModel.class);
+        mViewModel.activity = getActivity();
         MainActivity.isTestScreenEnabled = false;
+
         initView();
     }
 
@@ -176,8 +178,9 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
             }
         }
         learningFragmentBinding.learningSwiperefresh.setOnRefreshListener(() -> {
-            mViewModel.fetchQuestionData("", params);
             mViewModel.pageCount="0";
+            mViewModel.fetchQuestionData("", params);
+            dismissRefresh(learningFragmentBinding.learningSwiperefresh);
             mViewModel.getQuestionList().observe(getViewLifecycleOwner(), questionsList -> {
                 if (!isFilterApplied && !isSettingsApplied)
                     setData(questionsList);
@@ -185,7 +188,7 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
             mViewModel.getFilterQuestionList().observe(getViewLifecycleOwner(), questionsList -> {
                 if (isFilterApplied || isSettingsApplied)
                     setData(questionsList);
-            });mViewModel.fetchQuestionData(bundle.getString(Constant.FB_MS_ID), params);
+            });
         });
 
         learningFragmentBinding.tvInfo.setOnClickListener(v -> {
@@ -366,6 +369,7 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
     public void onDoneClick(HashMap<String, String> map) {
         params = map;
         isFilterApplied = true;
+        mViewModel.pageCount="0";
         mViewModel.fetchQuestionData("", params);
         questionsFilteredList.clear();
         setFilterIcon(filterMenu, getActivity(), true);

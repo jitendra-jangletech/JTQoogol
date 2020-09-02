@@ -1725,8 +1725,7 @@
                                     android:id="@+id/a_mtp1"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:scaleType="centerCrop"
-                                    android:src="@drawable/no_image" />
+                                    android:scaleType="centerCrop" />
 
                                 <ImageView
                                     android:id="@+id/a_mtp_chck1"
@@ -1750,8 +1749,7 @@
                                     android:id="@+id/b_mtp1"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:scaleType="centerCrop"
-                                    android:src="@drawable/no_image" />
+                                    android:scaleType="centerCrop" />
 
 
                                 <ImageView
@@ -1787,8 +1785,7 @@
                                     android:id="@+id/a_mtp2"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:scaleType="centerCrop"
-                                    android:src="@drawable/no_image" />
+                                    android:scaleType="centerCrop" />
 
                                 <ImageView
                                     android:id="@+id/a_mtp_chck2"
@@ -1812,8 +1809,7 @@
                                     android:id="@+id/b_mtp2"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:scaleType="centerCrop"
-                                    android:src="@drawable/no_image" />
+                                    android:scaleType="centerCrop" />
 
 
                                 <ImageView
@@ -1849,8 +1845,7 @@
                                     android:id="@+id/a_mtp3"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:scaleType="centerCrop"
-                                    android:src="@drawable/no_image" />
+                                    android:scaleType="centerCrop" />
 
                                 <ImageView
                                     android:id="@+id/a_mtp_chck3"
@@ -1874,8 +1869,7 @@
                                     android:id="@+id/b_mtp3"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:scaleType="centerCrop"
-                                    android:src="@drawable/no_image" />
+                                    android:scaleType="centerCrop" />
 
 
                                 <ImageView
@@ -1912,8 +1906,7 @@
                                     android:id="@+id/a_mtp4"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:scaleType="centerCrop"
-                                    android:src="@drawable/no_image" />
+                                    android:scaleType="centerCrop" />
 
                                 <ImageView
                                     android:id="@+id/a_mtp_chck4"
@@ -1937,8 +1930,7 @@
                                     android:id="@+id/b_mtp4"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:scaleType="centerCrop"
-                                    android:src="@drawable/no_image" />
+                                    android:scaleType="centerCrop" />
 
                                 <ImageView
                                     android:id="@+id/b_mtp_chck4"

@@ -80,6 +80,7 @@ public class SharedByYouFragment extends BaseFragment implements LearningAdapter
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(LearningViewModel.class);
+           mViewModel.activity = getActivity();
         initView();
     }
 
@@ -139,6 +140,7 @@ public class SharedByYouFragment extends BaseFragment implements LearningAdapter
         });
 
         learningFragmentBinding.learningSwiperefresh.setOnRefreshListener(() -> {
+            mViewModel.pageCount="0";
             mViewModel.fetchQuestionData("",SHARED_BY_ME,params);
             mViewModel.getSharedQuestionList(SHARED_BY_ME).observe(getViewLifecycleOwner(), questionsList -> {
                 if (!isFilterApplied)
@@ -274,6 +276,7 @@ public class SharedByYouFragment extends BaseFragment implements LearningAdapter
     public void onDoneClick(HashMap<String, String> map) {
         params=map;
         isFilterApplied=true;
+        mViewModel.pageCount="0";
         setFilterIcon(filterMenu, getActivity(), true);
         mViewModel.fetchQuestionData("",SHARED_BY_ME,params);
         mViewModel.getFilterQuestionList().observe(getViewLifecycleOwner(), questionsList -> {
