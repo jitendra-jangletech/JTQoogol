@@ -191,7 +191,7 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
             });
         });
 
-        learningFragmentBinding.tvInfo.setOnClickListener(v -> {
+        learningFragmentBinding.syllabusLayout.setOnClickListener(v -> {
             NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
             navController.navigate(R.id.nav_syllabus, Bundle.EMPTY);
         });

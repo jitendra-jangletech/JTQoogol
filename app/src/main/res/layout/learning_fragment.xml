@@ -17,6 +17,7 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
+                android:id="@+id/syllabus_layout"
                 android:layout_height="match_parent"
                 app:cardElevation="@dimen/_5sdp"
                 app:layout_constraintTop_toTopOf="parent">
