@@ -25,6 +25,8 @@ import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 
+import static com.jangletech.qoogol.util.AppUtils.getDeviceId;
+
 public class SettingsFragment extends BaseFragment implements UniversalDialog.DialogButtonClickListener {
 
     private static final String TAG = "SettingsFragment";
@@ -69,6 +71,7 @@ public class SettingsFragment extends BaseFragment implements UniversalDialog.Di
                 bundle.putString(Constant.u_user_id, getUserId(getActivity()));
                 bundle.putString("SCREEN", "SETTINGS");
                 LaunchIntent.putExtras(bundle);
+                bundle.putString(Constant.device_id,getDeviceId(getActivity()));
                 LaunchIntent.putExtra(Intent.ACTION_VIEW, bundle);
                 startActivity(LaunchIntent);
             } else {

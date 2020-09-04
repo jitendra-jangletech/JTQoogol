@@ -38,6 +38,7 @@ import java.util.concurrent.Executors;
 import retrofit2.Call;
 import retrofit2.Callback;
 
+import static com.jangletech.qoogol.util.AppUtils.getDeviceId;
 import static com.jangletech.qoogol.util.Constant.tq_doubts;
 
 /**
@@ -128,6 +129,7 @@ public class DoubtListingDialog extends Dialog implements DoubtAdapter.onItemCli
                 bundle.putString(Constant.appName,"Q");
                 bundle.putString(Constant.q_id,questionId);
                 bundle.putString(Constant.TorQ,"Q");
+                bundle.putString(Constant.device_id,getDeviceId());
                 callChatChilliApp(bundle);
             } else {
                 addDoubtDialog = new AddDoubtDialog(context,null);
@@ -203,6 +205,8 @@ public class DoubtListingDialog extends Dialog implements DoubtAdapter.onItemCli
         bundle.putString(Constant.u_user_id, new PreferenceManager(context).getUserId());
         bundle.putString("SCREEN", "OPEN_POST ");
         bundle.putString(Constant.crms_id,doubt_id);
+        bundle.putString(Constant.appName,"Q");
+        bundle.putString(Constant.device_id,getDeviceId());
         callChatChilliApp(bundle);
     }
 }

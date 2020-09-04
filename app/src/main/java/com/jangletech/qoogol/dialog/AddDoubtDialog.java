@@ -176,6 +176,7 @@ public class AddDoubtDialog  extends Dialog implements DoubtGroupAdapter.onItemC
         bundle.putString(Constant.appName,"Q");
         bundle.putString(Constant.q_id,questionId);
         bundle.putString(Constant.TorQ,"Q");
+        bundle.putString(Constant.device_id,getDeviceId());
         callChatChilliApp(bundle);
     }
 }
