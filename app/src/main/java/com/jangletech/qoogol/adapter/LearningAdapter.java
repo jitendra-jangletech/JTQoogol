@@ -838,26 +838,26 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
         }
 
         private void loadImage(String img, ImageView imageView) {
-           try {
-               if (!img.contains("http")) {
-                   String fileName = img.substring(img.lastIndexOf('/') + 1);
-                   File file = new File(UtilHelper.getDirectory(activity), fileName);
-                   Log.d(TAG, "loadImage URL : " + file);
-                   if (file.exists()) {
-                       Glide.with(activity).load(file).into(imageView);
-                   } else {
-                       Glide.with(activity).load(Constant.PRODUCTION_BASE_FILE_API + img.replace(".png", ".PNG").trim())
-                               .placeholder(R.drawable.no_image)
-                               .error(R.drawable.no_image)
-                               .into(imageView);
-                   }
-               } else {
-                   //load image directly
-                   Glide.with(activity).load(img).into(imageView);
-               }
-           } catch (Exception e) {
-               e.printStackTrace();
-           }
+            try {
+                if (!img.contains("http")) {
+                    String fileName = img.substring(img.lastIndexOf('/') + 1);
+                    File file = new File(UtilHelper.getDirectory(activity), fileName);
+                    Log.d(TAG, "loadImage URL : " + file);
+                    if (file.exists()) {
+                        Glide.with(activity).load(file).into(imageView);
+                    } else {
+                        Glide.with(activity).load(Constant.PRODUCTION_BASE_FILE_API + img.replace(".png", ".PNG").trim())
+                                .placeholder(R.drawable.no_image)
+                                .error(R.drawable.no_image)
+                                .into(imageView);
+                    }
+                } else {
+                    //load image directly
+                    Glide.with(activity).load(img).into(imageView);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         private void showLayout() {
@@ -904,20 +904,10 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
                     learningItemBinding.categoryTextview.setText("SCQ");
                     learningItemBinding.scqImgtextLayout.setVisibility(View.VISIBLE);
                     try {
-                        //loadImage(learningQuestions.getMcq1().split("::")[0], learningItemBinding.scqImgtextImg1);
-                        //loadImage(learningQuestions.getMcq2().split("::")[0], learningItemBinding.scqImgtextImg2);
-                        //loadImage(learningQuestions.getMcq3().split("::")[0], learningItemBinding.scqImgtextImg3);
-                        //loadImage(learningQuestions.getMcq4().split("::")[0], learningItemBinding.scqImgtextImg4);
                         Glide.with(activity).load(Constant.PRODUCTION_BASE_FILE_API + learningQuestions.getMcq1().split("::")[0]).into(learningItemBinding.scqImgtextImg1);
                         Glide.with(activity).load(Constant.PRODUCTION_BASE_FILE_API + learningQuestions.getMcq2().split("::")[0]).into(learningItemBinding.scqImgtextImg2);
                         Glide.with(activity).load(Constant.PRODUCTION_BASE_FILE_API + learningQuestions.getMcq3().split("::")[0]).into(learningItemBinding.scqImgtextImg3);
                         Glide.with(activity).load(Constant.PRODUCTION_BASE_FILE_API + learningQuestions.getMcq4().split("::")[0]).into(learningItemBinding.scqImgtextImg4);
-
-
-//                        Glide.with(activity).load(new URL(Constant.QUESTION_IMAGES_API + learningQuestions.getMcq1().split(":")[0].trim())).into(learningItemBinding.scqImgtextImg1);
-//                        Glide.with(activity).load(new URL(Constant.QUESTION_IMAGES_API + learningQuestions.getMcq2().split(":")[0].trim())).into(learningItemBinding.scqImgtextImg2);
-//                        Glide.with(activity).load(new URL(Constant.QUESTION_IMAGES_API + learningQuestions.getMcq3().split(":")[0].trim())).into(learningItemBinding.scqImgtextImg3);
-//                        Glide.with(activity).load(new URL(Constant.QUESTION_IMAGES_API + learningQuestions.getMcq4().split(":")[0].trim())).into(learningItemBinding.scqImgtextImg4);
 
                         learningItemBinding.scqImgtextText1.setText(learningQuestions.getMcq1().split("::")[1]);
                         learningItemBinding.scqImgtextText2.setText(learningQuestions.getMcq2().split("::")[1]);
@@ -991,6 +981,7 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
                     learningItemBinding.resetLabel.setVisibility(View.VISIBLE);
                     learningItemBinding.categoryTextview.setText("Match the Pairs");
                     setPairAnswers(learningQuestions);
+
 
                     loadImage(learningQuestions.getMcq1().split("::", -1)[0], learningItemBinding.aMtp1);
                     loadImage(learningQuestions.getMcq1().split("::", -1)[1], learningItemBinding.bMtp1);

@@ -130,7 +130,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="No Questions Added."
+            android:text="No Questions Available."
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textColor="@color/colorSkyBlue"
             android:visibility="gone"

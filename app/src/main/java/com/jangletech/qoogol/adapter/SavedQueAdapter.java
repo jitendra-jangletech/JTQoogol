@@ -11,6 +11,7 @@ import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -39,6 +40,7 @@ import com.jangletech.qoogol.databinding.SavedItemBinding;
 import com.jangletech.qoogol.dialog.LikeListingDialog;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.model.LearningQuestions;
+import com.jangletech.qoogol.model.LearningQuestionsNew;
 import com.jangletech.qoogol.model.ProcessQuestion;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
@@ -271,11 +273,7 @@ public class SavedQueAdapter extends RecyclerView.Adapter<SavedQueAdapter.ViewHo
         public ViewHolder(@NonNull SavedItemBinding itemView) {
             super(itemView.getRoot());
             this.learningItemBinding = itemView;
-            MTP_ans.clear();
-            MTP_ans.put("a1", "b3");
-            MTP_ans.put("a2", "b4");
-            MTP_ans.put("a3", "b1");
-            MTP_ans.put("a4", "b2");
+
 
 //            learningItemBinding.questiondescTextview.setShowingLine(2);
 //            learningItemBinding.questiondescTextview.addShowLessText("Show Less");
@@ -711,14 +709,28 @@ public class SavedQueAdapter extends RecyclerView.Adapter<SavedQueAdapter.ViewHo
         }
 
         private void loadImage(String img, ImageView imageView) {
-            String fileName = img.substring(img.lastIndexOf('/') + 1);
-            File file = new File(UtilHelper.getDirectory(activity), fileName);
-            if (file.exists()) {
-                Glide.with(activity).load(file).into(imageView);
-            } else {
-                Glide.with(activity).load(R.drawable.profile).into(imageView);
+            try {
+                if (!img.contains("http")) {
+                    String fileName = img.substring(img.lastIndexOf('/') + 1);
+                    File file = new File(UtilHelper.getDirectory(activity), fileName);
+                    Log.d("", "loadImage URL : " + file);
+                    if (file.exists()) {
+                        Glide.with(activity).load(file).into(imageView);
+                    } else {
+                        Glide.with(activity).load(Constant.PRODUCTION_BASE_FILE_API + img.replace(".png", ".PNG").trim())
+                                .placeholder(R.drawable.no_image)
+                                .error(R.drawable.no_image)
+                                .into(imageView);
+                    }
+                } else {
+                    //load image directly
+                    Glide.with(activity).load(img).into(imageView);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
+
 
         private void showLayout() {
             LearningQuestions learningQuestions = learningQuestionsList.get(getAdapterPosition());
@@ -827,22 +839,58 @@ public class SavedQueAdapter extends RecyclerView.Adapter<SavedQueAdapter.ViewHo
                     learningItemBinding.reset.setVisibility(View.VISIBLE);
                     learningItemBinding.resetLabel.setVisibility(View.VISIBLE);
                     learningItemBinding.categoryTextview.setText("Match the Pairs");
-//            learningItemBinding.a1text.setText(learningQuestions.getA1());
-//            learningItemBinding.a2text.setText(learningQuestions.getA2());
-//            learningItemBinding.a3text.setText(learningQuestions.getA3());
-//            learningItemBinding.a4text.setText(learningQuestions.getA4());
-//            learningItemBinding.b1text.setText(learningQuestions.getB1());
-//            learningItemBinding.b2text.setText(learningQuestions.getB2());
-//            learningItemBinding.b3text.setText(learningQuestions.getB3());
-//            learningItemBinding.b4text.setText(learningQuestions.getB4());
+                    setPairAnswers(learningQuestions);
+
+                    learningItemBinding.a1text.setText(learningQuestions.getMcq1().split("::", -1)[0]);
+                    learningItemBinding.b1text.setText(learningQuestions.getMcq1().split("::", -1)[1]);
+
+                    learningItemBinding.a2text.setText(learningQuestions.getMcq2().split("::", -1)[0]);
+                    learningItemBinding.b2text.setText(learningQuestions.getMcq2().split("::", -1)[1]);
+
+                    learningItemBinding.a3text.setText(learningQuestions.getMcq3().split("::", -1)[0]);
+                    learningItemBinding.b3text.setText(learningQuestions.getMcq3().split("::", -1)[1]);
+
+                    learningItemBinding.a4text.setText(learningQuestions.getMcq4().split("::", -1)[0]);
+                    learningItemBinding.b4text.setText(learningQuestions.getMcq4().split("::", -1)[1]);
+
                 } else if (learningQuestions.getQue_option_type().equalsIgnoreCase(MATCH_PAIR_IMAGE)) {
                     learningItemBinding.mtpImgLayout.setVisibility(View.VISIBLE);
                     learningItemBinding.reset.setVisibility(View.VISIBLE);
                     learningItemBinding.resetLabel.setVisibility(View.VISIBLE);
                     learningItemBinding.categoryTextview.setText("Match the Pairs");
+
+                    setPairAnswers(learningQuestions);
+
+                    loadImage(learningQuestions.getMcq1().split("::", -1)[0], learningItemBinding.aMtp1);
+                    loadImage(learningQuestions.getMcq1().split("::", -1)[1], learningItemBinding.bMtp1);
+
+                    loadImage(learningQuestions.getMcq2().split("::", -1)[0], learningItemBinding.aMtp2);
+                    loadImage(learningQuestions.getMcq2().split("::", -1)[1], learningItemBinding.bMtp2);
+
+                    loadImage(learningQuestions.getMcq3().split("::", -1)[0], learningItemBinding.aMtp3);
+                    loadImage(learningQuestions.getMcq3().split("::", -1)[1], learningItemBinding.bMtp3);
+
+
                 }
             }
         }
+
+        private void setPairAnswers(LearningQuestions learningQuestionsNew) {
+            MTP_ans.clear();
+            String options[] = {};
+            options = learningQuestionsNew.getAnswer().split(",");
+            for (int i = 0; i < options.length; i++) {
+                if (i == 0)
+                    MTP_ans.put("a1", options[i].split("-", -1)[1].toLowerCase());
+                if (i == 1)
+                    MTP_ans.put("a2", options[i].split("-", -1)[1].toLowerCase());
+                if (i == 2)
+                    MTP_ans.put("a3", options[i].split("-", -1)[1].toLowerCase());
+                if (i == 3)
+                    MTP_ans.put("a4", options[i].split("-", -1)[1].toLowerCase());
+            }
+        }
+
 
         private void submitCall() {
             try {
@@ -1022,9 +1070,9 @@ public class SavedQueAdapter extends RecyclerView.Adapter<SavedQueAdapter.ViewHo
                         Toast.makeText(activity, "Please select atleast one option.", Toast.LENGTH_SHORT).show();
                     }
                 } else if (learningQuestions.getQue_option_type().equalsIgnoreCase(MATCH_PAIR)) {
-                    if (!isB1Selected || !isB2Selected || !isB3Selected || !isB4Selected) {
+                    if (paired.size() != MTP_ans.size()) {
                         Toast.makeText(activity, "Select all pairs first.", Toast.LENGTH_SHORT).show();
-                    } else {
+                    }else {
                         isAttempted = 1;
                         boolean isFound = false;
                         for (Map.Entry<String, String> entry : paired.entrySet()) {
@@ -1047,7 +1095,7 @@ public class SavedQueAdapter extends RecyclerView.Adapter<SavedQueAdapter.ViewHo
                     }
                 } else if (learningQuestions.getQue_option_type().equalsIgnoreCase(MATCH_PAIR_IMAGE)) {
 
-                    if (!isB1Selected || !isB2Selected || !isB3Selected || !isB4Selected) {
+                    if (paired.size() != MTP_ans.size()) {
                         Toast.makeText(activity, "Select all pairs first.", Toast.LENGTH_SHORT).show();
                     } else {
                         isAttempted = 1;

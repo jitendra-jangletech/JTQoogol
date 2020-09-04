@@ -159,14 +159,16 @@ public class SharedWithYouFragment extends BaseFragment implements LearningAdapt
 
     private void setData(List<LearningQuestionsNew> questionsList) {
         if (questionsList!=null && questionsList.size()>0) {
-            questionsNewList.clear();
-            questionsNewList.addAll(questionsList);
-            initRecycler();
             learningFragmentBinding.tvNoQuest.setVisibility(View.GONE);
+
         } else {
             dismissRefresh(learningFragmentBinding.learningSwiperefresh);
             learningFragmentBinding.tvNoQuest.setVisibility(View.VISIBLE);
         }
+
+        questionsNewList.clear();
+        questionsNewList.addAll(questionsList);
+        initRecycler();
     }
 
     private void initRecycler() {

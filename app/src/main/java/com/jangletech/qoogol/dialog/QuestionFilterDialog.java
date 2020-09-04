@@ -24,6 +24,7 @@ import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -244,16 +245,19 @@ public class QuestionFilterDialog extends BottomSheetDialogFragment implements V
                     que_categoryset.add(Constant.fill_the_blanks);
             }
 
-            if (option_type!=null && !option_type.isEmpty()) {
-                if (option_type.contains(Constant.SCQ))
+            List<String> items = Arrays.asList(option_type.replace("\'","").split("\\s*,\\s*"));
+
+            for (int i=0;i<items.size();i++) {
+                if (items.get(i).equalsIgnoreCase(Constant.SCQ))
                     que_categoryset.add(Constant.scq);
-                if (option_type.contains(Constant.MCQ))
-                    que_categoryset.add(Constant.mcq);
-                if (option_type.contains(Constant.TRUE_FALSE))
+                if (items.get(i).equalsIgnoreCase(Constant.MCQ))
+                    que_categoryset.add(Constant.scq);
+                if (items.get(i).equalsIgnoreCase(Constant.TRUE_FALSE))
                     que_categoryset.add(Constant.true_false);
-                if (option_type.contains(Constant.MATCH_PAIR))
+                if (items.get(i).equalsIgnoreCase(Constant.MATCH_PAIR))
                     que_categoryset.add(Constant.match_pair);
             }
+
             if (params.get(Constant.q_trending)!=null &&params.get(Constant.q_trending).equalsIgnoreCase("1"))
                 typeset.add(Constant.trending);
             if (params.get(Constant.q_popular)!=null &&params.get(Constant.q_popular).equalsIgnoreCase("1"))

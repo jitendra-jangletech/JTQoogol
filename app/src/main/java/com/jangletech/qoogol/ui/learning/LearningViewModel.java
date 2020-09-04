@@ -7,6 +7,8 @@ import android.content.pm.PackageManager;
 import android.text.TextUtils;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
@@ -34,8 +36,11 @@ import com.karumi.dexter.listener.single.PermissionListener;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -174,7 +179,128 @@ public class LearningViewModel extends AndroidViewModel {
                             }
                         } else {
                             if (pageCount.equalsIgnoreCase("0"))
-                            filterQueList.setValue(null);
+                            filterQueList.setValue(new List<LearningQuestionsNew>() {
+                                @Override
+                                public int size() {
+                                    return 0;
+                                }
+
+                                @Override
+                                public boolean isEmpty() {
+                                    return false;
+                                }
+
+                                @Override
+                                public boolean contains(@Nullable Object o) {
+                                    return false;
+                                }
+
+                                @NonNull
+                                @Override
+                                public Iterator<LearningQuestionsNew> iterator() {
+                                    return null;
+                                }
+
+                                @NonNull
+                                @Override
+                                public Object[] toArray() {
+                                    return new Object[0];
+                                }
+
+                                @NonNull
+                                @Override
+                                public <T> T[] toArray(@NonNull T[] a) {
+                                    return null;
+                                }
+
+                                @Override
+                                public boolean add(LearningQuestionsNew learningQuestionsNew) {
+                                    return false;
+                                }
+
+                                @Override
+                                public boolean remove(@Nullable Object o) {
+                                    return false;
+                                }
+
+                                @Override
+                                public boolean containsAll(@NonNull Collection<?> c) {
+                                    return false;
+                                }
+
+                                @Override
+                                public boolean addAll(@NonNull Collection<? extends LearningQuestionsNew> c) {
+                                    return false;
+                                }
+
+                                @Override
+                                public boolean addAll(int index, @NonNull Collection<? extends LearningQuestionsNew> c) {
+                                    return false;
+                                }
+
+                                @Override
+                                public boolean removeAll(@NonNull Collection<?> c) {
+                                    return false;
+                                }
+
+                                @Override
+                                public boolean retainAll(@NonNull Collection<?> c) {
+                                    return false;
+                                }
+
+                                @Override
+                                public void clear() {
+
+                                }
+
+                                @Override
+                                public LearningQuestionsNew get(int index) {
+                                    return null;
+                                }
+
+                                @Override
+                                public LearningQuestionsNew set(int index, LearningQuestionsNew element) {
+                                    return null;
+                                }
+
+                                @Override
+                                public void add(int index, LearningQuestionsNew element) {
+
+                                }
+
+                                @Override
+                                public LearningQuestionsNew remove(int index) {
+                                    return null;
+                                }
+
+                                @Override
+                                public int indexOf(@Nullable Object o) {
+                                    return 0;
+                                }
+
+                                @Override
+                                public int lastIndexOf(@Nullable Object o) {
+                                    return 0;
+                                }
+
+                                @NonNull
+                                @Override
+                                public ListIterator<LearningQuestionsNew> listIterator() {
+                                    return null;
+                                }
+
+                                @NonNull
+                                @Override
+                                public ListIterator<LearningQuestionsNew> listIterator(int index) {
+                                    return null;
+                                }
+
+                                @NonNull
+                                @Override
+                                public List<LearningQuestionsNew> subList(int fromIndex, int toIndex) {
+                                    return null;
+                                }
+                            });
                         }
 
                     }

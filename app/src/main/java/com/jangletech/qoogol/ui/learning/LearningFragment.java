@@ -224,9 +224,17 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
     }
 
     private void setData(List<LearningQuestionsNew> questionsList) {
+        if (questionsList!=null && questionsList.size()>0) {
+            learningFragmentBinding.tvNoQuest.setVisibility(View.GONE);
+        } else {
+            dismissRefresh(learningFragmentBinding.learningSwiperefresh);
+            learningFragmentBinding.tvNoQuest.setVisibility(View.VISIBLE);
+        }
+
         questionsNewList.clear();
         questionsNewList.addAll(questionsList);
         initRecycler();
+
     }
 
     private void initRecycler() {
