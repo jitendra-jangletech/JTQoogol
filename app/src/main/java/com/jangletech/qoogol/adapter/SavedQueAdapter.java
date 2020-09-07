@@ -881,13 +881,13 @@ public class SavedQueAdapter extends RecyclerView.Adapter<SavedQueAdapter.ViewHo
             options = learningQuestionsNew.getAnswer().split(",");
             for (int i = 0; i < options.length; i++) {
                 if (i == 0)
-                    MTP_ans.put("a1", options[i].split("-", -1)[1].toLowerCase());
+                    MTP_ans.put("a1", options[i].split("-", -1)[1].toLowerCase().trim());
                 if (i == 1)
-                    MTP_ans.put("a2", options[i].split("-", -1)[1].toLowerCase());
+                    MTP_ans.put("a2", options[i].split("-", -1)[1].toLowerCase().trim());
                 if (i == 2)
-                    MTP_ans.put("a3", options[i].split("-", -1)[1].toLowerCase());
+                    MTP_ans.put("a3", options[i].split("-", -1)[1].toLowerCase().trim());
                 if (i == 3)
-                    MTP_ans.put("a4", options[i].split("-", -1)[1].toLowerCase());
+                    MTP_ans.put("a4", options[i].split("-", -1)[1].toLowerCase().trim());
             }
         }
 
@@ -1095,7 +1095,7 @@ public class SavedQueAdapter extends RecyclerView.Adapter<SavedQueAdapter.ViewHo
                     }
                 } else if (learningQuestions.getQue_option_type().equalsIgnoreCase(MATCH_PAIR_IMAGE)) {
 
-                    if (paired.size() != MTP_ans.size()) {
+                    if (imgpaired.size() != MTP_ans.size()) {
                         Toast.makeText(activity, "Select all pairs first.", Toast.LENGTH_SHORT).show();
                     } else {
                         isAttempted = 1;

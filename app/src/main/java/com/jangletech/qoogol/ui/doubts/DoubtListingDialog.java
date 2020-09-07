@@ -115,6 +115,7 @@ public class DoubtListingDialog extends Dialog implements DoubtAdapter.onItemCli
             doubtSwiperefresh.setRefreshing(false);
     }
 
+
     private void initView() {
         mSettings = new PreferenceManager(context);
         doubtListingBinding.titletv.setText("Doubts");

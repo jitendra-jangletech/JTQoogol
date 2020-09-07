@@ -80,19 +80,23 @@ public class QuestionFilterDialog extends BottomSheetDialogFragment implements V
         prepareQueCategory();
 
         mBinding.reset.setOnClickListener(v -> {
-            mBinding.testDifficultyLevelChipGrp.clearCheck();
-            mBinding.queTypeChipGrp.clearCheck();
-            mBinding.queCategoryChipGrp.clearCheck();
-            mSettings.setQueDiffLevelFilter("");
-            mSettings.setQueTypeFilter("");
-            mSettings.setOptionTypeFilter("");
-            mSettings.setQueTrendingFilter("");
-            mSettings.setQuePopularFilter("");
-            mSettings.setQueRecentFilter("");
-            mSettings.setRatingsFilter("");
-            filterClickListener.onResetClick();
-            saveQueFilter(false);
-            dismiss();
+           try {
+               mBinding.testDifficultyLevelChipGrp.clearCheck();
+               mBinding.queTypeChipGrp.clearCheck();
+               mBinding.queCategoryChipGrp.clearCheck();
+               mSettings.setQueDiffLevelFilter("");
+               mSettings.setQueTypeFilter("");
+               mSettings.setOptionTypeFilter("");
+               mSettings.setQueTrendingFilter("");
+               mSettings.setQuePopularFilter("");
+               mSettings.setQueRecentFilter("");
+               mSettings.setRatingsFilter("");
+               filterClickListener.onResetClick();
+               saveQueFilter(false);
+               dismiss();
+           } catch (Exception e) {
+               e.printStackTrace();
+           }
         });
 
         mBinding.done.setOnClickListener(v -> {
