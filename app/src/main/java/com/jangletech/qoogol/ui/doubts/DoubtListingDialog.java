@@ -138,7 +138,10 @@ public class DoubtListingDialog extends Dialog implements DoubtAdapter.onItemCli
             }
 
         });
-        doubtListingBinding.doubtSwiperefresh.setOnRefreshListener(() -> getDataFromApi());
+        doubtListingBinding.doubtSwiperefresh.setOnRefreshListener(() -> {
+            dismissRefresh(doubtListingBinding.doubtSwiperefresh);
+            getDataFromApi();
+        });
         getDataFromApi();
     }
 
