@@ -101,8 +101,7 @@ public class FollowingFragment extends BaseFragment implements FollowingsAdapter
         init();
         mViewModel.getFollowingList().observe(getViewLifecycleOwner(), followingList -> {
             if (followingList != null) {
-                connectionsList.clear();
-                connectionsList.addAll(followingList);
+                connectionsList = followingList;
                 initView();
                 checkRefresh();
             }
@@ -116,10 +115,7 @@ public class FollowingFragment extends BaseFragment implements FollowingsAdapter
         mBinding.connectionRecycler.setLayoutManager(linearLayoutManager);
         mBinding.connectionRecycler.setAdapter(mAdapter);
         userId = String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));
-        if (!isVisible) {
-            isVisible = true;
-            mViewModel.fetchFollowingsData(false);
-        }
+        mViewModel.fetchFollowingsData(false);
         mBinding.connectionRecycler.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
@@ -138,7 +134,7 @@ public class FollowingFragment extends BaseFragment implements FollowingsAdapter
                 if (dy > 0) {
                     if (isScrolling && (currentItems + scrolledOutItems == totalItems)) {
                         isScrolling = false;
-                        mViewModel.fetchFollowingsData(false);
+                        //mViewModel.fetchFollowingsData(false);
                     }
                 }
             }
@@ -241,14 +237,19 @@ public class FollowingFragment extends BaseFragment implements FollowingsAdapter
     private void setSearchData(FollowingResponse response) {
         if (response != null && response.getFollowing_list().size() > 0) {
             filteredList.clear();
+            List<Following> followingList = new ArrayList<>();
+            for (Following following : response.getFollowing_list()) {
+                following.setU_first_name(getDecryptedField(following.getU_first_name(), Constant.cf_key1));
+                following.setU_last_name(getDecryptedField(following.getU_last_name(), Constant.cf_key2));
+                followingList.add(following);
+            }
             mBinding.tvEmptySearch.setVisibility(View.GONE);
             mBinding.connectionRecycler.setVisibility(View.VISIBLE);
-            mAdapter.updateList(response.getFollowing_list());
+            mAdapter.updateList(followingList);
         } else {
             //no search results found
             mBinding.tvEmptySearch.setVisibility(View.VISIBLE);
             mBinding.connectionRecycler.setVisibility(View.GONE);
-            //showToast("No Search Results Found.");
         }
     }
 

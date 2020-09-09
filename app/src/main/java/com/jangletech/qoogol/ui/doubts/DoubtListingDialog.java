@@ -10,12 +10,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
+import android.widget.AbsListView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.jangletech.qoogol.R;
@@ -39,7 +40,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 
 import static com.jangletech.qoogol.util.AppUtils.getDeviceId;
-import static com.jangletech.qoogol.util.Constant.tq_doubts;
+import static com.jangletech.qoogol.util.Constant.que_doubts;
 
 /**
  * Created by Pritali on 7/31/2020.
@@ -56,6 +57,11 @@ public class DoubtListingDialog extends Dialog implements DoubtAdapter.onItemCli
     private ApiInterface apiService = ApiClient.getInstance().getApi();
     AppRepository mAppRepository = new AppRepository(context);
     String subject_id;
+    Call<DoubtResponse> call;
+    private Boolean isScrolling = false;
+    private int currentItems, scrolledOutItems, totalItems;
+    LinearLayoutManager linearLayoutManager;
+    String pageCount = "0";
 
     public DoubtListingDialog(@NonNull Activity context, String questionId, String subject_id, int call_from) {
         super(context, android.R.style.Theme_DeviceDefault_Light_DarkActionBar);
@@ -77,7 +83,10 @@ public class DoubtListingDialog extends Dialog implements DoubtAdapter.onItemCli
 
     private void getDataFromApi() {
         doubtListingBinding.doubtSwiperefresh.setRefreshing(true);
-        Call<DoubtResponse> call = apiService.fetchDoubtApi(new PreferenceManager(context).getUserId(),"L");
+        if (call_from == que_doubts)
+            call = apiService.fetchDoubtApi(getDeviceId(), new PreferenceManager(context).getUserId(), "L", "Q", questionId, pageCount);
+        else
+            call = apiService.fetchDoubtApi(getDeviceId(), new PreferenceManager(context).getUserId(), "L", "T", questionId, pageCount);
         call.enqueue(new Callback<DoubtResponse>() {
             @Override
             public void onResponse(Call<DoubtResponse> call, retrofit2.Response<DoubtResponse> response) {
@@ -87,11 +96,8 @@ public class DoubtListingDialog extends Dialog implements DoubtAdapter.onItemCli
                         executor.execute(() -> mAppRepository.insertDoubts(response.body().getDoubtInfoList()));
                         dismissRefresh(doubtListingBinding.doubtSwiperefresh);
                         try {
-                            if (call_from== tq_doubts) {
-                                initRecycler(mAppRepository.getQuestionDoubts(questionId));
-                            } else {
-                                initRecycler(mAppRepository.getMyDoubts(mSettings.getUserId()));
-                            }
+                            initRecycler(response.body().getDoubtInfoList());
+                            pageCount = response.body().getRow();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -122,27 +128,61 @@ public class DoubtListingDialog extends Dialog implements DoubtAdapter.onItemCli
         doubtListingBinding.btnCloseDialog.setOnClickListener(v -> dismiss());
 
         doubtListingBinding.addDoubt.setOnClickListener(v -> {
-            if (call_from==tq_doubts) {
+            if (call_from == que_doubts) {
                 Bundle bundle = new Bundle();
                 bundle.putString(Constant.u_user_id, new PreferenceManager(context).getUserId());
                 bundle.putString("SCREEN", "List_GROUPS");
-                bundle.putString(Constant.sm_id,subject_id);
-                bundle.putString(Constant.appName,"Q");
-                bundle.putString(Constant.q_id,questionId);
-                bundle.putString(Constant.TorQ,"Q");
-                bundle.putString(Constant.device_id,getDeviceId());
+                bundle.putString(Constant.sm_id, subject_id);
+                bundle.putString(Constant.appName, "Q");
+                bundle.putString(Constant.q_id, questionId);
+                bundle.putString(Constant.TorQ, "Q");
+                bundle.putString(Constant.device_id, getDeviceId());
                 callChatChilliApp(bundle);
             } else {
-                addDoubtDialog = new AddDoubtDialog(context,null);
-                addDoubtDialog.show();
+                Bundle bundle = new Bundle();
+                bundle.putString(Constant.u_user_id, new PreferenceManager(context).getUserId());
+                bundle.putString("SCREEN", "List_GROUPS");
+                bundle.putString(Constant.sm_id, subject_id);
+                bundle.putString(Constant.appName, "Q");
+                bundle.putString(Constant.q_id, questionId);
+                bundle.putString(Constant.TorQ, "T");
+                bundle.putString(Constant.device_id, getDeviceId());
+                callChatChilliApp(bundle);
             }
 
         });
         doubtListingBinding.doubtSwiperefresh.setOnRefreshListener(() -> {
+            pageCount = "0";
             dismissRefresh(doubtListingBinding.doubtSwiperefresh);
             getDataFromApi();
         });
         getDataFromApi();
+
+        doubtListingBinding.doubtRecycler.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                    isScrolling = true;
+                }
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                currentItems = linearLayoutManager.getChildCount();
+                totalItems = linearLayoutManager.getItemCount();
+                scrolledOutItems = linearLayoutManager.findFirstVisibleItemPosition();
+                if (dy > 0) {
+                    if (isScrolling && (currentItems + scrolledOutItems == totalItems)) {
+                        isScrolling = false;
+                        getDataFromApi();
+                    }
+                }
+            }
+        });
+
+
     }
 
 
@@ -158,7 +198,6 @@ public class DoubtListingDialog extends Dialog implements DoubtAdapter.onItemCli
 
     private void callChatChilliApp(Bundle bundle) {
         if (isAppInstalled()) {
-            //This intent will help you to launch if the package is already installed
             Intent LaunchIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://chatchilli.com"));
             LaunchIntent.putExtras(bundle);
             LaunchIntent.putExtra(Intent.ACTION_VIEW, bundle);
@@ -183,17 +222,16 @@ public class DoubtListingDialog extends Dialog implements DoubtAdapter.onItemCli
     }
 
 
-
     private void initRecycler(List<DoubtInfo> doubtInfoList) {
         doubtsList.clear();
         doubtsList.addAll(doubtInfoList);
         if (doubtListingBinding.doubtSwiperefresh.isRefreshing())
             doubtListingBinding.doubtSwiperefresh.setRefreshing(false);
 
-        if (doubtsList!=null && doubtsList.size() > 0) {
-            doubtAdapter = new DoubtAdapter(context, doubtsList, call_from,this);
+        if (doubtsList != null && doubtsList.size() > 0) {
+            doubtAdapter = new DoubtAdapter(context, doubtsList, call_from, this);
             doubtListingBinding.doubtRecycler.setHasFixedSize(true);
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+            linearLayoutManager = new LinearLayoutManager(getContext());
             doubtListingBinding.doubtRecycler.setLayoutManager(linearLayoutManager);
             doubtListingBinding.doubtRecycler.setAdapter(doubtAdapter);
             doubtListingBinding.tvEmptyview.setVisibility(View.GONE);
@@ -203,14 +241,15 @@ public class DoubtListingDialog extends Dialog implements DoubtAdapter.onItemCli
         }
     }
 
+
     @Override
     public void onItemClick(String doubt_id) {
         Bundle bundle = new Bundle();
         bundle.putString(Constant.u_user_id, new PreferenceManager(context).getUserId());
-        bundle.putString("SCREEN", "OPEN_POST ");
-        bundle.putString(Constant.crms_id,doubt_id);
-        bundle.putString(Constant.appName,"Q");
-        bundle.putString(Constant.device_id,getDeviceId());
+        bundle.putString("SCREEN", "OPEN_POST");
+        bundle.putString(Constant.crms_id, doubt_id);
+        bundle.putString(Constant.appName, "Q");
+        bundle.putString(Constant.device_id, getDeviceId());
         callChatChilliApp(bundle);
     }
 }

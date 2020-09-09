@@ -1,6 +1,5 @@
 package com.jangletech.qoogol.dialog;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -25,6 +24,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.databinding.DataBindingUtil;
 
 import com.jangletech.qoogol.R;
+import com.jangletech.qoogol.adapter.PractiseViewPagerAdapter;
 import com.jangletech.qoogol.databinding.DialogSubjectiveAnsBinding;
 import com.jangletech.qoogol.util.AppUtils;
 
@@ -35,14 +35,15 @@ public class SubjectiveAnsDialog extends Dialog {
     private String strAns;
     private GetAnsListener getAnsListener;
     private int seconds, minutes;
+    private CountDownTimer countDownTimer;
 
     public SubjectiveAnsDialog(@NonNull Context mContext, String ans, int seconds, int minutes, GetAnsListener listener) {
         super(mContext, android.R.style.Theme_DeviceDefault_Light_DarkActionBar);
         this.mContext = mContext;
         this.strAns = ans;
         this.getAnsListener = listener;
-        this.seconds = seconds;
-        this.minutes = minutes;
+        this.seconds = PractiseViewPagerAdapter.gSeconds;
+        this.minutes = PractiseViewPagerAdapter.gMinutes;
     }
 
     @Override
@@ -54,31 +55,25 @@ public class SubjectiveAnsDialog extends Dialog {
         mBinding = DataBindingUtil.inflate(LayoutInflater.from(getContext()),
                 R.layout.dialog_subjective_ans, null, false);
         setContentView(mBinding.getRoot());
+        Log.d(TAG, "onCreate Seconds : " + PractiseViewPagerAdapter.gSeconds);
+        Log.d(TAG, "onCreate Minutes : " + PractiseViewPagerAdapter.gMinutes);
         setTimer(mBinding.tvtimer, seconds, minutes);
         mBinding.etAns.requestFocus();
         answerCharCounter(mBinding.etAns, mBinding.tvWordCounter, 200);
         mBinding.etAns.append(strAns);
 
-        /*KeyboardVisibilityEvent.setEventListener((Activity) mContext,
-                new KeyboardVisibilityEventListener() {
-                    @Override
-                    public void onVisibilityChanged(boolean isOpen) {
-                        if (isOpen) {
-                            //showToast("Opened");
-                        } else {
-                            //showToast("Closed");
-                            getAnsListener.onAnswerEntered(AppUtils.encodedString(mBinding.etAns.getText().toString().trim()));
-                            dismiss();
-                        }
-                    }
-                });
-*/
+        mBinding.save.setOnClickListener(v -> {
+            getAnsListener.onAnswerEntered(AppUtils.encodedString(mBinding.etAns.getText().toString().trim()));
+            dismiss();
+        });
+
         setOnKeyListener(new Dialog.OnKeyListener() {
             @Override
             public boolean onKey(DialogInterface arg0, int keyCode,
                                  KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_BACK) {
                     Log.d(TAG, "onKey Executed : ");
+                    //countDownTimer.cancel();
                     getAnsListener.onAnswerEntered(AppUtils.encodedString(mBinding.etAns.getText().toString().trim()));
                     dismiss();
                 }
@@ -93,7 +88,6 @@ public class SubjectiveAnsDialog extends Dialog {
             int timerCountMinutes = minutes;
 
             public void onTick(long millisUntilFinished) {
-                // timer.setText(new SimpleDateFormat("mm:ss").format(new Date( millisUntilFinished)));
                 if (timerCountSeconds < 59) {
                     timerCountSeconds++;
                 } else {

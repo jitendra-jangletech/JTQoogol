@@ -36,13 +36,18 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.activities.MainActivity;
 import com.jangletech.qoogol.activities.RegisterLoginActivity;
+import com.jangletech.qoogol.model.LearningQuestionsNew;
+import com.jangletech.qoogol.model.TestModelNew;
+import com.jangletech.qoogol.util.AESSecurities;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.TinyDB;
 
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 
@@ -50,6 +55,10 @@ public class BaseFragment extends Fragment {
 
     private static final String TAG = "BaseFragment";
     private SharedPreferences preferences;
+
+    public String getDecryptedField(String encryptText,String key){
+        return AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(key),encryptText);
+    }
 
     public static boolean hasError(ViewGroup viewGroup) {
         boolean result = false;
@@ -97,6 +106,7 @@ public class BaseFragment extends Fragment {
     public void replaceFragment(int resId, Fragment fragment, Bundle bundle) {
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         String backStateName = fragment.getClass().getName();
+
         boolean fragmentPopped = fragmentManager.popBackStackImmediate(backStateName, 0);
         if (!fragmentPopped) {
             fragment.setArguments(bundle);
@@ -105,6 +115,8 @@ public class BaseFragment extends Fragment {
             fragmentTransaction.replace(resId, fragment);
             fragmentTransaction.addToBackStack(backStateName);
             fragmentTransaction.commit();
+        } else {
+            Log.d(TAG, "replaceFragment Else Executed: ");
         }
     }
 
@@ -226,10 +238,34 @@ public class BaseFragment extends Fragment {
 
     public void showErrorDialog(Activity activity, String title, String msg) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.AlertDialogStyle);
-        builder.setTitle("Error Code : " + title)
+        builder.setTitle("Alert")
                 .setMessage(msg)
                 .setPositiveButton("OK", null)
                 .show();
+    }
+
+    public List<TestModelNew> searchTests(String text, List<TestModelNew> originalList){
+        List<TestModelNew> filteredTestList = new ArrayList<>();
+        for (TestModelNew testModelNew : originalList) {
+            if (testModelNew.getAuthor().toLowerCase().contains(text) ||
+                    testModelNew.getSm_sub_name().toLowerCase().contains(text) ||
+                    testModelNew.getTm_name().toLowerCase().contains(text)) {
+                filteredTestList.add(testModelNew);
+            }
+        }
+        return filteredTestList;
+    }
+
+    public List<LearningQuestionsNew> searchQuestion(String text, List<LearningQuestionsNew> qList) {
+        List<LearningQuestionsNew> filteredList = new ArrayList<>();
+        for (LearningQuestionsNew questionsNew : qList) {
+            if (questionsNew.getSubject().toLowerCase().contains(text) ||
+                    questionsNew.getChapter().toLowerCase().contains(text) ||
+                    questionsNew.getQuestion().toLowerCase().contains(text)) {
+                filteredList.add(questionsNew);
+            }
+        }
+        return filteredList;
     }
 
     public void showErrorDialog(Activity activity, String title, String msg, String flag, String mobile) {
@@ -237,11 +273,12 @@ public class BaseFragment extends Fragment {
         bundle.putString(Constant.u_mob_1, mobile);
         Log.d(TAG, "showErrorDialog Mobile : " + mobile);
         AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.AlertDialogStyle);
-        builder.setTitle("Error Code : " + title)
+        builder.setTitle("Alert")
                 .setMessage(msg)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        TinyDB.getInstance(activity).putString(Constant.u_mob_1, mobile);
                         if (flag.equals("NEW_USER")) {
                             replaceFragment(R.id.container, new NewUserFragment(), bundle);
                         } else if (flag.equals("EXISTING_USER")) {

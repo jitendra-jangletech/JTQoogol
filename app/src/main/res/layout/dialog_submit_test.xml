@@ -191,7 +191,7 @@
                         android:layout_marginLeft="@dimen/_12sdp"
                         android:layout_toRightOf="@+id/unattempted"
                         android:gravity="center_horizontal"
-                        android:text="Unattempted"
+                        android:text="@string/seen"
                         android:textSize="@dimen/_12ssp" />
 
                     <TextView

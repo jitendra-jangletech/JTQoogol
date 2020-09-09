@@ -48,13 +48,12 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
-                            android:id="@+id/tvNavHome"
+                            android:id="@+id/nav_profile"
                             style="@style/menu_item_style"
-                            android:drawableLeft="@drawable/nav_learning"
+                            android:drawableLeft="@drawable/ic_edit_profile"
                             android:foreground="?attr/selectableItemBackground"
-                            android:text="@string/menu_home"
-                            android:visibility="gone" />
-
+                            android:text="@string/profile"
+                            android:visibility="visible" />
 
                         <RelativeLayout
                             android:id="@+id/tvLearning"
@@ -174,7 +173,7 @@
                                 android:id="@+id/nav_shared_by_you"
                                 style="@style/sub_menu_item_style"
                                 android:foreground="?attr/selectableItemBackground"
-                                android:text="@string/shared_by_you" />
+                                android:text="Shared With Friends" />
 
                             <TextView
                                 android:id="@+id/nav_shared_with_you"
@@ -230,7 +229,6 @@
                             android:visibility="gone" />
 
                         <TextView
-
                             android:id="@+id/nav_fav"
                             style="@style/menu_item_style"
                             android:drawableLeft="@drawable/nav_fav"

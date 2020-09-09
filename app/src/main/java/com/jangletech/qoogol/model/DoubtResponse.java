@@ -2,7 +2,6 @@ package com.jangletech.qoogol.model;
 
 import com.google.gson.annotations.SerializedName;
 import com.jangletech.qoogol.util.Constant;
-
 import java.util.List;
 
 /**
@@ -17,6 +16,9 @@ public class DoubtResponse {
 
     @SerializedName("List1")
     private List<DoubtInfo> doubtInfoList;
+
+    @SerializedName(Constant.row_count)
+    private String row;
 
     public String getResponse() {
         return response;
@@ -40,5 +42,13 @@ public class DoubtResponse {
 
     public void setDoubtInfoList(List<DoubtInfo> doubtInfoList) {
         this.doubtInfoList = doubtInfoList;
+    }
+
+    public String getRow() {
+        return row!=null?row:"0";
+    }
+
+    public void setRow(String row) {
+        this.row = row;
     }
 }

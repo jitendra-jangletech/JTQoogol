@@ -67,27 +67,24 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Comments comments = commentList.get(position);
 
-//        holder.commentItemBinding.tvSenderName.setText(
-//                AESSecurities.getInstance().decrypt(TinyDB.getInstance(activity).getString(Constant.cf_key1), comments.getUserFirstName()) + " "
-//                        + AESSecurities.getInstance().decrypt(TinyDB.getInstance(activity).getString(Constant.cf_key2), comments.getUserLastName())
-//        );
-
         holder.commentItemBinding.tvSenderName.setText(comments.getUserFirstName() + " " +
                 comments.getUserLastName());
 
-        if (comments.getReplyCommentCount() > 0) {
-            holder.commentItemBinding.tvCommentCount.setVisibility(View.VISIBLE);
-        } else {
-            holder.commentItemBinding.tvCommentCount.setVisibility(View.GONE);
-        }
 
-        if (comments.getReplyLikeCount() > 0) {
-            holder.commentItemBinding.tvLikes.setVisibility(View.VISIBLE);
-        } else {
-            holder.commentItemBinding.tvLikes.setVisibility(View.GONE);
-        }
+        if (callingFrom.equals(Module.Test.toString())) {
 
-        if (callingFrom.equals(Module.Test.toString()))
+            if (comments.getReplyCommentCount() > 0) {
+                holder.commentItemBinding.tvCommentCount.setVisibility(View.VISIBLE);
+            } else {
+                holder.commentItemBinding.tvCommentCount.setVisibility(View.GONE);
+            }
+
+            if (comments.getReplyLikeCount() > 0) {
+                holder.commentItemBinding.tvLikes.setVisibility(View.VISIBLE);
+            } else {
+                holder.commentItemBinding.tvLikes.setVisibility(View.GONE);
+            }
+
             if (comments.getTlc_user_id().equalsIgnoreCase(AppUtils.getUserId())) {
                 //self comment
                 holder.commentItemBinding.tvDelete.setVisibility(View.VISIBLE);
@@ -96,7 +93,33 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
                 holder.commentItemBinding.tvDelete.setVisibility(View.GONE);
             }
 
-        if (callingFrom.equals(Module.Learning.toString()))
+            String decoded = AppUtils.decodedString(comments.getTlc_comment_text());
+            Log.d(TAG, "decoded  :  " + StringUtils.stripAccents(decoded));
+            holder.commentItemBinding.textCommentBody.setText(decoded);
+            holder.commentItemBinding.textCommentTime.setText(DateUtils.localeDateFormat(comments.getTlc_cdatetime()));
+
+            holder.commentItemBinding.tvLikes.setText(String.valueOf(comments.getReplyLikeCount()));
+            holder.commentItemBinding.tvCommentCount.setText(String.valueOf(comments.getReplyCommentCount()));
+
+        }
+
+        if (callingFrom.equals(Module.Learning.toString())) {
+
+            holder.commentItemBinding.tvLikes.setText(String.valueOf(comments.getQuestLikeCount()));
+            holder.commentItemBinding.tvCommentCount.setText(String.valueOf(comments.getQuestCommentCount()));
+
+            if (comments.getQuestLikeCount() > 0) {
+                holder.commentItemBinding.tvLikes.setVisibility(View.VISIBLE);
+            } else {
+                holder.commentItemBinding.tvLikes.setVisibility(View.GONE);
+            }
+
+            if (comments.getQuestCommentCount() > 0) {
+                holder.commentItemBinding.tvCommentCount.setVisibility(View.VISIBLE);
+            } else {
+                holder.commentItemBinding.tvCommentCount.setVisibility(View.GONE);
+            }
+
             if (comments.getUserId().equalsIgnoreCase(AppUtils.getUserId())) {
                 holder.commentItemBinding.tvDelete.setVisibility(View.VISIBLE);
             } else {
@@ -104,26 +127,11 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
                 holder.commentItemBinding.tvDelete.setVisibility(View.GONE);
             }
 
-        if (callingFrom.equals(Module.Learning.toString())) {
             String decoded = AppUtils.decodedString(comments.getComment());
             holder.commentItemBinding.textCommentBody.setText(decoded);
             holder.commentItemBinding.textCommentTime.setText(DateUtils.localeDateFormat(comments.getTime()));
-            //commentItemBinding.textCommentTime.setText(DateUtils.getFormattedDate(comments.getTime().substring(0, 10)));
         }
 
-        if (callingFrom.equals(Module.Test.toString())) {
-            //Log.d(TAG, "Without Decoding : " + comments.getTlc_comment_text());
-            String decoded = AppUtils.decodedString(comments.getTlc_comment_text());
-            Log.d(TAG, "decoded  :  " + StringUtils.stripAccents(decoded));
-            //String decoded = AppUtils.decodedMessage(StringEscapeUtils.unescapeJava(comments.getTlc_comment_text()));
-            //holder.commentItemBinding.tvSenderName.setText(comments.getUserFirstName() + " " + comments.getUserLastName());
-            holder.commentItemBinding.textCommentBody.setText(decoded);
-            holder.commentItemBinding.textCommentTime.setText(DateUtils.localeDateFormat(comments.getTlc_cdatetime()));
-            //commentItemBinding.textCommentTime.setText(DateUtils.getFormattedDate(comments.getTlc_cdatetime().substring(0, 10)));//todo change data & time format
-        }
-
-        holder.commentItemBinding.tvLikes.setText(String.valueOf(comments.getReplyLikeCount()));
-        holder.commentItemBinding.tvCommentCount.setText(String.valueOf(comments.getReplyCommentCount()));
 
         if (comments.isLiked()) {
             AppUtils.bounceAnim(activity, holder.commentItemBinding.tvLikes);
@@ -207,6 +215,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     }
 
     public void deleteComment(int pos) {
+        Log.d(TAG, "deleteComment: "+pos);
         commentList.remove(pos);
         notifyItemRemoved(pos);
     }

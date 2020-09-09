@@ -81,6 +81,12 @@ public class FollowingsAdapter extends RecyclerView.Adapter<FollowingsAdapter.Vi
         this.filteredConnectionsList = connectionsList;
         this.call_from = call_from;
         this.listener = listener;
+        setHasStableIds(true);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return Long.parseLong(connectionsList.get(position).getCn_user_id_2());
     }
 
     @NonNull

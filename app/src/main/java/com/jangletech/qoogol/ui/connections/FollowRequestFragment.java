@@ -87,14 +87,13 @@ public class FollowRequestFragment extends BaseFragment implements FollowReqAdap
                     initView(list);
 
                 } else {
-                    mBinding.emptyview.setText("You don't not have any pending requests.");
+                    mBinding.emptyview.setText("You don't have any pending requests.");
                     mBinding.emptyview.setVisibility(View.VISIBLE);
                 }
             }
             dismissRefresh(mBinding.requestsSwiperefresh);
         });
     }
-
 
     public void fetchFollowReq() {
         Call<FollowRequestResponse> call = apiService.fetchRefreshedFollowReq(getUserId(getActivity()), followrequests, getDeviceId(getActivity()), qoogol, "0", forcerefresh);

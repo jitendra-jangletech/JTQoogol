@@ -112,7 +112,6 @@ public class NotificationsFragment extends BaseFragment implements NotificationA
                     if (notifications.size() > 0) {
                         mBinding.tvNoTest.setVisibility(View.GONE);
                     } else {
-                        mBinding.tvNoTest.setText("No Notifications.");
                         mBinding.tvNoTest.setVisibility(View.VISIBLE);
                     }
                 }
@@ -230,8 +229,10 @@ public class NotificationsFragment extends BaseFragment implements NotificationA
                 if (response != null && response.body() != null) {
                     if (response.body().getResponse().equals("200")) {
                         notificationResponse = response.body();
-                        Log.d(TAG, "onResponse List Size :  " + response.body().getNotifications().size());
                         mViewModel.insert(response.body().getNotifications());
+                        if (response.body().getNotifications().size() == 0) {
+                            mBinding.tvNoTest.setText("No Notifications.");
+                        }
                     } else {
                         showErrorDialog(getActivity(), response.body().getResponse(), response.body().getMessage());
                     }

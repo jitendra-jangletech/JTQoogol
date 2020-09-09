@@ -9,6 +9,17 @@ public class TestListResponse {
 
     private String prev_tm_id;
 
+    @SerializedName(Constant.row_count)
+    private String row_count;
+
+    public String getRow_count() {
+        return row_count;
+    }
+
+    public void setRow_count(String row_count) {
+        this.row_count = row_count;
+    }
+
     public String getPrev_tm_id() {
         return prev_tm_id;
     }

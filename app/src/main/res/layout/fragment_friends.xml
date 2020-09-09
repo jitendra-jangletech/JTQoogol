@@ -12,19 +12,20 @@
             android:id="@+id/tvEmptySearch"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_35sdp"
+            android:background="@color/background"
             android:fontFamily="sans-serif-thin"
             android:gravity="center"
-            android:background="@color/background"
-            android:visibility="gone"
             android:text="No Search Results Found."
             android:textStyle="bold"
+            android:visibility="gone"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            style="@style/font_style"
             android:id="@+id/emptyview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="No Connections Added."
+            android:text="Fetching Connections..."
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textColor="@color/colorSkyBlue"
             android:visibility="gone"
@@ -42,9 +43,9 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/connection_recycler"
-                tools:listitem="@layout/connection_item"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                tools:listitem="@layout/connection_item" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

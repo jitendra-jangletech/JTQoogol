@@ -7,6 +7,8 @@ public class Constant {
 
     public static final String IS_EDUCATION_ADDED = "IS_EDUCATION_ADDED";
 
+    public static final String FOLLOW_REQ = "FOLLOW_REQ";
+
     public static final String FILTER = "FILTER";
     public static final String QUESTION_FILTER = "QUESTIONFILTER";
     public static final int LIKE = 1;
@@ -127,7 +129,6 @@ public class Constant {
     public static final String share_comment = "370";
     public static final String mst_text = "451";
 
-
     //Preferences
     public static final String PREF_NAME = "qoogol";
     public static final String IS_LOGGED_IN = "LOGGED_IN";
@@ -192,7 +193,8 @@ public class Constant {
     public static int fetch_loged_in_user = 0;
     public static int fetch_other_user = 1;
     public static int my_doubts = 0;
-    public static int tq_doubts = 1;
+    public static int test_doubts = 1;
+    public static int que_doubts = 2;
 
     //Question media
     public static String TEXt = "1";
@@ -285,6 +287,7 @@ public class Constant {
     public static final String FETCH_OTHER_USER_INFO = "sm72FetchPublicProfileN";
     public static final String FETCH_USER_EDU = "q112ProcessUserEdu";
     public static final String FETCH_USER_SETTINGS = "q113ProcessUserSetting";
+    public static final String SIGN_UP_REFERRED_API = "sm01SignupReferredBy";
 
     public static final String FETCH_FAQ = "sm18FAQ";
     public static final String UPDATE_USER_PROFILE = "sm67UpdateProfileDetailsN";
@@ -292,7 +295,7 @@ public class Constant {
     public static final String FETCH_CHAPTERS = "q114FetchChapterMaster";
     public static final String FETCH_NOTIFICATIONS = "sm28FetchNotificationsN";
     public static final String FETCH_SHAREDTQ_USERS = "q153FetchSharedTQ";
-    public static final String UPDATE_NOTIFICATIONS = "sm27UpdateNotificationsN";
+    public static final String UPDATE_NOTIFICATIONS = "sm27UpdateNotifications";
     public static final String COUNTRY = "sm05CountryData";
     public static final String STATE = "sm06StateData";
     public static final String CITY = "sm09CityData";
@@ -491,7 +494,7 @@ public class Constant {
     public static final String MULTILOGIN_ERROR = "You have logged in from another device. Continue?";
     public static final String ERROR = "Something went wrong. Try again later.";
 
-    //comman
+    //common
     public static final String Response = "Response";
     public static final String Message = "Message";
     public static final String prev_q_id = "prev_q_id";
@@ -526,6 +529,7 @@ public class Constant {
     //DegreeMaster
     public static final String dm_id = "255";
     public static final String dm_degree_name = "256";
+
 
     // Q_UserEdu
     public static final String ue_id = "1450";
@@ -752,6 +756,9 @@ public class Constant {
     public static final String isLike = "1403";
     public static final String isFavourite = "1410";
     public static final String _1223G = "1223G";
+
+    public static final String quest_like_count = "1399";
+    public static final String quest_comment_count = "1400";
 
     //TEst Rating & feedback
     public static final String tlc_rating = "1411";

@@ -68,16 +68,11 @@ import com.mukesh.OtpView;
 import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.io.File;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Pattern;
@@ -126,6 +121,7 @@ public class PersonalInfoFragment extends BaseFragment {
     private PreferenceManager mSettings;
     private Call<UserProfile> call;
     private boolean isFragmentVisible = false;
+    private Calendar mCalenderMax, mCalender;
 
     public static PersonalInfoFragment newInstance() {
         return new PersonalInfoFragment();
@@ -152,7 +148,9 @@ public class PersonalInfoFragment extends BaseFragment {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_personal_info, container, false);
         mViewModel = new ViewModelProvider(this).get(PersonalInfoViewModel.class);
         mBinding.setLifecycleOwner(this);
-        //masterKey = AESSecurities.getMasterKey(AppUtils.getDeviceId());
+        mCalender = Calendar.getInstance();
+        mCalenderMax = Calendar.getInstance();
+        mCalenderMax.add(Calendar.YEAR, -13);
         return mBinding.getRoot();
     }
 
@@ -172,11 +170,7 @@ public class PersonalInfoFragment extends BaseFragment {
             Log.d(TAG, "onChanged : " + userProfile);
             if (userProfile != null) {
                 profile = userProfile;
-                //Log.d(TAG, "initViews FName : " + userProfile.getFirstName());
-                //Log.d(TAG, "initViews LName : " + userProfile.getLastName());
-                //Log.d(TAG, "initViews Dob : " + userProfile.getDob());
                 mBinding.setUserProfile(userProfile);
-                //save User Badge Info
                 new PreferenceManager(getActivity()).saveString("BADGE", userProfile.getBadge());
                 new PreferenceManager(getActivity()).saveString(Constant.userName, userProfile.getUserName());
 
@@ -190,7 +184,6 @@ public class PersonalInfoFragment extends BaseFragment {
                 mBinding.etPassword.setText(AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key6), userProfile.getPassword()));
 
                 if (!userid.equalsIgnoreCase(mSettings.getUserId())) {
-                    //manageUnwantedFields(userProfile);
                     getActionBar().setTitle("User Profile");
                     mBinding.userProfileLayout.setVisibility(View.GONE);
                     mBinding.publicProfileLayout.setVisibility(View.VISIBLE);
@@ -304,67 +297,63 @@ public class PersonalInfoFragment extends BaseFragment {
                     mBinding.etMobile.getText().toString().trim()), "M");
         });
 
-        if (userid.equalsIgnoreCase(mSettings.getUserId())) {
-            fetchLanguages();
-            mViewModel.getLanguages().observe(getViewLifecycleOwner(), new Observer<List<Language>>() {
-                @Override
-                public void onChanged(@Nullable final List<Language> languages) {
-                    mMapLanguage = new HashMap<>();
-                    for (Language language : languages) {
-                        mMapLanguage.put(language.getLang_id(), language.getLanguageName());
-                    }
-                    populateLanguage(mMapLanguage);
+        fetchLanguages();
+        mViewModel.getLanguages().observe(getViewLifecycleOwner(), new Observer<List<Language>>() {
+            @Override
+            public void onChanged(@Nullable final List<Language> languages) {
+                mMapLanguage = new HashMap<>();
+                for (Language language : languages) {
+                    mMapLanguage.put(language.getLang_id(), language.getLanguageName());
                 }
-            });
+                populateLanguage(mMapLanguage);
+            }
+        });
 
-            fetchNationalities();
-            mViewModel.getCountries().observe(getViewLifecycleOwner(), new Observer<List<Country>>() {
-                @Override
-                public void onChanged(@Nullable final List<Country> countries) {
-                    mMapNationality = new HashMap<>();
-                    for (Country country : countries) {
-                        mMapNationality.put(country.getCountryId(), country.getCountryName());
-                    }
-                    populateCountries(mMapNationality);
+        fetchNationalities();
+        mViewModel.getCountries().observe(getViewLifecycleOwner(), new Observer<List<Country>>() {
+            @Override
+            public void onChanged(@Nullable final List<Country> countries) {
+                mMapNationality = new HashMap<>();
+                for (Country country : countries) {
+                    mMapNationality.put(country.getCountryId(), country.getCountryName());
                 }
-            });
+                populateCountries(mMapNationality);
+            }
+        });
 
-            mViewModel.getStates().observe(getViewLifecycleOwner(), new Observer<List<State>>() {
-                @Override
-                public void onChanged(@Nullable final List<State> states) {
-                    mMapStates = new HashMap<>();
-                    for (State state : states) {
-                        mMapStates.put(Integer.valueOf(state.getState_id()), state.getStateName());
-                    }
-                    populateState(mMapStates);
+        mViewModel.getStates().observe(getViewLifecycleOwner(), new Observer<List<State>>() {
+            @Override
+            public void onChanged(@Nullable final List<State> states) {
+                mMapStates = new HashMap<>();
+                for (State state : states) {
+                    mMapStates.put(Integer.valueOf(state.getState_id()), state.getStateName());
                 }
-            });
+                populateState(mMapStates);
+            }
+        });
 
-            mViewModel.getDistricts().observe(getViewLifecycleOwner(), new Observer<List<District>>() {
-                @Override
-                public void onChanged(@Nullable final List<District> districts) {
-                    mMapDistricts = new HashMap<>();
-                    for (District district : districts) {
-                        mMapDistricts.put(Integer.valueOf(district.getDistrict_id()), district.getDistrictName());
-                    }
-                    populateDistrict(mMapDistricts);
+        mViewModel.getDistricts().observe(getViewLifecycleOwner(), new Observer<List<District>>() {
+            @Override
+            public void onChanged(@Nullable final List<District> districts) {
+                mMapDistricts = new HashMap<>();
+                for (District district : districts) {
+                    mMapDistricts.put(Integer.valueOf(district.getDistrict_id()), district.getDistrictName());
                 }
-            });
+                populateDistrict(mMapDistricts);
+            }
+        });
 
-            mViewModel.getCities().observe(getViewLifecycleOwner(), new Observer<List<City>>() {
-                @Override
-                public void onChanged(@Nullable final List<City> cities) {
-                    mMapCities = new HashMap<>();
-                    for (City city : cities) {
-                        mMapCities.put(Integer.valueOf(city.getCity_id()), city.getCityName());
-                    }
-                    populateCity(mMapCities);
+        mViewModel.getCities().observe(getViewLifecycleOwner(), new Observer<List<City>>() {
+            @Override
+            public void onChanged(@Nullable final List<City> cities) {
+                mMapCities = new HashMap<>();
+                for (City city : cities) {
+                    mMapCities.put(Integer.valueOf(city.getCity_id()), city.getCityName());
                 }
-            });
+                populateCity(mMapCities);
+            }
+        });
 
-        } else {
-            manageLayoutForOtherUser();
-        }
     }
 
     private void populateUserNames(List<String> userNames) {
@@ -660,6 +649,7 @@ public class PersonalInfoFragment extends BaseFragment {
         });
 
         mBinding.btnSave.setOnClickListener(v -> {
+            getLanguageTag();
             mBinding.etFirstName.setError(null);
             mBinding.etLastName.setError(null);
             mBinding.etMobile.setError(null);
@@ -1095,19 +1085,14 @@ public class PersonalInfoFragment extends BaseFragment {
     }
 
     private void showDatePicker() {
-        DateFormat format = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
-        Date date = null;
-        try {
-            date = format.parse(mBinding.etDob.getText().toString());
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        Calendar newCalendar = Calendar.getInstance();
-        newCalendar.setTime(date != null ? date : new Date());
         DatePickerDialog dialog = new DatePickerDialog(getContext(), android.R.style.Theme_Holo_Dialog, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 String formattedDate = year + "-" + (month + 1) + "-" + day;
+                mCalender.set(Calendar.YEAR, year);
+                mCalender.set(Calendar.MONTH, month);
+                mCalender.set(Calendar.DAY_OF_MONTH, day);
+
                 if (AppUtils.isEnteredDOBValid(year, (month + 1), day)) {
                     mBinding.etDob.setText(DateUtils.getFormattedDate(formattedDate));
                 } else {
@@ -1115,9 +1100,9 @@ public class PersonalInfoFragment extends BaseFragment {
                     mBinding.etDob.setText("");
                 }
             }
-        }, //newCalendar.get(1990), newCalendar.get(1), newCalendar.get(Calendar.DAY_OF_MONTH));
-                newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+        }, mCalender.get(Calendar.YEAR), mCalender.get(Calendar.MONTH), mCalender.get(Calendar.DAY_OF_MONTH));
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.getDatePicker().setMaxDate(mCalenderMax.getTimeInMillis());
         dialog.show();
 
     }
@@ -1382,6 +1367,7 @@ public class PersonalInfoFragment extends BaseFragment {
 
         Log.d(TAG, "Profile Image Params : " + params);
         Log.d(TAG, "Profile Image Size: " + imageFile.getTotalSpace());
+        Log.d(TAG, "updateProfileImage Name : " + imageFile.getName());
 
         MultipartBody.Part body =
                 MultipartBody.Part.createFormData("file", imageFile.getName(), requestFile);
@@ -1411,14 +1397,29 @@ public class PersonalInfoFragment extends BaseFragment {
         });
     }
 
+    /*private File convertToPngImage(File path){
+        try {
+            Bitmap bmp = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), path.getPath().toString());
+            FileOutputStream out = new FileOutputStream(Environment.getExternalStorageDirectory()+"/profile.png");
+            bmp.compress(Bitmap.CompressFormat.PNG, 70, out); //100-best quality
+            out.close();
+            return new File(Environment.getExternalStorageDirectory()+"/profile.png");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }*/
+
     private void getLanguageTag() {
         String keys = mBinding.langAutocompleteView.getText()
                 .toString();
         Log.d(TAG, "getLanguageTag Keys : " + keys);
         String languageKey = "";
         for (String s : keys.split(",", -1)) {
-            languageKey = languageKey + "," + getKeyFromValue(mMapLanguage, s.trim());
-            Log.d(TAG, "Key : " + getKeyFromValue(mMapLanguage, s.trim()));
+            if (!s.isEmpty()) {
+                languageKey = languageKey + "," + getKeyFromValue(mMapLanguage, s.trim());
+                Log.d(TAG, "Key : " + getKeyFromValue(mMapLanguage, s.trim()));
+            }
         }
         Log.d(TAG, "getLanguageTag Final : " + languageKey.replace("-1", ""));
         mBinding.langAutocompleteView.setTag(languageKey.replace("-1", ""));

@@ -52,7 +52,6 @@ import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
-import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
@@ -68,8 +67,14 @@ public interface ApiInterface {
     @POST(Constant.DEGREE)
     Call<DegreeResponse> getDegrees();
 
+    @FormUrlEncoded
     @POST(Constant.COURSE)
-    Call<CourseResponse> getCourses();
+    Call<CourseResponse> getCourses(@Field(Constant.co_dm_id) int degreeId);
+
+    @FormUrlEncoded
+    @POST(Constant.SIGN_UP_REFERRED_API)
+    Call<VerifyResponse> doReferCodeVerification(@Field(Constant.u_referred_by) String referId);
+
 
     @FormUrlEncoded
     @POST(Constant.FETCH_FAQ)
@@ -104,7 +109,6 @@ public interface ApiInterface {
             @Field(Constant.appName) String appName,
             @Field("126") String deviceId
     );
-
 
     @FormUrlEncoded
     @POST(Constant.CLASS_MASTER)
@@ -264,7 +268,8 @@ public interface ApiInterface {
                                          @Field(Constant.tm_avg_rating) String avgRating,
                                          @Field(Constant.tm_id) String tmId,
                                          @Field(Constant.tm_catg) String cat,
-                                         @Field(Constant.pagestart) String pageCount
+                                         @Field(Constant.pagestart) String pageCount,
+                                         @Field(Constant.selected_ue_id) String ueId
     );
 
     @FormUrlEncoded
@@ -334,11 +339,10 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST(Constant.PROCESS_QUESTION)
     Call<ProcessQuestion> likeReplyQuestComment(@Field(Constant.u_user_id) String userid,
-                                                @Field(Constant.qlc_id) int qlcId,
+                                                @Field(Constant.q_id) int qId,
                                                 @Field(Constant.CASE) String caseL,
                                                 @Field(Constant.qlc_like_flag) String questLike,
-                                                @Field(Constant.quest_comment_reply_id) String replyId,
-                                                @Field(Constant.qlc_comment_text) String text);
+                                                @Field(Constant.quest_comment_reply_id) String replyId);
 
     @FormUrlEncoded
     @POST(Constant.PROCESS_TEST)
@@ -346,8 +350,7 @@ public interface ApiInterface {
                                           @Field(Constant.tm_id) int tmId,
                                           @Field(Constant.CASE) String caseL,
                                           @Field(Constant.tlc_like_flag) String flag,
-                                          @Field(Constant.test_comment_reply_id) String replyId,
-                                          @Field(Constant.tlc_comment_text) String text);
+                                          @Field(Constant.test_comment_reply_id) String replyId);
 
 
     @FormUrlEncoded
@@ -379,7 +382,7 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST(Constant.PROCESS_QUESTION)
     Call<ProcessQuestion> replyQuestComment(@Field(Constant.u_user_id) String userid,
-                                            @Field(Constant.qlc_id) int qlcId,
+                                            @Field(Constant.q_id) int qlcId,
                                             @Field(Constant.CASE) String caseL,
                                             @Field(Constant.qlc_comment_flag) String flag,
                                             @Field(Constant.quest_comment_reply_id) String replyId,
@@ -418,7 +421,8 @@ public interface ApiInterface {
                                         @Field(Constant.device_id) String deviceId,
                                         @Field(Constant.appName) String appName,
                                         @Field(Constant.u_fcm_token) String token,
-                                        @Field(Constant.CASE2) String case2);
+                                        @Field(Constant.CASE2) String case2,
+                                        @Field(Constant.u_referred_by) String referBy);
 
     @FormUrlEncoded
     @POST(Constant.FETCH_QA)
@@ -438,14 +442,14 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST(Constant.FETCH_QA)
     Call<LearningQuestResponse> fetchQAByCaseApi(@Field(Constant.u_user_id) String userid, @Field(Constant.q_id) String question,
-                                           @Field(Constant.CASE) String CASE,
-                                           @Field(Constant.q_avg_ratings) String ratings,
-                                           @Field(Constant.q_diff_level) String diff_level,
-                                           @Field(Constant.q_trending) String trending,
-                                           @Field(Constant.q_popular) String popular,
-                                           @Field(Constant.q_recent) String recent,
-                                           @Field(Constant.q_type) String question_type,
-                                           @Field(Constant.q_option_type) String option_type);
+                                                 @Field(Constant.CASE) String CASE,
+                                                 @Field(Constant.q_avg_ratings) String ratings,
+                                                 @Field(Constant.q_diff_level) String diff_level,
+                                                 @Field(Constant.q_trending) String trending,
+                                                 @Field(Constant.q_popular) String popular,
+                                                 @Field(Constant.q_recent) String recent,
+                                                 @Field(Constant.q_type) String question_type,
+                                                 @Field(Constant.q_option_type) String option_type);
 
     @FormUrlEncoded
     @POST(Constant.FETCH_LocalData)
@@ -468,12 +472,18 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST(Constant.FETCH_DOUBTS)
-    Call<DoubtResponse> fetchDoubtApi(@Field(Constant.u_user_id) String userid,
-                                      @Field(Constant.CASE) String caseR);
-
+    Call<DoubtResponse> fetchDoubtApi(@Field(Constant.device_id) String deviceId,
+                                      @Field(Constant.u_user_id) String userid,
+                                      @Field(Constant.CASE) String caseR,
+                                      @Field(Constant.TorQ) String torq,
+                                      @Field(Constant.q_id) String question,
+                                      @Field(Constant.pagestart) String pagestart);
     @FormUrlEncoded
-    Call<LearningQuestResponse> fetchQAApi(@Field(Constant.u_user_id) int userid,
-                                           @Field(Constant.q_id) String question);
+    @POST(Constant.FETCH_DOUBTS)
+    Call<DoubtResponse> fetchDoubtApi(@Field(Constant.device_id) String deviceId,
+                                      @Field(Constant.u_user_id) String userid,
+                                      @Field(Constant.CASE) String caseR,
+                                      @Field(Constant.pagestart) String pagestart);
 
     @FormUrlEncoded
     @POST(Constant.REFER)
@@ -504,6 +514,16 @@ public interface ApiInterface {
                                         @Field(Constant.CASE) String caseL,
                                         @Field(Constant.qlc_comment_flag) int flag);
 
+    @POST(Constant.PROCESS_QUESTION)
+    Call<ProcessQuestion> addQuestCommentReplyLike(@Field(Constant.u_user_id) int userid,
+                                                   @Field(Constant.q_id) int queId,
+                                                   @Field(Constant.CASE) String caseL,
+                                                   @Field(Constant.qlc_comment_text) String text,
+                                                   @Field(Constant.qlc_comment_flag) String commentFlag,
+                                                   @Field(Constant.qlc_like_flag) String likeFlag,
+                                                   @Field(Constant.quest_comment_reply_id) String replyId);
+
+
     @FormUrlEncoded
     @POST(Constant.FETCH_SHAREDTQ_USERS)
     Call<ShareUserResponse> fetchSharedByUsers(@Field(Constant.u_user_id) String userid,
@@ -527,10 +547,11 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST(Constant.PROCESS_TEST)
-    Call<ProcessQuestion> submitTestFeedBack(@Field(Constant.u_user_id) String userid,
+    Call<ProcessQuestion> submitTestFeedBack(@Field(Constant.tt_id) String ttId,
+                                             @Field(Constant.u_user_id) String userid,
                                              @Field(Constant.tlc_rating) String rating,
                                              @Field(Constant.tlc_feedback) String feedback,
-                                             @Field(Constant.tt_id) String tmId,
+                                             @Field(Constant.tm_id) String tmId,
                                              @Field(Constant.CASE) String caseL);
 
     @FormUrlEncoded
@@ -782,6 +803,15 @@ public interface ApiInterface {
                                             @Field(Constant.tm_id) int tmId,
                                             @Field(Constant.CASE) String caseL,
                                             @Field(Constant.tlc_comment_text) String comment);
+
+    @FormUrlEncoded
+    @POST(Constant.PROCESS_QUESTION)
+    Call<ProcessQuestion> addQuestCommentApi(@Field(Constant.u_user_id) int userid,
+                                             @Field(Constant.q_id) int tmId,
+                                             @Field(Constant.CASE) String caseL,
+                                             @Field(Constant.qlc_comment_text) String comment,
+                                             @Field(Constant.qlc_comment_flag) String commentFlag);
+
 
     @FormUrlEncoded
     @POST(Constant.FETCH_VERIFIED_CONTACTLIST)

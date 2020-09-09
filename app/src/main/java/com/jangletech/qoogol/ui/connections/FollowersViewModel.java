@@ -11,8 +11,12 @@ import com.jangletech.qoogol.model.Followers;
 import com.jangletech.qoogol.model.FollowersResponse;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
+import com.jangletech.qoogol.util.AESSecurities;
+import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
+import com.jangletech.qoogol.util.TinyDB;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -35,9 +39,11 @@ public class FollowersViewModel extends AndroidViewModel {
     Call<FollowersResponse> call;
     String userId;
     String pagestart;
+    private Application application;
 
     public FollowersViewModel(@NonNull Application application) {
         super(application);
+        this.application = application;
         apiService = ApiClient.getInstance().getApi();
         mAppRepository = new AppRepository(application);
         userId = new PreferenceManager(getApplication()).getUserId();
@@ -66,14 +72,20 @@ public class FollowersViewModel extends AndroidViewModel {
             call = apiService.fetchFollowers(userId, followers, getDeviceId(getApplication()), qoogol, pagestart);
         }
 
-
         call.enqueue(new Callback<FollowersResponse>() {
             @Override
             public void onResponse(Call<FollowersResponse> call, retrofit2.Response<FollowersResponse> response) {
                 try {
-                    if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
+                    if (response.body() != null &&
+                            response.body().getResponse().equalsIgnoreCase("200")) {
+                        List<Followers> followersList = new ArrayList<>();
+                        for (Followers followers : response.body().getFollowers_list()) {
+                            followers.setU_first_name(AESSecurities.getInstance().decrypt(TinyDB.getInstance(application).getString(Constant.cf_key1), followers.getU_first_name()));
+                            followers.setU_last_name(AESSecurities.getInstance().decrypt(TinyDB.getInstance(application).getString(Constant.cf_key2), followers.getU_last_name()));
+                            followersList.add(followers);
+                        }
                         ExecutorService executor = Executors.newSingleThreadExecutor();
-                        executor.execute(() -> mAppRepository.insertFollowers(response.body().getFollowers_list()));
+                        executor.execute(() -> mAppRepository.insertFollowers(followersList));
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

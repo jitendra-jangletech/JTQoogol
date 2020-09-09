@@ -17,6 +17,28 @@ public class Comments {
         this.tlc_comment_text = commentText;
     }
 
+    @SerializedName(Constant.quest_comment_count)
+    private int questCommentCount;
+
+    public int getQuestCommentCount() {
+        return questCommentCount;
+    }
+
+    public void setQuestCommentCount(int questCommentCount) {
+        this.questCommentCount = questCommentCount;
+    }
+
+    public int getQuestLikeCount() {
+        return questLikeCount;
+    }
+
+    public void setQuestLikeCount(int questLikeCount) {
+        this.questLikeCount = questLikeCount;
+    }
+
+    @SerializedName(Constant.quest_like_count)
+    private int questLikeCount;
+
     @SerializedName(Constant.test_comment_reply_id)
     private int replyCommentId;
 

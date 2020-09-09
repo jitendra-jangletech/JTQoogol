@@ -207,7 +207,7 @@
                                         android:gravity="center_vertical"
                                         android:minWidth="@dimen/_60sdp"
                                         android:minHeight="@dimen/_40sdp"
-                                        android:text="UnAttempted"
+                                        android:text="@string/seen"
                                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                                         android:textColor="@color/colorBlack"
                                         android:textStyle="bold"

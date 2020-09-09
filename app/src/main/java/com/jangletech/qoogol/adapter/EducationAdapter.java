@@ -54,7 +54,13 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.View
         this.educationItemClickListener = educationItemClickListener;
         this.CallingFrom = callingFrom;
         this.ueId = ueId;
+        setHasStableIds(true);
         checkedPosition = setUePosition(educationList, ueId);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return Long.parseLong(educationList.get(position).getUe_id());
     }
 
     private int setUePosition(List<Education> educations, String ueId) {
@@ -118,10 +124,10 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.View
                 if (checkedPosition != position) {
                     notifyItemChanged(checkedPosition);
                     checkedPosition = position;
-                    educationItemClickListener.onItemClick(education);
+                    educationItemClickListener.onItemClick(education,position);
                 }
             } else {
-                educationItemClickListener.onItemClick(education);
+                educationItemClickListener.onItemClick(education,position);
             }
 
         });
@@ -157,7 +163,7 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.View
     }
 
     public interface EducationItemClickListener {
-        void onItemClick(Education education);
+        void onItemClick(Education education,int position);
 
         void onDeleteClick(Education education, int position);
     }

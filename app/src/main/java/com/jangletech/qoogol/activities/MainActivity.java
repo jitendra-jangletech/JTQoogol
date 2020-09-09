@@ -37,7 +37,6 @@ import com.jangletech.qoogol.enums.Nav;
 import com.jangletech.qoogol.model.UserProfile;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
-import com.jangletech.qoogol.ui.doubts.DoubtListingDialog;
 import com.jangletech.qoogol.ui.personal_info.PersonalInfoViewModel;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
@@ -109,9 +108,6 @@ public class MainActivity extends BaseActivity {
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
             if (destination.getId() == R.id.nav_syllabus
                     || destination.getId() == R.id.nav_edit_profile
-                    || destination.getId() == R.id.nav_test_filter
-                    || destination.getId() == R.id.nav_comments
-                    || destination.getId() == R.id.nav_share
                     || destination.getId() == R.id.nav_blocked_connections
                     || destination.getId() == R.id.nav_test_details) {
                 hideBottomNav();
@@ -152,7 +148,7 @@ public class MainActivity extends BaseActivity {
                 //navigateFlag = Nav.ASK_DOUBTS.toString();
                 if (navController.getCurrentDestination() != null &&
                         navController.getCurrentDestination().getId() != R.id.nav_doubts) {
-//                    navController.navigate(R.id.nav_doubts);
+                    navController.navigate(R.id.nav_doubts);
                 }
             }
             if (item.getItemId() == R.id.nav_notifications) {
@@ -241,6 +237,11 @@ public class MainActivity extends BaseActivity {
                 if (navigateFlag.equals(Nav.SETTINGS.toString())) {
                     navigateFlag = "";
                     navToFragment(R.id.nav_settings, Bundle.EMPTY);
+                }
+
+                if (navigateFlag.equals(Nav.DOUBTS.toString())) {
+                    navigateFlag = "";
+                    navToFragment(R.id.nav_doubts, Bundle.EMPTY);
                 }
                 if (navigateFlag.equals(Nav.FAQ.toString())) {
                     navigateFlag = "";
@@ -347,17 +348,17 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        mBinding.tvNavHome.setOnClickListener(v -> {
-            mBinding.drawerLayout.closeDrawers();
-            if (navController.getCurrentDestination().getId() != R.id.nav_home) {
-                navigateFlag = Nav.HOME.toString();
-            }
-        });
-
         mBinding.navFav.setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawer(Gravity.LEFT);
             if (navController.getCurrentDestination().getId() != R.id.nav_fav) {
                 navigateFlag = Nav.FAVOURITE.toString();
+            }
+        });
+
+        mBinding.navProfile.setOnClickListener(v -> {
+            mBinding.drawerLayout.closeDrawer(Gravity.LEFT);
+            if (navController.getCurrentDestination().getId() != R.id.nav_edit_profile) {
+                navigateFlag = Nav.USER_PROFILE.toString();
             }
         });
 
@@ -385,8 +386,9 @@ public class MainActivity extends BaseActivity {
 
         findViewById(R.id.nav_doubts).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
-            DoubtListingDialog doubtListingDialog = new DoubtListingDialog(this, null, "", Constant.my_doubts);
-            doubtListingDialog.show();
+            if (navController.getCurrentDestination().getId() != R.id.nav_doubts) {
+                navigateFlag = Nav.DOUBTS.toString();
+            }
         });
 
         findViewById(R.id.nav_blocked_connections).setOnClickListener(v -> {
@@ -556,7 +558,8 @@ public class MainActivity extends BaseActivity {
                         navToFragment(R.id.nav_test_my, bundle);
                     } else if (action != null && action.equalsIgnoreCase("Q")) {
                         navToFragment(R.id.nav_learning, bundle);
-                    } else if (action != null && action.equalsIgnoreCase("CF")) {
+                    } else if (action != null && action.equalsIgnoreCase("CF") ||
+                            action.equalsIgnoreCase("CC")) {
                         navToFragment(R.id.nav_requests, bundle);
                     } else if (action != null && action.equalsIgnoreCase("CAF") ||
                             action.equalsIgnoreCase("CA")) {
@@ -621,6 +624,7 @@ public class MainActivity extends BaseActivity {
                         navController.getCurrentDestination().getId() == R.id.nav_import_contacts ||
                         navController.getCurrentDestination().getId() == R.id.nav_code_conduct ||
                         navController.getCurrentDestination().getId() == R.id.nav_faq ||
+                        navController.getCurrentDestination().getId() == R.id.nav_doubts ||
                         navController.getCurrentDestination().getId() == R.id.nav_fav ||
                         navController.getCurrentDestination().getId() == R.id.nav_shared_with_you_que ||
                         navController.getCurrentDestination().getId() == R.id.nav_shared_by_you_que ||

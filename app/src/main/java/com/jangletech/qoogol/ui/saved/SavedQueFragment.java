@@ -1,6 +1,7 @@
 package com.jangletech.qoogol.ui.saved;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,13 +17,17 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.SavedQueAdapter;
 import com.jangletech.qoogol.databinding.LearningFragmentBinding;
+import com.jangletech.qoogol.dialog.CommentDialog;
 import com.jangletech.qoogol.dialog.ProgressDialog;
+import com.jangletech.qoogol.dialog.PublicProfileDialog;
+import com.jangletech.qoogol.dialog.ShareQuestionDialog;
 import com.jangletech.qoogol.enums.Module;
 import com.jangletech.qoogol.model.LearningQuestions;
 import com.jangletech.qoogol.model.ProcessQuestion;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
+import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
@@ -38,8 +43,9 @@ import static com.jangletech.qoogol.util.Constant.connectonId;
 import static com.jangletech.qoogol.util.Constant.learning;
 import static com.jangletech.qoogol.util.Constant.profile;
 
-public class SavedQueFragment extends BaseFragment implements SavedQueAdapter.onIconClick {
+public class SavedQueFragment extends BaseFragment implements SavedQueAdapter.onIconClick, CommentDialog.CommentClickListener, PublicProfileDialog.PublicProfileClickListener, ShareQuestionDialog.ShareDialogListener {
 
+    private static final String TAG = "SavedQueFragment";
     private SavedViewModel mViewModel;
     private LearningFragmentBinding learningFragmentBinding;
     private SavedQueAdapter learingAdapter;
@@ -153,18 +159,16 @@ public class SavedQueFragment extends BaseFragment implements SavedQueAdapter.on
 
     @Override
     public void onCommentClick(int questionId) {
-        Bundle bundle = new Bundle();
-        bundle.putString(Constant.CALL_FROM, Module.Learning.toString());
-        bundle.putInt("QuestionId", questionId);
-        NavHostFragment.findNavController(this).navigate(R.id.nav_comments, bundle);
+        Log.d(TAG, "onCommentClick questionId : " + questionId);
+        CommentDialog commentDialog = new CommentDialog(getActivity(), questionId, false, this);
+        commentDialog.show();
     }
 
     @Override
     public void onShareClick(int questionId) {
-        Bundle bundle = new Bundle();
-        bundle.putInt("QuestionId", questionId);
-        bundle.putInt("call_from", learning);
-        NavHostFragment.findNavController(this).navigate(R.id.nav_share, bundle);
+        new ShareQuestionDialog(getActivity(), String.valueOf(questionId), AppUtils.getUserId()
+                , getDeviceId(getActivity()), "Q",this)
+                .show();
     }
 
 
@@ -183,5 +187,36 @@ public class SavedQueFragment extends BaseFragment implements SavedQueAdapter.on
             bundle.putString(Constant.fetch_profile_id, userId);
         }
         NavHostFragment.findNavController(this).navigate(R.id.nav_edit_profile, bundle);
+    }
+
+    @Override
+    public void onCommentClick(String userId) {
+        PublicProfileDialog publicProfileDialog = new PublicProfileDialog(getActivity(), userId, this);
+        publicProfileDialog.show();
+    }
+
+    @Override
+    public void onBackClick(int count) {
+
+    }
+
+    @Override
+    public void onFriendUnFriendClick() {
+
+    }
+
+    @Override
+    public void onFollowUnfollowClick() {
+
+    }
+
+    @Override
+    public void onViewImage(String path) {
+        showFullScreen(path);
+    }
+
+    @Override
+    public void onSharedSuccess(int count) {
+
     }
 }

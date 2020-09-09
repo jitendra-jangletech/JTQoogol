@@ -3,270 +3,107 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-
-    <ScrollView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/btnSave"
-        android:fillViewport="true"
-        android:scrollbars="none">
+        android:layout_height="match_parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/btnSave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_10sdp"
+            android:backgroundTint="@color/colorSkyBlue"
+            android:gravity="center"
+            android:text="@string/save"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
+
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".ui.syllabus.SyllabusFragment">
+            android:fillViewport="true"
+            android:scrollbars="none">
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/rootLayout"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/background"
-                app:cardElevation="@dimen/_10sdp"
-                app:cardUseCompatPadding="true"
-                app:layout_constraintTop_toTopOf="parent">
+                android:layout_height="match_parent"
+                tools:context=".ui.syllabus.SyllabusFragment">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerview"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/_5sdp">
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:scrollbars="horizontal"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                    <ImageView
-                        android:id="@+id/delete"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/_2sdp"
-                        android:src="@drawable/ic_delete"
-                        android:tint="@color/colorSkyBlue"
-                        android:visibility="gone"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/mainLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/background"
+                    app:cardUseCompatPadding="true"
+                    app:layout_constraintTop_toBottomOf="@+id/recyclerview">
 
-                    <ImageView
-                        android:id="@+id/right"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/_2sdp"
-                        android:src="@drawable/ic_edit_profile"
-                        android:visibility="visible"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/tvUniversity"
-                        style="@style/font_style"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:padding="@dimen/_2sdp"
-                        android:text="University"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                        android:textColor="@color/colorSkyBlue"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/tvInstitute"
-                        style="@style/font_style"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_2sdp"
-                        android:padding="@dimen/_2sdp"
-                        android:text="Institute"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                        android:textColor="@color/colorSkyBlue"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tvUniversity" />
-
-
-                    <TextView
-                        android:id="@+id/tvDegree"
-                        style="@style/font_style"
+                    <LinearLayout
+                        android:id="@+id/subject_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_2sdp"
-                        android:padding="@dimen/_2sdp"
-                        android:text="Degree"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                        android:textColor="@color/colorSkyBlue"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tvInstitute" />
-
-                    <TextView
-                        android:id="@+id/tvCourse"
-                        style="@style/font_style"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_2sdp"
-                        android:padding="@dimen/_2sdp"
-                        android:text="Course"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                        android:textColor="@color/colorSkyBlue"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tvDegree" />
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/tvCourseYearLayout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tvCourse">
+                        android:orientation="vertical"
+                        android:padding="@dimen/_5sdp">
 
                         <TextView
-                            android:id="@+id/tvCourseYearTitle"
-                            style="@style/font_style"
+                            style="@style/chipTitleStyle"
+                            android:text="Select Subjects" />
+
+                        <com.google.android.material.chip.ChipGroup
+                            android:id="@+id/subjectsChipGrp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_2sdp"
-                            android:padding="@dimen/_2sdp"
-                            android:text="Class / Year : "
-                            android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                            android:textColor="@color/colorSkyBlue"
-                            app:layout_constraintLeft_toLeftOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            android:layout_marginTop="@dimen/_10sdp"
+                            app:selectionRequired="true"
+                            app:singleSelection="true" />
 
-                        <TextView
-                            android:id="@+id/tvCourseYear"
-                            style="@style/font_style"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_2sdp"
-                            android:padding="@dimen/_2sdp"
-                            android:text="X"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                            android:textColor="@color/colorSkyBlue"
-                            app:layout_constraintLeft_toRightOf="@+id/tvCourseYearTitle"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tvCourseYearLayout">
-
-
-                        <TextView
-                            android:id="@+id/tvStartDate"
-                            style="@style/font_style"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_2sdp"
-                            android:padding="@dimen/_2sdp"
-                            android:text="Start Date"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                            android:textColor="@color/colorSkyBlue"
-                            app:layout_constraintLeft_toLeftOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/tvToDate"
-                            style="@style/font_style"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/_5sdp"
-                            android:layout_marginTop="@dimen/_2sdp"
-                            android:layout_marginRight="@dimen/_5sdp"
-                            android:padding="@dimen/_2sdp"
-                            android:text="To"
-                            android:textColor="@color/colorSkyBlue"
-                            app:layout_constraintLeft_toRightOf="@+id/tvStartDate"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/tvEndDate"
-                            style="@style/font_style"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_1sdp"
                             android:layout_marginLeft="@dimen/_10sdp"
-                            android:layout_marginTop="@dimen/_2sdp"
-                            android:padding="@dimen/_2sdp"
-                            android:text="End Date"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                            android:textColor="@color/colorSkyBlue"
-                            app:layout_constraintLeft_toRightOf="@+id/tvToDate"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            android:layout_marginTop="@dimen/_15sdp"
+                            android:layout_marginRight="@dimen/_10sdp"
+                            android:background="@color/colorLightGray" />
 
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+                        <TextView
+                            style="@style/chipTitleStyle"
+                            android:text="Select Chapter" />
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                        <com.google.android.material.chip.ChipGroup
+                            android:id="@+id/chapterChipGrp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_10sdp"
+                            android:layout_marginBottom="@dimen/_40sdp"
+                            app:selectionRequired="false"
+                            app:singleSelection="false" />
 
-            </com.google.android.material.card.MaterialCardView>
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_1sdp"
+                            android:layout_marginLeft="@dimen/_10sdp"
+                            android:layout_marginTop="@dimen/_15sdp"
+                            android:layout_marginRight="@dimen/_10sdp"
+                            android:background="@color/colorLightGray"
+                            android:visibility="gone" />
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/mainLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/background"
-                app:cardElevation="@dimen/_10sdp"
-                app:cardUseCompatPadding="true"
-                app:layout_constraintTop_toBottomOf="@+id/rootLayout">
+                    </LinearLayout>
 
-                <LinearLayout
-                    android:padding="@dimen/_5sdp"
-                    android:id="@+id/subject_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                </com.google.android.material.card.MaterialCardView>
 
-                    <TextView
-                        style="@style/chipTitleStyle"
-                        android:text="Select Subjects" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
 
-                    <com.google.android.material.chip.ChipGroup
-                        android:id="@+id/subjectsChipGrp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        app:selectionRequired="true"
-                        app:singleSelection="true" />
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/_1sdp"
-                        android:layout_marginLeft="@dimen/_10sdp"
-                        android:layout_marginTop="@dimen/_15sdp"
-                        android:layout_marginRight="@dimen/_10sdp"
-                        android:background="@color/colorLightGray" />
-
-                    <TextView
-                        style="@style/chipTitleStyle"
-                        android:text="Select Chapter" />
-
-                    <com.google.android.material.chip.ChipGroup
-                        android:id="@+id/chapterChipGrp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        app:selectionRequired="false"
-                        app:singleSelection="false" />
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/_1sdp"
-                        android:layout_marginLeft="@dimen/_10sdp"
-                        android:layout_marginTop="@dimen/_15sdp"
-                        android:layout_marginRight="@dimen/_10sdp"
-                        android:background="@color/colorLightGray" />
-
-                </LinearLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-
-
-            <TextView
-                android:visibility="gone"
-                android:id="@+id/btnSave"
-                style="@style/font_style"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_40sdp"
-                android:background="@color/colorPrimaryDark"
-                android:gravity="center"
-                android:text="Save"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@color/colorWhite"
-                app:layout_constraintBottom_toBottomOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

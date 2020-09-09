@@ -3,6 +3,7 @@ package com.jangletech.qoogol.ui.educational_info;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.DataBindingUtil;
 
 import com.google.android.material.textfield.TextInputLayout;
@@ -61,30 +63,34 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.jangletech.qoogol.util.Constant.board_id;
-import static com.jangletech.qoogol.util.Constant.degree_id;
 
 public class AddEduDialog extends Dialog {
 
     private static final String TAG = "AddEduDialog";
-    AddEditEducationBinding addEditEducationBinding;
+    private AddEditEducationBinding addEditEducationBinding;
     private Activity context;
     private Education education;
-    Map<Integer, String> mMapUniversity;
-    Map<Integer, String> mMapInstitute;
-    Map<Integer, String> mMapDegree;
-    Map<Integer, String> mMapCourse;
-    ApiInterface apiService = ApiClient.getInstance().getApi();
-    List<Course> courseList;
+    private Calendar mCalender;
+    private Map<Integer, String> mMapUniversity;
+    private Map<Integer, String> mMapInstitute;
+    private Map<Integer, String> mMapDegree;
+    private Map<Integer, String> mMapCourse;
+    private ApiInterface apiService = ApiClient.getInstance().getApi();
+    private List<Course> courseList;
+    private int pos;
     private HashMap<String, String> params;
     private ApiCallListener apiCallListener;
     private boolean flag;
 
-    public AddEduDialog(@NonNull Activity context, Education education, boolean flag, ApiCallListener apiCallListener) {
+    public AddEduDialog(@NonNull Activity context, Education education, boolean flag, ApiCallListener apiCallListener,
+                        int pos) {
         super(context, android.R.style.Theme_DeviceDefault_Light_DarkActionBar);
         this.context = context;
         this.education = education;
         this.apiCallListener = apiCallListener;
         this.flag = flag;
+        this.pos = pos;
+        mCalender = Calendar.getInstance();
         params = new HashMap<>();
     }
 
@@ -102,7 +108,6 @@ public class AddEduDialog extends Dialog {
             fetchClassList(education.getCo_id());
             fetchInstituteData(0);
             fetchCourseData(Integer.parseInt(education.getDm_id()));
-
             addEditEducationBinding.universityBoardAutocompleteView.setTag(education.getUbm_id());
             addEditEducationBinding.instituteAutocompleteView.setTag(education.getIom_id());
             addEditEducationBinding.degreeAutocompleteView.setTag(education.getDm_id());
@@ -125,7 +130,6 @@ public class AddEduDialog extends Dialog {
 
 
     private void setListeners() {
-
         addEditEducationBinding.etstartdate.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -162,6 +166,26 @@ public class AddEduDialog extends Dialog {
                 if (!s.toString().isEmpty()) {
                     addEditEducationBinding.etenddate.setError(null);
                     addEditEducationBinding.tilEnddate.setError(null);
+                }
+            }
+        });
+
+        addEditEducationBinding.delete.setOnClickListener(v -> {
+            if(!flag) {
+                if (education == null) {
+                    dismiss();
+                } else {
+                    androidx.appcompat.app.AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.AlertDialogStyle);
+                    builder.setTitle("Confirm")
+                            .setMessage("Are you sure you want to delete education?")
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    apiCallListener.onDialogEduDelete(education, pos);
+                                    dismiss();
+                                }
+                            }).setNegativeButton("No", null)
+                            .show();
                 }
             }
         });
@@ -267,16 +291,20 @@ public class AddEduDialog extends Dialog {
         addEditEducationBinding.courseYearAutocompleteView.setOnItemClickListener((parent, view, position, id) -> {
             final String name = ((TextView) view).getText().toString();
             addEditEducationBinding.courseYearAutocompleteView.setTag(name);
+            getDate(0);
         });
 
-
         addEditEducationBinding.etstartdate.setOnTouchListener((v, event) -> {
-            getDate(event, 0);
+            if (MotionEvent.ACTION_UP == event.getAction()) {
+                getDate(0);
+            }
             return true;
         });
 
         addEditEducationBinding.etenddate.setOnTouchListener((v, event) -> {
-            getDate(event, 1);
+            if (MotionEvent.ACTION_UP == event.getAction()) {
+                getDate(1);
+            }
             return true;
         });
     }
@@ -353,39 +381,46 @@ public class AddEduDialog extends Dialog {
         });
     }
 
-    private void getDate(MotionEvent event, int call_from) {
-        if (MotionEvent.ACTION_UP == event.getAction()) {
-            DateFormat format = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
-            Date date = null;
-
-            try {
-                if (call_from == 0 && !addEditEducationBinding.etstartdate.getText().toString().isEmpty()) {
-                    date = format.parse(addEditEducationBinding.etstartdate.getText().toString());
-                }
-                if (call_from == 1 && !addEditEducationBinding.etenddate.getText().toString().isEmpty()) {
-                    date = format.parse(addEditEducationBinding.etenddate.getText().toString());
-                }
-            } catch (ParseException e) {
-                e.printStackTrace();
+    private void getDate(int call_from) {
+//        if (MotionEvent.ACTION_UP == event.getAction()) {
+        DateFormat format = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
+        Date date = null;
+        try {
+            if (call_from == 0 && !addEditEducationBinding.etstartdate.getText().toString().isEmpty()) {
+                date = format.parse(addEditEducationBinding.etstartdate.getText().toString());
             }
-
-            Calendar newCalendar = Calendar.getInstance();
-            if (date != null)
-                newCalendar.setTime(date);
-            DatePickerDialog dialog = new DatePickerDialog(getContext(), android.R.style.Theme_Holo_Dialog, new DatePickerDialog.OnDateSetListener() {
-                @Override
-                public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                    String formattedDate = year + "-" + (month + 1) + "-" + day;
-                    if (call_from == 0) {
-                        addEditEducationBinding.etstartdate.setText(DateUtils.getFormattedDate(formattedDate));
-                    } else {
-                        addEditEducationBinding.etenddate.setText(DateUtils.getFormattedDate(formattedDate));
-                    }
-                }
-            }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
-            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-            dialog.show();
+            if (call_from == 1 && !addEditEducationBinding.etenddate.getText().toString().isEmpty()) {
+                date = format.parse(addEditEducationBinding.etenddate.getText().toString());
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
+
+        Calendar newCalendar = Calendar.getInstance();
+        if (date != null)
+            newCalendar.setTime(date);
+        DatePickerDialog dialog = new DatePickerDialog(getContext(), android.R.style.Theme_Holo_Dialog, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                String formattedDate = year + "-" + (month + 1) + "-" + day;
+                String formattedEndDate = (year + 1) + "-" + (month + 1) + "-" + day;
+                if (call_from == 0) {
+                    mCalender.set(Calendar.YEAR, year);
+                    mCalender.set(Calendar.MONTH, month);
+                    mCalender.set(Calendar.DAY_OF_MONTH, day);
+
+                    addEditEducationBinding.etstartdate.setText(DateUtils.getFormattedDate(formattedDate));
+                    addEditEducationBinding.etenddate.setText(DateUtils.getFormattedDate(formattedEndDate));
+                } else {
+                    addEditEducationBinding.etenddate.setText(DateUtils.getFormattedDate(formattedDate));
+                }
+            }
+        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        if (call_from == 1)
+            dialog.getDatePicker().setMinDate(mCalender.getTimeInMillis());
+        dialog.show();
+        //}
     }
 
 
@@ -618,9 +653,7 @@ public class AddEduDialog extends Dialog {
 
     private void fetchCourseData(int degree) {
         ProgressDialog.getInstance().show(context);
-        Map<String, Integer> requestBody = new HashMap<>();
-        requestBody.put(degree_id, degree);
-        Call<CourseResponse> call = apiService.getCourses();
+        Call<CourseResponse> call = apiService.getCourses(degree);
         call.enqueue(new Callback<CourseResponse>() {
             @Override
             public void onResponse(Call<CourseResponse> call, Response<CourseResponse> response) {
@@ -664,5 +697,7 @@ public class AddEduDialog extends Dialog {
 
     public interface ApiCallListener {
         void onSuccess();
+
+        void onDialogEduDelete(Education education, int pos);
     }
 }

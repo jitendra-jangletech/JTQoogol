@@ -104,6 +104,7 @@
                 </LinearLayout>
 
                 <ImageView
+                    android:foreground="?attr/selectableItemBackground"
                     android:id="@+id/reset"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

@@ -9,8 +9,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Window;
 import android.widget.RatingBar;
+
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
+
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.activities.PracticeTestActivity;
 import com.jangletech.qoogol.databinding.DialogSubmitTestBinding;
@@ -21,7 +23,6 @@ import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
-import com.jangletech.qoogol.util.PreferenceManager;
 
 import java.util.HashMap;
 import java.util.List;
@@ -56,14 +57,17 @@ public class SubmitTestDialog extends Dialog {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         mBinding = DataBindingUtil.inflate(LayoutInflater.from(getContext()), R.layout.dialog_submit_test, null, false);
         setContentView(mBinding.getRoot());
-        String userId = AppUtils.getStringField(new PreferenceManager(getContext()).getInt(Constant.USER_ID));
+        String userId = AppUtils.getUserId();
+        Log.d(TAG, "onCreate TTID : " + String.valueOf(startResumeTestResponse.getTtId()));
+        params.put(Constant.tm_id, startResumeTestResponse.getTm_id());
         params.put(Constant.tt_id, String.valueOf(startResumeTestResponse.getTtId()));
         params.put(Constant.u_user_id, userId);
+        params.put(Constant.tlc_rating, "1");
+        params.put(Constant.tlc_feedback, "1");
         params.put(Constant.CASE, "L");
         submitTestFeedBack(params);
 
         mBinding.tvYes.setOnClickListener(v -> {
-            //submitDialogClickListener.onYesClick();
             testFeedback = mBinding.feedback.getText().toString();
             params.put(Constant.tlc_rating, testRating);
             params.put(Constant.tlc_feedback, AppUtils.encodedString(testFeedback));
@@ -172,6 +176,7 @@ public class SubmitTestDialog extends Dialog {
         ProgressDialog.getInstance().show(activity);
         Log.d(TAG, "submitTestFeedBack Params : " + params);
         Call<ProcessQuestion> call = apiService.submitTestFeedBack(
+                params.get(Constant.tt_id),
                 params.get(Constant.u_user_id),
                 params.get(Constant.tlc_rating),
                 params.get(Constant.tlc_feedback),
@@ -186,11 +191,12 @@ public class SubmitTestDialog extends Dialog {
                     Log.d(TAG, "onResponse Success : ");
                     if (params.get(Constant.CASE).equalsIgnoreCase("I")) {
                         dismiss();
-                        AppUtils.showToast(activity, "Feedback Submitted Successfully.");
-                        submitDialogClickListener.onYesClick();
+                        //AppUtils.showToast(activity, "Feedback Submitted Successfully.");
+                        submitDialogClickListener.onYesClick(mBinding.tvObtainMarksValue.getText().toString());
                     }
                 } else {
                     //todo set rating and feedback test
+                    //mBinding.rating.setRating();
                 }
             }
 
@@ -204,7 +210,7 @@ public class SubmitTestDialog extends Dialog {
 
 
     public interface SubmitDialogClickListener {
-        void onYesClick();
+        void onYesClick(String obtainMarks);
 
         void onNoClick();
 

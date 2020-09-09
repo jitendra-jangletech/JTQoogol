@@ -85,9 +85,10 @@ public class ExistingUserFragment extends BaseFragment {
     public void initViews() {
         mAppRepository = new AppRepository(getActivity());
         Log.d(TAG, "initViews Args : " + getArguments().getString(Constant.u_mob_1));
-        String mobile = getMobileFromBundle(getArguments());
+        String mobile = TinyDB.getInstance(getActivity()).getString(Constant.u_mob_1);
         if (mobile != null && !mobile.isEmpty()) {
             mBinding.tilEmailMobileUserName.getEditText().setText(mobile);
+            TinyDB.getInstance(getActivity()).putString(Constant.u_mob_1, "");
         }
 
         mBinding.termsPrivacy.setText(Html.fromHtml(getResources().getString(R.string.terms_and_conditions)));
@@ -269,14 +270,6 @@ public class ExistingUserFragment extends BaseFragment {
                             }
                             executor.execute(() -> mAppRepository.insertTests(newList));
                         }
-
-                        Thread thread = new Thread() {
-                            @Override
-                            public void run() {
-                                downloadImages();
-                            }
-                        };
-                        thread.start();
                     }
 
                     navigateOnHomeScreen();
@@ -308,7 +301,6 @@ public class ExistingUserFragment extends BaseFragment {
             for (LearningQuestionsNew learningQuestionsNew : list) {
                 images = images + learningQuestionsNew.getImageList();
             }
-
             return images;
         } catch (Exception e) {
             e.printStackTrace();

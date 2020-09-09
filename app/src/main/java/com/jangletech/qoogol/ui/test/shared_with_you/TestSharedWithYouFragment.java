@@ -31,7 +31,7 @@ import com.google.android.material.chip.ChipGroup;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.activities.PracticeTestActivity;
 import com.jangletech.qoogol.adapter.TestListAdapter;
-import com.jangletech.qoogol.databinding.FragmentTestMyBinding;
+import com.jangletech.qoogol.databinding.FragmentTestListBinding;
 import com.jangletech.qoogol.dialog.CommentDialog;
 import com.jangletech.qoogol.dialog.FilterDialog;
 import com.jangletech.qoogol.dialog.LikeListingDialog;
@@ -59,11 +59,11 @@ import static com.jangletech.qoogol.util.Constant.CASE;
 import static com.jangletech.qoogol.util.Constant.TEST_FILTER_APPLIED;
 
 public class TestSharedWithYouFragment extends BaseFragment
-        implements TestListAdapter.TestClickListener, SearchView.OnQueryTextListener, CommentDialog.CommentClickListener, PublicProfileDialog.PublicProfileClickListener, FilterDialog.FilterClickListener, LikeListingDialog.onItemClickListener {
+        implements TestListAdapter.TestClickListener, SearchView.OnQueryTextListener, CommentDialog.CommentClickListener, PublicProfileDialog.PublicProfileClickListener, FilterDialog.FilterClickListener, LikeListingDialog.onItemClickListener, ShareQuestionDialog.ShareDialogListener {
 
     private static final String TAG = "TestSharedWithYouFragme";
     private MyTestViewModel mViewModel;
-    private FragmentTestMyBinding mBinding;
+    private FragmentTestListBinding mBinding;
     private TestListAdapter mAdapter;
     private Menu filterMenu;
     private List<TestModelNew> filteredTestList = new ArrayList<>();
@@ -75,6 +75,8 @@ public class TestSharedWithYouFragment extends BaseFragment
     private int currentItems, scrolledOutItems, totalItems;
     private String pageStart = "0";
     private Context mContext;
+    private int selectedPos = -1;
+    private TestModelNew selectedTestCard;
     private HashMap<String, String> params = new HashMap<>();
     private int tmId;
     private String flag = "";
@@ -100,7 +102,7 @@ public class TestSharedWithYouFragment extends BaseFragment
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_test_my, container, false);
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_test_list, container, false);
         mBinding.setLifecycleOwner(this);
         mViewModel = new ViewModelProvider(this).get(MyTestViewModel.class);
         initViews();
@@ -148,7 +150,7 @@ public class TestSharedWithYouFragment extends BaseFragment
 
     private void setFilteredTestList(TestListResponse response) {
         if (response != null) {
-            pageStart = response.getPrev_tm_id();
+            pageStart = response.getRow_count();
             filteredTestList.addAll(response.getTestList());
             mAdapter.updateList(filteredTestList);
             if (filteredTestList.size() == 0) {
@@ -176,27 +178,6 @@ public class TestSharedWithYouFragment extends BaseFragment
             }
         });
 
-//        params.put(Constant.u_user_id, getUserId(getActivity()));
-//        params.put(CASE, Constant.SHARED_WITH_YOU);
-//        params.put(Constant.tm_popular_test, "");
-//        params.put(Constant.tm_recent_test, "");
-
-//        fetchSubjectList(new PreferenceManager(requireActivity()).getString(Constant.scr_co_id));
-//        fetchTestList(params,pagestart);
-//        mViewModel.getAllSubjects().observe(getViewLifecycleOwner(), new Observer<List<FetchSubjectResponse>>() {
-//            @Override
-//            public void onChanged(@Nullable final List<FetchSubjectResponse> subjects) {
-//                if (subjects != null) {
-//                    Log.d(TAG, "onChanged Subjects Size : " + subjects.size());
-//                    ArrayList<String> subjectList = new ArrayList<>();
-//                    for (FetchSubjectResponse obj : subjects) {
-//                        if (!subjectList.contains(obj.getSm_sub_name()))
-//                            subjectList.add(obj.getSm_sub_name());
-//                    }
-//                    prepareSubjectChips(subjectList);
-//                }
-//            }
-//        });
         fetchTestList(AppUtils.loadHashMap(mContext), pageStart);
         mViewModel.getAllTests("SHTO", getUserId(getActivity())).observe(getViewLifecycleOwner(), new Observer<List<TestModelNew>>() {
             @Override
@@ -205,7 +186,7 @@ public class TestSharedWithYouFragment extends BaseFragment
                     Log.d(TAG, "onChanged Size : " + tests.size());
                     if (!isFilterApplied) {
                         if (testListResponse != null) {
-                            pageStart = testListResponse.getPrev_tm_id();
+                            pageStart = testListResponse.getRow_count();
                         }
                         testList = tests;
                         setMyTestList(tests);
@@ -238,28 +219,6 @@ public class TestSharedWithYouFragment extends BaseFragment
                 }
             }
         });
-
-
-//        mBinding.subjectsChipGrp.setOnCheckedChangeListener((chipGroup, id) -> {
-//            Chip chip = ((Chip) chipGroup.getChildAt(chipGroup.getCheckedChipId()));
-//            if (chip != null) {
-//                try {
-//                    if (chip.isChecked()) {
-//                        setCheckedChip(mBinding.subjectsChipGrp);
-//                        List<TestModelNew> filteredModelList = filterBySubject(testList, chip.getText().toString());
-//                        if (filteredModelList.size() > 0) {
-//                            mAdapter.setSearchResult(filteredModelList);
-//                            mBinding.tvNoTest.setVisibility(View.GONE);
-//                        } else {
-//                            mAdapter.setSearchResult(filteredModelList);
-//                            mBinding.tvNoTest.setVisibility(View.VISIBLE);
-//                        }
-//                    }
-//                } catch (NullPointerException npe) {
-//                    showToast("Something went wrong!!");
-//                }
-//            }
-//        });
     }
 
     public void setMyTestList(List<TestModelNew> testList) {
@@ -272,36 +231,6 @@ public class TestSharedWithYouFragment extends BaseFragment
         }
     }
 
-//    private void prepareSubjectChips(ArrayList<String> subjects) {
-//        mBinding.subjectsChipGrp.removeAllViews();
-//        int idCounter = 0;
-//        for (String subject : subjects) {
-//            Chip chip = (Chip) LayoutInflater.from(mBinding.subjectsChipGrp.getContext()).inflate(R.layout.chip_layout, mBinding.subjectsChipGrp, false);
-//            chip.setText(subject);
-//            chip.setId(idCounter);
-//            chip.setTag("Subjects");
-//            chip.setClickable(true);
-//            chip.setCheckable(true);
-//            mBinding.subjectsChipGrp.addView(chip);
-//            idCounter++;
-//        }
-//    }
-
-    private void setCheckedChip(ChipGroup chipGroup) {
-        for (int i = 0; i < chipGroup.getChildCount(); i++) {
-            Chip chip = (Chip) chipGroup.getChildAt(i);
-            if (chip.isChecked()) {
-                chip.setTextColor(Color.WHITE);
-            } else {
-                chip.setTextColor(Color.BLACK);
-            }
-        }
-    }
-
-    private String getTestType(String key) {
-        return new PreferenceManager(getActivity()).getString(key);
-    }
-
     @Override
     public boolean onQueryTextSubmit(String query) {
         return false;
@@ -309,59 +238,14 @@ public class TestSharedWithYouFragment extends BaseFragment
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        final List<TestModelNew> filteredModelList = filter(testList, newText);
-        mAdapter.setSearchResult(filteredModelList);
+        if (newText.trim().toLowerCase().isEmpty()) {
+            mAdapter.updateList(testList);
+        } else {
+            mAdapter.updateList(searchTests(newText.trim().toLowerCase(), testList));
+        }
         return true;
     }
 
-    private List<TestModelNew> filter(List<TestModelNew> models, String query) {
-        query = query.toLowerCase();
-        final List<TestModelNew> filteredModelList = new ArrayList<>();
-        for (TestModelNew model : models) {
-            String testName = model.getTm_name().toLowerCase();
-            if (testName.contains(query)) {
-                filteredModelList.add(model);
-            }
-        }
-        return filteredModelList;
-    }
-
-    private List<TestModelNew> filterBySubject(List<TestModelNew> models, String subject) {
-        List<TestModelNew> filteredModelList = new ArrayList<>();
-        if (!subject.equalsIgnoreCase("All")) {
-            for (TestModelNew model : models) {
-                String testSubject = model.getSm_sub_name();
-                if (testSubject.contains(subject)) {
-                    filteredModelList.add(model);
-                }
-            }
-        } else {
-            filteredModelList = models;
-        }
-        return filteredModelList;
-    }
-
-//    private void fetchSubjectList(String scrCoId) {
-//        Log.d(TAG, "fetchSubjectList ScrCoId : " + scrCoId);
-//        mBinding.swipeToRefresh.setRefreshing(true);
-//        Call<FetchSubjectResponseList> call = apiService.fetchSubjectList(scrCoId);
-//        call.enqueue(new Callback<FetchSubjectResponseList>() {
-//            @Override
-//            public void onResponse(Call<FetchSubjectResponseList> call, Response<FetchSubjectResponseList> response) {
-//                //ProgressDialog.getInstance().dismiss();
-//                mBinding.swipeToRefresh.setRefreshing(false);
-//                mViewModel.setAllSubjectList(response.body().getFetchSubjectResponseList());
-//            }
-//
-//            @Override
-//            public void onFailure(Call<FetchSubjectResponseList> call, Throwable t) {
-//                //ProgressDialog.getInstance().dismiss();
-//                mBinding.swipeToRefresh.setRefreshing(false);
-//                showToast("Something went wrong!!");
-//                t.printStackTrace();
-//            }
-//        });
-//    }
 
     private void fetchTestList(HashMap<String, String> params, String pageStart) {
         Log.d(TAG, "fetchTestList Params : " + params);
@@ -377,6 +261,7 @@ public class TestSharedWithYouFragment extends BaseFragment
             params.put(Constant.tm_id, "");
             params.put(Constant.tm_catg, "");
         }
+        params.put(Constant.u_user_id, getUserId(mContext));
         mBinding.swipeToRefresh.setRefreshing(true);
         Call<TestListResponse> call = apiService.fetchTestList(
                 params.get(Constant.u_user_id),
@@ -387,7 +272,8 @@ public class TestSharedWithYouFragment extends BaseFragment
                 params.get(Constant.tm_avg_rating),
                 params.get(Constant.tm_id),
                 params.get(Constant.tm_catg),
-                pageStart
+                pageStart,
+                ""
         );
         call.enqueue(new Callback<TestListResponse>() {
             @Override
@@ -437,19 +323,6 @@ public class TestSharedWithYouFragment extends BaseFragment
         startActivity(intent);
     }
 
-    @Override
-    public void onCommentClick(TestModelNew testModel) {
-        Log.d(TAG, "onCommentClick TmId : " + testModel.getTm_id());
-        CommentDialog commentDialog = new CommentDialog(getActivity(), testModel.getTm_id(), true, this);
-        commentDialog.show();
-    }
-
-    @Override
-    public void onShareClick(int testid) {
-        new ShareQuestionDialog(getActivity(), String.valueOf(testid), getUserId(mContext)
-                , getDeviceId(mContext), "T")
-                .show();
-    }
 
     @Override
     public void onLikeCountClick(TestModelNew testModel) {
@@ -481,6 +354,42 @@ public class TestSharedWithYouFragment extends BaseFragment
         PublicProfileDialog publicProfileDialog = new PublicProfileDialog(getActivity(), userId, this);
         publicProfileDialog.show();
     }
+
+    @Override
+    public void onBackClick(int count) {
+        Log.d(TAG, "onBackClick Comment Count : " + count);
+        int commentCount = Integer.parseInt(selectedTestCard.getCommentsCount())+count;
+        selectedTestCard.setCommentsCount("" + commentCount);
+        mAdapter.notifyItemChanged(selectedPos, selectedTestCard);
+    }
+
+    @Override
+    public void onCommentClick(TestModelNew testModel, int pos) {
+        Log.d(TAG, "onCommentClick TmId : " + testModel.getTm_id());
+        selectedPos = pos;
+        selectedTestCard = testModel;
+        CommentDialog commentDialog = new CommentDialog(getActivity(), testModel.getTm_id(), true, this);
+        commentDialog.show();
+    }
+
+    @Override
+    public void onShareClick(TestModelNew testModelNew, int pos) {
+        selectedPos = pos;
+        selectedTestCard = testModelNew;
+        new ShareQuestionDialog(getActivity(), String.valueOf(testModelNew.getTm_id()), getUserId(mContext)
+                , getDeviceId(mContext), "T", this)
+                .show();
+    }
+
+    @Override
+    public void onSharedSuccess(int count) {
+        Log.d(TAG, "onSharedSuccess Count : " + count);
+        int shareCount = Integer.parseInt(selectedTestCard.getShareCount());
+        selectedTestCard.setShareCount("" + (shareCount + count));
+        mAdapter.notifyItemChanged(selectedPos, selectedTestCard);
+    }
+
+
 
     @Override
     public void onFriendUnFriendClick() {

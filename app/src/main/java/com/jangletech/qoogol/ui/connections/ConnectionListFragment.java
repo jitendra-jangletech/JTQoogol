@@ -110,14 +110,14 @@ public class ConnectionListFragment extends BaseFragment implements ConnectionAd
         mBinding.connectionRecycler.setAdapter(mAdapter);
         mViewModel.getConnectionsList(getUserId(getActivity())).observe(getViewLifecycleOwner(), connections -> {
             if (connections != null) {
+                connectionsList = connections;
                 if (connectionResponse != null)
                     pageCount = connectionResponse.getRow_count();
-
                 if (connections.size() > 0) {
+                    mBinding.tvEmptySearch.setVisibility(View.GONE);
+                    mBinding.connectionRecycler.setVisibility(View.VISIBLE);
                     mBinding.emptyview.setVisibility(View.GONE);
-                    connectionsList.clear();
-                    connectionsList.addAll(connections);
-                    mAdapter.updateList(connectionsList);
+                    mAdapter.updateList(connections);
                 } else {
                     mBinding.emptyview.setVisibility(View.VISIBLE);
                 }
@@ -147,7 +147,6 @@ public class ConnectionListFragment extends BaseFragment implements ConnectionAd
                 }
             }
         });
-
         mBinding.connectionSwiperefresh.setOnRefreshListener(() -> fetchConnections("0"));
     }
 
@@ -162,13 +161,14 @@ public class ConnectionListFragment extends BaseFragment implements ConnectionAd
                     connectionResponse = response.body();
                     List<Connections> newConnections = new ArrayList<>();
                     for (Connections connections : response.body().getConnection_list()) {
-                        String fName = AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key1),connections.getU_first_name());
-                        String lName = AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key2),connections.getU_last_name());
+                        String fName = AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key1), connections.getU_first_name());
+                        String lName = AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key2), connections.getU_last_name());
                         connections.setU_first_name(fName);
                         connections.setU_last_name(lName);
                         newConnections.add(connections);
                     }
-                    mViewModel.insert(response.body().getConnection_list());
+                    //mViewModel.insert(response.body().getConnection_list());
+                    mViewModel.insert(newConnections);
                 } else if (response.body().getResponse().equals("501")) {
                     resetSettingAndLogout();
                 } else {
@@ -186,26 +186,11 @@ public class ConnectionListFragment extends BaseFragment implements ConnectionAd
         });
     }
 
-    /*public void checkRefresh() {
-        if (mBinding.connectionSwiperefresh.isRefreshing()) {
-            mBinding.connectionSwiperefresh.setRefreshing(false);
-        }
-    }*/
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        /*if (isVisibleToUser && isVisible)
-            mViewModel.fetchConnectionsData(false);*/
     }
-
-//    private void initView() {
-//        mAdapter = new ConnectionAdapter(getActivity(), connectionsList, friends, this);
-//        mBinding.connectionRecycler.setHasFixedSize(true);
-//        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-//        mBinding.connectionRecycler.setLayoutManager(linearLayoutManager);
-//        mBinding.connectionRecycler.setAdapter(mAdapter);
-//    }
 
     @Override
     public void onUpdateConnection(String user) {
@@ -292,8 +277,6 @@ public class ConnectionListFragment extends BaseFragment implements ConnectionAd
             public void onResponse(Call<ConnectionResponse> call, retrofit2.Response<ConnectionResponse> response) {
                 dismissRefresh(mBinding.connectionSwiperefresh);
                 if (response.body().getResponse().equalsIgnoreCase("200")) {
-                    //connectionResponse = response.body();
-                    //mViewModel.insert(response.body().getConnection_list());
                     setSearchData(connectionResponse);
                 } else if (response.body().getResponse().equals("501")) {
                     resetSettingAndLogout();
@@ -315,14 +298,13 @@ public class ConnectionListFragment extends BaseFragment implements ConnectionAd
     private void setSearchData(ConnectionResponse connectionResponse) {
         if (connectionResponse != null && connectionResponse.getConnection_list().size() > 0) {
             filteredList.clear();
-            //mBinding.tvEmptySearch.setVisibility(View.GONE);
-            //mBinding.connectionRecycler.setVisibility(View.VISIBLE);
+            mBinding.tvEmptySearch.setVisibility(View.GONE);
+            mBinding.connectionRecycler.setVisibility(View.VISIBLE);
             mAdapter.updateList(connectionResponse.getConnection_list());
         } else {
-            //no search results found
             showToast("No Search Results Found.");
-            //mBinding.tvEmptySearch.setVisibility(View.VISIBLE);
-            //mBinding.connectionRecycler.setVisibility(View.GONE);
+            mBinding.tvEmptySearch.setVisibility(View.VISIBLE);
+            mBinding.connectionRecycler.setVisibility(View.GONE);
         }
     }
 }

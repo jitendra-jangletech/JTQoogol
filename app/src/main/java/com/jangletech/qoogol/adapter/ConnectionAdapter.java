@@ -75,6 +75,12 @@ public class ConnectionAdapter extends RecyclerView.Adapter<ConnectionAdapter.Vi
         this.filteredConnectionsList = connectionsList;
         this.call_from = call_from;
         this.listener = listener;
+        setHasStableIds(true);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return Long.parseLong(connectionsList.get(position).getCn_user_id_2());
     }
 
     @NonNull
@@ -215,7 +221,6 @@ public class ConnectionAdapter extends RecyclerView.Adapter<ConnectionAdapter.Vi
         }
 
         setAnimation(holder.connectionItemBinding.getRoot(), position);
-
     }
 
     private void setAnimation(View viewToAnimate, int position) {

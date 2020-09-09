@@ -56,7 +56,7 @@ import retrofit2.Response;
 public class PracticeTestActivity extends BaseActivity implements
         PracticeTestQuestPaletAdapter.QuestClickListener,
         SubmitTestDialog.SubmitDialogClickListener,
-        PractiseViewPagerAdapter.ViewPagerClickListener {
+        PractiseViewPagerAdapter.ViewPagerClickListener, ShareQuestionDialog.ShareDialogListener {
 
     private static final String TAG = "PracticeTestActivity";
     public static List<TestQuestionNew> questionsNewList = new ArrayList<>();
@@ -433,7 +433,7 @@ public class PracticeTestActivity extends BaseActivity implements
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             //finish();
-                            submitTestQuestions("P");
+                            submitTestQuestions("P","0");
                         }
                     })
                     .setNegativeButton("Cancel", null)
@@ -451,11 +451,12 @@ public class PracticeTestActivity extends BaseActivity implements
     }
 
     @Override
-    public void onYesClick() {
-        submitTestQuestions("C");
+    public void onYesClick(String obtainMarks) {
+        Log.d(TAG, "onYesClick: "+obtainMarks);
+        submitTestQuestions("C",obtainMarks);
     }
 
-    private void submitTestQuestions(String testStatus) {
+    private void submitTestQuestions(String testStatus,String obtainMarks) {
         SubmitTest submitTest = new SubmitTest();
         List<TestQuestionNew> submitTestQuestionList = new ArrayList<>();
         submitTest.setTm_id(startTestResponse.getTm_id());
@@ -469,7 +470,7 @@ public class PracticeTestActivity extends BaseActivity implements
 
         HashMap<String, String> params = new HashMap<>();
         params.put(Constant.tt_id, String.valueOf(startTestResponse.getTtId()));
-        params.put(Constant.tt_obtain_marks, "100");
+        params.put(Constant.tt_obtain_marks,obtainMarks);
         params.put(Constant.tt_status, testStatus);
         params.put(Constant.u_user_id, String.valueOf(new PreferenceManager(this).getInt(Constant.USER_ID)));
         params.put(Constant.DataList, json);
@@ -478,12 +479,17 @@ public class PracticeTestActivity extends BaseActivity implements
         ProgressDialog.getInstance().show(this);
         Call<VerifyResponse> call = apiService.submitTestQuestion(
                 params.get(Constant.DataList),
-                params.get(Constant.u_user_id));
+                params.get(Constant.u_user_id)
+        );
         call.enqueue(new Callback<VerifyResponse>() {
             @Override
             public void onResponse(Call<VerifyResponse> call, Response<VerifyResponse> response) {
                 ProgressDialog.getInstance().dismiss();
-                if (response.body() != null && response.body().getResponse().equals("200")) {
+                if (response.body() != null &&
+                        response.body().getResponse().equals("200")) {
+                    if (testStatus.equalsIgnoreCase("C")) {
+                        showToast("Test Submitted Successfully.");
+                    }
                     finish();
                 } else {
                     Log.e(TAG, "onResponse Error : " + response.body().getResponse());
@@ -541,13 +547,21 @@ public class PracticeTestActivity extends BaseActivity implements
 
     }
 
+    @Override
+    public void onCommentBack(int count) {
+        //TestQuestionNew testQuestionNew = questionsNewList.get(practiceViewPager.getCurrentItem());
+        //int prevCount = Integer.parseInt(testQuestionNew.getComments()) + count;
+        updatePageCount("COMMENT",count);
+    }
+
 
     @Override
     public void onShareClick() {
+        Log.d(TAG, "onShareClick: ");
         TestQuestionNew testQuestionNew = questionsNewList.get(practiceViewPager.getCurrentItem());
         String qId = String.valueOf(testQuestionNew.getTtqa_id());
         new ShareQuestionDialog(this, qId, AppUtils.getUserId()
-                , getDeviceId(), "Q")
+                , getDeviceId(), "Q", this)
                 .show();
     }
 
@@ -655,7 +669,7 @@ public class PracticeTestActivity extends BaseActivity implements
             public void onResponse(Call<VerifyResponse> call, Response<VerifyResponse> response) {
                 ProgressDialog.getInstance().dismiss();
                 if (response.body() != null && response.body().getResponse().equals("200")) {
-                    showToast("Question Marked.");
+                    //showToast("Question Marked.");
                 } else {
                     Log.e(TAG, "onResponse Error : " + response.body().getResponse());
                 }
@@ -738,5 +752,26 @@ public class PracticeTestActivity extends BaseActivity implements
         View view = practiceViewPager.findViewWithTag(pageSelectedPos);
         TextView tvLikeCount = view.findViewById(R.id.like_value);
         tvLikeCount.setText(String.valueOf(likeCount));
+    }
+
+    private void updatePageCount(String flag,int count) {
+        View view = practiceViewPager.findViewWithTag(pageSelectedPos);
+        if (flag.equalsIgnoreCase("COMMENT")) {
+            TextView tvCommentCount = view.findViewById(R.id.comment_value);
+            int prevCount = Integer.parseInt(tvCommentCount.getText().toString())+count;
+            tvCommentCount.setText(String.valueOf(prevCount));
+        } else {
+            TextView tvShareValue = view.findViewById(R.id.share_value);
+            int prevCount = Integer.parseInt(tvShareValue.getText().toString())+count;
+            tvShareValue.setText(String.valueOf(prevCount));
+        }
+    }
+
+
+    @Override
+    public void onSharedSuccess(int count) {
+        //TestQuestionNew testQuestionNew = questionsNewList.get(practiceViewPager.getCurrentItem());
+        //int prevCount = Integer.parseInt(testQuestionNew.getShares()) + count;
+        updatePageCount("SHARE",count);
     }
 }

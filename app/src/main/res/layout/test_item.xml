@@ -6,10 +6,10 @@
         android:id="@+id/testItemCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/_10sdp"
         android:background="@color/bg_recycler"
         android:clickable="true"
         app:cardElevation="@dimen/_10sdp"
-        app:cardUseCompatPadding="true"
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
@@ -69,8 +69,8 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    style="@style/font_style"
                     android:id="@+id/tvNegativeMarks"
+                    style="@style/font_style"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -91,8 +91,8 @@
                 android:weightSum="3">
 
                 <TextView
-                    style="@style/font_style"
                     android:id="@+id/tvQuestCount"
+                    style="@style/font_style"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -101,8 +101,8 @@
                     android:textColor="@color/colorBlack" />
 
                 <TextView
-                    style="@style/font_style"
                     android:id="@+id/tvDuration"
+                    style="@style/font_style"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -111,8 +111,8 @@
                     android:textColor="@color/colorBlack" />
 
                 <TextView
-                    style="@style/font_style"
                     android:id="@+id/tvTotalMarks"
+                    style="@style/font_style"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -178,8 +178,8 @@
                 android:weightSum="3">
 
                 <TextView
-                    style="@style/font_style"
                     android:id="@+id/tvDifficultyLevel"
+                    style="@style/font_style"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -189,8 +189,8 @@
 
 
                 <TextView
-                    style="@style/font_style"
                     android:id="@+id/tvRanking"
+                    style="@style/font_style"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -199,8 +199,8 @@
                     android:textColor="@color/colorBlack" />
 
                 <TextView
-                    style="@style/font_style"
                     android:id="@+id/tvAttendedBy"
+                    style="@style/font_style"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -264,8 +264,8 @@
                 android:weightSum="3">
 
                 <TextView
-                    style="@style/font_style"
                     android:id="@+id/tvPublishedDate"
+                    style="@style/font_style"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -275,8 +275,8 @@
 
 
                 <TextView
-                    style="@style/font_style"
                     android:id="@+id/tvAuthorName"
+                    style="@style/font_style"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -285,8 +285,8 @@
                     android:textColor="@color/colorBlack" />
 
                 <TextView
-                    style="@style/font_style"
                     android:id="@+id/tvCategory"
+                    style="@style/font_style"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -334,13 +334,13 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        style="@style/font_style"
                         android:id="@+id/ratingvalue"
+                        style="@style/font_style"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/_5sdp"
-                        android:text="0"
                         android:padding="@dimen/_5sdp"
+                        android:text="0"
                         android:textAlignment="textStart"
                         android:textColor="@color/colorLightGray"
                         app:layout_constraintBottom_toBottomOf="@+id/que_rating"
@@ -382,13 +382,13 @@
                                             app:layout_constraintTop_toTopOf="parent" />-->
 
                     <TextView
-                        style="@style/font_style"
                         android:id="@+id/like_value"
+                        style="@style/font_style"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/_5sdp"
-                        android:text="0"
                         android:padding="@dimen/_5sdp"
+                        android:text="0"
                         android:textAlignment="textStart"
                         android:textColor="@color/colorBlack"
                         app:layout_constraintBottom_toBottomOf="@+id/like"
@@ -417,12 +417,12 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:padding="@dimen/_5sdp"
-                        style="@style/font_style"
                         android:id="@+id/comment_value"
+                        style="@style/font_style"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_5sdp"
+                        android:padding="@dimen/_5sdp"
                         android:text="0"
                         android:textAlignment="textStart"
                         android:textColor="@color/colorBlack"
@@ -452,12 +452,12 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:padding="@dimen/_5sdp"
-                        style="@style/font_style"
                         android:id="@+id/share_value"
+                        style="@style/font_style"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/_5sdp"
+                        android:padding="@dimen/_5sdp"
                         android:text="0"
                         android:textAlignment="textStart"
                         android:textColor="@color/colorBlack"
@@ -521,9 +521,8 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    style="@style/font_style"
-                    android:visibility="visible"
                     android:id="@+id/tvNoOfAttempts"
+                    style="@style/font_style"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/_35sdp"
                     android:layout_gravity="center_vertical"
@@ -532,6 +531,7 @@
                     android:padding="@dimen/_5sdp"
                     android:text="Attempts 0"
                     android:textColor="@color/colorSkyBlue"
+                    android:visibility="visible"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
