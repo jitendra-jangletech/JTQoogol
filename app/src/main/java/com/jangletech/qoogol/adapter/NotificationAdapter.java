@@ -34,8 +34,13 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         this.mContext = context;
         this.notifications = notifications;
         this.onItemClickListener = onItemClickListener;
+        setHasStableIds(true);
     }
 
+    @Override
+    public long getItemId(int position) {
+        return Long.parseLong(notifications.get(position).getN_id());
+    }
 
     @NonNull
     @Override
@@ -87,7 +92,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
     private void setAnimation(View viewToAnimate, int position) {
         if (position > lastPosition) {
-            Animation animation = AnimationUtils.loadAnimation(mContext,R.anim.fall_down);
+            Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.fall_down);
             viewToAnimate.startAnimation(animation);
             lastPosition = position;
         }

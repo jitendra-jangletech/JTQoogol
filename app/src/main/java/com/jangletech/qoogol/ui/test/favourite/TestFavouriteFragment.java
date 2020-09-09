@@ -24,6 +24,7 @@ import com.jangletech.qoogol.databinding.TestFavouriteFragmentBinding;
 import com.jangletech.qoogol.dialog.CommentDialog;
 import com.jangletech.qoogol.dialog.LikeListingDialog;
 import com.jangletech.qoogol.dialog.PublicProfileDialog;
+import com.jangletech.qoogol.dialog.ShareQuestionDialog;
 import com.jangletech.qoogol.model.TestListResponse;
 import com.jangletech.qoogol.model.TestModelNew;
 import com.jangletech.qoogol.retrofit.ApiClient;
@@ -31,22 +32,20 @@ import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.ui.test.my_test.MyTestViewModel;
 import com.jangletech.qoogol.util.Constant;
-
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.jangletech.qoogol.util.Constant.test;
-
-public class TestFavouriteFragment extends BaseFragment implements TestListAdapter.TestClickListener, CommentDialog.CommentClickListener, PublicProfileDialog.PublicProfileClickListener, LikeListingDialog.onItemClickListener {
+public class TestFavouriteFragment extends BaseFragment implements TestListAdapter.TestClickListener, CommentDialog.CommentClickListener, PublicProfileDialog.PublicProfileClickListener, LikeListingDialog.onItemClickListener, ShareQuestionDialog.ShareDialogListener {
 
     private static final String TAG = "TestFavouriteFragment";
     private MyTestViewModel mViewModel;
     private TestFavouriteFragmentBinding mBinding;
     private List<TestModelNew> testModelNewList;
     private TestListAdapter testListAdapter;
+    private int selectedPos = -1;
+    private TestModelNew selectedTestCard;
     private boolean isFragmentVisible = false;
     private ApiInterface apiService = ApiClient.getInstance().getApi();
 
@@ -83,6 +82,7 @@ public class TestFavouriteFragment extends BaseFragment implements TestListAdapt
             isFragmentVisible = true;
             fetchTestList();
         }
+
         mViewModel.getAllTestList().observe(getActivity(), new Observer<List<TestModelNew>>() {
             @Override
             public void onChanged(@Nullable final List<TestModelNew> favTests) {
@@ -104,6 +104,7 @@ public class TestFavouriteFragment extends BaseFragment implements TestListAdapt
         Call<TestListResponse> call = apiService.fetchTestList(
                 getUserId(getActivity()),
                 "FV",
+                "",
                 "",
                 "",
                 "",
@@ -160,24 +161,6 @@ public class TestFavouriteFragment extends BaseFragment implements TestListAdapt
         startActivity(intent);
     }
 
-    @Override
-    public void onCommentClick(TestModelNew testModel) {
-//        Bundle bundle = new Bundle();
-//        bundle.putInt("tmId", testModel.getTm_id());
-//        bundle.putString(Constant.CALL_FROM, Module.Test.toString());
-        //NavHostFragment.findNavController(this).navigate(R.id.nav_comments, bundle);
-        Log.d(TAG, "onCommentClick TmId : " + testModel.getTm_id());
-        CommentDialog commentDialog = new CommentDialog(getActivity(), testModel.getTm_id(), true, this);
-        commentDialog.show();
-    }
-
-    @Override
-    public void onShareClick(int testid) {
-        Bundle bundle = new Bundle();
-        bundle.putString("testId", String.valueOf(testid));
-        bundle.putInt("call_from", test);
-        NavHostFragment.findNavController(this).navigate(R.id.nav_share, bundle);
-    }
 
     @Override
     public void onLikeCountClick(TestModelNew testModel) {
@@ -189,7 +172,6 @@ public class TestFavouriteFragment extends BaseFragment implements TestListAdapt
     public void favClick(TestModelNew testModelNew) {
         Log.d(TAG, "favClick Value : " + testModelNew.isFavourite());
         mViewModel.updateFav("PRACTICE", getUserId(getActivity()), testModelNew.getTm_id(), testModelNew.isFavourite());
-        //fetchTestList();
     }
 
 
@@ -212,6 +194,7 @@ public class TestFavouriteFragment extends BaseFragment implements TestListAdapt
         publicProfileDialog.show();
     }
 
+
     @Override
     public void onFriendUnFriendClick() {
 
@@ -232,4 +215,39 @@ public class TestFavouriteFragment extends BaseFragment implements TestListAdapt
         PublicProfileDialog publicProfileDialog = new PublicProfileDialog(getActivity(), user_id, this);
         publicProfileDialog.show();
     }
+
+    @Override
+    public void onBackClick(int count) {
+        Log.d(TAG, "onBackClick Comment Count : " + count);
+        int commentCount = Integer.parseInt(selectedTestCard.getCommentsCount())+count;
+        selectedTestCard.setCommentsCount("" + commentCount);
+        testListAdapter.notifyItemChanged(selectedPos, selectedTestCard);
+    }
+
+    @Override
+    public void onCommentClick(TestModelNew testModel, int pos) {
+        Log.d(TAG, "onCommentClick TmId : " + testModel.getTm_id());
+        selectedPos = pos;
+        selectedTestCard = testModel;
+        CommentDialog commentDialog = new CommentDialog(getActivity(), testModel.getTm_id(), true, this);
+        commentDialog.show();
+    }
+
+    @Override
+    public void onShareClick(TestModelNew testModelNew, int pos) {
+        selectedPos = pos;
+        selectedTestCard = testModelNew;
+        new ShareQuestionDialog(getActivity(), String.valueOf(testModelNew.getTm_id()), getUserId(getActivity())
+                , getDeviceId(getActivity()), "T", this)
+                .show();
+    }
+
+    @Override
+    public void onSharedSuccess(int count) {
+        Log.d(TAG, "onSharedSuccess Count : " + count);
+        int shareCount = Integer.parseInt(selectedTestCard.getShareCount());
+        selectedTestCard.setShareCount("" + (shareCount + count));
+        testListAdapter.notifyItemChanged(selectedPos, selectedTestCard);
+    }
+
 }

@@ -67,7 +67,7 @@ public class NotificationHelper {
             String channelId = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ? createNotificationChannel(notificationManager) : "";
             NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, channelId);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                notificationBuilder.setSmallIcon(R.drawable.ic_star);
+                notificationBuilder.setSmallIcon(R.drawable.logo);
                 notificationBuilder.setColor(context.getResources().getColor(R.color.colorPrimary));
             } else {
                 notificationBuilder.setSmallIcon(R.mipmap.ic_launcher);

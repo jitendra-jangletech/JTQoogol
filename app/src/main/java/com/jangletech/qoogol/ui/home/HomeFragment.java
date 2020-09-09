@@ -24,6 +24,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager.widget.ViewPager;
 
 import com.github.mikephil.charting.data.BarDataSet;
@@ -68,7 +69,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
     private static final String TAG = "HomeFragment";
     private ApiInterface apiService = ApiClient.getInstance().getApi();
 
-
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         mViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
@@ -81,9 +81,17 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if (TinyDB.getInstance(getActivity()).getBoolean(Constant.IS_EDUCATION_ADDED)) {
+        Log.d(TAG, "onActivityCreated IS_EDUCATION_ADDED : " + TinyDB.getInstance(getActivity()).getBoolean(Constant.IS_EDUCATION_ADDED));
+        if (!TinyDB.getInstance(getActivity()).getBoolean(Constant.IS_EDUCATION_ADDED)) {
             getEducationInfoList();
         }
+
+        mBinding.swipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                fetchDashboardDetails();
+            }
+        });
     }
 
     private void setupViewPager(ViewPager viewPager, DashBoard dashBoard) {
@@ -125,7 +133,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
         mBinding.followersLayout.setOnClickListener(this);
         mBinding.followingLayout.setOnClickListener(this);
         mBinding.connectionLayout.setOnClickListener(this);
-        //mBinding.pieChart.setOnChartValueSelectedListener(this);
         fetchDashboardDetails();
         mViewModel.getDashboardDetails(getUserId(getActivity())).observe(getViewLifecycleOwner(), new Observer<DashBoard>() {
             @Override
@@ -137,7 +144,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
             }
         });
     }
-
 
     private void setDashBoardData(DashBoard dashBoard) {
         Log.d(TAG, "setDashBoardData Followers Data : " + dashBoard.getFollowers());
@@ -188,15 +194,13 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
             mBinding.swipeToRefresh.setRefreshing(true);
             Call<DashBoard> call = apiService.fetchDashBoardDetails(
                     params.get(Constant.u_user_id),
-                    params.get(Constant.device_id)
-            );
+                    params.get(Constant.device_id));
+
             Activity activity = getActivity();
             call.enqueue(new Callback<DashBoard>() {
                 @Override
                 public void onResponse(Call<DashBoard> call, Response<DashBoard> response) {
-                    //ProgressDialog.getInstance().dismiss();
                     mBinding.swipeToRefresh.setRefreshing(false);
-                    //Log.d(TAG, "onResponse Done: " + response.body().getResponse());
                     if (response.body() != null) {
                         DashBoard dashBoard = response.body();
                         dashBoard.setUserId(getUserId(activity));
@@ -213,6 +217,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
             });
         } catch (Exception e) {
             e.printStackTrace();
+            mBinding.swipeToRefresh.setRefreshing(false);
         }
     }
 
@@ -240,19 +245,16 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
         NavHostFragment.findNavController(this).navigate(R.id.nav_connections, bundle);
     }
 
-    private void showEducationDialog(Education education) {
-        AddEduDialog addEduDialog = new AddEduDialog(getActivity(), education, true, this);
+    private void showAddEducationDialog(Education education) {
+        AddEduDialog addEduDialog = new AddEduDialog(getActivity(), education, true, this, 0);
         addEduDialog.show();
     }
 
     private void getEducationInfoList() {
-        //ProgressDialog.getInstance().show(getActivity());
         Call<FetchEducationResponse> call = apiService.fetchUserEdu(AppUtils.getUserId(), "L", getDeviceId(getActivity()), Constant.APP_NAME);
-
         call.enqueue(new Callback<FetchEducationResponse>() {
             @Override
             public void onResponse(Call<FetchEducationResponse> call, Response<FetchEducationResponse> response) {
-                //ProgressDialog.getInstance().dismiss();
                 if (response.body() != null && response.body().getResponseCode().equals("200")) {
                     if (response.body().getEducationList().size() == 0) {
                         androidx.appcompat.app.AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogStyle);
@@ -262,10 +264,13 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
                                 .setPositiveButton("Proceed To Add Education", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        showEducationDialog(null);
+                                        showAddEducationDialog(null);
                                     }
                                 })
                                 .setCancelable(false).show();
+                    } else {
+                        //education list is not empty set flag
+                        TinyDB.getInstance(getActivity()).putBoolean(Constant.IS_EDUCATION_ADDED, true);
                     }
                 } else {
                     showErrorDialog(getActivity(), response.body().getResponseCode(), "");
@@ -290,9 +295,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setHasOptionsMenu(true);
-        //String timeAgo = DateUtils.getTimeAgo("");
-        //Log.d(TAG, "Time Ago : "+timeAgo);
     }
 
     @Override
@@ -333,7 +335,12 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
     @Override
     public void onSuccess() {
         //Successfully Added new Education
-        TinyDB.getInstance(getActivity()).putBoolean(Constant.IS_EDUCATION_ADDED, false);
+        TinyDB.getInstance(getActivity()).putBoolean(Constant.IS_EDUCATION_ADDED, true);
+    }
+
+    @Override
+    public void onDialogEduDelete(Education education, int pos) {
+
     }
 
     public static class Adapter extends FragmentPagerAdapter {

@@ -109,21 +109,18 @@ public class EducationInfoFragment extends BaseFragment implements EducationAdap
             Log.d(TAG, "onChanged Education List Size : " + educations.size());
             if (educations != null) {
                 educationList = educations;
-                if (userid.equalsIgnoreCase(mSettings.getUserId()))
-                    setEducationListAdapter(educations, fetch_loged_in_user);
-                else
-                    setEducationListAdapter(educations, fetch_other_user);
-            }
-        });
-
-        /*mViewModel.getDeleteResponse().observe(getViewLifecycleOwner(), new Observer<VerifyResponse>() {
-            @Override
-            public void onChanged(VerifyResponse verifyResponse) {
-                if(verifyResponse!=null){
-                    //todo delete edu from list
+                if (educations.size() > 0) {
+                    mBinding.emptytv.setVisibility(View.GONE);
+                    if (userid.equalsIgnoreCase(mSettings.getUserId()))
+                        setEducationListAdapter(educations, fetch_loged_in_user);
+                    else
+                        setEducationListAdapter(educations, fetch_other_user);
+                } else {
+                    mBinding.emptytv.setText("No Education Added.");
+                    mBinding.emptytv.setVisibility(View.VISIBLE);
                 }
             }
-        });*/
+        });
     }
 
     private void setEducationListAdapter(List<Education> educationList, int call_from) {
@@ -146,7 +143,6 @@ public class EducationInfoFragment extends BaseFragment implements EducationAdap
             public void onResponse(Call<VerifyResponse> call, Response<VerifyResponse> response) {
                 ProgressDialog.getInstance().dismiss();
                 if (response.body() != null && response.body().getResponse().equals("200")) {
-                    //mViewModel.setDeleteResponse(response.body());
                     mViewModel.delete(params.get(Constant.ue_id));
                     educationAdapter.deleteEducation(pos);
                 } else if (response.body().getResponse().equals("501")) {
@@ -177,10 +173,12 @@ public class EducationInfoFragment extends BaseFragment implements EducationAdap
             @Override
             public void onResponse(Call<FetchEducationResponse> call, Response<FetchEducationResponse> response) {
                 ProgressDialog.getInstance().dismiss();
-                if (response.body() != null && response.body().getResponseCode().equals("200")) {
-                    //mViewModel.delete();
+                if (response.body() != null &&
+                        response.body().getResponseCode().equals("200")) {
+                    Log.d(TAG, "onResponse List : " + response.body().getEducationList());
+                    mBinding.emptytv.setText("No Education Added.");
+                    mBinding.emptytv.setVisibility(View.VISIBLE);
                     mViewModel.insert(response.body().getEducationList());
-                    //mViewModel.setEducationList(response.body().getEducationList());
                 } else {
                     showErrorDialog(requireActivity(), response.body().getResponseCode(), "");
                 }
@@ -195,8 +193,9 @@ public class EducationInfoFragment extends BaseFragment implements EducationAdap
         });
     }
 
-    private void showEducationDialog(Education education) {
-        AddEduDialog addEduDialog = new AddEduDialog(getActivity(), education, false, this);
+    private void showEducationDialog(Education education, int pos) {
+        AddEduDialog addEduDialog = new AddEduDialog(getActivity(), education, false,
+                this, pos);
         addEduDialog.show();
     }
 
@@ -211,14 +210,14 @@ public class EducationInfoFragment extends BaseFragment implements EducationAdap
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.addedu:
-                showEducationDialog(null);
+                showEducationDialog(null, 0);
                 break;
         }
     }
 
     @Override
-    public void onItemClick(Education education) {
-        showEducationDialog(education);
+    public void onItemClick(Education education, int pos) {
+        showEducationDialog(education, pos);
     }
 
     @Override
@@ -242,6 +241,15 @@ public class EducationInfoFragment extends BaseFragment implements EducationAdap
     @Override
     public void onSuccess() {
         fetchEducationDetails(fetch_loged_in_user);
+    }
+
+    @Override
+    public void onDialogEduDelete(Education education, int pos) {
+        HashMap<String, String> params = new HashMap<>();
+        params.put(Constant.u_user_id, getUserId(getActivity()));
+        params.put(Constant.ue_id, education.getUe_id());
+        params.put(Constant.CASE, "D");
+        deleteEdu(params, pos);
     }
 
     @Override

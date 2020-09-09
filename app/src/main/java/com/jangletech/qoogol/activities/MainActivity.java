@@ -347,17 +347,17 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        mBinding.tvNavHome.setOnClickListener(v -> {
-            mBinding.drawerLayout.closeDrawers();
-            if (navController.getCurrentDestination().getId() != R.id.nav_home) {
-                navigateFlag = Nav.HOME.toString();
-            }
-        });
-
         mBinding.navFav.setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawer(Gravity.LEFT);
             if (navController.getCurrentDestination().getId() != R.id.nav_fav) {
                 navigateFlag = Nav.FAVOURITE.toString();
+            }
+        });
+
+        mBinding.navProfile.setOnClickListener(v -> {
+            mBinding.drawerLayout.closeDrawer(Gravity.LEFT);
+            if (navController.getCurrentDestination().getId() != R.id.nav_edit_profile) {
+                navigateFlag = Nav.USER_PROFILE.toString();
             }
         });
 
@@ -556,7 +556,8 @@ public class MainActivity extends BaseActivity {
                         navToFragment(R.id.nav_test_my, bundle);
                     } else if (action != null && action.equalsIgnoreCase("Q")) {
                         navToFragment(R.id.nav_learning, bundle);
-                    } else if (action != null && action.equalsIgnoreCase("CF")) {
+                    } else if (action != null && action.equalsIgnoreCase("CF") ||
+                            action.equalsIgnoreCase("CC")) {
                         navToFragment(R.id.nav_requests, bundle);
                     } else if (action != null && action.equalsIgnoreCase("CAF") ||
                             action.equalsIgnoreCase("CA")) {

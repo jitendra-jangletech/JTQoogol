@@ -27,13 +27,13 @@
                         android:id="@+id/result_tabs"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:tabTextAppearance="@style/CustomTextAppearanceTab"
                         android:background="@color/colorPrimary"
+                        app:tabGravity="fill"
                         app:tabIndicatorColor="@color/white"
                         app:tabMaxWidth="0dp"
-                        app:tabGravity="fill"
                         app:tabMode="scrollable"
                         app:tabSelectedTextColor="@color/colorWhite"
+                        app:tabTextAppearance="@style/CustomTextAppearanceTab"
                         app:tabTextColor="@color/grey" />
                 </com.google.android.material.appbar.AppBarLayout>
 

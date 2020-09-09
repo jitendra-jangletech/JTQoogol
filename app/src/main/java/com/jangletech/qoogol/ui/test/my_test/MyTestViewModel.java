@@ -2,12 +2,10 @@ package com.jangletech.qoogol.ui.test.my_test;
 
 import android.app.Application;
 import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-
 import com.jangletech.qoogol.database.repo.AppRepository;
 import com.jangletech.qoogol.model.Chapter;
 import com.jangletech.qoogol.model.ClassResponse;
@@ -145,16 +143,4 @@ public class MyTestViewModel extends AndroidViewModel {
         Log.d(TAG, "getAllTests Avg Rating : " + avgRating);
         return appRepository.getAllTestsAvgRating(flag, userId, avgRating);
     }
-
-    /*public void insertAttemptedTest(List<AttemptedTest> attemptedTests) {
-        appRepository.insertAttemptedTest(attemptedTests);
-    }
-
-    public void deleteAttemptedTest() {
-        appRepository.deleteAttemptedTest();
-    }
-
-    public LiveData<List<AttemptedTest>> getAllAttemptedTests() {
-        return appRepository.getAllAttemptedTests();
-    }*/
 }

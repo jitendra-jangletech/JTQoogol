@@ -1,12 +1,19 @@
 package com.jangletech.qoogol.activities;
 
 import android.content.Intent;
+import android.content.IntentSender;
 import android.os.Bundle;
 import android.util.Log;
 
+import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.play.core.appupdate.AppUpdateInfo;
+import com.google.android.play.core.appupdate.AppUpdateManager;
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
+import com.google.android.play.core.install.model.AppUpdateType;
+import com.google.android.play.core.install.model.UpdateAvailability;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.model.AppConfigResponse;
 import com.jangletech.qoogol.retrofit.ApiClient;
@@ -28,6 +35,7 @@ public class SplashActivity extends BaseActivity {
     private static final String TAG = "SplashActivity";
     private ApiInterface apiService = ApiClient.getInstance().getApi();
     private SplashViewModel mViewModel;
+    private static final int MY_REQUEST_CODE = 2020;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,16 +73,9 @@ public class SplashActivity extends BaseActivity {
                 }
             }
         });
-        /*new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                performAutoLogin();
-            }
-        }, 1000);*/
     }
 
     private void fetchAppConfig() {
-        //ProgressDialog.getInstance().show(this);
         Call<AppConfigResponse> call = apiService.fetchAppConfig(Constant.APP_NAME, AppUtils.getDeviceId());
         call.enqueue(new Callback<AppConfigResponse>() {
             @Override
@@ -108,5 +109,43 @@ public class SplashActivity extends BaseActivity {
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(i);
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == 2020) {
+            Log.d(TAG, "onActivityResult: " + resultCode);
+            forceAppUpdate();
+        }
+    }
+
+    private void forceAppUpdate() {
+        // Creates instance of the manager.
+        AppUpdateManager appUpdateManager = AppUpdateManagerFactory.create(SplashActivity.this);
+        // Returns an intent object that you use to check for an update.
+        com.google.android.play.core.tasks.Task<AppUpdateInfo> appUpdateInfoTask = appUpdateManager.getAppUpdateInfo();
+        // Checks that the platform will allow the specified type of update.
+        appUpdateInfoTask.addOnSuccessListener(appUpdateInfo -> {
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
+                try {
+                    appUpdateManager.startUpdateFlowForResult(
+                            appUpdateInfo,
+                            AppUpdateType.IMMEDIATE,
+                            this,
+                            MY_REQUEST_CODE
+                    );
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE &&
+                    appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
+                try {
+                    appUpdateManager.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.IMMEDIATE, this, MY_REQUEST_CODE);
+                } catch (IntentSender.SendIntentException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 }

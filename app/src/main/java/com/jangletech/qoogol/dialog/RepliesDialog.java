@@ -3,8 +3,10 @@ package com.jangletech.qoogol.dialog;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -51,15 +53,21 @@ public class RepliesDialog extends Dialog implements CommentAdapter.onCommentIte
     private CommentAdapter mAdapter;
     private String commentId = "";
     private List<Comments> commentList;
+    private ReplyClickListener replyClickListener;
+    private int replyCount = 0;
     private ApiInterface apiService = ApiClient.getInstance().getApi();
 
-    public RepliesDialog(@NonNull Context mContext, Activity activity, Comments comments, int id, boolean isCallFromTest) {
+    public RepliesDialog(@NonNull Context mContext, Activity activity,
+                         Comments comments, int id, boolean isCallFromTest,
+                         ReplyClickListener replyClickListener) {
         super(mContext, android.R.style.Theme_DeviceDefault_Light_DarkActionBar);
         this.mContext = mContext;
         this.activity = activity;
         this.comments = comments;
         this.id = id;
         this.isCallFromTest = isCallFromTest;
+        this.replyClickListener = replyClickListener;
+        replyCount = 0;
     }
 
     @Override
@@ -85,10 +93,6 @@ public class RepliesDialog extends Dialog implements CommentAdapter.onCommentIte
         mBinding.commentRecycler.setLayoutManager(new LinearLayoutManager(mContext));
         mBinding.commentRecycler.setAdapter(mAdapter);
 
-//        mBinding.tvSenderName.setText(
-//                AESSecurities.getInstance().decrypt(TinyDB.getInstance(activity).getString(Constant.cf_key1),comments.getUserFirstName() + " "
-//                        + AESSecurities.getInstance().decrypt(TinyDB.getInstance(activity).getString(Constant.cf_key2),comments.getUserLastName())));
-
         mBinding.tvSenderName.setText(comments.getUserFirstName() + " " + comments.getUserLastName());
 
         Glide.with(mContext)
@@ -97,6 +101,7 @@ public class RepliesDialog extends Dialog implements CommentAdapter.onCommentIte
                 .into(mBinding.profilePic);
 
         mBinding.btnClose.setOnClickListener(v -> {
+            replyClickListener.onReplyBackClick(replyCount);
             dismiss();
         });
 
@@ -106,7 +111,11 @@ public class RepliesDialog extends Dialog implements CommentAdapter.onCommentIte
                 return;
             }
             Log.d(TAG, "Replied To Id : " + comments.getCommentId());
-            likeReplyComment("I", comments.getTlc_id(), AppUtils.encodedString(mBinding.etComment.getText().toString().trim()));
+            if (isCallFromTest)
+                likeReplyComment("I", comments.getTlc_id(), AppUtils.encodedString(mBinding.etComment.getText().toString().trim()));
+            else
+                likeReplyComment("I", comments.getCommentId(), AppUtils.encodedString(mBinding.etComment.getText().toString().trim()));
+
         });
     }
 
@@ -155,7 +164,7 @@ public class RepliesDialog extends Dialog implements CommentAdapter.onCommentIte
                     commentId
             );
         else
-            call = apiService.deleteTestComment(
+            call = apiService.deleteQuestComment(
                     AppUtils.getUserId(),
                     id,
                     "D",
@@ -170,8 +179,9 @@ public class RepliesDialog extends Dialog implements CommentAdapter.onCommentIte
 
                 if (response.body() != null &&
                         response.body().getResponse().equals("200")) {
-                    //remove deleted item from recyclerview
                     mAdapter.deleteComment(pos);
+                    replyCount--;
+                    CommentDialog.addCommentCount--;
                 } else {
                     AppUtils.showToast(mContext, response.body().getResponse());
                 }
@@ -246,6 +256,8 @@ public class RepliesDialog extends Dialog implements CommentAdapter.onCommentIte
                     if (strCase.equalsIgnoreCase("L")) {
                         setCommentAdapter();
                     } else {
+                        replyCount++;
+                        CommentDialog.addCommentCount++;
                         if (isCallFromTest)
                             likeReplyComment("L", comments.getTlc_id(), "");
                         else
@@ -268,5 +280,15 @@ public class RepliesDialog extends Dialog implements CommentAdapter.onCommentIte
                 t.printStackTrace();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        replyClickListener.onReplyBackClick(replyCount);
+        dismiss();
+    }
+
+    public interface ReplyClickListener {
+        void onReplyBackClick(int count);
     }
 }

@@ -15,7 +15,6 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.jangletech.qoogol.R;
-import com.jangletech.qoogol.databinding.AddEducationBinding;
 import com.jangletech.qoogol.databinding.FragmentEditProfileBinding;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
@@ -37,7 +36,6 @@ import static com.jangletech.qoogol.util.Constant.profile;
 public class EditProfileFragment extends Fragment {
 
     private FragmentEditProfileBinding fragmentEditProfileBinding;
-    private AddEducationBinding addEducationBinding;
     private ApiInterface apiService = ApiClient.getInstance().getApi();
     private static final String TAG = "EditProfileFragment";
     private PreferenceManager mSettings;

@@ -2,8 +2,10 @@ package com.jangletech.qoogol.dialog;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -21,7 +23,6 @@ import com.jangletech.qoogol.model.Comments;
 import com.jangletech.qoogol.model.ProcessQuestion;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
-import com.jangletech.qoogol.ui.learning.CommentViewModel;
 import com.jangletech.qoogol.util.AESSecurities;
 import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
@@ -35,18 +36,22 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CommentDialog extends Dialog implements CommentAdapter.onCommentItemClickListener {
+public class CommentDialog extends Dialog implements
+        CommentAdapter.onCommentItemClickListener,
+        RepliesDialog.ReplyClickListener {
 
     private static final String TAG = "CommentDialog";
     private CommentDialogBinding mBinding;
     private Activity mContext;
     private List<Comments> commentList;
     private CommentAdapter commentAdapter;
-    private CommentViewModel mViewModel;
     private int id;
     private int itemPosition;
+    public static int addCommentCount = 0;
     private Call<ProcessQuestion> call;
     private boolean isCallFromTest;
+    private int selectedPos = -1;
+    private Comments selectedComment;
     private CommentClickListener commentClickListener;
     private ApiInterface apiService = ApiClient.getInstance().getApi();
 
@@ -57,6 +62,7 @@ public class CommentDialog extends Dialog implements CommentAdapter.onCommentIte
         this.id = id;
         this.isCallFromTest = isCallFromTest;
         this.commentClickListener = commentClickListener;
+        addCommentCount = 0;
     }
 
 
@@ -70,10 +76,24 @@ public class CommentDialog extends Dialog implements CommentAdapter.onCommentIte
         commentList = new ArrayList<>();
         setCommentAdapter();
         fetchCommentsAPI(Integer.parseInt(AppUtils.getUserId()),
-                id, "L", "");
+                id, "L", "", "", "", "");
 
         mBinding.btnClose.setOnClickListener(v -> {
+            commentClickListener.onBackClick(addCommentCount);
             dismiss();
+        });
+
+        setOnKeyListener(new Dialog.OnKeyListener() {
+            @Override
+            public boolean onKey(DialogInterface arg0, int keyCode,
+                                 KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK) {
+                    Log.d(TAG, "onKey Executed : ");
+                    commentClickListener.onBackClick(addCommentCount);
+                    dismiss();
+                }
+                return true;
+            }
         });
 
         mBinding.btnSend.setOnClickListener(v -> {
@@ -82,19 +102,17 @@ public class CommentDialog extends Dialog implements CommentAdapter.onCommentIte
                 return;
             }
             fetchCommentsAPI(Integer.parseInt(AppUtils.getUserId()),
-                    id, "I", mBinding.etComment.getText().toString());
+                    id, "I", mBinding.etComment.getText().toString(), "", "", "");
         });
     }
 
-    private void fetchCommentsAPI(int user_id, int que_id, String api_case, String comment_text) {
+    private void fetchCommentsAPI(int user_id, int que_id, String api_case, String comment_text,
+                                  String commentFlag, String likeFlag, String replyId) {
         ProgressDialog.getInstance().show(mContext);
         mBinding.emptytv.setText("Fetching Comments...");
         mBinding.emptytv.setVisibility(View.VISIBLE);
         Log.d(TAG, "fetchCommentsAPI userId : " + user_id);
         Log.d(TAG, "fetchCommentsAPI Case : " + api_case);
-
-        //String encoded = Base64.encodeToString(comment_text.getBytes(StandardCharsets.UTF_8), Base64.DEFAULT);
-        //String encodedComment = StringUtils.stripAccents(encoded);
 
         try {
             if (isCallFromTest) {
@@ -106,7 +124,7 @@ public class CommentDialog extends Dialog implements CommentAdapter.onCommentIte
                 if (api_case.equalsIgnoreCase("L"))
                     call = apiService.fetchComments(user_id, que_id, api_case, 1);
                 else
-                    call = apiService.addCommentApi(String.valueOf(user_id), que_id, "I", AppUtils.encodedString(comment_text));
+                    call = apiService.addQuestCommentApi(user_id, que_id, "I", AppUtils.encodedString(comment_text), "1");
             }
 
             call.enqueue(new Callback<ProcessQuestion>() {
@@ -118,10 +136,13 @@ public class CommentDialog extends Dialog implements CommentAdapter.onCommentIte
                         commentList.clear();
                         if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
                             List<Comments> newCommentList = response.body().getCommentList();
-                            for (Comments comments : newCommentList){
+                            for (Comments comments : newCommentList) {
                                 comments.setUserFirstName(AESSecurities.getInstance().decrypt(TinyDB.getInstance(mContext).getString(Constant.cf_key1), comments.getUserFirstName()));
                                 comments.setUserLastName(AESSecurities.getInstance().decrypt(TinyDB.getInstance(mContext).getString(Constant.cf_key2), comments.getUserLastName()));
                                 commentList.add(comments);
+                            }
+                            if (api_case.equalsIgnoreCase("I")) {
+                                addCommentCount++;
                             }
                             emptyView();
                         } else {
@@ -172,8 +193,26 @@ public class CommentDialog extends Dialog implements CommentAdapter.onCommentIte
         }
     }
 
+    @Override
+    public void onReplyBackClick(int count) {
+        if (selectedComment != null) {
+            if (isCallFromTest) {
+                int prevCount = selectedComment.getReplyCommentCount() + count;
+                selectedComment.setReplyCommentCount(prevCount);
+                commentAdapter.notifyItemChanged(selectedPos, selectedComment);
+            } else {
+                //Question case
+                int prevCount = selectedComment.getQuestCommentCount() + count;
+                selectedComment.setQuestCommentCount(prevCount);
+                commentAdapter.notifyItemChanged(selectedPos, selectedComment);
+            }
+        }
+    }
+
     public interface CommentClickListener {
         void onCommentClick(String userId);
+
+        void onBackClick(int count);
     }
 
     @Override
@@ -183,7 +222,6 @@ public class CommentDialog extends Dialog implements CommentAdapter.onCommentIte
 
     @Override
     public void onCommentDelete(int pos, Comments comments) {
-        //AppUtils.showToast(mContext, "Delete " + pos);
         if (isCallFromTest)
             deleteComment(comments.getTlc_id(), pos);
         else
@@ -193,26 +231,26 @@ public class CommentDialog extends Dialog implements CommentAdapter.onCommentIte
     @Override
     public void onCommentsClick(int pos, Comments comments) {
         itemPosition = pos;
-        new RepliesDialog(mContext, mContext, comments, id, isCallFromTest).show();
+        selectedPos = pos;
+        selectedComment = comments;
+        new RepliesDialog(mContext, mContext, comments, id, isCallFromTest, this).show();
     }
 
     @Override
     public void onLikeClick(int pos, Comments comments) {
         itemPosition = pos;
         if (isCallFromTest)
-            likeReplyComment("I", comments.getTlc_id(), "");
+            likeReplyComment("I", comments.getTlc_id());
         else
-            likeReplyComment("I", comments.getCommentId(), "");
-
+            likeReplyComment("I", comments.getCommentId());
     }
 
     @Override
     public void onReplyClick(int pos, Comments comments) {
-        //AppUtils.showToast(mContext, "Reply");
         itemPosition = pos;
-        new RepliesDialog(mContext, mContext, comments, id, isCallFromTest).show();
-        //likeReplyComment("I", comments.getCommentId(), "");
+        new RepliesDialog(mContext, mContext, comments, id, isCallFromTest, this).show();
     }
+
 
     private void deleteComment(String commentId, int pos) {
         ProgressDialog.getInstance().show(mContext);
@@ -226,7 +264,7 @@ public class CommentDialog extends Dialog implements CommentAdapter.onCommentIte
                     commentId
             );
         else
-            call = apiService.deleteTestComment(
+            call = apiService.deleteQuestComment(
                     AppUtils.getUserId(),
                     id,
                     "D",
@@ -241,8 +279,8 @@ public class CommentDialog extends Dialog implements CommentAdapter.onCommentIte
 
                 if (response.body() != null &&
                         response.body().getResponse().equals("200")) {
-                    //remove deleted item from recyclerview
                     commentAdapter.deleteComment(pos);
+                    addCommentCount--;
                 } else {
                     AppUtils.showToast(mContext, response.body().getResponse());
                 }
@@ -258,7 +296,7 @@ public class CommentDialog extends Dialog implements CommentAdapter.onCommentIte
     }
 
     private void likeReplyComment(String strCase,
-                                  String commentId, String text) {
+                                  String commentId) {
         ProgressDialog.getInstance().show(mContext);
 
         Log.d(TAG, "likeReplyComment isCallFromTest : " + isCallFromTest);
@@ -267,7 +305,6 @@ public class CommentDialog extends Dialog implements CommentAdapter.onCommentIte
         Log.d(TAG, "likeReplyComment strCase : " + strCase);
         Log.d(TAG, "likeReplyComment strCase : " + strCase);
         Log.d(TAG, "likeReplyComment commentId : " + commentId);
-        Log.d(TAG, "likeReplyComment commentId : " + text);
 
         if (isCallFromTest)
             call = apiService.likeTestComment(
@@ -275,16 +312,16 @@ public class CommentDialog extends Dialog implements CommentAdapter.onCommentIte
                     id,
                     strCase,
                     "1",
-                    commentId,
-                    text);
+                    commentId
+            );
         else
             call = apiService.likeReplyQuestComment(
                     AppUtils.getUserId(),
                     id,
                     strCase,
                     "1",
-                    commentId,
-                    text);
+                    commentId
+            );
 
         call.enqueue(new Callback<ProcessQuestion>() {
             @Override
@@ -308,15 +345,27 @@ public class CommentDialog extends Dialog implements CommentAdapter.onCommentIte
         });
     }
 
+
     private void updateCommentList(List<Comments> list) {
         Comments comments = list.get(itemPosition);
-        int preLikeCount = comments.getReplyLikeCount();
-        if (comments.isLiked()) {
-            comments.setLiked(false);
-            comments.setReplyLikeCount(preLikeCount - 1);
+        if (isCallFromTest) {
+            int preLikeCount = comments.getReplyLikeCount();
+            if (comments.isLiked()) {
+                comments.setLiked(false);
+                comments.setReplyLikeCount(preLikeCount - 1);
+            } else {
+                comments.setLiked(true);
+                comments.setReplyLikeCount(preLikeCount + 1);
+            }
         } else {
-            comments.setLiked(true);
-            comments.setReplyLikeCount(preLikeCount + 1);
+            int preLikeCount = comments.getQuestLikeCount();
+            if (comments.isLiked()) {
+                comments.setLiked(false);
+                comments.setQuestLikeCount(preLikeCount - 1);
+            } else {
+                comments.setLiked(true);
+                comments.setQuestLikeCount(preLikeCount + 1);
+            }
         }
         commentAdapter.notifyItemChanged(itemPosition, comments);
     }

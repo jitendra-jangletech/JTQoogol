@@ -31,14 +31,12 @@ import com.google.android.material.chip.ChipGroup;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.activities.PracticeTestActivity;
 import com.jangletech.qoogol.adapter.TestListAdapter;
-import com.jangletech.qoogol.databinding.FragmentTestMyBinding;
+import com.jangletech.qoogol.databinding.FragmentTestListBinding;
 import com.jangletech.qoogol.dialog.CommentDialog;
 import com.jangletech.qoogol.dialog.FilterDialog;
 import com.jangletech.qoogol.dialog.LikeListingDialog;
-import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.dialog.PublicProfileDialog;
 import com.jangletech.qoogol.dialog.ShareQuestionDialog;
-import com.jangletech.qoogol.model.ProcessQuestion;
 import com.jangletech.qoogol.model.TestListResponse;
 import com.jangletech.qoogol.model.TestModelNew;
 import com.jangletech.qoogol.retrofit.ApiClient;
@@ -60,14 +58,16 @@ import retrofit2.Response;
 import static com.jangletech.qoogol.util.Constant.CASE;
 
 public class TestSharedByYouFragment extends BaseFragment
-        implements TestListAdapter.TestClickListener, SearchView.OnQueryTextListener, CommentDialog.CommentClickListener, PublicProfileDialog.PublicProfileClickListener, FilterDialog.FilterClickListener, LikeListingDialog.onItemClickListener {
+        implements TestListAdapter.TestClickListener, SearchView.OnQueryTextListener, CommentDialog.CommentClickListener, PublicProfileDialog.PublicProfileClickListener, FilterDialog.FilterClickListener, LikeListingDialog.onItemClickListener, ShareQuestionDialog.ShareDialogListener {
 
     private static final String TAG = "TestSharedByYouFragment";
     private ApiInterface apiService = ApiClient.getInstance().getApi();
     private MyTestViewModel mViewModel;
-    private FragmentTestMyBinding mBinding;
+    private FragmentTestListBinding mBinding;
     private TestListAdapter mAdapter;
     private Menu filterMenu;
+    private int selectedPos = -1;
+    private TestModelNew selectedTestCard;
     private TestListResponse testListResponse;
     private List<TestModelNew> testList = new ArrayList<>();
     private List<TestModelNew> filteredTestList = new ArrayList<>();
@@ -80,7 +80,6 @@ public class TestSharedByYouFragment extends BaseFragment
     private HashMap<String, String> params = new HashMap<>();
     private int tmId;
     private String flag = "";
-
 
     public static TestSharedByYouFragment newInstance() {
         return new TestSharedByYouFragment();
@@ -103,7 +102,7 @@ public class TestSharedByYouFragment extends BaseFragment
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_test_my, container, false);
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_test_list, container, false);
         mBinding.setLifecycleOwner(this);
         mViewModel = new ViewModelProvider(this).get(MyTestViewModel.class);
         initViews();
@@ -142,20 +141,12 @@ public class TestSharedByYouFragment extends BaseFragment
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_filter:
-//                Bundle bundle = new Bundle();
-//                bundle.putString("call_from", "test");
-//                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_test_filter, bundle);
-                //MainActivity.navController.navigate(R.id.nav_test_filter, bundle);
                 FilterDialog bottomSheetFragment = new FilterDialog(getActivity(), AppUtils.loadHashMap(mContext), this);
                 bottomSheetFragment.show(getActivity().getSupportFragmentManager(), bottomSheetFragment.getTag());
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    private void setTitle(String title) {
-        getActionBar().setTitle(title);
     }
 
     private void initViews() {
@@ -203,7 +194,7 @@ public class TestSharedByYouFragment extends BaseFragment
                     Log.d(TAG, "onChanged Size : " + tests.size());
                     if (!isFilterApplied) {
                         if (testListResponse != null)
-                            pageStart = testListResponse.getPrev_tm_id();
+                            pageStart = testListResponse.getRow_count();
                         testList = tests;
                         setMyTestList(tests);
                     }
@@ -260,7 +251,7 @@ public class TestSharedByYouFragment extends BaseFragment
 
     private void setFilteredTestList(TestListResponse response) {
         if (response != null) {
-            pageStart = response.getPrev_tm_id();
+            pageStart = response.getRow_count();
             filteredTestList.addAll(response.getTestList());
             mAdapter.updateList(filteredTestList);
             if (filteredTestList.size() == 0) {
@@ -319,59 +310,13 @@ public class TestSharedByYouFragment extends BaseFragment
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        final List<TestModelNew> filteredModelList = filter(testList, newText);
-        mAdapter.setSearchResult(filteredModelList);
+        if (newText.trim().toLowerCase().isEmpty()) {
+            mAdapter.updateList(testList);
+        } else {
+            mAdapter.updateList(searchTests(newText.trim().toLowerCase(), testList));
+        }
         return true;
     }
-
-    private List<TestModelNew> filter(List<TestModelNew> models, String query) {
-        query = query.toLowerCase();
-        final List<TestModelNew> filteredModelList = new ArrayList<>();
-        for (TestModelNew model : models) {
-            String testName = model.getTm_name().toLowerCase();
-            if (testName.contains(query)) {
-                filteredModelList.add(model);
-            }
-        }
-        return filteredModelList;
-    }
-
-    private List<TestModelNew> filterBySubject(List<TestModelNew> models, String subject) {
-        List<TestModelNew> filteredModelList = new ArrayList<>();
-        if (!subject.equalsIgnoreCase("All")) {
-            for (TestModelNew model : models) {
-                String testSubject = model.getSm_sub_name();
-                if (testSubject.contains(subject)) {
-                    filteredModelList.add(model);
-                }
-            }
-        } else {
-            filteredModelList = models;
-        }
-        return filteredModelList;
-    }
-
-//    private void fetchSubjectList(String scrCoId) {
-//        Log.d(TAG, "fetchSubjectList ScrCoId : " + scrCoId);
-//        mBinding.swipeToRefresh.setRefreshing(true);
-//        Call<FetchSubjectResponseList> call = apiService.fetchSubjectList(Constant.SCR_CO_ID);
-//        call.enqueue(new Callback<FetchSubjectResponseList>() {
-//            @Override
-//            public void onResponse(Call<FetchSubjectResponseList> call, Response<FetchSubjectResponseList> response) {
-//                //ProgressDialog.getInstance().dismiss();
-//                mBinding.swipeToRefresh.setRefreshing(false);
-//                mViewModel.setAllSubjectList(response.body().getFetchSubjectResponseList());
-//            }
-//
-//            @Override
-//            public void onFailure(Call<FetchSubjectResponseList> call, Throwable t) {
-//                //ProgressDialog.getInstance().dismiss();
-//                mBinding.swipeToRefresh.setRefreshing(false);
-//                showToast("Something went wrong!!");
-//                t.printStackTrace();
-//            }
-//        });
-//    }
 
     private void fetchTestList(HashMap<String, String> params, String pageStart) {
         Log.d(TAG, "fetchTestList Params : " + params);
@@ -387,6 +332,7 @@ public class TestSharedByYouFragment extends BaseFragment
             params.put(Constant.tm_id, "");
             params.put(Constant.tm_catg, "");
         }
+        params.put(Constant.u_user_id, getUserId(mContext));
         mBinding.swipeToRefresh.setRefreshing(true);
         Call<TestListResponse> call = apiService.fetchTestList(
                 params.get(Constant.u_user_id),
@@ -397,7 +343,8 @@ public class TestSharedByYouFragment extends BaseFragment
                 params.get(Constant.tm_avg_rating),
                 params.get(Constant.tm_id),
                 params.get(Constant.tm_catg),
-                pageStart
+                pageStart,
+                ""
         );
         call.enqueue(new Callback<TestListResponse>() {
             @Override
@@ -447,28 +394,6 @@ public class TestSharedByYouFragment extends BaseFragment
         startActivity(intent);
     }
 
-    @Override
-    public void onCommentClick(TestModelNew testModel) {
-        /*Bundle bundle = new Bundle();
-        tmId = testModel.getTm_id();
-        bundle.putInt("tmId", tmId);
-        bundle.putString(Constant.CALL_FROM, Module.Test.toString());
-        NavHostFragment.findNavController(this).navigate(R.id.nav_comments, bundle);*/
-        Log.d(TAG, "onCommentClick TmId : " + testModel.getTm_id());
-        CommentDialog commentDialog = new CommentDialog(getActivity(), testModel.getTm_id(), true, this);
-        commentDialog.show();
-    }
-
-    @Override
-    public void onShareClick(int testid) {
-        /*Bundle bundle = new Bundle();
-        bundle.putString("testId", String.valueOf(testid));
-        bundle.putInt("call_from", test);
-        NavHostFragment.findNavController(this).navigate(R.id.nav_share, bundle);*/
-        new ShareQuestionDialog(getActivity(), String.valueOf(testid), getUserId(mContext)
-                , getDeviceId(mContext), "T")
-                .show();
-    }
 
     @Override
     public void onLikeCountClick(TestModelNew testModel) {
@@ -482,110 +407,13 @@ public class TestSharedByYouFragment extends BaseFragment
 
     }
 
-    /*@Override
-    public void onLikeClick(TestModelNew testModel, int pos, boolean isChecked) {
-        callApi(isChecked ? 1 : 0, pos);
-    }
-
-    @Override
-    public void onFavouriteClick(TestModelNew testModel, boolean isChecked, int pos) {
-        HashMap<String, Integer> params = new HashMap<>();
-        if (isChecked) {
-            params.put(Constant.isFavourite, 1);
-            params.put(Constant.tm_id, testModel.getTm_id());
-            favTest(params);
-        } else {
-            params.put(Constant.isFavourite, 0);
-            params.put(Constant.tm_id, testModel.getTm_id());
-            favTest(params);
-        }
-    }*/
 
     @Override
     public void onAttemptsClick(TestModelNew testModel) {
         Bundle bundle = new Bundle();
         bundle.putSerializable("PARAMS", testModel);
         NavHostFragment.findNavController(this).navigate(R.id.nav_test_attempt_history, bundle);
-        //MainActivity.navController.navigate(R.id.nav_test_attempt_history,bundle);
     }
-
-    private void callApi(int like, int pos) {
-        //doLikeTest(like, pos, testList.get(pos).getTm_id());
-    }
-
-    private void favTest(HashMap<String, Integer> map) {
-        Log.d(TAG, "favTest params : " + map);
-        ProgressDialog.getInstance().show(getActivity());
-        Call<ProcessQuestion> call = apiService.addFavTest(new PreferenceManager(getActivity()).getInt(Constant.USER_ID), map.get(Constant.tm_id), "I", map.get(Constant.isFavourite));
-        call.enqueue(new Callback<ProcessQuestion>() {
-            @Override
-            public void onResponse(Call<ProcessQuestion> call, Response<ProcessQuestion> response) {
-                ProgressDialog.getInstance().dismiss();
-                try {
-                    if (response.body() != null && response.body().getResponse().equals("200")) {
-                        if (map.get(Constant.isFavourite) == 0) {
-                            showToast("Removed from favourites");
-                        } else {
-                            showToast("Added to favourites");
-                        }
-                    } else {
-                        showErrorDialog(getActivity(), response.body().getResponse(), response.body().getMessage());
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ProcessQuestion> call, Throwable t) {
-                ProgressDialog.getInstance().dismiss();
-                showToast("Something went wrong!!");
-                t.printStackTrace();
-            }
-        });
-    }
-
-//    private void doLikeTest(int like, int pos, int testId) {
-//        ProgressDialog.getInstance().show(getActivity());
-//        Call<ProcessQuestion> call = apiService.addTestLike(new PreferenceManager(getActivity()).getInt(Constant.USER_ID), testId, "I", like);
-//        call.enqueue(new Callback<ProcessQuestion>() {
-//            @Override
-//            public void onResponse(Call<ProcessQuestion> call, Response<ProcessQuestion> response) {
-//                ProgressDialog.getInstance().dismiss();
-//                try {
-//                    if (response.body() != null && response.body().getResponse().equals("200")) {
-//                        int likeCount = Integer.parseInt(testList.get(pos).getLikeCount());
-//                        if (like == 1) {
-//                            Log.e(TAG, "like 0 ");
-//                            testList.get(pos).setLike(false);
-//                            if (likeCount <= 0)
-//                                testList.get(pos).setLikeCount("0");
-//                            else
-//                                testList.get(pos).setLikeCount("" + (likeCount - 1));
-//                        }
-//                        if (like == 0) {
-//                            testList.get(pos).setLike(true);
-//                            testList.get(pos).setLikeCount("" + (likeCount + 1));
-//                        }
-//                        //testList.set(pos, testList.get(pos));
-//                        mAdapter.updateList(testList);
-//
-//                    } else {
-//                        showErrorDialog(getActivity(), response.body().getResponse(), response.body().getMessage());
-//                    }
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<ProcessQuestion> call, Throwable t) {
-//                ProgressDialog.getInstance().dismiss();
-//                showToast("Something went wrong!!");
-//                t.printStackTrace();
-//            }
-//        });
-//    }
 
     @Override
     public void onDetach() {
@@ -598,6 +426,7 @@ public class TestSharedByYouFragment extends BaseFragment
         PublicProfileDialog publicProfileDialog = new PublicProfileDialog(getActivity(), userId, this);
         publicProfileDialog.show();
     }
+
 
     @Override
     public void onFriendUnFriendClick() {
@@ -642,5 +471,39 @@ public class TestSharedByYouFragment extends BaseFragment
         Log.d(TAG, "onItemCLick UserId : " + user_id);
         PublicProfileDialog publicProfileDialog = new PublicProfileDialog(getActivity(), user_id, this);
         publicProfileDialog.show();
+    }
+
+    @Override
+    public void onBackClick(int count) {
+        Log.d(TAG, "onBackClick Comment Count : " + count);
+        int commentCount = Integer.parseInt(selectedTestCard.getCommentsCount()) + count;
+        selectedTestCard.setCommentsCount("" + commentCount);
+        mAdapter.notifyItemChanged(selectedPos, selectedTestCard);
+    }
+
+    @Override
+    public void onCommentClick(TestModelNew testModel, int pos) {
+        Log.d(TAG, "onCommentClick TmId : " + testModel.getTm_id());
+        selectedPos = pos;
+        selectedTestCard = testModel;
+        CommentDialog commentDialog = new CommentDialog(getActivity(), testModel.getTm_id(), true, this);
+        commentDialog.show();
+    }
+
+    @Override
+    public void onShareClick(TestModelNew testModelNew, int pos) {
+        selectedPos = pos;
+        selectedTestCard = testModelNew;
+        new ShareQuestionDialog(getActivity(), String.valueOf(testModelNew.getTm_id()), getUserId(mContext)
+                , getDeviceId(mContext), "T", this)
+                .show();
+    }
+
+    @Override
+    public void onSharedSuccess(int count) {
+        Log.d(TAG, "onSharedSuccess Count : " + count);
+        int shareCount = Integer.parseInt(selectedTestCard.getShareCount());
+        selectedTestCard.setShareCount("" + (shareCount + count));
+        mAdapter.notifyItemChanged(selectedPos, selectedTestCard);
     }
 }

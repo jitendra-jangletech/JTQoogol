@@ -3,13 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
         <variable
             name="question"
             type="com.jangletech.qoogol.model.LearningQuestionsNew" />
-
     </data>
-
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/container"
@@ -236,14 +233,14 @@
                 app:layout_constraintTop_toTopOf="@+id/questLayout" />
 
             <LinearLayout
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/questLayout"
                 android:id="@+id/descLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingLeft="@dimen/_10sdp"
                 android:paddingRight="@dimen/_10sdp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/questLayout">
 
                 <com.jangletech.qoogol.view.ExpandableTextView
                     android:id="@+id/questiondesc_textview"
@@ -254,19 +251,19 @@
                     android:layout_marginEnd="@dimen/_10sdp"
                     android:text="@{question.questiondesc}"
                     android:textColor="@color/colorBlack"
-                    android:textSize="@dimen/_10ssp"/>
+                    android:textSize="@dimen/_10ssp" />
 
                 <io.github.kexanie.library.MathView
                     android:id="@+id/questiondesc_textview_math"
                     android:layout_width="match_parent"
-                    android:visibility="gone"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/_10sdp"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:layout_marginEnd="@dimen/_10sdp"
                     android:text="@{question.questiondesc}"
                     android:textColor="@color/colorBlack"
-                    android:textSize="@dimen/_10ssp"/>
+                    android:textSize="@dimen/_10ssp"
+                    android:visibility="gone" />
 
             </LinearLayout>
 
@@ -283,25 +280,25 @@
 
                 <ImageView
                     android:id="@+id/ask_doubt"
-                    android:visibility="visible"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/_5sdp"
                     android:src="@drawable/ic_action_help"
+                    android:visibility="visible"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/tvtimer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/_5sdp"
                     android:gravity="center"
                     android:text="00:00"
-                    android:layout_marginRight="@dimen/_5sdp"
                     android:textColor="@color/black"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@+id/ask_doubt"
-                  app:layout_constraintRight_toLeftOf="@+id/ask_doubt"
+                    app:layout_constraintRight_toLeftOf="@+id/ask_doubt"
                     app:layout_constraintTop_toTopOf="@+id/ask_doubt" />
 
                 <ImageView

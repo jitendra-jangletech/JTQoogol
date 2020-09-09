@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.ClipData;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -108,6 +107,7 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
         this.learningQuestionsList = learningQuestionsList;
         this.onIconClick = onIconClick;
         this.call_from = call_from;
+        setHasStableIds(true);
     }
 
     @NonNull
@@ -132,7 +132,7 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
 
     @Override
     public long getItemId(int position) {
-        return position;
+        return learningQuestionsList.get(position).getQuestion_id();
     }
 
     @Override
@@ -279,9 +279,9 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
     }
 
     public interface onIconClick {
-        void onCommentClick(int questionId);
+        void onCommentClick(LearningQuestionsNew learningQuestionsNew, int pos);
 
-        void onShareClick(int questionId);
+        void onShareClick(LearningQuestionsNew learningQuestionsNew, int pos);
 
         void onSubmitClick(int questionId, int isRight);
 
@@ -380,7 +380,7 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
 
             learningItemBinding.askDoubt.setOnClickListener(v -> {
                 LearningQuestionsNew learningQuestions = learningQuestionsList.get(getAdapterPosition());
-                DoubtListingDialog doubtListingDialog = new DoubtListingDialog(activity, String.valueOf(learningQuestions.getQuestion_id()), learningQuestions.getSubject_id(),tq_doubts);
+                DoubtListingDialog doubtListingDialog = new DoubtListingDialog(activity, String.valueOf(learningQuestions.getQuestion_id()), learningQuestions.getSubject_id(), tq_doubts);
                 doubtListingDialog.show();
             });
 
@@ -417,7 +417,7 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
             learningItemBinding.likeValue.setOnClickListener(v -> {
                 LearningQuestionsNew learningQuestions = learningQuestionsList.get(getAdapterPosition());
                 if (!learningQuestions.getLikes().equalsIgnoreCase("0")) {
-                    LikeListingDialog listingDialog = new LikeListingDialog(false,activity, learningQuestions.getQuestion_id(), this::onItemCLick);
+                    LikeListingDialog listingDialog = new LikeListingDialog(false, activity, learningQuestions.getQuestion_id(), this::onItemCLick);
                     listingDialog.show();
                 }
             });
@@ -434,7 +434,7 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
             learningItemBinding.share.setOnClickListener(v ->
             {
                 LearningQuestionsNew learningQuestions = learningQuestionsList.get(getAdapterPosition());
-                onIconClick.onShareClick(learningQuestions.getQuestion_id());
+                onIconClick.onShareClick(learningQuestions, getAdapterPosition());
             });
 
             learningItemBinding.favorite.setOnClickListener(v -> {
@@ -463,8 +463,7 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
                     reset());
 
             learningItemBinding.commentLayout.setOnClickListener(v -> onIconClick.onCommentClick(learningQuestionsList.get(
-                    getAdapterPosition()).
-                    getQuestion_id()));
+                    getAdapterPosition()), getAdapterPosition()));
 
             learningItemBinding.mcqImgtextImg1.setOnClickListener(v -> {
                 if (isMCQImgSubmited)
@@ -795,7 +794,7 @@ public class LearningAdapter extends RecyclerView.Adapter<LearningAdapter.ViewHo
                 learningItemBinding.scq2Layout.setBackground(activity.getResources().getDrawable(R.drawable.grey_border_grey_bg));
             });
 
-            learningItemBinding.scq3Layout.setOnClickListener(v ->  {
+            learningItemBinding.scq3Layout.setOnClickListener(v -> {
                 setLayoutBg();
                 setSCQAnsIndicator();
                 scq_ans = "C";

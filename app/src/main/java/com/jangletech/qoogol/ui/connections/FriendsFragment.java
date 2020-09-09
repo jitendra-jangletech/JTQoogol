@@ -145,6 +145,7 @@ public class FriendsFragment extends BaseFragment implements FriendsAdapter.upda
         mViewModel.getFriendList().observe(getViewLifecycleOwner(), friendsList -> {
             checkRefresh();
             if (friendsList != null) {
+                connectionsList = friendsList;
                 setFriendsList(friendsList);
             }
         });
@@ -174,30 +175,22 @@ public class FriendsFragment extends BaseFragment implements FriendsAdapter.upda
             mViewModel.fetchFriendsData(false);
     }
 
-//    private void initView() {
-//
-//        if (connectionsList.size() > 0) {
-//            mBinding.connectionRecycler.setHasFixedSize(true);
-//            mBinding.connectionRecycler.setLayoutManager(linearLayoutManager);
-//            mBinding.connectionRecycler.setAdapter(mAdapter);
-//            mBinding.emptyview.setVisibility(View.GONE);
-//        } else {
-//            mBinding.emptyview.setText("No Friends Added.");
-//            mBinding.emptyview.setVisibility(View.VISIBLE);
-//        }
-//    }
-
     private void setSearchData(FriendsResponse response) {
         if (response != null && response.getFriends_list().size() > 0) {
             filteredList.clear();
+            List<Friends> tempList = new ArrayList<>();
             mBinding.tvEmptySearch.setVisibility(View.GONE);
             mBinding.connectionRecycler.setVisibility(View.VISIBLE);
-            mAdapter.updateList(response.getFriends_list());
+            for (Friends friends : response.getFriends_list()) {
+                friends.setU_first_name(getDecryptedField(friends.getU_first_name(), Constant.cf_key1));
+                friends.setU_last_name(getDecryptedField(friends.getU_last_name(), Constant.cf_key2));
+                tempList.add(friends);
+            }
+            mAdapter.updateList(tempList);
         } else {
             //no search results found
             mBinding.tvEmptySearch.setVisibility(View.VISIBLE);
             mBinding.connectionRecycler.setVisibility(View.GONE);
-            //showToast("No Search Results Found.");
         }
     }
 
@@ -275,6 +268,7 @@ public class FriendsFragment extends BaseFragment implements FriendsAdapter.upda
 
     @Override
     public boolean onQueryTextChange(String newText) {
+        Log.d(TAG, "onQueryTextChange: " + newText);
         if (newText.trim().toLowerCase().isEmpty()) {
             mBinding.tvEmptySearch.setVisibility(View.GONE);
             mBinding.connectionRecycler.setVisibility(View.VISIBLE);

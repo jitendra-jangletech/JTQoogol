@@ -2,6 +2,7 @@ package com.jangletech.qoogol.ui.connections;
 
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.FragmentPendingRequestsBinding;
+import com.jangletech.qoogol.util.Constant;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +27,7 @@ import java.util.List;
 public class PendingRequestsFragment extends Fragment {
 
     private FragmentPendingRequestsBinding mbinding;
-
+    private static final String TAG = "PendingRequestsFragment";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -40,6 +42,13 @@ public class PendingRequestsFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         setupViewPager(mbinding.requestsViewpager);
         mbinding.requestsTabs.setupWithViewPager(mbinding.requestsViewpager);
+        if (getArguments() != null) {
+            Log.d(TAG, "onActivityCreated Req: " + getArguments().getString(Constant.FB_ACTION));
+            if (getArguments().getString(Constant.FB_ACTION) != null &&
+                    getArguments().getString(Constant.FB_ACTION).equalsIgnoreCase("CF")) {
+                mbinding.requestsViewpager.setCurrentItem(1);
+            }
+        }
     }
 
     private void setupViewPager(ViewPager viewPager) {

@@ -5,7 +5,7 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
-    <string name="menu_home">Home</string>
+    <string name="menu_home">Dashboard</string>
     <string name="menu_fav">Favourite</string>
 
 
@@ -98,7 +98,6 @@
     <string name="valid_email">Please enter valid email.</string>
 
 
-
     <!--facebook-->
     <string name="facebook_app_id">125515072005255</string>
     <string name="fb_login_protocol_scheme">fb125515072005255</string>
@@ -113,8 +112,8 @@
     <string name="popular_test">Popular Test</string>
     <string name="recent_test">Recent Test</string>
     <string name="attended_by_friends">Attended By Friends</string>
-    <string name="shared_with_you">Shared with you</string>
-    <string name="shared_by_you">Shared by you</string>
+    <string name="shared_with_you">Shared With You</string>
+    <string name="shared_by_you">Shared With Friends</string>
     <string name="create_test">Create Test</string>
     <string name="favourite_test">Favourite Test</string>
     <string name="questions">Questions</string>
@@ -210,7 +209,7 @@
     <string name="available_courses">Available courses for study</string>
     <string name="no_education">No education details available</string>
     <string name="copyrights">\u00a9 JangleTech All rights reserved</string>
-    <string name="qoogol_version_1_0">Qoogol Version 1.0</string>
+    <string name="qoogol_version_1_0">Qoogol Version 1.2</string>
     <string name="menu_learning">Learning</string>
     <string name="menu_learning_details">Question Details</string>
     <string name="menu_test">Practise Test</string>
@@ -422,7 +421,7 @@
     <string name="include_institutes">Include institutes</string>
     <string name="remove_connection">Remove\nconnection</string>
     <string name="online">Online</string>
-    <string name="terms_and_conditions"><![CDATA[I accept the <a href="https://spot20191210061236.azurewebsites.net/uploads/Policies/qoogol_terms_and_conditions.html">terms and conditions</a> and <a href="https://spot20191210061236.azurewebsites.net/uploads/Policies/qoogol_privacy_policy.html">privacy policy</a>.]]></string>
+    <string name="terms_and_conditions"><![CDATA[I accept the <a href="https://jtmobileappstorage.blob.core.windows.net/spotmeets/Policies/qoogol_terms_and_conditions.html">terms and conditions</a> and <a href="https://jtmobileappstorage.blob.core.windows.net/spotmeets/Policies/qoogol_privacy_policy.html">privacy policy</a>.]]></string>
     <string name="spotmeets_desc"><b>Qoogol</b> android app for free academic tests, prepare for competitive exams &amp; post doubts.</string>
     <string name="support"><![CDATA[Send your suggestions at : <a href="admin@qoogol.com">admin@qoogol.com</a>]]></string>
     <string name="link"><![CDATA[For more information, visit : <a href="https://www.qoogol.com">www.qoogol.com</a>]]></string>
@@ -437,6 +436,9 @@
     <string name="nationality_">Nationality</string>
     <string name="location_filters">Location filters</string>
     <string name="state">State</string>
+    <string name="seen">Seen</string>
+    <string name="delete">Delete</string>
+    <string name="profile">Profile</string>
     <string name="district">Division</string>
     <string name="city_">City</string>
     <string name="college">College</string>
@@ -453,7 +455,6 @@
     <string name="group_name_error">Please enter group name.</string>
     <string name="add_">Add</string>
     <string name="forward">forward</string>
-    <string name="delete">delete</string>
     <string name="select_language_">Select language</string>
     <string name="social_filters">Social filters:</string>
     <string name="profession_filters">Profession filters:</string>

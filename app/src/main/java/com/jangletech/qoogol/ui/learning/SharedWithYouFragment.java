@@ -1,17 +1,20 @@
 package com.jangletech.qoogol.ui.learning;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.MenuItemCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.fragment.NavHostFragment;
@@ -20,10 +23,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.LearningAdapter;
 import com.jangletech.qoogol.databinding.LearningFragmentBinding;
+import com.jangletech.qoogol.dialog.CommentDialog;
 import com.jangletech.qoogol.dialog.ProgressDialog;
+import com.jangletech.qoogol.dialog.PublicProfileDialog;
 import com.jangletech.qoogol.dialog.QuestionFilterDialog;
 import com.jangletech.qoogol.dialog.ShareQuestionDialog;
-import com.jangletech.qoogol.enums.Module;
 import com.jangletech.qoogol.model.LearningQuestionsNew;
 import com.jangletech.qoogol.model.ProcessQuestion;
 import com.jangletech.qoogol.retrofit.ApiClient;
@@ -44,15 +48,21 @@ import retrofit2.Callback;
 import static com.jangletech.qoogol.util.Constant.CALL_FROM;
 import static com.jangletech.qoogol.util.Constant.SHARED_WITH_ME;
 import static com.jangletech.qoogol.util.Constant.connectonId;
-import static com.jangletech.qoogol.util.Constant.learning;
 import static com.jangletech.qoogol.util.Constant.profile;
 import static com.jangletech.qoogol.util.Constant.sharedto;
 
-public class SharedWithYouFragment extends BaseFragment implements LearningAdapter.onIconClick, QuestionFilterDialog.FilterClickListener {
+public class SharedWithYouFragment extends BaseFragment implements
+        LearningAdapter.onIconClick, QuestionFilterDialog.FilterClickListener,
+        SearchView.OnQueryTextListener, ShareQuestionDialog.ShareDialogListener,
+        CommentDialog.CommentClickListener,
+        PublicProfileDialog.PublicProfileClickListener {
 
+    private static final String TAG = "SharedWithYouFragment";
     private LearningViewModel mViewModel;
     LearningFragmentBinding learningFragmentBinding;
     LearningAdapter learningAdapter;
+    private LearningQuestionsNew selectedLearningQuest;
+    private int selectedPos = -1;
     List<LearningQuestionsNew> learningQuestionsList;
     List<LearningQuestionsNew> questionsNewList;
     ApiInterface apiService = ApiClient.getInstance().getApi();
@@ -61,8 +71,7 @@ public class SharedWithYouFragment extends BaseFragment implements LearningAdapt
     boolean isFilterApplied = false;
     List<LearningQuestionsNew> questionsFilteredList;
     private Menu filterMenu;
-    ;
-
+    private boolean isSearching = false;
 
     public static SharedWithYouFragment newInstance() {
         return new SharedWithYouFragment();
@@ -89,10 +98,25 @@ public class SharedWithYouFragment extends BaseFragment implements LearningAdapt
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.action_search, menu);
         super.onCreateOptionsMenu(menu, inflater);
+        MenuItem item = menu.findItem(R.id.action_search);
         filterMenu = menu;
         if (isFilterApplied) {
             setFilterIcon(menu, getActivity(), true);
         }
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
+        searchView.setOnQueryTextListener(this);
+
+        item.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                return true;
+            }
+        });
     }
 
 
@@ -142,7 +166,7 @@ public class SharedWithYouFragment extends BaseFragment implements LearningAdapt
         });
 
         learningFragmentBinding.learningSwiperefresh.setOnRefreshListener(() -> {
-            mViewModel.pageCount="0";
+            mViewModel.pageCount = "0";
             mViewModel.fetchQuestionData("", SHARED_WITH_ME, params);
             mViewModel.getSharedQuestionList(SHARED_WITH_ME).observe(getViewLifecycleOwner(), questionsList -> {
                 if (!isFilterApplied)
@@ -152,13 +176,52 @@ public class SharedWithYouFragment extends BaseFragment implements LearningAdapt
                 if (isFilterApplied)
                     setData(questionsList);
             });
-
         });
+    }
 
+    @Override
+    public void onCommentClick(LearningQuestionsNew learningQuestionsNew, int pos) {
+        Log.d(TAG, "onCommentClick questionId : " + learningQuestionsNew.getQuestion_id());
+        selectedPos = pos;
+        selectedLearningQuest = learningQuestionsNew;
+        CommentDialog commentDialog = new CommentDialog(getActivity(), learningQuestionsNew.getQuestion_id(), false, this);
+        commentDialog.show();
+    }
+
+
+    @Override
+    public void onShareClick(LearningQuestionsNew learningQuestionsNew, int pos) {
+        selectedLearningQuest = learningQuestionsNew;
+        selectedPos = pos;
+        new ShareQuestionDialog(getActivity(), String.valueOf(learningQuestionsNew.getQuestion_id()), AppUtils.getUserId()
+                , getDeviceId(getActivity()), "Q", this)
+                .show();
+    }
+
+    @Override
+    public void onCommentClick(String userId) {
+        PublicProfileDialog publicProfileDialog = new PublicProfileDialog(getActivity(), userId, this);
+        publicProfileDialog.show();
+    }
+
+    @Override
+    public void onBackClick(int count) {
+        Log.d(TAG, "onBackClick Comment Count : " + count);
+        int commentCount = Integer.parseInt(selectedLearningQuest.getComments()) + count;
+        selectedLearningQuest.setComments(String.valueOf(commentCount));
+        learningAdapter.notifyItemChanged(selectedPos, selectedLearningQuest);
+    }
+
+    @Override
+    public void onSharedSuccess(int count) {
+        Log.d(TAG, "onSharedSuccess Count : " + count);
+        int shareCount = Integer.parseInt(selectedLearningQuest.getShares()) + count;
+        selectedLearningQuest.setShares(String.valueOf(shareCount));
+        learningAdapter.notifyItemChanged(selectedPos, selectedLearningQuest);
     }
 
     private void setData(List<LearningQuestionsNew> questionsList) {
-        if (questionsList!=null && questionsList.size()>0) {
+        if (questionsList != null && questionsList.size() > 0) {
             learningFragmentBinding.tvNoQuest.setVisibility(View.GONE);
 
         } else {
@@ -228,23 +291,6 @@ public class SharedWithYouFragment extends BaseFragment implements LearningAdapt
 
 
     @Override
-    public void onCommentClick(int questionId) {
-        Bundle bundle = new Bundle();
-        bundle.putString(Constant.CALL_FROM, Module.Learning.toString());
-        bundle.putInt("QuestionId", questionId);
-        NavHostFragment.findNavController(this).navigate(R.id.nav_comments, bundle);
-    }
-
-
-    @Override
-    public void onShareClick(int questionId) {
-        new ShareQuestionDialog(getActivity(), String.valueOf(questionId), AppUtils.getUserId()
-                , getDeviceId(getActivity()), "Q")
-                .show();
-    }
-
-
-    @Override
     public void onSubmitClick(int questionId, int isRight) {
         ProcessQuestionAPI(questionId, isRight, "submit", "", "");
     }
@@ -278,7 +324,7 @@ public class SharedWithYouFragment extends BaseFragment implements LearningAdapt
     public void onDoneClick(HashMap<String, String> map) {
         params = map;
         isFilterApplied = true;
-        mViewModel.pageCount="0";
+        mViewModel.pageCount = "0";
         setFilterIcon(filterMenu, getActivity(), true);
         mViewModel.fetchQuestionData("", SHARED_WITH_ME, params);
         questionsFilteredList.clear();
@@ -288,4 +334,35 @@ public class SharedWithYouFragment extends BaseFragment implements LearningAdapt
         });
     }
 
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        if (newText.trim().toLowerCase().isEmpty()) {
+            isSearching = false;
+            learningAdapter.updateList(questionsNewList);
+        } else {
+            isSearching = true;
+            learningAdapter.updateList(searchQuestion(newText.trim().toLowerCase(), questionsNewList));
+        }
+        return true;
+    }
+
+    @Override
+    public void onFriendUnFriendClick() {
+
+    }
+
+    @Override
+    public void onFollowUnfollowClick() {
+
+    }
+
+    @Override
+    public void onViewImage(String path) {
+        showFullScreen(path);
+    }
 }

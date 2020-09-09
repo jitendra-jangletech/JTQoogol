@@ -139,6 +139,7 @@ public class FollowersFragment extends BaseFragment implements FollowersAdapter.
         mViewModel.getFollowersList().observe(getViewLifecycleOwner(), followersList -> {
             if (followersList != null) {
                 checkRefresh();
+                connectionsList = followersList;
                 setFollowersList(followersList);
             }
         });
@@ -228,6 +229,8 @@ public class FollowersFragment extends BaseFragment implements FollowersAdapter.
     @Override
     public boolean onQueryTextChange(String newText) {
         if (newText.trim().toLowerCase().isEmpty()) {
+            mBinding.tvEmptySearch.setVisibility(View.GONE);
+            mBinding.connectionRecycler.setVisibility(View.VISIBLE);
             mAdapter.updateList(connectionsList);
         } else {
             filteredList.clear();
@@ -281,9 +284,15 @@ public class FollowersFragment extends BaseFragment implements FollowersAdapter.
     private void setSearchData(FollowersResponse response) {
         if (response != null && response.getFollowers_list().size() > 0) {
             filteredList.clear();
+            List<Followers> tempList = new ArrayList<>();
+            for (Followers followers : response.getFollowers_list()) {
+                followers.setU_first_name(getDecryptedField(followers.getU_first_name(), Constant.cf_key1));
+                followers.setU_last_name(getDecryptedField(followers.getU_last_name(), Constant.cf_key2));
+                tempList.add(followers);
+            }
             mBinding.tvEmptySearch.setVisibility(View.GONE);
             mBinding.connectionRecycler.setVisibility(View.VISIBLE);
-            mAdapter.updateList(response.getFollowers_list());
+            mAdapter.updateList(tempList);
         } else {
             //no search results found
             mBinding.tvEmptySearch.setVisibility(View.VISIBLE);

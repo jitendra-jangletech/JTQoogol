@@ -40,12 +40,24 @@
                 app:layout_constraintLeft_toRightOf="@+id/btnClose"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <TextView
+                android:id="@+id/delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/_7sdp"
+                android:text="@string/delete"
+                android:textColor="@color/colorWhite"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fillViewport="true"
+            android:paddingBottom="@dimen/_60sdp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/top_layout">
 
@@ -76,11 +88,11 @@
                     android:id="@+id/addUniversity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:tint="@color/colorSkyBlue"
                     android:layout_alignEnd="@+id/universityBoardAutocompleteView"
                     android:layout_marginTop="@dimen/_18sdp"
                     android:contentDescription="@string/app_name"
                     android:src="@drawable/ic_add"
+                    android:tint="@color/colorSkyBlue"
                     android:visibility="visible"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -106,7 +118,6 @@
 
 
                 <ImageView
-                    android:tint="@color/colorSkyBlue"
                     android:id="@+id/addInstitute"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -114,6 +125,7 @@
                     android:layout_marginTop="@dimen/_18sdp"
                     android:contentDescription="@string/app_name"
                     android:src="@drawable/ic_add"
+                    android:tint="@color/colorSkyBlue"
                     android:visibility="visible"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/universityBoardAutocompleteView" />
@@ -155,8 +167,8 @@
                     app:layout_constraintTop_toBottomOf="@+id/tvCourse" />
 
                 <TextView
-                    style="@style/font_style"
                     android:id="@+id/tvCourseYear"
+                    style="@style/font_style"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_15sdp"
@@ -196,8 +208,8 @@
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etstartdate"
                             style="@style/EditTextStyle"
-                            android:drawableTint="@color/colorSkyBlue"
                             android:drawableRight="@drawable/ic_date_calender"
+                            android:drawableTint="@color/colorSkyBlue"
                             android:focusable="false"
                             android:maxLength="15" />
                     </com.google.android.material.textfield.TextInputLayout>
@@ -217,8 +229,8 @@
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etenddate"
                             style="@style/EditTextStyle"
-                            android:drawableTint="@color/colorSkyBlue"
                             android:drawableRight="@drawable/ic_date_calender"
+                            android:drawableTint="@color/colorSkyBlue"
                             android:focusable="false"
                             android:maxLength="15" />
                     </com.google.android.material.textfield.TextInputLayout>
@@ -229,8 +241,8 @@
         </ScrollView>
 
         <TextView
-            style="@style/font_style"
             android:id="@+id/btnSave"
+            style="@style/font_style"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_38sdp"
             android:background="@color/colorPrimary"

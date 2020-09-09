@@ -1,7 +1,6 @@
 package com.jangletech.qoogol.ui;
 
 import android.app.DatePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -27,6 +26,7 @@ import com.jangletech.qoogol.activities.RegisterLoginViewModel;
 import com.jangletech.qoogol.databinding.FragmentNewUserBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.model.RegisterLoginModel;
+import com.jangletech.qoogol.model.VerifyResponse;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.util.AESSecurities;
@@ -36,11 +36,7 @@ import com.jangletech.qoogol.util.DateUtils;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.TinyDB;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 
 import retrofit2.Call;
@@ -50,18 +46,21 @@ import retrofit2.Response;
 public class NewUserFragment extends BaseFragment {
 
     private static final String TAG = "NewUserFragment";
+    private CountDownTimer countDownTimer;
     private FragmentNewUserBinding mBinding;
     private RegisterLoginModel registerLoginModel;
     private boolean isValidated = true;
     private boolean isOtpSent = false;
     private int countryCode = 91; //todo country code hardcoded
     private String strMobile = "";
+    private String strReferralCode = "";
     private String strPasswordOtp = "";
     private RegisterLoginViewModel mViewModel;
     private ApiInterface apiService = ApiClient.getInstance().getApi();
     private String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
     private String gender = "M";
     private String dob = "";
+    private Calendar mCalendar, mCalendarMax;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -73,6 +72,9 @@ public class NewUserFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_new_user, container, false);
+        mCalendar = Calendar.getInstance();
+        mCalendarMax = Calendar.getInstance();
+        mCalendarMax.add(Calendar.YEAR, -13);
         initViews();
         return mBinding.getRoot();
     }
@@ -153,6 +155,15 @@ public class NewUserFragment extends BaseFragment {
 
         mBinding.tilDob.getEditText().setOnClickListener(v -> {
             showDatePicker();
+        });
+
+        mBinding.btnVerify.setOnClickListener(v -> {
+            if (mBinding.refrerralView.getText().toString().trim().isEmpty() ||
+                    mBinding.refrerralView.getText().toString().trim().length() < 4) {
+                mBinding.refrerralView.setError("Enter valid referral code.");
+                return;
+            }
+            doReferralCodeVerification(mBinding.refrerralView.getText().toString().trim());
         });
 
         mBinding.sendOtp.setOnClickListener(v -> {
@@ -292,7 +303,12 @@ public class NewUserFragment extends BaseFragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                if (strMobile != null && !strMobile.isEmpty()) {
+                    if (!strMobile.equalsIgnoreCase(s.toString())) {
+                        mBinding.rlReferral.setVisibility(View.GONE);
+                        //referralCode = "";
+                    }
+                }
             }
         });
 
@@ -344,23 +360,17 @@ public class NewUserFragment extends BaseFragment {
 
             }
         });
-
     }
 
     private void showDatePicker() {
-        DateFormat format = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
-        Date date = null;
-        try {
-            date = format.parse(mBinding.tilDob.getEditText().getText().toString());
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        Calendar newCalendar = Calendar.getInstance();
-        newCalendar.setTime(date != null ? date : new Date());
         DatePickerDialog dialog = new DatePickerDialog(getContext(), android.R.style.Theme_Holo_Dialog, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 String formattedDate = year + "-" + (month + 1) + "-" + day;
+                mCalendar.set(Calendar.YEAR, year);
+                mCalendar.set(Calendar.MONTH, month);
+                mCalendar.set(Calendar.DAY_OF_MONTH, day);
+
                 if (AppUtils.isEnteredDOBValid(year, (month + 1), day)) {
                     mBinding.tilDob.getEditText().setText(DateUtils.getFormattedDate(formattedDate));
                 } else {
@@ -368,42 +378,47 @@ public class NewUserFragment extends BaseFragment {
                     mBinding.tilDob.getEditText().setText("");
                 }
             }
-        }, //newCalendar.get(1990), newCalendar.get(1), newCalendar.get(Calendar.DAY_OF_MONTH));
-                newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+        }, mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH));
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.getDatePicker().setMaxDate(mCalendarMax.getTimeInMillis());
         dialog.show();
     }
 
     private void doRegisterLogin(String mobile, String caseR, int countryCode, String passwordOtp, String deviceId, String appName) {
-        Log.d(TAG, "First Name : " + AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key1),mBinding.tilFirstName.getEditText().getText().toString().trim()));
-        Log.d(TAG, "Last Name : " + AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key2),mBinding.tilLastName.getEditText().getText().toString().trim()));
+        Log.d(TAG, "First Name : " + AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key1), mBinding.tilFirstName.getEditText().getText().toString().trim()));
+        Log.d(TAG, "Last Name : " + AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key2), mBinding.tilLastName.getEditText().getText().toString().trim()));
         Log.d(TAG, "Gender Name : " + gender);
-        Log.d(TAG, "Dob : " + AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key3),mBinding.tilDob.getEditText().getText().toString().trim()));
-        Log.d(TAG, "Email: " + AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key1),mBinding.tilEmailMobile.getEditText().getText().toString().trim()));
+        Log.d(TAG, "Dob : " + AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key3), mBinding.tilDob.getEditText().getText().toString().trim()));
+        Log.d(TAG, "Email: " + AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key1), mBinding.tilEmailMobile.getEditText().getText().toString().trim()));
         Log.d(TAG, "Otp : " + mBinding.tilOtp.getEditText().getText().toString().trim());
-        Log.d(TAG, "Password  : " + AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key6),mBinding.tilPassword.getEditText().getText().toString().trim()));
+        Log.d(TAG, "Password  : " + AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key6), mBinding.tilPassword.getEditText().getText().toString().trim()));
         Log.d(TAG, "Case R  : " + caseR);
         Log.d(TAG, "Country Code : " + countryCode);
         Log.d(TAG, "Device Id : " + deviceId);
         Log.d(TAG, "App Name : " + appName);
         Log.d(TAG, "Token : " + new PreferenceManager(getActivity()).getToken());
         Log.d(TAG, "Case2 : N");
+        Log.d(TAG, "Referral Code  : " + strReferralCode);
+
+        /*if (!isReferralCodeVerified)
+            strReferralCode = "";*/
 
         ProgressDialog.getInstance().show(getActivity());
         Call<RegisterLoginModel> call = apiService.doRegister(
-                AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key1),mBinding.tilFirstName.getEditText().getText().toString().trim()),
-                AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key2),mBinding.tilLastName.getEditText().getText().toString().trim()),
+                AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key1), mBinding.tilFirstName.getEditText().getText().toString().trim()),
+                AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key2), mBinding.tilLastName.getEditText().getText().toString().trim()),
                 gender,
-                AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key3),mBinding.tilDob.getEditText().getText().toString().trim()),
-                AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key4),mBinding.tilEmailMobile.getEditText().getText().toString().trim()),
+                AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key3), mBinding.tilDob.getEditText().getText().toString().trim()),
+                AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key4), mBinding.tilEmailMobile.getEditText().getText().toString().trim()),
                 mBinding.tilOtp.getEditText().getText().toString().trim(),
-                AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key6),mBinding.tilPassword.getEditText().getText().toString().trim()),
+                AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key6), mBinding.tilPassword.getEditText().getText().toString().trim()),
                 caseR,
                 countryCode,
                 deviceId,
                 appName,
                 new PreferenceManager(getActivity()).getToken(),
-                "N"
+                "N",
+                strReferralCode
         );
         call.enqueue(new Callback<RegisterLoginModel>() {
             @Override
@@ -419,6 +434,7 @@ public class NewUserFragment extends BaseFragment {
                     } else {
                         if (!response.body().getU_user_id().isEmpty()) {
                             //deleteOfflineData();
+                            countDownTimer.cancel();
                             Log.d(TAG, "onResponse Launch UserId : " + response.body().getU_user_id());
                             new PreferenceManager(getActivity()).saveInt(Constant.USER_ID, Integer.parseInt(response.body().getU_user_id()));
                             new PreferenceManager(getActivity()).saveUserId(response.body().getU_user_id());
@@ -446,8 +462,9 @@ public class NewUserFragment extends BaseFragment {
     }
 
     private void setTimer() {
+        mBinding.rlReferral.setVisibility(View.VISIBLE);
         showToast("Otp Sent Successfully");
-        new CountDownTimer(120000, 1000) {
+        countDownTimer = new CountDownTimer(120000, 1000) {
             public void onTick(long millisUntilFinished) {
                 mBinding.tvSendOtp.setEnabled(false);
                 mBinding.tvSendOtp.setText(String.format(Locale.ENGLISH, "%d:%d sec", millisUntilFinished / (60 * 1000) % 60, millisUntilFinished / 1000 % 60));
@@ -458,5 +475,36 @@ public class NewUserFragment extends BaseFragment {
                 mBinding.tvSendOtp.setEnabled(true);
             }
         }.start();
+    }
+
+    private void doReferralCodeVerification(String referralCode) {
+        ProgressDialog.getInstance().show(getActivity());
+        Call<VerifyResponse> call = apiService.doReferCodeVerification(referralCode);
+        call.enqueue(new Callback<VerifyResponse>() {
+            @Override
+            public void onResponse(Call<VerifyResponse> call, Response<VerifyResponse> response) {
+                ProgressDialog.getInstance().dismiss();
+                if (response != null) {
+                    if (response.body() != null &&
+                            response.body().getResponse().equals("200")) {
+                        strReferralCode = referralCode;
+                        //isReferralCodeVerified = true;
+                        mBinding.refrerralView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_right_tick, 0);
+                        mBinding.refrerralView.setEnabled(false);
+                        mBinding.btnVerify.setEnabled(false);
+                    } else {
+                        //isReferralCodeVerified = false;
+                        showToast("Referral code is not valid.");
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<VerifyResponse> call, Throwable t) {
+                ProgressDialog.getInstance().dismiss();
+                showToast("Something went wrong!!");
+                t.printStackTrace();
+            }
+        });
     }
 }

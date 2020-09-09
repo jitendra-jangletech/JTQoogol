@@ -48,6 +48,8 @@ public class ApiClient {
     private static OkHttpClient okHttpClient() {
         return new OkHttpClient.Builder()
                 .cache(cache())
+                .writeTimeout(2, TimeUnit.MINUTES)
+                .readTimeout(2, TimeUnit.MINUTES)
                 .addInterceptor(httpLoggingInterceptor()) // used if network off OR on
                 .addNetworkInterceptor(networkInterceptor()) // only used when network is on
                 .addInterceptor(offlineInterceptor())
@@ -95,7 +97,6 @@ public class ApiClient {
             Log.d(TAG, "network interceptor: called.");
 
             Response response = chain.proceed(chain.request());
-
             CacheControl cacheControl = new CacheControl.Builder()
                     .maxAge(5, TimeUnit.SECONDS)
                     .build();

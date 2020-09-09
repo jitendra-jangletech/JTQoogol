@@ -19,7 +19,6 @@ import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.LearningAdapter;
 import com.jangletech.qoogol.databinding.LearningFragmentBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
-import com.jangletech.qoogol.enums.Module;
 import com.jangletech.qoogol.model.LearningQuestionsNew;
 import com.jangletech.qoogol.model.ProcessQuestion;
 import com.jangletech.qoogol.retrofit.ApiClient;
@@ -161,19 +160,13 @@ public class FavQueFragment extends Fragment implements LearningAdapter.onIconCl
     }
 
     @Override
-    public void onCommentClick(int questionId) {
-        Bundle bundle = new Bundle();
-        bundle.putString(Constant.CALL_FROM, Module.Learning.toString());
-        bundle.putInt("QuestionId", questionId);
-        NavHostFragment.findNavController(this).navigate(R.id.nav_comments, bundle);
+    public void onCommentClick(LearningQuestionsNew learningQuestionsNew, int pos) {
+
     }
 
     @Override
-    public void onShareClick(int questionId) {
-        Bundle bundle = new Bundle();
-        bundle.putInt("QuestionId", questionId);
-        bundle.putInt("call_from", learning);
-        NavHostFragment.findNavController(this).navigate(R.id.nav_share, bundle);
+    public void onShareClick(LearningQuestionsNew learningQuestionsNew, int pos) {
+
     }
 
     @Override

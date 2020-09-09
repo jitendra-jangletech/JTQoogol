@@ -92,6 +92,7 @@ public class PractiseViewPagerAdapter extends PagerAdapter
     private CountDownTimer countDownTimer;
     private Gson gson;
     private String flag;
+    public static int gMinutes = 0, gSeconds = 0;
     private PracticeScqBinding practiceScqBinding;
     private PracticeMtpBinding practiceMtpBinding;
     private PracticeMtpImageBinding practiceMtpImageBinding;
@@ -327,6 +328,10 @@ public class PractiseViewPagerAdapter extends PagerAdapter
             reset(Constant.MATCH_PAIR);
         });
 
+        practiceMtpBinding.reset.setOnClickListener(v -> {
+            reset(Constant.MATCH_PAIR);
+        });
+
         practiceMtpBinding.submit.setOnClickListener(v -> {
             Log.e(TAG, "initMtp Selection : " + isB1Selected + "," + isB2Selected + "," + isB3Selected + "," + isB4Selected);
             String selectedPairs = "";
@@ -468,6 +473,10 @@ public class PractiseViewPagerAdapter extends PagerAdapter
         }
 
         practiceMtpImageBinding.resetLabel.setOnClickListener(v -> {
+            reset(Constant.MATCH_PAIR_IMAGE);
+        });
+
+        practiceMtpImageBinding.reset.setOnClickListener(v -> {
             reset(Constant.MATCH_PAIR_IMAGE);
         });
 
@@ -1139,6 +1148,8 @@ public class PractiseViewPagerAdapter extends PagerAdapter
             scq3.setText(testQuestionNew.getQ_mcq_op_3());
         }
 
+        //scq4Math.setText(testQuestionNew.getQ_mcq_op_4());
+
         if (testQuestionNew.getQ_mcq_op_4().contains("\\")) {
             scq4.setVisibility(View.GONE);
             scq4Math.setVisibility(View.VISIBLE);
@@ -1492,19 +1503,10 @@ public class PractiseViewPagerAdapter extends PagerAdapter
         EditText etSinlgeineAns = layout.findViewById(R.id.fill_in_the_blanks);
 
         String decodedAns = AppUtils.decodedString(testQuestionNew.getTtqa_sub_ans());
-        //Log.d(TAG, "Plain Text : "+testQuestionNew.getTtqa_sub_ans());
-        //Log.d(TAG, "Decoded Text : " + StringUtils.stripAccents(decodedAns));
+
         int minutes = Integer.parseInt(tvTimer.getText().toString().split(":", -1)[0]);
         int seconds = Integer.parseInt(tvTimer.getText().toString().split(":", -1)[1]);
         SubjectiveAnsDialog subjectiveAnsDialog = new SubjectiveAnsDialog(context, decodedAns, seconds, minutes, this);
-
-        /*etMultiLineAns.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                etMultiLineAns.requestFocus();
-                return true;
-            }
-        });*/
 
         etMultiLineAns.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1518,6 +1520,8 @@ public class PractiseViewPagerAdapter extends PagerAdapter
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
                     etMultiLineAns.clearFocus();
+                    gMinutes = Integer.parseInt(tvTimer.getText().toString().split(":", -1)[0]);
+                    gSeconds = Integer.parseInt(tvTimer.getText().toString().split(":", -1)[1]);
                     subjectiveAnsDialog.show();
                 }
             }
@@ -1697,7 +1701,7 @@ public class PractiseViewPagerAdapter extends PagerAdapter
 
         if (imgDoubts != null) {
             imgDoubts.setOnClickListener(v -> {
-                new DoubtListingDialog(context, null, "",Constant.my_doubts)
+                new DoubtListingDialog(context, null, "", Constant.my_doubts)
                         .show();
             });
         }
@@ -1876,6 +1880,12 @@ public class PractiseViewPagerAdapter extends PagerAdapter
     public void onCommentClick(String userId) {
         publicProfileDialog = new PublicProfileDialog(context, userId, this);
         publicProfileDialog.show();
+    }
+
+    @Override
+    public void onBackClick(int count) {
+        Log.d(TAG, "onBackClick Comment Count : " + count);
+        viewPagerClickListener.onCommentBack(count);
     }
 
     private void loadImage(String img, ImageView imageView) {
@@ -2566,6 +2576,8 @@ public class PractiseViewPagerAdapter extends PagerAdapter
         void onLikeClick(boolean isChecked, int likeCount);
 
         void onCommentClick();
+
+        void onCommentBack(int count);
 
         void onShareClick();
 

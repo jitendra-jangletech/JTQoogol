@@ -8,9 +8,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
+
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.EducationAdapter;
 import com.jangletech.qoogol.databinding.DialogEduListingBinding;
@@ -21,8 +23,10 @@ import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -70,11 +74,6 @@ public class EducationListDialog extends Dialog implements EducationAdapter.Educ
         });
 
         mBinding.tvSave.setOnClickListener(v -> {
-            //AppUtils.showToast(mContext, "UEID : " + edu.getUe_id());
-            /*Log.d(TAG, "onCreate University : " + edu.getUbm_board_name());
-            Log.d(TAG, "onCreate Degree : " + edu.getDm_degree_name());
-            Log.d(TAG, "onCreate Course : " + edu.getCo_name());
-            Log.d(TAG, "onCreate Institute : " + edu.getIom_name());*/
             listener.onSaveButtonClick(edu);
             dismiss();
         });
@@ -121,7 +120,7 @@ public class EducationListDialog extends Dialog implements EducationAdapter.Educ
     }
 
     @Override
-    public void onItemClick(Education education) {
+    public void onItemClick(Education education, int pos) {
         edu = education;
         Log.d(TAG, "onItemClick : " + education.getCo_name());
         Log.d(TAG, "onItemClick : " + education.getDm_degree_name());
@@ -135,6 +134,7 @@ public class EducationListDialog extends Dialog implements EducationAdapter.Educ
 
     public interface EducationDialogClickListener {
         void onSaveButtonClick(Education education);
+
         void onAddEduClick();
     }
 }

@@ -116,8 +116,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@color/colorWhite"
-                            android:drawableTint="@color/colorSkyBlue"
                             android:drawableEnd="@drawable/ic_date_calender"
+                            android:drawableTint="@color/colorSkyBlue"
                             android:focusable="false"
                             android:textColor="@color/colorBlack" />
                     </com.google.android.material.textfield.TextInputLayout>
@@ -143,14 +143,14 @@
                         android:weightSum="2">
 
                         <com.google.android.material.textfield.TextInputLayout
-                            app:passwordToggleEnabled="true"
                             android:id="@+id/tilOtp"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/_1sdp"
                             android:layout_weight="1.4"
                             android:hint="@string/otp_new"
-                            app:errorEnabled="true">
+                            app:errorEnabled="true"
+                            app:passwordToggleEnabled="true">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:layout_width="match_parent"
@@ -201,6 +201,86 @@
                             android:inputType="textPassword"
                             android:textColor="@color/colorBlack" />
                     </com.google.android.material.textfield.TextInputLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/rlReferral"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/etPassword"
+                        android:layout_alignStart="@+id/imgLogo"
+                        android:layout_alignEnd="@+id/imgLogo"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="@dimen/activity_horizontal_margin"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:id="@+id/etInput"
+                            style="@style/MatchedTextViewDataStyle"
+                            android:layout_below="@+id/referredUserName"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentTop="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="0dp"
+                            android:layout_marginTop="5dp"
+                            android:text="@string/referral_code_" />
+
+                        <TextView
+                            android:id="@+id/etInputRefOptional"
+                            style="@style/MatchedTextViewDataStyle"
+                            android:layout_below="@+id/etInput"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="0dp"
+                            android:gravity="center"
+                            android:text="@string/optional"
+                            android:textSize="12sp" />
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/refrerral_view"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentTop="true"
+                            android:layout_marginStart="5dp"
+                            android:layout_toStartOf="@+id/btnVerify"
+                            android:layout_toEndOf="@+id/etInput"
+                            android:digits="@string/user_name_params"
+                            android:maxLength="40"
+                            android:maxLines="1"
+                            android:minWidth="80dp"
+                            android:padding="5dp"
+                            android:textAlignment="textStart"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="16sp"
+                            android:textStyle="normal" />
+
+                        <TextView
+                            android:id="@+id/btnVerify"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginStart="@dimen/margin_10"
+                            android:background="@drawable/gray_border"
+                            android:padding="5dp"
+                            android:text="@string/verify"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/textSizexSmall"
+                            android:textStyle="normal" />
+
+                        <TextView
+                            android:id="@+id/referredUserName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/btnVerify"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="@dimen/margin_10"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="14sp"
+                            android:textStyle="normal"
+                            android:visibility="gone" />
+
+                    </RelativeLayout>
 
                     <TextView
                         android:id="@+id/terms_privacy"

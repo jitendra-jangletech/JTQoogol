@@ -52,22 +52,28 @@ public class ShareQuestionDialog extends Dialog implements ShareAdapter.OnItemCl
     private String actionId;
     private String userId;
     private String deviceId;
+    private int addShareCount = 0;
     private int pageCount = 0;
     private String tOrQ = "";
     private boolean isSearching = false;
     private Boolean isScrolling = false;
+    private boolean isMoreDataAvailable = false;
     private int currentItems, scrolledOutItems, totalItems;
     private LinearLayoutManager linearLayoutManager;
+    private ShareDialogListener listener;
     private ApiInterface apiService = ApiClient.getInstance().getApi();
 
     public ShareQuestionDialog(@NonNull Activity mContext, String actionId,
-                               String userId, String deviceId, String tOrQ) {
+                               String userId, String deviceId, String tOrQ,ShareDialogListener listener) {
         super(mContext, android.R.style.Theme_DeviceDefault_Light_DarkActionBar);
         this.mContext = mContext;
         this.actionId = actionId;
         this.userId = userId;
         this.deviceId = deviceId;
         this.tOrQ = tOrQ;
+        this.listener = listener;
+        addShareCount = 0;
+        isMoreDataAvailable = false;
     }
 
     @Override
@@ -154,7 +160,8 @@ public class ShareQuestionDialog extends Dialog implements ShareAdapter.OnItemCl
                 totalItems = linearLayoutManager.getItemCount();
                 scrolledOutItems = linearLayoutManager.findFirstVisibleItemPosition();
                 if (dy > 0) {
-                    if (isScrolling && (currentItems + scrolledOutItems == totalItems)) {
+                    if (isScrolling && !isMoreDataAvailable &&
+                            (currentItems + scrolledOutItems == totalItems)) {
                         isScrolling = false;
                         getData(pageCount, "");
                     }
@@ -164,7 +171,6 @@ public class ShareQuestionDialog extends Dialog implements ShareAdapter.OnItemCl
     }
 
     private void getData(int pagestart, String text) {
-        //ProgressDialog.getInstance().show(getActivity());
         mBinding.progress.setVisibility(View.VISIBLE);
         Call<ShareResponse> call = apiService.fetchConnectionsforShare(userId, friends_and_groups,
                 deviceId, qoogol, pagestart, text);
@@ -205,7 +211,6 @@ public class ShareQuestionDialog extends Dialog implements ShareAdapter.OnItemCl
             List<ShareModel> sharingList = new ArrayList<>();
             if (shareResponse.getConnection_list().size() > 0) {
                 for (ShareModel shareModel : shareResponse.getConnection_list()) {
-                    //Log.d(TAG, "setData First Name : " + AESSecurities.getInstance().decrypt(TinyDB.getInstance(mContext).getString(Constant.cf_key1), shareModel.getU_first_name()));
                     shareModel.setU_first_name(AESSecurities.getInstance().decrypt(TinyDB.getInstance(mContext).getString(Constant.cf_key1), shareModel.getU_first_name()));
                     shareModel.setU_last_name(AESSecurities.getInstance().decrypt(TinyDB.getInstance(mContext).getString(Constant.cf_key2), shareModel.getU_last_name()));
                     sharingList.add(shareModel);
@@ -217,6 +222,7 @@ public class ShareQuestionDialog extends Dialog implements ShareAdapter.OnItemCl
                     shareModelList.addAll(sharingList);
                     mAdapter.updateList(shareModelList);
                 } else {
+                    isMoreDataAvailable = true;
                     AppUtils.showToast(mContext, "No more connections available.");
                 }
             } else {
@@ -227,7 +233,7 @@ public class ShareQuestionDialog extends Dialog implements ShareAdapter.OnItemCl
                     mAdapter.updateList(filteredModelList);
                 } else {
                     AppUtils.showToast(mContext, "No search results found.");
-                    mAdapter.updateList(shareModelList);
+                    mAdapter.updateList(filteredModelList);
                 }
             }
         }
@@ -238,7 +244,7 @@ public class ShareQuestionDialog extends Dialog implements ShareAdapter.OnItemCl
         modelAction = modelAction.replace("D", "U");
         modelAction = modelAction.replace("A", "U");
         String comment = AppUtils.encodedString(mBinding.shareComment.getText().toString().trim());
-
+        setShareCount(modelAction);
         Log.d(TAG, "callShareAPI Test Id : " + actionId);
         Log.d(TAG, "callShareAPI Comment : " + comment);
         Log.d(TAG, "callShareAPI Model Action : " + modelAction);
@@ -259,6 +265,7 @@ public class ShareQuestionDialog extends Dialog implements ShareAdapter.OnItemCl
                     if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
                         Log.i(TAG, "shared successfully");
                         AppUtils.showToast(getContext(), "Shared successfully...");
+                        listener.onSharedSuccess(addShareCount);
                     } else {
                         AppUtils.showToast(mContext, UtilHelper.getAPIError(String.valueOf(response.body())));
                     }
@@ -286,5 +293,20 @@ public class ShareQuestionDialog extends Dialog implements ShareAdapter.OnItemCl
     @Override
     public void onBottomReached(int position) {
 
+    }
+
+    private void setShareCount(String shareAction){
+        if(shareAction!=null){
+            String[] data = shareAction.split(",",-1);
+            for(String string :data){
+                if(string!=null && !string.isEmpty()){
+                    addShareCount++;
+                }
+            }
+        }
+    }
+
+    public interface ShareDialogListener{
+        void onSharedSuccess(int count);
     }
 }

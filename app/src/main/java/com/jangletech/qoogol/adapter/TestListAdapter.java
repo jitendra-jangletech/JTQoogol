@@ -19,7 +19,6 @@ import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.TestItemBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.model.ProcessQuestion;
-import com.jangletech.qoogol.model.TestModel;
 import com.jangletech.qoogol.model.TestModelNew;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
@@ -28,8 +27,10 @@ import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.DateUtils;
 import com.jangletech.qoogol.util.PreferenceManager;
+
 import java.util.HashMap;
 import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -60,7 +61,13 @@ public class TestListAdapter extends RecyclerView.Adapter<TestListAdapter.ViewHo
         this.testModelList = itemlist;
         this.testClickListener = testClickListener;
         this.flag = flag;
+        setHasStableIds(true);
         setMapValues();
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return testModelList.get(position).getTm_id();
     }
 
     private void setMapValues() {
@@ -110,7 +117,6 @@ public class TestListAdapter extends RecyclerView.Adapter<TestListAdapter.ViewHo
         });
 
 
-
         Log.e(TAG, "Like Count : " + testModelNew.getLikeCount());
         holder.itemBinding.likeValue.setText("" + testModelNew.getLikeCount());
 
@@ -131,10 +137,10 @@ public class TestListAdapter extends RecyclerView.Adapter<TestListAdapter.ViewHo
 
         if (testModelNew.isFavourite()) {
             //itemBinding.favorite.setChecked(true);
-            AppUtils.bounceAnim(activity, holder.itemBinding.favorite);
+            //AppUtils.bounceAnim(activity, holder.itemBinding.favorite);
             holder.itemBinding.favorite.setImageDrawable(activity.getDrawable(R.drawable.ic_favorite_filled));
         } else {
-            AppUtils.bounceAnim(activity, holder.itemBinding.favorite);
+            //AppUtils.bounceAnim(activity, holder.itemBinding.favorite);
             holder.itemBinding.favorite.setImageDrawable(activity.getDrawable(R.drawable.ic_fav));
         }
 
@@ -145,10 +151,10 @@ public class TestListAdapter extends RecyclerView.Adapter<TestListAdapter.ViewHo
         }*/
 
         if (testModelNew.isLike()) {
-            AppUtils.bounceAnim(activity, holder.itemBinding.like);
+            //AppUtils.bounceAnim(activity, holder.itemBinding.like);
             holder.itemBinding.like.setBackgroundDrawable(activity.getDrawable(R.drawable.ic_like_filled));
         } else {
-            AppUtils.bounceAnim(activity, holder.itemBinding.like);
+            //AppUtils.bounceAnim(activity, holder.itemBinding.like);
             holder.itemBinding.like.setBackgroundDrawable(activity.getDrawable(R.drawable.ic_like));
         }
 
@@ -169,11 +175,11 @@ public class TestListAdapter extends RecyclerView.Adapter<TestListAdapter.ViewHo
         });
 
         holder.itemBinding.commentLayout.setOnClickListener(v -> {
-            testClickListener.onCommentClick(testModelNew);
+            testClickListener.onCommentClick(testModelNew,position);
         });
 
         holder.itemBinding.shareLayout.setOnClickListener(v -> {
-            testClickListener.onShareClick(testModelNew.getTm_id());
+            testClickListener.onShareClick(testModelNew,position);
         });
 
         holder.itemBinding.favorite.setOnClickListener(v -> {
@@ -210,9 +216,9 @@ public class TestListAdapter extends RecyclerView.Adapter<TestListAdapter.ViewHo
 
         void onStartTestClick(TestModelNew testModel);
 
-        void onCommentClick(TestModelNew testModel);
+        void onCommentClick(TestModelNew testModel,int pos);
 
-        void onShareClick(int testid);
+        void onShareClick(TestModelNew testModelNew,int pos);
 
         void onLikeCountClick(TestModelNew testModel);
 
