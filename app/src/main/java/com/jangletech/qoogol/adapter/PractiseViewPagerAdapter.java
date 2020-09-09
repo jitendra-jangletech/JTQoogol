@@ -768,6 +768,7 @@ public class PractiseViewPagerAdapter extends PagerAdapter
         call.enqueue(new Callback<ProcessQuestion>() {
             @Override
             public void onResponse(Call<ProcessQuestion> call, retrofit2.Response<ProcessQuestion> response) {
+                ProgressDialog.getInstance().dismiss();
                 try {
                     if (response.body() != null && response.body().getResponse().equals("200")) {
 
@@ -789,9 +790,8 @@ public class PractiseViewPagerAdapter extends PagerAdapter
                             viewPagerClickListener.onLikeClick(false, likeCount);
                         }
                     } else {
-                        Toast.makeText(context, UtilHelper.getAPIError(String.valueOf(response.body())), Toast.LENGTH_SHORT).show();
+                        AppUtils.showToast(context, null, response.body().getMessage());
                     }
-                    ProgressDialog.getInstance().dismiss();
                 } catch (Exception e) {
                     e.printStackTrace();
                     ProgressDialog.getInstance().dismiss();
@@ -802,6 +802,7 @@ public class PractiseViewPagerAdapter extends PagerAdapter
             public void onFailure(Call<ProcessQuestion> call, Throwable t) {
                 t.printStackTrace();
                 ProgressDialog.getInstance().dismiss();
+                AppUtils.showToast(context, t, "");
             }
         });
     }
@@ -1314,14 +1315,15 @@ public class PractiseViewPagerAdapter extends PagerAdapter
                     showToast("Answer Submitted");
                     viewPagerClickListener.onSubmitClick();
                 } else {
-                    Log.e(TAG, "onResponse Error : " + response.body().getResponse());
+                    AppUtils.showToast(context, null, response.body().getErrorMsg());
                 }
             }
 
             @Override
             public void onFailure(Call<VerifyResponse> call, Throwable t) {
-                showToast("Something went wrong!!");
+                ProgressDialog.getInstance().dismiss();
                 t.printStackTrace();
+                AppUtils.showToast(context, t, "");
             }
         });
     }
@@ -1701,7 +1703,9 @@ public class PractiseViewPagerAdapter extends PagerAdapter
 
         if (imgDoubts != null) {
             imgDoubts.setOnClickListener(v -> {
-                new DoubtListingDialog(context,testQuestionNew.getTq_id() , testQuestionNew.getQ_sm_id(), Constant.que_doubts)
+                Log.d(TAG, "initViews QId : " + testQuestionNew.getTq_id());
+                Log.d(TAG, "initViews SmId : " + testQuestionNew.getQ_sm_id());
+                new DoubtListingDialog(context, testQuestionNew.getTq_id(), testQuestionNew.getQ_sm_id(), Constant.que_doubts)
                         .show();
             });
         }

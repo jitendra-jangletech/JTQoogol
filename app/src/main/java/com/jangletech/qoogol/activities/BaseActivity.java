@@ -2,6 +2,7 @@ package com.jangletech.qoogol.activities;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -61,6 +62,21 @@ public class BaseActivity extends AppCompatActivity {
 
     public void saveString(String key, String value) {
         new PreferenceManager(getApplicationContext()).saveString(key, value);
+    }
+
+    public void noInternetError(Throwable t) {
+        if (t instanceof UnknownHostException) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogStyle);
+            builder.setTitle("Alert")
+                    .setMessage("Check your internet connection.")
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                            dialog.dismiss();
+                        }
+                    }).setCancelable(false).show();
+        }
     }
 
     public static void expand(final View v) {

@@ -9,6 +9,16 @@ import java.util.List;
  * Created by Pritali on 6/9/2020.
  */
 public class FriendRequestResponse {
+    public String getMessage() {
+        return Message;
+    }
+
+    public void setMessage(String message) {
+        Message = message;
+    }
+
+    private String Message;
+
     @SerializedName(Constant.Response)
     private String response;
 

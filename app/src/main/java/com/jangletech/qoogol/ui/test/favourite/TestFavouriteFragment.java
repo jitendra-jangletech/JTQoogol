@@ -31,8 +31,11 @@ import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.ui.test.my_test.MyTestViewModel;
+import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
+
 import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -99,7 +102,6 @@ public class TestFavouriteFragment extends BaseFragment implements TestListAdapt
 
     private void fetchTestList() {
         Log.d(TAG, "fetchTestList UserId : " + getUserId(getActivity()));
-        //ProgressDialog.getInstance().show(getActivity());
         mBinding.swipeToRefresh.setRefreshing(true);
         Call<TestListResponse> call = apiService.fetchTestList(
                 getUserId(getActivity()),
@@ -124,15 +126,13 @@ public class TestFavouriteFragment extends BaseFragment implements TestListAdapt
                 } else if (response.body().getResponse().equals("501")) {
                     resetSettingAndLogout();
                 } else {
-                    showErrorDialog(getActivity(), response.body().getResponse(), response.body().getMessage());
+                    AppUtils.showToast(getActivity(), null, response.body().getMessage());
                 }
             }
 
             @Override
             public void onFailure(Call<TestListResponse> call, Throwable t) {
-                //ProgressDialog.getInstance().dismiss();
                 mBinding.swipeToRefresh.setRefreshing(false);
-                showToast("Something went wrong!!");
                 t.printStackTrace();
                 apiCallFailureDialog(t);
             }
@@ -219,7 +219,7 @@ public class TestFavouriteFragment extends BaseFragment implements TestListAdapt
     @Override
     public void onBackClick(int count) {
         Log.d(TAG, "onBackClick Comment Count : " + count);
-        int commentCount = Integer.parseInt(selectedTestCard.getCommentsCount())+count;
+        int commentCount = Integer.parseInt(selectedTestCard.getCommentsCount()) + count;
         selectedTestCard.setCommentsCount("" + commentCount);
         testListAdapter.notifyItemChanged(selectedPos, selectedTestCard);
     }

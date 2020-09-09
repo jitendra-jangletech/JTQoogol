@@ -19,6 +19,7 @@ import com.jangletech.qoogol.model.Like;
 import com.jangletech.qoogol.model.ProcessQuestion;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
+import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
 
@@ -88,7 +89,7 @@ public class LikeListingDialog extends Dialog implements LikeAdapter.onItemClick
                             likeList = response.body().getLikeList();
                             initRecycler();
                         } else {
-                            Toast.makeText(context, UtilHelper.getAPIError(String.valueOf(response.body())), Toast.LENGTH_SHORT).show();
+                            AppUtils.showToast(context, null,response.body().getMessage());
                         }
                         if (likeDialogBinding.likeSwiperefresh.isRefreshing())
                             likeDialogBinding.likeSwiperefresh.setRefreshing(false);
@@ -108,6 +109,8 @@ public class LikeListingDialog extends Dialog implements LikeAdapter.onItemClick
                 public void onFailure(Call<ProcessQuestion> call, Throwable t) {
                     t.printStackTrace();
                     ProgressDialog.getInstance().dismiss();
+                    AppUtils.showToast(context, t,"");
+                    dismiss();
                     if (likeDialogBinding.likeSwiperefresh.isRefreshing())
                         likeDialogBinding.likeSwiperefresh.setRefreshing(false);
                 }

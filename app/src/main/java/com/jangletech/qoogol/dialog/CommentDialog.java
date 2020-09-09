@@ -27,7 +27,6 @@ import com.jangletech.qoogol.util.AESSecurities;
 import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.TinyDB;
-import com.jangletech.qoogol.util.UtilHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,7 +63,6 @@ public class CommentDialog extends Dialog implements
         this.commentClickListener = commentClickListener;
         addCommentCount = 0;
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,7 +144,7 @@ public class CommentDialog extends Dialog implements
                             }
                             emptyView();
                         } else {
-                            Toast.makeText(mContext, UtilHelper.getAPIError(String.valueOf(response.body())), Toast.LENGTH_SHORT).show();
+                            AppUtils.showToast(mContext, null, response.body().getMessage());
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -161,6 +159,8 @@ public class CommentDialog extends Dialog implements
                     t.printStackTrace();
                     mBinding.shimmerViewContainer.hideShimmer();
                     ProgressDialog.getInstance().dismiss();
+                    AppUtils.showToast(mContext, t, "");
+                    dismiss();
                 }
             });
         } catch (Exception e) {
@@ -282,14 +282,14 @@ public class CommentDialog extends Dialog implements
                     commentAdapter.deleteComment(pos);
                     addCommentCount--;
                 } else {
-                    AppUtils.showToast(mContext, response.body().getResponse());
+                    AppUtils.showToast(mContext, null, response.body().getMessage());
                 }
             }
 
             @Override
             public void onFailure(Call<ProcessQuestion> call, Throwable t) {
                 ProgressDialog.getInstance().dismiss();
-                AppUtils.showToast(mContext, "Something went wrong!!");
+                AppUtils.showToast(mContext, t, "");
                 t.printStackTrace();
             }
         });
@@ -339,7 +339,7 @@ public class CommentDialog extends Dialog implements
             @Override
             public void onFailure(Call<ProcessQuestion> call, Throwable t) {
                 ProgressDialog.getInstance().dismiss();
-                AppUtils.showToast(mContext, "Something went wrong!!");
+                AppUtils.showToast(mContext, t,null);
                 t.printStackTrace();
             }
         });

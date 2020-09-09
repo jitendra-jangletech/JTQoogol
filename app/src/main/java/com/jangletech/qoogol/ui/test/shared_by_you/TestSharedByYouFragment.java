@@ -2,7 +2,6 @@ package com.jangletech.qoogol.ui.test.shared_by_you;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,8 +25,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.google.android.material.chip.Chip;
-import com.google.android.material.chip.ChipGroup;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.activities.PracticeTestActivity;
 import com.jangletech.qoogol.adapter.TestListAdapter;
@@ -45,7 +42,6 @@ import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.ui.test.my_test.MyTestViewModel;
 import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
-import com.jangletech.qoogol.util.PreferenceManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -161,7 +157,7 @@ public class TestSharedByYouFragment extends BaseFragment
         mBinding.swipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                fetchTestList(params, pageStart);
+                fetchTestList(params, "0");
             }
         });
 
@@ -273,36 +269,6 @@ public class TestSharedByYouFragment extends BaseFragment
         }
     }
 
-//    private void prepareSubjectChips(ArrayList<String> subjects) {
-//        mBinding.subjectsChipGrp.removeAllViews();
-//        int idCounter = 0;
-//        for (String subject : subjects) {
-//            Chip chip = (Chip) LayoutInflater.from(mBinding.subjectsChipGrp.getContext()).inflate(R.layout.chip_layout, mBinding.subjectsChipGrp, false);
-//            chip.setText(subject);
-//            chip.setId(idCounter);
-//            chip.setTag("Subjects");
-//            chip.setClickable(true);
-//            chip.setCheckable(true);
-//            mBinding.subjectsChipGrp.addView(chip);
-//            idCounter++;
-//        }
-//    }
-
-    private void setCheckedChip(ChipGroup chipGroup) {
-        for (int i = 0; i < chipGroup.getChildCount(); i++) {
-            Chip chip = (Chip) chipGroup.getChildAt(i);
-            if (chip.isChecked()) {
-                chip.setTextColor(Color.WHITE);
-            } else {
-                chip.setTextColor(Color.BLACK);
-            }
-        }
-    }
-
-    private String getTestType(String key) {
-        return new PreferenceManager(getActivity()).getString(key);
-    }
-
     @Override
     public boolean onQueryTextSubmit(String query) {
         return false;
@@ -365,7 +331,7 @@ public class TestSharedByYouFragment extends BaseFragment
                 } else if (response.body().getResponse().equals("501")) {
                     resetSettingAndLogout();
                 } else {
-                    showErrorDialog(getActivity(), response.body().getResponse(), response.body().getMessage());
+                    AppUtils.showToast(getActivity(), null, response.body().getMessage());
                 }
             }
 
@@ -373,8 +339,8 @@ public class TestSharedByYouFragment extends BaseFragment
             public void onFailure(Call<TestListResponse> call, Throwable t) {
                 mBinding.swipeToRefresh.setRefreshing(false);
                 mBinding.progress.setVisibility(View.GONE);
-                showToast("Something went wrong!!");
                 t.printStackTrace();
+                apiCallFailureDialog(t);
             }
         });
     }

@@ -6,6 +6,17 @@ import java.util.List;
 
 public class FetchEducationResponse {
 
+    @SerializedName("Message")
+    private String message;
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
     @SerializedName("Response")
     private String responseCode;
 

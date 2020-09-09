@@ -315,14 +315,31 @@
                             android:visibility="visible"
                             app:layout_constraintBottom_toBottomOf="parent">
 
-                            <TextView
-                                android:layout_width="match_parent"
+                            <LinearLayout
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginBottom="@dimen/_2sdp"
-                                android:gravity="center"
-                                android:text="@string/qoogol_version_1_0"
-                                android:textColor="@color/menu_item_text_color"
-                                android:textSize="@dimen/_9ssp" />
+                                android:layout_gravity="center_horizontal"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="@dimen/_2sdp"
+                                    android:gravity="center"
+                                    android:text="@string/qoogol_version_1_0"
+                                    android:textColor="@color/menu_item_text_color"
+                                    android:textSize="@dimen/_9ssp" />
+
+                                <TextView
+                                    android:id="@+id/tvAppVersion"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="@dimen/_2sdp"
+                                    android:gravity="center"
+                                    android:text=""
+                                    android:textColor="@color/menu_item_text_color"
+                                    android:textSize="@dimen/_9ssp" />
+                            </LinearLayout>
 
                             <TextView
                                 android:layout_width="match_parent"

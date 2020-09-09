@@ -16,6 +16,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.jangletech.qoogol.R;
+import com.jangletech.qoogol.activities.BaseActivity;
 import com.jangletech.qoogol.adapter.LearningAdapter;
 import com.jangletech.qoogol.databinding.LearningFragmentBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
@@ -23,6 +24,8 @@ import com.jangletech.qoogol.model.LearningQuestionsNew;
 import com.jangletech.qoogol.model.ProcessQuestion;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
+import com.jangletech.qoogol.ui.BaseFragment;
+import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
@@ -41,7 +44,7 @@ import static com.jangletech.qoogol.util.Constant.profile;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FavQueFragment extends Fragment implements LearningAdapter.onIconClick {
+public class FavQueFragment extends BaseFragment implements LearningAdapter.onIconClick {
 
     private static final String TAG = "FavQueFragment";
     private LearningFragmentBinding learningFragmentBinding;
@@ -142,7 +145,7 @@ public class FavQueFragment extends Fragment implements LearningAdapter.onIconCl
                     if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
 
                     } else {
-                        Toast.makeText(getActivity(), UtilHelper.getAPIError(String.valueOf(response.body())), Toast.LENGTH_SHORT).show();
+                        AppUtils.showToast(getActivity(), null, response.body().getMessage());
                     }
                     ProgressDialog.getInstance().dismiss();
                 } catch (Exception e) {
@@ -155,6 +158,7 @@ public class FavQueFragment extends Fragment implements LearningAdapter.onIconCl
             public void onFailure(Call<ProcessQuestion> call, Throwable t) {
                 t.printStackTrace();
                 ProgressDialog.getInstance().dismiss();
+                apiCallFailureDialog(t);
             }
         });
     }

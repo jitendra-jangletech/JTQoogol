@@ -20,6 +20,7 @@ import com.jangletech.qoogol.model.FaqResponse;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
+import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 
 import java.util.HashMap;
@@ -69,7 +70,7 @@ public class FaqTopicDetailsFragment extends BaseFragment implements FAQListAdap
         params.put(Constant.faqt_id, faqModel.getFaqt_id());
         fetchFaq(params);
         mViewModel.getFaqQuestions().observe(requireActivity(), faqModels -> {
-            if(faqModels!=null) {
+            if (faqModels != null) {
                 faqListAdapter = new FAQListAdapter(faqModels, requireActivity(), this);
                 mBinding.faqDetailsRecyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
                 mBinding.faqDetailsRecyclerView.setAdapter(faqListAdapter);
@@ -97,14 +98,14 @@ public class FaqTopicDetailsFragment extends BaseFragment implements FAQListAdap
                         mViewModel.setFaqQuestions(response.body().getList());
                     }
                 } else {
-                    showToast("Something went wrong!!");
+                    AppUtils.showToast(getActivity(), null, response.body().getMessage());
                 }
             }
 
             @Override
             public void onFailure(Call<FaqResponse> call, Throwable t) {
                 ProgressDialog.getInstance().dismiss();
-                showToast("Something went wrong!!");
+                apiCallFailureDialog(t);
                 t.printStackTrace();
             }
         });

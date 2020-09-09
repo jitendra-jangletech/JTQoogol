@@ -13,6 +13,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.FollowReqAdapter;
@@ -70,7 +71,7 @@ public class FollowRequestFragment extends BaseFragment implements FollowReqAdap
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(FollowReqViewModel.class);
-        init();
+        //init();
         fetchFollowReq();
         mViewModel.getFollowReqdList().observe(getViewLifecycleOwner(), followRequestList -> {
             if (followRequestList != null) {
@@ -87,15 +88,23 @@ public class FollowRequestFragment extends BaseFragment implements FollowReqAdap
                     initView(list);
 
                 } else {
-                    mBinding.emptyview.setText("You don't have any pending requests.");
+                    mBinding.emptyview.setText("No Requests.");
                     mBinding.emptyview.setVisibility(View.VISIBLE);
                 }
             }
             dismissRefresh(mBinding.requestsSwiperefresh);
         });
+
+        mBinding.requestsSwiperefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                fetchFollowReq();
+            }
+        });
     }
 
     public void fetchFollowReq() {
+        mBinding.emptyview.setText("Fetching Requests...");
         Call<FollowRequestResponse> call = apiService.fetchRefreshedFollowReq(getUserId(getActivity()), followrequests, getDeviceId(getActivity()), qoogol, "0", forcerefresh);
         call.enqueue(new Callback<FollowRequestResponse>() {
             @Override
@@ -103,6 +112,9 @@ public class FollowRequestFragment extends BaseFragment implements FollowReqAdap
                 dismissRefresh(mBinding.requestsSwiperefresh);
                 if (response.body() != null &&
                         response.body().getResponse().equalsIgnoreCase("200")) {
+                    if(response.body().getFollowreq_list().size() == 0){
+                        mBinding.emptyview.setText("No Requests.");
+                    }
                     mViewModel.insert(response.body().getFollowreq_list());
                 } else {
                     if (response.body() != null)
@@ -120,7 +132,7 @@ public class FollowRequestFragment extends BaseFragment implements FollowReqAdap
         });
     }
 
-    private void init() {
+    /*private void init() {
         if (!isVisible) {
             isVisible = true;
             mViewModel.fetchFollowReqData(false);
@@ -135,7 +147,7 @@ public class FollowRequestFragment extends BaseFragment implements FollowReqAdap
         if (mBinding.requestsSwiperefresh.isRefreshing()) {
             mBinding.requestsSwiperefresh.setRefreshing(false);
         }
-    }
+    }*/
 
     @Override
     public void onResume() {

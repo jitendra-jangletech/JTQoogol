@@ -233,10 +233,7 @@ public class PracticeTestActivity extends BaseActivity implements
 
             @Override
             public void onDrawerClosed(@NonNull View drawerView) {
-               /* if (isQuestionSelected) {
-                    isQuestionSelected = false;
-                    practiceViewPager.setCurrentItem(questPos, true);
-                }*/
+
             }
 
             @Override
@@ -245,65 +242,6 @@ public class PracticeTestActivity extends BaseActivity implements
             }
         });
     }
-
-//    private void submitTestQuestions() {
-//        SubmitTest submitTest = new SubmitTest();
-//        List<TestQuestionNew> submitTestQuestionList = new ArrayList<>();
-//        submitTest.setTm_id(startTestResponse.getTm_id());
-//        submitTest.setTt_id(String.valueOf(startTestResponse.getTtId()));
-//        for (TestQuestionNew question : questionsNewList) {
-//            if (question.isAnsweredRight())
-//                question.setTtqa_obtain_marks(question.getQ_marks());
-//            else
-//                question.setTtqa_obtain_marks("0");
-//
-//            if (question.getQue_option_type().equalsIgnoreCase(Constant.FILL_THE_BLANKS) ||
-//                    question.getType().equalsIgnoreCase(Constant.SHORT_ANSWER) ||
-//                    question.getType().equalsIgnoreCase(Constant.LONG_ANSWER) ||
-//                    question.getType().equalsIgnoreCase(Constant.ONE_LINE_ANSWER) ||
-//                    question.getType().equalsIgnoreCase(Constant.FILL_THE_BLANKS)) {
-//                //String encoded = Base64.encodeToString(question.getTtqa_sub_ans().getBytes(StandardCharsets.UTF_8), Base64.DEFAULT);
-//                //String encodedAns = StringUtils.stripAccents(encoded);
-//                //Log.d(TAG, "Encoded Ans While Test Submition : " + AppUtils.encodedString(question.getTtqa_sub_ans()));
-//                //question.setTtqa_sub_ans(AppUtils.encodedString(question.getTtqa_sub_ans()));
-//            } else {
-//                question.setTtqa_sub_ans(question.getTtqa_sub_ans());
-//            }
-//            submitTestQuestionList.add(question);
-//        }
-//
-//        submitTest.setTestQuestionNewList(submitTestQuestionList);
-//        String json = gson.toJson(submitTest);
-//        Log.d(TAG, "submitTestQuestions JSON : " + json);
-//        HashMap<String, String> params = new HashMap<>();
-//        params.put(Constant.u_user_id, String.valueOf(new PreferenceManager(this).getInt(Constant.USER_ID)));
-//        params.put(Constant.DataList, json);
-//
-//        Log.d(TAG, "submitTestQuestions Params : " + params);
-//        ProgressDialog.getInstance().show(this);
-//        Call<VerifyResponse> call = apiService.submitTestQuestion(
-//                params.get(Constant.DataList),
-//                params.get(Constant.u_user_id));
-//        call.enqueue(new Callback<VerifyResponse>() {
-//            @Override
-//            public void onResponse(Call<VerifyResponse> call, Response<VerifyResponse> response) {
-//                ProgressDialog.getInstance().dismiss();
-//                if (response.body() != null && response.body().getResponse().equals("200")) {
-//                    //showToast("Te Submitted");
-//                    finish();
-//                } else {
-//                    Log.e(TAG, "submitTestQuestions Error : " + response.body().getResponse());
-//                    showToast(response.body().getResponse());
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<VerifyResponse> call, Throwable t) {
-//                showToast("Something went wrong!!");
-//                t.printStackTrace();
-//            }
-//        });
-//    }
 
     private void fetchTestQA() {
         ProgressDialog.getInstance().show(this);
@@ -332,18 +270,12 @@ public class PracticeTestActivity extends BaseActivity implements
             @Override
             public void onFailure(Call<StartResumeTestResponse> call, Throwable t) {
                 ProgressDialog.getInstance().dismiss();
-                t.printStackTrace();
+                noInternetError(t);
             }
         });
     }
 
     private void setupViewPager(StartResumeTestResponse startResumeTestResponse) {
-        /*for (TestQuestionNew testQuestionNew : startResumeTestResponse.getTestQuestionNewList()) {
-            if (testQuestionNew.getA_sub_ans().trim().equalsIgnoreCase(testQuestionNew.getTtqa_sub_ans().trim())
-                    || testQuestionNew.getType().equals("5") || testQuestionNew.getType().equals("6")) {
-                testQuestionNew.setAnsweredRight(true);
-            }
-        }*/
         practiseViewPagerAdapter = new PractiseViewPagerAdapter(PracticeTestActivity.this, this, startResumeTestResponse, flag);
         practiceViewPager.setAdapter(practiseViewPagerAdapter);
         setTimerToSelectedPage(0);
@@ -433,7 +365,7 @@ public class PracticeTestActivity extends BaseActivity implements
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             //finish();
-                            submitTestQuestions("P","0");
+                            submitTestQuestions("P", "0");
                         }
                     })
                     .setNegativeButton("Cancel", null)
@@ -452,11 +384,11 @@ public class PracticeTestActivity extends BaseActivity implements
 
     @Override
     public void onYesClick(String obtainMarks) {
-        Log.d(TAG, "onYesClick: "+obtainMarks);
-        submitTestQuestions("C",obtainMarks);
+        Log.d(TAG, "onYesClick: " + obtainMarks);
+        submitTestQuestions("C", obtainMarks);
     }
 
-    private void submitTestQuestions(String testStatus,String obtainMarks) {
+    private void submitTestQuestions(String testStatus, String obtainMarks) {
         SubmitTest submitTest = new SubmitTest();
         List<TestQuestionNew> submitTestQuestionList = new ArrayList<>();
         submitTest.setTm_id(startTestResponse.getTm_id());
@@ -470,7 +402,7 @@ public class PracticeTestActivity extends BaseActivity implements
 
         HashMap<String, String> params = new HashMap<>();
         params.put(Constant.tt_id, String.valueOf(startTestResponse.getTtId()));
-        params.put(Constant.tt_obtain_marks,obtainMarks);
+        params.put(Constant.tt_obtain_marks, obtainMarks);
         params.put(Constant.tt_status, testStatus);
         params.put(Constant.u_user_id, String.valueOf(new PreferenceManager(this).getInt(Constant.USER_ID)));
         params.put(Constant.DataList, json);
@@ -492,15 +424,13 @@ public class PracticeTestActivity extends BaseActivity implements
                     }
                     finish();
                 } else {
-                    Log.e(TAG, "onResponse Error : " + response.body().getResponse());
+                    AppUtils.showToast(getApplicationContext(), null, "");
                 }
             }
 
             @Override
             public void onFailure(Call<VerifyResponse> call, Throwable t) {
                 ProgressDialog.getInstance().dismiss();
-                showToast("Something went wrong!!");
-                t.printStackTrace();
                 apiCallFailureDialog(t);
             }
         });
@@ -551,7 +481,7 @@ public class PracticeTestActivity extends BaseActivity implements
     public void onCommentBack(int count) {
         //TestQuestionNew testQuestionNew = questionsNewList.get(practiceViewPager.getCurrentItem());
         //int prevCount = Integer.parseInt(testQuestionNew.getComments()) + count;
-        updatePageCount("COMMENT",count);
+        updatePageCount("COMMENT", count);
     }
 
 
@@ -618,18 +548,16 @@ public class PracticeTestActivity extends BaseActivity implements
             public void onResponse(Call<VerifyResponse> call, Response<VerifyResponse> response) {
                 ProgressDialog.getInstance().dismiss();
                 if (response.body() != null && response.body().getResponse().equals("200")) {
-                    //showToast("Question Marked.");
 
                 } else {
-                    Log.e(TAG, "onResponse Error : " + response.body().getResponse());
+                    AppUtils.showToast(getApplicationContext(), null, response.body().getErrorMsg());
                 }
             }
 
             @Override
             public void onFailure(Call<VerifyResponse> call, Throwable t) {
                 ProgressDialog.getInstance().dismiss();
-                showToast("Something went wrong!!");
-                t.printStackTrace();
+                AppUtils.showToast(getApplicationContext(), t, "");
             }
         });
     }
@@ -669,17 +597,16 @@ public class PracticeTestActivity extends BaseActivity implements
             public void onResponse(Call<VerifyResponse> call, Response<VerifyResponse> response) {
                 ProgressDialog.getInstance().dismiss();
                 if (response.body() != null && response.body().getResponse().equals("200")) {
-                    //showToast("Question Marked.");
+
                 } else {
-                    Log.e(TAG, "onResponse Error : " + response.body().getResponse());
+                    AppUtils.showToast(getApplicationContext(), null, response.body().getErrorMsg());
                 }
             }
 
             @Override
             public void onFailure(Call<VerifyResponse> call, Throwable t) {
                 ProgressDialog.getInstance().dismiss();
-                showToast("Something went wrong!!");
-                t.printStackTrace();
+                AppUtils.showToast(getApplicationContext(), t, "");
             }
         });
     }
@@ -754,15 +681,15 @@ public class PracticeTestActivity extends BaseActivity implements
         tvLikeCount.setText(String.valueOf(likeCount));
     }
 
-    private void updatePageCount(String flag,int count) {
+    private void updatePageCount(String flag, int count) {
         View view = practiceViewPager.findViewWithTag(pageSelectedPos);
         if (flag.equalsIgnoreCase("COMMENT")) {
             TextView tvCommentCount = view.findViewById(R.id.comment_value);
-            int prevCount = Integer.parseInt(tvCommentCount.getText().toString())+count;
+            int prevCount = Integer.parseInt(tvCommentCount.getText().toString()) + count;
             tvCommentCount.setText(String.valueOf(prevCount));
         } else {
             TextView tvShareValue = view.findViewById(R.id.share_value);
-            int prevCount = Integer.parseInt(tvShareValue.getText().toString())+count;
+            int prevCount = Integer.parseInt(tvShareValue.getText().toString()) + count;
             tvShareValue.setText(String.valueOf(prevCount));
         }
     }
@@ -772,6 +699,6 @@ public class PracticeTestActivity extends BaseActivity implements
     public void onSharedSuccess(int count) {
         //TestQuestionNew testQuestionNew = questionsNewList.get(practiceViewPager.getCurrentItem());
         //int prevCount = Integer.parseInt(testQuestionNew.getShares()) + count;
-        updatePageCount("SHARE",count);
+        updatePageCount("SHARE", count);
     }
 }

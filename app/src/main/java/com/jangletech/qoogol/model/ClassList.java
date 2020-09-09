@@ -7,6 +7,16 @@ import java.util.List;
 
 public class ClassList {
 
+    private String Message;
+
+    public String getMessage() {
+        return Message;
+    }
+
+    public void setMessage(String message) {
+        Message = message;
+    }
+
     private String Response;
 
     public String getResponse() {

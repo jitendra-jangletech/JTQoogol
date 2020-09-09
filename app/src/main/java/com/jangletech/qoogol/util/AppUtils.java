@@ -132,6 +132,15 @@ public class AppUtils {
         Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
     }
 
+    public static void showToast(Context context,Throwable t ,String msg) {
+        if(t instanceof UnknownHostException){
+            Toast.makeText(context, "Check Your Internet Connection.", Toast.LENGTH_LONG).show();
+        }else{
+            Toast.makeText(context, "Something Went Wrong!! \n"+msg, Toast.LENGTH_LONG).show();
+        }
+
+    }
+
     public static void bounceAnim(Context context, View view) {
         Animation anim = AnimationUtils.loadAnimation(context, R.anim.bounce);
         BounceInterpolator interpolator = new BounceInterpolator(0.1, 20);

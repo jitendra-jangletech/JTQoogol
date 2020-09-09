@@ -31,6 +31,7 @@ import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.util.AESSecurities;
+import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.TinyDB;
 
@@ -167,12 +168,11 @@ public class ConnectionListFragment extends BaseFragment implements ConnectionAd
                         connections.setU_last_name(lName);
                         newConnections.add(connections);
                     }
-                    //mViewModel.insert(response.body().getConnection_list());
                     mViewModel.insert(newConnections);
                 } else if (response.body().getResponse().equals("501")) {
                     resetSettingAndLogout();
                 } else {
-                    showToast("Error Code : " + response.body().getResponse());
+                    AppUtils.showToast(getActivity(), null,response.body().getMessage());
                 }
             }
 
@@ -180,7 +180,6 @@ public class ConnectionListFragment extends BaseFragment implements ConnectionAd
             public void onFailure(Call<ConnectionResponse> call, Throwable t) {
                 t.printStackTrace();
                 dismissRefresh(mBinding.connectionSwiperefresh);
-                showToast("Something went wrong!!");
                 apiCallFailureDialog(t);
             }
         });
@@ -281,7 +280,7 @@ public class ConnectionListFragment extends BaseFragment implements ConnectionAd
                 } else if (response.body().getResponse().equals("501")) {
                     resetSettingAndLogout();
                 } else {
-                    showToast("Error Code : " + response.body().getResponse());
+                    AppUtils.showToast(getActivity(), null, response.body().getMessage());
                 }
             }
 
@@ -289,7 +288,6 @@ public class ConnectionListFragment extends BaseFragment implements ConnectionAd
             public void onFailure(Call<ConnectionResponse> call, Throwable t) {
                 t.printStackTrace();
                 dismissRefresh(mBinding.connectionSwiperefresh);
-                showToast("Something went wrong!!");
                 apiCallFailureDialog(t);
             }
         });

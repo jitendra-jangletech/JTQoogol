@@ -1,5 +1,6 @@
 package com.jangletech.qoogol.ui.connections;
 
+import android.app.Application;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,6 +30,7 @@ import com.jangletech.qoogol.model.FollowingResponse;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
+import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 
@@ -134,7 +136,6 @@ public class FollowingFragment extends BaseFragment implements FollowingsAdapter
                 if (dy > 0) {
                     if (isScrolling && (currentItems + scrolledOutItems == totalItems)) {
                         isScrolling = false;
-                        //mViewModel.fetchFollowingsData(false);
                     }
                 }
             }
@@ -220,7 +221,7 @@ public class FollowingFragment extends BaseFragment implements FollowingsAdapter
                 } else if (response.body().getResponse().equals("501")) {
                     resetSettingAndLogout();
                 } else {
-                    showToast("Error Code : " + response.body().getResponse());
+                    AppUtils.showToast(getActivity(), null, response.body().getMessage());
                 }
             }
 
@@ -228,7 +229,6 @@ public class FollowingFragment extends BaseFragment implements FollowingsAdapter
             public void onFailure(Call<FollowingResponse> call, Throwable t) {
                 t.printStackTrace();
                 dismissRefresh(mBinding.connectionSwiperefresh);
-                showToast("Something went wrong!!");
                 apiCallFailureDialog(t);
             }
         });

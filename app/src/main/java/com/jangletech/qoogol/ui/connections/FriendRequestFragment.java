@@ -17,6 +17,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.FriendReqAdapter;
@@ -28,6 +29,7 @@ import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.util.AESSecurities;
+import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.TinyDB;
 
@@ -66,7 +68,7 @@ public class FriendRequestFragment extends BaseFragment implements FriendReqAdap
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(FriendReqViewModel.class);
-        init();
+        //init();
         fetchFriendRequests();
         mViewModel.getFrienReqdList().observe(getViewLifecycleOwner(), friendRequestList -> {
             if (friendRequestList != null) {
@@ -74,18 +76,32 @@ public class FriendRequestFragment extends BaseFragment implements FriendReqAdap
                 for (FriendRequest friendRequest : friendRequestList) {
                     String fName = AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key1), friendRequest.getU_first_name());
                     String lName = AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key2), friendRequest.getU_last_name());
-                    Log.d(TAG, "uid : " + friendRequest.getCn_user_id_2() + " = " + AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key1), friendRequest.getU_first_name()));
                     friendRequest.setU_first_name(fName);
                     friendRequest.setU_last_name(lName);
                     list.add(friendRequest);
                 }
                 initView(list);
+
+                if(list.size() > 0){
+                    mBinding.emptyview.setVisibility(View.GONE);
+                }else{
+                    mBinding.emptyview.setText("No Requests.");
+                    mBinding.emptyview.setVisibility(View.VISIBLE);
+                }
             }
             dismissRefresh(mBinding.requestsSwiperefresh);
+        });
+
+        mBinding.requestsSwiperefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                fetchFriendRequests();
+            }
         });
     }
 
     private void fetchFriendRequests() {
+        mBinding.emptyview.setText("Fetching Requests...");
         Call<FriendRequestResponse> call = apiService.fetchFriendRequests(getUserId(getActivity()), friendrequests, getDeviceId(getActivity()), qoogol, "0");
         call.enqueue(new Callback<FriendRequestResponse>() {
             @Override
@@ -93,11 +109,12 @@ public class FriendRequestFragment extends BaseFragment implements FriendReqAdap
                 dismissRefresh(mBinding.requestsSwiperefresh);
                 if (response.body() != null &&
                         response.body().getResponse().equalsIgnoreCase("200")) {
-                    Log.d(TAG, "onResponse: ");
+                    if(response.body().getFriend_req_list().size() == 0){
+                        mBinding.emptyview.setText("No Requests.");
+                    }
                     mViewModel.insert(response.body().getFriend_req_list());
                 } else {
-                    if (response.body() != null)
-                        showToast("Error : " + response.body().getResponse());
+                    AppUtils.showToast(getActivity(), null, response.body().getMessage());
                 }
             }
 
@@ -105,13 +122,12 @@ public class FriendRequestFragment extends BaseFragment implements FriendReqAdap
             public void onFailure(Call<FriendRequestResponse> call, Throwable t) {
                 t.printStackTrace();
                 dismissRefresh(mBinding.requestsSwiperefresh);
-                showToast("Something went wrong!!");
                 apiCallFailureDialog(t);
             }
         });
     }
 
-    private void init() {
+    /*private void init() {
         if (!isVisible) {
             isVisible = true;
             mViewModel.fetchFriendReqData(false);
@@ -123,7 +139,7 @@ public class FriendRequestFragment extends BaseFragment implements FriendReqAdap
         if (mBinding.requestsSwiperefresh.isRefreshing()) {
             mBinding.requestsSwiperefresh.setRefreshing(false);
         }
-    }
+    }*/
 
     @Override
     public void onDetach() {

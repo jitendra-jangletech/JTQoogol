@@ -237,7 +237,7 @@ public class MyTestFragment extends BaseFragment
         mBinding.swipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                fetchTestList(params, pageStart);
+                fetchTestList(params, "0");
             }
         });
 
@@ -382,7 +382,7 @@ public class MyTestFragment extends BaseFragment
             public void onFailure(Call<TestListResponse> call, Throwable t) {
                 mBinding.swipeToRefresh.setRefreshing(false);
                 mBinding.progress.setVisibility(View.GONE);
-                showToast("Something went wrong!!");
+                AppUtils.showToast(mContext, t,"");
                 apiCallFailureDialog(t);
                 t.printStackTrace();
             }

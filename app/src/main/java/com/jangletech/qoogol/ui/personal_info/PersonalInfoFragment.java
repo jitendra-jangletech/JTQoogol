@@ -179,6 +179,7 @@ public class PersonalInfoFragment extends BaseFragment {
                 mBinding.etFirstName.setText(AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key1), userProfile.getFirstName()));
                 mBinding.etLastName.setText(AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key2), userProfile.getLastName()));
                 mBinding.etDob.setText(DateUtils.getFormattedDate(AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key3), userProfile.getDob())));
+                mBinding.etDob.setTag(AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key3), userProfile.getDob()));
                 mBinding.etMobile.setText(AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key4), userProfile.getMobileNumber()));
                 mBinding.etEmail.setText(AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key5), userProfile.getEmailAddress()));
                 mBinding.etPassword.setText(AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key6), userProfile.getPassword()));
@@ -583,8 +584,8 @@ public class PersonalInfoFragment extends BaseFragment {
 
             @Override
             public void onFailure(Call<ResponseObj> call, Throwable t) {
-                t.printStackTrace();
                 ProgressDialog.getInstance().dismiss();
+                apiCallFailureDialog(t);
             }
         });
     }
@@ -689,13 +690,17 @@ public class PersonalInfoFragment extends BaseFragment {
         });
 
         mBinding.nationalityAutocompleteView.setOnItemClickListener((parent, view, position, id) -> {
-            final String name = ((TextView) view).getText().toString();
-            int key = getKeyFromValue(mMapNationality, name);
-            if (key != -1) {
-                mBinding.nationalityAutocompleteView.setTag(key);
-                ProgressDialog.getInstance().show(requireActivity());
-                fetchStates(String.valueOf(key));
-                //fetchMasterData(UtilHelper.getStateApi(), Constant.s_c_id, "" + key, Params.STATE.value);
+            try {
+                final String name = ((TextView) view).getText().toString();
+                int key = getKeyFromValue(mMapNationality, name);
+                if (key != -1) {
+                    mBinding.nationalityAutocompleteView.setTag(key);
+                    ProgressDialog.getInstance().show(requireActivity());
+                    fetchStates(String.valueOf(key));
+                    //fetchMasterData(UtilHelper.getStateApi(), Constant.s_c_id, "" + key, Params.STATE.value);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
 
@@ -897,8 +902,7 @@ public class PersonalInfoFragment extends BaseFragment {
             @Override
             public void onFailure(Call<UserProfileResponse> call, Throwable t) {
                 ProgressDialog.getInstance().dismiss();
-                showToast("Something went wrong!!");
-                t.printStackTrace();
+                apiCallFailureDialog(t);
             }
         });
     }
@@ -938,17 +942,14 @@ public class PersonalInfoFragment extends BaseFragment {
                 } else if (response.body().getResponseCode().equals("501")) {
                     resetSettingAndLogout();
                 } else {
-                    showErrorDialog(requireActivity(), response.body().getResponseCode(), "");
+                    AppUtils.showToast(getActivity(), null, response.body().getMessage());
+                    //showErrorDialog(requireActivity(), response.body().getResponseCode(), "");
                 }
             }
 
             @Override
             public void onFailure(Call<UserProfile> call, Throwable t) {
-                //ProgressDialog.getInstance().dismiss();
-                Log.e(TAG, "onFailure UserProfile: " + t.getMessage());
                 apiCallFailureDialog(t);
-                showToast("Something went wrong!!");
-                t.printStackTrace();
             }
         });
     }
@@ -972,9 +973,7 @@ public class PersonalInfoFragment extends BaseFragment {
                 @Override
                 public void onFailure(Call<Language> call, Throwable t) {
                     ProgressDialog.getInstance().dismiss();
-                    Log.e(TAG, "onFailure Languages: " + t.getMessage());
-                    showToast("Something went wrong!!");
-                    t.printStackTrace();
+                    AppUtils.showToast(getActivity(), t, "");
                 }
             });
         } catch (Exception e) {
@@ -1004,9 +1003,7 @@ public class PersonalInfoFragment extends BaseFragment {
             @Override
             public void onFailure(Call<CountryResponse> call, Throwable t) {
                 ProgressDialog.getInstance().dismiss();
-                Log.e(TAG, "onFailure Nationalities: " + t.getMessage());
-                showToast("Something went wrong!!");
-                t.printStackTrace();
+                AppUtils.showToast(getActivity(), t, "");
             }
         });
     }
@@ -1028,9 +1025,7 @@ public class PersonalInfoFragment extends BaseFragment {
             @Override
             public void onFailure(Call<StateResponse> call, Throwable t) {
                 ProgressDialog.getInstance().dismiss();
-                Log.e(TAG, "onFailure States: " + t.getMessage());
-                showToast("Something went wrong!!");
-                t.printStackTrace();
+                AppUtils.showToast(getContext(), t, "");
             }
         });
     }
@@ -1053,9 +1048,7 @@ public class PersonalInfoFragment extends BaseFragment {
             @Override
             public void onFailure(Call<DistrictResponse> call, Throwable t) {
                 ProgressDialog.getInstance().dismiss();
-                Log.e(TAG, "onFailure Districts: " + t.getMessage());
-                showToast("Something went wrong!!");
-                t.printStackTrace();
+                AppUtils.showToast(getContext(), t, "");
             }
         });
     }
@@ -1077,14 +1070,21 @@ public class PersonalInfoFragment extends BaseFragment {
             @Override
             public void onFailure(Call<CityResponse> call, Throwable t) {
                 ProgressDialog.getInstance().dismiss();
-                Log.e(TAG, "onFailure City : " + t.getMessage());
-                showToast("Something went wrong!!");
-                t.printStackTrace();
+                AppUtils.showToast(getContext(), t, "");
             }
         });
     }
 
     private void showDatePicker() {
+
+        if (mBinding.etDob.getTag() != null &&
+                !mBinding.etDob.getTag().toString().isEmpty()) {
+            String[] dob = mBinding.etDob.getTag().toString().split("-", -1);
+            mCalender.set(Calendar.YEAR, Integer.parseInt(dob[0]));
+            mCalender.set(Calendar.MONTH, Integer.parseInt(dob[1]) - 1);
+            mCalender.set(Calendar.DAY_OF_MONTH, Integer.parseInt(dob[2]));
+        }
+
         DatePickerDialog dialog = new DatePickerDialog(getContext(), android.R.style.Theme_Holo_Dialog, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
@@ -1109,13 +1109,17 @@ public class PersonalInfoFragment extends BaseFragment {
 
     private Integer getKeyFromValue(Map<Integer, String> map, String name) {
         int selectedKey = -1;
-        for (Map.Entry<Integer, String> e : map.entrySet()) {
-            int key = e.getKey();
-            String value = e.getValue();
-            if (value.equals(name)) {
-                selectedKey = key;
-                break;
+        try {
+            for (Map.Entry<Integer, String> e : map.entrySet()) {
+                int key = e.getKey();
+                String value = e.getValue();
+                if (value.equals(name)) {
+                    selectedKey = key;
+                    break;
+                }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return selectedKey;
     }
@@ -1203,7 +1207,8 @@ public class PersonalInfoFragment extends BaseFragment {
                     if (response.body().getResponse().equals("200")) {
                         createVerifyOTPDialog(response.body().getNewOTP());
                     } else {
-                        showErrorDialog(requireActivity(), response.body().getResponse(), response.body().getErrorMsg());
+                        AppUtils.showToast(getActivity(), null, response.body().getErrorMsg());
+                        //showErrorDialog(requireActivity(), response.body().getErrorMsg(), response.body().getErrorMsg());
                     }
                 }
             }
@@ -1211,8 +1216,7 @@ public class PersonalInfoFragment extends BaseFragment {
             @Override
             public void onFailure(Call<VerifyResponse> call, Throwable t) {
                 ProgressDialog.getInstance().dismiss();
-                showToast("Something went wrong!!");
-                t.printStackTrace();
+                apiCallFailureDialog(t);
             }
         });
     }
@@ -1306,8 +1310,8 @@ public class PersonalInfoFragment extends BaseFragment {
         Log.d(TAG, "generateVerifyUserName: " + params);
         String strCase = params.get(Constant.CASE);
         Call<GenerateVerifyUserName> call = apiService.generateVerifyUserName(
-                AESSecurities.getInstance().encrypt(masterKey, params.get(Constant.u_first_name)),
-                AESSecurities.getInstance().encrypt(masterKey, params.get(Constant.u_last_name)),
+                AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key1), params.get(Constant.u_first_name)),
+                AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key2), params.get(Constant.u_last_name)),
                 params.get(Constant.CASE),
                 params.get(Constant.userName)
         );
@@ -1327,16 +1331,15 @@ public class PersonalInfoFragment extends BaseFragment {
                     if (strCase.equals("V")) {
                         //mBinding.userNameAutoCompleteTextView.setTag("");
                     }
-                    showErrorDialog(requireActivity(), response.body().getResponse(), "");
+                    AppUtils.showToast(getActivity(), null, response.body().getMessage());
+                    //showErrorDialog(requireActivity(), response.body().getResponse(), "");
                 }
             }
 
             @Override
             public void onFailure(Call<GenerateVerifyUserName> call, Throwable t) {
                 ProgressDialog.getInstance().dismiss();
-                Log.e(TAG, "onFailure Languages: " + t.getMessage());
-                showToast("Something went wrong!!");
-                t.printStackTrace();
+                apiCallFailureDialog(t);
             }
         });
     }
@@ -1383,16 +1386,15 @@ public class PersonalInfoFragment extends BaseFragment {
                     loadProfilePic(getProfileImageUrl(response.body().getW_user_profile_image_name()));
                     new PreferenceManager(requireActivity()).saveString(Constant.PROFILE_PIC, getProfileImageUrl(response.body().getW_user_profile_image_name()));
                 } else {
-                    showErrorDialog(requireActivity(), response.body().getResponse(), "");
+                    AppUtils.showToast(getActivity(), null, response.body().getErrorMsg());
+                    //showErrorDialog(requireActivity(), response.body().getResponse(), "");
                 }
             }
 
             @Override
             public void onFailure(Call<VerifyResponse> call, Throwable t) {
                 ProgressDialog.getInstance().dismiss();
-                t.printStackTrace();
-                Log.e(TAG, "onFailure Upload Profile Pic: " + t.getMessage());
-                showToast("Something went wrong!!");
+                apiCallFailureDialog(t);
             }
         });
     }

@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.ShareItemBinding;
 import com.jangletech.qoogol.model.ShareModel;
+import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.UtilHelper;
 
 import java.util.ArrayList;
@@ -63,6 +64,8 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         holder.shareItemBinding.setConnection(connections);
         try {
             if (connections.getRecordType().equalsIgnoreCase("G")) {
+                Log.d(TAG, "onBindViewHolder First Name : "+ AppUtils.decodedString(connections.getU_first_name()));
+                Log.d(TAG, "onBindViewHolder Last Name : "+AppUtils.decodedString(connections.getU_last_name()));
                 holder.shareItemBinding.tvUserName.setText(connections.getU_first_name());
                 if (connections.getProf_pic() != null && !connections.getProf_pic().isEmpty()) {
                     Glide.with(activity).load(UtilHelper.getProfileImageUrl(connections.getProf_pic().trim())).circleCrop().placeholder(R.drawable.profile).into(holder.shareItemBinding.userProfileImage);
@@ -105,52 +108,6 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         void onBottomReached(int position);
     }
 
-
-   /* @Override
-    public Filter getFilter() {
-        return shareFilter;
-    }
-
-    public void updateFilterList(List<ShareModel> shareModels) {
-        filteredConnectionsList = shareModels;
-    }
-
-    private Filter shareFilter = new Filter() {
-        @Override
-        protected FilterResults performFiltering(CharSequence constraint) {
-            filteredConnectionsList = connectionsList;
-            List<ShareModel> filteredList = new ArrayList<>();
-            Log.d(TAG, "performFiltering : " + constraint);
-            Log.d(TAG, "performFiltering List Size : " + filteredConnectionsList.size());
-            if (constraint == null || constraint.length() == 0) {
-                //filteredList.addAll(filteredConnectionsList);
-                filteredConnectionsList = connectionsList;
-            } else {
-                String filterPattern = constraint.toString().toLowerCase();
-                Log.d(TAG, "performFiltering Else : " + filterPattern);
-                for (ShareModel item : connectionsList) {
-                    Log.d(TAG, "performFiltering First Name : " + item.getU_first_name());
-                    Log.d(TAG, "performFiltering Last Name : " + item.getU_last_name());
-                    if (item.getU_first_name().toLowerCase().contains(filterPattern) ||
-                            item.getU_last_name().toLowerCase().contains(filterPattern)) {
-                        filteredList.add(item);
-                    }
-                }
-                filteredConnectionsList = filteredList;
-            }
-            FilterResults results = new FilterResults();
-            results.values = filteredConnectionsList;
-            return results;
-        }
-
-        @Override
-        protected void publishResults(CharSequence constraint, FilterResults results) {
-            //filteredConnectionsList.clear();
-            filteredConnectionsList = (List<ShareModel>) results.values;
-            Log.d(TAG, "publishResults : " + filteredConnectionsList.size());
-            notifyDataSetChanged();
-        }
-    };*/
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ShareItemBinding shareItemBinding;

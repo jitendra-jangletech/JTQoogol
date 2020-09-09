@@ -9,8 +9,19 @@ import java.util.List;
  * Created by Pritali on 6/8/2020.
  */
 public class FriendsResponse {
+
+    private String Message;
+
     @SerializedName(Constant.Response)
     private String response;
+
+    public String getMessage() {
+        return Message;
+    }
+
+    public void setMessage(String message) {
+        Message = message;
+    }
 
     @SerializedName(Constant.row_count)
     private String row_count;

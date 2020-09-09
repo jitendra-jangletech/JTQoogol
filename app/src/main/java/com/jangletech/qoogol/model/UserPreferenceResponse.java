@@ -7,6 +7,16 @@ import java.util.List;
 
 public class UserPreferenceResponse {
 
+    private String Message;
+
+    public String getMessage() {
+        return Message;
+    }
+
+    public void setMessage(String message) {
+        Message = message;
+    }
+
     @SerializedName(Constant.co_name)
     private String courseName;
 

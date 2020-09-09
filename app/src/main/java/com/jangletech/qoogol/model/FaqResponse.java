@@ -6,6 +6,16 @@ import java.util.List;
 
 public class FaqResponse {
 
+    private String Message;
+
+    public String getMessage() {
+        return Message;
+    }
+
+    public void setMessage(String message) {
+        Message = message;
+    }
+
     @SerializedName("70E")
     private List<FAQModel> list;
 

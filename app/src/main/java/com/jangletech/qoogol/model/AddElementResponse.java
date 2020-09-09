@@ -5,6 +5,16 @@ import com.jangletech.qoogol.util.Constant;
 
 public class AddElementResponse {
 
+    private String Message;
+
+    public String getMessage() {
+        return Message;
+    }
+
+    public void setMessage(String message) {
+        Message = message;
+    }
+
     @SerializedName("520")
     private String instituteId;
 

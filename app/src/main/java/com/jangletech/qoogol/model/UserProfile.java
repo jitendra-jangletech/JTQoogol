@@ -28,6 +28,17 @@ import static com.jangletech.qoogol.util.Constant.cn_request_active;
 @Entity(tableName = "userprofile", indices = @Index(value = {"userId"}, unique = true))
 public class UserProfile {
 
+    @SerializedName("Message")
+    private String message;
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
     @SerializedName(Constant.userBadge)
     private String badge;
 

@@ -232,7 +232,7 @@ public class SharedByYouFragment extends BaseFragment implements
                     if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
 
                     } else {
-                        Toast.makeText(getActivity(), UtilHelper.getAPIError(String.valueOf(response.body())), Toast.LENGTH_SHORT).show();
+                        AppUtils.showToast(getActivity(), null, response.body().getMessage());
                     }
                     ProgressDialog.getInstance().dismiss();
                 } catch (Exception e) {

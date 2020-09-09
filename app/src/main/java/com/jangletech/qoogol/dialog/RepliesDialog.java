@@ -3,10 +3,8 @@ package com.jangletech.qoogol.dialog;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -181,16 +179,16 @@ public class RepliesDialog extends Dialog implements CommentAdapter.onCommentIte
                         response.body().getResponse().equals("200")) {
                     mAdapter.deleteComment(pos);
                     replyCount--;
-                    CommentDialog.addCommentCount--;
+                    //CommentDialog.addCommentCount--;
                 } else {
-                    AppUtils.showToast(mContext, response.body().getResponse());
+                    AppUtils.showToast(mContext, null, response.body().getResponse());
                 }
             }
 
             @Override
             public void onFailure(Call<ProcessQuestion> call, Throwable t) {
                 ProgressDialog.getInstance().dismiss();
-                AppUtils.showToast(mContext, "Something went wrong!!");
+                AppUtils.showToast(mContext, t, "");
                 t.printStackTrace();
             }
         });
@@ -257,7 +255,7 @@ public class RepliesDialog extends Dialog implements CommentAdapter.onCommentIte
                         setCommentAdapter();
                     } else {
                         replyCount++;
-                        CommentDialog.addCommentCount++;
+                        //CommentDialog.addCommentCount++;
                         if (isCallFromTest)
                             likeReplyComment("L", comments.getTlc_id(), "");
                         else
@@ -266,7 +264,7 @@ public class RepliesDialog extends Dialog implements CommentAdapter.onCommentIte
 
                 } else {
                     mBinding.btnSend.setClickable(true);
-                    AppUtils.showToast(mContext, response.body().getResponse());
+                    AppUtils.showToast(mContext, null, response.body().getMessage());
                 }
             }
 
@@ -276,7 +274,7 @@ public class RepliesDialog extends Dialog implements CommentAdapter.onCommentIte
                 mBinding.etComment.setText("");
                 mBinding.btnSend.setClickable(true);
                 mBinding.tvNoReplies.setVisibility(View.GONE);
-                AppUtils.showToast(mContext, "Something went wrong!!");
+                AppUtils.showToast(mContext, t, "");
                 t.printStackTrace();
             }
         });

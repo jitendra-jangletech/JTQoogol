@@ -19,7 +19,6 @@ import com.google.android.material.chip.ChipGroup;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.EducationAdapter;
 import com.jangletech.qoogol.databinding.FragmentSyllabusBinding;
-import com.jangletech.qoogol.databinding.ImageItemBindingImpl;
 import com.jangletech.qoogol.dialog.EducationListDialog;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.enums.Module;
@@ -34,6 +33,7 @@ import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.ui.educational_info.AddEduDialog;
 import com.jangletech.qoogol.ui.educational_info.EducationInfoViewModel;
 import com.jangletech.qoogol.ui.test.my_test.MyTestViewModel;
+import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.TinyDB;
 
@@ -112,7 +112,14 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
             if (educations != null) {
                 educationList = educations;
                 if (educations.size() > 0) {
+                    mBinding.mainLayout.setVisibility(View.VISIBLE);
+                    mBinding.btnAddEdu.setVisibility(View.GONE);
+                    mBinding.btnSave.setVisibility(View.VISIBLE);
                     setEducationListAdapter(educations);
+                } else {
+                    mBinding.mainLayout.setVisibility(View.GONE);
+                    mBinding.btnAddEdu.setVisibility(View.VISIBLE);
+                    mBinding.btnSave.setVisibility(View.GONE);
                 }
             }
         });
@@ -150,6 +157,11 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
 
         mBinding.btnSave.setOnClickListener(v -> {
             Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_test_my, Bundle.EMPTY);
+        });
+
+        mBinding.btnAddEdu.setOnClickListener(v -> {
+            AddEduDialog addEduDialog = new AddEduDialog(getActivity(), null, false, this, 0);
+            addEduDialog.show();
         });
 
         /*mBinding.rootLayout.setOnClickListener(v -> {
@@ -247,15 +259,15 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
                     Log.d(TAG, "onResponse List : " + response.body().getEducationList());
                     educationInfoViewModel.insert(response.body().getEducationList());
                 } else {
-                    showErrorDialog(requireActivity(), response.body().getResponseCode(), "");
+                    AppUtils.showToast(getActivity(), null, response.body().getMessage());
                 }
             }
 
             @Override
             public void onFailure(Call<FetchEducationResponse> call, Throwable t) {
-                showToast("Something went wrong!!");
                 ProgressDialog.getInstance().dismiss();
                 t.printStackTrace();
+                apiCallFailureDialog(t);
             }
         });
     }
@@ -282,15 +294,15 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
                 if (response.body() != null && response.body().getResponseCode() == 200) {
                     mViewModel.setUserPreference(response.body());
                 } else {
-                    showErrorDialog(requireActivity(), "" + response.body().getResponseCode(), "");
+                    AppUtils.showToast(getActivity(), null, response.body().getMessage());
                 }
             }
 
             @Override
             public void onFailure(Call<UserPreferenceResponse> call, Throwable t) {
                 ProgressDialog.getInstance().dismiss();
-                showToast("Something went wrong!!");
                 t.printStackTrace();
+                AppUtils.showToast(getActivity(), t, "");
             }
         });
     }
@@ -376,6 +388,7 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void onSuccess() {
         Log.d(TAG, "Education Added Successfully.");
+        fetchEducationDetails();
         fetchUpdatePreferences(params);
     }
 

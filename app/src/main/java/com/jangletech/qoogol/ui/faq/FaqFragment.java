@@ -25,6 +25,7 @@ import com.jangletech.qoogol.model.FaqResponse;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
+import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.ItemOffsetDecoration;
 import com.jangletech.qoogol.util.PreferenceManager;
@@ -119,22 +120,21 @@ public class FaqFragment extends BaseFragment implements
                         mViewModel.setFaqQuestions(response.body().getList());
                     }
                 } else {
-                    showToast("Something went wrong!!");
+                    AppUtils.showToast(getActivity(), null, response.body().getResponse());
                 }
             }
 
             @Override
             public void onFailure(Call<FaqResponse> call, Throwable t) {
                 ProgressDialog.getInstance().dismiss();
-                showToast("Something went wrong!!");
                 t.printStackTrace();
+                apiCallFailureDialog(t);
             }
         });
     }
 
     @Override
     public void onItemClick(FAQModel faqModel) {
-        //showToast(""+faqModel.getFaqt_name());
         Bundle bundle = new Bundle();
         bundle.putSerializable("PARAMS", faqModel);
         NavController navController = Navigation.findNavController(mBinding.getRoot());

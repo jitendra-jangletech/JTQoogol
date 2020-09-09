@@ -64,7 +64,7 @@ public class ShareQuestionDialog extends Dialog implements ShareAdapter.OnItemCl
     private ApiInterface apiService = ApiClient.getInstance().getApi();
 
     public ShareQuestionDialog(@NonNull Activity mContext, String actionId,
-                               String userId, String deviceId, String tOrQ,ShareDialogListener listener) {
+                               String userId, String deviceId, String tOrQ, ShareDialogListener listener) {
         super(mContext, android.R.style.Theme_DeviceDefault_Light_DarkActionBar);
         this.mContext = mContext;
         this.actionId = actionId;
@@ -183,14 +183,14 @@ public class ShareQuestionDialog extends Dialog implements ShareAdapter.OnItemCl
                         if (response.body().getResponse().equalsIgnoreCase("200")) {
                             setData(response.body());
                         } else {
-                            AppUtils.showToast(mContext, " Error : " + response.body().getResponse());
+                            AppUtils.showToast(mContext, null, response.body().getMessage());
                         }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                     isSearching = false;
                     mBinding.progress.setVisibility(View.GONE);
-                    AppUtils.showToast(mContext, "Something went wrong!!");
+                    AppUtils.showToast(mContext, null, "");
                 }
             }
 
@@ -199,7 +199,8 @@ public class ShareQuestionDialog extends Dialog implements ShareAdapter.OnItemCl
                 t.printStackTrace();
                 isSearching = false;
                 mBinding.progress.setVisibility(View.GONE);
-                //ProgressDialog.getInstance().dismiss();
+                AppUtils.showToast(mContext, t, "");
+                dismiss();
             }
         });
     }
@@ -276,6 +277,7 @@ public class ShareQuestionDialog extends Dialog implements ShareAdapter.OnItemCl
                     t.printStackTrace();
                     ProgressDialog.getInstance().dismiss();
                     dismiss();
+                    AppUtils.showToast(mContext, t, "");
                 }
             });
         }
@@ -295,18 +297,18 @@ public class ShareQuestionDialog extends Dialog implements ShareAdapter.OnItemCl
 
     }
 
-    private void setShareCount(String shareAction){
-        if(shareAction!=null){
-            String[] data = shareAction.split(",",-1);
-            for(String string :data){
-                if(string!=null && !string.isEmpty()){
+    private void setShareCount(String shareAction) {
+        if (shareAction != null) {
+            String[] data = shareAction.split(",", -1);
+            for (String string : data) {
+                if (string != null && !string.isEmpty()) {
                     addShareCount++;
                 }
             }
         }
     }
 
-    public interface ShareDialogListener{
+    public interface ShareDialogListener {
         void onSharedSuccess(int count);
     }
 }

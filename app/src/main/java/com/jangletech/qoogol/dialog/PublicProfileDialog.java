@@ -29,6 +29,7 @@ import com.jangletech.qoogol.util.DateUtils;
 import com.jangletech.qoogol.util.TinyDB;
 import com.jangletech.qoogol.util.UtilHelper;
 
+import java.net.UnknownHostException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -99,14 +100,16 @@ public class PublicProfileDialog extends Dialog {
                     mBinding.setUserProfile(response.body());
                     setPublicProfile(response.body());
                 } else {
-                    showToast("Something went wrong!!");
+                    dismiss();
+                    showToast(null,response.body().getMessage());
                 }
             }
 
             @Override
             public void onFailure(Call<UserProfile> call, Throwable t) {
                 ProgressDialog.getInstance().dismiss();
-                showToast("Something went wrong!!");
+                dismiss();
+                showToast(t,"");
                 t.printStackTrace();
             }
         });
@@ -219,8 +222,12 @@ public class PublicProfileDialog extends Dialog {
         });
     }
 
-    public void showToast(String msg) {
-        Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show();
+    public void showToast(Throwable t,String msg) {
+        if(t instanceof UnknownHostException){
+            Toast.makeText(activity, "Check Your Internet Connections.", Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(activity,"Something Went Wrong!! \n"+msg , Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void loadProfilePic(String url) {

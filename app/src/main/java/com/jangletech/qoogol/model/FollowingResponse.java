@@ -10,6 +10,16 @@ import java.util.List;
  */
 public class FollowingResponse {
 
+    private String Message;
+
+    public String getMessage() {
+        return Message;
+    }
+
+    public void setMessage(String message) {
+        Message = message;
+    }
+
     @SerializedName(Constant.Response)
     private String response;
 

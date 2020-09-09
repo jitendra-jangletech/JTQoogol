@@ -25,6 +25,7 @@ import com.jangletech.qoogol.model.VerifyResponse;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
+import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 
@@ -148,14 +149,14 @@ public class EducationInfoFragment extends BaseFragment implements EducationAdap
                 } else if (response.body().getResponse().equals("501")) {
                     resetSettingAndLogout();
                 } else {
-                    showErrorDialog(getActivity(), response.body().getResponse(), response.body().getErrorMsg());
+                    AppUtils.showToast(getActivity(), null, response.body().getErrorMsg());
                 }
             }
 
             @Override
             public void onFailure(Call<VerifyResponse> call, Throwable t) {
-                showToast("Something went wrong!!");
-                t.printStackTrace();
+                ProgressDialog.getInstance().dismiss();
+                apiCallFailureDialog(t);
             }
         });
     }
@@ -163,7 +164,6 @@ public class EducationInfoFragment extends BaseFragment implements EducationAdap
 
     private void fetchEducationDetails(int call_from) {
         ProgressDialog.getInstance().show(getActivity());
-
         if (call_from == fetch_loged_in_user)
             call = apiService.fetchUserEdu(userid, "L", getDeviceId(getActivity()), Constant.APP_NAME);
         else
@@ -180,15 +180,15 @@ public class EducationInfoFragment extends BaseFragment implements EducationAdap
                     mBinding.emptytv.setVisibility(View.VISIBLE);
                     mViewModel.insert(response.body().getEducationList());
                 } else {
-                    showErrorDialog(requireActivity(), response.body().getResponseCode(), "");
+                    //showErrorDialog(requireActivity(), response.body().getResponseCode(), "");
+                    AppUtils.showToast(getActivity(), null, response.body().getMessage());
                 }
             }
 
             @Override
             public void onFailure(Call<FetchEducationResponse> call, Throwable t) {
-                showToast("Something went wrong!!");
                 ProgressDialog.getInstance().dismiss();
-                t.printStackTrace();
+                apiCallFailureDialog(t);
             }
         });
     }
@@ -199,12 +199,6 @@ public class EducationInfoFragment extends BaseFragment implements EducationAdap
         addEduDialog.show();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        //Log.d(TAG, "onResume: ");
-        //fetchEducationDetails();
-    }
 
     @Override
     public void onClick(View v) {

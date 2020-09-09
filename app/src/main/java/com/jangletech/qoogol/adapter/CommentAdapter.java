@@ -72,12 +72,11 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
 
 
         if (callingFrom.equals(Module.Test.toString())) {
-
-            if (comments.getReplyCommentCount() > 0) {
+            /*if (comments.getReplyCommentCount() > 0) {
                 holder.commentItemBinding.tvCommentCount.setVisibility(View.VISIBLE);
             } else {
                 holder.commentItemBinding.tvCommentCount.setVisibility(View.GONE);
-            }
+            }*/
 
             if (comments.getReplyLikeCount() > 0) {
                 holder.commentItemBinding.tvLikes.setVisibility(View.VISIBLE);
@@ -108,11 +107,11 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             holder.commentItemBinding.tvLikes.setText(String.valueOf(comments.getQuestLikeCount()));
             holder.commentItemBinding.tvCommentCount.setText(String.valueOf(comments.getQuestCommentCount()));
 
-            if (comments.getQuestLikeCount() > 0) {
+            /*if (comments.getQuestLikeCount() > 0) {
                 holder.commentItemBinding.tvLikes.setVisibility(View.VISIBLE);
             } else {
                 holder.commentItemBinding.tvLikes.setVisibility(View.GONE);
-            }
+            }*/
 
             if (comments.getQuestCommentCount() > 0) {
                 holder.commentItemBinding.tvCommentCount.setVisibility(View.VISIBLE);
@@ -210,14 +209,18 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         void onCommentsClick(int pos, Comments comments);
 
         void onLikeClick(int pos, Comments comments);
-
         void onReplyClick(int pos, Comments comments);
     }
 
     public void deleteComment(int pos) {
-        Log.d(TAG, "deleteComment: "+pos);
-        commentList.remove(pos);
-        notifyItemRemoved(pos);
+        Log.d(TAG, "deleteComment: " + pos);
+        if (commentList.size() == 1) {
+            commentList.remove(0);
+            notifyItemRemoved(0);
+        } else {
+            commentList.remove(pos);
+            notifyItemRemoved(pos);
+        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

@@ -41,6 +41,7 @@ import com.jangletech.qoogol.model.VerifyResponse;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
+import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.DateUtils;
 import com.jangletech.qoogol.util.PreferenceManager;
@@ -171,7 +172,7 @@ public class AddEduDialog extends Dialog {
         });
 
         addEditEducationBinding.delete.setOnClickListener(v -> {
-            if(!flag) {
+            if (!flag) {
                 if (education == null) {
                     dismiss();
                 } else {
@@ -324,15 +325,14 @@ public class AddEduDialog extends Dialog {
                     }
                     populateClasses(list);
                 } else {
-                    Toast.makeText(context, "Something went wrong.", Toast.LENGTH_SHORT).show();
+                    AppUtils.showToast(getContext(), null, response.body().getMessage());
                 }
             }
 
             @Override
             public void onFailure(Call<ClassList> call, Throwable t) {
                 ProgressDialog.getInstance().dismiss();
-                Toast.makeText(context, "Something went wrong.", Toast.LENGTH_SHORT).show();
-                t.printStackTrace();
+                AppUtils.showToast(getContext(), t, "");
             }
         });
     }
@@ -492,15 +492,14 @@ public class AddEduDialog extends Dialog {
                     apiCallListener.onSuccess();
                     dismiss();
                 } else {
-                    Toast.makeText(context, "Error : " + response.body().getResponse(), Toast.LENGTH_SHORT).show();
+                    AppUtils.showToast(context, null, response.body().getErrorMsg());
                 }
             }
 
             @Override
             public void onFailure(Call<VerifyResponse> call, Throwable t) {
-                t.printStackTrace();
-                Toast.makeText(context, "Something went wrong!!", Toast.LENGTH_SHORT).show();
                 ProgressDialog.getInstance().dismiss();
+                AppUtils.showToast(getContext(), t, "");
             }
         });
     }
@@ -524,8 +523,7 @@ public class AddEduDialog extends Dialog {
             @Override
             public void onFailure(Call<AddElementResponse> call, Throwable t) {
                 ProgressDialog.getInstance().dismiss();
-                Toast.makeText(context, "Something went wrong!!", Toast.LENGTH_SHORT).show();
-                t.printStackTrace();
+                AppUtils.showToast(context, t, "");
             }
         });
     }
@@ -545,15 +543,14 @@ public class AddEduDialog extends Dialog {
                     else
                         addEditEducationBinding.instituteAutocompleteView.setTag(response.body().getInstituteId());
                 } else {
-                    Toast.makeText(context, "Error : " + response.body().getResponse(), Toast.LENGTH_SHORT).show();
+                    AppUtils.showToast(context, null, response.body().getMessage());
                 }
             }
 
             @Override
             public void onFailure(Call<AddElementResponse> call, Throwable t) {
                 ProgressDialog.getInstance().dismiss();
-                Toast.makeText(context, "Something went wrong!!", Toast.LENGTH_SHORT).show();
-                t.printStackTrace();
+                AppUtils.showToast(context, t, "");
             }
         });
     }
@@ -582,8 +579,8 @@ public class AddEduDialog extends Dialog {
 
             @Override
             public void onFailure(Call<UniversityResponse> call, Throwable t) {
-                t.printStackTrace();
                 ProgressDialog.getInstance().dismiss();
+                AppUtils.showToast(context, t, "");
             }
         });
     }
@@ -615,8 +612,8 @@ public class AddEduDialog extends Dialog {
 
             @Override
             public void onFailure(Call<InstituteResponse> call, Throwable t) {
-                t.printStackTrace();
                 ProgressDialog.getInstance().dismiss();
+                AppUtils.showToast(context, t, "");
             }
         });
     }
@@ -645,8 +642,8 @@ public class AddEduDialog extends Dialog {
 
             @Override
             public void onFailure(Call<DegreeResponse> call, Throwable t) {
-                t.printStackTrace();
                 ProgressDialog.getInstance().dismiss();
+                AppUtils.showToast(context, t, "");
             }
         });
     }
@@ -677,8 +674,8 @@ public class AddEduDialog extends Dialog {
 
             @Override
             public void onFailure(Call<CourseResponse> call, Throwable t) {
-                t.printStackTrace();
                 ProgressDialog.getInstance().dismiss();
+                AppUtils.showToast(context, t, "");
             }
         });
     }

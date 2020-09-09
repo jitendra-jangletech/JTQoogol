@@ -174,7 +174,7 @@ public class TestSharedWithYouFragment extends BaseFragment
         mBinding.swipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                fetchTestList(params, pageStart);
+                fetchTestList(params, "0");
             }
         });
 
@@ -294,7 +294,7 @@ public class TestSharedWithYouFragment extends BaseFragment
                 } else if (response.body().getResponse().equals("501")) {
                     resetSettingAndLogout();
                 } else {
-                    showErrorDialog(getActivity(), response.body().getResponse(), response.body().getMessage());
+                    AppUtils.showToast(getActivity(), null, response.body().getMessage());
                 }
             }
 
@@ -302,8 +302,8 @@ public class TestSharedWithYouFragment extends BaseFragment
             public void onFailure(Call<TestListResponse> call, Throwable t) {
                 mBinding.swipeToRefresh.setRefreshing(false);
                 mBinding.progress.setVisibility(View.GONE);
-                showToast("Something went wrong!!");
                 t.printStackTrace();
+                apiCallFailureDialog(t);
             }
         });
     }

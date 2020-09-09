@@ -85,6 +85,7 @@ public class SplashActivity extends BaseActivity {
                     Log.d(TAG, "onResponse: " + response.body());
                     mViewModel.setAppConfigResponse(response.body());
                 } else {
+                    AppUtils.showToast(getApplicationContext(), null, response.body().getMessage());
                     showErrorDialog(SplashActivity.this, response.body().getResponse(), response.body().getMessage());
                 }
             }
@@ -92,7 +93,7 @@ public class SplashActivity extends BaseActivity {
             @Override
             public void onFailure(Call<AppConfigResponse> call, Throwable t) {
                 //ProgressDialog.getInstance().dismiss();
-                showToast("Something went wrong!!");
+                noInternetError(t);
                 t.printStackTrace();
             }
         });

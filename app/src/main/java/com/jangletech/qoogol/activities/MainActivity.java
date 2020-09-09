@@ -38,6 +38,7 @@ import com.jangletech.qoogol.model.UserProfile;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.personal_info.PersonalInfoViewModel;
+import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 
@@ -75,6 +76,7 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        mBinding.tvAppVersion.setText(" " + BuildConfig.VERSION_NAME);
         mViewmodel = new ViewModelProvider(this).get(PersonalInfoViewModel.class);
         profileImage = findViewById(R.id.profilePic);
         badgeImg = findViewById(R.id.imgBadge);
@@ -571,8 +573,12 @@ public class MainActivity extends BaseActivity {
     }
 
     private void navToFragment(int resId, Bundle bundle) {
-        navController.popBackStack();
-        navController.navigate(resId, bundle);
+        try {
+            navController.popBackStack();
+            navController.navigate(resId, bundle);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -712,17 +718,16 @@ public class MainActivity extends BaseActivity {
                 } else if (response.body().getResponseCode().equals("501")) {
                     resetSettingAndLogout();
                 } else {
-                    //showErrorDialog(this, response.body().getResponseCode(), "");
+                    AppUtils.showToast(getApplicationContext(), null, response.body().getMessage());
                 }
             }
 
             @Override
             public void onFailure(Call<UserProfile> call, Throwable t) {
                 ProgressDialog.getInstance().dismiss();
-                Log.e(TAG, "onFailure UserProfile: " + t.getMessage());
-                apiCallFailureDialog(t);
-                showToast("Something went wrong!!");
                 t.printStackTrace();
+                apiCallFailureDialog(t);
+
             }
         });
     }

@@ -9,6 +9,17 @@ import java.util.List;
  * Created by Pritali on 5/18/2020.
  */
 public class ShareResponse {
+
+    private String Message;
+
+    public String getMessage() {
+        return Message;
+    }
+
+    public void setMessage(String message) {
+        Message = message;
+    }
+
     @SerializedName(Constant.Response)
     private String response;
 
