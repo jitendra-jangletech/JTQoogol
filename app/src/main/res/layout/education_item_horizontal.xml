@@ -4,29 +4,33 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/rootLayout"
-        app:cardElevation="@dimen/_20sdp"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/_5sdp"
-        android:background="@color/background">
+        android:layout_margin="@dimen/_4sdp"
+        android:background="@color/background"
+        app:cardElevation="@dimen/_40sdp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
+            android:id="@+id/border_layout"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="@dimen/_5sdp">
+            android:padding="@dimen/_5sdp"
+            android:background="@drawable/border"
+            app:layout_constraintLeft_toRightOf="@+id/right"
+            app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
-                android:visibility="visible"
                 android:id="@+id/right"
-                
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_2sdp"
                 android:src="@drawable/ic_right_mtp"
+                android:visibility="gone"
                 app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                app:layout_constraintTop_toBottomOf="@+id/right"
                 android:id="@+id/tvUniversity"
                 style="@style/font_style"
                 android:layout_width="wrap_content"
@@ -35,8 +39,8 @@
                 android:text="Jawaharlal Nehru Technological University"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/colorSkyBlue"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:textSize="@dimen/_10ssp"
+                app:layout_constraintLeft_toLeftOf="parent" />
 
             <TextView
                 android:id="@+id/tvInstitute"
@@ -48,9 +52,9 @@
                 android:text="Nalla Malla Raddy Engineering College"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="@color/colorSkyBlue"
+                android:textSize="@dimen/_8ssp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvUniversity" />
-
 
             <TextView
                 android:id="@+id/tvDegree"
@@ -62,6 +66,7 @@
                 android:text="Bachelor of Technology"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="@color/colorSkyBlue"
+                android:textSize="@dimen/_8ssp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvInstitute" />
 
@@ -75,6 +80,7 @@
                 android:text="Computer Science and Engineering"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="@color/colorSkyBlue"
+                android:textSize="@dimen/_8ssp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvDegree" />
 
@@ -95,6 +101,7 @@
                     android:text="Class / Year : "
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     android:textColor="@color/colorSkyBlue"
+                    android:textSize="@dimen/_8ssp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -108,6 +115,7 @@
                     android:text="4"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     android:textColor="@color/colorSkyBlue"
+                    android:textSize="@dimen/_8ssp"
                     app:layout_constraintLeft_toRightOf="@+id/tvCourseYearTitle"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -131,6 +139,7 @@
                     android:text="08 May 2010"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     android:textColor="@color/colorSkyBlue"
+                    android:textSize="@dimen/_8ssp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -145,6 +154,7 @@
                     android:padding="@dimen/_2sdp"
                     android:text="To"
                     android:textColor="@color/colorSkyBlue"
+                    android:textSize="@dimen/_8ssp"
                     app:layout_constraintLeft_toRightOf="@+id/tvStartDate"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -159,6 +169,7 @@
                     android:text="08 May 2010"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     android:textColor="@color/colorSkyBlue"
+                    android:textSize="@dimen/_8ssp"
                     app:layout_constraintLeft_toRightOf="@+id/tvToDate"
                     app:layout_constraintTop_toTopOf="parent" />
 

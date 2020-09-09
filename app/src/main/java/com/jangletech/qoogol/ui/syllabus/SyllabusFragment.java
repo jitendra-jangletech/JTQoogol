@@ -19,8 +19,10 @@ import com.google.android.material.chip.ChipGroup;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.EducationAdapter;
 import com.jangletech.qoogol.databinding.FragmentSyllabusBinding;
+import com.jangletech.qoogol.databinding.ImageItemBindingImpl;
 import com.jangletech.qoogol.dialog.EducationListDialog;
 import com.jangletech.qoogol.dialog.ProgressDialog;
+import com.jangletech.qoogol.enums.Module;
 import com.jangletech.qoogol.model.Education;
 import com.jangletech.qoogol.model.FetchEducationResponse;
 import com.jangletech.qoogol.model.SyllabusChapter;
@@ -121,14 +123,6 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
                 if (userPreferences != null) {
                     response = userPreferences;
 
-//                    mBinding.tvUniversity.setText(userPreferences.getBoardName());
-//                    mBinding.tvInstitute.setText(userPreferences.getInstituteName());
-//                    mBinding.tvDegree.setText(userPreferences.getDegreeName());
-//                    mBinding.tvCourse.setText(userPreferences.getCourseName());
-//                    mBinding.tvCourseYear.setText(userPreferences.getClassYear());
-//                    mBinding.tvStartDate.setText(DateUtils.getFormattedDate(userPreferences.getStartDate()));
-//                    mBinding.tvEndDate.setText(DateUtils.getFormattedDate(userPreferences.getEndDate()));
-
                     Log.d(TAG, "onChanged UeId : " + userPreferences.getSelectedUeId());
 
                     saveString(getActivity(), Constant.selected_ue_id, userPreferences.getSelectedUeId());
@@ -136,6 +130,9 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
                     saveString(getActivity(), Constant.chapterName1, userPreferences.getChapterName1());
                     saveString(getActivity(), Constant.chapterName2, userPreferences.getChapterName2());
                     saveString(getActivity(), Constant.chapterName3, userPreferences.getChapterName3());
+
+                    mBinding.subjectsChipGrp.removeAllViews();
+                    mBinding.chapterChipGrp.removeAllViews();
 
                     if (userPreferences.getSubjectList() != null)
                         prepareSubjectChips(userPreferences.getSubjectList());
@@ -168,7 +165,7 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
 
     private void setEducationListAdapter(List<Education> educationList) {
         Log.d(TAG, "setEducationListAdapter: " + educationList.size());
-        educationAdapter = new EducationAdapter(requireActivity(), educationList, this, "", "");
+        educationAdapter = new EducationAdapter(requireActivity(), educationList, this, Module.Syllabus.toString(), TinyDB.getInstance(getActivity()).getString(Constant.selected_ue_id));
         mBinding.recyclerview.setHasFixedSize(true);
         mBinding.recyclerview.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, true));
         mBinding.recyclerview.setAdapter(educationAdapter);
@@ -191,6 +188,13 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
     }
 
     private void prepareSubjectChips(List<SyllabusSubject> list) {
+        if (list.size() > 0) {
+            mBinding.subjectLayout.setVisibility(View.VISIBLE);
+            mBinding.chapterLayout.setVisibility(View.VISIBLE);
+        } else {
+            mBinding.subjectLayout.setVisibility(View.GONE);
+            mBinding.chapterLayout.setVisibility(View.GONE);
+        }
         mBinding.subjectsChipGrp.removeAllViews();
         for (int i = 0; i < list.size(); i++) {
             Chip chip = (Chip) LayoutInflater.from(mBinding.subjectsChipGrp.getContext()).inflate(R.layout.chip_new, mBinding.subjectsChipGrp, false);
@@ -209,6 +213,11 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
     }
 
     private void prepareChapterChips(List<SyllabusChapter> list) {
+//        if (list.size() > 0) {
+//            mBinding.chapterLayout.setVisibility(View.VISIBLE);
+//        } else {
+//            mBinding.chapterLayout.setVisibility(View.GONE);
+//        }
         mBinding.chapterChipGrp.removeAllViews();
         for (int i = 0; i < list.size(); i++) {
             Chip chip = (Chip) LayoutInflater.from(mBinding.chapterChipGrp.getContext()).inflate(R.layout.chip_new, mBinding.chapterChipGrp, false);
@@ -377,7 +386,14 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
 
     @Override
     public void onItemClick(Education education, int position) {
-
+        TinyDB.getInstance(getActivity()).putString(Constant.selected_ue_id, education.getUe_id());
+        params.put(Constant.CASE, "U");
+        params.put(Constant.selected_ue_id, education.getUe_id());
+        params.put(Constant.subjectId, "");
+        params.put(Constant.chapterId1, "");
+        params.put(Constant.chapterId2, "");
+        params.put(Constant.chapterId3, "");
+        fetchUpdatePreferences(params);
     }
 
     @Override
