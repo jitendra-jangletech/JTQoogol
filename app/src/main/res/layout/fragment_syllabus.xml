@@ -38,6 +38,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
+                    android:scrollIndicators="bottom"
                     android:scrollbars="horizontal"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -50,53 +51,69 @@
                     app:layout_constraintTop_toBottomOf="@+id/recyclerview">
 
                     <LinearLayout
-                        android:id="@+id/subject_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="@dimen/_5sdp">
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
-                        <TextView
-                            style="@style/chipTitleStyle"
-                            android:text="Select Subjects" />
-
-                        <com.google.android.material.chip.ChipGroup
-                            android:id="@+id/subjectsChipGrp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_10sdp"
-                            app:selectionRequired="true"
-                            app:singleSelection="true" />
-
-                        <View
+                        <LinearLayout
+                            android:id="@+id/subject_layout"
                             android:layout_width="match_parent"
-                            android:layout_height="@dimen/_1sdp"
-                            android:layout_marginLeft="@dimen/_10sdp"
-                            android:layout_marginTop="@dimen/_15sdp"
-                            android:layout_marginRight="@dimen/_10sdp"
-                            android:background="@color/colorLightGray" />
-
-                        <TextView
-                            style="@style/chipTitleStyle"
-                            android:text="Select Chapter" />
-
-                        <com.google.android.material.chip.ChipGroup
-                            android:id="@+id/chapterChipGrp"
-                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_10sdp"
-                            android:layout_marginBottom="@dimen/_40sdp"
-                            app:selectionRequired="false"
-                            app:singleSelection="false" />
+                            android:orientation="vertical"
+                            android:padding="@dimen/_5sdp">
 
-                        <View
+                            <TextView
+                                style="@style/chipTitleStyle"
+                                android:text="Select Subjects" />
+
+                            <com.google.android.material.chip.ChipGroup
+                                android:id="@+id/subjectsChipGrp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_10sdp"
+                                app:selectionRequired="true"
+                                app:singleSelection="true" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/_1sdp"
+                                android:layout_marginLeft="@dimen/_10sdp"
+                                android:layout_marginTop="@dimen/_15sdp"
+                                android:layout_marginRight="@dimen/_10sdp"
+                                android:background="@color/colorLightGray" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/chapter_layout"
                             android:layout_width="match_parent"
-                            android:layout_height="@dimen/_1sdp"
-                            android:layout_marginLeft="@dimen/_10sdp"
-                            android:layout_marginTop="@dimen/_15sdp"
-                            android:layout_marginRight="@dimen/_10sdp"
-                            android:background="@color/colorLightGray"
-                            android:visibility="gone" />
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="@dimen/_5sdp">
+
+                            <TextView
+                                style="@style/chipTitleStyle"
+                                android:text="Select Chapter" />
+
+                            <com.google.android.material.chip.ChipGroup
+                                android:id="@+id/chapterChipGrp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_10sdp"
+                                android:layout_marginBottom="@dimen/_40sdp"
+                                app:selectionRequired="false"
+                                app:singleSelection="false" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/_1sdp"
+                                android:layout_marginLeft="@dimen/_10sdp"
+                                android:layout_marginTop="@dimen/_15sdp"
+                                android:layout_marginRight="@dimen/_10sdp"
+                                android:background="@color/colorLightGray"
+                                android:visibility="gone" />
+
+                        </LinearLayout>
 
                     </LinearLayout>
 

@@ -14,10 +14,12 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.jangletech.qoogol.R;
+import com.jangletech.qoogol.databinding.EducationItemHorizontalBinding;
 import com.jangletech.qoogol.databinding.ItemEducationBinding;
 import com.jangletech.qoogol.enums.Module;
 import com.jangletech.qoogol.model.Education;
 import com.jangletech.qoogol.util.DateUtils;
+import com.jangletech.qoogol.util.TinyDB;
 
 import java.util.List;
 
@@ -27,6 +29,7 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.View
     private List<Education> educationList;
     private Context mContext;
     private ItemEducationBinding itemEducationBinding;
+    private EducationItemHorizontalBinding educationItemHorizontalBinding;
     private EducationItemClickListener educationItemClickListener;
     private String CallingFrom = "";
     private String ueId = "";
@@ -82,9 +85,16 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.View
     @NonNull
     @Override
     public EducationAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        itemEducationBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
-                R.layout.item_education, parent, false);
-        return new ViewHolder(itemEducationBinding);
+        if (CallingFrom.equalsIgnoreCase(Module.Syllabus.toString())) {
+            educationItemHorizontalBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
+                    R.layout.education_item_horizontal, parent, false);
+            return new ViewHolder(educationItemHorizontalBinding);
+        } else {
+            itemEducationBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
+                    R.layout.item_education, parent, false);
+            return new ViewHolder(itemEducationBinding);
+        }
+
     }
 
     @Override
@@ -92,78 +102,105 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.View
         Education education = educationList.get(position);
 
         if (CallingFrom.equalsIgnoreCase(Module.Syllabus.toString())) {
-            holder.itemEducationBinding.delete.setVisibility(View.GONE);
-            holder.itemEducationBinding.right.setVisibility(View.VISIBLE);
+
+            holder.educationItemHorizontalBinding.tvUniversity.setText(education.getUbm_board_name());
+            holder.educationItemHorizontalBinding.tvInstitute.setText(education.getIom_name());
+            holder.educationItemHorizontalBinding.tvDegree.setText(education.getDm_degree_name());
+            holder.educationItemHorizontalBinding.tvCourse.setText(education.getCo_name());
+            holder.educationItemHorizontalBinding.tvCourseYear.setText(education.getUe_cy_num());
+            holder.educationItemHorizontalBinding.tvStartDate.setText(education.getUe_startdate() != null ? DateUtils.getFormattedDate(education.getUe_startdate()) : "");
+            holder.educationItemHorizontalBinding.tvEndDate.setText(education.getUe_enddate() != null ? DateUtils.getFormattedDate(education.getUe_enddate()) : "");
 
             if (checkedPosition == -1) {
-                holder.itemEducationBinding.right.setVisibility(View.GONE);
+                holder.educationItemHorizontalBinding.borderLayout.setBackgroundResource(R.drawable.normal);
+                //holder.educationItemHorizontalBinding.right.setVisibility(View.GONE);
             } else {
                 if (checkedPosition == position) {
-                    holder.itemEducationBinding.right.setVisibility(View.VISIBLE);
+                    holder.educationItemHorizontalBinding.borderLayout.setBackgroundResource(R.drawable.border);
+                    //holder.educationItemHorizontalBinding.right.setVisibility(View.VISIBLE);
                 } else {
-                    holder.itemEducationBinding.right.setVisibility(View.GONE);
+                    holder.educationItemHorizontalBinding.borderLayout.setBackgroundResource(R.drawable.normal);
+                    //holder.educationItemHorizontalBinding.right.setVisibility(View.GONE);
                 }
             }
+
+            holder.educationItemHorizontalBinding.rootLayout.setOnClickListener(v -> {
+                //holder.educationItemHorizontalBinding.right.setVisibility(View.VISIBLE);
+                holder.educationItemHorizontalBinding.borderLayout.setBackgroundResource(R.drawable.border);
+                if (checkedPosition != position) {
+                    notifyItemChanged(checkedPosition);
+                    checkedPosition = position;
+                    educationItemClickListener.onItemClick(education, position);
+                }
+            });
 
         } else {
             holder.itemEducationBinding.delete.setVisibility(View.VISIBLE);
             holder.itemEducationBinding.right.setVisibility(View.GONE);
+
+            holder.itemEducationBinding.tvUniversity.setText(education.getUbm_board_name());
+            holder.itemEducationBinding.tvInstitute.setText(education.getIom_name());
+            holder.itemEducationBinding.tvDegree.setText(education.getDm_degree_name());
+            holder.itemEducationBinding.tvCourse.setText(education.getCo_name());
+            holder.itemEducationBinding.tvCourseYear.setText(education.getUe_cy_num());
+            holder.itemEducationBinding.tvStartDate.setText(education.getUe_startdate() != null ? DateUtils.getFormattedDate(education.getUe_startdate()) : "");
+            holder.itemEducationBinding.tvEndDate.setText(education.getUe_enddate() != null ? DateUtils.getFormattedDate(education.getUe_enddate()) : "");
+
+            holder.itemEducationBinding.rootLayout.setOnClickListener(v -> {
+                if (CallingFrom.equalsIgnoreCase(Module.Syllabus.toString())) {
+                    holder.itemEducationBinding.right.setVisibility(View.VISIBLE);
+                    if (checkedPosition != position) {
+                        notifyItemChanged(checkedPosition);
+                        checkedPosition = position;
+                        educationItemClickListener.onItemClick(education, position);
+                    }
+                } else {
+                    educationItemClickListener.onItemClick(education, position);
+                }
+
+            });
+            holder.itemEducationBinding.delete.setOnClickListener(v -> {
+                if (educationList.size() == 1) {
+                    androidx.appcompat.app.AlertDialog.Builder builder = new AlertDialog.Builder(mContext, R.style.AlertDialogStyle);
+                    builder.setTitle("Alert")
+                            .setMessage("You can't delete this item, Atleast one education is mandatory.")
+                            .setPositiveButton("Ok", null)
+                            .show();
+                } else {
+                    educationItemClickListener.onDeleteClick(education, position);
+                }
+            });
+
+            setAnimation(holder.itemEducationBinding.getRoot(), position);
+
         }
 
-        holder.itemEducationBinding.tvUniversity.setText(education.getUbm_board_name());
-        holder.itemEducationBinding.tvInstitute.setText(education.getIom_name());
-        holder.itemEducationBinding.tvDegree.setText(education.getDm_degree_name());
-        holder.itemEducationBinding.tvCourse.setText(education.getCo_name());
-        holder.itemEducationBinding.tvCourseYear.setText(education.getUe_cy_num());
-        holder.itemEducationBinding.tvStartDate.setText(education.getUe_startdate() != null ? DateUtils.getFormattedDate(education.getUe_startdate()) : "");
-        holder.itemEducationBinding.tvEndDate.setText(education.getUe_enddate() != null ? DateUtils.getFormattedDate(education.getUe_enddate()) : "");
 
-        holder.itemEducationBinding.rootLayout.setOnClickListener(v -> {
-            if (CallingFrom.equalsIgnoreCase(Module.Syllabus.toString())) {
-                holder.itemEducationBinding.right.setVisibility(View.VISIBLE);
-                if (checkedPosition != position) {
-                    notifyItemChanged(checkedPosition);
-                    checkedPosition = position;
-                    educationItemClickListener.onItemClick(education,position);
-                }
-            } else {
-                educationItemClickListener.onItemClick(education,position);
-            }
-
-        });
-        holder.itemEducationBinding.delete.setOnClickListener(v -> {
-            if (educationList.size() == 1) {
-                androidx.appcompat.app.AlertDialog.Builder builder = new AlertDialog.Builder(mContext, R.style.AlertDialogStyle);
-                builder.setTitle("Alert")
-                        .setMessage("You can't delete this item, Atleast one education is mandatory.")
-                        .setPositiveButton("Ok", null)
-                        .show();
-            } else {
-                educationItemClickListener.onDeleteClick(education, position);
-            }
-        });
-
-        setAnimation(holder.itemEducationBinding.getRoot(), position);
     }
 
 
     @Override
-
     public int getItemCount() {
         return educationList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ItemEducationBinding itemEducationBinding;
+        EducationItemHorizontalBinding educationItemHorizontalBinding;
 
         public ViewHolder(@NonNull ItemEducationBinding itemView) {
             super(itemView.getRoot());
             this.itemEducationBinding = itemView;
         }
+
+        public ViewHolder(@NonNull EducationItemHorizontalBinding itemView) {
+            super(itemView.getRoot());
+            this.educationItemHorizontalBinding = itemView;
+        }
     }
 
     public interface EducationItemClickListener {
-        void onItemClick(Education education,int position);
+        void onItemClick(Education education, int position);
 
         void onDeleteClick(Education education, int position);
     }
