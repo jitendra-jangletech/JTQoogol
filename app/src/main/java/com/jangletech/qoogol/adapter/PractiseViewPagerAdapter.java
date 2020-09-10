@@ -1648,14 +1648,10 @@ public class PractiseViewPagerAdapter extends PagerAdapter
         TextView tvShareValue = layout.findViewById(R.id.share_value);
 
         ImageView imgDoubts = layout.findViewById(R.id.ask_doubt);
-
         ImageView share = layout.findViewById(R.id.share);
-
         TextView solutionDesc = layout.findViewById(R.id.solution_option);
-
         LinearLayout questLayout = layout.findViewById(R.id.questLayout);
         MathView questMath = layout.findViewById(R.id.questMathView);
-
         ConstraintLayout commentsLayout = layout.findViewById(R.id.comment_layout);
 
         //Toggle Buttons
@@ -1719,7 +1715,6 @@ public class PractiseViewPagerAdapter extends PagerAdapter
 
         if (imgQueDownload != null)
             imgQueDownload.setOnClickListener(v -> {
-                //todo add question to the saved Question List (Api Call needs to be implemented)
                 showToast("Added to saved questions List.");
             });
 
