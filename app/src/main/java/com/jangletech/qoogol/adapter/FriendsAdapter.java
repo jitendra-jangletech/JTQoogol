@@ -30,6 +30,8 @@ import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
 
+import org.apache.commons.text.StringEscapeUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -105,7 +107,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
     public void onBindViewHolder(@NonNull FriendsAdapter.ViewHolder holder, int position) {
         Friends connections = connectionsList.get(position);
 
-        holder.connectionItemBinding.tvUserName.setText(connections.getU_first_name() + " " + connections.getU_last_name());
+        holder.connectionItemBinding.tvUserName.setText(StringEscapeUtils.unescapeJava(connections.getU_first_name()) + " " + StringEscapeUtils.unescapeJava(connections.getU_last_name()));
         /*holder.connectionItemBinding.tvUserName.setText(
                 AESSecurities.getInstance().decrypt(TinyDB.getInstance(activity).getString(Constant.cf_key1), connections.getU_first_name())
                         + " " + AESSecurities.getInstance().decrypt(TinyDB.getInstance(activity).getString(Constant.cf_key2), connections.getU_last_name()));*/

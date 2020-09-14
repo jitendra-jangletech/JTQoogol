@@ -292,10 +292,7 @@ public class NewUserFragment extends BaseFragment {
                 if (s.toString().isEmpty()) {
                     mBinding.tilEmailMobile.setError("Please enter Email Id or Mobile number.");
                     return;
-                }/* else if (s.toString().trim().matches("[0-9]+") && s.toString().trim().length() != 10) {
-                    mBinding.tilEmailMobile.setError("Please enter valid mobile number.");
-                    return;
-                }*/ else {
+                } else {
                     isValidated = true;
                     mBinding.tilEmailMobile.setError(null);
                 }
@@ -306,7 +303,6 @@ public class NewUserFragment extends BaseFragment {
                 if (strMobile != null && !strMobile.isEmpty()) {
                     if (!strMobile.equalsIgnoreCase(s.toString())) {
                         mBinding.rlReferral.setVisibility(View.GONE);
-                        //referralCode = "";
                     }
                 }
             }
@@ -433,12 +429,14 @@ public class NewUserFragment extends BaseFragment {
                         setTimer();
                     } else {
                         if (!response.body().getU_user_id().isEmpty()) {
-                            //deleteOfflineData();
-                            countDownTimer.cancel();
+                            if (countDownTimer != null) {
+                                countDownTimer.cancel();
+                            }
                             Log.d(TAG, "onResponse Launch UserId : " + response.body().getU_user_id());
                             new PreferenceManager(getActivity()).saveInt(Constant.USER_ID, Integer.parseInt(response.body().getU_user_id()));
                             new PreferenceManager(getActivity()).saveUserId(response.body().getU_user_id());
                             new PreferenceManager(getActivity()).setIsLoggedIn(true);
+                            TinyDB.getInstance(getActivity()).putBoolean(Constant.IS_EDUCATION_ADDED, false);
                             Intent i = new Intent(getActivity(), MainActivity.class);
                             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(i);
@@ -447,16 +445,15 @@ public class NewUserFragment extends BaseFragment {
                 } else if (response.body() != null && response.body().getResponse().equals("316")) {
                     showErrorDialog(getActivity(), response.body().getResponse(), response.body().getMessage(), "EXISTING_USER", mobile);
                 } else {
-                    showErrorDialog(getActivity(), response.body().getResponse(), response.body().getMessage());
-                    showToast("Error Code : " + response.body().getResponse());
+                    AppUtils.showToast(getActivity(), null, response.body().getMessage());
                 }
             }
 
             @Override
             public void onFailure(Call<RegisterLoginModel> call, Throwable t) {
                 ProgressDialog.getInstance().dismiss();
-                showToast("Something went wrong!!");
                 t.printStackTrace();
+                apiCallFailureDialog(t);
             }
         });
     }
@@ -502,8 +499,8 @@ public class NewUserFragment extends BaseFragment {
             @Override
             public void onFailure(Call<VerifyResponse> call, Throwable t) {
                 ProgressDialog.getInstance().dismiss();
-                showToast("Something went wrong!!");
                 t.printStackTrace();
+                apiCallFailureDialog(t);
             }
         });
     }

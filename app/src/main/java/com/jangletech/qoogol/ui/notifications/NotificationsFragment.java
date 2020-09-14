@@ -18,7 +18,6 @@ import androidx.core.view.MenuItemCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -43,10 +42,6 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static com.jangletech.qoogol.util.Constant.fromTest;
-import static com.jangletech.qoogol.util.Constant.from_question;
-import static com.jangletech.qoogol.util.Constant.from_user;
 
 public class NotificationsFragment extends BaseFragment implements NotificationAdapter.onItemClickListener, PublicProfileDialog.PublicProfileClickListener, SearchView.OnQueryTextListener {
 
@@ -189,7 +184,6 @@ public class NotificationsFragment extends BaseFragment implements NotificationA
         call.enqueue(new Callback<ResponseObj>() {
             @Override
             public void onResponse(Call<ResponseObj> call, Response<ResponseObj> response) {
-                //ProgressDialog.getInstance().dismiss();
                 mBinding.swipeToRefresh.setRefreshing(false);
                 if (response.body() != null && response.body().getResponse().equals("200")) {
                     deleteFromdb(n_id);
@@ -261,19 +255,19 @@ public class NotificationsFragment extends BaseFragment implements NotificationA
         Bundle bundle = new Bundle();
         bundle.putBoolean("fromNotification", true);
         bundle.putString(Constant.FB_MS_ID, notification.getN_ref_id());
-        if (notification.getN_ref_type().equalsIgnoreCase(from_user) ||
+        /*if (notification.getN_ref_type().equalsIgnoreCase(from_user) ||
                 notification.getN_ref_type().equalsIgnoreCase(Constant.from_close_friend) ||
                 notification.getN_ref_type().equalsIgnoreCase(Constant.from_friend)) {
-            //bundle.putInt(CALL_FROM, connectonId);
-            //bundle.putString(Constant.fetch_profile_id, notification.getN_ref_id());
-            //NavHostFragment.findNavController(this).navigate(R.id.nav_edit_profile, bundle);
             PublicProfileDialog publicProfileDialog = new PublicProfileDialog(getActivity(), notification.getN_sent_by_u_id(), this);
             publicProfileDialog.show();
         } else if (notification.getN_ref_type().equalsIgnoreCase(from_question)) {
             NavHostFragment.findNavController(this).navigate(R.id.nav_learning, bundle);
         } else if (notification.getN_ref_type().equalsIgnoreCase(fromTest)) {
             NavHostFragment.findNavController(this).navigate(R.id.nav_test_my, bundle);
-        }
+        }*/
+
+        PublicProfileDialog publicProfileDialog = new PublicProfileDialog(getActivity(), notification.getN_sent_by_u_id(), this);
+        publicProfileDialog.show();
     }
 
     @Override

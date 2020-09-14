@@ -84,11 +84,27 @@ public class QuestionAnalyticsFragment extends BaseFragment {
 
         ArrayList<PieEntry> yValues = new ArrayList<>();
         if (dashBoard != null) {
-            yValues.add(new PieEntry(calculatePercentage(total, dashBoard.getUp_tests_likes()), "Like"));
+
+            if (calculatePercentage(total, dashBoard.getUp_tests_likes()) > 0) {
+                yValues.add(new PieEntry(calculatePercentage(total, dashBoard.getUp_tests_likes()), "Like"));
+            }
+            if (calculatePercentage(total, dashBoard.getTestShares()) > 0) {
+                yValues.add(new PieEntry(calculatePercentage(total, dashBoard.getTestShares()), "Share"));
+            }
+            if (calculatePercentage(total, dashBoard.getUp_fav_tests()) > 0) {
+                yValues.add(new PieEntry(calculatePercentage(total, dashBoard.getUp_fav_tests()), "Favourite"));
+            }
+            if (calculatePercentage(total, dashBoard.getTestTaken()) > 0) {
+                yValues.add(new PieEntry(calculatePercentage(total, dashBoard.getTestTaken()), "Test Taken"));
+            }
+            if (calculatePercentage(total, dashBoard.getUp_tests_ratings_given()) > 0) {
+                yValues.add(new PieEntry(calculatePercentage(total, dashBoard.getUp_tests_ratings_given()), "Rating Given"));
+            }
+           /* yValues.add(new PieEntry(calculatePercentage(total, dashBoard.getUp_tests_likes()), "Like"));
             yValues.add(new PieEntry(calculatePercentage(total, dashBoard.getTestShares()), "Share"));
             yValues.add(new PieEntry(calculatePercentage(total, dashBoard.getUp_fav_tests()), "Favourite"));
             yValues.add(new PieEntry(calculatePercentage(total, dashBoard.getTestTaken()), "Test Taken"));
-            yValues.add(new PieEntry(calculatePercentage(total, dashBoard.getUp_tests_ratings_given()), "Rating Given"));
+            yValues.add(new PieEntry(calculatePercentage(total, dashBoard.getUp_tests_ratings_given()), "Rating Given"));*/
         }
 
         mBinding.pieChart.animateY(1000, Easing.EaseInOutCubic);

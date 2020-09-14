@@ -46,7 +46,7 @@ import java.util.concurrent.Executors;
 @Database(entities = {LearningQuestionsNew.class, DashBoard.class, TestModelNew.class, DoubtInfo.class,
         TestQuestion.class, UserProfile.class, Education.class, Friends.class, Followers.class, Following.class,
         FriendRequest.class, FollowRequest.class, Connections.class, LearningQuestions.class, BlockedConnections.class,
-        Notification.class}, version = 11, exportSchema = false)
+        Notification.class}, version = 12, exportSchema = false)
 @TypeConverters(Converters.class)
 public abstract class QoogolDatabase extends RoomDatabase {
     public abstract UserProfileDao userProfileDao();

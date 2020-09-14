@@ -51,6 +51,31 @@ public class DateUtils {
         }
     }
 
+    public static String localeDateOfBirthFormat(String strDate) throws ParseException {
+        String formattedDate = "";
+        SimpleDateFormat inputFormat;
+        try {
+            if (strDate.contains("T")) {
+                inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            } else {
+                inputFormat = new SimpleDateFormat("yyyy-MM-dd");
+            }
+            // SimpleDateFormat inputFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+            SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MMM-yyyy");
+            Date date = inputFormat.parse(strDate);
+            assert date != null;
+            formattedDate = outputFormat.format(date);
+        } catch (Exception ex) {
+            Log.e(TAG, ex.getMessage());
+            inputFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+            SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MMM-yyyy");
+            Date date = inputFormat.parse(strDate);
+            assert date != null;
+            formattedDate = outputFormat.format(date);
+        }
+        return formattedDate;
+    }
+
     public static String getFormattedDate(String strDate) {
         Log.d(TAG, "getFormattedDate: " + strDate);
         if (strDate != null && strDate.length() > 10) {

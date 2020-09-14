@@ -177,6 +177,7 @@
                                     android:textColor="@color/colorSkyBlue" />
 
                                 <EditText
+                                    android:inputType="text|textNoSuggestions"
                                     android:id="@+id/etFirstName"
                                     style="@style/font_style"
                                     android:layout_width="match_parent"
@@ -205,6 +206,7 @@
                                     android:textColor="@color/colorSkyBlue" />
 
                                 <EditText
+                                    android:inputType="text|textNoSuggestions"
                                     android:id="@+id/etLastName"
                                     style="@style/font_style"
                                     android:layout_width="match_parent"

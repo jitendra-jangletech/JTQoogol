@@ -145,6 +145,9 @@ public class ConnectionListFragment extends BaseFragment implements ConnectionAd
                         isScrolling = false;
                         fetchConnections(pageCount);
                     }
+                }else{
+                    //todo hide bottom navigation bar
+                    
                 }
             }
         });

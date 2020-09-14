@@ -178,8 +178,11 @@ public class PersonalInfoFragment extends BaseFragment {
                 //set First Name, Last Name, Mobile Number, Email, Password, Dob
                 mBinding.etFirstName.setText(AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key1), userProfile.getFirstName()));
                 mBinding.etLastName.setText(AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key2), userProfile.getLastName()));
-                mBinding.etDob.setText(DateUtils.getFormattedDate(AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key3), userProfile.getDob())));
-                mBinding.etDob.setTag(AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key3), userProfile.getDob()));
+                try {
+                    mBinding.etDob.setText(DateUtils.localeDateOfBirthFormat(AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key3), userProfile.getDob())));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 mBinding.etMobile.setText(AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key4), userProfile.getMobileNumber()));
                 mBinding.etEmail.setText(AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key5), userProfile.getEmailAddress()));
                 mBinding.etPassword.setText(AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key6), userProfile.getPassword()));
@@ -271,7 +274,11 @@ public class PersonalInfoFragment extends BaseFragment {
         mBinding.tvMobile.setText(Html.fromHtml(getString(R.string.mobile_number)));
 
         mBinding.etDob.setOnClickListener(v -> {
-            showDatePicker();
+            try {
+                showDatePicker();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         });
 
         mBinding.btnEmailVerify.setOnClickListener(v -> {
@@ -1075,11 +1082,11 @@ public class PersonalInfoFragment extends BaseFragment {
         });
     }
 
-    private void showDatePicker() {
+    private void showDatePicker() throws Exception {
 
-        if (mBinding.etDob.getTag() != null &&
-                !mBinding.etDob.getTag().toString().isEmpty()) {
-            String[] dob = mBinding.etDob.getTag().toString().split("-", -1);
+        if (mBinding.etDob.getText().toString() != null &&
+                !mBinding.etDob.getText().toString().isEmpty()) {
+            String[] dob = convertDateToDataBaseFormat(mBinding.etDob.getText().toString()).split("-", -1);
             mCalender.set(Calendar.YEAR, Integer.parseInt(dob[0]));
             mCalender.set(Calendar.MONTH, Integer.parseInt(dob[1]) - 1);
             mCalender.set(Calendar.DAY_OF_MONTH, Integer.parseInt(dob[2]));

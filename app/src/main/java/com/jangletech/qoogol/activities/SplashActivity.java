@@ -1,19 +1,12 @@
 package com.jangletech.qoogol.activities;
 
 import android.content.Intent;
-import android.content.IntentSender;
 import android.os.Bundle;
 import android.util.Log;
 
-import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.google.android.play.core.appupdate.AppUpdateInfo;
-import com.google.android.play.core.appupdate.AppUpdateManager;
-import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
-import com.google.android.play.core.install.model.AppUpdateType;
-import com.google.android.play.core.install.model.UpdateAvailability;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.model.AppConfigResponse;
 import com.jangletech.qoogol.retrofit.ApiClient;
@@ -112,16 +105,16 @@ public class SplashActivity extends BaseActivity {
         }
     }
 
-    @Override
+   /* @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == 2020) {
             Log.d(TAG, "onActivityResult: " + resultCode);
             forceAppUpdate();
         }
-    }
+    }*/
 
-    private void forceAppUpdate() {
+    /*private void forceAppUpdate() {
         // Creates instance of the manager.
         AppUpdateManager appUpdateManager = AppUpdateManagerFactory.create(SplashActivity.this);
         // Returns an intent object that you use to check for an update.
@@ -148,5 +141,5 @@ public class SplashActivity extends BaseActivity {
                 }
             }
         });
-    }
+    }*/
 }

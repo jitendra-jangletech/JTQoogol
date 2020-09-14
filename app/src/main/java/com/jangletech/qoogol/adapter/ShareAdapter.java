@@ -16,8 +16,9 @@ import com.bumptech.glide.Glide;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.ShareItemBinding;
 import com.jangletech.qoogol.model.ShareModel;
-import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.UtilHelper;
+
+import org.apache.commons.text.StringEscapeUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,14 +65,14 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         holder.shareItemBinding.setConnection(connections);
         try {
             if (connections.getRecordType().equalsIgnoreCase("G")) {
-                Log.d(TAG, "onBindViewHolder First Name : "+ AppUtils.decodedString(connections.getU_first_name()));
-                Log.d(TAG, "onBindViewHolder Last Name : "+AppUtils.decodedString(connections.getU_last_name()));
-                holder.shareItemBinding.tvUserName.setText(connections.getU_first_name());
+                Log.d(TAG, "onBindViewHolder First Name : " + StringEscapeUtils.unescapeJava(connections.getU_first_name()));
+                Log.d(TAG, "onBindViewHolder Last Name : " + StringEscapeUtils.unescapeJava(connections.getU_last_name()));
+                holder.shareItemBinding.tvUserName.setText(StringEscapeUtils.unescapeJava(connections.getU_first_name()) + " " + StringEscapeUtils.unescapeJava(connections.getU_last_name()));
                 if (connections.getProf_pic() != null && !connections.getProf_pic().isEmpty()) {
                     Glide.with(activity).load(UtilHelper.getProfileImageUrl(connections.getProf_pic().trim())).circleCrop().placeholder(R.drawable.profile).into(holder.shareItemBinding.userProfileImage);
                 }
             } else {
-                holder.shareItemBinding.tvUserName.setText(connections.getU_first_name() + " " + connections.getU_last_name());
+                holder.shareItemBinding.tvUserName.setText(StringEscapeUtils.unescapeJava(connections.getU_first_name()) + " " + StringEscapeUtils.unescapeJava(connections.getU_last_name()));
                 if (connections.getProf_pic() != null && !connections.getProf_pic().isEmpty()) {
                     Glide.with(activity).load(UtilHelper.getProfileImageUrl(connections.getProf_pic().trim())).circleCrop().placeholder(R.drawable.profile).into(holder.shareItemBinding.userProfileImage);
                 }

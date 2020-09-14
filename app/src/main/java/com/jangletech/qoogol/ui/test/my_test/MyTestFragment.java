@@ -46,12 +46,15 @@ import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.TinyDB;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
 import static com.jangletech.qoogol.util.Constant.CASE;
 
 public class MyTestFragment extends BaseFragment
@@ -104,7 +107,6 @@ public class MyTestFragment extends BaseFragment
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_test_my, container, false);
         mBinding.setLifecycleOwner(this);
         mViewModel = new ViewModelProvider(this).get(MyTestViewModel.class);
-        initViews();
         return mBinding.getRoot();
     }
 
@@ -112,6 +114,7 @@ public class MyTestFragment extends BaseFragment
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         MainActivity.isTestScreenEnabled = true;
+        initViews();
         if (mBinding.topLayout.getVisibility() == View.GONE) {
             changeConfigurationAlert();
         }
@@ -243,7 +246,12 @@ public class MyTestFragment extends BaseFragment
 
         if (getArguments() != null && getArguments().getBoolean("fromNotification")) {
             Log.d(TAG, "initViews msId : " + getArguments().getString(Constant.FB_MS_ID));
-            params.put(Constant.tm_id, getArguments().getString(Constant.FB_MS_ID));
+            if (params == null) {
+                params = new HashMap<>();
+                params.put(Constant.tm_id, getArguments().getString(Constant.FB_MS_ID));
+            } else {
+                params.put(Constant.tm_id, getArguments().getString(Constant.FB_MS_ID));
+            }
         }
 
         if (getString(Constant.tm_diff_level) != null && !getString(Constant.tm_diff_level).isEmpty())
@@ -382,7 +390,7 @@ public class MyTestFragment extends BaseFragment
             public void onFailure(Call<TestListResponse> call, Throwable t) {
                 mBinding.swipeToRefresh.setRefreshing(false);
                 mBinding.progress.setVisibility(View.GONE);
-                AppUtils.showToast(mContext, t,"");
+                AppUtils.showToast(mContext, t, "");
                 apiCallFailureDialog(t);
                 t.printStackTrace();
             }
@@ -457,8 +465,8 @@ public class MyTestFragment extends BaseFragment
 
     @Override
     public void onBackClick(int count) {
-        Log.d(TAG, "onBackClick Comment Count : "+count);
-        int commentCount = Integer.parseInt(selectedTestCard.getCommentsCount())+count;
+        Log.d(TAG, "onBackClick Comment Count : " + count);
+        int commentCount = Integer.parseInt(selectedTestCard.getCommentsCount()) + count;
         selectedTestCard.setCommentsCount("" + commentCount);
         mAdapter.notifyItemChanged(selectedPos, selectedTestCard);
     }
@@ -515,6 +523,7 @@ public class MyTestFragment extends BaseFragment
                         navigateToSyllabus();
                     }
                 })
+                .setNegativeButton("Cancel", null)
                 .setCancelable(true).show();
     }
 
@@ -530,7 +539,7 @@ public class MyTestFragment extends BaseFragment
 
     @Override
     public void onSharedSuccess(int count) {
-        Log.d(TAG, "onSharedSuccess Count : "+count);
+        Log.d(TAG, "onSharedSuccess Count : " + count);
         int shareCount = Integer.parseInt(selectedTestCard.getShareCount());
         selectedTestCard.setShareCount("" + (shareCount + count));
         mAdapter.notifyItemChanged(selectedPos, selectedTestCard);

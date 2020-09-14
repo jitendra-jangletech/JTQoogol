@@ -424,6 +424,7 @@ public class BaseFragment extends Fragment {
         } catch (Exception ex) {
             Log.e(TAG, ex.getMessage());
         }
+        Log.d(TAG, "convertDateToDataBaseFormat : "+formattedDate);
         return formattedDate;
     }
 }

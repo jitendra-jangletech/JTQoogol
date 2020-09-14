@@ -56,6 +56,7 @@ public class ExistingUserFragment extends BaseFragment {
     private String strMobile = "";
     private String strPasswordOtp = "";
     public AppRepository mAppRepository;
+    private CountDownTimer countDownTimer;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -157,7 +158,7 @@ public class ExistingUserFragment extends BaseFragment {
 
     private void setTimer() {
         showToast("Otp Sent Successfully");
-        new CountDownTimer(120000, 1000) {
+        countDownTimer = new CountDownTimer(120000, 1000) {
             public void onTick(long millisUntilFinished) {
                 mBinding.sendOtp.setEnabled(false);
                 mBinding.tvSendOtp.setEnabled(false);
@@ -165,9 +166,13 @@ public class ExistingUserFragment extends BaseFragment {
             }
 
             public void onFinish() {
-                mBinding.tvSendOtp.setText(getResources().getString(R.string.resend_otp));
-                mBinding.tvSendOtp.setEnabled(true);
-                mBinding.sendOtp.setEnabled(true);
+                try {
+                    mBinding.tvSendOtp.setText(getResources().getString(R.string.resend_otp));
+                    mBinding.tvSendOtp.setEnabled(true);
+                    mBinding.sendOtp.setEnabled(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }.start();
     }
@@ -214,9 +219,6 @@ public class ExistingUserFragment extends BaseFragment {
                                     TinyDB.getInstance(getActivity()).putString(Constant.selected_ue_id, response.body().getUeId());
                                     Log.d(TAG, "onResponse UEID : " + response.body().getUeId());
                                     callOfflineApi(response.body().getU_user_id());
-                                    /*Intent i = new Intent(getActivity(), MainActivity.class);
-                                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                    startActivity(i);*/
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
@@ -235,8 +237,7 @@ public class ExistingUserFragment extends BaseFragment {
                     } else if (response.body().getResponse().equals("315")) {
                         showErrorDialog(getActivity(), response.body().getResponse(), response.body().getMessage(), "NEW_USER", mobile);
                     } else {
-                        showErrorDialog(getActivity(), response.body().getResponse(), response.body().getMessage());
-                        showToast("Error Code : " + response.body().getResponse());
+                        showErrorDialog(getActivity(), response.body().getResponse(), response.body().getMessage(), "NEW_USER", mobile);
                     }
                 }
             }
@@ -244,8 +245,8 @@ public class ExistingUserFragment extends BaseFragment {
             @Override
             public void onFailure(Call<RegisterLoginModel> call, Throwable t) {
                 ProgressDialog.getInstance().dismiss();
-                showToast("Something went wrong!!");
                 t.printStackTrace();
+                apiCallFailureDialog(t);
             }
         });
     }
@@ -288,6 +289,10 @@ public class ExistingUserFragment extends BaseFragment {
     }
 
     private void navigateOnHomeScreen() {
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+        }
+        TinyDB.getInstance(getActivity()).putBoolean(Constant.IS_EDUCATION_ADDED, false);
         Intent i = new Intent(getActivity(), MainActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(i);

@@ -564,7 +564,7 @@ public class MainActivity extends BaseActivity {
                             action.equalsIgnoreCase("CC")) {
                         navToFragment(R.id.nav_requests, bundle);
                     } else if (action != null && action.equalsIgnoreCase("CAF") ||
-                            action.equalsIgnoreCase("CA")) {
+                            action.equalsIgnoreCase("CA") || action.equalsIgnoreCase("CN")) {
                         navToFragment(R.id.nav_connections, bundle);
                     }
                 }

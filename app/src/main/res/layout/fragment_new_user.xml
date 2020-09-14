@@ -57,6 +57,7 @@
                                 android:background="@color/colorWhite"
                                 android:inputType="textNoSuggestions"
                                 android:textColor="@color/colorBlack" />
+
                         </com.google.android.material.textfield.TextInputLayout>
 
                         <com.google.android.material.textfield.TextInputLayout

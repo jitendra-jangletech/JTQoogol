@@ -29,6 +29,9 @@ import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.StringEscapeUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -100,7 +103,7 @@ public class ConnectionAdapter extends RecyclerView.Adapter<ConnectionAdapter.Vi
                 AESSecurities.getInstance().decrypt(TinyDB.getInstance(activity).getString(Constant.cf_key1), connections.getU_first_name()) + " "
                         + AESSecurities.getInstance().decrypt(TinyDB.getInstance(activity).getString(Constant.cf_key2), connections.getU_last_name()));*/
 
-        holder.connectionItemBinding.tvUserName.setText(connections.getU_first_name() + " " + connections.getU_last_name());
+        holder.connectionItemBinding.tvUserName.setText(StringEscapeUtils.unescapeJava(connections.getU_first_name()) + " " + StringEscapeUtils.unescapeJava(connections.getU_last_name()));
         if (connections.getBadge() != null && !connections.getBadge().isEmpty()) {
             String badge = connections.getBadge();
             if (badge.equalsIgnoreCase("B")) ;

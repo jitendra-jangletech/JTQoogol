@@ -2,6 +2,7 @@ package com.jangletech.qoogol.ui;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -83,11 +84,26 @@ public class TestAnalyticsFragment extends BaseFragment {
 
         ArrayList<PieEntry> yValues = new ArrayList<>();
         if (dashBoard != null) {
-            yValues.add(new PieEntry(calculatePercentage(total, dashBoard.getUp_tests_likes()), "Like"));
-            yValues.add(new PieEntry(calculatePercentage(total, dashBoard.getTestShares()), "Share"));
-            yValues.add(new PieEntry(calculatePercentage(total, dashBoard.getUp_fav_tests()), "Favourite"));
-            yValues.add(new PieEntry(calculatePercentage(total, dashBoard.getTestTaken()), "Test Taken"));
-            yValues.add(new PieEntry(calculatePercentage(total, dashBoard.getUp_tests_ratings_given()), "Rating Given"));
+            Log.d(TAG, "setPieChartData Likes: " + calculatePercentage(total, dashBoard.getUp_tests_likes()));
+            Log.d(TAG, "setPieChartData Shares: " + calculatePercentage(total, dashBoard.getTestShares()));
+            Log.d(TAG, "setPieChartData Fav : " + calculatePercentage(total, dashBoard.getUp_fav_tests()));
+            Log.d(TAG, "setPieChartData Test Taken : " + calculatePercentage(total, dashBoard.getTestTaken()));
+
+            if (calculatePercentage(total, dashBoard.getUp_tests_likes()) > 0) {
+                yValues.add(new PieEntry(calculatePercentage(total, dashBoard.getUp_tests_likes()), "Like"));
+            }
+            if (calculatePercentage(total, dashBoard.getTestShares()) > 0) {
+                yValues.add(new PieEntry(calculatePercentage(total, dashBoard.getTestShares()), "Share"));
+            }
+            if (calculatePercentage(total, dashBoard.getUp_fav_tests()) > 0) {
+                yValues.add(new PieEntry(calculatePercentage(total, dashBoard.getUp_fav_tests()), "Favourite"));
+            }
+            if (calculatePercentage(total, dashBoard.getTestTaken()) > 0) {
+                yValues.add(new PieEntry(calculatePercentage(total, dashBoard.getTestTaken()), "Test Taken"));
+            }
+            if (calculatePercentage(total, dashBoard.getUp_tests_ratings_given()) > 0) {
+                yValues.add(new PieEntry(calculatePercentage(total, dashBoard.getUp_tests_ratings_given()), "Rating Given"));
+            }
         }
 
         mBinding.pieChart.animateY(1000, Easing.EaseInOutCubic);
@@ -116,38 +132,38 @@ public class TestAnalyticsFragment extends BaseFragment {
         }
     }
 
-    private void setDynamicPieChartData(String label) {
-        mBinding.pieChartDetailed.setVisibility(View.VISIBLE);
-        mBinding.tvLabel.setVisibility(View.VISIBLE);
-        mBinding.tvLabel.setText(label);
-        mBinding.pieChartDetailed.setUsePercentValues(true);
-        mBinding.pieChartDetailed.getDescription().setEnabled(false);
-        mBinding.pieChartDetailed.setExtraOffsets(5, 10, 5, 5);
-        mBinding.pieChartDetailed.setDragDecelerationFrictionCoef(0.95f);
-
-        mBinding.pieChartDetailed.setDrawHoleEnabled(true);
-        mBinding.pieChartDetailed.setHoleColor(Color.WHITE);
-        mBinding.pieChartDetailed.setTransparentCircleRadius(61f);
-
-        ArrayList<PieEntry> yValues = new ArrayList<>();
-        yValues.add(new PieEntry(30, "Maths"));
-        yValues.add(new PieEntry(40, "Science"));
-        yValues.add(new PieEntry(20, "English"));
-        yValues.add(new PieEntry(10, "Marathi"));
-
-        mBinding.pieChartDetailed.animateY(1000, Easing.EaseInOutCubic);
-
-        PieDataSet pieDataSet = new PieDataSet(yValues, label);
-        pieDataSet.setSliceSpace(3f);
-        pieDataSet.setSelectionShift(5f);
-        pieDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
-
-        PieData pieData = new PieData(pieDataSet);
-        pieData.setValueTextSize(10f);
-        pieData.setValueTextColor(Color.WHITE);
-        mBinding.pieChartDetailed.setData(pieData);
-        mBinding.pieChartDetailed.invalidate();
-    }
+//    private void setDynamicPieChartData(String label) {
+//        mBinding.pieChartDetailed.setVisibility(View.VISIBLE);
+//        mBinding.tvLabel.setVisibility(View.VISIBLE);
+//        mBinding.tvLabel.setText(label);
+//        mBinding.pieChartDetailed.setUsePercentValues(true);
+//        mBinding.pieChartDetailed.getDescription().setEnabled(false);
+//        mBinding.pieChartDetailed.setExtraOffsets(5, 10, 5, 5);
+//        mBinding.pieChartDetailed.setDragDecelerationFrictionCoef(0.95f);
+//
+//        mBinding.pieChartDetailed.setDrawHoleEnabled(true);
+//        mBinding.pieChartDetailed.setHoleColor(Color.WHITE);
+//        mBinding.pieChartDetailed.setTransparentCircleRadius(61f);
+//
+//        ArrayList<PieEntry> yValues = new ArrayList<>();
+//        yValues.add(new PieEntry(30, "Maths"));
+//        yValues.add(new PieEntry(40, "Science"));
+//        yValues.add(new PieEntry(20, "English"));
+//        yValues.add(new PieEntry(10, "Marathi"));
+//
+//        mBinding.pieChartDetailed.animateY(1000, Easing.EaseInOutCubic);
+//
+//        PieDataSet pieDataSet = new PieDataSet(yValues, label);
+//        pieDataSet.setSliceSpace(3f);
+//        pieDataSet.setSelectionShift(5f);
+//        pieDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+//
+//        PieData pieData = new PieData(pieDataSet);
+//        pieData.setValueTextSize(10f);
+//        pieData.setValueTextColor(Color.WHITE);
+//        mBinding.pieChartDetailed.setData(pieData);
+//        mBinding.pieChartDetailed.invalidate();
+//    }
 
     private float calculatePercentage(double total, double value) {
         return (float) ((value / total) * 100);

@@ -11,7 +11,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.databinding.DataBindingUtil;
@@ -28,6 +27,8 @@ import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
+
+import org.apache.commons.text.StringEscapeUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -97,7 +98,7 @@ public class FollowersAdapter extends RecyclerView.Adapter<FollowersAdapter.View
        /* holder.connectionItemBinding.tvUserName.setText(
                 AESSecurities.getInstance().decrypt(TinyDB.getInstance(activity).getString(Constant.cf_key1), connections.getU_first_name())
                         + " " + AESSecurities.getInstance().decrypt(TinyDB.getInstance(activity).getString(Constant.cf_key2), connections.getU_last_name()));*/
-        holder.connectionItemBinding.tvUserName.setText(connections.getU_first_name() + " " + connections.getU_last_name());
+        holder.connectionItemBinding.tvUserName.setText(StringEscapeUtils.unescapeJava(connections.getU_first_name()) + " " + StringEscapeUtils.unescapeJava(connections.getU_last_name()));
         try {
             if (connections.getProf_pic() != null && !connections.getProf_pic().isEmpty()) {
                 Glide.with(activity).load(UtilHelper.getProfileImageUrl(connections.getProf_pic().trim())).circleCrop().placeholder(R.drawable.profile).into(holder.connectionItemBinding.userProfileImage);
