@@ -1,13 +1,22 @@
 package com.jangletech.qoogol.model;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import com.google.gson.annotations.SerializedName;
 import com.jangletech.qoogol.util.Constant;
 
+import org.jetbrains.annotations.NotNull;
+
+@Entity
 public class AppConfigResponse {
 
     private String Message;
+
     private String Response;
 
+    @NotNull
+    @PrimaryKey
     @SerializedName(Constant.GMT)
     private String dateTime;
 

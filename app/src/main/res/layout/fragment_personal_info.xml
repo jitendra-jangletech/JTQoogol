@@ -41,8 +41,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/rlParent"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/_10sdp">
+                android:layout_height="wrap_content">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/profilePicLayout"
@@ -66,7 +65,7 @@
                         android:layout_width="135dp"
                         android:layout_height="135dp"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginTop="45dp"
+                        android:layout_marginTop="41dp"
                         android:background="@drawable/image_border"
                         android:contentDescription="@string/app_name"
                         android:padding="2dp"
@@ -77,10 +76,18 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    app:layout_constraintTop_toBottomOf="@+id/profilePicLayout"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:id="@+id/switchPrivate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
+                    android:padding="@dimen/_10sdp"
                     app:layout_constraintTop_toBottomOf="@+id/profilePicLayout">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -103,7 +110,7 @@
                                 style="@style/font_style"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/_10sdp"
+                                android:layout_marginTop="@dimen/_4sdp"
                                 android:padding="@dimen/_5sdp"
                                 android:text="Referral Code : "
                                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
@@ -113,7 +120,7 @@
                                 style="@style/font_style"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/_10sdp"
+                                android:layout_marginTop="@dimen/_4sdp"
                                 android:padding="@dimen/_5sdp"
                                 android:text='@{userProfile.userName}'
                                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
@@ -134,7 +141,7 @@
                                 style="@style/font_style"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/_10sdp"
+                                android:layout_marginTop="@dimen/_4sdp"
                                 android:padding="@dimen/_5sdp"
                                 android:text="Points:"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
@@ -144,7 +151,7 @@
                                 style="@style/font_style"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/_10sdp"
+                                android:layout_marginTop="@dimen/_4sdp"
                                 android:padding="@dimen/_5sdp"
                                 android:text='@{userProfile.totalPointsEarned}'
                                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
@@ -177,13 +184,13 @@
                                     android:textColor="@color/colorSkyBlue" />
 
                                 <EditText
-                                    android:inputType="text|textNoSuggestions"
                                     android:id="@+id/etFirstName"
                                     style="@style/font_style"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:hint="First Name"
                                     android:importantForAutofill="no"
+                                    android:inputType="text|textNoSuggestions"
                                     android:maxLength="50"
                                     android:singleLine="true"
                                     android:textColor="@color/colorBlack" />
@@ -206,13 +213,13 @@
                                     android:textColor="@color/colorSkyBlue" />
 
                                 <EditText
-                                    android:inputType="text|textNoSuggestions"
                                     android:id="@+id/etLastName"
                                     style="@style/font_style"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:hint="Last Name"
                                     android:importantForAutofill="no"
+                                    android:inputType="text|textNoSuggestions"
                                     android:maxLength="50"
                                     android:singleLine="true"
                                     android:textColor="@color/colorBlack" />
@@ -542,36 +549,12 @@
                                 android:text="@string/language"
                                 android:textColor="@color/colorSkyBlue" />
 
-                            <!--<com.jangletech.qoogol.view.CustomAutoCompleteTextView
-                                app:endIconMode="none"
-                                android:id="@+id/langAutocompleteView"
-                                style="@style/AutoCompleteTextViewStyle"
-                                android:layout_below="@+id/tvHobby"
-                                android:hint="@string/select_language"
-                                android:text='@{userProfile.u_language}' />-->
-
                             <androidx.appcompat.widget.AppCompatMultiAutoCompleteTextView
                                 android:id="@+id/langAutocompleteView"
                                 style="@style/AutoCompleteTextViewStyle"
                                 android:layout_below="@+id/tvHobby"
                                 android:hint="@string/select_language"
                                 android:text='@{userProfile.u_language}' />
-
-                            <!-- <TextView
-                                 android:visibility="gone"
-                                 android:id="@+id/tvHobby"
-                                 android:layout_width="match_parent"
-                                 android:layout_height="wrap_content"
-                                 android:layout_marginTop="@dimen/_15sdp"
-                                 android:text="@string/hobby" />
-
-                             <androidx.appcompat.widget.AppCompatMultiAutoCompleteTextView
-                                 android:visibility="gone"
-                                 android:id="@+id/hobbyAutocompleteView"
-                                 style="@style/AutoCompleteTextViewStyle"
-                                 android:layout_below="@+id/tvHobby"
-                                 android:hint="@string/your_hobby"
-                                 android:text='@{userProfile.u_Hobby}' />-->
 
                             <com.google.android.material.button.MaterialButton
                                 android:id="@+id/btnImportContacts"
@@ -674,269 +657,6 @@
                                 android:hint="@string/select_native_city"
                                 android:tag="@{userProfile.cityId}"
                                 android:text="@{userProfile.u_City}" />
-
-                        </LinearLayout>
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/publicProfileLayout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:visibility="gone">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            app:layout_constraintTop_toTopOf="parent">
-
-                            <androidx.constraintlayout.widget.ConstraintLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center">
-
-                                <TextView
-                                    android:id="@+id/tvName"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center_horizontal"
-                                    android:padding="@dimen/_10sdp"
-                                    android:text="Qoogol User"
-                                    android:textColor="@color/colorBlack"
-                                    android:textSize="@dimen/_16ssp"
-                                    android:textStyle="bold"
-                                    app:layout_constraintLeft_toLeftOf="parent"
-                                    app:layout_constraintTop_toTopOf="parent" />
-
-                                <ImageView
-                                    android:id="@+id/imgBadge"
-                                    android:layout_width="@dimen/_40sdp"
-                                    android:layout_height="@dimen/_40sdp"
-                                    android:padding="@dimen/_10sdp"
-                                    app:layout_constraintLeft_toRightOf="@+id/tvName"
-                                    app:layout_constraintTop_toTopOf="parent" />
-
-                            </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-                            <androidx.constraintlayout.widget.ConstraintLayout
-                                android:id="@+id/connection_layout"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
-
-                                <Button
-                                    android:id="@+id/add_friend"
-                                    style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginRight="@dimen/_10sdp"
-                                    android:backgroundTint="@color/colorSkyBlue"
-                                    android:minWidth="@dimen/_85sdp"
-                                    android:text="@string/add_friend"
-                                    android:textAllCaps="false"
-                                    android:textColor="@color/colorWhite"
-                                    app:cornerRadius="@dimen/_5sdp"
-                                    app:layout_constraintEnd_toStartOf="@+id/follow"
-                                    app:layout_constraintHorizontal_chainStyle="packed"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toTopOf="parent"
-                                    app:layout_constraintVertical_chainStyle="packed" />
-
-                                <Button
-                                    android:id="@+id/follow"
-                                    style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="@dimen/_10sdp"
-                                    android:backgroundTint="@color/colorSkyBlue"
-                                    android:minWidth="@dimen/_85sdp"
-                                    android:text="@string/follow"
-                                    android:textAllCaps="false"
-                                    android:textColor="@color/colorWhite"
-                                    app:cornerRadius="@dimen/_5sdp"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toEndOf="@id/add_friend"
-                                    app:layout_constraintTop_toTopOf="parent" />
-
-                            </androidx.constraintlayout.widget.ConstraintLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                app:layout_constraintTop_toBottomOf="@+id/tvName">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_15sdp"
-                                    android:text="@string/gender"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                                    android:textColor="@color/colorSkyBlue" />
-
-                                <TextView
-                                    android:id="@+id/tvGender"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:text=""
-                                    android:textColor="@color/colorBlack"
-                                    android:textSize="@dimen/_12ssp" />
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                app:layout_constraintTop_toBottomOf="@+id/tvName">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_15sdp"
-                                    android:text="@string/dob"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                                    android:textColor="@color/colorSkyBlue" />
-
-                                <TextView
-                                    android:id="@+id/tvDobs"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:text="@{DateUtils.getFormattedDate(userProfile.dob)}"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                                    android:textColor="@color/colorBlack"
-                                    android:textSize="@dimen/_12ssp" />
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:id="@+id/languageLayout"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                app:layout_constraintTop_toBottomOf="@+id/tvName">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_15sdp"
-                                    android:text="@string/language"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                                    android:textColor="@color/colorSkyBlue" />
-
-                                <TextView
-                                    android:id="@+id/tvLanguages"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:text="@{userProfile.u_language}"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                                    android:textColor="@color/colorBlack"
-                                    android:textSize="@dimen/_12ssp" />
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:id="@+id/nationalityLayout"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                app:layout_constraintTop_toBottomOf="@+id/tvName">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_15sdp"
-                                    android:text="@string/nationality"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                                    android:textColor="@color/colorSkyBlue" />
-
-                                <TextView
-                                    android:id="@+id/tvNationalitys"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:text="@{userProfile.u_Nationality}"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                                    android:textColor="@color/colorBlack"
-                                    android:textSize="@dimen/_12ssp" />
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:id="@+id/stateLayout"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                app:layout_constraintTop_toBottomOf="@+id/tvName">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_15sdp"
-                                    android:text="@string/state"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                                    android:textColor="@color/colorSkyBlue" />
-
-                                <TextView
-                                    android:id="@+id/tvStates"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:text="@{userProfile.u_State}"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                                    android:textColor="@color/colorBlack"
-                                    android:textSize="@dimen/_12ssp" />
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:id="@+id/divisionLayout"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_15sdp"
-                                    android:text="@string/district"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                                    android:textColor="@color/colorSkyBlue" />
-
-                                <TextView
-                                    android:id="@+id/tvDivisions"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:text="@{userProfile.u_District}"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                                    android:textColor="@color/colorBlack"
-                                    android:textSize="@dimen/_12ssp" />
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:id="@+id/cityLayout"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_15sdp"
-                                    android:text="@string/city"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                                    android:textColor="@color/colorSkyBlue" />
-
-                                <TextView
-                                    android:id="@+id/tvCitys"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:text="@{userProfile.u_City}"
-                                    android:textColor="@color/colorBlack"
-                                    android:textSize="@dimen/_12ssp" />
-
-                            </LinearLayout>
 
                         </LinearLayout>
 

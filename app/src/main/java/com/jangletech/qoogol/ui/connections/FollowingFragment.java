@@ -1,6 +1,5 @@
 package com.jangletech.qoogol.ui.connections;
 
-import android.app.Application;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,7 +29,6 @@ import com.jangletech.qoogol.model.FollowingResponse;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
-import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 
@@ -116,8 +114,11 @@ public class FollowingFragment extends BaseFragment implements FollowingsAdapter
         mBinding.connectionRecycler.setHasFixedSize(true);
         mBinding.connectionRecycler.setLayoutManager(linearLayoutManager);
         mBinding.connectionRecycler.setAdapter(mAdapter);
-        userId = String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));
-        mViewModel.fetchFollowingsData(false);
+        //userId = String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID));
+        if (!isVisible) {
+            isVisible = true;
+            mViewModel.fetchFollowingsData(false);
+        }
         mBinding.connectionRecycler.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
@@ -136,6 +137,7 @@ public class FollowingFragment extends BaseFragment implements FollowingsAdapter
                 if (dy > 0) {
                     if (isScrolling && (currentItems + scrolledOutItems == totalItems)) {
                         isScrolling = false;
+                        //mViewModel.fetchFollowingsData(false);
                     }
                 }
             }
@@ -221,7 +223,7 @@ public class FollowingFragment extends BaseFragment implements FollowingsAdapter
                 } else if (response.body().getResponse().equals("501")) {
                     resetSettingAndLogout();
                 } else {
-                    AppUtils.showToast(getActivity(), null, response.body().getMessage());
+                    showToast("Error Code : " + response.body().getResponse());
                 }
             }
 
@@ -229,6 +231,7 @@ public class FollowingFragment extends BaseFragment implements FollowingsAdapter
             public void onFailure(Call<FollowingResponse> call, Throwable t) {
                 t.printStackTrace();
                 dismissRefresh(mBinding.connectionSwiperefresh);
+                showToast("Something went wrong!!");
                 apiCallFailureDialog(t);
             }
         });
@@ -260,10 +263,6 @@ public class FollowingFragment extends BaseFragment implements FollowingsAdapter
         mViewModel.fetchFollowingsData(true);
     }
 
-    @Override
-    public void onBottomReached(int size) {
-        //mViewModel.fetchFollowingsData(false);
-    }
 
     @Override
     public void showProfileClick(Bundle bundle) {

@@ -46,24 +46,18 @@ import com.jangletech.qoogol.model.District;
 import com.jangletech.qoogol.model.DistrictResponse;
 import com.jangletech.qoogol.model.GenerateVerifyUserName;
 import com.jangletech.qoogol.model.Language;
-import com.jangletech.qoogol.model.ResponseObj;
 import com.jangletech.qoogol.model.State;
 import com.jangletech.qoogol.model.StateResponse;
 import com.jangletech.qoogol.model.UserProfile;
 import com.jangletech.qoogol.model.UserProfileResponse;
 import com.jangletech.qoogol.model.VerifyResponse;
-import com.jangletech.qoogol.retrofit.ApiClient;
-import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
-import com.jangletech.qoogol.ui.connections.FollowingViewModel;
-import com.jangletech.qoogol.ui.connections.FriendReqViewModel;
 import com.jangletech.qoogol.util.AESSecurities;
 import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.DateUtils;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.TinyDB;
-import com.jangletech.qoogol.util.UtilHelper;
 import com.mukesh.OtpView;
 import com.theartofdev.edmodo.cropper.CropImage;
 
@@ -85,25 +79,16 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.app.Activity.RESULT_OK;
-import static com.jangletech.qoogol.util.Constant.accept_friend_requests;
-import static com.jangletech.qoogol.util.Constant.fetch_loged_in_user;
-import static com.jangletech.qoogol.util.Constant.fetch_other_user;
-import static com.jangletech.qoogol.util.Constant.follow;
-import static com.jangletech.qoogol.util.Constant.qoogol;
-import static com.jangletech.qoogol.util.Constant.reject_friend_requests;
-import static com.jangletech.qoogol.util.Constant.remove_connection;
-import static com.jangletech.qoogol.util.Constant.sent_friend_req;
-import static com.jangletech.qoogol.util.Constant.unfollow;
 
 public class PersonalInfoFragment extends BaseFragment {
 
     private static final String TAG = "PersonalInfoFragment";
     private static final int RESULT_REQUEST_LOAD_IMAGE_CODE = 1001;
     private PersonalInfoViewModel mViewModel;
-    private android.app.ProgressDialog mDialog;
+    //private android.app.ProgressDialog mDialog;
     private FragmentPersonalInfoBinding mBinding;
     private Dialog dialog;
-    private String masterKey = "";
+    //private String masterKey = "";
     private Context mContext;
     private String gender = "";
     private Map<Integer, String> mMapNationality;
@@ -116,7 +101,7 @@ public class PersonalInfoFragment extends BaseFragment {
     private boolean isMailVerified = false;
     private boolean isMobileVerified = false;
     private HashMap<String, String> userProfileMap;
-    private ApiInterface apiService = ApiClient.getInstance().getApi();
+    //private ApiInterface apiService = ApiClient.getInstance().getApi();
     private String userid = "";
     private PreferenceManager mSettings;
     private Call<UserProfile> call;
@@ -138,7 +123,7 @@ public class PersonalInfoFragment extends BaseFragment {
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser && isFragmentVisible) {
-            fetchUserProfile(fetch_loged_in_user, "");
+            fetchUserProfile("");
         }
     }
 
@@ -160,13 +145,10 @@ public class PersonalInfoFragment extends BaseFragment {
         Log.d(TAG, "initViews UserId : " + mSettings.getUserId());
         if (!isFragmentVisible) {
             isFragmentVisible = true;
-            if (userid.equalsIgnoreCase(mSettings.getUserId()))
-                fetchUserProfile(fetch_loged_in_user, "");
-            else
-                fetchUserProfile(fetch_other_user, "");
+            fetchUserProfile("");
         }
 
-        mViewModel.getUserProfile(userid).observe(getViewLifecycleOwner(), userProfile -> {
+        mViewModel.getUserProfile(getUserId(getActivity())).observe(getViewLifecycleOwner(), userProfile -> {
             Log.d(TAG, "onChanged : " + userProfile);
             if (userProfile != null) {
                 profile = userProfile;
@@ -175,7 +157,6 @@ public class PersonalInfoFragment extends BaseFragment {
                 new PreferenceManager(getActivity()).saveString(Constant.userName, userProfile.getUserName());
 
                 Log.d(TAG, "Focus Languages : " + userProfile);
-                //set First Name, Last Name, Mobile Number, Email, Password, Dob
                 mBinding.etFirstName.setText(AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key1), userProfile.getFirstName()));
                 mBinding.etLastName.setText(AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key2), userProfile.getLastName()));
                 try {
@@ -187,16 +168,7 @@ public class PersonalInfoFragment extends BaseFragment {
                 mBinding.etEmail.setText(AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key5), userProfile.getEmailAddress()));
                 mBinding.etPassword.setText(AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key6), userProfile.getPassword()));
 
-                if (!userid.equalsIgnoreCase(mSettings.getUserId())) {
-                    getActionBar().setTitle("User Profile");
-                    mBinding.userProfileLayout.setVisibility(View.GONE);
-                    mBinding.publicProfileLayout.setVisibility(View.VISIBLE);
-                    setPublicProfile(userProfile);
-                } else {
-                    mBinding.publicProfileLayout.setVisibility(View.GONE);
-                    mBinding.userProfileLayout.setVisibility(View.VISIBLE);
-                    updateUi(userProfile);
-                }
+                updateUi(userProfile);
             }
         });
 
@@ -209,7 +181,6 @@ public class PersonalInfoFragment extends BaseFragment {
                 }
             }
         });
-
 
         mBinding.userProfilePic.setOnClickListener(v -> {
             loadImage();
@@ -361,7 +332,6 @@ public class PersonalInfoFragment extends BaseFragment {
                 populateCity(mMapCities);
             }
         });
-
     }
 
     private void populateUserNames(List<String> userNames) {
@@ -372,76 +342,6 @@ public class PersonalInfoFragment extends BaseFragment {
         ArrayAdapter<String> userNameAdapter = new ArrayAdapter(mContext, R.layout.textview_dropdown, userNames);
         mBinding.userNameAutoCompleteTextView.setThreshold(0);
         mBinding.userNameAutoCompleteTextView.setAdapter(userNameAdapter);
-    }
-
-    private void manageUnwantedFields(UserProfile userProfile) {
-        if (userProfile.getStrTagLine().equalsIgnoreCase("")) {
-            mBinding.taglineLayout.setVisibility(View.GONE);
-        }
-
-        if (userProfile.getU_language().equalsIgnoreCase("")) {
-            mBinding.tvLanguage.setVisibility(View.GONE);
-            mBinding.langAutocompleteView.setVisibility(View.GONE);
-        }
-
-        if (userProfile.getU_Nationality().equalsIgnoreCase("")) {
-            mBinding.tvNationality.setVisibility(View.GONE);
-            mBinding.nationalityAutocompleteView.setVisibility(View.GONE);
-        }
-
-        if (userProfile.getU_State().equalsIgnoreCase("")) {
-            mBinding.tvState.setVisibility(View.GONE);
-            mBinding.stateAutocompleteView.setVisibility(View.GONE);
-        }
-
-        if (userProfile.getU_District().equalsIgnoreCase("")) {
-            mBinding.tvDivision.setVisibility(View.GONE);
-            mBinding.divisionAutocompleteView.setVisibility(View.GONE);
-        }
-
-        if (userProfile.getU_State().equalsIgnoreCase("")) {
-            mBinding.tvState.setVisibility(View.GONE);
-            mBinding.stateAutocompleteView.setVisibility(View.GONE);
-        }
-
-        if (userProfile.getU_City().equalsIgnoreCase("")) {
-            mBinding.tvCity.setVisibility(View.GONE);
-            mBinding.cityAutocompleteView.setVisibility(View.GONE);
-        }
-
-        mBinding.radioMale.setVisibility(View.GONE);
-        mBinding.radioFemale.setVisibility(View.GONE);
-        mBinding.radioOthers.setVisibility(View.GONE);
-
-        if (userProfile.getStrGender().equalsIgnoreCase("M"))
-            mBinding.radioMale.setVisibility(View.VISIBLE);
-        else if (userProfile.getStrGender().equalsIgnoreCase("F"))
-            mBinding.radioFemale.setVisibility(View.VISIBLE);
-        else if (userProfile.getStrGender().equalsIgnoreCase("O"))
-            mBinding.radioOthers.setVisibility(View.VISIBLE);
-    }
-
-    private void manageLayoutForOtherUser() {
-        mBinding.btnImportContacts.setVisibility(View.GONE);
-        mBinding.btnSave.setVisibility(View.GONE);
-        mBinding.passwordLayout.setVisibility(View.GONE);
-        mBinding.refferalLayout.setVisibility(View.GONE);
-        mBinding.pointsLayout.setVisibility(View.GONE);
-        mBinding.mobileLayout.setVisibility(View.GONE);
-        mBinding.mobileEmailLayout.setVisibility(View.GONE);
-
-        mBinding.etDob.setOnClickListener(null);
-        mBinding.userProfilePic.setOnClickListener(null);
-
-        mBinding.genderGrp.setEnabled(false);
-        mBinding.etFirstName.setEnabled(false);
-        mBinding.etLastName.setEnabled(false);
-        mBinding.langAutocompleteView.setEnabled(false);
-        mBinding.etTagLine.setEnabled(false);
-        mBinding.stateAutocompleteView.setEnabled(false);
-        mBinding.nationalityAutocompleteView.setEnabled(false);
-        mBinding.divisionAutocompleteView.setEnabled(false);
-        mBinding.cityAutocompleteView.setEnabled(false);
     }
 
     private void getUserNames(GenerateVerifyUserName generateVerifyUserName) {
@@ -470,141 +370,7 @@ public class PersonalInfoFragment extends BaseFragment {
         } else {
             isMail = false;
         }
-
         verifyMobileEmail(map);
-    }
-
-    /*private void setGenderProfilePic(UserProfile userProfile){
-        if(userProfile.getStrGender().equalsIgnoreCase("M")){
-            if (userProfile.getStrGender().equalsIgnoreCase("M")) {
-                loadProfilePic(Constant.PRODUCTION_MALE_PROFILE_API);
-            } else if (userProfile.getStrGender().equalsIgnoreCase("F")) {
-                loadProfilePic(Constant.PRODUCTION_FEMALE_PROFILE_API);
-            }
-        }
-    }*/
-
-    private void setPublicProfile(UserProfile userProfile) {
-        try {
-            if (userProfile != null && userProfile.getIsConnected().equalsIgnoreCase("true")) {
-                mBinding.addFriend.setText(getActivity().getResources().getString(R.string.unfriend));
-            } else if (userProfile != null && userProfile.getIsInitiated_by_u1().equalsIgnoreCase("true")) {
-                mBinding.addFriend.setText(getActivity().getResources().getString(R.string.cancel));
-            } else if (userProfile != null && userProfile.getIsInitiated_by_u2().equalsIgnoreCase("true")) {
-                mBinding.addFriend.setText(getActivity().getResources().getString(R.string.accept_friend_req));
-            } else {
-                mBinding.addFriend.setText(getActivity().getResources().getString(R.string.add_friend));
-            }
-
-            if (userProfile != null && userProfile.getU1FollowsU2().equalsIgnoreCase("true")) {
-                mBinding.follow.setText(getActivity().getResources().getString(R.string.unfollow));
-            } else {
-                mBinding.follow.setText(getActivity().getResources().getString(R.string.follow));
-            }
-
-            //set user badge
-            if (userProfile.getBadge() != null && userProfile.getBadge().equalsIgnoreCase("B"))
-                mBinding.imgBadge.setImageDrawable(getActivity().getDrawable(R.drawable.bronze));
-            if (userProfile.getBadge() != null && userProfile.getBadge().equalsIgnoreCase("S"))
-                mBinding.imgBadge.setImageDrawable(getActivity().getDrawable(R.drawable.silver));
-            if (userProfile.getBadge() != null && userProfile.getBadge().equalsIgnoreCase("G"))
-                mBinding.imgBadge.setImageDrawable(getActivity().getDrawable(R.drawable.gold));
-            if (userProfile.getBadge() != null && userProfile.getBadge().equalsIgnoreCase("P"))
-                mBinding.imgBadge.setImageDrawable(getActivity().getDrawable(R.drawable.platinum));
-
-
-            mBinding.tvName.setText(userProfile.getFirstName() + " " + userProfile.getLastName());
-            if (userProfile.getStrGender() != null && userProfile.getStrGender().equalsIgnoreCase("M")) {
-                mBinding.tvGender.setText("Male");
-            } else if (userProfile.getStrGender() != null && userProfile.getStrGender().equalsIgnoreCase("F")) {
-                mBinding.tvGender.setText("Female");
-            }
-            if (userProfile.getEndPathImage() != null && !userProfile.getEndPathImage().isEmpty()) {
-                loadProfilePic(getProfileImageUrl(userProfile.getEndPathImage()));
-            } else if (userProfile.getStrGender() != null && userProfile.getStrGender().equalsIgnoreCase("M")) {
-                loadProfilePic(Constant.PRODUCTION_MALE_PROFILE_API);
-            } else if (userProfile.getStrGender() != null && userProfile.getStrGender().equalsIgnoreCase("F")) {
-                loadProfilePic(Constant.PRODUCTION_FEMALE_PROFILE_API);
-            }
-
-            if (userProfile.getU_Nationality() == null || userProfile.getU_Nationality().isEmpty()) {
-                mBinding.nationalityLayout.setVisibility(View.GONE);
-            } else if (userProfile.getU_State() == null || userProfile.getU_State().isEmpty()) {
-                mBinding.stateLayout.setVisibility(View.GONE);
-            } else if (userProfile.getU_District() == null || userProfile.getU_District().isEmpty()) {
-                mBinding.divisionLayout.setVisibility(View.GONE);
-            } else if (userProfile.getU_City() == null || userProfile.getU_City().isEmpty()) {
-                mBinding.cityLayout.setVisibility(View.GONE);
-            } else if (userProfile.getU_language() == null || userProfile.getU_language().isEmpty()) {
-                mBinding.languageLayout.setVisibility(View.GONE);
-            }
-
-            mBinding.addFriend.setOnClickListener(v -> {
-                if (userProfile.getIsConnected().equalsIgnoreCase("true")) {
-                    updateConnection(userProfile.getUserId(), remove_connection);
-                } else if (userProfile.getIsInitiated_by_u1().equalsIgnoreCase("true")) {
-                    updateConnection(userProfile.getUserId(), reject_friend_requests);
-                } else if (userProfile.getIsInitiated_by_u2().equalsIgnoreCase("true")) {
-                    updateConnection(userProfile.getUserId(), accept_friend_requests);
-                } else {
-                    updateConnection(userProfile.getUserId(), sent_friend_req);
-                }
-            });
-
-            mBinding.follow.setOnClickListener(v -> {
-                if (userProfile.getU1FollowsU2().equalsIgnoreCase("true")) {
-                    updateConnection(userProfile.getUserId(), unfollow);
-                } else {
-                    updateConnection(userProfile.getUserId(), follow);
-                }
-            });
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void updateConnection(String user, String Processcase) {
-        ApiInterface apiService = ApiClient.getInstance().getApi();
-        ProgressDialog.getInstance().show(getActivity());
-        Call<ResponseObj> call = apiService.updateConnections(String.valueOf(new PreferenceManager(getActivity()).getInt(Constant.USER_ID)), Processcase, getDeviceId(getActivity()), qoogol, user);
-        call.enqueue(new Callback<ResponseObj>() {
-            @Override
-            public void onResponse(Call<ResponseObj> call, retrofit2.Response<ResponseObj> response) {
-                try {
-                    ProgressDialog.getInstance().dismiss();
-                    if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
-                        fetchUserProfile(fetch_other_user, "");
-                        if (Processcase.equalsIgnoreCase(reject_friend_requests) || Processcase.equalsIgnoreCase(accept_friend_requests)) {
-                            removeReqFromDb(user);
-                        } else if (Processcase.equalsIgnoreCase(unfollow)) {
-                            removeFollowingFromDb(user);
-                        }
-                    } else {
-                        Toast.makeText(getActivity(), UtilHelper.getAPIError(String.valueOf(response.body())), Toast.LENGTH_SHORT).show();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    ProgressDialog.getInstance().dismiss();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseObj> call, Throwable t) {
-                ProgressDialog.getInstance().dismiss();
-                apiCallFailureDialog(t);
-            }
-        });
-    }
-
-    private void removeFollowingFromDb(String user) {
-        FollowingViewModel mViewModel = ViewModelProviders.of(this).get(FollowingViewModel.class);
-        mViewModel.deleteUpdatedConnection(user);
-    }
-
-    private void removeReqFromDb(String user) {
-        FriendReqViewModel mViewModel = ViewModelProviders.of(this).get(FriendReqViewModel.class);
-        mViewModel.deleteUpdatedConnection(user);
     }
 
     private void updateUi(UserProfile userProfile) {
@@ -836,7 +602,6 @@ public class PersonalInfoFragment extends BaseFragment {
             userProfileMap.put(Constant.userName, mBinding.userNameAutoCompleteTextView.getTag().toString());
         else
             userProfileMap.put(Constant.userName, mBinding.userNameAutoCompleteTextView.getText().toString().trim());
-        //userProfileMap.put(Constant.userName, getEmptyStringIfNull(String.valueOf(mBinding.userNameAutoCompleteTextView.getTag())));
 
         userProfileMap.put(Constant.u_user_id, String.valueOf(userid));
         userProfileMap.put(Constant.u_app_version, Constant.APP_VERSION);
@@ -860,14 +625,15 @@ public class PersonalInfoFragment extends BaseFragment {
 
     private void updateUserProfile(HashMap<String, String> userProfileMap) {
         Log.d(TAG, "updateUserProfile: " + userProfileMap);
-
         Log.d(TAG, "Focus First Name : " + AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key1), userProfileMap.get(Constant.u_first_name_encrypted)));
         Log.d(TAG, "Focus First Name : " + AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key2), userProfileMap.get(Constant.u_last_name_encrypted)));
         Log.d(TAG, "Focus Mobile : " + AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key4), userProfileMap.get(Constant.u_mob_1_encrypted)));
 
+        Log.d(TAG, "updateUserProfile Private Switch : "+mBinding.switchPrivate.isChecked());
+
         ProgressDialog.getInstance().show(requireActivity());
-        Call<UserProfileResponse> call = apiService.updateUserProfile(
-                userProfileMap.get(Constant.u_user_id),
+        Call<UserProfileResponse> call = getApiService().updateUserProfile(
+                getUserId(getActivity()),
                 userProfileMap.get(Constant.appName),
                 userProfileMap.get(Constant.u_app_version),
                 userProfileMap.get(Constant.device_id),
@@ -887,7 +653,9 @@ public class PersonalInfoFragment extends BaseFragment {
                 String.valueOf(userProfileMap.get(Constant.u_nationality)),
                 String.valueOf(userProfileMap.get(Constant.w_lm_id_array)),
                 userProfileMap.get(Constant.u_gender),
-                userProfileMap.get(Constant.userName)
+                userProfileMap.get(Constant.userName),
+                mBinding.switchPrivate.isChecked(),
+                profile.getNotificationEnabled()
         );
 
         call.enqueue(new Callback<UserProfileResponse>() {
@@ -899,7 +667,7 @@ public class PersonalInfoFragment extends BaseFragment {
                         String displayName = mBinding.etFirstName.getText().toString().trim() + " " + mBinding.etLastName.getText().toString().trim();
                         new PreferenceManager(requireActivity()).saveString(Constant.DISPLAY_NAME, displayName);
                         new PreferenceManager(requireActivity()).saveString(Constant.GENDER, userProfileMap.get(Constant.u_gender));
-                        fetchUserProfile(0, "FINISH");
+                        fetchUserProfile("FINISH");
                     } else {
                         showErrorDialog(requireActivity(), response.body().getResponseCode(), response.body().getMessage());
                     }
@@ -930,27 +698,20 @@ public class PersonalInfoFragment extends BaseFragment {
     }
 
 
-    private void fetchUserProfile(int call_from, String flag) {
-        //ProgressDialog.getInstance().show(requireActivity());
-        if (call_from == fetch_loged_in_user)
-            call = apiService.fetchUserInfo(userid, getDeviceId(getActivity()), Constant.APP_NAME, Constant.APP_VERSION);
-        else
-            call = apiService.fetchOtherUsersInfo(mSettings.getUserId(), getDeviceId(getActivity()), Constant.APP_NAME, Constant.APP_VERSION, userid, "UP");
-
+    private void fetchUserProfile(String flag) {
+        call = getApiService().fetchUserInfo(getUserId(getActivity()), getDeviceId(getActivity()), Constant.APP_NAME, Constant.APP_VERSION);
         call.enqueue(new Callback<UserProfile>() {
             @Override
             public void onResponse(Call<UserProfile> call, Response<UserProfile> response) {
-                //ProgressDialog.getInstance().dismiss();
+
                 if (response.body() != null && response.body().getResponseCode().equals("200")) {
                     mViewModel.insert(response.body());
                     if (flag.equalsIgnoreCase("FINISH"))
                         showToast("Successfully updated profile info.");
-                    //Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_home);
                 } else if (response.body().getResponseCode().equals("501")) {
                     resetSettingAndLogout();
                 } else {
                     AppUtils.showToast(getActivity(), null, response.body().getMessage());
-                    //showErrorDialog(requireActivity(), response.body().getResponseCode(), "");
                 }
             }
 
@@ -965,7 +726,7 @@ public class PersonalInfoFragment extends BaseFragment {
     private void fetchLanguages() {
         try {
             ProgressDialog.getInstance().show(requireActivity());
-            Call<Language> call = apiService.fetchLanguages(userid);
+            Call<Language> call = getApiService().fetchLanguages(userid);
             call.enqueue(new Callback<Language>() {
                 @Override
                 public void onResponse(Call<Language> call, Response<Language> response) {
@@ -990,7 +751,7 @@ public class PersonalInfoFragment extends BaseFragment {
 
     private void fetchNationalities() {
         ProgressDialog.getInstance().show(requireActivity());
-        Call<CountryResponse> call = apiService.fetchNationalities(userid);
+        Call<CountryResponse> call = getApiService().fetchNationalities(userid);
         call.enqueue(new Callback<CountryResponse>() {
             @Override
             public void onResponse(Call<CountryResponse> call, Response<CountryResponse> response) {
@@ -1017,7 +778,7 @@ public class PersonalInfoFragment extends BaseFragment {
 
     private void fetchStates(String key) {
         ProgressDialog.getInstance().show(requireActivity());
-        Call<StateResponse> call = apiService.fetchStates(key);
+        Call<StateResponse> call = getApiService().fetchStates(key);
         call.enqueue(new Callback<StateResponse>() {
             @Override
             public void onResponse(Call<StateResponse> call, Response<StateResponse> response) {
@@ -1040,7 +801,7 @@ public class PersonalInfoFragment extends BaseFragment {
 
     private void fetchDistricts(String key) {
         ProgressDialog.getInstance().show(requireActivity());
-        Call<DistrictResponse> call = apiService.fetchDistricts(key);
+        Call<DistrictResponse> call = getApiService().fetchDistricts(key);
         call.enqueue(new Callback<DistrictResponse>() {
             @Override
             public void onResponse(Call<DistrictResponse> call, Response<DistrictResponse> response) {
@@ -1062,7 +823,7 @@ public class PersonalInfoFragment extends BaseFragment {
 
     private void fetchCities(String key) {
         ProgressDialog.getInstance().show(requireActivity());
-        Call<CityResponse> call = apiService.fetchCities(key);
+        Call<CityResponse> call = getApiService().fetchCities(key);
         call.enqueue(new Callback<CityResponse>() {
             @Override
             public void onResponse(Call<CityResponse> call, Response<CityResponse> response) {
@@ -1197,7 +958,7 @@ public class PersonalInfoFragment extends BaseFragment {
     private void verifyMobileEmail(HashMap<String, String> map) {
         Log.d(TAG, "verifyMobileEmail: " + map);
         ProgressDialog.getInstance().show(requireActivity());
-        Call<VerifyResponse> call = apiService.verifyMobileEmail(
+        Call<VerifyResponse> call = getApiService().verifyMobileEmail(
                 map.get(Constant.appName),
                 map.get(Constant.u_app_version),
                 map.get(Constant.device_id),
@@ -1302,7 +1063,6 @@ public class PersonalInfoFragment extends BaseFragment {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(PersonalInfoViewModel.class);
         initViews();
-
     }
 
     private void loadImage() {
@@ -1316,7 +1076,7 @@ public class PersonalInfoFragment extends BaseFragment {
         ProgressDialog.getInstance().show(requireActivity());
         Log.d(TAG, "generateVerifyUserName: " + params);
         String strCase = params.get(Constant.CASE);
-        Call<GenerateVerifyUserName> call = apiService.generateVerifyUserName(
+        Call<GenerateVerifyUserName> call = getApiService().generateVerifyUserName(
                 AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key1), params.get(Constant.u_first_name)),
                 AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key2), params.get(Constant.u_last_name)),
                 params.get(Constant.CASE),
@@ -1383,7 +1143,7 @@ public class PersonalInfoFragment extends BaseFragment {
                 MultipartBody.Part.createFormData("file", imageFile.getName(), requestFile);
 
         ProgressDialog.getInstance().show(requireActivity());
-        Call<VerifyResponse> call = apiService.updateProfileImage(userId,
+        Call<VerifyResponse> call = getApiService().updateProfileImage(userId,
                 deviceId, appName, appVersion, caseq, body);
         call.enqueue(new Callback<VerifyResponse>() {
             @Override
@@ -1394,7 +1154,6 @@ public class PersonalInfoFragment extends BaseFragment {
                     new PreferenceManager(requireActivity()).saveString(Constant.PROFILE_PIC, getProfileImageUrl(response.body().getW_user_profile_image_name()));
                 } else {
                     AppUtils.showToast(getActivity(), null, response.body().getErrorMsg());
-                    //showErrorDialog(requireActivity(), response.body().getResponse(), "");
                 }
             }
 
@@ -1405,19 +1164,6 @@ public class PersonalInfoFragment extends BaseFragment {
             }
         });
     }
-
-    /*private File convertToPngImage(File path){
-        try {
-            Bitmap bmp = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), path.getPath().toString());
-            FileOutputStream out = new FileOutputStream(Environment.getExternalStorageDirectory()+"/profile.png");
-            bmp.compress(Bitmap.CompressFormat.PNG, 70, out); //100-best quality
-            out.close();
-            return new File(Environment.getExternalStorageDirectory()+"/profile.png");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }*/
 
     private void getLanguageTag() {
         String keys = mBinding.langAutocompleteView.getText()
@@ -1433,11 +1179,4 @@ public class PersonalInfoFragment extends BaseFragment {
         Log.d(TAG, "getLanguageTag Final : " + languageKey.replace("-1", ""));
         mBinding.langAutocompleteView.setTag(languageKey.replace("-1", ""));
     }
-
-   /* @Override
-    public void onPause() {
-        super.onPause();
-        Log.d(TAG, "onPause Called: ");
-        userInfo();
-    }*/
 }

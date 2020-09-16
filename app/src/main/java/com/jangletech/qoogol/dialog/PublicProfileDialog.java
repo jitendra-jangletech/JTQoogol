@@ -28,15 +28,12 @@ import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.DateUtils;
 import com.jangletech.qoogol.util.TinyDB;
 import com.jangletech.qoogol.util.UtilHelper;
-
 import java.net.UnknownHostException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
 import static com.jangletech.qoogol.ui.BaseFragment.getDeviceId;
 import static com.jangletech.qoogol.ui.BaseFragment.getUserId;
 import static com.jangletech.qoogol.util.Constant.accept_friend_requests;

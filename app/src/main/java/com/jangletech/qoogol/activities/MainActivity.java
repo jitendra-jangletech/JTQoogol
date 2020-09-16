@@ -69,7 +69,7 @@ public class MainActivity extends BaseActivity {
     public static TextView tvNavConnections, tvNavCredits, tvNavFollowers, tvNavFollowing;
     private String navigateFlag = "";
     private ApiInterface apiService = ApiClient.getInstance().getApi();
-    private BottomNavigationView bottomNavigationView;
+    public static BottomNavigationView bottomNavigationView;
     public static String userId = "";
 
     @Override
@@ -473,9 +473,6 @@ public class MainActivity extends BaseActivity {
         findViewById(R.id.nav_code_conduct).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
             navToFragment(R.id.nav_code_conduct, Bundle.EMPTY);
-            /*if (navController.getCurrentDestination().getId() != R.id.nav_settings) {
-                navigateFlag = Nav.SETTINGS.toString();
-            }*/
         });
 
 
@@ -483,7 +480,6 @@ public class MainActivity extends BaseActivity {
             if (mBinding.testNavLayout.getVisibility() == View.VISIBLE) {
                 mBinding.testNavLayout.setVisibility(View.GONE);
                 mBinding.expand.setBackground(getDrawable(R.drawable.ic_expand));
-                //collapse(mBinding.testNavLayout);
             } else {
                 mBinding.testNavLayout.setVisibility(View.VISIBLE);
                 mBinding.expand.setBackground(getDrawable(R.drawable.ic_collapse));
@@ -495,7 +491,6 @@ public class MainActivity extends BaseActivity {
             if (mBinding.learningNavLayout.getVisibility() == View.VISIBLE) {
                 mBinding.learningNavLayout.setVisibility(View.GONE);
                 mBinding.expandLearning.setBackground(getDrawable(R.drawable.ic_expand));
-                //collapse(mBinding.testNavLayout);
             } else {
                 mBinding.learningNavLayout.setVisibility(View.VISIBLE);
                 mBinding.expandLearning.setBackground(getDrawable(R.drawable.ic_collapse));
@@ -540,12 +535,6 @@ public class MainActivity extends BaseActivity {
         });
     }
 
-    /*@Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        getNotificationIntent(intent);
-    }*/
-
     private void getNotificationIntent(Intent intent) {
         if (intent != null) {
             if (intent.hasExtra("bundle")) {
@@ -588,15 +577,6 @@ public class MainActivity extends BaseActivity {
                 || super.onSupportNavigateUp();
     }
 
-  /*  @Override
-    public void onPositiveButtonClick() {
-        new PreferenceManager(getApplicationContext()).setIsLoggedIn(false);
-        new PreferenceManager(getApplicationContext()).saveString(Constant.MOBILE, "");
-        new PreferenceManager(getApplicationContext()).saveString(Constant.USER_ID, "");
-        Intent intent = new Intent(this, LaunchActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-    }*/
 
     @Override
     public void onBackPressed() {
@@ -659,14 +639,6 @@ public class MainActivity extends BaseActivity {
 
     private void saveTestType(String type) {
         new PreferenceManager(getApplicationContext()).saveString(CALL_FROM, type);
-    }
-
-    private void showBottomNav() {
-        bottomNavigationView.setVisibility(View.VISIBLE);
-    }
-
-    private void hideBottomNav() {
-        bottomNavigationView.setVisibility(View.GONE);
     }
 
     @Override

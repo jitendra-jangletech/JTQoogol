@@ -354,6 +354,7 @@
     <string name="sound">Mute All Groups</string>
     <string name="refresh_frequency">Location refresh frequency</string>
     <string name="logout">Logout</string>
+    <string name="mute_all_group_alerts">Mute All Group Alerts</string>
     <string name="project_code">Project code:</string>
     <string name="project_code_hint">Project code</string>
     <string name="connect">Connect</string>

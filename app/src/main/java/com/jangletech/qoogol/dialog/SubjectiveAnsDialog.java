@@ -73,7 +73,6 @@ public class SubjectiveAnsDialog extends Dialog {
                                  KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_BACK) {
                     Log.d(TAG, "onKey Executed : ");
-                    //countDownTimer.cancel();
                     getAnsListener.onAnswerEntered(AppUtils.encodedString(mBinding.etAns.getText().toString().trim()));
                     dismiss();
                 }
@@ -123,6 +122,7 @@ public class SubjectiveAnsDialog extends Dialog {
                 return null;
             }
         };
+
         etAnswer.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -142,7 +142,6 @@ public class SubjectiveAnsDialog extends Dialog {
                     for (int i = 0; i < words.length; i++) {
                         if (!words[i].isEmpty()) {
                             wordCount++;
-                            //AppUtils.encodedString(s.toString());
                         }
                     }
                 }

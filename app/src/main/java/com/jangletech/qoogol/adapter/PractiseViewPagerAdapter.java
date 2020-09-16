@@ -193,15 +193,7 @@ public class PractiseViewPagerAdapter extends PagerAdapter
                 practiceMtpImageBinding.getRoot().setTag(position);
                 return practiceMtpImageBinding.getRoot();
             }
-            /*if (testQuestionNew.getQue_option_type().equalsIgnoreCase(Constant.TRUE_FALSE)) {
-                ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.practice_true_false, collection, false);
-                trueFalseBinding = DataBindingUtil.inflate(inflater, R.layout.practice_true_false, collection, false);
-                initViews(layout, testQuestionNew, position);
-                initTrueFalse(layout, testQuestionNew);
-                collection.addView(layout);
-                layout.setTag(position);
-                return layout;
-            }*/
+
             if (testQuestionNew.getQue_option_type().equalsIgnoreCase(Constant.FILL_THE_BLANKS)) {
                 ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.practice_fill_the_blanks, collection, false);
                 initViews(layout, testQuestionNew, position);
@@ -210,16 +202,6 @@ public class PractiseViewPagerAdapter extends PagerAdapter
                 layout.setTag(position);
                 return layout;
             }
-            /*if (testQuestionNew.getQue_option_type().equalsIgnoreCase(Constant.LONG_ANSWER) ||
-                    testQuestionNew.getQue_option_type().equalsIgnoreCase(Constant.SHORT_ANSWER) ||
-                    testQuestionNew.getQue_option_type().equalsIgnoreCase(Constant.ONE_LINE_ANSWER)) {
-                ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.practice_subjective, collection, false);
-                initViews(layout, testQuestionNew, position);
-                initSubjective(layout, testQuestionNew);
-                collection.addView(layout);
-                layout.setTag(position);
-                return layout;
-            }*/
         }
         return null;
     }
@@ -484,12 +466,9 @@ public class PractiseViewPagerAdapter extends PagerAdapter
             String selectedPairs = "";
             if (!isB1Selected || !isB2Selected || !isB3Selected) {
                 showToast("Select all pairs first.");
-                //Toast.makeText(activity, "Select all pairs first.", Toast.LENGTH_SHORT).show();
             } else {
-                //isAttempted = 1;
                 boolean isFound = false;
                 for (Map.Entry<String, String> entry : imgpaired.entrySet()) {
-                    //Iterator ansIterator = MTP_ans.entrySet().iterator();
                     String value = entry.getValue();
                     String key = entry.getKey();
                     selectedPairs = selectedPairs + key.toUpperCase() + "-" + value.toUpperCase() + ",";
@@ -524,9 +503,7 @@ public class PractiseViewPagerAdapter extends PagerAdapter
     }
 
     private void initFillTheBlanks(ViewGroup layout, TestQuestionNew testQuestionNew) {
-        //ConstraintLayout fillTheBlanksLayout = layout.findViewById(R.id.fillTheBlanksLayout);
         ConstraintLayout solutionLayout = layout.findViewById(R.id.solution_layout);
-        //fill the blanks attributes
         EditText etFillTheBlanks = layout.findViewById(R.id.fillTheBlanksEditText);
         ImageView fibImg = layout.findViewById(R.id.fib_img);
         Log.d(TAG, "FILL_THE_BLANKS");
@@ -1293,6 +1270,8 @@ public class PractiseViewPagerAdapter extends PagerAdapter
         question.setTtqa_attempted(true);
         question.setTtqa_visited(false);
 
+        //question.setTq_duration();
+
         submitTestQuestionList.add(question);
         submitTest.setTestQuestionNewList(submitTestQuestionList);
         //Log.d(TAG, "Get Encoded : " + StringEscapeUtils.unescapeJava(question.getTtqa_sub_ans().replace("=", "")));
@@ -1510,6 +1489,8 @@ public class PractiseViewPagerAdapter extends PagerAdapter
         int seconds = Integer.parseInt(tvTimer.getText().toString().split(":", -1)[1]);
         SubjectiveAnsDialog subjectiveAnsDialog = new SubjectiveAnsDialog(context, decodedAns, seconds, minutes, this);
 
+
+
         etMultiLineAns.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1541,7 +1522,6 @@ public class PractiseViewPagerAdapter extends PagerAdapter
                 testQuestionNew.getType().equalsIgnoreCase(Constant.LONG_ANSWER)) {
             Log.d(TAG, "SHORT_ANSWER OR LONG_ANSWER");
             multiLineAnswerLayout.setVisibility(View.VISIBLE);
-            //decodedAns = AppUtils.decodedMessage(StringEscapeUtils.unescapeJava(testQuestionNew.getTtqa_sub_ans()));
             answerCharCounter(etMultiLineAns, tvWordCounter, 200, testQuestionNew);
             etMultiLineAns.setText(decodedAns);
         }

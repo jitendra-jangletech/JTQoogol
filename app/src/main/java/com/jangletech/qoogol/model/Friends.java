@@ -13,6 +13,17 @@ import com.jangletech.qoogol.util.Constant;
 @Entity
 public class Friends {
 
+    @SerializedName(Constant.userBadge)
+    private String badge;
+
+    public String getBadge() {
+        return badge;
+    }
+
+    public void setBadge(String badge) {
+        this.badge = badge;
+    }
+
     @SerializedName(Constant.cn_id)
     private String cn_id;
 
@@ -30,7 +41,7 @@ public class Friends {
     @SerializedName(Constant.cn_user_id_2)
     private String cn_user_id_2;
 
-    
+
     @SerializedName(Constant.cn_connected)
     private String cn_connected;
 
@@ -77,14 +88,11 @@ public class Friends {
     @SerializedName(Constant.ucn_count)
     private String ucn_count;
 
-
     @SerializedName(Constant.w_u_ms_count)
     private String w_u_ms_count;
 
-
     @SerializedName(Constant.w_distance)
     private String w_distance;
-
 
     @SerializedName(Constant.w_user_profile_image_name)
     private String prof_pic;

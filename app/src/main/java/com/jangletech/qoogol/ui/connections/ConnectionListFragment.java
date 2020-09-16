@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.SearchView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.MenuItemCompat;
@@ -20,7 +19,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.ConnectionAdapter;
 import com.jangletech.qoogol.databinding.FragmentFriendsBinding;
@@ -31,16 +29,12 @@ import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.util.AESSecurities;
-import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.TinyDB;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
-
 import static com.jangletech.qoogol.util.Constant.connections;
 import static com.jangletech.qoogol.util.Constant.friends;
 import static com.jangletech.qoogol.util.Constant.qoogol;
@@ -62,8 +56,6 @@ public class ConnectionListFragment extends BaseFragment implements ConnectionAd
     private Boolean isScrolling = false;
     private ConnectionResponse connectionResponse;
     private ConnectionsViewModel mViewModel;
-
-    private ApiInterface apiService = ApiClient.getInstance().getApi();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -109,6 +101,7 @@ public class ConnectionListFragment extends BaseFragment implements ConnectionAd
         mBinding.connectionRecycler.setHasFixedSize(true);
         mBinding.connectionRecycler.setLayoutManager(linearLayoutManager);
         mBinding.connectionRecycler.setAdapter(mAdapter);
+
         mViewModel.getConnectionsList(getUserId(getActivity())).observe(getViewLifecycleOwner(), connections -> {
             if (connections != null) {
                 connectionsList = connections;
@@ -145,9 +138,6 @@ public class ConnectionListFragment extends BaseFragment implements ConnectionAd
                         isScrolling = false;
                         fetchConnections(pageCount);
                     }
-                }else{
-                    //todo hide bottom navigation bar
-                    
                 }
             }
         });
@@ -156,7 +146,7 @@ public class ConnectionListFragment extends BaseFragment implements ConnectionAd
 
 
     private void fetchConnections(String pageCount) {
-        Call<ConnectionResponse> call = apiService.fetchConnections(getUserId(getActivity()), connections, getDeviceId(getActivity()), qoogol, pageCount);
+        Call<ConnectionResponse> call = getApiService().fetchConnections(getUserId(getActivity()), connections, getDeviceId(getActivity()), qoogol, pageCount);
         call.enqueue(new Callback<ConnectionResponse>() {
             @Override
             public void onResponse(Call<ConnectionResponse> call, retrofit2.Response<ConnectionResponse> response) {
@@ -171,11 +161,12 @@ public class ConnectionListFragment extends BaseFragment implements ConnectionAd
                         connections.setU_last_name(lName);
                         newConnections.add(connections);
                     }
+                    //mViewModel.insert(response.body().getConnection_list());
                     mViewModel.insert(newConnections);
                 } else if (response.body().getResponse().equals("501")) {
                     resetSettingAndLogout();
                 } else {
-                    AppUtils.showToast(getActivity(), null,response.body().getMessage());
+                    showToast("Error Code : " + response.body().getResponse());
                 }
             }
 
@@ -183,6 +174,7 @@ public class ConnectionListFragment extends BaseFragment implements ConnectionAd
             public void onFailure(Call<ConnectionResponse> call, Throwable t) {
                 t.printStackTrace();
                 dismissRefresh(mBinding.connectionSwiperefresh);
+                showToast("Something went wrong!!");
                 apiCallFailureDialog(t);
             }
         });
@@ -200,10 +192,6 @@ public class ConnectionListFragment extends BaseFragment implements ConnectionAd
         mViewModel.fetchConnectionsData(true);
     }
 
-    @Override
-    public void onBottomReached(int size) {
-
-    }
 
     @Override
     public void showProfileClick(Bundle bundle) {
@@ -266,7 +254,7 @@ public class ConnectionListFragment extends BaseFragment implements ConnectionAd
     }
 
     private void searchFromServer(String text) {
-        Call<ConnectionResponse> call = apiService.searchConnections(
+        Call<ConnectionResponse> call = getApiService().searchConnections(
                 getUserId(getActivity()),
                 connections,
                 getDeviceId(getActivity()),
@@ -283,7 +271,7 @@ public class ConnectionListFragment extends BaseFragment implements ConnectionAd
                 } else if (response.body().getResponse().equals("501")) {
                     resetSettingAndLogout();
                 } else {
-                    AppUtils.showToast(getActivity(), null, response.body().getMessage());
+                    showToast("Error Code : " + response.body().getResponse());
                 }
             }
 
@@ -291,6 +279,7 @@ public class ConnectionListFragment extends BaseFragment implements ConnectionAd
             public void onFailure(Call<ConnectionResponse> call, Throwable t) {
                 t.printStackTrace();
                 dismissRefresh(mBinding.connectionSwiperefresh);
+                showToast("Something went wrong!!");
                 apiCallFailureDialog(t);
             }
         });

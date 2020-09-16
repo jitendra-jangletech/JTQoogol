@@ -5,6 +5,7 @@ import android.content.Context;
 import androidx.lifecycle.LiveData;
 
 import com.jangletech.qoogol.database.QoogolDatabase;
+import com.jangletech.qoogol.database.dao.AppConfigDao;
 import com.jangletech.qoogol.database.dao.BlockedDao;
 import com.jangletech.qoogol.database.dao.ConnectionsDao;
 import com.jangletech.qoogol.database.dao.DashboardDao;
@@ -19,6 +20,7 @@ import com.jangletech.qoogol.database.dao.LearningQuestionDao;
 import com.jangletech.qoogol.database.dao.NotificationDao;
 import com.jangletech.qoogol.database.dao.TestDao;
 import com.jangletech.qoogol.database.dao.UserProfileDao;
+import com.jangletech.qoogol.model.AppConfigResponse;
 import com.jangletech.qoogol.model.BlockedConnections;
 import com.jangletech.qoogol.model.Connections;
 import com.jangletech.qoogol.model.DashBoard;
@@ -50,6 +52,7 @@ public class AppRepository {
     private final FollowersDao followersDao;
     private final FollowingsDao followingsDao;
     private final FriendReqDao friendReqDao;
+    private final AppConfigDao appConfigDao;
     private final FollowReqDao followReqDao;
     private final ConnectionsDao connectionsDao;
     private final BlockedDao blockedDao;
@@ -63,6 +66,7 @@ public class AppRepository {
         notificationDao = db.notificationDao();
         dashboardDao = db.dashboardDao();
         testDao = db.testDao();
+        appConfigDao = db.appConfigDao();
         learningQuestionDao = db.learningQuestionDao();
         friendsDao = db.friendsDao();
         followersDao = db.followersDao();
@@ -72,7 +76,6 @@ public class AppRepository {
         connectionsDao = db.connectionsDao();
         blockedDao = db.blockedDao();
         doubtDao = db.doubtDao();
-        //testDetailsDao = db.testDetailsDao();
     }
 
     public LiveData<DashBoard> getDashBoardData(String uId) {
@@ -110,7 +113,7 @@ public class AppRepository {
     }
 
     public void updateFavTest(String flag,String uId,int tmId,boolean value) {
-         testDao.updateFav(flag,uId,tmId,value);
+        testDao.updateFav(flag,uId,tmId,value);
     }
 
     public LiveData<List<TestModelNew>> getAllTestsFiltered(String flag,String uId,String diffLevel) {
@@ -139,10 +142,6 @@ public class AppRepository {
         insertAllFollowReqAsync(followRequests);
     }
 
-    /*public void insertTestDetails(TestDetailsResponse testDetailsResponse) {
-        insertTestDetailsAsync(testDetailsResponse);
-    }*/
-
     public void deleteAllEducations() {
         deleteAllEducationsAsync();
     }
@@ -150,14 +149,6 @@ public class AppRepository {
     public void deleteTests() {
         deleteTestsAsync();
     }
-
-  /*  public void insertAttemptedTest(List<AttemptedTest> attemptedTests) {
-        insertAttemptedTestAsync(attemptedTests);
-    }
-
-    public void deleteAttemptedTest() {
-        deleteAttemptedTestAsync();
-    }*/
 
     public void insertEducationInfo(List<Education> educations) {
         insertEducationAsync(educations);
@@ -220,33 +211,6 @@ public class AppRepository {
             }
         }).start();
     }
-
-    /*private void insertTestDetailsAsync(TestDetailsResponse testDetailsResponse) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    testDetailsDao.insert(testDetailsResponse);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-    }*/
-
-    /*private void insertAttemptedTestAsync(final List<AttemptedTest> attemptedTests) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    attemptedTestDao.insertAll(attemptedTests);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-    }*/
-
 
     private void insertNotificationAsync(final List<Notification> notifications) {
         new Thread(new Runnable() {
@@ -418,20 +382,6 @@ public class AppRepository {
         }).start();
     }
 
-    private void updatePersonalInfoAsync(final UserProfile userProfile) {
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    userProfileDao.insert(userProfile);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-    }
-
     public void insertQuestions(List<LearningQuestionsNew> learningQuestions) {
         learningQuestionDao.upsertQuestions(learningQuestions);
     }
@@ -472,6 +422,10 @@ public class AppRepository {
         friendReqDao.insertFriendReq(friendRequests);
     }
 
+    public void insertAppConfig(AppConfigResponse appConfigResponse) {
+        appConfigDao.insertAppConfig(appConfigResponse);
+    }
+
     public void deleteFriendReq(String logInuser, String otherUser) {
         friendReqDao.deleteFriendReq(logInuser,otherUser);
     }
@@ -505,6 +459,11 @@ public class AppRepository {
     public LiveData<List<Connections>> getConnectionsFromDb(String userID) {
         return connectionsDao.getAllConnections(userID);
     }
+
+    public LiveData<AppConfigResponse> getAppConfig() {
+        return appConfigDao.getAppConfig();
+    }
+
 
     public LiveData<List<Friends>> getFriendsFromDb(String userID) {
         return friendsDao.getAllFriends(userID);

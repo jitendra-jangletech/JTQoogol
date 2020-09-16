@@ -72,11 +72,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
 
 
         if (callingFrom.equals(Module.Test.toString())) {
-            /*if (comments.getReplyCommentCount() > 0) {
-                holder.commentItemBinding.tvCommentCount.setVisibility(View.VISIBLE);
-            } else {
-                holder.commentItemBinding.tvCommentCount.setVisibility(View.GONE);
-            }*/
 
             if (comments.getReplyLikeCount() > 0) {
                 holder.commentItemBinding.tvLikes.setVisibility(View.VISIBLE);
@@ -106,12 +101,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
 
             holder.commentItemBinding.tvLikes.setText(String.valueOf(comments.getQuestLikeCount()));
             holder.commentItemBinding.tvCommentCount.setText(String.valueOf(comments.getQuestCommentCount()));
-
-            /*if (comments.getQuestLikeCount() > 0) {
-                holder.commentItemBinding.tvLikes.setVisibility(View.VISIBLE);
-            } else {
-                holder.commentItemBinding.tvLikes.setVisibility(View.GONE);
-            }*/
 
             if (comments.getQuestCommentCount() > 0) {
                 holder.commentItemBinding.tvCommentCount.setVisibility(View.VISIBLE);

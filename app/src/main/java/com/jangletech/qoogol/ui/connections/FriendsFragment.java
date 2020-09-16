@@ -30,7 +30,6 @@ import com.jangletech.qoogol.model.FriendsResponse;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
-import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 
 import java.util.ArrayList;
@@ -45,7 +44,10 @@ import static com.jangletech.qoogol.util.Constant.qoogol;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FriendsFragment extends BaseFragment implements FriendsAdapter.updateConnectionListener, PublicProfileDialog.PublicProfileClickListener, SearchView.OnQueryTextListener {
+public class FriendsFragment extends BaseFragment implements
+        FriendsAdapter.updateConnectionListener,
+        PublicProfileDialog.PublicProfileClickListener,
+        SearchView.OnQueryTextListener {
 
     private static final String TAG = "FriendsFragment";
     private FragmentFriendsBinding mBinding;
@@ -150,7 +152,6 @@ public class FriendsFragment extends BaseFragment implements FriendsAdapter.upda
                 setFriendsList(friendsList);
             }
         });
-
     }
 
     private void setFriendsList(List<Friends> friendsList) {
@@ -212,7 +213,7 @@ public class FriendsFragment extends BaseFragment implements FriendsAdapter.upda
                 } else if (response.body().getResponse().equals("501")) {
                     resetSettingAndLogout();
                 } else {
-                    AppUtils.showToast(getActivity(), null, response.body().getResponse());
+                    showToast("Error Code : " + response.body().getResponse());
                 }
             }
 
@@ -220,6 +221,7 @@ public class FriendsFragment extends BaseFragment implements FriendsAdapter.upda
             public void onFailure(Call<FriendsResponse> call, Throwable t) {
                 t.printStackTrace();
                 dismissRefresh(mBinding.connectionSwiperefresh);
+                showToast("Something went wrong!!");
                 apiCallFailureDialog(t);
             }
         });
@@ -233,17 +235,12 @@ public class FriendsFragment extends BaseFragment implements FriendsAdapter.upda
         mViewModel.fetchFriendsData(true);
     }
 
-    @Override
-    public void onBottomReached(int size) {
-        //mViewModel.fetchFriendsData(false);
-    }
 
     @Override
     public void showProfileClick(Bundle bundle) {
         String otherUserId = bundle.getString(Constant.fetch_profile_id);
         PublicProfileDialog publicProfileDialog = new PublicProfileDialog(getActivity(), otherUserId, this);
         publicProfileDialog.show();
-        //NavHostFragment.findNavController(this).navigate(R.id.nav_edit_profile, bundle);
     }
 
     @Override

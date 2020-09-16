@@ -228,7 +228,9 @@ public interface ApiInterface {
                                                 @Field(Constant.u_nationality) String u_nationality,
                                                 @Field(Constant.w_lm_id_array) String w_lm_id_array,
                                                 @Field(Constant.u_gender) String gender,
-                                                @Field(Constant.userName) String userName
+                                                @Field(Constant.userName) String userName,
+                                                @Field(Constant.u_private) boolean isPrivate,
+                                                @Field(Constant.u_notification_alerts) String alertFlag
     );
 
     @FormUrlEncoded
@@ -478,6 +480,7 @@ public interface ApiInterface {
                                       @Field(Constant.TorQ) String torq,
                                       @Field(Constant.q_id) String question,
                                       @Field(Constant.pagestart) String pagestart);
+
     @FormUrlEncoded
     @POST(Constant.FETCH_DOUBTS)
     Call<DoubtResponse> fetchDoubtApi(@Field(Constant.device_id) String deviceId,
@@ -645,9 +648,9 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST(Constant.FETCH_CONNECTIONS)
     Call<FriendsResponse> fetchFriends(@Field(Constant.u_user_id) String userid,
-                                       @Field("Case") String connectionCase,
+                                       @Field(Constant.CASE) String connectionCase,
                                        @Field(Constant.device_id) String device_id,
-                                       @Field("200Q") String app,
+                                       @Field(Constant.appName) String app,
                                        @Field(Constant.pagestart) String pagestart);
 
     @FormUrlEncoded
@@ -676,6 +679,14 @@ public interface ApiInterface {
                                                  @Field("200Q") String app,
                                                  @Field(Constant.pagestart) String pagestart,
                                                  @Field("ForceRefresh") String refresh);
+
+    @FormUrlEncoded
+    @POST(Constant.LOG_OUT_API)
+    Call<VerifyResponse> logout(@Field(Constant.u_user_id) String userid,
+                                   @Field(Constant.device_id) String device_id,
+                                   @Field(Constant.u_status) String status,
+                                   @Field("200Q") String app);
+
 
     @FormUrlEncoded
     @POST(Constant.FETCH_CONNECTIONS)

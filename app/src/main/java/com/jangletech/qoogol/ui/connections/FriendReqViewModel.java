@@ -58,7 +58,7 @@ public class FriendReqViewModel extends AndroidViewModel {
 
     public void deleteUpdatedConnection(String user) {
         ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.execute(() -> mAppRepository.deleteFriendReq(userId,user));
+        executor.execute(() -> mAppRepository.deleteFriendReq(userId, user));
     }
 
     void fetchFriendReqData(boolean isRefresh) {
@@ -68,15 +68,16 @@ public class FriendReqViewModel extends AndroidViewModel {
 
     private void getData(boolean isRefresh) {
         if (isRefresh)
-            call = apiService.fetchRefreshedFriendReq(userId,friendrequests, getDeviceId(getApplication()), qoogol,pagestart,forcerefresh);
+            call = apiService.fetchRefreshedFriendReq(userId, friendrequests, getDeviceId(getApplication()), qoogol, pagestart, forcerefresh);
         else
-            call = apiService.fetchFriendRequests(userId,friendrequests, getDeviceId(getApplication()), qoogol,pagestart);
+            call = apiService.fetchFriendRequests(userId, friendrequests, getDeviceId(getApplication()), qoogol, pagestart);
 
         call.enqueue(new Callback<FriendRequestResponse>() {
             @Override
             public void onResponse(Call<FriendRequestResponse> call, retrofit2.Response<FriendRequestResponse> response) {
                 try {
-                    if (response.body()!=null && response.body().getResponse().equalsIgnoreCase("200")){
+
+                    if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
                         Log.d(TAG, "onResponse: ");
                         ExecutorService executor = Executors.newSingleThreadExecutor();
                         executor.execute(() -> mAppRepository.insertFriendReq(response.body().getFriend_req_list()));

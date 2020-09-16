@@ -109,7 +109,7 @@ public class Connections {
     private String group_id;
 
     public String getBadge() {
-        return badge;
+        return badge!=null?badge:"";
     }
 
     public void setBadge(String badge) {

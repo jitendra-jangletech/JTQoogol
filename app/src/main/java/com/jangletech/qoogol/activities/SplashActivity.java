@@ -16,9 +16,7 @@ import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.TinyDB;
-
 import java.text.ParseException;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -28,6 +26,7 @@ public class SplashActivity extends BaseActivity {
     private static final String TAG = "SplashActivity";
     private ApiInterface apiService = ApiClient.getInstance().getApi();
     private SplashViewModel mViewModel;
+    private boolean isLogged = true;
     private static final int MY_REQUEST_CODE = 2020;
 
     @Override
@@ -35,12 +34,12 @@ public class SplashActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         mViewModel = new ViewModelProvider(this).get(SplashViewModel.class);
+        isLogged = true;
         fetchAppConfig();
         mViewModel.getAppConfigResponse().observe(this, new Observer<AppConfigResponse>() {
             @Override
             public void onChanged(AppConfigResponse appConfigResponse) {
                 if (appConfigResponse != null) {
-                    //String masterKey = AESSecurities.getMasterKey(AppUtils.getDeviceId());
                     String masterKey = "";
                     try {
                         masterKey = AESSecurities.getMasterKey(appConfigResponse.getAlgo(), AppUtils.getDeviceId(), appConfigResponse.getDateTime());
@@ -69,14 +68,14 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void fetchAppConfig() {
+        Log.d(TAG, "fetchAppConfig DeviceId : "+getDeviceId());
         Call<AppConfigResponse> call = apiService.fetchAppConfig(Constant.APP_NAME, AppUtils.getDeviceId());
         call.enqueue(new Callback<AppConfigResponse>() {
             @Override
             public void onResponse(Call<AppConfigResponse> call, Response<AppConfigResponse> response) {
-                //ProgressDialog.getInstance().dismiss();
                 if (response.body() != null) {
                     Log.d(TAG, "onResponse: " + response.body());
-                    mViewModel.setAppConfigResponse(response.body());
+                    mViewModel.insert(response.body());
                 } else {
                     AppUtils.showToast(getApplicationContext(), null, response.body().getMessage());
                     showErrorDialog(SplashActivity.this, response.body().getResponse(), response.body().getMessage());
@@ -85,23 +84,26 @@ public class SplashActivity extends BaseActivity {
 
             @Override
             public void onFailure(Call<AppConfigResponse> call, Throwable t) {
-                //ProgressDialog.getInstance().dismiss();
-                noInternetError(t);
+                AppUtils.showToast(getApplicationContext(), t,"");
                 t.printStackTrace();
             }
         });
     }
 
     private void performAutoLogin() {
-        boolean isLoggedIn = new PreferenceManager(SplashActivity.this).isLoggedIn();
-        if (isLoggedIn) {
-            Intent i = new Intent(SplashActivity.this, MainActivity.class);
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(i);
-        } else {
-            Intent i = new Intent(SplashActivity.this, RegisterLoginActivity.class);
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(i);
+        Log.d(TAG, "performAutoLogin: ");
+        if(isLogged){
+            isLogged = false;
+            boolean isLoggedIn = new PreferenceManager(SplashActivity.this).isLoggedIn();
+            if (isLoggedIn) {
+                Intent i = new Intent(SplashActivity.this, MainActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);
+            } else {
+                Intent i = new Intent(SplashActivity.this, RegisterLoginActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);
+            }
         }
     }
 

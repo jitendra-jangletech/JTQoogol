@@ -32,21 +32,14 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import com.jangletech.qoogol.R;
-import com.jangletech.qoogol.dialog.ProgressDialog;
-import com.jangletech.qoogol.model.FetchEducationResponse;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.NetworkUtil;
 import com.jangletech.qoogol.util.PreferenceManager;
-
 import java.net.UnknownHostException;
 import java.util.Objects;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 
 public class BaseActivity extends AppCompatActivity {
@@ -58,6 +51,14 @@ public class BaseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
+    }
+
+    public void showBottomNav() {
+        MainActivity.bottomNavigationView.setVisibility(View.VISIBLE);
+    }
+
+    public void hideBottomNav() {
+        MainActivity.bottomNavigationView.setVisibility(View.GONE);
     }
 
     public void saveString(String key, String value) {

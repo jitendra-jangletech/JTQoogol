@@ -12,6 +12,18 @@ import com.jangletech.qoogol.util.Constant;
  */
 @Entity
 public class Following {
+
+    @SerializedName(Constant.userBadge)
+    private String badge;
+
+    public String getBadge() {
+        return badge;
+    }
+
+    public void setBadge(String badge) {
+        this.badge = badge;
+    }
+
     @SerializedName(Constant.cn_id)
     private String cn_id;
 

@@ -56,7 +56,8 @@ import retrofit2.Response;
 public class PracticeTestActivity extends BaseActivity implements
         PracticeTestQuestPaletAdapter.QuestClickListener,
         SubmitTestDialog.SubmitDialogClickListener,
-        PractiseViewPagerAdapter.ViewPagerClickListener, ShareQuestionDialog.ShareDialogListener {
+        PractiseViewPagerAdapter.ViewPagerClickListener,
+        ShareQuestionDialog.ShareDialogListener {
 
     private static final String TAG = "PracticeTestActivity";
     public static List<TestQuestionNew> questionsNewList = new ArrayList<>();
@@ -115,7 +116,7 @@ public class PracticeTestActivity extends BaseActivity implements
         practiceViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+                Log.d(TAG, "onPageScrolled: " + position);
             }
 
             @Override
@@ -625,19 +626,24 @@ public class PracticeTestActivity extends BaseActivity implements
     }
 
     private void setTimerToSelectedPage(int pos) {
+        int prevSeconds = 0;
+        int prevMinutes = 0;
         if (countDownTimer != null)
             countDownTimer.cancel();
-
         View view = practiceViewPager.findViewWithTag(pos);
         if (view != null) {
             TextView tvTimer = view.findViewById(R.id.tvtimer);
+            String[] time = tvTimer.getText().toString().split(":", -1);
+            prevSeconds = Integer.parseInt(time[1]);
+            prevMinutes = Integer.parseInt(time[0]);
 
+            int finalPrevSeconds = prevSeconds;
+            int finalPrevMinutes = prevMinutes;
             countDownTimer = new CountDownTimer(60 * 1000 * 60, 1000) {
-                int timerCountSeconds = 0;
-                int timerCountMinutes = 0;
+                int timerCountSeconds = finalPrevSeconds;
+                int timerCountMinutes = finalPrevMinutes;
 
                 public void onTick(long millisUntilFinished) {
-                    // timer.setText(new SimpleDateFormat("mm:ss").format(new Date( millisUntilFinished)));
                     if (timerCountSeconds < 59) {
                         timerCountSeconds++;
                     } else {

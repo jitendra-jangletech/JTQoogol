@@ -29,7 +29,6 @@ import com.jangletech.qoogol.model.FollowersResponse;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
-import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 
@@ -195,10 +194,6 @@ public class FollowersFragment extends BaseFragment implements FollowersAdapter.
         mViewModel.fetchFollowersData(true);
     }
 
-    @Override
-    public void onBottomReached(int size) {
-        //mViewModel.fetchFollowersData(false);
-    }
 
     @Override
     public void showProfileClick(Bundle bundle) {
@@ -268,7 +263,7 @@ public class FollowersFragment extends BaseFragment implements FollowersAdapter.
                 } else if (response.body().getResponse().equals("501")) {
                     resetSettingAndLogout();
                 } else {
-                    AppUtils.showToast(getActivity(), null, response.body().getMessage());
+                    showToast("Error Code : " + response.body().getResponse());
                 }
             }
 
@@ -276,6 +271,7 @@ public class FollowersFragment extends BaseFragment implements FollowersAdapter.
             public void onFailure(Call<FollowersResponse> call, Throwable t) {
                 t.printStackTrace();
                 dismissRefresh(mBinding.connectionSwiperefresh);
+                showToast("Something went wrong!!");
                 apiCallFailureDialog(t);
             }
         });

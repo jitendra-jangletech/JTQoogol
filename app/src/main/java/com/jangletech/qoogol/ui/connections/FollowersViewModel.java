@@ -12,6 +12,7 @@ import com.jangletech.qoogol.model.FollowersResponse;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.util.AESSecurities;
+import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.TinyDB;

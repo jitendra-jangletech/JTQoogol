@@ -130,9 +130,12 @@ public class NotificationsFragment extends BaseFragment implements NotificationA
                 totalItems = linearLayoutManager.getItemCount();
                 scrolledOutItems = linearLayoutManager.findFirstVisibleItemPosition();
                 if (dy > 0) {
+                    //hideBottomNav();
                     if (isScrolling && (currentItems + scrolledOutItems == totalItems)) {
                         isScrolling = false;
                         fetchNotifications(pageStart);
+                    } else {
+                        //showBottomNav();
                     }
                 }
             }
@@ -161,7 +164,6 @@ public class NotificationsFragment extends BaseFragment implements NotificationA
     }
 
     private void enableSwipe() {
-
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT) {
             @Override
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder viewHolder1) {
@@ -293,7 +295,6 @@ public class NotificationsFragment extends BaseFragment implements NotificationA
     @Override
     public boolean onQueryTextChange(String newText) {
         Log.d(TAG, "onQueryTextChange Text : " + newText.trim().toLowerCase());
-        //searchNotification(newText.trim().toLowerCase());
         return true;
     }
 

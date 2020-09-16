@@ -1,15 +1,16 @@
 package com.jangletech.qoogol.adapter;
 
 import android.app.Activity;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Filter;
-import android.widget.Filterable;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -29,10 +30,6 @@ import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.text.StringEscapeUtils;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -48,8 +45,6 @@ import static com.jangletech.qoogol.util.Constant.connectonId;
 import static com.jangletech.qoogol.util.Constant.follow;
 import static com.jangletech.qoogol.util.Constant.followers;
 import static com.jangletech.qoogol.util.Constant.following;
-import static com.jangletech.qoogol.util.Constant.followrequests;
-import static com.jangletech.qoogol.util.Constant.friendrequests;
 import static com.jangletech.qoogol.util.Constant.friends;
 import static com.jangletech.qoogol.util.Constant.qoogol;
 import static com.jangletech.qoogol.util.Constant.reject_follow_requests;
@@ -61,7 +56,7 @@ import static com.jangletech.qoogol.util.Constant.unfollow;
 /**
  * Created by Pritali on 5/6/2020.
  */
-public class ConnectionAdapter extends RecyclerView.Adapter<ConnectionAdapter.ViewHolder> implements Filterable {
+public class ConnectionAdapter extends RecyclerView.Adapter<ConnectionAdapter.ViewHolder> {
 
     private static final String TAG = "ConnectionAdapter";
     private List<Connections> connectionsList;
@@ -88,7 +83,7 @@ public class ConnectionAdapter extends RecyclerView.Adapter<ConnectionAdapter.Vi
 
     @NonNull
     @Override
-    public ConnectionAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         connectionItemBinding = DataBindingUtil.inflate(
                 LayoutInflater.from(parent.getContext()),
                 R.layout.connection_item, parent, false);
@@ -96,24 +91,19 @@ public class ConnectionAdapter extends RecyclerView.Adapter<ConnectionAdapter.Vi
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ConnectionAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Connections connections = connectionsList.get(position);
-        //Log.d(TAG, "Connection Name : " + AESSecurities.getInstance().decrypt(BuildConfig.SECRET_KEY, connections.getU_first_name()));
-        /*holder.connectionItemBinding.tvUserName.setText(
-                AESSecurities.getInstance().decrypt(TinyDB.getInstance(activity).getString(Constant.cf_key1), connections.getU_first_name()) + " "
-                        + AESSecurities.getInstance().decrypt(TinyDB.getInstance(activity).getString(Constant.cf_key2), connections.getU_last_name()));*/
 
-        holder.connectionItemBinding.tvUserName.setText(StringEscapeUtils.unescapeJava(connections.getU_first_name()) + " " + StringEscapeUtils.unescapeJava(connections.getU_last_name()));
-        if (connections.getBadge() != null && !connections.getBadge().isEmpty()) {
-            String badge = connections.getBadge();
-            if (badge.equalsIgnoreCase("B")) ;
-            holder.connectionItemBinding.imgBadge.setImageDrawable(activity.getDrawable(R.drawable.bronze));
-            if (badge.equalsIgnoreCase("G")) ;
-            holder.connectionItemBinding.imgBadge.setImageDrawable(activity.getDrawable(R.drawable.gold));
-            if (badge.equalsIgnoreCase("S")) ;
-            holder.connectionItemBinding.imgBadge.setImageDrawable(activity.getDrawable(R.drawable.silver));
-            if (badge.equalsIgnoreCase("P")) ;
-            holder.connectionItemBinding.imgBadge.setImageDrawable(activity.getDrawable(R.drawable.platinum));
+        holder.connectionItemBinding.tvUserName.setText(connections.getU_first_name() + " " + connections.getU_last_name());
+
+        if (connections.getBadge().equalsIgnoreCase("B")) {
+            loadBadge(R.drawable.bronze,holder.connectionItemBinding.imgBadge);
+        } else if (connections.getBadge().equalsIgnoreCase("G")) {
+            loadBadge(R.drawable.gold,holder.connectionItemBinding.imgBadge);
+        } else if (connections.getBadge().equalsIgnoreCase("S")) {
+            loadBadge(R.drawable.silver,holder.connectionItemBinding.imgBadge);
+        } else if (connections.getBadge().equalsIgnoreCase("P")) {
+            loadBadge(R.drawable.platinum,holder.connectionItemBinding.imgBadge);
         }
 
         holder.connectionItemBinding.rlProfile.setOnClickListener(v -> {
@@ -131,7 +121,6 @@ public class ConnectionAdapter extends RecyclerView.Adapter<ConnectionAdapter.Vi
             e.printStackTrace();
         }
 
-
         PopupMenu popup = new PopupMenu(activity, holder.connectionItemBinding.textViewOptions, END);
         popup.setGravity(END);
         popup.inflate(R.menu.connection_options);
@@ -148,31 +137,7 @@ public class ConnectionAdapter extends RecyclerView.Adapter<ConnectionAdapter.Vi
             popupMenu.findItem(R.id.action_unfollow).setVisible(true);
             if (connections.getCn_connected().equalsIgnoreCase("false"))
                 popupMenu.findItem(R.id.action_add_friend).setVisible(false);
-        } else if (call_from.equalsIgnoreCase(friendrequests)) {
-            try {
-                if (connections.getFriend_req_sent().equalsIgnoreCase("true")) {
-                    popupMenu.findItem(R.id.cancel_friend).setVisible(true);
-                } else {
-                    popupMenu.findItem(R.id.accept_friend).setVisible(true);
-                    popupMenu.findItem(R.id.reject_friend).setVisible(true);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-        } else if (call_from.equalsIgnoreCase(followrequests)) {
-            try {
-                if (connections.getFollow_req_sent().equalsIgnoreCase("true")) {
-                    popupMenu.findItem(R.id.cancel_follow).setVisible(true);
-                } else {
-                    popupMenu.findItem(R.id.accept_follow).setVisible(true);
-                    popupMenu.findItem(R.id.reject_follow).setVisible(true);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         }
-
         popup.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
                 case R.id.action_remove_connection:
@@ -215,15 +180,16 @@ public class ConnectionAdapter extends RecyclerView.Adapter<ConnectionAdapter.Vi
             }
             return false;
         });
+
         holder.connectionItemBinding.textViewOptions.setOnClickListener(v -> {
             popup.show();
         });
 
-        if (position == connectionsList.size() && connectionsList.size() >= 25) {
-            listener.onBottomReached(connectionsList.size());
-        }
-
         setAnimation(holder.connectionItemBinding.getRoot(), position);
+    }
+
+    private void loadBadge(int drawable, ImageView imageView){
+        Glide.with(activity).load(drawable).into(imageView);
     }
 
     private void setAnimation(View viewToAnimate, int position) {
@@ -234,37 +200,6 @@ public class ConnectionAdapter extends RecyclerView.Adapter<ConnectionAdapter.Vi
         }
     }
 
-    @Override
-    public Filter getFilter() {
-        return new Filter() {
-            @Override
-            protected FilterResults performFiltering(CharSequence charSequence) {
-                String charString = charSequence.toString();
-                if (charString.isEmpty()) {
-                    connectionsList = filteredConnectionsList;
-                } else {
-                    List<Connections> filteredList = new ArrayList<>();
-                    for (Connections row : filteredConnectionsList) {
-                        if (row.getU_first_name().toLowerCase().contains(charString.toLowerCase()) || row.getU_last_name().toLowerCase().contains(charString.toLowerCase())) {
-                            filteredList.add(row);
-                        }
-                    }
-                    connectionsList = filteredList;
-                }
-
-                FilterResults filterResults = new FilterResults();
-                filterResults.values = connectionsList;
-                return filterResults;
-            }
-
-            @Override
-            protected void publishResults(CharSequence constraint, FilterResults filterResults) {
-                connectionsList = (ArrayList<Connections>) filterResults.values;
-                notifyDataSetChanged();
-            }
-        };
-    }
-
     public void updateList(List<Connections> connections) {
         connectionsList = connections;
         notifyDataSetChanged();
@@ -272,8 +207,6 @@ public class ConnectionAdapter extends RecyclerView.Adapter<ConnectionAdapter.Vi
 
     public interface updateConnectionListener {
         void onUpdateConnection(String user);
-
-        void onBottomReached(int size);
 
         void showProfileClick(Bundle bundle);
     }

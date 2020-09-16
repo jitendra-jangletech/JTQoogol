@@ -9,6 +9,7 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
 import com.jangletech.qoogol.database.converter.Converters;
+import com.jangletech.qoogol.database.dao.AppConfigDao;
 import com.jangletech.qoogol.database.dao.BlockedDao;
 import com.jangletech.qoogol.database.dao.ConnectionsDao;
 import com.jangletech.qoogol.database.dao.DashboardDao;
@@ -23,6 +24,7 @@ import com.jangletech.qoogol.database.dao.LearningQuestionDao;
 import com.jangletech.qoogol.database.dao.NotificationDao;
 import com.jangletech.qoogol.database.dao.TestDao;
 import com.jangletech.qoogol.database.dao.UserProfileDao;
+import com.jangletech.qoogol.model.AppConfigResponse;
 import com.jangletech.qoogol.model.BlockedConnections;
 import com.jangletech.qoogol.model.Connections;
 import com.jangletech.qoogol.model.DashBoard;
@@ -46,7 +48,7 @@ import java.util.concurrent.Executors;
 @Database(entities = {LearningQuestionsNew.class, DashBoard.class, TestModelNew.class, DoubtInfo.class,
         TestQuestion.class, UserProfile.class, Education.class, Friends.class, Followers.class, Following.class,
         FriendRequest.class, FollowRequest.class, Connections.class, LearningQuestions.class, BlockedConnections.class,
-        Notification.class}, version = 12, exportSchema = false)
+        Notification.class, AppConfigResponse.class}, version = 13, exportSchema = false)
 @TypeConverters(Converters.class)
 public abstract class QoogolDatabase extends RoomDatabase {
     public abstract UserProfileDao userProfileDao();
@@ -62,6 +64,8 @@ public abstract class QoogolDatabase extends RoomDatabase {
     public abstract FollowReqDao followReqDao();
 
     public abstract BlockedDao blockedDao();
+
+    public abstract AppConfigDao appConfigDao();
 
     public abstract ConnectionsDao connectionsDao();
 

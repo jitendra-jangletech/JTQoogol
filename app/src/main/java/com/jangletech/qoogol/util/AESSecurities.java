@@ -24,7 +24,6 @@ public class AESSecurities {
 
     private static final String TAG = "AESSecurities";
     private String paddedString = "989753";
-    //private String SecretKey = BuildConfig.SECRET_KEY;
     private static AESSecurities instance = null;
 
     public static AESSecurities getInstance() {

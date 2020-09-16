@@ -17,7 +17,6 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.FriendReqAdapter;
@@ -25,11 +24,8 @@ import com.jangletech.qoogol.databinding.FragmentFriendRequestBinding;
 import com.jangletech.qoogol.dialog.PublicProfileDialog;
 import com.jangletech.qoogol.model.FriendRequest;
 import com.jangletech.qoogol.model.FriendRequestResponse;
-import com.jangletech.qoogol.retrofit.ApiClient;
-import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.util.AESSecurities;
-import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.TinyDB;
 
@@ -53,7 +49,6 @@ public class FriendRequestFragment extends BaseFragment implements FriendReqAdap
     private Boolean isVisible = false;
     private FriendReqViewModel mViewModel;
     private LinearLayoutManager linearLayoutManager;
-    private ApiInterface apiService = ApiClient.getInstance().getApi();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -68,7 +63,7 @@ public class FriendRequestFragment extends BaseFragment implements FriendReqAdap
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(FriendReqViewModel.class);
-        //init();
+
         fetchFriendRequests();
         mViewModel.getFrienReqdList().observe(getViewLifecycleOwner(), friendRequestList -> {
             if (friendRequestList != null) {
@@ -80,41 +75,27 @@ public class FriendRequestFragment extends BaseFragment implements FriendReqAdap
                     friendRequest.setU_last_name(lName);
                     list.add(friendRequest);
                 }
-                initView(list);
-
-                if(list.size() > 0){
-                    mBinding.emptyview.setVisibility(View.GONE);
-                }else{
-                    mBinding.emptyview.setText("No Requests.");
-                    mBinding.emptyview.setVisibility(View.VISIBLE);
-                }
+                setFriendReqList(list);
             }
             dismissRefresh(mBinding.requestsSwiperefresh);
         });
 
-        mBinding.requestsSwiperefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                fetchFriendRequests();
-            }
-        });
+        mBinding.requestsSwiperefresh.setOnRefreshListener(() -> mViewModel.fetchFriendReqData(true));
     }
 
     private void fetchFriendRequests() {
-        mBinding.emptyview.setText("Fetching Requests...");
-        Call<FriendRequestResponse> call = apiService.fetchFriendRequests(getUserId(getActivity()), friendrequests, getDeviceId(getActivity()), qoogol, "0");
+        Call<FriendRequestResponse> call = getApiService().fetchFriendRequests(getUserId(getActivity()), friendrequests, getDeviceId(getActivity()), qoogol, "0");
         call.enqueue(new Callback<FriendRequestResponse>() {
             @Override
             public void onResponse(Call<FriendRequestResponse> call, retrofit2.Response<FriendRequestResponse> response) {
                 dismissRefresh(mBinding.requestsSwiperefresh);
                 if (response.body() != null &&
                         response.body().getResponse().equalsIgnoreCase("200")) {
-                    if(response.body().getFriend_req_list().size() == 0){
-                        mBinding.emptyview.setText("No Requests.");
-                    }
+                    Log.d(TAG, "onResponse: ");
                     mViewModel.insert(response.body().getFriend_req_list());
                 } else {
-                    AppUtils.showToast(getActivity(), null, response.body().getMessage());
+                    if (response.body() != null)
+                        showToast("Error : " + response.body().getResponse());
                 }
             }
 
@@ -122,24 +103,12 @@ public class FriendRequestFragment extends BaseFragment implements FriendReqAdap
             public void onFailure(Call<FriendRequestResponse> call, Throwable t) {
                 t.printStackTrace();
                 dismissRefresh(mBinding.requestsSwiperefresh);
+                showToast("Something went wrong!!");
                 apiCallFailureDialog(t);
             }
         });
     }
 
-    /*private void init() {
-        if (!isVisible) {
-            isVisible = true;
-            mViewModel.fetchFriendReqData(false);
-        }
-        mBinding.requestsSwiperefresh.setOnRefreshListener(() -> mViewModel.fetchFriendReqData(true));
-    }
-
-    public void checkRefresh() {
-        if (mBinding.requestsSwiperefresh.isRefreshing()) {
-            mBinding.requestsSwiperefresh.setRefreshing(false);
-        }
-    }*/
 
     @Override
     public void onDetach() {
@@ -186,9 +155,16 @@ public class FriendRequestFragment extends BaseFragment implements FriendReqAdap
             mViewModel.fetchFriendReqData(false);
     }
 
-    private void initView(List<FriendRequest> friendRequests) {
+    private void setFriendReqList(List<FriendRequest> friendRequests) {
         if (mBinding.requestsSwiperefresh.isRefreshing())
             mBinding.requestsSwiperefresh.setRefreshing(false);
+
+        if (friendRequests.size() > 0) {
+            mBinding.emptyview.setVisibility(View.GONE);
+        } else {
+            mBinding.emptyview.setText("No Requests.");
+        }
+
         mAdapter = new FriendReqAdapter(getActivity(), friendRequests, friendrequests, this);
         mBinding.requestRecycler.setHasFixedSize(true);
         mBinding.requestRecycler.setLayoutManager(linearLayoutManager);

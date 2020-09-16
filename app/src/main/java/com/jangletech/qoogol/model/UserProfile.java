@@ -28,8 +28,20 @@ import static com.jangletech.qoogol.util.Constant.cn_request_active;
 @Entity(tableName = "userprofile", indices = @Index(value = {"userId"}, unique = true))
 public class UserProfile {
 
+    public boolean isPrivate() {
+        return isPrivate;
+    }
+
+    public void setPrivate(boolean aPrivate) {
+        isPrivate = aPrivate;
+    }
+
     @SerializedName("Message")
     private String message;
+
+    @SerializedName(Constant.u_private)
+    private boolean isPrivate;
+
 
     public String getMessage() {
         return message;
@@ -218,6 +230,28 @@ public class UserProfile {
     @ColumnInfo
     private String u_Degree;
 
+    @SerializedName(Constant.u_native_s_id)
+    private String nativeStateId;
+
+    public String getNativeStateId() {
+        return nativeStateId;
+    }
+
+    public void setNativeStateId(String nativeStateId) {
+        this.nativeStateId = nativeStateId;
+    }
+
+    public String getNativeDistrictId() {
+        return nativeDistrictId;
+    }
+
+    public void setNativeDistrictId(String nativeDistrictId) {
+        this.nativeDistrictId = nativeDistrictId;
+    }
+
+    @SerializedName(Constant.u_native_dt_id)
+    private String nativeDistrictId;
+
     @SerializedName(Constant.dor_co_id)
     @ColumnInfo
     private String u_CourseId;
@@ -323,13 +357,22 @@ public class UserProfile {
     @ColumnInfo(name = "email")
     private String emailAddress;
 
-
     @SerializedName(Constant.cn_connected)
     private String isConnected;
 
-
     @SerializedName(Constant.cn_u1_follows_u2)
     private String u1FollowsU2;
+
+    @SerializedName(Constant.w_lm_id_array)
+    private String w_lm_id_array;
+
+    public String getW_lm_id_array() {
+        return w_lm_id_array;
+    }
+
+    public void setW_lm_id_array(String w_lm_id_array) {
+        this.w_lm_id_array = w_lm_id_array;
+    }
 
     public String getBadge() {
         return badge;

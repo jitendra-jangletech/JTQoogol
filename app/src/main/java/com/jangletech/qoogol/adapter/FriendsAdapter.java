@@ -11,6 +11,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -29,8 +30,6 @@ import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
-
-import org.apache.commons.text.StringEscapeUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +60,7 @@ import static com.jangletech.qoogol.util.Constant.unfollow;
 /**
  * Created by Pritali on 5/6/2020.
  */
-public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHolder> implements Filterable {
+public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHolder>{
 
     private static final String TAG = "FriendsAdapter";
     private List<Friends> connectionsList;
@@ -96,7 +95,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
 
     @NonNull
     @Override
-    public FriendsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         connectionItemBinding = DataBindingUtil.inflate(
                 LayoutInflater.from(parent.getContext()),
                 R.layout.connection_item, parent, false);
@@ -104,19 +103,25 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(@NonNull FriendsAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Friends connections = connectionsList.get(position);
-
-        holder.connectionItemBinding.tvUserName.setText(StringEscapeUtils.unescapeJava(connections.getU_first_name()) + " " + StringEscapeUtils.unescapeJava(connections.getU_last_name()));
-        /*holder.connectionItemBinding.tvUserName.setText(
-                AESSecurities.getInstance().decrypt(TinyDB.getInstance(activity).getString(Constant.cf_key1), connections.getU_first_name())
-                        + " " + AESSecurities.getInstance().decrypt(TinyDB.getInstance(activity).getString(Constant.cf_key2), connections.getU_last_name()));*/
+        holder.connectionItemBinding.tvUserName.setText(connections.getU_first_name() + " " + connections.getU_last_name());
         try {
             if (connections.getProf_pic() != null && !connections.getProf_pic().isEmpty()) {
                 Glide.with(activity).load(UtilHelper.getProfileImageUrl(connections.getProf_pic().trim())).circleCrop().placeholder(R.drawable.profile).into(holder.connectionItemBinding.userProfileImage);
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+
+        if (connections.getBadge().equalsIgnoreCase("B")) {
+            loadBadge(R.drawable.bronze,holder.connectionItemBinding.imgBadge);
+        } else if (connections.getBadge().equalsIgnoreCase("G")) {
+            loadBadge(R.drawable.gold,holder.connectionItemBinding.imgBadge);
+        } else if (connections.getBadge().equalsIgnoreCase("S")) {
+            loadBadge(R.drawable.silver,holder.connectionItemBinding.imgBadge);
+        } else if (connections.getBadge().equalsIgnoreCase("P")) {
+            loadBadge(R.drawable.platinum,holder.connectionItemBinding.imgBadge);
         }
 
         holder.connectionItemBinding.rlProfile.setOnClickListener(v -> {
@@ -204,9 +209,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
                     bundle.putInt(CALL_FROM, connectonId);
                     bundle.putString(Constant.fetch_profile_id, connections.getCn_user_id_2());
                     listener.showProfileClick(bundle);
-//                    NavHostFragment.findNavController(this).navigate(R.id.nav_edit_profile,bundle);
                     break;
-
             }
             return false;
         });
@@ -214,49 +217,15 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             popup.show();
         });
 
-        if (position == connectionsList.size() && connectionsList.size() >= 25) {
-            listener.onBottomReached(connectionsList.size());
-        }
-
         setAnimation(holder.connectionItemBinding.getRoot(), position);
     }
 
-    @Override
-    public Filter getFilter() {
-        return new Filter() {
-            @Override
-            protected FilterResults performFiltering(CharSequence charSequence) {
-                String charString = charSequence.toString();
-                if (charString.isEmpty()) {
-                    connectionsList = filteredConnectionsList;
-                } else {
-                    List<Friends> filteredList = new ArrayList<>();
-                    for (Friends row : filteredConnectionsList) {
-                        if (row.getU_first_name().toLowerCase().contains(charString.toLowerCase()) || row.getU_last_name().toLowerCase().contains(charString.toLowerCase())) {
-                            filteredList.add(row);
-                        }
-                    }
-                    connectionsList = filteredList;
-                }
-
-                FilterResults filterResults = new FilterResults();
-                filterResults.values = connectionsList;
-                return filterResults;
-            }
-
-            @Override
-            protected void publishResults(CharSequence constraint, FilterResults filterResults) {
-                connectionsList = (ArrayList<Friends>) filterResults.values;
-                notifyDataSetChanged();
-            }
-        };
+    private void loadBadge(int drawable, ImageView imageView){
+        Glide.with(activity).load(drawable).into(imageView);
     }
 
     public interface updateConnectionListener {
         void onUpdateConnection(String user);
-
-        void onBottomReached(int size);
-
         void showProfileClick(Bundle bundle);
     }
 

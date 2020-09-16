@@ -13,6 +13,7 @@ import android.os.CountDownTimer;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
@@ -38,6 +39,8 @@ import com.jangletech.qoogol.activities.MainActivity;
 import com.jangletech.qoogol.activities.RegisterLoginActivity;
 import com.jangletech.qoogol.model.LearningQuestionsNew;
 import com.jangletech.qoogol.model.TestModelNew;
+import com.jangletech.qoogol.retrofit.ApiClient;
+import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.util.AESSecurities;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
@@ -55,22 +58,14 @@ public class BaseFragment extends Fragment {
 
     private static final String TAG = "BaseFragment";
     private SharedPreferences preferences;
+    private ApiInterface apiService = ApiClient.getInstance().getApi();
+
+    public ApiInterface getApiService(){
+        return apiService;
+    }
 
     public String getDecryptedField(String encryptText,String key){
         return AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(key),encryptText);
-    }
-
-    public static boolean hasError(ViewGroup viewGroup) {
-        boolean result = false;
-        for (int i = 0; i < viewGroup.getChildCount(); i++) {
-            if (viewGroup.getChildAt(i) instanceof TextInputLayout) {
-                if (((TextInputLayout) viewGroup.getChildAt(i)).getError() != null) {
-                    result = true;
-                }
-            }
-        }
-        Log.d(TAG, "hasError: " + result);
-        return result;
     }
 
     public static String getDefinedTestCategory(String strCat) {
@@ -217,25 +212,6 @@ public class BaseFragment extends Fragment {
         alertDialog.setCancelable(false).show();
     }
 
-    public String getTempImageUrl(String path) {
-        return Constant.QUESTION_IMAGES_API + path.split("/")[1].split(":")[0];
-    }
-
-    public void setFragmentTitle(String title) {
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(title);
-    }
-
-
-    public void clearErrors(ViewGroup viewGroup) {
-        for (int i = 0; i < viewGroup.getChildCount(); i++) {
-            if (viewGroup.getChildAt(i) instanceof TextInputLayout) {
-                if (((TextInputLayout) viewGroup.getChildAt(i)).getError() == null) {
-                    ((TextInputLayout) viewGroup.getChildAt(i)).setError(null);
-                }
-            }
-        }
-    }
-
     public void showErrorDialog(Activity activity, String title, String msg) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.AlertDialogStyle);
         builder.setTitle("Alert")
@@ -296,46 +272,6 @@ public class BaseFragment extends Fragment {
         return "";
     }
 
-    public void setTimer(TextView timer, int seconds, int minutes) {
-        CountDownTimer countDownTimer = new CountDownTimer(60 * 1000 * 60, 1000) {
-            int timerCountSeconds = seconds;
-            int timerCountMinutes = minutes;
-
-            public void onTick(long millisUntilFinished) {
-                // timer.setText(new SimpleDateFormat("mm:ss").format(new Date( millisUntilFinished)));
-                if (timerCountSeconds < 59) {
-                    timerCountSeconds++;
-                } else {
-                    timerCountSeconds = 0;
-                    timerCountMinutes++;
-                }
-                if (timerCountMinutes < 10) {
-                    if (timerCountSeconds < 10) {
-                        timer.setText(String.valueOf("0" + timerCountMinutes + ":0" + timerCountSeconds));
-                    } else {
-                        timer.setText(String.valueOf("0" + timerCountMinutes + ":" + timerCountSeconds));
-                    }
-                } else {
-                    if (timerCountSeconds < 10) {
-                        timer.setText(String.valueOf(timerCountMinutes + ":0" + timerCountSeconds));
-                    } else {
-                        timer.setText(String.valueOf(timerCountMinutes + ":" + timerCountSeconds));
-                    }
-                }
-            }
-
-            public void onFinish() {
-                timer.setText("00:00");
-            }
-        }.start();
-    }
-    /*public void addFragment(Fragment fragment){
-        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.fragmentContainer, fragment);
-        ft.addToBackStack(null);
-        ft.commit();
-    }*/
-
     public void showToast(String msg) {
         try {
             Toast.makeText(requireActivity(), msg, Toast.LENGTH_SHORT).show();
@@ -359,10 +295,8 @@ public class BaseFragment extends Fragment {
     public void setFilterIcon(Menu menu, Context mContext, boolean flag) {
         if (flag)
             menu.getItem(1).setIcon(ContextCompat.getDrawable(mContext, R.drawable.ic_filter_applied));
-            //menuItem.setIcon(getActivity().getResources().getDrawable(R.drawable.ic_filter_applied));
         else
             menu.getItem(1).setIcon(ContextCompat.getDrawable(mContext, R.drawable.ic_filter));
-        //menuItem.setIcon(getActivity().getResources().getDrawable(R.drawable.ic_filter));
     }
 
     public void apiCallFailureDialog(Throwable t) {
@@ -404,6 +338,14 @@ public class BaseFragment extends Fragment {
         if (swipeRefreshLayout != null && swipeRefreshLayout.isRefreshing()) {
             swipeRefreshLayout.setRefreshing(false);
         }
+    }
+
+    public void showBottomNav() {
+        MainActivity.bottomNavigationView.setVisibility(View.VISIBLE);
+    }
+
+    public void hideBottomNav() {
+        MainActivity.bottomNavigationView.setVisibility(View.GONE);
     }
 
     public String getProfileImageUrl(String imageName) {

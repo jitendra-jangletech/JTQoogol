@@ -69,12 +69,6 @@ public class Constant {
     public static final String SORT_LIST = "SORT_LIST";
     public static final String SORT_GRID = "SORT_GRID";
 
-    /*//Different Question Types
-    public static final String SCQ = "SCQ";
-    public static final String MCQ = "MCQ";
-    public static final String FILL_THE_BLANKS = "FILL_THE_BLANKS";
-    public static final String TRUE_FALSE = "TRUE_FALSE";
-*/
 
     //encrypted fields
     public static final String u_birth_date_encrypted = "107E";
@@ -304,6 +298,7 @@ public class Constant {
     public static final String VERIFY_MOBILE_EMAIL = "sm01VerifyMobileEmailN";
     public static final String UPDATE_PROFILE_IMAGE_API = "sm22UpdateProfilePicN";
     public static final String COURSE = "sm15CourseData";
+    public static final String LOG_OUT_API = "sm02Signout";
     public static final String INSTITUTE = "sm13InstOrgData";
     public static final String DEGREE = "sm14DegreeData";
     public static final String FETCH_CONNECTIONS = "sm25FetchConnectionsN";
@@ -341,7 +336,7 @@ public class Constant {
     public static final String u_Email = "199L";
     public static final String u_Message_alerts = "199E";
     public static final String u_AV_alerts = "199D";
-    public static final String u_notification_alerts = "199C";
+
     public static final String u_total_points = "98";
     public static final String u_lm_id = "156";
     public static final String u_app_live = "172";
@@ -655,6 +650,10 @@ public class Constant {
     // ChapterMaster
     public static final String cm_id = "1315";
     public static final String cm_chapter_name = "1316";
+
+    public static final String u_private = "113";
+    public static final String u_status = "112";
+    public static final String u_notification_alerts = "199C";
 
     // Q_SubjectCourseR
     public static final String scr_id = "1425";

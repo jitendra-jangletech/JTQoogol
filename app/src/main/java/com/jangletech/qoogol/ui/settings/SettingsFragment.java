@@ -17,21 +17,32 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 
+import com.jangletech.qoogol.BuildConfig;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.activities.RegisterLoginActivity;
 import com.jangletech.qoogol.databinding.SettingsFragmentBinding;
+import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.dialog.UniversalDialog;
+import com.jangletech.qoogol.model.UserProfile;
+import com.jangletech.qoogol.model.UserProfileResponse;
+import com.jangletech.qoogol.model.VerifyResponse;
 import com.jangletech.qoogol.ui.BaseFragment;
+import com.jangletech.qoogol.ui.personal_info.PersonalInfoViewModel;
+import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 
-import static com.jangletech.qoogol.util.AppUtils.getDeviceId;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SettingsFragment extends BaseFragment implements UniversalDialog.DialogButtonClickListener {
 
     private static final String TAG = "SettingsFragment";
     private SettingsViewModel mViewModel;
+    private PersonalInfoViewModel personalInfoViewModel;
     private Context mContext;
+    private UserProfile profile;
     private SettingsFragmentBinding mBinding;
 
     public static SettingsFragment newInstance() {
@@ -55,6 +66,15 @@ public class SettingsFragment extends BaseFragment implements UniversalDialog.Di
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(SettingsViewModel.class);
+        personalInfoViewModel = ViewModelProviders.of(this).get(PersonalInfoViewModel.class);
+
+//        personalInfoViewModel.getUserProfile(getUserId(getActivity())).observe(getViewLifecycleOwner(), userProfile -> {
+//            Log.d(TAG, "onChanged : " + userProfile);
+//            if (userProfile != null) {
+//                profile = userProfile;
+//            }
+//        });
+        fetchUserProfile();
 
         mBinding.tvLogout.setOnClickListener(v -> {
             UniversalDialog universalDialog = new UniversalDialog(mContext, "Confirm Log Out",
@@ -65,13 +85,12 @@ public class SettingsFragment extends BaseFragment implements UniversalDialog.Di
 
         mBinding.tvMoreSettings.setOnClickListener(v -> {
             if (isAppInstalled()) {
-                //This intent will help you to launch if the package is already installed
                 Bundle bundle = new Bundle();
                 Intent LaunchIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://chatchilli.com"));
                 bundle.putString(Constant.u_user_id, getUserId(getActivity()));
                 bundle.putString("SCREEN", "SETTINGS");
                 LaunchIntent.putExtras(bundle);
-                bundle.putString(Constant.device_id,getDeviceId(getActivity()));
+                bundle.putString(Constant.device_id, getDeviceId(getActivity()));
                 LaunchIntent.putExtra(Intent.ACTION_VIEW, bundle);
                 startActivity(LaunchIntent);
             } else {
@@ -96,6 +115,12 @@ public class SettingsFragment extends BaseFragment implements UniversalDialog.Di
             }
         });
 
+        mBinding.tvMuteGroupAlerts.setOnClickListener(v -> {
+            //showToast(""+mBinding.tvMuteGroupAlerts.isChecked());
+            profile.setNotificationEnabled(mBinding.tvMuteGroupAlerts.isChecked()?"1":"0");
+           updateNotificationSetting(profile);
+        });
+
         mBinding.tvBlockedList.setOnClickListener(v -> {
             Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_blocked_connections);
         });
@@ -108,19 +133,122 @@ public class SettingsFragment extends BaseFragment implements UniversalDialog.Di
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
+                            logout("X");
                         }
                     }).setNegativeButton("No", null)
                     .show();
         });
     }
 
+    private void logout(String status) {
+        ProgressDialog.getInstance().show(getActivity());
+        Call<VerifyResponse> call = getApiService().logout(
+                getUserId(getActivity()),
+                getDeviceId(getActivity()),
+                status,
+                Constant.APP_NAME);
+
+        call.enqueue(new Callback<VerifyResponse>() {
+            @Override
+            public void onResponse(Call<VerifyResponse> call, Response<VerifyResponse> response) {
+                ProgressDialog.getInstance().dismiss();
+                if (response.body() != null) {
+                    if (response.body().getResponse().equals("200")) {
+                        new PreferenceManager(mContext).setIsLoggedIn(false);
+                        new PreferenceManager(mContext).saveString(Constant.MOBILE, "");
+                        new PreferenceManager(mContext).saveString(Constant.USER_ID, "");
+                        Intent intent = new Intent(mContext, RegisterLoginActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                    } else {
+                        AppUtils.showToast(getActivity(), null, response.body().getErrorMsg());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<VerifyResponse> call, Throwable t) {
+                ProgressDialog.getInstance().dismiss();
+                apiCallFailureDialog(t);
+                t.printStackTrace();
+            }
+        });
+    }
+
+    private void updateNotificationSetting(UserProfile userProfile) {
+        Call<UserProfileResponse> call = getApiService().updateUserProfile(
+                getUserId(getActivity()),
+                Constant.APP_NAME,
+                BuildConfig.VERSION_NAME,
+                getDeviceId(getActivity()),
+                userProfile.getFirstName(),
+                userProfile.getLastName(),
+                "n",
+                userProfile.getMobileNumber(),
+                userProfile.getEmailAddress(),
+                "i",
+                userProfile.getPassword(),
+                userProfile.getDob(),
+                userProfile.getStrTagLine(),
+                userProfile.getCityId(),
+                userProfile.getNativeStateId(),
+                userProfile.getNativeDistrictId(),
+                userProfile.getU_NationalityId(),
+                userProfile.getW_lm_id_array(),
+                userProfile.getStrGender(),
+                userProfile.getUserName(),
+                userProfile.isPrivate(),
+                "1"
+        );
+
+        call.enqueue(new Callback<UserProfileResponse>() {
+            @Override
+            public void onResponse(Call<UserProfileResponse> call, Response<UserProfileResponse> response) {
+                ProgressDialog.getInstance().dismiss();
+                if (response != null && response.body() != null) {
+                    if (response.body().getResponseCode().equals("200")) {
+
+                    } else {
+                        showErrorDialog(requireActivity(), response.body().getResponseCode(), response.body().getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserProfileResponse> call, Throwable t) {
+                ProgressDialog.getInstance().dismiss();
+                apiCallFailureDialog(t);
+            }
+        });
+    }
+
+    private void fetchUserProfile() {
+        ProgressDialog.getInstance().show(getActivity());
+        Call<UserProfile> call = getApiService().fetchUserInfo(getUserId(getActivity()), getDeviceId(getActivity()), Constant.APP_NAME, Constant.APP_VERSION);
+        call.enqueue(new Callback<UserProfile>() {
+            @Override
+            public void onResponse(Call<UserProfile> call, Response<UserProfile> response) {
+                ProgressDialog.getInstance().dismiss();
+                if (response.body() != null && response.body().getResponseCode().equals("200")) {
+                    profile = response.body();
+                } else if (response.body().getResponseCode().equals("501")) {
+                    resetSettingAndLogout();
+                } else {
+                    AppUtils.showToast(getActivity(), null, response.body().getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserProfile> call, Throwable t) {
+                ProgressDialog.getInstance().dismiss();
+                t.printStackTrace();
+                apiCallFailureDialog(t);
+            }
+        });
+    }
+
     @Override
     public void onPositiveButtonClick() {
-        new PreferenceManager(mContext).setIsLoggedIn(false);
-        new PreferenceManager(mContext).saveString(Constant.MOBILE, "");
-        new PreferenceManager(mContext).saveString(Constant.USER_ID, "");
-        Intent intent = new Intent(mContext, RegisterLoginActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
+        logout("O");
     }
 }

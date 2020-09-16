@@ -40,7 +40,8 @@ import retrofit2.Response;
 import static com.jangletech.qoogol.util.Constant.fetch_loged_in_user;
 import static com.jangletech.qoogol.util.Constant.fetch_other_user;
 
-public class EducationInfoFragment extends BaseFragment implements EducationAdapter.EducationItemClickListener
+public class EducationInfoFragment extends BaseFragment implements
+        EducationAdapter.EducationItemClickListener
         , View.OnClickListener, AddEduDialog.ApiCallListener {
 
     private static final String TAG = "EducationInfoFragment";

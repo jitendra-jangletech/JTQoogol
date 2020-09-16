@@ -48,7 +48,6 @@ public class ExistingUserFragment extends BaseFragment {
 
     private static final String TAG = "ExistingUserFragment";
     private FragmentExistingUserBinding mBinding;
-    private ApiInterface apiService = ApiClient.getInstance().getApi();
     private boolean isOtpSent = false;
     private RegisterLoginViewModel mViewModel;
     private RegisterLoginModel registerLoginModel;
@@ -104,8 +103,6 @@ public class ExistingUserFragment extends BaseFragment {
             }
 
             strMobile = mBinding.tilEmailMobileUserName.getEditText().getText().toString().trim();
-            //if(strMobile.equals(new PreferenceManager(getApplicationContext()).getString(Constant.MOBILE)))
-            //strMobile = new PreferenceManager(getApplicationContext()).getString(Constant.MOBILE);//mBinding.etMobileNumber.getText().toString().trim();
             strPasswordOtp = mBinding.tilPasswordOtp.getEditText().getText().toString().trim();
             if (isOtpSent && registerLoginModel.getNewOTP().equals(strPasswordOtp)) {
                 doRegisterLogin(strMobile, "2", countryCode, strPasswordOtp, getDeviceId(getActivity()), "Q");
@@ -188,7 +185,7 @@ public class ExistingUserFragment extends BaseFragment {
         Log.d(TAG, "Case2 = : E");
 
         ProgressDialog.getInstance().show(getActivity());
-        Call<RegisterLoginModel> call = apiService.doRegisterLogin(
+        Call<RegisterLoginModel> call = getApiService().doRegisterLogin(
                 AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key4), mobile),
                 caseR,
                 countryCode,
@@ -253,8 +250,7 @@ public class ExistingUserFragment extends BaseFragment {
 
 
     private void callOfflineApi(String u_user_id) {
-        Log.d(TAG, "PRACTICE UserId : " + u_user_id);
-        Call<LocalDataResponse> call = apiService.fetchLocalDataApi(u_user_id, getDeviceId(getActivity()), Constant.forcerefresh);
+        Call<LocalDataResponse> call = getApiService().fetchLocalDataApi(getUserId(getActivity()), getDeviceId(getActivity()), Constant.forcerefresh);
         call.enqueue(new Callback<LocalDataResponse>() {
             @Override
             public void onResponse(Call<LocalDataResponse> call, retrofit2.Response<LocalDataResponse> response) {
@@ -272,7 +268,6 @@ public class ExistingUserFragment extends BaseFragment {
                             executor.execute(() -> mAppRepository.insertTests(newList));
                         }
                     }
-
                     navigateOnHomeScreen();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -289,13 +284,17 @@ public class ExistingUserFragment extends BaseFragment {
     }
 
     private void navigateOnHomeScreen() {
-        if (countDownTimer != null) {
-            countDownTimer.cancel();
+        try {
+            if (countDownTimer != null) {
+                countDownTimer.cancel();
+            }
+            TinyDB.getInstance(getActivity()).putBoolean(Constant.IS_EDUCATION_ADDED, false);
+            Intent i = new Intent(getActivity(), MainActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(i);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        TinyDB.getInstance(getActivity()).putBoolean(Constant.IS_EDUCATION_ADDED, false);
-        Intent i = new Intent(getActivity(), MainActivity.class);
-        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(i);
     }
 
 

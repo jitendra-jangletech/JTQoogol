@@ -84,9 +84,6 @@ public class FriendReqAdapter extends RecyclerView.Adapter<FriendReqAdapter.View
     @Override
     public void onBindViewHolder(@NonNull FriendReqAdapter.ViewHolder holder, int position) {
         FriendRequest connections = connectionsList.get(position);
-        /*holder.connectionItemBinding.tvUserName.setText(
-                AESSecurities.getInstance().decrypt(TinyDB.getInstance(activity).getString(Constant.cf_key1), connections.getU_first_name() + " "
-                        + AESSecurities.getInstance().decrypt(TinyDB.getInstance(activity).getString(Constant.cf_key2), connections.getU_last_name())));*/
         holder.connectionItemBinding.tvUserName.setText(connections.getU_first_name() + " " + connections.getU_last_name());
         try {
             if (connections.getProf_pic() != null && !connections.getProf_pic().isEmpty()) {
@@ -143,7 +140,6 @@ public class FriendReqAdapter extends RecyclerView.Adapter<FriendReqAdapter.View
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
         }
 
 
@@ -184,7 +180,6 @@ public class FriendReqAdapter extends RecyclerView.Adapter<FriendReqAdapter.View
                     bundle.putInt(CALL_FROM, connectonId);
                     bundle.putString(Constant.fetch_profile_id, connections.getCn_user_id_2());
                     listener.showProfileClick(bundle);
-//                    NavHostFragment.findNavController(this).navigate(R.id.nav_edit_profile,bundle);
                     break;
 
             }
@@ -198,7 +193,6 @@ public class FriendReqAdapter extends RecyclerView.Adapter<FriendReqAdapter.View
         if (position == connectionsList.size() && connectionsList.size() >= 25) {
             listener.onBottomReached(connectionsList.size());
         }
-
     }
 
     @Override
