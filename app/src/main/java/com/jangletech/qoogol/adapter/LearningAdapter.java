@@ -250,16 +250,18 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         try {
             LearningQuestionsNew learningQuestions = learningQuestionsList.get(position);
             if (getItemViewType(position) == Integer.parseInt(FILL_THE_BLANKS)) {
-                fillintheblanksBinding.setQuestion(learningQuestions);
-                fillintheblanksBinding.categoryTextview.setText("Fill the Blanks");
-                setData(learningQuestions, fillintheblanksBinding.questionMathview, fillintheblanksBinding.questionTextview,
-                        fillintheblanksBinding.questiondescTextview, fillintheblanksBinding.questiondescTextviewMath,
-                        fillintheblanksBinding.saveQue, fillintheblanksBinding.like, fillintheblanksBinding.favorite,
-                        fillintheblanksBinding.queImg1, fillintheblanksBinding.imgRecycler);
+                FilltheBlanksHolder filltheBlanksHolder = (FilltheBlanksHolder)holder;
+                filltheBlanksHolder.mBinding.setQuestion(learningQuestions);
+                filltheBlanksHolder.mBinding.categoryTextview.setText("Fill the Blanks");
+                setData(learningQuestions, filltheBlanksHolder.mBinding.questionMathview, filltheBlanksHolder.mBinding.questionTextview,
+                        filltheBlanksHolder.mBinding.questiondescTextview, filltheBlanksHolder.mBinding.questiondescTextviewMath,
+                        filltheBlanksHolder.mBinding.saveQue, filltheBlanksHolder.mBinding.like, filltheBlanksHolder.mBinding.favorite,
+                        filltheBlanksHolder.mBinding.queImg1, filltheBlanksHolder.mBinding.imgRecycler);
             } else if (getItemViewType(position) == Integer.parseInt(LONG_ANSWER)) {
-                longansBinding.setQuestion(learningQuestions);
-                longansBinding.categoryTextview.setText("Long Answer");
-                setData(learningQuestions, longansBinding.questionMathview, longansBinding.questionTextview, longansBinding.questiondescTextview, longansBinding.questionMathview, longansBinding.saveQue, longansBinding.like, longansBinding.favorite, longansBinding.queImg1, longansBinding.imgRecycler);
+                LongAnsHolder longAnsHolder = (LongAnsHolder)holder;
+                longAnsHolder.mBinding.setQuestion(learningQuestions);
+                longAnsHolder.mBinding.categoryTextview.setText("Long Answer");
+                setData(learningQuestions, longAnsHolder.mBinding.questionMathview, longAnsHolder.mBinding.questionTextview, longAnsHolder.mBinding.questiondescTextview, longAnsHolder.mBinding.questionMathview, longAnsHolder.mBinding.saveQue, longAnsHolder.mBinding.like, longAnsHolder.mBinding.favorite, longAnsHolder.mBinding.queImg1, longAnsHolder.mBinding.imgRecycler);
             } else if (getItemViewType(position) == Integer.parseInt(ONE_LINE_ANSWER)) {
                 onelineansBinding.setQuestion(learningQuestions);
                 onelineansBinding.categoryTextview.setText("Short Answer");
@@ -396,7 +398,7 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public long getItemId(int position) {
-        return position;
+        return learningQuestionsList.get(position).getQuestion_id();
     }
 
     @Override
@@ -810,6 +812,8 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 mBinding.timerLayout.setVisibility(View.VISIBLE);
                 mBinding.close.setVisibility(View.VISIBLE);
                 mBinding.expand.setVisibility(View.GONE);
+                mBinding.resetLabel.setVisibility(View.VISIBLE);
+                mBinding.reset.setVisibility(View.VISIBLE);
                 countDownTimer = setTimer(mBinding.tvtimer, 0, 0);
 
 
@@ -834,6 +838,8 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 mBinding.timerLayout.setVisibility(View.GONE);
                 mBinding.expand.setVisibility(View.VISIBLE);
                 mBinding.close.setVisibility(View.GONE);
+                mBinding.resetLabel.setVisibility(View.GONE);
+                mBinding.reset.setVisibility(View.GONE);
             });
 
             mBinding.askDoubt.setOnClickListener(v -> {
@@ -1368,6 +1374,8 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 LearningQuestionsNew learningQuestions = learningQuestionsList.get(getAdapterPosition());
                 mBinding.expandableLayout.setVisibility(View.VISIBLE);
                 mBinding.timerLayout.setVisibility(View.VISIBLE);
+                mBinding.resetLabel.setVisibility(View.VISIBLE);
+                mBinding.reset.setVisibility(View.VISIBLE);
                 mBinding.close.setVisibility(View.VISIBLE);
                 mBinding.expand.setVisibility(View.GONE);
                 countDownTimer = setTimer(mBinding.tvtimer, 0, 0);
@@ -1393,6 +1401,8 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 mBinding.timerLayout.setVisibility(View.GONE);
                 mBinding.expand.setVisibility(View.VISIBLE);
                 mBinding.close.setVisibility(View.GONE);
+                mBinding.resetLabel.setVisibility(View.GONE);
+                mBinding.reset.setVisibility(View.GONE);
             });
 
             mBinding.reset.setOnClickListener(v -> reset());
@@ -1763,7 +1773,6 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     break;
             }
         }
-
 
         public void reset() {
             paired.clear();
