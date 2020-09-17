@@ -263,13 +263,15 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 longAnsHolder.mBinding.categoryTextview.setText("Long Answer");
                 setData(learningQuestions, longAnsHolder.mBinding.questionMathview, longAnsHolder.mBinding.questionTextview, longAnsHolder.mBinding.questiondescTextview, longAnsHolder.mBinding.questionMathview, longAnsHolder.mBinding.saveQue, longAnsHolder.mBinding.like, longAnsHolder.mBinding.favorite, longAnsHolder.mBinding.queImg1, longAnsHolder.mBinding.imgRecycler);
             } else if (getItemViewType(position) == Integer.parseInt(ONE_LINE_ANSWER)) {
-                onelineansBinding.setQuestion(learningQuestions);
-                onelineansBinding.categoryTextview.setText("Short Answer");
-                setData(learningQuestions, onelineansBinding.questionMathview, onelineansBinding.questionTextview, onelineansBinding.questiondescTextview, onelineansBinding.questionMathview, onelineansBinding.saveQue, onelineansBinding.like, onelineansBinding.favorite, onelineansBinding.queImg1, onelineansBinding.imgRecycler);
+                OneLineAnsHolder oneLineAnsHolder = (OneLineAnsHolder)holder;
+                oneLineAnsHolder.mBinding.setQuestion(learningQuestions);
+                oneLineAnsHolder.mBinding.categoryTextview.setText("Short Answer");
+                setData(learningQuestions, oneLineAnsHolder.mBinding.questionMathview, oneLineAnsHolder.mBinding.questionTextview, oneLineAnsHolder.mBinding.questiondescTextview, oneLineAnsHolder.mBinding.questionMathview, oneLineAnsHolder.mBinding.saveQue, oneLineAnsHolder.mBinding.like, oneLineAnsHolder.mBinding.favorite, oneLineAnsHolder.mBinding.queImg1, oneLineAnsHolder.mBinding.imgRecycler);
             } else if (getItemViewType(position) == Integer.parseInt(TRUE_FALSE)) {
-                truefalseBinding.setQuestion(learningQuestions);
-                truefalseBinding.categoryTextview.setText("True False");
-                setData(learningQuestions, truefalseBinding.questionMathview, truefalseBinding.questionTextview, truefalseBinding.questiondescTextview, truefalseBinding.questionMathview, truefalseBinding.saveQue, truefalseBinding.like, truefalseBinding.favorite, truefalseBinding.queImg1, truefalseBinding.imgRecycler);
+                TrueFalseHolder trueFalseHolder = (TrueFalseHolder) holder;
+                trueFalseHolder.mBinding.setQuestion(learningQuestions);
+                trueFalseHolder.mBinding.categoryTextview.setText("True False");
+                setData(learningQuestions, trueFalseHolder.mBinding.questionMathview, trueFalseHolder.mBinding.questionTextview, trueFalseHolder.mBinding.questiondescTextview, trueFalseHolder.mBinding.questionMathview, trueFalseHolder.mBinding.saveQue, trueFalseHolder.mBinding.like, trueFalseHolder.mBinding.favorite, trueFalseHolder.mBinding.queImg1, trueFalseHolder.mBinding.imgRecycler);
             } else if (getItemViewType(position) == Integer.parseInt(SCQ)) {
                 scqBinding.setQuestion(learningQuestions);
                 scqBinding.categoryTextview.setText("SCQ");
