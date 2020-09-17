@@ -200,6 +200,7 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
 
         learningFragmentBinding.learningSwiperefresh.setOnRefreshListener(() -> {
             mViewModel.pageCount = "0";
+            questionsNewList.clear();
             mViewModel.fetchQuestionData("", params);
             dismissRefresh(learningFragmentBinding.learningSwiperefresh);
             mViewModel.getQuestionList().observe(getViewLifecycleOwner(), questionsList -> {
@@ -252,7 +253,7 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
             dismissRefresh(learningFragmentBinding.learningSwiperefresh);
             learningFragmentBinding.tvNoQuest.setVisibility(View.VISIBLE);
         }
-
+        if (isFilterApplied || isSettingsApplied)
         questionsNewList.clear();
         questionsNewList.addAll(questionsList);
         initRecycler();
@@ -409,6 +410,8 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
         params.put(Constant.q_type, "");
         params.put(Constant.q_avg_ratings, "");
         params.put(Constant.q_diff_level, "");
+        mViewModel.pageCount = "0";
+        questionsFilteredList.clear();
         mViewModel.fetchQuestionData("", params);
     }
 
@@ -421,8 +424,11 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
         questionsFilteredList.clear();
         setFilterIcon(filterMenu, getActivity(), true);
         mViewModel.getFilterQuestionList().observe(getViewLifecycleOwner(), questionsList -> {
-            if (isFilterApplied)
+            if (isFilterApplied) {
+                questionsNewList.clear();
                 setData(questionsList);
+
+            }
         });
     }
 

@@ -11,14 +11,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.widget.AbsListView;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.DoubtAdapter;
 import com.jangletech.qoogol.database.repo.AppRepository;
@@ -30,14 +28,12 @@ import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import retrofit2.Call;
 import retrofit2.Callback;
-
 import static com.jangletech.qoogol.util.AppUtils.getDeviceId;
 import static com.jangletech.qoogol.util.Constant.que_doubts;
 
@@ -115,6 +111,7 @@ public class DoubtListingDialog extends Dialog implements DoubtAdapter.onItemCli
         });
     }
 
+
     private void dismissRefresh(SwipeRefreshLayout doubtSwiperefresh) {
         if (doubtSwiperefresh.isRefreshing())
             doubtSwiperefresh.setRefreshing(false);
@@ -180,9 +177,8 @@ public class DoubtListingDialog extends Dialog implements DoubtAdapter.onItemCli
                 }
             }
         });
-
-
     }
+
 
 
     public boolean isAppInstalled() {
@@ -194,6 +190,7 @@ public class DoubtListingDialog extends Dialog implements DoubtAdapter.onItemCli
         }
         return false;
     }
+
 
     private void callChatChilliApp(Bundle bundle) {
         if (isAppInstalled()) {
