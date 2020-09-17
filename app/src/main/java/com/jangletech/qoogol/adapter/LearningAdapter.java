@@ -320,8 +320,8 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 questionTextview.setVisibility(View.GONE);
 
             } else {
-                mathview.setVisibility(View.VISIBLE);
-                questionTextview.setVisibility(View.GONE);
+                mathview.setVisibility(View.GONE);
+                questionTextview.setVisibility(View.VISIBLE);
             }
 
             if (learningQuestions.getQuestiondesc().contains("\\")) {
