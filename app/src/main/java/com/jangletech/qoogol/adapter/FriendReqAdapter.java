@@ -276,7 +276,6 @@ public class FriendReqAdapter extends RecyclerView.Adapter<FriendReqAdapter.View
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ConnectionItemBinding connectionItemBinding;
-
         public ViewHolder(@NonNull ConnectionItemBinding itemView) {
             super(itemView.getRoot());
             this.connectionItemBinding = itemView;
