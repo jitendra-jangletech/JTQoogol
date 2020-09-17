@@ -19,7 +19,9 @@ import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.activities.BaseActivity;
 import com.jangletech.qoogol.adapter.LearningAdapter;
 import com.jangletech.qoogol.databinding.LearningFragmentBinding;
+import com.jangletech.qoogol.dialog.CommentDialog;
 import com.jangletech.qoogol.dialog.ProgressDialog;
+import com.jangletech.qoogol.dialog.PublicProfileDialog;
 import com.jangletech.qoogol.model.LearningQuestionsNew;
 import com.jangletech.qoogol.model.ProcessQuestion;
 import com.jangletech.qoogol.retrofit.ApiClient;
@@ -44,7 +46,7 @@ import static com.jangletech.qoogol.util.Constant.profile;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FavQueFragment extends BaseFragment implements LearningAdapter.onIconClick {
+public class FavQueFragment extends BaseFragment implements LearningAdapter.onIconClick, CommentDialog.CommentClickListener,PublicProfileDialog.PublicProfileClickListener {
 
     private static final String TAG = "FavQueFragment";
     private LearningFragmentBinding learningFragmentBinding;
@@ -165,7 +167,8 @@ public class FavQueFragment extends BaseFragment implements LearningAdapter.onIc
 
     @Override
     public void onCommentClick(LearningQuestionsNew learningQuestionsNew, int pos) {
-
+        CommentDialog commentDialog = new CommentDialog(getActivity(), learningQuestionsNew.getQuestion_id(), false, this);
+        commentDialog.show();
     }
 
     @Override
@@ -194,5 +197,31 @@ public class FavQueFragment extends BaseFragment implements LearningAdapter.onIc
     @Override
     public void onFavClick() {
         mViewModel.fetchFavQuestionData(learningFragmentBinding.learningSwiperefresh);
+    }
+
+    @Override
+    public void onCommentClick(String userId) {
+        PublicProfileDialog publicProfileDialog = new PublicProfileDialog(getActivity(), userId, this);
+        publicProfileDialog.show();
+    }
+
+    @Override
+    public void onBackClick(int count) {
+
+    }
+
+    @Override
+    public void onFriendUnFriendClick() {
+
+    }
+
+    @Override
+    public void onFollowUnfollowClick() {
+
+    }
+
+    @Override
+    public void onViewImage(String path) {
+
     }
 }

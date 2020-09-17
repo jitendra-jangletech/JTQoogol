@@ -444,7 +444,6 @@ public class Constant {
     public static final String requests = "R";
     public static final String friendrequests = "FRR";
     public static final String followrequests = "FLR";
-
     public static final String sent_friend_req = "C";
     public static final String remove_connection = "X";
     public static final String accept_follow_requests = "AF";
@@ -455,6 +454,7 @@ public class Constant {
     public static final String unblock = "U";
     public static final String follow = "F";
     public static final String unfollow = "UF";
+    public static final String remove_follower = "XF";
 
 
     //Filters

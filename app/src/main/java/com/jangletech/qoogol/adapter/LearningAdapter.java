@@ -320,8 +320,8 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 questionTextview.setVisibility(View.GONE);
 
             } else {
-                mathview.setVisibility(View.VISIBLE);
-                questionTextview.setVisibility(View.GONE);
+                mathview.setVisibility(View.GONE);
+                questionTextview.setVisibility(View.VISIBLE);
             }
 
             if (learningQuestions.getQuestiondesc().contains("\\")) {
@@ -673,7 +673,7 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
                             } else {
                                 learningQuestionsNew.setIsSave("true");
-                                Glide.with(activity).load(activity.getResources().getDrawable(R.drawable.ic_save_black)).into(learningItemBinding.saveQue);
+                                onValueChhangeListener.onSaveChange(R.drawable.ic_save_black);
                                 executor.execute(() -> new AppRepository(activity).insertQuestion(copyFields(learningQuestionsNew)));
                             }
 
