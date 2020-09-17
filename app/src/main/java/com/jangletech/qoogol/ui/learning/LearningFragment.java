@@ -253,8 +253,8 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
             dismissRefresh(learningFragmentBinding.learningSwiperefresh);
             learningFragmentBinding.tvNoQuest.setVisibility(View.VISIBLE);
         }
-        if (isFilterApplied || isSettingsApplied)
-        questionsNewList.clear();
+//        if (isFilterApplied || isSettingsApplied)
+//        questionsNewList.clear();
         questionsNewList.addAll(questionsList);
         initRecycler();
 
