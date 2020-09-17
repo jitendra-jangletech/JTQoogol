@@ -56,7 +56,7 @@ public class LearningViewModel extends AndroidViewModel {
     PreferenceManager mSettings;
     List<LearningQuestionsNew> questionsFilteredList;
     MutableLiveData<List<LearningQuestionsNew>> filterQueList;
-    String pageCount;
+    String pageCount,prev_count;
     Activity activity;
 
     public LearningViewModel(Application application) {
@@ -67,6 +67,7 @@ public class LearningViewModel extends AndroidViewModel {
         questionsFilteredList=new ArrayList<>();
         filterQueList=new MutableLiveData<>();
         pageCount="0";
+        prev_count="0";
     }
 
     LiveData<List<LearningQuestionsNew>> getQuestionList() {
@@ -162,6 +163,7 @@ public class LearningViewModel extends AndroidViewModel {
                     if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
 
                         if (response.body().getQuestion_list()!=null && response.body().getQuestion_list().size()>0) {
+                            prev_count=pageCount;
                             pageCount=response.body().getRow_count();
                             ExecutorService executor = Executors.newSingleThreadExecutor();
                             executor.execute(() -> mAppRepository.insertQuestions(response.body().getQuestion_list()));
