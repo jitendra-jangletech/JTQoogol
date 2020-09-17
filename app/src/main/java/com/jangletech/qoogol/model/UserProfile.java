@@ -383,7 +383,7 @@ public class UserProfile {
     }
 
     public String getU1FollowsU2() {
-        return u1FollowsU2!=null?u1FollowsU2:"";
+        return u1FollowsU2 != null ? u1FollowsU2 : "";
     }
 
     public void setU1FollowsU2(String u1FollowsU2) {
@@ -394,7 +394,7 @@ public class UserProfile {
 
 
     public String getIsConnected() {
-        return isConnected!=null?isConnected:"";
+        return isConnected != null ? isConnected : "";
     }
 
     public void setIsConnected(String isConnected) {
@@ -411,7 +411,7 @@ public class UserProfile {
     }
 
     public String getU_StateId() {
-        return u_StateId==null?"":u_StateId;
+        return u_StateId == null ? "" : u_StateId;
     }
 
 
@@ -429,11 +429,11 @@ public class UserProfile {
     }
 
     public String getU_BoardId() {
-        return u_BoardId==null?"":u_BoardId;
+        return u_BoardId == null ? "" : u_BoardId;
     }
 
     public String getU_DegreeId() {
-        return u_DegreeId==null?"":u_DegreeId;
+        return u_DegreeId == null ? "" : u_DegreeId;
     }
 
 
@@ -473,7 +473,7 @@ public class UserProfile {
     }
 
     public String getU_CollegeId() {
-        return u_CollegeId==null?"":u_CollegeId;
+        return u_CollegeId == null ? "" : u_CollegeId;
     }
 
     public String getU_Nationality() {
@@ -523,7 +523,7 @@ public class UserProfile {
 
 
     public String getU_NationalityId() {
-        return u_NationalityId==null?"":u_NationalityId;
+        return u_NationalityId == null ? "" : u_NationalityId;
     }
 
 
@@ -920,7 +920,7 @@ public class UserProfile {
     }
 
     public String getIsInitiated_by_u1() {
-        return isInitiated_by_u1!=null?isInitiated_by_u1:"";
+        return isInitiated_by_u1 != null ? isInitiated_by_u1 : "";
     }
 
     public void setIsInitiated_by_u1(String isInitiated_by_u1) {
@@ -928,7 +928,7 @@ public class UserProfile {
     }
 
     public String getIsInitiated_by_u2() {
-        return isInitiated_by_u2!=null?isInitiated_by_u2:"";
+        return isInitiated_by_u2 != null ? isInitiated_by_u2 : "";
     }
 
     public void setIsInitiated_by_u2(String isInitiated_by_u2) {
@@ -936,7 +936,7 @@ public class UserProfile {
     }
 
     public String getNotificationEnabled() {
-        return notificationEnabled;
+        return notificationEnabled != null ? notificationEnabled : "";
     }
 
     public void setNotificationEnabled(String notificationEnabled) {

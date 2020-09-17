@@ -31,6 +31,7 @@ import com.jangletech.qoogol.ui.personal_info.PersonalInfoViewModel;
 import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
+import com.jangletech.qoogol.util.QoogolApp;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -42,7 +43,7 @@ public class SettingsFragment extends BaseFragment implements UniversalDialog.Di
     private SettingsViewModel mViewModel;
     private PersonalInfoViewModel personalInfoViewModel;
     private Context mContext;
-    private UserProfile profile;
+    private UserProfile profile = new UserProfile();
     private SettingsFragmentBinding mBinding;
 
     public static SettingsFragment newInstance() {
@@ -68,19 +69,29 @@ public class SettingsFragment extends BaseFragment implements UniversalDialog.Di
         mViewModel = ViewModelProviders.of(this).get(SettingsViewModel.class);
         personalInfoViewModel = ViewModelProviders.of(this).get(PersonalInfoViewModel.class);
 
-//        personalInfoViewModel.getUserProfile(getUserId(getActivity())).observe(getViewLifecycleOwner(), userProfile -> {
-//            Log.d(TAG, "onChanged : " + userProfile);
-//            if (userProfile != null) {
-//                profile = userProfile;
-//            }
-//        });
         fetchUserProfile();
+        personalInfoViewModel.getUserProfile(getUserId(getActivity())).observe(getViewLifecycleOwner(), userProfile -> {
+            Log.d(TAG, "onChanged : " + userProfile);
+            if (userProfile != null) {
+                profile = userProfile;
+                setMuteCheckBox(userProfile.getNotificationEnabled());
+            }
+        });
+
 
         mBinding.tvLogout.setOnClickListener(v -> {
-            UniversalDialog universalDialog = new UniversalDialog(mContext, "Confirm Log Out",
-                    "you are signing out of your Qoogol app on this device",
-                    "Logout", "Cancel", this);
-            universalDialog.show();
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogStyle);
+            builder.setTitle("Confirm Logout")
+                    .setMessage("Are you sure, you want to logout?")
+                    .setPositiveButton("Logout", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            logout("O");
+                        }
+                    })
+                    .setNegativeButton("Cancel", null)
+                    .show();
+
         });
 
         mBinding.tvMoreSettings.setOnClickListener(v -> {
@@ -116,9 +127,30 @@ public class SettingsFragment extends BaseFragment implements UniversalDialog.Di
         });
 
         mBinding.tvMuteGroupAlerts.setOnClickListener(v -> {
-            //showToast(""+mBinding.tvMuteGroupAlerts.isChecked());
-            profile.setNotificationEnabled(mBinding.tvMuteGroupAlerts.isChecked()?"1":"0");
-           updateNotificationSetting(profile);
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogStyle);
+            builder.setTitle("Alert")
+                    .setMessage("Change in this setting will also effect in CHATCHILLI App, associated with same mobile number.\n" +
+                            "would you like to continue?")
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Log.d(TAG, "onClick Network : " + QoogolApp.getInstance().hasNetwork());
+                            if (QoogolApp.getInstance().hasNetwork()) {
+                                profile.setNotificationEnabled(mBinding.tvMuteGroupAlerts.isChecked() ? "1" : "0");
+                                updateNotificationSetting(profile);
+                            } else {
+                                setMuteCheckBox(profile.getNotificationEnabled());
+                            }
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            setMuteCheckBox(profile.getNotificationEnabled());
+                        }
+                    })
+                    .setCancelable(false)
+                    .show();
         });
 
         mBinding.tvBlockedList.setOnClickListener(v -> {
@@ -138,6 +170,14 @@ public class SettingsFragment extends BaseFragment implements UniversalDialog.Di
                     }).setNegativeButton("No", null)
                     .show();
         });
+    }
+
+    private void setMuteCheckBox(String flag) {
+        if (flag.equalsIgnoreCase("true")) {
+            mBinding.tvMuteGroupAlerts.setChecked(true);
+        } else {
+            mBinding.tvMuteGroupAlerts.setChecked(false);
+        }
     }
 
     private void logout(String status) {
@@ -183,10 +223,10 @@ public class SettingsFragment extends BaseFragment implements UniversalDialog.Di
                 getDeviceId(getActivity()),
                 userProfile.getFirstName(),
                 userProfile.getLastName(),
-                "n",
+                "'n'",
                 userProfile.getMobileNumber(),
                 userProfile.getEmailAddress(),
-                "i",
+                "'i'",
                 userProfile.getPassword(),
                 userProfile.getDob(),
                 userProfile.getStrTagLine(),
@@ -197,8 +237,8 @@ public class SettingsFragment extends BaseFragment implements UniversalDialog.Di
                 userProfile.getW_lm_id_array(),
                 userProfile.getStrGender(),
                 userProfile.getUserName(),
-                userProfile.isPrivate(),
-                "1"
+                userProfile.isPrivate() ? "1" : "0",
+                mBinding.tvMuteGroupAlerts.isChecked() ? "1" : "0"
         );
 
         call.enqueue(new Callback<UserProfileResponse>() {
@@ -207,7 +247,7 @@ public class SettingsFragment extends BaseFragment implements UniversalDialog.Di
                 ProgressDialog.getInstance().dismiss();
                 if (response != null && response.body() != null) {
                     if (response.body().getResponseCode().equals("200")) {
-
+                        showToast("Updated Successfully.");
                     } else {
                         showErrorDialog(requireActivity(), response.body().getResponseCode(), response.body().getMessage());
                     }
@@ -217,6 +257,8 @@ public class SettingsFragment extends BaseFragment implements UniversalDialog.Di
             @Override
             public void onFailure(Call<UserProfileResponse> call, Throwable t) {
                 ProgressDialog.getInstance().dismiss();
+                Log.d(TAG, "onFailure: " + profile.getNotificationEnabled());
+                setMuteCheckBox(profile.getNotificationEnabled());
                 apiCallFailureDialog(t);
             }
         });
@@ -230,7 +272,7 @@ public class SettingsFragment extends BaseFragment implements UniversalDialog.Di
             public void onResponse(Call<UserProfile> call, Response<UserProfile> response) {
                 ProgressDialog.getInstance().dismiss();
                 if (response.body() != null && response.body().getResponseCode().equals("200")) {
-                    profile = response.body();
+                    personalInfoViewModel.insert(response.body());
                 } else if (response.body().getResponseCode().equals("501")) {
                     resetSettingAndLogout();
                 } else {

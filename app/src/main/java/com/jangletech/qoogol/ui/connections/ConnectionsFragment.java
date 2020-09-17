@@ -82,7 +82,6 @@ public class ConnectionsFragment extends BaseFragment {
         adapter.addFragment(new FollowersFragment(), getContext().getString(R.string.followers));
         adapter.addFragment(new FollowingFragment(), getString(R.string.following));
         viewPager.setAdapter(adapter);
-
         viewPager.setCurrentItem(position);
     }
 

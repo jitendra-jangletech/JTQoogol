@@ -83,6 +83,7 @@ public class NotificationsFragment extends BaseFragment implements NotificationA
         mBinding.notificationRecyclerView.setHasFixedSize(true);
         mBinding.notificationRecyclerView.setLayoutManager(linearLayoutManager);
         notificationAdapter = new NotificationAdapter(getActivity(), notificationList, this);
+        notificationAdapter.setHasStableIds(true);
         mBinding.notificationRecyclerView.setAdapter(notificationAdapter);
         return mBinding.getRoot();
     }

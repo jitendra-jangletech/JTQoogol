@@ -250,7 +250,7 @@ public class StartResumeTestResponse {
     }
 
     public String getTm_duration() {
-        return tm_duration;
+        return tm_duration!=null?tm_duration:"";
     }
 
     public void setTm_duration(String tm_duration) {

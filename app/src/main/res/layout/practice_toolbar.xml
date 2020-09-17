@@ -2,22 +2,49 @@
 <androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/practiceToolBar"
     android:background="@color/colorPrimary"
     android:elevation="@dimen/_10sdp">
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <TextView
+            android:textSize="@dimen/_10ssp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             android:id="@+id/tvPracticeTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Practice Long Test"
             android:textColor="@color/colorWhite" />
 
-    </RelativeLayout>
+            <TextView
+                android:padding="@dimen/_5sdp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvPracticeTitle"
+                android:gravity="center"
+                android:drawablePadding="@dimen/_5sdp"
+                android:drawableLeft="@drawable/ic_pause_circle_outline"
+                android:id="@+id/tvPracticeTimer"
+                android:textColor="@color/colorWhite"
+                android:text="00:00:00"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        <ImageView
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_margin="@dimen/_10sdp"
+            android:background="@drawable/ic_navigation"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:id="@+id/drawerIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </androidx.appcompat.widget.Toolbar>

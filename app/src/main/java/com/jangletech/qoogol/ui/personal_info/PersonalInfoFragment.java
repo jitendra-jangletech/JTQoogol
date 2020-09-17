@@ -107,6 +107,7 @@ public class PersonalInfoFragment extends BaseFragment {
     private Call<UserProfile> call;
     private boolean isFragmentVisible = false;
     private Calendar mCalenderMax, mCalender;
+    private boolean isClicked = false;
 
     public static PersonalInfoFragment newInstance() {
         return new PersonalInfoFragment();
@@ -172,6 +173,7 @@ public class PersonalInfoFragment extends BaseFragment {
             }
         });
 
+
         mViewModel.getUserNameData().observe(getViewLifecycleOwner(), new Observer<GenerateVerifyUserName>() {
             @Override
             public void onChanged(GenerateVerifyUserName generateVerifyUserName) {
@@ -184,6 +186,19 @@ public class PersonalInfoFragment extends BaseFragment {
 
         mBinding.userProfilePic.setOnClickListener(v -> {
             loadImage();
+        });
+
+        /*mBinding.switchPrivate.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isClicked) {
+                    mBinding.btnSave.performClick();
+                }
+            }
+        });*/
+
+        mBinding.switchPrivate.setOnClickListener(v -> {
+            mBinding.btnSave.performClick();
         });
 
         mBinding.etDob.addTextChangedListener(new TextWatcher() {
@@ -458,8 +473,11 @@ public class PersonalInfoFragment extends BaseFragment {
                 return;
             }
 
-            userInfo();
-
+            try {
+                userInfo();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         });
 
         mBinding.nationalityAutocompleteView.setOnItemClickListener((parent, view, position, id) -> {
@@ -629,7 +647,7 @@ public class PersonalInfoFragment extends BaseFragment {
         Log.d(TAG, "Focus First Name : " + AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key2), userProfileMap.get(Constant.u_last_name_encrypted)));
         Log.d(TAG, "Focus Mobile : " + AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key4), userProfileMap.get(Constant.u_mob_1_encrypted)));
 
-        Log.d(TAG, "updateUserProfile Private Switch : "+mBinding.switchPrivate.isChecked());
+        Log.d(TAG, "updateUserProfile Private Switch : " + mBinding.switchPrivate.isChecked());
 
         ProgressDialog.getInstance().show(requireActivity());
         Call<UserProfileResponse> call = getApiService().updateUserProfile(
@@ -654,8 +672,8 @@ public class PersonalInfoFragment extends BaseFragment {
                 String.valueOf(userProfileMap.get(Constant.w_lm_id_array)),
                 userProfileMap.get(Constant.u_gender),
                 userProfileMap.get(Constant.userName),
-                mBinding.switchPrivate.isChecked(),
-                profile.getNotificationEnabled()
+                mBinding.switchPrivate.isChecked() ? "1" : "0",
+                profile.getNotificationEnabled().equals("true") ? "1" : "0"
         );
 
         call.enqueue(new Callback<UserProfileResponse>() {
@@ -703,7 +721,6 @@ public class PersonalInfoFragment extends BaseFragment {
         call.enqueue(new Callback<UserProfile>() {
             @Override
             public void onResponse(Call<UserProfile> call, Response<UserProfile> response) {
-
                 if (response.body() != null && response.body().getResponseCode().equals("200")) {
                     mViewModel.insert(response.body());
                     if (flag.equalsIgnoreCase("FINISH"))

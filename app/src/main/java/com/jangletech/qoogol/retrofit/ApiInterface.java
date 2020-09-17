@@ -229,7 +229,7 @@ public interface ApiInterface {
                                                 @Field(Constant.w_lm_id_array) String w_lm_id_array,
                                                 @Field(Constant.u_gender) String gender,
                                                 @Field(Constant.userName) String userName,
-                                                @Field(Constant.u_private) boolean isPrivate,
+                                                @Field(Constant.u_private) String isPrivate,
                                                 @Field(Constant.u_notification_alerts) String alertFlag
     );
 
@@ -683,9 +683,9 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST(Constant.LOG_OUT_API)
     Call<VerifyResponse> logout(@Field(Constant.u_user_id) String userid,
-                                   @Field(Constant.device_id) String device_id,
-                                   @Field(Constant.u_status) String status,
-                                   @Field("200Q") String app);
+                                @Field(Constant.device_id) String device_id,
+                                @Field(Constant.u_status) String status,
+                                @Field("200Q") String app);
 
 
     @FormUrlEncoded
@@ -831,6 +831,5 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST(Constant.INVITE_CONTACTLIST)
     Call<SendInviteResponse> inviteContacts(@Field(Constant.u_user_id) String userid, @Field(Constant.device_id) String device_id, @Field("200Q") String app, @Field(Constant.GroupMembersList) String list);
-
 
 }

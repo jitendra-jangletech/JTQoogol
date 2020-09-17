@@ -6,7 +6,9 @@ import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -81,7 +83,8 @@ public class PracticeTestActivity extends BaseActivity implements
     private boolean isDialogItemClicked = false;
     private String testName = "";
     static CountDownTimer countDownTimer;
-    private TextView tvTitle;
+    private CountDownTimer testCountDownTimer;
+    private TextView tvTestTitle, tvTestTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,11 +92,28 @@ public class PracticeTestActivity extends BaseActivity implements
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_practice_test);
         mViewModel = new ViewModelProvider(this).get(StartTestViewModel.class);
         toolbar = findViewById(R.id.toolbar);
-        tvTitle = findViewById(R.id.tvPracticeTitle);
+        tvTestTitle = findViewById(R.id.tvPracticeTitle);
+        tvTestTimer = findViewById(R.id.tvPracticeTimer);
         practiceViewPager = findViewById(R.id.practice_viewpager);
         gson = new Gson();
         setupNavigationDrawer();
         setMargins(mBinding.marginLayout);
+
+
+        ImageView img = findViewById(R.id.drawerIcon);
+        img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mBinding.drawerLayout.openDrawer(Gravity.RIGHT);
+            }
+        });
+
+        tvTestTimer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
         if (getIntent() != null && getIntent().getStringExtra("FLAG") != null
                 && getIntent().getStringExtra("FLAG").equalsIgnoreCase("ATTEMPTED")) {
@@ -105,7 +125,7 @@ public class PracticeTestActivity extends BaseActivity implements
             @Override
             public void onChanged(@Nullable final List<TestQuestionNew> practiceQAList) {
                 if (practiceQAList != null) {
-                    Log.d(TAG, "onChanged: ");
+                    Log.d(TAG, "onChanged Test Duration : "+startTestResponse.getTm_duration());
                     questionsNewList = practiceQAList;
                     practiceViewPager.setOffscreenPageLimit(practiceQAList.size());
                     setQuestPaletAdapter();
@@ -140,8 +160,7 @@ public class PracticeTestActivity extends BaseActivity implements
             public void onChanged(StartResumeTestResponse startResumeTestResponse) {
                 if (startResumeTestResponse != null) {
                     startTestResponse = startResumeTestResponse;
-                    //tvTitle.setText(startResumeTestResponse.getTm_name());
-                    setTitle(startTestResponse.getTm_name());
+                    tvTestTitle.setText(startResumeTestResponse.getTm_name());
                     mBinding.tvTestTitle.setText(startTestResponse.getTm_name());
                     questionsNewList = startResumeTestResponse.getTestQuestionNewList();
                     setupViewPager(startResumeTestResponse);
@@ -277,9 +296,11 @@ public class PracticeTestActivity extends BaseActivity implements
     }
 
     private void setupViewPager(StartResumeTestResponse startResumeTestResponse) {
+        Log.d(TAG, "setupViewPager : "+startResumeTestResponse.getTm_duration());
         practiseViewPagerAdapter = new PractiseViewPagerAdapter(PracticeTestActivity.this, this, startResumeTestResponse, flag);
         practiceViewPager.setAdapter(practiseViewPagerAdapter);
         setTimerToSelectedPage(0);
+        setTestTimer(tvTestTimer);
     }
 
     private void setQuestPaletAdapter() {
@@ -625,6 +646,50 @@ public class PracticeTestActivity extends BaseActivity implements
         }
     }
 
+    private void setTestTimer(TextView timer) {
+        if (testCountDownTimer != null)
+            testCountDownTimer.cancel();
+
+        testCountDownTimer = new CountDownTimer(60 * 1000 * 60, 1000) {
+            int timerCountSeconds = 10;
+            int timerCountMinutes = 1;
+            int timerCountHours = 2;
+
+            public void onTick(long millisUntilFinished) {
+                if (timerCountSeconds > 0) {
+                    timerCountSeconds--;
+                } else {
+                    timerCountSeconds = 59;
+                    if (timerCountMinutes > 1) {
+                        timerCountMinutes--;
+                    } else {
+                        timerCountMinutes = 59;
+                        timerCountHours--;
+                    }
+                }
+
+                if (timerCountMinutes < 10) {
+                    if (timerCountSeconds < 10) {
+                        timer.setText(String.valueOf("0" + timerCountHours + ":0" + timerCountMinutes + ":0" + timerCountSeconds));
+                    } else {
+                        timer.setText(String.valueOf("0" + timerCountHours + ":0" + timerCountMinutes + ":" + timerCountSeconds));
+                    }
+                } else {
+                    if (timerCountSeconds < 10) {
+                        timer.setText(String.valueOf("0" + timerCountHours + ":" + timerCountMinutes + ":0" + timerCountSeconds));
+                    } else {
+                        timer.setText(String.valueOf("0" + timerCountHours + ":" + timerCountMinutes + ":" + timerCountSeconds));
+                    }
+                }
+            }
+
+            public void onFinish() {
+                timer.setText("00:00:00");
+            }
+        }.start();
+    }
+
+
     private void setTimerToSelectedPage(int pos) {
         int prevSeconds = 0;
         int prevMinutes = 0;
@@ -703,8 +768,6 @@ public class PracticeTestActivity extends BaseActivity implements
 
     @Override
     public void onSharedSuccess(int count) {
-        //TestQuestionNew testQuestionNew = questionsNewList.get(practiceViewPager.getCurrentItem());
-        //int prevCount = Integer.parseInt(testQuestionNew.getShares()) + count;
         updatePageCount("SHARE", count);
     }
 }
