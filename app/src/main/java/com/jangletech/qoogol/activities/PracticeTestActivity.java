@@ -6,7 +6,6 @@ import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ScrollView;
@@ -111,7 +110,17 @@ public class PracticeTestActivity extends BaseActivity implements
         tvTestTimer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                AlertDialog.Builder builder = new AlertDialog.Builder(PracticeTestActivity.this, R.style.AlertDialogStyle);
+                builder.setTitle("Pause Test")
+                        .setMessage("Are you sure, you want to pause this test?")
+                        .setPositiveButton("Pause", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                submitTestQuestions("P", "0");
+                            }
+                        })
+                        .setNegativeButton("Cancel", null)
+                        .show();
             }
         });
 
@@ -125,7 +134,7 @@ public class PracticeTestActivity extends BaseActivity implements
             @Override
             public void onChanged(@Nullable final List<TestQuestionNew> practiceQAList) {
                 if (practiceQAList != null) {
-                    Log.d(TAG, "onChanged Test Duration : "+startTestResponse.getTm_duration());
+                    Log.d(TAG, "onChanged Test Duration : " + startTestResponse.getTm_duration());
                     questionsNewList = practiceQAList;
                     practiceViewPager.setOffscreenPageLimit(practiceQAList.size());
                     setQuestPaletAdapter();
@@ -296,11 +305,11 @@ public class PracticeTestActivity extends BaseActivity implements
     }
 
     private void setupViewPager(StartResumeTestResponse startResumeTestResponse) {
-        Log.d(TAG, "setupViewPager : "+startResumeTestResponse.getTm_duration());
+        Log.d(TAG, "setupViewPager : " + startResumeTestResponse.getTm_duration());
         practiseViewPagerAdapter = new PractiseViewPagerAdapter(PracticeTestActivity.this, this, startResumeTestResponse, flag);
         practiceViewPager.setAdapter(practiseViewPagerAdapter);
         setTimerToSelectedPage(0);
-        setTestTimer(tvTestTimer);
+        setTestTimer(tvTestTimer, startResumeTestResponse.getTm_duration());
     }
 
     private void setQuestPaletAdapter() {
@@ -392,8 +401,6 @@ public class PracticeTestActivity extends BaseActivity implements
                     })
                     .setNegativeButton("Cancel", null)
                     .show();
-
-            //startActivity(new Intent(this, MainActivity.class));
         }
     }
 
@@ -411,12 +418,22 @@ public class PracticeTestActivity extends BaseActivity implements
     }
 
     private void submitTestQuestions(String testStatus, String obtainMarks) {
+        Log.d(TAG, "submitTestQuestions Test Duration : " + tvTestTimer.getText());
         SubmitTest submitTest = new SubmitTest();
         List<TestQuestionNew> submitTestQuestionList = new ArrayList<>();
         submitTest.setTm_id(startTestResponse.getTm_id());
         submitTest.setTt_id(String.valueOf(startTestResponse.getTtId()));
+        submitTest.setTt_duration_taken(tvTestTimer.getText().toString());
+        int count = 0;
         for (TestQuestionNew question : questionsNewList) {
+            View view = practiceViewPager.findViewWithTag(count);
+            if (view != null) {
+                TextView tvTimer = view.findViewById(R.id.tvtimer);
+                Log.d(TAG, "TestQuestion : " + tvTimer.getText().toString());
+                question.setTq_duration(tvTimer.getText().toString());
+            }
             submitTestQuestionList.add(question);
+            count++;
         }
         submitTest.setTestQuestionNewList(submitTestQuestionList);
         String json = gson.toJson(submitTest);
@@ -646,14 +663,20 @@ public class PracticeTestActivity extends BaseActivity implements
         }
     }
 
-    private void setTestTimer(TextView timer) {
+    private void setTestTimer(TextView timer, String duration) {
+
+        String timerDuration[] = duration.split(":", -1);
+        int hours = Integer.parseInt(timerDuration[0]);
+        int minutes = Integer.parseInt(timerDuration[1]);
+        int seconds = Integer.parseInt(timerDuration[2]);
+
         if (testCountDownTimer != null)
             testCountDownTimer.cancel();
 
         testCountDownTimer = new CountDownTimer(60 * 1000 * 60, 1000) {
-            int timerCountSeconds = 10;
-            int timerCountMinutes = 1;
-            int timerCountHours = 2;
+            int timerCountSeconds = seconds;
+            int timerCountMinutes = minutes;
+            int timerCountHours = hours;
 
             public void onTick(long millisUntilFinished) {
                 if (timerCountSeconds > 0) {
