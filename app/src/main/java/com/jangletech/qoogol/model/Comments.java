@@ -17,6 +17,28 @@ public class Comments {
         this.tlc_comment_text = commentText;
     }
 
+    @SerializedName(Constant.w_media_name)
+    private String mediaPath;
+
+    public String getMediaPath() {
+        return mediaPath != null ? mediaPath : "";
+    }
+
+    public void setMediaPath(String mediaPath) {
+        this.mediaPath = mediaPath;
+    }
+
+    public String getStorageId() {
+        return storageId != null ? storageId : "";
+    }
+
+    public void setStorageId(String storageId) {
+        this.storageId = storageId;
+    }
+
+    @SerializedName(Constant.blob_path)
+    private String storageId;
+
     @SerializedName(Constant.quest_comment_count)
     private int questCommentCount;
 

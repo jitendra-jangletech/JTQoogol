@@ -27,6 +27,7 @@ import com.jangletech.qoogol.model.InstituteResponse;
 import com.jangletech.qoogol.model.Language;
 import com.jangletech.qoogol.model.LearningQuestResponse;
 import com.jangletech.qoogol.model.LocalDataResponse;
+import com.jangletech.qoogol.model.MasterResponse;
 import com.jangletech.qoogol.model.NotificationResponse;
 import com.jangletech.qoogol.model.ProcessQuestion;
 import com.jangletech.qoogol.model.RegisterLoginModel;
@@ -108,6 +109,12 @@ public interface ApiInterface {
     Call<AppConfigResponse> fetchAppConfig(
             @Field(Constant.appName) String appName,
             @Field("126") String deviceId
+    );
+
+    @FormUrlEncoded
+    @POST(Constant.APP_MASTER)
+    Call<MasterResponse> fetchMaster(
+            @Field(Constant.mdt_type_id) String mdt_type_id
     );
 
     @FormUrlEncoded
@@ -195,6 +202,13 @@ public interface ApiInterface {
                                             @Part(Constant.appName) RequestBody appName,
                                             @Part(Constant.u_app_version) RequestBody appVersion,
                                             @Part(Constant.CASE) RequestBody casel,
+                                            @Part MultipartBody.Part image);
+
+    @Multipart
+    @POST(Constant.PROCESS_TEST)
+    Call<VerifyResponse> sendGifComment(@Part(Constant.u_user_id) RequestBody userId,
+                                            @Part(Constant.tm_id) RequestBody tmId,
+                                            @Part(Constant.CASE) RequestBody strCase,
                                             @Part MultipartBody.Part image);
 
     @FormUrlEncoded

@@ -1,5 +1,6 @@
 package com.jangletech.qoogol.util;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.provider.Settings;
@@ -21,6 +22,7 @@ import org.apache.commons.text.StringEscapeUtils;
 import org.joda.time.LocalDate;
 import org.joda.time.Period;
 
+import java.io.File;
 import java.lang.reflect.Type;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
@@ -138,7 +140,38 @@ public class AppUtils {
         }else{
             Toast.makeText(context, "Something Went Wrong!! \n"+msg, Toast.LENGTH_LONG).show();
         }
+    }
 
+    public static String getMedialUrl(Activity activity,String mdtId,String path){
+        Log.d(TAG, "getMedialUrl: "+TinyDB.getInstance(activity).getString(mdtId)+path);
+        return TinyDB.getInstance(activity).getString(mdtId)+path;
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    public static File createStickerGifyFile(Activity activity, String extension) {
+        String mFileName = System.currentTimeMillis() + "";
+        File storageDir = getDirectory(activity);
+        return new File(storageDir, mFileName + "." + extension);
+    }
+
+    public static File getDirectory(Context context) {
+        File directory = context.getExternalFilesDir("Qoogol");
+        if (directory != null) {
+            String path = directory.getAbsolutePath();
+            if (path.contains("/Android/")) {
+                path = path.substring(0, path.indexOf("/Android/"));
+                directory = new File(path, "Qoogol");
+                if (!directory.exists()) {
+                    if (directory.mkdir()) {
+                        return directory;
+                    }
+                } else {
+                    return directory;
+                }
+            }
+        }
+        Log.e(TAG, "error in creation of directory");
+        return context.getExternalFilesDir("ChatChilli");
     }
 
     public static void bounceAnim(Context context, View view) {

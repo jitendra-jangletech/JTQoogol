@@ -141,6 +141,16 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             holder.commentItemBinding.tvCommentCount.setVisibility(View.GONE);
         }
 
+        if(!comments.getStorageId().isEmpty()){
+            commentItemBinding.textCommentBody.setVisibility(View.GONE);
+            commentItemBinding.imgGif.setVisibility(View.VISIBLE);
+            Glide.with(activity)
+                    .load(AppUtils.getMedialUrl(activity, comments.getStorageId(),comments.getMediaPath()))
+                    .into(holder.commentItemBinding.imgGif);
+        }else{
+            commentItemBinding.textCommentBody.setVisibility(View.VISIBLE);
+        }
+
         Glide.with(activity)
                 .load(getProfileImageUrl(comments))
                 .apply(RequestOptions.circleCropTransform())
@@ -175,6 +185,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         });
         setAnimation(holder.commentItemBinding.getRoot(), position);
     }
+
 
     private void setAnimation(View viewToAnimate, int position) {
         if (position > lastPosition) {

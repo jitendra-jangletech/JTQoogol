@@ -2,16 +2,12 @@ package com.jangletech.qoogol.model;
 
 import com.google.gson.annotations.SerializedName;
 import com.jangletech.qoogol.util.Constant;
-
 import java.util.List;
 
 /**
  * Created by Pritali on 4/29/2020.
  */
 public class ProcessQuestion {
-
-//    @SerializedName(Constant._1223G)
-//    private int _1223G;
 
     @SerializedName(Constant.q_likes)
     private String likeCount;

@@ -101,7 +101,6 @@ public class PersonalInfoFragment extends BaseFragment {
     private boolean isMailVerified = false;
     private boolean isMobileVerified = false;
     private HashMap<String, String> userProfileMap;
-    //private ApiInterface apiService = ApiClient.getInstance().getApi();
     private String userid = "";
     private PreferenceManager mSettings;
     private Call<UserProfile> call;
@@ -1061,10 +1060,9 @@ public class PersonalInfoFragment extends BaseFragment {
             }
         } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            if (result != null && resultCode == RESULT_OK) {
+            if(result != null && resultCode == RESULT_OK) {
                 File imageFile = new File(result.getUri().getPath());
                 updateProfileImage(imageFile);
-                //new compressImageTask(mUserId, result.getUri(), requireActivity()).execute();
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
                 Toast.makeText(requireActivity(), error.getMessage(), Toast.LENGTH_LONG).show();

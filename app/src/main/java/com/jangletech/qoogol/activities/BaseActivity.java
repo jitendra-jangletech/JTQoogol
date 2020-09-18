@@ -65,6 +65,11 @@ public class BaseActivity extends AppCompatActivity {
         new PreferenceManager(getApplicationContext()).saveString(key, value);
     }
 
+    /*public String getTestDurationFormat(int minutes){
+        String temp = "";
+        int hours = minutes/60;
+    }*/
+
     public void noInternetError(Throwable t) {
         if (t instanceof UnknownHostException) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogStyle);

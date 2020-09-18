@@ -97,6 +97,7 @@ public class ExistingUserFragment extends BaseFragment {
         mBinding.login.setOnClickListener(v -> {
             mBinding.tilEmailMobileUserName.setError(null);
             mBinding.tilPasswordOtp.setError(null);
+
             if (isOtpSent && mBinding.tilPasswordOtp.getEditText().getText().toString().isEmpty()) {
                 mBinding.tilPasswordOtp.setError("Please enter valid password or otp");
                 return;

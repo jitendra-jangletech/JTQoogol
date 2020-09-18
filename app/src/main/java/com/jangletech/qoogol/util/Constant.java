@@ -216,6 +216,9 @@ public class Constant {
     public static String MATCH_PAIR = "11";
     public static String MATCH_PAIR_IMAGE = "12";
 
+    public static final String blob_path = "425E";
+    public static final String mdt_type_id = "272";
+
     //App Config Fields
     public static final String CF_VIDEO = "56V";
     public static final String CF_IMAGE = "56I";
@@ -309,6 +312,7 @@ public class Constant {
     public static final String CITY_API = "sm09CityData";
     public static final String CLASS_MASTER = "q115FetchClassMaster";
     public static final String APP_CONFIG = "sm03ConfigTable";
+    public static final String APP_MASTER = "sm04MasterData";
 
     public static final String ADD_UNIVERSITY = "sm37AddUBM";
     public static final String ADD_INSTITUTE = "sm38AddIOM";

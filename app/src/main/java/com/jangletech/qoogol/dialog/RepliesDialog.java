@@ -210,6 +210,7 @@ public class RepliesDialog extends Dialog implements CommentAdapter.onCommentIte
 
     private void likeReplyComment(String strCase,
                                   String commentId, String text) {
+        ProgressDialog.getInstance().show(mContext);
         mBinding.btnSend.setClickable(false);
         mBinding.tvNoReplies.setText("Fetching Replies...");
         mBinding.tvNoReplies.setVisibility(View.VISIBLE);
@@ -240,6 +241,7 @@ public class RepliesDialog extends Dialog implements CommentAdapter.onCommentIte
         call.enqueue(new Callback<ProcessQuestion>() {
             @Override
             public void onResponse(Call<ProcessQuestion> call, Response<ProcessQuestion> response) {
+                ProgressDialog.getInstance().dismiss();
                 mBinding.tvNoReplies.setVisibility(View.GONE);
                 if (response.body() != null &&
                         response.body().getResponse().equals("200")) {

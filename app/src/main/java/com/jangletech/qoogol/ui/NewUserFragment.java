@@ -51,7 +51,7 @@ public class NewUserFragment extends BaseFragment {
     private RegisterLoginModel registerLoginModel;
     private boolean isValidated = true;
     private boolean isOtpSent = false;
-    private int countryCode = 91; //todo country code hardcoded
+    private int countryCode = 91;
     private String strMobile = "";
     private String strReferralCode = "";
     private String strPasswordOtp = "";

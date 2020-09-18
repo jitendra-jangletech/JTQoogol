@@ -25,7 +25,6 @@ public class ApiClient {
     public static final String BASE_URL_STAGING = "https://spot20191210061236-staging.azurewebsites.net/api/";
     public static final String HEADER_CACHE_CONTROL = "Cache-Control";
     public static final String HEADER_PRAGMA = "Pragma";
-
     private static ApiClient instance;
 
     public static ApiClient getInstance() {
@@ -39,7 +38,7 @@ public class ApiClient {
 
     private static Retrofit retrofit() {
         return new Retrofit.Builder()
-                .baseUrl(BASE_URL_PROD)
+                .baseUrl(BASE_URL_STAGING)
                 .client(okHttpClient())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();

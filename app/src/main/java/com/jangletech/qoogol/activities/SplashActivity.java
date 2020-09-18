@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.model.AppConfigResponse;
+import com.jangletech.qoogol.model.MasterResponse;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.util.AESSecurities;
@@ -16,7 +17,9 @@ import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.TinyDB;
+
 import java.text.ParseException;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -61,14 +64,14 @@ public class SplashActivity extends BaseActivity {
                     TinyDB.getInstance(SplashActivity.this).putString(Constant.cf_key4, AESSecurities.getInstance().decrypt("4" + masterKey, appConfigResponse.getMobileKey()));
                     TinyDB.getInstance(SplashActivity.this).putString(Constant.cf_key5, AESSecurities.getInstance().decrypt("5" + masterKey, appConfigResponse.getEmailKey()));
                     TinyDB.getInstance(SplashActivity.this).putString(Constant.cf_key6, AESSecurities.getInstance().decrypt("6" + masterKey, appConfigResponse.getPasswordKey()));
-                    performAutoLogin();
+                    fetchMasterData();
                 }
             }
         });
     }
 
     private void fetchAppConfig() {
-        Log.d(TAG, "fetchAppConfig DeviceId : "+getDeviceId());
+        Log.d(TAG, "fetchAppConfig DeviceId : " + getDeviceId());
         Call<AppConfigResponse> call = apiService.fetchAppConfig(Constant.APP_NAME, AppUtils.getDeviceId());
         call.enqueue(new Callback<AppConfigResponse>() {
             @Override
@@ -84,15 +87,47 @@ public class SplashActivity extends BaseActivity {
 
             @Override
             public void onFailure(Call<AppConfigResponse> call, Throwable t) {
-                AppUtils.showToast(getApplicationContext(), t,"");
+                AppUtils.showToast(getApplicationContext(), t, "");
                 t.printStackTrace();
             }
         });
     }
 
+    private void fetchMasterData() {
+        Call<MasterResponse> call = apiService.fetchMaster("10");
+        call.enqueue(new Callback<MasterResponse>() {
+            @Override
+            public void onResponse(Call<MasterResponse> call, Response<MasterResponse> response) {
+                if (response.body() != null) {
+                    if (response.body().getResponse() == 200) {
+                        Log.d(TAG, "onResponse: " + response.body());
+                        setMasterData(response.body());
+                    } else {
+                        showToast(response.body().getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MasterResponse> call, Throwable t) {
+                AppUtils.showToast(getApplicationContext(), t, "");
+                t.printStackTrace();
+                performAutoLogin();
+            }
+        });
+    }
+
+    private void setMasterData(MasterResponse body) {
+        for (MasterResponse.Master master : body.getMasterList()) {
+            Log.d(TAG, "setMasterData: " + master.getMdt_id() + " = " + master.getMdt_desc());
+            TinyDB.getInstance(this).putString(master.getMdt_id(), master.getMdt_desc());
+        }
+        performAutoLogin();
+    }
+
     private void performAutoLogin() {
         Log.d(TAG, "performAutoLogin: ");
-        if(isLogged){
+        if (isLogged) {
             isLogged = false;
             boolean isLoggedIn = new PreferenceManager(SplashActivity.this).isLoggedIn();
             if (isLoggedIn) {

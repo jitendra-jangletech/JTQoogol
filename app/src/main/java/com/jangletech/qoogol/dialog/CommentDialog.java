@@ -21,6 +21,7 @@ import com.jangletech.qoogol.databinding.CommentDialogBinding;
 import com.jangletech.qoogol.enums.Module;
 import com.jangletech.qoogol.model.Comments;
 import com.jangletech.qoogol.model.ProcessQuestion;
+import com.jangletech.qoogol.model.VerifyResponse;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.util.AESSecurities;
@@ -28,9 +29,13 @@ import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.TinyDB;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -62,6 +67,7 @@ public class CommentDialog extends Dialog implements
         this.isCallFromTest = isCallFromTest;
         this.commentClickListener = commentClickListener;
         addCommentCount = 0;
+        Log.d(TAG, "CommentDialog ID: " + id);
     }
 
     @Override
@@ -79,6 +85,22 @@ public class CommentDialog extends Dialog implements
         mBinding.btnClose.setOnClickListener(v -> {
             commentClickListener.onBackClick(addCommentCount);
             dismiss();
+        });
+
+        mBinding.etComment.setKeyBoardInputCallbackListener((inputContentInfo, flags, opts) -> {
+            Log.i(TAG, inputContentInfo.getContentUri().toString());
+            String filePath = inputContentInfo.getContentUri().getPath();
+            String extension = filePath.substring(filePath.lastIndexOf(".") + 1);
+            Log.i(TAG, "selected file path: " + filePath);
+            File imageFile = AppUtils.createStickerGifyFile(mContext, extension);
+            if (!imageFile.exists()) {
+                try {
+                    imageFile.createNewFile();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            sendGifComment(imageFile);
         });
 
         setOnKeyListener(new Dialog.OnKeyListener() {
@@ -101,6 +123,52 @@ public class CommentDialog extends Dialog implements
             }
             fetchCommentsAPI(Integer.parseInt(AppUtils.getUserId()),
                     id, "I", mBinding.etComment.getText().toString(), "", "", "");
+        });
+    }
+
+    private void sendGifComment(File imageFile) {
+        ProgressDialog.getInstance().show(mContext);
+        RequestBody requestFile =
+                RequestBody.create(MediaType.parse("image/png"), imageFile);
+
+        RequestBody userId =
+                RequestBody.create(MediaType.parse("multipart/form-data"), AppUtils.getUserId());
+        RequestBody tmId =
+                RequestBody.create(MediaType.parse("multipart/form-data"), String.valueOf(id));
+        RequestBody strCase =
+                RequestBody.create(MediaType.parse("multipart/form-data"), "I");
+
+        Log.d(TAG, "Profile Image Size: " + imageFile.getTotalSpace());
+        Log.d(TAG, "updateProfileImage Name : " + imageFile.getName());
+
+        MultipartBody.Part body =
+                MultipartBody.Part.createFormData("file", imageFile.getName(), requestFile);
+
+        Call<VerifyResponse> call = apiService.sendGifComment(
+                userId,
+                tmId,
+                strCase,
+                body);
+        call.enqueue(new Callback<VerifyResponse>() {
+            @Override
+            public void onResponse(Call<VerifyResponse> call, Response<VerifyResponse> response) {
+                ProgressDialog.getInstance().dismiss();
+                if (response.body() != null && response.body().getResponse().equals("200")) {
+                    Log.d(TAG, "onResponse Success: ");
+                    if (isCallFromTest)
+                        fetchCommentsAPI(Integer.parseInt(AppUtils.getUserId()),
+                                id, "L", "", "", "", "");
+                } else {
+                    AppUtils.showToast(mContext, null, response.body().getErrorMsg());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<VerifyResponse> call, Throwable t) {
+                t.printStackTrace();
+                ProgressDialog.getInstance().dismiss();
+                AppUtils.showToast(mContext, t, "");
+            }
         });
     }
 
@@ -330,7 +398,11 @@ public class CommentDialog extends Dialog implements
 
                 if (response.body() != null &&
                         response.body().getResponse().equals("200")) {
-                    updateCommentList(commentList);
+                    try {
+                        updateCommentList(commentList);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 } else {
                     AppUtils.showToast(mContext, response.body().getResponse());
                 }
@@ -339,7 +411,7 @@ public class CommentDialog extends Dialog implements
             @Override
             public void onFailure(Call<ProcessQuestion> call, Throwable t) {
                 ProgressDialog.getInstance().dismiss();
-                AppUtils.showToast(mContext, t,null);
+                AppUtils.showToast(mContext, t, null);
                 t.printStackTrace();
             }
         });
