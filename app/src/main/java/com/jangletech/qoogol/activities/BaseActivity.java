@@ -1,6 +1,8 @@
 package com.jangletech.qoogol.activities;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,6 +16,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
 import android.view.inputmethod.InputMethodManager;
@@ -26,6 +29,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 
+import com.bogdwellers.pinchtozoom.ImageMatrixTouchHandler;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
@@ -69,6 +73,26 @@ public class BaseActivity extends AppCompatActivity {
         String temp = "";
         int hours = minutes/60;
     }*/
+
+    @SuppressLint("ClickableViewAccessibility")
+    public void showFullScreen(final String profilePath) {
+        final Dialog dialog = new Dialog(this, android.R.style.Theme_Light);
+        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawableResource(android.R.color.transparent);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.image_fullscreen_preview);
+        ImageView imageView = dialog.findViewById(R.id.image_preview);
+        imageView.setOnTouchListener(new ImageMatrixTouchHandler(dialog.getWindow().getContext()));
+
+        Glide.with(this).load(profilePath)
+                .thumbnail(0.5f)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .dontTransform()
+                .dontAnimate()
+                .into(imageView);
+
+        dialog.show();
+    }
 
     public void noInternetError(Throwable t) {
         if (t instanceof UnknownHostException) {

@@ -211,6 +211,14 @@ public interface ApiInterface {
                                             @Part(Constant.CASE) RequestBody strCase,
                                             @Part MultipartBody.Part image);
 
+    @Multipart
+    @POST(Constant.PROCESS_QUESTION)
+    Call<VerifyResponse> sendQuestGifComment(@Part(Constant.u_user_id) RequestBody userId,
+                                        @Part(Constant.q_id) RequestBody qId,
+                                        @Part(Constant.CASE) RequestBody strCase,
+                                        @Part MultipartBody.Part image);
+
+
     @FormUrlEncoded
     @POST(Constant.VERIFY_MOBILE_EMAIL)
     Call<VerifyResponse> verifyMobileEmail(@Field(Constant.appName) String appName,

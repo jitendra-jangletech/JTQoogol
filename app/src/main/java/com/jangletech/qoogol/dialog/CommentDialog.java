@@ -3,6 +3,8 @@ package com.jangletech.qoogol.dialog;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -29,7 +31,10 @@ import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.TinyDB;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,6 +55,7 @@ public class CommentDialog extends Dialog implements
     private List<Comments> commentList;
     private CommentAdapter commentAdapter;
     private int id;
+    private Call<VerifyResponse> sendGifCall;
     private int itemPosition;
     public static int addCommentCount = 0;
     private Call<ProcessQuestion> call;
@@ -88,19 +94,31 @@ public class CommentDialog extends Dialog implements
         });
 
         mBinding.etComment.setKeyBoardInputCallbackListener((inputContentInfo, flags, opts) -> {
-            Log.i(TAG, inputContentInfo.getContentUri().toString());
-            String filePath = inputContentInfo.getContentUri().getPath();
-            String extension = filePath.substring(filePath.lastIndexOf(".") + 1);
-            Log.i(TAG, "selected file path: " + filePath);
-            File imageFile = AppUtils.createStickerGifyFile(mContext, extension);
-            if (!imageFile.exists()) {
-                try {
+            try {
+                Log.i(TAG, inputContentInfo.getContentUri().toString());
+                FileOutputStream fos = null;
+                String filePath = inputContentInfo.getContentUri().getPath();
+                String extension = filePath.substring(filePath.lastIndexOf(".") + 1);
+                Log.i(TAG, "selected file path: " + filePath);
+                File imageFile = AppUtils.createStickerGifyFile(mContext, extension);
+                if (!imageFile.exists()) {
                     imageFile.createNewFile();
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
+
+                final InputStream imageStream = mContext.getContentResolver().openInputStream(inputContentInfo.getContentUri());
+                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                selectedImage.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+                byte[] byteArray = byteArrayOutputStream.toByteArray();
+                fos = new FileOutputStream(imageFile);
+                fos.write(byteArray);
+                fos.flush();
+                fos.close();
+                sendGifComment(imageFile);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            sendGifComment(imageFile);
         });
 
         setOnKeyListener(new Dialog.OnKeyListener() {
@@ -142,14 +160,14 @@ public class CommentDialog extends Dialog implements
         Log.d(TAG, "updateProfileImage Name : " + imageFile.getName());
 
         MultipartBody.Part body =
-                MultipartBody.Part.createFormData("file", imageFile.getName(), requestFile);
+                MultipartBody.Part.createFormData("Files", imageFile.getName(), requestFile);
 
-        Call<VerifyResponse> call = apiService.sendGifComment(
-                userId,
-                tmId,
-                strCase,
-                body);
-        call.enqueue(new Callback<VerifyResponse>() {
+        if (isCallFromTest)
+            sendGifCall = apiService.sendGifComment(userId, tmId, strCase, body);
+        else
+            sendGifCall = apiService.sendQuestGifComment(userId, tmId, strCase, body);
+
+        sendGifCall.enqueue(new Callback<VerifyResponse>() {
             @Override
             public void onResponse(Call<VerifyResponse> call, Response<VerifyResponse> response) {
                 ProgressDialog.getInstance().dismiss();

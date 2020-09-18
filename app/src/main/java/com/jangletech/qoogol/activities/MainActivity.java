@@ -33,6 +33,7 @@ import com.jangletech.qoogol.BuildConfig;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.ActivityMainBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
+import com.jangletech.qoogol.dialog.PublicProfileDialog;
 import com.jangletech.qoogol.enums.Nav;
 import com.jangletech.qoogol.model.UserProfile;
 import com.jangletech.qoogol.retrofit.ApiClient;
@@ -55,7 +56,7 @@ import static com.jangletech.qoogol.ui.BaseFragment.getUserName;
 import static com.jangletech.qoogol.util.Constant.CALL_FROM;
 import static com.jangletech.qoogol.util.Constant.profile;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements PublicProfileDialog.PublicProfileClickListener {
 
     private static final String TAG = "MainActivity";
     private AppBarConfiguration mAppBarConfiguration;
@@ -551,7 +552,9 @@ public class MainActivity extends BaseActivity {
                         navToFragment(R.id.nav_learning, bundle);
                     } else if (action != null && action.equalsIgnoreCase("CF") ||
                             action.equalsIgnoreCase("CC")) {
-                        navToFragment(R.id.nav_requests, bundle);
+                        //navToFragment(R.id.nav_requests, bundle);
+                        PublicProfileDialog publicProfileDialog = new PublicProfileDialog(this, userId, this);
+                        publicProfileDialog.show();
                     } else if (action != null && action.equalsIgnoreCase("CAF") ||
                             action.equalsIgnoreCase("CA") || action.equalsIgnoreCase("CN")) {
                         navToFragment(R.id.nav_connections, bundle);
@@ -738,5 +741,20 @@ public class MainActivity extends BaseActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onFriendUnFriendClick() {
+
+    }
+
+    @Override
+    public void onFollowUnfollowClick() {
+
+    }
+
+    @Override
+    public void onViewImage(String path) {
+        showFullScreen(path);
     }
 }
