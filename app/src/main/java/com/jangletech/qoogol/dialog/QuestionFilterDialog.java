@@ -255,7 +255,7 @@ public class QuestionFilterDialog extends BottomSheetDialogFragment implements V
                 if (items.get(i).equalsIgnoreCase(Constant.SCQ))
                     que_categoryset.add(Constant.scq);
                 if (items.get(i).equalsIgnoreCase(Constant.MCQ))
-                    que_categoryset.add(Constant.scq);
+                    que_categoryset.add(Constant.mcq);
                 if (items.get(i).equalsIgnoreCase(Constant.TRUE_FALSE))
                     que_categoryset.add(Constant.true_false);
                 if (items.get(i).equalsIgnoreCase(Constant.MATCH_PAIR))

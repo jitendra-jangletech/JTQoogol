@@ -677,6 +677,7 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                 executor.execute(() -> new AppRepository(activity).insertQuestion(copyFields(learningQuestionsNew)));
                             }
 
+
                         } else if (call_from.equalsIgnoreCase("fav")) {
                             ExecutorService executor = Executors.newSingleThreadExecutor();
                             if (flag == 0) {

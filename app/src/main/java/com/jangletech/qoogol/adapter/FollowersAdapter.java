@@ -49,6 +49,7 @@ import static com.jangletech.qoogol.util.Constant.qoogol;
 import static com.jangletech.qoogol.util.Constant.reject_follow_requests;
 import static com.jangletech.qoogol.util.Constant.reject_friend_requests;
 import static com.jangletech.qoogol.util.Constant.remove_connection;
+import static com.jangletech.qoogol.util.Constant.remove_follower;
 import static com.jangletech.qoogol.util.Constant.unblock;
 import static com.jangletech.qoogol.util.Constant.unfollow;
 
@@ -131,6 +132,7 @@ public class FollowersAdapter extends RecyclerView.Adapter<FollowersAdapter.View
         if (connections.getCn_u1_follows_u2().equalsIgnoreCase("false")) {
             popupMenu.findItem(R.id.action_follow).setVisible(true);
         }
+        popupMenu.findItem(R.id.action_removefollower).setVisible(true);
 
         if (call_from.equalsIgnoreCase(friends)) {
             popupMenu.findItem(R.id.action_remove_connection).setVisible(true);
@@ -195,6 +197,9 @@ public class FollowersAdapter extends RecyclerView.Adapter<FollowersAdapter.View
                 case R.id.reject_friend:
                 case R.id.cancel_friend:
                     updateConnection(connections.getCn_user_id_2(), reject_friend_requests);
+                    break;
+                case R.id.action_removefollower:
+                    updateConnection(connections.getCn_user_id_2(), remove_follower);
                     break;
                 case R.id.action_view_profile:
                     Bundle bundle = new Bundle();
