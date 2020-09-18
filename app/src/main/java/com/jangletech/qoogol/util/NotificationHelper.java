@@ -17,6 +17,8 @@ import com.jangletech.qoogol.BuildConfig;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.activities.MainActivity;
 
+import org.apache.commons.text.StringEscapeUtils;
+
 import java.util.Map;
 
 import static androidx.core.app.NotificationCompat.PRIORITY_MAX;
@@ -40,7 +42,7 @@ public class NotificationHelper {
     // Build notification for foreground service
     public static void showNotification(Context context, Map<String, String> body) {
 
-        String title = body.get(Constant.FB_TITLE);
+        String title = StringEscapeUtils.unescapeJava(body.get(Constant.FB_TITLE));
         String fromType = (body.get(Constant.FB_FROM_TYPE));
         String action = (body.get(Constant.FB_ACTION));
         String ms_id = (body.get(Constant.FB_MS_ID));
@@ -76,7 +78,7 @@ public class NotificationHelper {
             notificationBuilder.setPriority(PRIORITY_MAX)
                     .setAutoCancel(true)
                     .setContentTitle(title)
-                    .setStyle(new NotificationCompat.BigTextStyle().bigText(message))
+                    .setStyle(new NotificationCompat.BigTextStyle().bigText(StringEscapeUtils.unescapeJava(message)))
                     .setContentIntent(resultPendingIntent);
             // notificationBuilder.addAction(R.drawable.ic_send,"Reply", getReplyAction(context));
             // notificationBuilder.addAction(R.drawable.ic_close,"Dismiss", getDismissAction(context));

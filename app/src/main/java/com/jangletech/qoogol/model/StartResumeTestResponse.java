@@ -19,6 +19,14 @@ public class StartResumeTestResponse {
     @SerializedName(Constant.tt_duration_taken)
     private String tt_duration_taken;
 
+    public String getTt_duration_taken() {
+        return tt_duration_taken != null ? tt_duration_taken : "";
+    }
+
+    public void setTt_duration_taken(String tt_duration_taken) {
+        this.tt_duration_taken = tt_duration_taken;
+    }
+
     @SerializedName(Constant.tt_comment)
     private String tt_comment;
 
@@ -250,7 +258,7 @@ public class StartResumeTestResponse {
     }
 
     public String getTm_duration() {
-        return tm_duration!=null?tm_duration:"";
+        return tm_duration != null ? tm_duration : "";
     }
 
     public void setTm_duration(String tm_duration) {

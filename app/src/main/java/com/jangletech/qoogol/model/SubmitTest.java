@@ -6,6 +6,17 @@ import java.util.List;
 
 public class SubmitTest {
 
+    @SerializedName(Constant.tt_duration_taken)
+    private String tt_duration_taken;
+
+    public String getTt_duration_taken() {
+        return tt_duration_taken!=null?tt_duration_taken:"";
+    }
+
+    public void setTt_duration_taken(String tt_duration_taken) {
+        this.tt_duration_taken = tt_duration_taken;
+    }
+
     @SerializedName(Constant.tt_id)
     private String tt_id;
 
