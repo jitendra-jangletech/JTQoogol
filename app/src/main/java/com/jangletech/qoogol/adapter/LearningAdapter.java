@@ -596,7 +596,6 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation_2;
             dialog.show();
-
             ratingFeedbackBinding.rating.setRating(Float.parseFloat(learningQuestionsNew.getRating()));
             String decoded = AppUtils.decodedString(learningQuestionsNew.getFeedback());
             ratingFeedbackBinding.feedback.setText(decoded);
@@ -921,6 +920,7 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 LearningQuestionsNew learningQuestions = learningQuestionsList.get(getAdapterPosition());
                 submitFunction();
                 if (isAttempted == 1) {
+                    countDownTimer.cancel();
                     onIconClick.onSubmitClick(learningQuestions.getQuestion_id(), isSolvedRight);
                 }
             } catch (Exception e) {
@@ -1466,6 +1466,7 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 LearningQuestionsNew learningQuestions = learningQuestionsList.get(getAdapterPosition());
                 submitFunction();
                 if (isAttempted == 1) {
+                    countDownTimer.cancel();
                     onIconClick.onSubmitClick(learningQuestions.getQuestion_id(), isSolvedRight);
                 }
             } catch (Exception e) {
@@ -1844,6 +1845,7 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 mBinding.expandableLayout.setVisibility(View.VISIBLE);
                 mBinding.timerLayout.setVisibility(View.VISIBLE);
                 mBinding.close.setVisibility(View.VISIBLE);
+
                 mBinding.expand.setVisibility(View.GONE);
                 countDownTimer = setTimer(mBinding.tvtimer, 0, 0);
                 try {
@@ -1966,6 +1968,7 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 LearningQuestionsNew learningQuestions = learningQuestionsList.get(getAdapterPosition());
                 submitFunction(learningQuestions);
                 if (isAttempted == 1) {
+                    countDownTimer.cancel();
                     onIconClick.onSubmitClick(learningQuestions.getQuestion_id(), isSolvedRight);
                 }
             } catch (Exception e) {
@@ -2262,6 +2265,7 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 LearningQuestionsNew learningQuestions = learningQuestionsList.get(getAdapterPosition());
                 submitFunction(learningQuestions);
                 if (isAttempted == 1) {
+                    countDownTimer.cancel();
                     onIconClick.onSubmitClick(learningQuestions.getQuestion_id(), isSolvedRight);
                 }
             } catch (Exception e) {
@@ -2535,6 +2539,7 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 LearningQuestionsNew learningQuestions = learningQuestionsList.get(getAdapterPosition());
                 submitFunction(learningQuestions);
                 if (isAttempted == 1) {
+                    countDownTimer.cancel();
                     onIconClick.onSubmitClick(learningQuestions.getQuestion_id(), isSolvedRight);
                 }
             } catch (Exception e) {
@@ -2794,6 +2799,7 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 LearningQuestionsNew learningQuestions = learningQuestionsList.get(getAdapterPosition());
                 submitFunction(learningQuestions);
                 if (isAttempted == 1) {
+                    countDownTimer.cancel();
                     onIconClick.onSubmitClick(learningQuestions.getQuestion_id(), isSolvedRight);
                 }
             } catch (Exception e) {
@@ -3040,6 +3046,7 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 LearningQuestionsNew learningQuestions = learningQuestionsList.get(getAdapterPosition());
                 submitFunction(learningQuestions);
                 if (isAttempted == 1) {
+                    countDownTimer.cancel();
                     onIconClick.onSubmitClick(learningQuestions.getQuestion_id(), isSolvedRight);
                 }
             } catch (Exception e) {
@@ -3276,6 +3283,7 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 LearningQuestionsNew learningQuestions = learningQuestionsList.get(getAdapterPosition());
                 submitFunction(learningQuestions);
                 if (isAttempted == 1) {
+                    countDownTimer.cancel();
                     onIconClick.onSubmitClick(learningQuestions.getQuestion_id(), isSolvedRight);
                 }
             } catch (Exception e) {
@@ -3493,6 +3501,7 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 LearningQuestionsNew learningQuestions = learningQuestionsList.get(getAdapterPosition());
                 submitFunction(learningQuestions);
                 if (isAttempted == 1) {
+                    countDownTimer.cancel();
                     onIconClick.onSubmitClick(learningQuestions.getQuestion_id(), isSolvedRight);
                 }
             } catch (Exception e) {
@@ -3663,6 +3672,7 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 LearningQuestionsNew learningQuestions = learningQuestionsList.get(getAdapterPosition());
                 submitFunction(learningQuestions);
                 if (isAttempted == 1) {
+                    countDownTimer.cancel();
                     onIconClick.onSubmitClick(learningQuestions.getQuestion_id(), isSolvedRight);
                 }
             } catch (Exception e) {
@@ -3800,6 +3810,7 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 LearningQuestionsNew learningQuestions = learningQuestionsList.get(getAdapterPosition());
                 submitFunction(learningQuestions);
                 if (isAttempted == 1) {
+                    countDownTimer.cancel();
                     onIconClick.onSubmitClick(learningQuestions.getQuestion_id(), isSolvedRight);
                 }
             } catch (Exception e) {
@@ -3936,6 +3947,7 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 LearningQuestionsNew learningQuestions = learningQuestionsList.get(getAdapterPosition());
                 submitFunction(learningQuestions);
                 if (isAttempted == 1) {
+                    countDownTimer.cancel();
                     onIconClick.onSubmitClick(learningQuestions.getQuestion_id(), isSolvedRight);
                 }
             } catch (Exception e) {
