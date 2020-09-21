@@ -56,7 +56,7 @@ public class TestQuestionNew implements Serializable {
     private boolean ttqa_mcq_ans_5;
 
     @SerializedName(Constant.ttqa_duration_taken)
-    private int ttqa_duration_taken;
+    private String ttqa_duration_taken;
 
     @SerializedName(Constant.ttqa_md_id)
     private int ttqa_md_id;
@@ -711,11 +711,11 @@ public class TestQuestionNew implements Serializable {
         this.ttqa_id = ttqa_id;
     }
 
-    public int getTtqa_duration_taken() {
+    public String getTtqa_duration_taken() {
         return ttqa_duration_taken;
     }
 
-    public void setTtqa_duration_taken(int ttqa_duration_taken) {
+    public void setTtqa_duration_taken(String ttqa_duration_taken) {
         this.ttqa_duration_taken = ttqa_duration_taken;
     }
 

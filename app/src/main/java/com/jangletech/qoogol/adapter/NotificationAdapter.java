@@ -31,7 +31,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         this.mContext = context;
         this.notifications = notifications;
         this.onItemClickListener = onItemClickListener;
-        setHasStableIds(true);
+        //setHasStableIds(true);
     }
 
     @Override

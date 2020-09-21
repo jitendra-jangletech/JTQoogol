@@ -22,7 +22,11 @@ import org.apache.commons.text.StringEscapeUtils;
 import org.joda.time.LocalDate;
 import org.joda.time.Period;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
@@ -152,6 +156,19 @@ public class AppUtils {
         String mFileName = System.currentTimeMillis() + "";
         File storageDir = getDirectory(activity);
         return new File(storageDir, mFileName + "." + extension);
+    }
+
+    public static byte[] readFully(InputStream input, File imageFile) throws IOException {
+        FileOutputStream output = new FileOutputStream(imageFile);
+        byte[] buffer = new byte[8192];
+        int bytesRead;
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        while ((bytesRead = input.read(buffer)) != -1) {
+            byteArrayOutputStream.write(buffer, 0, bytesRead);
+        }
+        byte[] byteArray = byteArrayOutputStream.toByteArray();
+        output.write(byteArray);
+        return byteArray;
     }
 
     public static File getDirectory(Context context) {

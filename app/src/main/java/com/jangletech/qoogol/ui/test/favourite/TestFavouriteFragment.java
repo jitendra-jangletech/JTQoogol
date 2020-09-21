@@ -118,7 +118,6 @@ public class TestFavouriteFragment extends BaseFragment implements TestListAdapt
         call.enqueue(new Callback<TestListResponse>() {
             @Override
             public void onResponse(Call<TestListResponse> call, Response<TestListResponse> response) {
-                //ProgressDialog.getInstance().dismiss();
                 mBinding.swipeToRefresh.setRefreshing(false);
                 if (response.body() != null && response.body().getResponse().equals("200")) {
                     Log.d(TAG, "Fav List Size is  : " + response.body().getTestList().size());

@@ -163,13 +163,6 @@
                                 android:text="@string/my_test" />
 
                             <TextView
-                                android:id="@+id/nav_attended_by_friends"
-                                style="@style/sub_menu_item_style"
-                                android:foreground="?attr/selectableItemBackground"
-                                android:text="@string/attended_by_friends"
-                                android:visibility="gone" />
-
-                            <TextView
                                 android:id="@+id/nav_shared_by_you"
                                 style="@style/sub_menu_item_style"
                                 android:foreground="?attr/selectableItemBackground"
@@ -179,32 +172,10 @@
                                 android:id="@+id/nav_shared_with_you"
                                 style="@style/sub_menu_item_style"
                                 android:foreground="?attr/selectableItemBackground"
-                                android:text="@string/shared_with_you"
-                                android:visibility="visible" />
-
-                            <TextView
-                                android:id="@+id/nav_test_popular"
-                                style="@style/sub_menu_item_style"
-                                android:foreground="?attr/selectableItemBackground"
-                                android:text="@string/popular_test"
-                                android:visibility="gone" />
-
-                            <TextView
-                                android:id="@+id/nav_recent_test"
-                                style="@style/sub_menu_item_style"
-                                android:foreground="?attr/selectableItemBackground"
-                                android:text="@string/recent_test"
-                                android:visibility="gone" />
+                                android:text="Shared With You" />
 
 
                         </LinearLayout>
-
-                        <TextView
-                            android:id="@+id/nav_practice_test"
-                            style="@style/sub_menu_item_style"
-                            android:foreground="?attr/selectableItemBackground"
-                            android:text="@string/practice_test"
-                            android:visibility="gone" />
 
                         <TextView
                             android:id="@+id/nav_syllabus"

@@ -240,6 +240,7 @@ public class MyTestFragment extends BaseFragment
         mBinding.swipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+
                 fetchTestList(params, "0");
             }
         });
