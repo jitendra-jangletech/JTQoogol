@@ -236,14 +236,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         commentList.remove(pos);
         notifyItemRemoved(pos);
         notifyItemRangeChanged(pos, getItemCount());
-        /*if (commentList.size() == 1) {
-            commentList.remove(0);
-            notifyItemRemoved(0);
-        } else {
-            commentList.remove(pos);
-            notifyItemRemoved(pos);
-            notifyDataSetChanged();
-        }*/
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

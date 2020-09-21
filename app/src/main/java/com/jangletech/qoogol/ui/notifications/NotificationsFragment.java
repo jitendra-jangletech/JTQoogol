@@ -257,16 +257,6 @@ public class NotificationsFragment extends BaseFragment implements NotificationA
         Bundle bundle = new Bundle();
         bundle.putBoolean("fromNotification", true);
         bundle.putString(Constant.FB_MS_ID, notification.getN_ref_id());
-        /*if (notification.getN_ref_type().equalsIgnoreCase(from_user) ||
-                notification.getN_ref_type().equalsIgnoreCase(Constant.from_close_friend) ||
-                notification.getN_ref_type().equalsIgnoreCase(Constant.from_friend)) {
-            PublicProfileDialog publicProfileDialog = new PublicProfileDialog(getActivity(), notification.getN_sent_by_u_id(), this);
-            publicProfileDialog.show();
-        } else if (notification.getN_ref_type().equalsIgnoreCase(from_question)) {
-            NavHostFragment.findNavController(this).navigate(R.id.nav_learning, bundle);
-        } else if (notification.getN_ref_type().equalsIgnoreCase(fromTest)) {
-            NavHostFragment.findNavController(this).navigate(R.id.nav_test_my, bundle);
-        }*/
 
         PublicProfileDialog publicProfileDialog = new PublicProfileDialog(getActivity(), notification.getN_sent_by_u_id(), this);
         publicProfileDialog.show();
@@ -297,26 +287,4 @@ public class NotificationsFragment extends BaseFragment implements NotificationA
         Log.d(TAG, "onQueryTextChange Text : " + newText.trim().toLowerCase());
         return true;
     }
-
-//    private void searchNotification(String searchTxt) {
-//        List<Notification> filteredNotifications = new ArrayList<>();
-//        if (searchTxt.isEmpty()) {
-//            //empty search text
-//            notificationAdapter.updateNotificationList(notificationList);
-//        } else {
-//            //search for text
-//            for (Notification notification : notificationList) {
-//                if (searchTxt.contains(notification.getW_notification_desc().toLowerCase())) {
-//                    filteredNotifications.add(notification);
-//                }
-//            }
-//
-//            if (filteredNotifications.size() > 0) {
-//                mBinding.tvEmptySearch.setVisibility(View.GONE);
-//                notificationAdapter.updateNotificationList(filteredNotifications);
-//            } else {
-//                mBinding.tvEmptySearch.setVisibility(View.VISIBLE);
-//            }
-//        }
-//    }
 }

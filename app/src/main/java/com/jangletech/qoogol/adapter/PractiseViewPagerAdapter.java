@@ -1919,7 +1919,6 @@ public class PractiseViewPagerAdapter extends PagerAdapter
 
     @Override
     public void onAnswerEntered(String answer) {
-        //showToast(answer);
         viewPagerClickListener.onFullScreenAns(answer);
     }
 

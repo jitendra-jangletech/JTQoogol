@@ -109,7 +109,6 @@ public class CommentDialog extends Dialog implements
                         public void onPermissionGranted(PermissionGrantedResponse response) {
                             try {
                                 Log.i(TAG, inputContentInfo.getContentUri().toString());
-                                FileOutputStream fos = null;
                                 String filePath = inputContentInfo.getContentUri().getPath();
                                 String extension = filePath.substring(filePath.lastIndexOf(".") + 1);
                                 Log.i(TAG, "selected file path: " + filePath);
@@ -117,17 +116,8 @@ public class CommentDialog extends Dialog implements
                                 if (!imageFile.exists()) {
                                     imageFile.createNewFile();
                                 }
-
                                 final InputStream imageStream = mContext.getContentResolver().openInputStream(inputContentInfo.getContentUri());
-                                //final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
                                 AppUtils.readFully(imageStream,imageFile);
-                                //ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                                /*selectedImage.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
-                                byte[] byteArray = byteArrayOutputStream.toByteArray();
-                                fos = new FileOutputStream(imageFile);
-                                fos.write(byteArray);
-                                fos.flush();
-                                fos.close();*/
                                 sendGifComment(imageFile);
                             } catch (Exception e) {
                                 e.printStackTrace();

@@ -4,8 +4,6 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -40,9 +38,7 @@ import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -103,7 +99,6 @@ public class RepliesDialog extends Dialog implements CommentAdapter.onCommentIte
                         public void onPermissionGranted(PermissionGrantedResponse response) {
                             try {
                                 Log.i(TAG, inputContentInfo.getContentUri().toString());
-                                FileOutputStream fos = null;
                                 String filePath = inputContentInfo.getContentUri().getPath();
                                 String extension = filePath.substring(filePath.lastIndexOf(".") + 1);
                                 Log.i(TAG, "selected file path: " + filePath);
@@ -111,17 +106,8 @@ public class RepliesDialog extends Dialog implements CommentAdapter.onCommentIte
                                 if (!imageFile.exists()) {
                                     imageFile.createNewFile();
                                 }
-
                                 final InputStream imageStream = mContext.getContentResolver().openInputStream(inputContentInfo.getContentUri());
-                                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-
-                                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                                selectedImage.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
-                                byte[] byteArray = byteArrayOutputStream.toByteArray();
-                                fos = new FileOutputStream(imageFile);
-                                fos.write(byteArray);
-                                fos.flush();
-                                fos.close();
+                                AppUtils.readFully(imageStream, imageFile);
                                 if (isCallFromTest)
                                     sendGifComment(imageFile, comments.getTlc_id());
                                 else
@@ -369,7 +355,7 @@ public class RepliesDialog extends Dialog implements CommentAdapter.onCommentIte
         RequestBody rId =
                 RequestBody.create(MediaType.parse("multipart/form-data"), replyId);
 
-        Log.d(TAG, "sendGifComment Reply Id : "+replyId);
+        Log.d(TAG, "sendGifComment Reply Id : " + replyId);
         Log.d(TAG, "Profile Image Size: " + imageFile.getTotalSpace());
         Log.d(TAG, "updateProfileImage Name : " + imageFile.getName());
 
@@ -377,9 +363,9 @@ public class RepliesDialog extends Dialog implements CommentAdapter.onCommentIte
                 MultipartBody.Part.createFormData("Files", imageFile.getName(), requestFile);
 
         if (isCallFromTest)
-            sendGifCall = apiService.sendReplyGifComment(userId, tmId, strCase,rId, body);
+            sendGifCall = apiService.sendReplyGifComment(userId, tmId, strCase, rId, body);
         else
-            sendGifCall = apiService.sendReplyQuestGifComment(userId, tmId, strCase,rId, body);
+            sendGifCall = apiService.sendReplyQuestGifComment(userId, tmId, strCase, rId, body);
 
         sendGifCall.enqueue(new Callback<VerifyResponse>() {
             @Override

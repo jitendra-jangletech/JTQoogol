@@ -526,8 +526,12 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
                     } else if (action != null && action.equalsIgnoreCase("Q")) {
                         navToFragment(R.id.nav_learning, bundle);
                     } else {
-                        PublicProfileDialog publicProfileDialog = new PublicProfileDialog(this, uId, this);
-                        publicProfileDialog.show();
+                        try {
+                            PublicProfileDialog publicProfileDialog = new PublicProfileDialog(this, uId, this);
+                            publicProfileDialog.show();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                     /*else if (action != null && action.equalsIgnoreCase("CF") ||
                             action.equalsIgnoreCase("CC")) {

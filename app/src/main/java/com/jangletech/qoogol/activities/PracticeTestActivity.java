@@ -116,6 +116,7 @@ public class PracticeTestActivity extends BaseActivity implements
                         .setPositiveButton("Pause", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                testCountDownTimer.cancel();
                                 submitTestQuestions("P", "0");
                             }
                         })
@@ -286,7 +287,7 @@ public class PracticeTestActivity extends BaseActivity implements
         call.enqueue(new Callback<StartResumeTestResponse>() {
             @Override
             public void onResponse(Call<StartResumeTestResponse> call, Response<StartResumeTestResponse> response) {
-                Log.d(TAG, "onResponse Code : "+response.body().getResponseCode());
+                Log.d(TAG, "onResponse Code : " + response.body().getResponseCode());
                 if (response.body() != null && response.body().getResponseCode() != null
                         && response.body().getResponseCode().equals("200")) {
                     mViewModel.setStartResumeTestResponse(response.body());
@@ -398,7 +399,7 @@ public class PracticeTestActivity extends BaseActivity implements
                     .setPositiveButton("Pause", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            //finish();
+                            testCountDownTimer.cancel();
                             submitTestQuestions("P", "0");
                         }
                     })
@@ -521,8 +522,6 @@ public class PracticeTestActivity extends BaseActivity implements
 
     @Override
     public void onCommentBack(int count) {
-        //TestQuestionNew testQuestionNew = questionsNewList.get(practiceViewPager.getCurrentItem());
-        //int prevCount = Integer.parseInt(testQuestionNew.getComments()) + count;
         updatePageCount("COMMENT", count);
     }
 
@@ -541,6 +540,13 @@ public class PracticeTestActivity extends BaseActivity implements
     public void onSubmitClick() {
         questionGridAdapter.notifyDataSetChanged();
         questionListAdapter.notifyDataSetChanged();
+        stopTimerPage();
+    }
+
+    private void stopTimerPage() {
+        int pos = practiceViewPager.getCurrentItem();
+        questionsNewList.get(pos).setAnsSubmitted(true);
+        countDownTimer.cancel();
     }
 
     @Override
@@ -717,49 +723,51 @@ public class PracticeTestActivity extends BaseActivity implements
 
 
     private void setTimerToSelectedPage(int pos) {
-        int prevSeconds = 0;
-        int prevMinutes = 0;
-        if (countDownTimer != null)
-            countDownTimer.cancel();
-        View view = practiceViewPager.findViewWithTag(pos);
-        if (view != null) {
-            TextView tvTimer = view.findViewById(R.id.tvtimer);
-            String[] time = tvTimer.getText().toString().split(":", -1);
-            prevSeconds = Integer.parseInt(time[1]);
-            prevMinutes = Integer.parseInt(time[0]);
+        if (!questionsNewList.get(pos).isAnsSubmitted()) {
+            int prevSeconds = 0;
+            int prevMinutes = 0;
+            if (countDownTimer != null)
+                countDownTimer.cancel();
+            View view = practiceViewPager.findViewWithTag(pos);
+            if (view != null) {
+                TextView tvTimer = view.findViewById(R.id.tvtimer);
+                String[] time = tvTimer.getText().toString().split(":", -1);
+                prevSeconds = Integer.parseInt(time[1]);
+                prevMinutes = Integer.parseInt(time[0]);
 
-            int finalPrevSeconds = prevSeconds;
-            int finalPrevMinutes = prevMinutes;
-            countDownTimer = new CountDownTimer(60 * 1000 * 60, 1000) {
-                int timerCountSeconds = finalPrevSeconds;
-                int timerCountMinutes = finalPrevMinutes;
+                int finalPrevSeconds = prevSeconds;
+                int finalPrevMinutes = prevMinutes;
+                countDownTimer = new CountDownTimer(60 * 1000 * 60, 1000) {
+                    int timerCountSeconds = finalPrevSeconds;
+                    int timerCountMinutes = finalPrevMinutes;
 
-                public void onTick(long millisUntilFinished) {
-                    if (timerCountSeconds < 59) {
-                        timerCountSeconds++;
-                    } else {
-                        timerCountSeconds = 0;
-                        timerCountMinutes++;
-                    }
-                    if (timerCountMinutes < 10) {
-                        if (timerCountSeconds < 10) {
-                            tvTimer.setText(String.valueOf("0" + timerCountMinutes + ":0" + timerCountSeconds));
+                    public void onTick(long millisUntilFinished) {
+                        if (timerCountSeconds < 59) {
+                            timerCountSeconds++;
                         } else {
-                            tvTimer.setText(String.valueOf("0" + timerCountMinutes + ":" + timerCountSeconds));
+                            timerCountSeconds = 0;
+                            timerCountMinutes++;
                         }
-                    } else {
-                        if (timerCountSeconds < 10) {
-                            tvTimer.setText(String.valueOf(timerCountMinutes + ":0" + timerCountSeconds));
+                        if (timerCountMinutes < 10) {
+                            if (timerCountSeconds < 10) {
+                                tvTimer.setText(String.valueOf("0" + timerCountMinutes + ":0" + timerCountSeconds));
+                            } else {
+                                tvTimer.setText(String.valueOf("0" + timerCountMinutes + ":" + timerCountSeconds));
+                            }
                         } else {
-                            tvTimer.setText(String.valueOf(timerCountMinutes + ":" + timerCountSeconds));
+                            if (timerCountSeconds < 10) {
+                                tvTimer.setText(String.valueOf(timerCountMinutes + ":0" + timerCountSeconds));
+                            } else {
+                                tvTimer.setText(String.valueOf(timerCountMinutes + ":" + timerCountSeconds));
+                            }
                         }
                     }
-                }
 
-                public void onFinish() {
-                    tvTimer.setText("00:00");
-                }
-            }.start();
+                    public void onFinish() {
+                        tvTimer.setText("00:00");
+                    }
+                }.start();
+            }
         }
     }
 

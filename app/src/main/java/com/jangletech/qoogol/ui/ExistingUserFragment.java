@@ -25,8 +25,6 @@ import com.jangletech.qoogol.model.LearningQuestionsNew;
 import com.jangletech.qoogol.model.LocalDataResponse;
 import com.jangletech.qoogol.model.RegisterLoginModel;
 import com.jangletech.qoogol.model.TestModelNew;
-import com.jangletech.qoogol.retrofit.ApiClient;
-import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.service.DownloadAsyncTask;
 import com.jangletech.qoogol.util.AESSecurities;
 import com.jangletech.qoogol.util.Constant;
@@ -220,16 +218,6 @@ public class ExistingUserFragment extends BaseFragment {
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
-                                try {
-                                    Log.d(TAG, "onResponse Launch UserId : " + response.body().getU_user_id());
-                                    new PreferenceManager(getActivity()).saveInt(Constant.USER_ID, Integer.parseInt(response.body().getU_user_id()));
-                                    new PreferenceManager(getActivity()).saveUserId(response.body().getU_user_id());
-                                    new PreferenceManager(getActivity()).setIsLoggedIn(true);
-                                    callOfflineApi(response.body().getU_user_id());
-
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
                             }
                         }
                     } else if (response.body().getResponse().equals("315")) {
@@ -248,7 +236,6 @@ public class ExistingUserFragment extends BaseFragment {
             }
         });
     }
-
 
     private void callOfflineApi(String u_user_id) {
         Call<LocalDataResponse> call = getApiService().fetchLocalDataApi(getUserId(getActivity()), getDeviceId(getActivity()), Constant.forcerefresh);

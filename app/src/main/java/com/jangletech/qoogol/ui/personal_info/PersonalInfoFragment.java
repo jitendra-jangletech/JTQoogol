@@ -446,19 +446,23 @@ public class PersonalInfoFragment extends BaseFragment {
 
             if (mBinding.etFirstName.getText().toString().trim().isEmpty()) {
                 mBinding.etFirstName.setError("Required");
+                mBinding.etFirstName.requestFocus();
                 return;
             }
             if (mBinding.etLastName.getText().toString().trim().isEmpty()) {
                 mBinding.etLastName.setError("Required");
+                mBinding.etLastName.requestFocus();
                 return;
             }
             if (mBinding.etMobile.getText().toString().trim().isEmpty()) {
                 mBinding.etMobile.setError("Required");
+                mBinding.etMobile.requestFocus();
                 return;
             }
 
             if (mBinding.etDob.getText().toString().trim().isEmpty()) {
                 mBinding.etDob.setError("Required");
+                mBinding.etDob.requestFocus();
                 return;
             }
 
@@ -469,6 +473,7 @@ public class PersonalInfoFragment extends BaseFragment {
 
             if (!mBinding.etPassword.getText().toString().isEmpty() && mBinding.etPassword.getText().toString().length() < 8) {
                 mBinding.etPassword.setError("Password should be 8 characters long");
+                mBinding.etPassword.requestFocus();
                 return;
             }
 
@@ -990,9 +995,10 @@ public class PersonalInfoFragment extends BaseFragment {
                 if (response != null && response.body() != null) {
                     if (response.body().getResponse().equals("200")) {
                         createVerifyOTPDialog(response.body().getNewOTP());
+                    } else if (response.body().getResponse().equals("312")) {
+                        showErrorDialog(getActivity(), response.body().getResponse(),response.body().getErrorMsg());
                     } else {
                         AppUtils.showToast(getActivity(), null, response.body().getErrorMsg());
-                        //showErrorDialog(requireActivity(), response.body().getErrorMsg(), response.body().getErrorMsg());
                     }
                 }
             }
@@ -1012,11 +1018,9 @@ public class PersonalInfoFragment extends BaseFragment {
         dialog.setCancelable(false);
         dialog.setContentView(R.layout.otp_layout);
         final OtpView otpText = dialog.findViewById(R.id.otp_view);
-        // TextView resendButton = dialog.findViewById(R.id.resend_otp);
         Button btnDone = dialog.findViewById(R.id.btnDone);
         AppCompatImageView close = dialog.findViewById(R.id.close);
 
-        // TextView tvDesc = dialog.findViewById(R.id.desc);
         close.setOnClickListener(view -> dialog.dismiss());
 
         btnDone.setOnClickListener(v -> {
@@ -1024,12 +1028,14 @@ public class PersonalInfoFragment extends BaseFragment {
                 otpText.setText("");
                 if (isMail) {
                     isMailVerified = true;
+                    mBinding.etEmail.setEnabled(false);
                     mBinding.btnEmailVerify.setText("Verified");
                     mBinding.btnEmailVerify.setEnabled(false);
                     mBinding.btnEmailVerify.setAlpha((float) 0.5);
                     dialog.dismiss();
                 } else {
                     isMobileVerified = true;
+                    mBinding.etMobile.setEnabled(false);
                     mBinding.btnMobileVerify.setText("Verified");
                     mBinding.btnMobileVerify.setEnabled(false);
                     mBinding.btnMobileVerify.setAlpha((float) 0.5);
@@ -1060,7 +1066,7 @@ public class PersonalInfoFragment extends BaseFragment {
             }
         } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            if(result != null && resultCode == RESULT_OK) {
+            if (result != null && resultCode == RESULT_OK) {
                 File imageFile = new File(result.getUri().getPath());
                 updateProfileImage(imageFile);
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {

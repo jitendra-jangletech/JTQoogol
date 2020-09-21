@@ -9,6 +9,16 @@ public class TestQuestionNew implements Serializable {
 
     private boolean isAnsweredRight;
 
+    public boolean isAnsSubmitted() {
+        return isAnsSubmitted;
+    }
+
+    public void setAnsSubmitted(boolean ansSubmitted) {
+        isAnsSubmitted = ansSubmitted;
+    }
+
+    private boolean isAnsSubmitted;
+
     @SerializedName(Constant.sub_ans_right_wrong)
     private boolean rightAnswered;
 

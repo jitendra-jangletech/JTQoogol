@@ -539,6 +539,7 @@
                             <EditText
                                 android:id="@+id/etDob"
                                 style="@style/font_style"
+                                android:inputType="text|textNoSuggestions"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:alpha="0.5"

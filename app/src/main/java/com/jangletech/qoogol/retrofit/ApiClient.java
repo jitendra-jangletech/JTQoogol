@@ -1,12 +1,9 @@
 package com.jangletech.qoogol.retrofit;
 
 import android.util.Log;
-
 import com.jangletech.qoogol.util.QoogolApp;
-
 import java.io.File;
 import java.util.concurrent.TimeUnit;
-
 import okhttp3.Cache;
 import okhttp3.CacheControl;
 import okhttp3.Interceptor;
@@ -36,7 +33,7 @@ public class ApiClient {
 
     private static Retrofit retrofit() {
         return new Retrofit.Builder()
-                .baseUrl(BASE_URL_PROD)
+                .baseUrl(BASE_URL_STAGING)
                 .client(okHttpClient())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
