@@ -46,6 +46,13 @@ public class SubjectiveAnsDialog extends Dialog {
         this.minutes = PractiseViewPagerAdapter.gMinutes;
     }
 
+    public void showd(int minutes,int seconds) {
+        super.show();
+        Log.d(TAG, "showd Minutes : "+minutes);
+        Log.d(TAG, "showd Seconds : "+seconds);
+        setTimer(mBinding.tvtimer, seconds, minutes);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,12 +64,13 @@ public class SubjectiveAnsDialog extends Dialog {
         setContentView(mBinding.getRoot());
         Log.d(TAG, "onCreate Seconds : " + PractiseViewPagerAdapter.gSeconds);
         Log.d(TAG, "onCreate Minutes : " + PractiseViewPagerAdapter.gMinutes);
-        setTimer(mBinding.tvtimer, seconds, minutes);
+
         mBinding.etAns.requestFocus();
         answerCharCounter(mBinding.etAns, mBinding.tvWordCounter, 200);
         mBinding.etAns.append(strAns);
 
         mBinding.save.setOnClickListener(v -> {
+            countDownTimer.cancel();
             getAnsListener.onAnswerEntered(AppUtils.encodedString(mBinding.etAns.getText().toString().trim()));
             dismiss();
         });
@@ -73,6 +81,7 @@ public class SubjectiveAnsDialog extends Dialog {
                                  KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_BACK) {
                     Log.d(TAG, "onKey Executed : ");
+                    countDownTimer.cancel();
                     getAnsListener.onAnswerEntered(AppUtils.encodedString(mBinding.etAns.getText().toString().trim()));
                     dismiss();
                 }
@@ -82,7 +91,7 @@ public class SubjectiveAnsDialog extends Dialog {
     }
 
     private void setTimer(TextView tvTimer, int seconds, int minutes) {
-        CountDownTimer countDownTimer = new CountDownTimer(60 * 1000 * 60, 1000) {
+        countDownTimer = new CountDownTimer(60 * 1000 * 60, 1000) {
             int timerCountSeconds = seconds;
             int timerCountMinutes = minutes;
 
