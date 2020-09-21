@@ -168,6 +168,7 @@ public class PracticeTestActivity extends BaseActivity implements
             @Override
             public void onChanged(StartResumeTestResponse startResumeTestResponse) {
                 if (startResumeTestResponse != null) {
+                    Log.d(TAG, "onChanged getStartResumeTestResponse: ");
                     startTestResponse = startResumeTestResponse;
                     tvTestTitle.setText(startResumeTestResponse.getTm_name());
                     mBinding.tvTestTitle.setText(startTestResponse.getTm_name());
@@ -285,6 +286,7 @@ public class PracticeTestActivity extends BaseActivity implements
         call.enqueue(new Callback<StartResumeTestResponse>() {
             @Override
             public void onResponse(Call<StartResumeTestResponse> call, Response<StartResumeTestResponse> response) {
+                Log.d(TAG, "onResponse Code : "+response.body().getResponseCode());
                 if (response.body() != null && response.body().getResponseCode() != null
                         && response.body().getResponseCode().equals("200")) {
                     mViewModel.setStartResumeTestResponse(response.body());
@@ -298,6 +300,7 @@ public class PracticeTestActivity extends BaseActivity implements
 
             @Override
             public void onFailure(Call<StartResumeTestResponse> call, Throwable t) {
+                t.printStackTrace();
                 ProgressDialog.getInstance().dismiss();
                 noInternetError(t);
             }

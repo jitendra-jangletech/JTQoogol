@@ -211,7 +211,6 @@ public class NotificationsFragment extends BaseFragment implements NotificationA
     }
 
     private void fetchNotifications(String pageStart) {
-        //ProgressDialog.getInstance().show(getActivity());
         Log.d(TAG, "fetchNotifications PageStart : " + pageStart);
         mBinding.swipeToRefresh.setRefreshing(true);
         Call<NotificationResponse> call = apiService.fetchNotifications(

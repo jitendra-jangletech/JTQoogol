@@ -230,18 +230,34 @@
                 android:orientation="horizontal"
                 android:weightSum="1">
 
-                <EditText
+<!--                <EditText-->
+<!--                    android:id="@+id/etComment"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_gravity="bottom"-->
+<!--                    android:layout_marginStart="@dimen/btn_padding"-->
+<!--                    android:layout_weight="0.9"-->
+<!--                    android:backgroundTint="@color/colorWhite"-->
+<!--                    android:hint="Enter Reply"-->
+<!--                    android:imeOptions="normal"-->
+<!--                    android:textColor="@color/colorBlack"-->
+<!--                    android:textColorHint="@color/grey" />-->
+
+                <com.jangletech.qoogol.util.ChatEditText
                     android:id="@+id/etComment"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
                     android:layout_marginStart="@dimen/btn_padding"
-                    android:layout_weight="0.9"
                     android:backgroundTint="@color/colorWhite"
-                    android:hint="Enter Reply"
+                    android:gravity="bottom"
+                    android:hint="Enter Comment"
                     android:imeOptions="normal"
+                    android:maxLines="10"
+                    android:padding="@dimen/margin_10"
                     android:textColor="@color/colorBlack"
-                    android:textColorHint="@color/grey" />
+                    android:textColorHint="@color/colorDarkGray" />
+
 
             </LinearLayout>
 

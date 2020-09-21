@@ -95,9 +95,9 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
         userId = getUserId(this);
         NavigationView navigationView = findViewById(R.id.nav_view);
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_test_popular, R.id.nav_attended_by_friends, R.id.nav_shared_with_you,
+                R.id.nav_shared_with_you,
                 R.id.nav_shared_by_you, R.id.nav_notifications, R.id.saved_questions,
-                R.id.nav_test_popular, R.id.nav_recent_test, R.id.nav_share_app, R.id.nav_about,
+                R.id.nav_share_app, R.id.nav_about,
                 R.id.nav_faq, R.id.nav_fav, R.id.nav_syllabus, R.id.nav_edit_profile,
                 R.id.nav_settings, R.id.nav_requests, R.id.nav_import_contacts,
                 R.id.nav_code_conduct,
@@ -200,14 +200,7 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
                     bundle.putInt(CALL_FROM, profile);
                     navToFragment(R.id.nav_edit_profile, bundle);
                 }
-                if (navigateFlag.equals(Nav.RECENT_TEST.toString())) {
-                    navigateFlag = "";
-                    clearFilters();
-                    saveTestType(Nav.RECENT_TEST.toString());
-                    Bundle bundle = new Bundle();
-                    bundle.putString(CALL_FROM, Nav.RECENT_TEST.toString());
-                    navToFragment(R.id.nav_recent_test, bundle);
-                }
+
                 if (navigateFlag.equals(Nav.FAVOURITE.toString())) {
                     navigateFlag = "";
                     navToFragment(R.id.nav_fav, Bundle.EMPTY);
@@ -288,14 +281,7 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
                     bundle.putString(CALL_FROM, Nav.SHARED_WITH_ME_QUE.toString());
                     navToFragment(R.id.nav_shared_with_you_que, bundle);
                 }
-                if (navigateFlag.equals(Nav.POPULAR_TEST.toString())) {
-                    navigateFlag = "";
-                    clearFilters();
-                    saveTestType(Nav.POPULAR_TEST.toString());
-                    Bundle bundle = new Bundle();
-                    bundle.putString("CALL_FROM", Nav.POPULAR_TEST.toString());
-                    navToFragment(R.id.nav_test_popular, bundle);
-                }
+
                 if (navigateFlag.equals(Nav.SHARED_BY_YOU.toString())) {
                     navigateFlag = "";
                     clearFilters();
@@ -310,12 +296,6 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
                     Bundle bundle = new Bundle();
                     bundle.putString("CALL_FROM", Nav.SHARED_WITH_YOU.toString());
                     navToFragment(R.id.nav_shared_with_you, bundle);
-                }
-                if (navigateFlag.equals(Nav.ATTENDED_BY_FRIENDS.toString())) {
-                    navigateFlag = "";
-                    Bundle bundle = new Bundle();
-                    bundle.putString("CALL_FROM", Nav.ATTENDED_BY_FRIENDS.toString());
-                    navToFragment(R.id.nav_attended_by_friends, bundle);
                 }
                 if (navigateFlag.equals(Nav.CONNECTIONS.toString())) {
                     navigateFlag = "";
@@ -373,13 +353,6 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
             }
         });
 
-        findViewById(R.id.nav_recent_test).setOnClickListener(v -> {
-            mBinding.drawerLayout.closeDrawers();
-            if (navController.getCurrentDestination().getId() != R.id.nav_recent_test) {
-                navigateFlag = Nav.RECENT_TEST.toString();
-            }
-        });
-
         findViewById(R.id.nav_requests).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
             if (navController.getCurrentDestination().getId() != R.id.nav_requests) {
@@ -422,7 +395,7 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
             }
         });
 
-        findViewById(R.id.nav_test_popular).setOnClickListener(v -> {
+        /*findViewById(R.id.nav_test_popular).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
             if (navController.getCurrentDestination().getId() != R.id.nav_test_popular) {
                 navigateFlag = Nav.POPULAR_TEST.toString();
@@ -434,7 +407,7 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
             if (navController.getCurrentDestination().getId() != R.id.nav_attended_by_friends) {
                 navigateFlag = Nav.ATTENDED_BY_FRIENDS.toString();
             }
-        });
+        });*/
 
         findViewById(R.id.nav_shared_with_you).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
@@ -542,6 +515,8 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
                 Bundle bundle = intent.getBundleExtra("bundle");
                 if (bundle != null && bundle.getBoolean("fromNotification")) {
                     String action = bundle.getString(Constant.FB_ACTION);
+                    String uId = bundle.getString(Constant.FB_U_G_ID);
+                    Log.d(TAG, "getNotificationIntent UId : " + uId);
                     Log.d(TAG, "getNotificationIntent From Notification : " + bundle.getString(Constant.FB_FROM_TYPE));
                     Log.d(TAG, "getNotificationIntent From Type : " + bundle.getString(Constant.FB_FROM_TYPE));
                     Log.d(TAG, "getNotificationIntent Action : " + bundle.getString(Constant.FB_ACTION));
@@ -550,7 +525,11 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
                         navToFragment(R.id.nav_test_my, bundle);
                     } else if (action != null && action.equalsIgnoreCase("Q")) {
                         navToFragment(R.id.nav_learning, bundle);
-                    } else if (action != null && action.equalsIgnoreCase("CF") ||
+                    } else {
+                        PublicProfileDialog publicProfileDialog = new PublicProfileDialog(this, uId, this);
+                        publicProfileDialog.show();
+                    }
+                    /*else if (action != null && action.equalsIgnoreCase("CF") ||
                             action.equalsIgnoreCase("CC")) {
                         //navToFragment(R.id.nav_requests, bundle);
                         PublicProfileDialog publicProfileDialog = new PublicProfileDialog(this, userId, this);
@@ -558,7 +537,7 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
                     } else if (action != null && action.equalsIgnoreCase("CAF") ||
                             action.equalsIgnoreCase("CA") || action.equalsIgnoreCase("CN")) {
                         navToFragment(R.id.nav_connections, bundle);
-                    }
+                    }*/
                 }
             }
         }
@@ -620,8 +599,6 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
                         navController.getCurrentDestination().getId() == R.id.saved_questions ||
                         navController.getCurrentDestination().getId() == R.id.nav_shared_by_you ||
                         navController.getCurrentDestination().getId() == R.id.nav_shared_with_you ||
-                        navController.getCurrentDestination().getId() == R.id.nav_test_popular ||
-                        navController.getCurrentDestination().getId() == R.id.nav_recent_test ||
                         navController.getCurrentDestination().getId() == R.id.nav_connections ||
                         navController.getCurrentDestination().getId() == R.id.nav_requests) {
                     navController.navigate(R.id.nav_home);

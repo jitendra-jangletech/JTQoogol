@@ -1,5 +1,6 @@
 package com.jangletech.qoogol.dialog;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -30,6 +31,12 @@ import com.jangletech.qoogol.util.AESSecurities;
 import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.TinyDB;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.single.PermissionListener;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -94,31 +101,53 @@ public class CommentDialog extends Dialog implements
         });
 
         mBinding.etComment.setKeyBoardInputCallbackListener((inputContentInfo, flags, opts) -> {
-            try {
-                Log.i(TAG, inputContentInfo.getContentUri().toString());
-                FileOutputStream fos = null;
-                String filePath = inputContentInfo.getContentUri().getPath();
-                String extension = filePath.substring(filePath.lastIndexOf(".") + 1);
-                Log.i(TAG, "selected file path: " + filePath);
-                File imageFile = AppUtils.createStickerGifyFile(mContext, extension);
-                if (!imageFile.exists()) {
-                    imageFile.createNewFile();
-                }
 
-                final InputStream imageStream = mContext.getContentResolver().openInputStream(inputContentInfo.getContentUri());
-                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+            Dexter.withActivity(mContext)
+                    .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    .withListener(new PermissionListener() {
+                        @Override
+                        public void onPermissionGranted(PermissionGrantedResponse response) {
+                            try {
+                                Log.i(TAG, inputContentInfo.getContentUri().toString());
+                                FileOutputStream fos = null;
+                                String filePath = inputContentInfo.getContentUri().getPath();
+                                String extension = filePath.substring(filePath.lastIndexOf(".") + 1);
+                                Log.i(TAG, "selected file path: " + filePath);
+                                File imageFile = AppUtils.createStickerGifyFile(mContext, extension);
+                                if (!imageFile.exists()) {
+                                    imageFile.createNewFile();
+                                }
 
-                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                selectedImage.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
-                byte[] byteArray = byteArrayOutputStream.toByteArray();
-                fos = new FileOutputStream(imageFile);
-                fos.write(byteArray);
-                fos.flush();
-                fos.close();
-                sendGifComment(imageFile);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+                                final InputStream imageStream = mContext.getContentResolver().openInputStream(inputContentInfo.getContentUri());
+                                //final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                                AppUtils.readFully(imageStream,imageFile);
+                                //ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                                /*selectedImage.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+                                byte[] byteArray = byteArrayOutputStream.toByteArray();
+                                fos = new FileOutputStream(imageFile);
+                                fos.write(byteArray);
+                                fos.flush();
+                                fos.close();*/
+                                sendGifComment(imageFile);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onPermissionDenied(PermissionDeniedResponse response) {
+                            Toast.makeText(mContext, "Storage permission denied.", Toast.LENGTH_LONG).show();
+                        }
+
+                        @Override
+                        public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+                            token.continuePermissionRequest();
+                        }
+                    })
+                    .withErrorListener(error ->
+                            Toast.makeText(mContext, "Error occurred! ", Toast.LENGTH_SHORT).show())
+                    .onSameThread()
+                    .check();
         });
 
         setOnKeyListener(new Dialog.OnKeyListener() {
@@ -173,9 +202,9 @@ public class CommentDialog extends Dialog implements
                 ProgressDialog.getInstance().dismiss();
                 if (response.body() != null && response.body().getResponse().equals("200")) {
                     Log.d(TAG, "onResponse Success: ");
-                    if (isCallFromTest)
-                        fetchCommentsAPI(Integer.parseInt(AppUtils.getUserId()),
-                                id, "L", "", "", "", "");
+                    addCommentCount++;
+                    fetchCommentsAPI(Integer.parseInt(AppUtils.getUserId()),
+                            id, "L", "", "", "", "");
                 } else {
                     AppUtils.showToast(mContext, null, response.body().getErrorMsg());
                 }
@@ -459,4 +488,6 @@ public class CommentDialog extends Dialog implements
         }
         commentAdapter.notifyItemChanged(itemPosition, comments);
     }
+
+
 }

@@ -82,6 +82,12 @@
         tools:layout="@layout/fragment_test_shared_by_you" />
 
     <fragment
+        android:id="@+id/nav_shared_with_you"
+        android:name="com.jangletech.qoogol.ui.test.shared_with_you.TestSharedWithYouFragment"
+        android:label="@string/shared_with_you"
+        tools:layout="@layout/fragment_test_shared_by_you" />
+
+    <fragment
         android:id="@+id/nav_notifications"
         android:name="com.jangletech.qoogol.ui.notifications.NotificationsFragment"
         android:label="@string/menu_notifications"

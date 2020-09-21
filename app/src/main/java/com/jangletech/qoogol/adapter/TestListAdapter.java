@@ -90,10 +90,9 @@ public class TestListAdapter extends RecyclerView.Adapter<TestListAdapter.ViewHo
     public void onBindViewHolder(@NonNull TestListAdapter.ViewHolder holder, int position) {
         Log.e(TAG, "onBindViewHolder Position : " + position);
         TestModelNew testModelNew = testModelList.get(position);
-        //map.put(position, itemBinding.likeValue);
         holder.itemBinding.tvTestNameSubject.setText(testModelNew.getTm_name() + "(" + testModelNew.getSm_sub_name() + ")");
         holder.itemBinding.tvCategory.setText(BaseFragment.getDefinedTestCategory(testModelNew.getTm_catg()));
-        holder.itemBinding.tvDuration.setText(testModelNew.getTm_duration() + " Min.");
+        holder.itemBinding.tvDuration.setText(testModelNew.getTm_duration());
         holder.itemBinding.tvTotalMarks.setText(testModelNew.getTm_tot_marks());
         holder.itemBinding.tvDifficultyLevel.setText(mapDiffLevel.get(testModelNew.getTm_diff_level()));
         holder.itemBinding.ratingvalue.setText(testModelNew.getTm_rating_count());
@@ -119,6 +118,7 @@ public class TestListAdapter extends RecyclerView.Adapter<TestListAdapter.ViewHo
 
         Log.e(TAG, "Like Count : " + testModelNew.getLikeCount());
         holder.itemBinding.likeValue.setText("" + testModelNew.getLikeCount());
+
 
         /*if (testModelList.get(holder.getAdapterPosition()).getShareCount() != null) {
             holder.itemBinding.shareValue.setText(testModelNew.getShareCount());
@@ -158,8 +158,6 @@ public class TestListAdapter extends RecyclerView.Adapter<TestListAdapter.ViewHo
             holder.itemBinding.like.setBackgroundDrawable(activity.getDrawable(R.drawable.ic_like));
         }
 
-        holder.itemBinding.shareValue.setText(testModelNew.getShareCount());
-        holder.itemBinding.commentValue.setText(testModelNew.getCommentsCount());
 
         if (testModelNew.getPublishedDate() != null)
             holder.itemBinding.tvPublishedDate.setText(DateUtils.getFormattedDate(testModelNew.getPublishedDate().substring(0, 10)));
@@ -175,11 +173,11 @@ public class TestListAdapter extends RecyclerView.Adapter<TestListAdapter.ViewHo
         });
 
         holder.itemBinding.commentLayout.setOnClickListener(v -> {
-            testClickListener.onCommentClick(testModelNew,position);
+            testClickListener.onCommentClick(testModelNew, position);
         });
 
         holder.itemBinding.shareLayout.setOnClickListener(v -> {
-            testClickListener.onShareClick(testModelNew,position);
+            testClickListener.onShareClick(testModelNew, position);
         });
 
         holder.itemBinding.favorite.setOnClickListener(v -> {
@@ -216,9 +214,9 @@ public class TestListAdapter extends RecyclerView.Adapter<TestListAdapter.ViewHo
 
         void onStartTestClick(TestModelNew testModel);
 
-        void onCommentClick(TestModelNew testModel,int pos);
+        void onCommentClick(TestModelNew testModel, int pos);
 
-        void onShareClick(TestModelNew testModelNew,int pos);
+        void onShareClick(TestModelNew testModelNew, int pos);
 
         void onLikeCountClick(TestModelNew testModel);
 

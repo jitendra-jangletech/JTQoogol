@@ -73,11 +73,11 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
 
         if (callingFrom.equals(Module.Test.toString())) {
 
-            if (comments.getReplyLikeCount() > 0) {
-                holder.commentItemBinding.tvLikes.setVisibility(View.VISIBLE);
-            } else {
-                holder.commentItemBinding.tvLikes.setVisibility(View.GONE);
-            }
+//            if (comments.getReplyLikeCount() > 0) {
+//                holder.commentItemBinding.tvLikes.setVisibility(View.VISIBLE);
+//            } else {
+//                holder.commentItemBinding.tvLikes.setVisibility(View.GONE);
+//            }
 
             if (comments.getTlc_user_id().equalsIgnoreCase(AppUtils.getUserId())) {
                 //self comment
@@ -102,11 +102,11 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             holder.commentItemBinding.tvLikes.setText(String.valueOf(comments.getQuestLikeCount()));
             holder.commentItemBinding.tvCommentCount.setText(String.valueOf(comments.getQuestCommentCount()));
 
-            if (comments.getQuestCommentCount() > 0) {
-                holder.commentItemBinding.tvCommentCount.setVisibility(View.VISIBLE);
-            } else {
-                holder.commentItemBinding.tvCommentCount.setVisibility(View.GONE);
-            }
+//            if (comments.getQuestCommentCount() > 0) {
+//                holder.commentItemBinding.tvCommentCount.setVisibility(View.VISIBLE);
+//            } else {
+//                holder.commentItemBinding.tvCommentCount.setVisibility(View.GONE);
+//            }
 
             if (comments.getUserId().equalsIgnoreCase(AppUtils.getUserId())) {
                 holder.commentItemBinding.tvDelete.setVisibility(View.VISIBLE);
@@ -141,13 +141,13 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             holder.commentItemBinding.tvCommentCount.setVisibility(View.GONE);
         }
 
-        if(!comments.getStorageId().isEmpty()){
+        if (!comments.getStorageId().isEmpty()) {
             commentItemBinding.textCommentBody.setVisibility(View.GONE);
             commentItemBinding.imgGif.setVisibility(View.VISIBLE);
             Glide.with(activity)
-                    .load(AppUtils.getMedialUrl(activity, comments.getStorageId(),comments.getMediaPath()))
+                    .load(AppUtils.getMedialUrl(activity, comments.getStorageId(), comments.getMediaPath()))
                     .into(holder.commentItemBinding.imgGif);
-        }else{
+        } else {
             commentItemBinding.textCommentBody.setVisibility(View.VISIBLE);
         }
 
@@ -161,8 +161,26 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             commentItemClickListener.onCommentDelete(position, comments);
         });
 
-        holder.commentItemBinding.commentlayouyt.setOnClickListener(v -> {
+        /*holder.commentItemBinding.commentlayouyt.setOnClickListener(v -> {
             //Comments comments = commentList.get(getAdapterPosition());
+            if (callingFrom.equals(Module.Learning.toString())) {
+                commentItemClickListener.onItemClick(comments.getUserId());
+            }
+            if (callingFrom.equals(Module.Test.toString())) {
+                commentItemClickListener.onItemClick(comments.getTlc_user_id());
+            }
+        });*/
+
+        holder.commentItemBinding.profilePic.setOnClickListener(v -> {
+            if (callingFrom.equals(Module.Learning.toString())) {
+                commentItemClickListener.onItemClick(comments.getUserId());
+            }
+            if (callingFrom.equals(Module.Test.toString())) {
+                commentItemClickListener.onItemClick(comments.getTlc_user_id());
+            }
+        });
+
+        holder.commentItemBinding.tvSenderName.setOnClickListener(v -> {
             if (callingFrom.equals(Module.Learning.toString())) {
                 commentItemClickListener.onItemClick(comments.getUserId());
             }
@@ -209,18 +227,23 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         void onCommentsClick(int pos, Comments comments);
 
         void onLikeClick(int pos, Comments comments);
+
         void onReplyClick(int pos, Comments comments);
     }
 
     public void deleteComment(int pos) {
         Log.d(TAG, "deleteComment: " + pos);
-        if (commentList.size() == 1) {
+        commentList.remove(pos);
+        notifyItemRemoved(pos);
+        notifyItemRangeChanged(pos, getItemCount());
+        /*if (commentList.size() == 1) {
             commentList.remove(0);
             notifyItemRemoved(0);
         } else {
             commentList.remove(pos);
             notifyItemRemoved(pos);
-        }
+            notifyDataSetChanged();
+        }*/
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

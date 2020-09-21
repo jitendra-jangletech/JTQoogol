@@ -208,5 +208,6 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.View
     public void deleteEducation(int pos) {
         educationList.remove(pos);
         notifyItemRemoved(pos);
+        notifyItemRangeChanged(pos, getItemCount());
     }
 }

@@ -207,16 +207,32 @@ public interface ApiInterface {
     @Multipart
     @POST(Constant.PROCESS_TEST)
     Call<VerifyResponse> sendGifComment(@Part(Constant.u_user_id) RequestBody userId,
-                                            @Part(Constant.tm_id) RequestBody tmId,
-                                            @Part(Constant.CASE) RequestBody strCase,
-                                            @Part MultipartBody.Part image);
+                                        @Part(Constant.tm_id) RequestBody tmId,
+                                        @Part(Constant.CASE) RequestBody strCase,
+                                        @Part MultipartBody.Part image);
 
     @Multipart
     @POST(Constant.PROCESS_QUESTION)
     Call<VerifyResponse> sendQuestGifComment(@Part(Constant.u_user_id) RequestBody userId,
-                                        @Part(Constant.q_id) RequestBody qId,
-                                        @Part(Constant.CASE) RequestBody strCase,
-                                        @Part MultipartBody.Part image);
+                                             @Part(Constant.q_id) RequestBody qId,
+                                             @Part(Constant.CASE) RequestBody strCase,
+                                             @Part MultipartBody.Part image);
+
+    @Multipart
+    @POST(Constant.PROCESS_TEST)
+    Call<VerifyResponse> sendReplyGifComment(@Part(Constant.u_user_id) RequestBody userId,
+                                             @Part(Constant.tm_id) RequestBody tmId,
+                                             @Part(Constant.CASE) RequestBody strCase,
+                                             @Part(Constant.test_comment_reply_id) RequestBody replyId,
+                                             @Part MultipartBody.Part image);
+
+    @Multipart
+    @POST(Constant.PROCESS_QUESTION)
+    Call<VerifyResponse> sendReplyQuestGifComment(@Part(Constant.u_user_id) RequestBody userId,
+                                                  @Part(Constant.q_id) RequestBody qId,
+                                                  @Part(Constant.CASE) RequestBody strCase,
+                                                  @Part(Constant.quest_comment_reply_id) RequestBody replyId,
+                                                  @Part MultipartBody.Part image);
 
 
     @FormUrlEncoded
