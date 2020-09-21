@@ -467,7 +467,7 @@ public class LearningQuestionsNew  implements Cloneable{
 
 
     public String getQue_media_typs() {
-        return que_media_typs!=null?que_media_typs:"";
+        return que_media_typs;
     }
 
     public void setQue_media_typs(String que_media_typs) {
