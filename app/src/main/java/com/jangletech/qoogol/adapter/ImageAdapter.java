@@ -50,7 +50,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
 
         String img = imgList.get(position);
         try {
-            Glide.with(activity).load(new URL(img)).into(imageItemBinding.img);
+            Glide.with(activity).load(new URL(img)).placeholder(R.drawable.no_image).error(R.drawable.no_image).into(imageItemBinding.img);
         } catch (Exception e) {
             e.printStackTrace();
         }

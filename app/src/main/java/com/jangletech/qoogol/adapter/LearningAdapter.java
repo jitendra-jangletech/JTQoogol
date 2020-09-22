@@ -344,7 +344,7 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     if (tempimgList.size() == 1) {
                         try {
                             queImg1.setVisibility(View.VISIBLE);
-                            Glide.with(activity).load(new URL(tempimgList.get(0))).into(queImg1);
+                            Glide.with(activity).load(new URL(tempimgList.get(0))).placeholder(R.drawable.no_image).error(R.drawable.no_image).into(queImg1);
                             List<String> finalTempimgList = tempimgList;
                             queImg1.setOnClickListener(v -> {
                                 Bundle bundle = new Bundle();
@@ -500,7 +500,7 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 File file = new File(UtilHelper.getDirectory(activity), fileName);
                 Log.d(TAG, "loadImage URL : " + file);
                 if (file.exists()) {
-                    Glide.with(activity).load(file).into(imageView);
+                    Glide.with(activity).load(file).placeholder(R.drawable.no_image).error(R.drawable.no_image).into(imageView);
                 } else {
                     Glide.with(activity).load(Constant.PRODUCTION_BASE_FILE_API + img.replace(".png", ".PNG").trim())
                             .placeholder(R.drawable.no_image)
@@ -508,7 +508,7 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                             .into(imageView);
                 }
             } else {
-                Glide.with(activity).load(img).into(imageView);
+                Glide.with(activity).load(img).placeholder(R.drawable.no_image).error(R.drawable.no_image).into(imageView);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -600,8 +600,8 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             String decoded = AppUtils.decodedString(learningQuestionsNew.getFeedback());
             ratingFeedbackBinding.feedback.setText(decoded);
             ratingFeedbackBinding.submitRating.setOnClickListener(v -> {
-                dialog.dismiss();
                 if (ratingFeedbackBinding.rating.getRating() != 0) {
+                    dialog.dismiss();
                     String encoded = Base64.encodeToString(ratingFeedbackBinding.feedback.getText().toString().getBytes(StandardCharsets.UTF_8), Base64.DEFAULT);
                     String encodedText = StringUtils.stripAccents(encoded);
                     ProcessQuestionAPI(learningQuestionsNew.getQuestion_id(), 0, "rating", String.valueOf(ratingFeedbackBinding.rating.getRating()), encodedText, position, "", onValueChhangeListener);
@@ -609,6 +609,8 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     Toast.makeText(activity, "Please add ratings", Toast.LENGTH_SHORT).show();
                 }
             });
+
+            ratingFeedbackBinding.cancelRating.setOnClickListener(v -> dialog.dismiss());
         } catch (Exception e) {
             e.printStackTrace();
         }

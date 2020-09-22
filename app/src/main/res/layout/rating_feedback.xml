@@ -45,16 +45,36 @@
             android:maxLines="20"
             android:layout_height="wrap_content"/>
 
+
         <Button
             android:padding="@dimen/_10sdp"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
             android:layout_marginTop="@dimen/_20sdp"
-            app:strokeColor="@color/colorPrimary"
+            app:strokeColor="@color/white"
+            android:textColor="@color/colorWhite"
             android:text="@string/submit"
+            android:minWidth="@dimen/_110sdp"
             android:id="@+id/submit_rating"
-            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginRight="@dimen/_5sdp"
+            android:backgroundTint="@color/colorSkyBlue"
             app:layout_constraintTop_toBottomOf="@+id/feedback"
             app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:padding="@dimen/_10sdp"
+            style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+            android:layout_marginTop="@dimen/_20sdp"
+            app:strokeColor="@color/white"
+            android:minWidth="@dimen/_110sdp"
+            android:layout_marginLeft="@dimen/_5sdp"
+            android:textColor="@color/colorWhite"
+            android:text="@string/cancel"
+            android:id="@+id/cancel_rating"
+            android:backgroundTint="@color/colorSkyBlue"
+            app:layout_constraintTop_toBottomOf="@+id/feedback"
+            app:layout_constraintRight_toRightOf="parent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
