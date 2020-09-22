@@ -101,9 +101,11 @@ public class TestListAdapter extends RecyclerView.Adapter<TestListAdapter.ViewHo
         holder.itemBinding.tvQuestCount.setText(testModelNew.getQuest_count());
 
         if (testModelNew.getAttemptedTests() != null && testModelNew.getAttemptedTests().size() > 0) {
+            //holder.itemBinding.btnStartTest.setText("Resume Test");
             holder.itemBinding.tvNoOfAttempts.setVisibility(View.VISIBLE);
             holder.itemBinding.tvNoOfAttempts.setText(Html.fromHtml("<h>Attempts : " + testModelNew.getAttemptedTests().size() + "</h>"));
         } else {
+            //holder.itemBinding.btnStartTest.setText("Start Test");
             holder.itemBinding.tvNoOfAttempts.setVisibility(View.GONE);
         }
 
@@ -221,10 +223,6 @@ public class TestListAdapter extends RecyclerView.Adapter<TestListAdapter.ViewHo
         void onLikeCountClick(TestModelNew testModel);
 
         void favClick(TestModelNew testModelNew);
-
-        //void onLikeClick(TestModelNew testModel, int pos, boolean isChecked);
-
-        //void onFavouriteClick(TestModelNew testModel, boolean isChecked, int position);
 
         void onAttemptsClick(TestModelNew testModel);
     }

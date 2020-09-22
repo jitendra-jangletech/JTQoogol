@@ -6,10 +6,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
-
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.activities.PracticeTestActivity;
 import com.jangletech.qoogol.adapter.AttemptHistoryAdapter;
@@ -18,9 +16,7 @@ import com.jangletech.qoogol.model.AttemptedTest;
 import com.jangletech.qoogol.model.TestModelNew;
 import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.util.Constant;
-
 import java.util.List;
-
 
 public class TestAttemptHistoryFragment extends BaseFragment implements AttemptHistoryAdapter.AttemptedTestClickListener {
 
@@ -33,7 +29,6 @@ public class TestAttemptHistoryFragment extends BaseFragment implements AttemptH
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_test_attempt_history, container, false);
         initViews();
         return mBinding.getRoot();

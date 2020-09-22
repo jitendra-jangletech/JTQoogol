@@ -28,17 +28,6 @@ public class TestListResponse {
         this.prev_tm_id = prev_tm_id;
     }
 
-//    @SerializedName(Constant.row_count)
-//    private String pageCount;
-//
-//    public String getPageCount() {
-//        return pageCount;
-//    }
-//
-//    public void setPageCount(String pageCount) {
-//        this.pageCount = pageCount;
-//    }
-
     @SerializedName("Response")
     private String response;
 

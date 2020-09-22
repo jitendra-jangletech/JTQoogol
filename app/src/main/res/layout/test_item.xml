@@ -334,6 +334,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
+                        android:textColor="@color/colorBlack"
                         android:id="@+id/ratingvalue"
                         style="@style/font_style"
                         android:layout_width="wrap_content"
@@ -342,7 +343,6 @@
                         android:padding="@dimen/_5sdp"
                         android:text="0"
                         android:textAlignment="textStart"
-                        android:textColor="@color/colorLightGray"
                         app:layout_constraintBottom_toBottomOf="@+id/que_rating"
                         app:layout_constraintLeft_toRightOf="@+id/que_rating"
                         app:layout_constraintTop_toTopOf="@+id/que_rating" />

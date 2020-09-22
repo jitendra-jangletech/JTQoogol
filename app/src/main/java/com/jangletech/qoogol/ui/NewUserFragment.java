@@ -381,13 +381,13 @@ public class NewUserFragment extends BaseFragment {
     }
 
     private void doRegisterLogin(String mobile, String caseR, int countryCode, String passwordOtp, String deviceId, String appName) {
-        Log.d(TAG, "First Name : " + AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key1), mBinding.tilFirstName.getEditText().getText().toString().trim()));
-        Log.d(TAG, "Last Name : " + AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key2), mBinding.tilLastName.getEditText().getText().toString().trim()));
+        Log.d(TAG, "First Name : " + AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key1), mBinding.tilFirstName.getEditText().getText().toString().trim()).trim());
+        Log.d(TAG, "Last Name : " + AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key2), mBinding.tilLastName.getEditText().getText().toString().trim()).trim());
         Log.d(TAG, "Gender Name : " + gender);
-        Log.d(TAG, "Dob : " + AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key3), mBinding.tilDob.getEditText().getText().toString().trim()));
-        Log.d(TAG, "Email: " + AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key1), mBinding.tilEmailMobile.getEditText().getText().toString().trim()));
+        Log.d(TAG, "Dob : " + AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key3), mBinding.tilDob.getEditText().getText().toString().trim()).trim());
+        Log.d(TAG, "Email: " + AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key1), mBinding.tilEmailMobile.getEditText().getText().toString().trim()).trim());
         Log.d(TAG, "Otp : " + mBinding.tilOtp.getEditText().getText().toString().trim());
-        Log.d(TAG, "Password  : " + AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key6), mBinding.tilPassword.getEditText().getText().toString().trim()));
+        Log.d(TAG, "Password  : " + AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key6), mBinding.tilPassword.getEditText().getText().toString().trim()).trim());
         Log.d(TAG, "Case R  : " + caseR);
         Log.d(TAG, "Country Code : " + countryCode);
         Log.d(TAG, "Device Id : " + deviceId);
@@ -401,13 +401,13 @@ public class NewUserFragment extends BaseFragment {
 
         ProgressDialog.getInstance().show(getActivity());
         Call<RegisterLoginModel> call = apiService.doRegister(
-                AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key1), mBinding.tilFirstName.getEditText().getText().toString().trim()),
-                AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key2), mBinding.tilLastName.getEditText().getText().toString().trim()),
+                AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key1), mBinding.tilFirstName.getEditText().getText().toString().trim()).trim(),
+                AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key2), mBinding.tilLastName.getEditText().getText().toString().trim()).trim(),
                 gender,
-                AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key3), mBinding.tilDob.getEditText().getText().toString().trim()),
-                AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key4), mBinding.tilEmailMobile.getEditText().getText().toString().trim()),
+                AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key3), mBinding.tilDob.getEditText().getText().toString().trim()).trim(),
+                AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key4), mBinding.tilEmailMobile.getEditText().getText().toString().trim()).trim(),
                 mBinding.tilOtp.getEditText().getText().toString().trim(),
-                AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key6), mBinding.tilPassword.getEditText().getText().toString().trim()),
+                AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key6), mBinding.tilPassword.getEditText().getText().toString().trim()).trim(),
                 caseR,
                 countryCode,
                 deviceId,
@@ -485,7 +485,6 @@ public class NewUserFragment extends BaseFragment {
                     if (response.body() != null &&
                             response.body().getResponse().equals("200")) {
                         strReferralCode = referralCode;
-                        //isReferralCodeVerified = true;
                         mBinding.refrerralView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_right_tick, 0);
                         mBinding.refrerralView.setEnabled(false);
                         mBinding.btnVerify.setEnabled(false);

@@ -311,6 +311,7 @@
 
                     <androidx.appcompat.widget.AppCompatRatingBar
                         android:id="@+id/rating"
+                        android:backgroundTint="@color/colorSkyBlue"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_5sdp"

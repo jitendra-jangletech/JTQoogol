@@ -27,6 +27,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.gson.Gson;
 import com.jangletech.qoogol.R;
+import com.jangletech.qoogol.adapter.LearningAdapter;
 import com.jangletech.qoogol.adapter.PracticeTestQuestPaletAdapter;
 import com.jangletech.qoogol.adapter.PractiseViewPagerAdapter;
 import com.jangletech.qoogol.databinding.ActivityPracticeTestBinding;
@@ -309,11 +310,17 @@ public class PracticeTestActivity extends BaseActivity implements
     }
 
     private void setupViewPager(StartResumeTestResponse startResumeTestResponse) {
-        Log.d(TAG, "setupViewPager : " + startResumeTestResponse.getTm_duration());
         practiseViewPagerAdapter = new PractiseViewPagerAdapter(PracticeTestActivity.this, this, startResumeTestResponse, flag);
         practiceViewPager.setAdapter(practiseViewPagerAdapter);
         setTimerToSelectedPage(0);
-        setTestTimer(tvTestTimer, startResumeTestResponse.getTm_duration());
+        if (startResumeTestResponse.getTt_duration_taken() != null
+                && !startResumeTestResponse.getTt_duration_taken().isEmpty()) {
+            Log.i(TAG, "setupViewPager Test Taken Duration : " + startResumeTestResponse.getTt_duration_taken());
+            setTestTimer(tvTestTimer, startResumeTestResponse.getTt_duration_taken());
+        } else {
+            Log.i(TAG, "setupViewPager Test Master Duration : " + startResumeTestResponse.getTm_duration());
+            setTestTimer(tvTestTimer, startResumeTestResponse.getTm_duration());
+        }
     }
 
     private void setQuestPaletAdapter() {
@@ -467,7 +474,7 @@ public class PracticeTestActivity extends BaseActivity implements
                     }
                     finish();
                 } else {
-                    AppUtils.showToast(getApplicationContext(), null, "");
+                    AppUtils.showToast(getApplicationContext(), null, response.body().getErrorMsg());
                 }
             }
 
@@ -599,6 +606,7 @@ public class PracticeTestActivity extends BaseActivity implements
 
                 } else {
                     AppUtils.showToast(getApplicationContext(), null, response.body().getErrorMsg());
+                    discardTest();
                 }
             }
 
@@ -614,6 +622,21 @@ public class PracticeTestActivity extends BaseActivity implements
         TestQuestionNew testQuestionNew = questionsNewList.get(pos);
         questionGridAdapter.notifyItemChanged(pos, testQuestionNew);
         questionListAdapter.notifyItemChanged(pos, testQuestionNew);
+    }
+
+    private void discardTest(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(PracticeTestActivity.this, R.style.AlertDialogStyle);
+        builder.setTitle("Discard Test")
+                .setMessage("We are not able to save changes, due to some technical issue. Since, closing this test.")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        testCountDownTimer.cancel();
+                        finish();
+                    }
+                })
+                .setCancelable(false)
+                .show();
     }
 
     private void markAQuestion(int markedPos) {
@@ -674,53 +697,56 @@ public class PracticeTestActivity extends BaseActivity implements
 
     private void setTestTimer(TextView timer, String duration) {
 
-        String timerDuration[] = duration.split(":", -1);
-        int hours = Integer.parseInt(timerDuration[0]);
-        int minutes = Integer.parseInt(timerDuration[1]);
-        int seconds = Integer.parseInt(timerDuration[2]);
+        try {
 
-        if (testCountDownTimer != null)
-            testCountDownTimer.cancel();
+            String timerDuration[] = duration.split(":", -1);
+            int hours = Integer.parseInt(timerDuration[0]);
+            int minutes = Integer.parseInt(timerDuration[1]);
+            int seconds = Integer.parseInt(timerDuration[2]);
 
-        testCountDownTimer = new CountDownTimer(60 * 1000 * 60, 1000) {
-            int timerCountSeconds = seconds;
-            int timerCountMinutes = minutes;
-            int timerCountHours = hours;
+            if (testCountDownTimer != null)
+                testCountDownTimer.cancel();
 
-            public void onTick(long millisUntilFinished) {
-                if (timerCountSeconds > 0) {
-                    timerCountSeconds--;
-                } else {
-                    timerCountSeconds = 59;
-                    if (timerCountMinutes > 1) {
-                        timerCountMinutes--;
+            testCountDownTimer = new CountDownTimer(60 * 1000 * 60, 1000) {
+                int timerCountSeconds = seconds;
+                int timerCountMinutes = minutes;
+                int timerCountHours = hours;
+
+                public void onTick(long millisUntilFinished) {
+                    if (timerCountSeconds > 0) {
+                        timerCountSeconds--;
                     } else {
-                        timerCountMinutes = 59;
-                        timerCountHours--;
+                        timerCountSeconds = 59;
+                        if (timerCountMinutes > 1) {
+                            timerCountMinutes--;
+                        } else {
+                            timerCountMinutes = 59;
+                            timerCountHours--;
+                        }
+                    }
+
+                    if (timerCountMinutes < 10) {
+                        if (timerCountSeconds < 10) {
+                            timer.setText(String.valueOf("0" + timerCountHours + ":0" + timerCountMinutes + ":0" + timerCountSeconds));
+                        } else {
+                            timer.setText(String.valueOf("0" + timerCountHours + ":0" + timerCountMinutes + ":" + timerCountSeconds));
+                        }
+                    } else {
+                        if (timerCountSeconds < 10) {
+                            timer.setText(String.valueOf("0" + timerCountHours + ":" + timerCountMinutes + ":0" + timerCountSeconds));
+                        } else {
+                            timer.setText(String.valueOf("0" + timerCountHours + ":" + timerCountMinutes + ":" + timerCountSeconds));
+                        }
                     }
                 }
-
-                if (timerCountMinutes < 10) {
-                    if (timerCountSeconds < 10) {
-                        timer.setText(String.valueOf("0" + timerCountHours + ":0" + timerCountMinutes + ":0" + timerCountSeconds));
-                    } else {
-                        timer.setText(String.valueOf("0" + timerCountHours + ":0" + timerCountMinutes + ":" + timerCountSeconds));
-                    }
-                } else {
-                    if (timerCountSeconds < 10) {
-                        timer.setText(String.valueOf("0" + timerCountHours + ":" + timerCountMinutes + ":0" + timerCountSeconds));
-                    } else {
-                        timer.setText(String.valueOf("0" + timerCountHours + ":" + timerCountMinutes + ":" + timerCountSeconds));
-                    }
+                public void onFinish() {
+                    timer.setText("00:00:00");
                 }
-            }
-
-            public void onFinish() {
-                timer.setText("00:00:00");
-            }
-        }.start();
+            }.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-
 
     private void setTimerToSelectedPage(int pos) {
         if (!questionsNewList.get(pos).isAnsSubmitted()) {
@@ -798,7 +824,6 @@ public class PracticeTestActivity extends BaseActivity implements
             tvShareValue.setText(String.valueOf(prevCount));
         }
     }
-
 
     @Override
     public void onSharedSuccess(int count) {
