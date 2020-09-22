@@ -652,7 +652,7 @@
                             android:layout_marginLeft="@dimen/_5sdp"
                             android:text="@{question.rating}"
                             android:textAlignment="textStart"
-                            android:textColor="@color/colorLightGray"
+                            android:textColor="@color/black"
                             app:layout_constraintBottom_toBottomOf="@+id/que_rating"
                             app:layout_constraintLeft_toRightOf="@+id/que_rating"
                             app:layout_constraintTop_toTopOf="@+id/que_rating" />

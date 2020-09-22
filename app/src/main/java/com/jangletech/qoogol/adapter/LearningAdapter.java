@@ -489,7 +489,6 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         void onSubmitClick(int questionId, int isRight);
 
         void onLikeClick(String userId);
-
         void onFavClick();
     }
 
