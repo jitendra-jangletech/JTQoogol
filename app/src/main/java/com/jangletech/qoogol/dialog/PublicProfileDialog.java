@@ -15,6 +15,7 @@ import androidx.databinding.DataBindingUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.jangletech.qoogol.BuildConfig;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.database.repo.AppRepository;
 import com.jangletech.qoogol.databinding.DialogPublicProfileBinding;
@@ -84,7 +85,7 @@ public class PublicProfileDialog extends Dialog {
                 getUserId(getContext()),
                 getDeviceId(getContext()),
                 Constant.APP_NAME,
-                Constant.APP_VERSION,
+                BuildConfig.VERSION_NAME,
                 userid,
                 "UP"
         );

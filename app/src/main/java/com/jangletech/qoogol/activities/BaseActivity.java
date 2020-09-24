@@ -179,6 +179,23 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
+    public void apiCallFailureTestDialog(Throwable t) {
+        if (t instanceof UnknownHostException) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogStyle);
+            builder.setTitle("Alert")
+                    .setMessage("You have no active internet connection, Still you want to discard test?" +
+                            "\n Note :- Changes will not be saved.")
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                        }
+                    })
+                    .show();
+
+        }
+    }
+
     public String getSingleQuoteString(String text) {
         return String.format("'%s'", text);
     }

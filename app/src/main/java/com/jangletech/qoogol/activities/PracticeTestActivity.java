@@ -27,7 +27,6 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.gson.Gson;
 import com.jangletech.qoogol.R;
-import com.jangletech.qoogol.adapter.LearningAdapter;
 import com.jangletech.qoogol.adapter.PracticeTestQuestPaletAdapter;
 import com.jangletech.qoogol.adapter.PractiseViewPagerAdapter;
 import com.jangletech.qoogol.databinding.ActivityPracticeTestBinding;
@@ -422,6 +421,7 @@ public class PracticeTestActivity extends BaseActivity implements
         practiceViewPager.setCurrentItem(questPos, true);
     }
 
+
     @Override
     public void onYesClick(String obtainMarks) {
         Log.d(TAG, "onYesClick: " + obtainMarks);
@@ -434,7 +434,12 @@ public class PracticeTestActivity extends BaseActivity implements
         List<TestQuestionNew> submitTestQuestionList = new ArrayList<>();
         submitTest.setTm_id(startTestResponse.getTm_id());
         submitTest.setTt_id(String.valueOf(startTestResponse.getTtId()));
-        submitTest.setTt_duration_taken(tvTestTimer.getText().toString());
+        if (tvTestTimer.getText().toString().contains("-")) {
+            submitTest.setTt_duration_taken("00:00:00");
+        } else {
+            submitTest.setTt_duration_taken(tvTestTimer.getText().toString());
+        }
+
         int count = 0;
         for (TestQuestionNew question : questionsNewList) {
             View view = practiceViewPager.findViewWithTag(count);
@@ -475,13 +480,14 @@ public class PracticeTestActivity extends BaseActivity implements
                     finish();
                 } else {
                     AppUtils.showToast(getApplicationContext(), null, response.body().getErrorMsg());
+                    discardTest();
                 }
             }
 
             @Override
             public void onFailure(Call<VerifyResponse> call, Throwable t) {
                 ProgressDialog.getInstance().dismiss();
-                apiCallFailureDialog(t);
+                apiCallFailureTestDialog(t);
             }
         });
     }
@@ -606,7 +612,6 @@ public class PracticeTestActivity extends BaseActivity implements
 
                 } else {
                     AppUtils.showToast(getApplicationContext(), null, response.body().getErrorMsg());
-                    discardTest();
                 }
             }
 
@@ -624,7 +629,7 @@ public class PracticeTestActivity extends BaseActivity implements
         questionListAdapter.notifyItemChanged(pos, testQuestionNew);
     }
 
-    private void discardTest(){
+    private void discardTest() {
         AlertDialog.Builder builder = new AlertDialog.Builder(PracticeTestActivity.this, R.style.AlertDialogStyle);
         builder.setTitle("Discard Test")
                 .setMessage("We are not able to save changes, due to some technical issue. Since, closing this test.")
@@ -739,6 +744,7 @@ public class PracticeTestActivity extends BaseActivity implements
                         }
                     }
                 }
+
                 public void onFinish() {
                     timer.setText("00:00:00");
                 }

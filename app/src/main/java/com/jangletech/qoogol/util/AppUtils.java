@@ -142,7 +142,7 @@ public class AppUtils {
         if(t instanceof UnknownHostException){
             Toast.makeText(context, "Check Your Internet Connection.", Toast.LENGTH_LONG).show();
         }else{
-            Toast.makeText(context, "Something Went Wrong!! \n"+msg, Toast.LENGTH_LONG).show();
+            Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
         }
     }
 

@@ -663,7 +663,7 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
 
     private void fetchUserProfile() {
         ProgressDialog.getInstance().show(this);
-        Call<UserProfile> call = apiService.fetchUserInfo(getUserId(getApplicationContext()), getDeviceId(), Constant.APP_NAME, Constant.APP_VERSION);
+        Call<UserProfile> call = apiService.fetchUserInfo(getUserId(getApplicationContext()), getDeviceId(), Constant.APP_NAME,BuildConfig.VERSION_NAME);
         call.enqueue(new Callback<UserProfile>() {
             @Override
             public void onResponse(Call<UserProfile> call, Response<UserProfile> response) {
@@ -683,7 +683,6 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
                 ProgressDialog.getInstance().dismiss();
                 t.printStackTrace();
                 apiCallFailureDialog(t);
-
             }
         });
     }

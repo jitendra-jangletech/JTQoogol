@@ -216,6 +216,7 @@ public class SettingsFragment extends BaseFragment implements UniversalDialog.Di
     }
 
     private void updateNotificationSetting(UserProfile userProfile) {
+        Log.d(TAG, "updateNotificationSetting Mobile Length : "+userProfile.getMobileNumber().length());
         Call<UserProfileResponse> call = getApiService().updateUserProfile(
                 getUserId(getActivity()),
                 Constant.APP_NAME,
@@ -266,7 +267,7 @@ public class SettingsFragment extends BaseFragment implements UniversalDialog.Di
 
     private void fetchUserProfile() {
         ProgressDialog.getInstance().show(getActivity());
-        Call<UserProfile> call = getApiService().fetchUserInfo(getUserId(getActivity()), getDeviceId(getActivity()), Constant.APP_NAME, Constant.APP_VERSION);
+        Call<UserProfile> call = getApiService().fetchUserInfo(getUserId(getActivity()), getDeviceId(getActivity()), Constant.APP_NAME, BuildConfig.VERSION_NAME);
         call.enqueue(new Callback<UserProfile>() {
             @Override
             public void onResponse(Call<UserProfile> call, Response<UserProfile> response) {

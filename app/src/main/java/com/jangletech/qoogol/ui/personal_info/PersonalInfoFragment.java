@@ -21,7 +21,6 @@ import android.widget.DatePicker;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
@@ -35,6 +34,7 @@ import androidx.navigation.Navigation;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.jangletech.qoogol.BuildConfig;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.FragmentPersonalInfoBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
@@ -60,7 +60,6 @@ import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.TinyDB;
 import com.mukesh.OtpView;
 import com.theartofdev.edmodo.cropper.CropImage;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -70,7 +69,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Pattern;
-
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -278,6 +276,7 @@ public class PersonalInfoFragment extends BaseFragment {
                         mBinding.etEmail.getText().toString().trim()), "E");
             }
         });
+
         mBinding.btnMobileVerify.setOnClickListener(v -> {
             mBinding.etMobile.setError(null);
             if (mBinding.etMobile.getText().toString().trim().isEmpty() ||
@@ -371,7 +370,7 @@ public class PersonalInfoFragment extends BaseFragment {
 
     private void verifyMobile(String mobile, String verify) {
         HashMap map = new HashMap();
-        map.put(Constant.u_app_version, Constant.APP_VERSION);
+        map.put(Constant.u_app_version, BuildConfig.VERSION_NAME);
         map.put(Constant.device_id, getDeviceId(getActivity()));
         map.put(Constant.u_user_type, "u");
         map.put(Constant.u_mob_1, mobile);
@@ -617,7 +616,7 @@ public class PersonalInfoFragment extends BaseFragment {
 
         userProfileMap.put(Constant.u_Email_encrypted, AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key5), mBinding.etEmail.getText().toString().trim()));
         userProfileMap.put(Constant.u_mob_1_encrypted, AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key4), mBinding.etMobile.getText().toString().trim()));
-        userProfileMap.put(Constant.u_birth_date_encrypted, AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key3), convertDateToDataBaseFormat(mBinding.etDob.getText().toString())));
+        userProfileMap.put(Constant.u_birth_date_encrypted, AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key3), convertDateToDataBaseFormat(mBinding.etDob.getText().toString())).trim());
         userProfileMap.put(Constant.u_Password_encrypted, AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key6), mBinding.etPassword.getText().toString().trim()));
 
         if (mBinding.userNameAutoCompleteTextView.getText().toString().trim().isEmpty())
@@ -626,7 +625,7 @@ public class PersonalInfoFragment extends BaseFragment {
             userProfileMap.put(Constant.userName, mBinding.userNameAutoCompleteTextView.getText().toString().trim());
 
         userProfileMap.put(Constant.u_user_id, String.valueOf(userid));
-        userProfileMap.put(Constant.u_app_version, Constant.APP_VERSION);
+        userProfileMap.put(Constant.u_app_version, BuildConfig.VERSION_NAME);
         userProfileMap.put(Constant.device_id, getDeviceId(getActivity()));
         userProfileMap.put(Constant.appName, Constant.APP_NAME);
         userProfileMap.put(Constant.u_first_name_encrypted, AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key1), mBinding.etFirstName.getText().toString().trim()));
@@ -649,15 +648,16 @@ public class PersonalInfoFragment extends BaseFragment {
         Log.d(TAG, "updateUserProfile: " + userProfileMap);
         Log.d(TAG, "Focus First Name : " + AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key1), userProfileMap.get(Constant.u_first_name_encrypted)));
         Log.d(TAG, "Focus First Name : " + AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key2), userProfileMap.get(Constant.u_last_name_encrypted)));
-        Log.d(TAG, "Focus Mobile : " + AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key4), userProfileMap.get(Constant.u_mob_1_encrypted)));
+        //Log.d(TAG, "Focus Mobile : " + AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key4), userProfileMap.get(Constant.u_mob_1_encrypted)));
 
         Log.d(TAG, "updateUserProfile Private Switch : " + mBinding.switchPrivate.isChecked());
+        Log.d(TAG, "updateUserProfile Mobile Number Length: " + userProfileMap.get(Constant.u_mob_1_encrypted).length());
 
         ProgressDialog.getInstance().show(requireActivity());
         Call<UserProfileResponse> call = getApiService().updateUserProfile(
                 getUserId(getActivity()),
                 userProfileMap.get(Constant.appName),
-                userProfileMap.get(Constant.u_app_version),
+                BuildConfig.VERSION_NAME,
                 userProfileMap.get(Constant.device_id),
                 userProfileMap.get(Constant.u_first_name_encrypted),
                 userProfileMap.get(Constant.u_last_name_encrypted),
@@ -719,9 +719,8 @@ public class PersonalInfoFragment extends BaseFragment {
                 .into(mBinding.userProfilePic);
     }
 
-
     private void fetchUserProfile(String flag) {
-        call = getApiService().fetchUserInfo(getUserId(getActivity()), getDeviceId(getActivity()), Constant.APP_NAME, Constant.APP_VERSION);
+        call = getApiService().fetchUserInfo(getUserId(getActivity()), getDeviceId(getActivity()), Constant.APP_NAME, BuildConfig.VERSION_NAME);
         call.enqueue(new Callback<UserProfile>() {
             @Override
             public void onResponse(Call<UserProfile> call, Response<UserProfile> response) {
@@ -981,7 +980,7 @@ public class PersonalInfoFragment extends BaseFragment {
         ProgressDialog.getInstance().show(requireActivity());
         Call<VerifyResponse> call = getApiService().verifyMobileEmail(
                 map.get(Constant.appName),
-                map.get(Constant.u_app_version),
+                BuildConfig.VERSION_NAME,
                 map.get(Constant.device_id),
                 map.get(Constant.u_user_type),
                 map.get(Constant.u_mob_1),
@@ -996,7 +995,7 @@ public class PersonalInfoFragment extends BaseFragment {
                     if (response.body().getResponse().equals("200")) {
                         createVerifyOTPDialog(response.body().getNewOTP());
                     } else if (response.body().getResponse().equals("312")) {
-                        showErrorDialog(getActivity(), response.body().getResponse(),response.body().getErrorMsg());
+                        showErrorDialog(getActivity(), response.body().getResponse(), response.body().getErrorMsg());
                     } else {
                         AppUtils.showToast(getActivity(), null, response.body().getErrorMsg());
                     }
@@ -1142,7 +1141,7 @@ public class PersonalInfoFragment extends BaseFragment {
         params.put(Constant.u_user_id, String.valueOf(userid));
         params.put(Constant.device_id, getDeviceId(getActivity()));
         params.put(Constant.appName, Constant.APP_NAME);
-        params.put(Constant.u_app_version, Constant.APP_VERSION);
+        params.put(Constant.u_app_version, BuildConfig.VERSION_NAME);
         params.put(Constant.CASE, "N");
 
         RequestBody userId =
@@ -1152,7 +1151,7 @@ public class PersonalInfoFragment extends BaseFragment {
         RequestBody appName =
                 RequestBody.create(MediaType.parse("multipart/form-data"), Constant.APP_NAME);
         RequestBody appVersion =
-                RequestBody.create(MediaType.parse("multipart/form-data"), Constant.APP_VERSION);
+                RequestBody.create(MediaType.parse("multipart/form-data"), BuildConfig.VERSION_NAME);
         RequestBody caseq =
                 RequestBody.create(MediaType.parse("multipart/form-data"), "N");
 

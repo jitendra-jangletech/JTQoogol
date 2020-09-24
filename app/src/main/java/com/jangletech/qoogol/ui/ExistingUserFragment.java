@@ -174,22 +174,12 @@ public class ExistingUserFragment extends BaseFragment {
     }
 
     private void doRegisterLogin(String mobile, String caseR, int countryCode, String passwordOtp, String deviceId, String appName) {
-        //String mobileEnc = AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key4), mobile);
-        Log.d(TAG, "Mobile = : " + AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key4), mobile).trim().length());
-        Log.d(TAG, "Case = : " + caseR);
-        Log.d(TAG, "Country Code = : " + countryCode);
-        Log.d(TAG, "Password  = : " + AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key6), passwordOtp));
-        Log.d(TAG, "deviceId  = : " + deviceId);
-        Log.d(TAG, "appName  = : " + appName);
-        Log.d(TAG, "Token  = : " + new PreferenceManager(getActivity()).getToken());
-        Log.d(TAG, "Case2 = : E");
-
         ProgressDialog.getInstance().show(getActivity());
         Call<RegisterLoginModel> call = getApiService().doRegisterLogin(
-                AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key4), mobile).trim(),
+                AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key4), mobile),
                 caseR,
                 countryCode,
-                AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key6), passwordOtp).trim(),
+                AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key6), passwordOtp),
                 deviceId,
                 appName,
                 new PreferenceManager(getActivity()).getToken(),

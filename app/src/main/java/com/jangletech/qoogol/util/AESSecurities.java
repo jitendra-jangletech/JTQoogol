@@ -150,7 +150,7 @@ public class AESSecurities {
                 byte[] results = new byte[text.length()];
                 results = cipher.doFinal(Base64.decode(text, Base64.DEFAULT));
                 Log.i("Data", new String(results, StandardCharsets.UTF_8));
-                return new String(results, StandardCharsets.UTF_8); // it returns the result as a String
+                return new String(results, StandardCharsets.UTF_8).trim(); // it returns the result as a String
             } catch (Exception e) {
                 Log.e("Error in Decryption", e.toString());
             }
@@ -177,7 +177,7 @@ public class AESSecurities {
 
                 byte[] results = cipher.doFinal(text.getBytes(StandardCharsets.UTF_8));
 
-                return Base64.encodeToString(results, Base64.DEFAULT); // it returns the result as a String
+                return Base64.encodeToString(results, Base64.DEFAULT).trim(); // it returns the result as a String
             } catch (Exception e) {
                 e.printStackTrace();
             }

@@ -16,6 +16,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.jangletech.qoogol.BuildConfig;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.ShareAdapter;
 import com.jangletech.qoogol.databinding.DialogShareQuestionBinding;
@@ -257,7 +258,7 @@ public class ShareQuestionDialog extends Dialog implements ShareAdapter.OnItemCl
         } else {
             ProgressDialog.getInstance().show(mContext);
             call = apiService.shareAPI(actionId, tOrQ, "F", deviceId, userId,
-                    modelAction, Constant.APP_VERSION, qoogol, comment);
+                    modelAction, BuildConfig.VERSION_NAME, qoogol, comment);
             call.enqueue(new Callback<ResponseObj>() {
                 @Override
                 public void onResponse(Call<ResponseObj> call, retrofit2.Response<ResponseObj> response) {

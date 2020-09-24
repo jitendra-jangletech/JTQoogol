@@ -142,10 +142,7 @@ public class FollowReqAdapter extends RecyclerView.Adapter<FollowReqAdapter.View
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
         }
-
-
         popup.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
                 case R.id.action_remove_connection:

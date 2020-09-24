@@ -90,6 +90,8 @@ public class Constant {
     public static final String CASE2 = "Case2";
     public static final String userName = "143A";
 
+    //507O
+
     public static final String STATUS = "status";
     public static final String VERIFY = "Verify";
     public static final String u_imei_num = "126";
@@ -250,7 +252,6 @@ public class Constant {
     public static final String u_referred_by = "143";
 
     public static final String APP_NAME = "Q";
-    public static final String APP_VERSION = "1.0";
 
     // QLikesComments
     public static final String tlc_id = "1401";

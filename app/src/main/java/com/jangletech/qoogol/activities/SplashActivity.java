@@ -3,10 +3,8 @@ package com.jangletech.qoogol.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.model.AppConfigResponse;
 import com.jangletech.qoogol.model.MasterResponse;
