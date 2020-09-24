@@ -158,6 +158,13 @@
         tools:layout="@layout/fragment_pending_requests" />
 
     <fragment
+        android:id="@+id/nav_upload_question"
+        android:name="com.jangletech.qoogol.ui.upload_question.UploadQueFragment"
+        android:label="@string/upload_que"
+        tools:layout="@layout/fragment_upload_que" />
+
+
+    <fragment
         android:id="@+id/nav_blocked_connections"
         android:name="com.jangletech.qoogol.ui.connections.BlockedFragment"
         android:label="@string/blockedlist"

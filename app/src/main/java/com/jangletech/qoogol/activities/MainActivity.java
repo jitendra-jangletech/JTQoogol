@@ -100,7 +100,7 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
                 R.id.nav_share_app, R.id.nav_about,
                 R.id.nav_faq, R.id.nav_fav, R.id.nav_syllabus, R.id.nav_edit_profile,
                 R.id.nav_settings, R.id.nav_requests, R.id.nav_import_contacts,
-                R.id.nav_code_conduct,
+                R.id.nav_code_conduct,R.id.nav_upload_question,
                 R.id.nav_home, R.id.nav_learning, R.id.nav_shared_with_you_que, R.id.nav_shared_by_you_que, R.id.nav_test_my, R.id.nav_doubts)
                 .setDrawerLayout(drawerLayout)
                 .build();
@@ -212,6 +212,10 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
                 if (navigateFlag.equals(Nav.PENDING_REQ.toString())) {
                     navigateFlag = "";
                     navToFragment(R.id.nav_requests, Bundle.EMPTY);
+                }
+                if (navigateFlag.equals(Nav.UPLOAD_QUE.toString())) {
+                    navigateFlag = "";
+                    navToFragment(R.id.nav_upload_question, Bundle.EMPTY);
                 }
                 if (navigateFlag.equals(Nav.BLOCKED_CONN.toString())) {
                     navigateFlag = "";
@@ -357,6 +361,13 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
             mBinding.drawerLayout.closeDrawers();
             if (navController.getCurrentDestination().getId() != R.id.nav_requests) {
                 navigateFlag = Nav.PENDING_REQ.toString();
+            }
+        });
+
+        findViewById(R.id.nav_upload_question).setOnClickListener(v -> {
+            mBinding.drawerLayout.closeDrawers();
+            if (navController.getCurrentDestination().getId() != R.id.nav_upload_question) {
+                navigateFlag = Nav.UPLOAD_QUE.toString();
             }
         });
 
@@ -604,6 +615,7 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
                         navController.getCurrentDestination().getId() == R.id.nav_shared_by_you ||
                         navController.getCurrentDestination().getId() == R.id.nav_shared_with_you ||
                         navController.getCurrentDestination().getId() == R.id.nav_connections ||
+                        navController.getCurrentDestination().getId() == R.id.nav_upload_question ||
                         navController.getCurrentDestination().getId() == R.id.nav_requests) {
                     navController.navigate(R.id.nav_home);
                 } else if (navController.getCurrentDestination().getId() == R.id.nav_syllabus) {

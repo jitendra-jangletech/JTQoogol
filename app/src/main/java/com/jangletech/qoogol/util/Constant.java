@@ -189,6 +189,8 @@ public class Constant {
     public static int my_doubts = 0;
     public static int test_doubts = 1;
     public static int que_doubts = 2;
+    public static int submit = 0;
+    public static int submit_rate = 1;
 
     //Question media
     public static String TEXt = "1";

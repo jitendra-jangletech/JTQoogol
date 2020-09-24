@@ -277,6 +277,7 @@
     <string name="friend_req">Friend Requests</string>
     <string name="follow_req">Follow Requests</string>
     <string name="pending_req">Pending Requests</string>
+    <string name="upload_que">Upload Question</string>
     <string name="view_prof">View Profile</string>
     <string name="blockedconnection">Blocked Connections</string>
     <string name="blockedlist">Block List</string>

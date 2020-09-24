@@ -102,6 +102,8 @@ import static com.jangletech.qoogol.util.Constant.learning;
 import static com.jangletech.qoogol.util.Constant.que_doubts;
 import static com.jangletech.qoogol.util.Constant.sharedby;
 import static com.jangletech.qoogol.util.Constant.sharedto;
+import static com.jangletech.qoogol.util.Constant.submit;
+import static com.jangletech.qoogol.util.Constant.submit_rate;
 
 /**
  * Created by Pritali on 3/18/2020.
@@ -904,17 +906,16 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     ImgChoiceDragListener());
 
             mBinding.submit.setOnClickListener(v -> {
-                submitCall();
+                submitCall(submit);
             });
 
             mBinding.submitAndRate.setOnClickListener(v -> {
-                submitCall();
-                displayRatingDialog(learningQuestionsList.get(getAdapterPosition()), getAdapterPosition(), this);
+                submitCall(submit_rate);
             });
 
         }
 
-        private void submitCall() {
+        private void submitCall(int call_from) {
             try {
                 isSolvedRight = 1;
                 isAttempted = 0;
@@ -922,6 +923,8 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 submitFunction();
                 if (isAttempted == 1) {
                     countDownTimer.cancel();
+                    if (call_from==submit_rate)
+                        displayRatingDialog(learningQuestionsList.get(getAdapterPosition()), getAdapterPosition(), this);
                     onIconClick.onSubmitClick(learningQuestions.getQuestion_id(), isSolvedRight);
                 }
             } catch (Exception e) {
@@ -1450,17 +1453,16 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             mBinding.b4text.setOnDragListener(new
                     ChoiceDragListener());
             mBinding.submit.setOnClickListener(v -> {
-                submitCall();
+                submitCall(submit);
             });
 
             mBinding.submitAndRate.setOnClickListener(v -> {
-                submitCall();
-                displayRatingDialog(learningQuestionsList.get(getAdapterPosition()), getAdapterPosition(), this);
+                submitCall(submit_rate);
             });
 
         }
 
-        private void submitCall() {
+        private void submitCall(int call_from) {
             try {
                 isSolvedRight = 1;
                 isAttempted = 0;
@@ -1468,6 +1470,8 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 submitFunction();
                 if (isAttempted == 1) {
                     countDownTimer.cancel();
+                    if (call_from==submit_rate)
+                        displayRatingDialog(learningQuestionsList.get(getAdapterPosition()), getAdapterPosition(), this);
                     onIconClick.onSubmitClick(learningQuestions.getQuestion_id(), isSolvedRight);
                 }
             } catch (Exception e) {
@@ -1952,17 +1956,15 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             });
 
             mBinding.submit.setOnClickListener(v -> {
-                submitCall();
             });
 
             mBinding.submitAndRate.setOnClickListener(v -> {
-                submitCall();
-                displayRatingDialog(learningQuestionsList.get(getAdapterPosition()), getAdapterPosition(), this);
+                submitCall(submit_rate);
             });
 
         }
 
-        private void submitCall() {
+        private void submitCall(int call_from) {
             try {
                 isSolvedRight = 1;
                 isAttempted = 0;
@@ -1970,6 +1972,8 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 submitFunction(learningQuestions);
                 if (isAttempted == 1) {
                     countDownTimer.cancel();
+                    if (call_from==submit_rate)
+                        displayRatingDialog(learningQuestionsList.get(getAdapterPosition()), getAdapterPosition(), this);
                     onIconClick.onSubmitClick(learningQuestions.getQuestion_id(), isSolvedRight);
                 }
             } catch (Exception e) {
@@ -2249,17 +2253,16 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             });
 
             mBinding.submit.setOnClickListener(v -> {
-                submitCall();
+                submitCall(submit);
             });
 
             mBinding.submitAndRate.setOnClickListener(v -> {
-                submitCall();
-                displayRatingDialog(learningQuestionsList.get(getAdapterPosition()), getAdapterPosition(), this);
+                submitCall(submit_rate);
             });
 
         }
 
-        private void submitCall() {
+        private void submitCall(int call_from) {
             try {
                 isSolvedRight = 1;
                 isAttempted = 0;
@@ -2267,6 +2270,8 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 submitFunction(learningQuestions);
                 if (isAttempted == 1) {
                     countDownTimer.cancel();
+                    if (call_from==submit_rate)
+                        displayRatingDialog(learningQuestionsList.get(getAdapterPosition()), getAdapterPosition(), this);
                     onIconClick.onSubmitClick(learningQuestions.getQuestion_id(), isSolvedRight);
                 }
             } catch (Exception e) {
@@ -2523,17 +2528,16 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 }
             });
             mBinding.submit.setOnClickListener(v -> {
-                submitCall();
+                submitCall(submit);
             });
 
             mBinding.submitAndRate.setOnClickListener(v -> {
-                submitCall();
-                displayRatingDialog(learningQuestionsList.get(getAdapterPosition()), getAdapterPosition(), this);
+                submitCall(submit_rate);
             });
 
         }
 
-        private void submitCall() {
+        private void submitCall(int call_from) {
             try {
                 isSolvedRight = 1;
                 isAttempted = 0;
@@ -2541,6 +2545,8 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 submitFunction(learningQuestions);
                 if (isAttempted == 1) {
                     countDownTimer.cancel();
+                    if (call_from==submit_rate)
+                        displayRatingDialog(learningQuestionsList.get(getAdapterPosition()), getAdapterPosition(), this);
                     onIconClick.onSubmitClick(learningQuestions.getQuestion_id(), isSolvedRight);
                 }
             } catch (Exception e) {
@@ -2783,17 +2789,16 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 mBinding.scqimgImgtextChck4.setImageDrawable(activity.getResources().getDrawable(R.drawable.selectmark));
             });
             mBinding.submit.setOnClickListener(v -> {
-                submitCall();
+                submitCall(submit);
             });
 
             mBinding.submitAndRate.setOnClickListener(v -> {
-                submitCall();
-                displayRatingDialog(learningQuestionsList.get(getAdapterPosition()), getAdapterPosition(), this);
+                submitCall(submit_rate);
             });
 
         }
 
-        private void submitCall() {
+        private void submitCall(int call_from) {
             try {
                 isSolvedRight = 1;
                 isAttempted = 0;
@@ -2801,6 +2806,8 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 submitFunction(learningQuestions);
                 if (isAttempted == 1) {
                     countDownTimer.cancel();
+                    if (call_from==submit_rate)
+                        displayRatingDialog(learningQuestionsList.get(getAdapterPosition()), getAdapterPosition(), this);
                     onIconClick.onSubmitClick(learningQuestions.getQuestion_id(), isSolvedRight);
                 }
             } catch (Exception e) {
@@ -3030,17 +3037,16 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             });
 
             mBinding.submit.setOnClickListener(v -> {
-                submitCall();
+                submitCall(submit);
             });
 
             mBinding.submitAndRate.setOnClickListener(v -> {
-                submitCall();
-                displayRatingDialog(learningQuestionsList.get(getAdapterPosition()), getAdapterPosition(), this);
+                submitCall(submit_rate);
             });
 
         }
 
-        private void submitCall() {
+        private void submitCall(int call_from) {
             try {
                 isSolvedRight = 1;
                 isAttempted = 0;
@@ -3048,6 +3054,8 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 submitFunction(learningQuestions);
                 if (isAttempted == 1) {
                     countDownTimer.cancel();
+                    if (call_from==submit_rate)
+                        displayRatingDialog(learningQuestionsList.get(getAdapterPosition()), getAdapterPosition(), this);
                     onIconClick.onSubmitClick(learningQuestions.getQuestion_id(), isSolvedRight);
                 }
             } catch (Exception e) {
@@ -3267,23 +3275,24 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             });
 
             mBinding.submit.setOnClickListener(v -> {
-                submitCall();
+                submitCall(Constant.submit);
             });
 
             mBinding.submitAndRate.setOnClickListener(v -> {
-                submitCall();
-                displayRatingDialog(learningQuestionsList.get(getAdapterPosition()), getAdapterPosition(), this);
+                submitCall(Constant.submit_rate);
             });
 
         }
 
-        private void submitCall() {
+        private void submitCall(int call_from) {
             try {
                 isSolvedRight = 1;
                 isAttempted = 0;
                 LearningQuestionsNew learningQuestions = learningQuestionsList.get(getAdapterPosition());
                 submitFunction(learningQuestions);
                 if (isAttempted == 1) {
+                    if (call_from==submit_rate)
+                        displayRatingDialog(learningQuestionsList.get(getAdapterPosition()), getAdapterPosition(), this);
                     countDownTimer.cancel();
                     onIconClick.onSubmitClick(learningQuestions.getQuestion_id(), isSolvedRight);
                 }
@@ -3485,17 +3494,16 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             });
 
             mBinding.submit.setOnClickListener(v -> {
-                submitCall();
+                submitCall(submit);
             });
 
             mBinding.submitAndRate.setOnClickListener(v -> {
-                submitCall();
-                displayRatingDialog(learningQuestionsList.get(getAdapterPosition()), getAdapterPosition(), this);
+                submitCall(submit_rate);
             });
 
         }
 
-        private void submitCall() {
+        private void submitCall(int call_from) {
             try {
                 isSolvedRight = 1;
                 isAttempted = 0;
@@ -3503,6 +3511,8 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 submitFunction(learningQuestions);
                 if (isAttempted == 1) {
                     countDownTimer.cancel();
+                    if (call_from==submit_rate)
+                        displayRatingDialog(learningQuestionsList.get(getAdapterPosition()), getAdapterPosition(), this);
                     onIconClick.onSubmitClick(learningQuestions.getQuestion_id(), isSolvedRight);
                 }
             } catch (Exception e) {
@@ -3656,17 +3666,16 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 mBinding.close.setVisibility(View.GONE);
             });
             mBinding.submit.setOnClickListener(v -> {
-                submitCall();
+                submitCall(submit);
             });
 
             mBinding.submitAndRate.setOnClickListener(v -> {
-                submitCall();
-                displayRatingDialog(learningQuestionsList.get(getAdapterPosition()), getAdapterPosition(), this);
+                submitCall(submit_rate);
             });
 
         }
 
-        private void submitCall() {
+        private void submitCall(int call_from) {
             try {
                 isSolvedRight = 1;
                 isAttempted = 0;
@@ -3674,6 +3683,8 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 submitFunction(learningQuestions);
                 if (isAttempted == 1) {
                     countDownTimer.cancel();
+                    if (call_from==submit_rate)
+                        displayRatingDialog(learningQuestionsList.get(getAdapterPosition()), getAdapterPosition(), this);
                     onIconClick.onSubmitClick(learningQuestions.getQuestion_id(), isSolvedRight);
                 }
             } catch (Exception e) {
@@ -3794,17 +3805,16 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 mBinding.close.setVisibility(View.GONE);
             });
             mBinding.submit.setOnClickListener(v -> {
-                submitCall();
+                submitCall(submit);
             });
 
             mBinding.submitAndRate.setOnClickListener(v -> {
-                submitCall();
-                displayRatingDialog(learningQuestionsList.get(getAdapterPosition()), getAdapterPosition(), this);
+                submitCall(submit_rate);
             });
 
         }
 
-        private void submitCall() {
+        private void submitCall(int call_from) {
             try {
                 isSolvedRight = 1;
                 isAttempted = 0;
@@ -3812,6 +3822,8 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 submitFunction(learningQuestions);
                 if (isAttempted == 1) {
                     countDownTimer.cancel();
+                    if (call_from==submit_rate)
+                        displayRatingDialog(learningQuestionsList.get(getAdapterPosition()), getAdapterPosition(), this);
                     onIconClick.onSubmitClick(learningQuestions.getQuestion_id(), isSolvedRight);
                 }
             } catch (Exception e) {
@@ -3931,17 +3943,16 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 mBinding.close.setVisibility(View.GONE);
             });
             mBinding.submit.setOnClickListener(v -> {
-                submitCall();
+                submitCall(submit);
             });
 
             mBinding.submitAndRate.setOnClickListener(v -> {
-                submitCall();
-                displayRatingDialog(learningQuestionsList.get(getAdapterPosition()), getAdapterPosition(), this);
+                submitCall(submit_rate);
             });
 
         }
 
-        private void submitCall() {
+        private void submitCall(int call_from) {
             try {
                 isSolvedRight = 1;
                 isAttempted = 0;
@@ -3949,6 +3960,8 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 submitFunction(learningQuestions);
                 if (isAttempted == 1) {
                     countDownTimer.cancel();
+                    if (call_from==submit_rate)
+                        displayRatingDialog(learningQuestionsList.get(getAdapterPosition()), getAdapterPosition(), this);
                     onIconClick.onSubmitClick(learningQuestions.getQuestion_id(), isSolvedRight);
                 }
             } catch (Exception e) {
