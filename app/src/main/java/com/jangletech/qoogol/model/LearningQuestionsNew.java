@@ -464,8 +464,6 @@ public class LearningQuestionsNew  implements Cloneable{
         this.answer = answer;
     }
 
-
-
     public String getQue_media_typs() {
         return que_media_typs;
     }

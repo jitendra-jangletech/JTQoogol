@@ -15,6 +15,7 @@ public enum Nav {
     FAVOURITE,
     SAVED,
     PENDING_REQ,
+    UPLOAD_QUE,
     BLOCKED_CONN,
     IMPORT_CONTACTS,
     NOTIFICATIONS,
