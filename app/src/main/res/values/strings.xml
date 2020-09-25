@@ -25,7 +25,9 @@
     <string name="menu_test_details">Test Details</string>
 
     //Upload Questions
+    <string name="menu_up_scq">Scan Question</string>
     <string name="menu_scan_quest">Scan Question</string>
+    <string name="menu_select_quest_type">Select Question Type</string>
 
     //Test Menu
     <string name="menu_test_practice">Practice Test</string>
@@ -281,10 +283,12 @@
     <string name="follow_req">Follow Requests</string>
     <string name="pending_req">Pending Requests</string>
     <string name="upload_que">Upload Questions</string>
-    <string name="scq">SCQ</string>
-    <string name="mcq">MCQ</string>
+    <string name="scq_label">SCQ</string>
+    <string name="mcq_label">MCQ</string>
     <string name="short_ans">Short Answer</string>
     <string name="long_ans">Long Answer</string>
+    <string name="scq">Upload SCQ</string>
+    <string name="mcq">Upload MCQ</string>
     <string name="note_upload_que">Pick a related subject to upload question.</string>
     <string name="view_prof">View Profile</string>
     <string name="blockedconnection">Blocked Connections</string>
@@ -826,6 +830,7 @@
     <string name="incoming_call">Incoming Call</string>
     <string name="likes">Likes</string>
     <string name="scan">Scan Question</string>
+    <string name="question_text">Question Text</string>
 
 
 </resources>

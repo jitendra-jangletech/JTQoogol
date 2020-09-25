@@ -20,16 +20,16 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
+import androidx.navigation.Navigation;
 
 import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.FragmentScanQuestDescBinding;
-import com.jangletech.qoogol.dialog.FilterDialog;
 import com.jangletech.qoogol.dialog.QuestionTypeDialog;
+import com.jangletech.qoogol.model.UploadQuestion;
 import com.jangletech.qoogol.ui.BaseFragment;
-import com.jangletech.qoogol.util.AppUtils;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -233,9 +233,10 @@ public class ScanQuestionDescFragment extends BaseFragment {
                 }
             }
             mBinding.tvDetected.setText(detectedText);
-            QuestionTypeDialog bottomSheetFragment = new QuestionTypeDialog(getActivity());
-            bottomSheetFragment.setCancelable(false);
-            bottomSheetFragment.show(getActivity().getSupportFragmentManager(), bottomSheetFragment.getTag());
+            Bundle bundle = new Bundle();
+            UploadQuestion uploadQuestion = new UploadQuestion("Science", String.valueOf(detectedText));
+            bundle.putSerializable("Question",uploadQuestion);
+            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_quest_type,bundle);
 
         } finally {
             textRecognizer.release();
