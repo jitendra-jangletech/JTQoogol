@@ -163,6 +163,18 @@
         android:label="@string/upload_que"
         tools:layout="@layout/fragment_upload_que" />
 
+    <fragment
+        android:id="@+id/nav_scq_question"
+        android:name="com.jangletech.qoogol.ui.upload_question.SCQ_QueFragment"
+        android:label="@string/scq"
+        tools:layout="@layout/fragment_scq__que" />
+
+    <fragment
+        android:id="@+id/nav_mcq_question"
+        android:name="com.jangletech.qoogol.ui.upload_question.MCQ_QueFragment"
+        android:label="@string/mcq"
+        tools:layout="@layout/fragment_mcq__que" />
+
 
     <fragment
         android:id="@+id/nav_blocked_connections"

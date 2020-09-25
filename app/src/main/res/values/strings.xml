@@ -281,6 +281,8 @@
     <string name="follow_req">Follow Requests</string>
     <string name="pending_req">Pending Requests</string>
     <string name="upload_que">Upload Questions</string>
+    <string name="scq">SCQ</string>
+    <string name="mcq">MCQ</string>
     <string name="note_upload_que">Pick a related subject to upload question.</string>
     <string name="view_prof">View Profile</string>
     <string name="blockedconnection">Blocked Connections</string>

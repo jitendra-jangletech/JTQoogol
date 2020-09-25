@@ -61,7 +61,8 @@ public class UploadQueFragment extends BaseFragment implements SubjectAdapter.Su
 
     @Override
     public void onSubjectSelected(SubjectClass subjectClass) {
-        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_scan_quest, Bundle.EMPTY);
+        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_scq_question, Bundle.EMPTY);
+//        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_scan_quest, Bundle.EMPTY);
     }
 }
 
