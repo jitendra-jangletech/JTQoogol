@@ -220,7 +220,6 @@
                             android:foreground="?attr/selectableItemBackground"
                             android:text="@string/pending_req" />
 
-
                         <TextView
                             android:id="@+id/nav_upload_question"
                             style="@style/menu_item_style"

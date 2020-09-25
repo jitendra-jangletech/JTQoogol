@@ -56,23 +56,23 @@
         tools:layout="@layout/fragment_learning_details" />
 
 
-
-
     <fragment
         android:id="@+id/nav_test_attempt_history"
         android:name="com.jangletech.qoogol.ui.test_attempt_history.TestAttemptHistoryFragment"
         android:label="@string/menu_test_attempt"
         tools:layout="@layout/fragment_test_attempt_history" />
 
-
     <fragment
         android:id="@+id/nav_test_my"
         android:name="com.jangletech.qoogol.ui.test.my_test.MyTestFragment"
         android:label="@string/menu_test_practice"
-        tools:layout="@layout/fragment_test_my">
+        tools:layout="@layout/fragment_test_my" />
 
-
-    </fragment>
+    <fragment
+        android:id="@+id/nav_scan_quest"
+        android:name="com.jangletech.qoogol.ui.upload_question.ScanQuestionDescFragment"
+        android:label="@string/menu_scan_quest"
+        tools:layout="@layout/fragment_scan_quest_desc" />
 
 
     <fragment
@@ -193,7 +193,6 @@
         android:name="com.jangletech.qoogol.ui.doubts.DoubtsFragment"
         android:label="@string/menu_ask_doubts"
         tools:layout="@layout/doubts_fragment" />
-
 
 
 </navigation>

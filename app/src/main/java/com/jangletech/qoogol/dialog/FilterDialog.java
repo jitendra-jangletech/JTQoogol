@@ -32,7 +32,6 @@ public class FilterDialog extends BottomSheetDialogFragment implements View.OnCl
     private DialogFilterBinding mBinding;
     private ApiInterface apiService = ApiClient.getInstance().getApi();
     private HashMap<String, String> params = new HashMap<>();
-    //private String avgRating = "", strDiffLevel = "", subject = "";
 
     public FilterDialog(@NonNull Activity mContext, HashMap<String, String> params, FilterClickListener filterClickListener) {
         this.mContext = mContext;

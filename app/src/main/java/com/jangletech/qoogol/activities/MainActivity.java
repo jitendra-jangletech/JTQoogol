@@ -100,7 +100,7 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
                 R.id.nav_share_app, R.id.nav_about,
                 R.id.nav_faq, R.id.nav_fav, R.id.nav_syllabus, R.id.nav_edit_profile,
                 R.id.nav_settings, R.id.nav_requests, R.id.nav_import_contacts,
-                R.id.nav_code_conduct,R.id.nav_upload_question,
+                R.id.nav_code_conduct,
                 R.id.nav_home, R.id.nav_learning, R.id.nav_shared_with_you_que, R.id.nav_shared_by_you_que, R.id.nav_test_my, R.id.nav_doubts)
                 .setDrawerLayout(drawerLayout)
                 .build();
@@ -112,7 +112,9 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
             if (destination.getId() == R.id.nav_syllabus
                     || destination.getId() == R.id.nav_edit_profile
                     || destination.getId() == R.id.nav_blocked_connections
-                    || destination.getId() == R.id.nav_test_details) {
+                    || destination.getId() == R.id.nav_test_details
+                    || destination.getId() == R.id.nav_scan_quest
+                    || destination.getId() == R.id.nav_upload_question) {
                 hideBottomNav();
             } else {
                 showBottomNav();
@@ -675,7 +677,7 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
 
     private void fetchUserProfile() {
         ProgressDialog.getInstance().show(this);
-        Call<UserProfile> call = apiService.fetchUserInfo(getUserId(getApplicationContext()), getDeviceId(), Constant.APP_NAME,BuildConfig.VERSION_NAME);
+        Call<UserProfile> call = apiService.fetchUserInfo(getUserId(getApplicationContext()), getDeviceId(), Constant.APP_NAME, BuildConfig.VERSION_NAME);
         call.enqueue(new Callback<UserProfile>() {
             @Override
             public void onResponse(Call<UserProfile> call, Response<UserProfile> response) {

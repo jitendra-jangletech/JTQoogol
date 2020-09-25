@@ -239,6 +239,7 @@
     <style name="font_style">
         <item name="fontFamily">sans-serif-thin</item>
         <item name="android:textStyle">bold</item>
+
     </style>
 
     <style name="chipTitleStyle">

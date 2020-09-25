@@ -54,7 +54,6 @@ public class DoubtGroupAdapter extends RecyclerView.Adapter<DoubtGroupAdapter.Vi
                 onItemCliclListener.onItemClick(subjectClass.getSubjectId());
             }
         });
-
     }
 
     public interface onItemCliclListener{

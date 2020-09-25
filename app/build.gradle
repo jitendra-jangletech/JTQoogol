@@ -168,5 +168,7 @@ dependencies {
 
     //For in-App update
     implementation 'com.google.android.play:core:1.7.3'
+    implementation 'com.google.android.gms:play-services-vision:15.0.1'
+
 
 }

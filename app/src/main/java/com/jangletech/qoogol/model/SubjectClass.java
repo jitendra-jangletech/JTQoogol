@@ -7,8 +7,15 @@ import com.jangletech.qoogol.util.Constant;
  * Created by Pritali on 8/20/2020.
  */
 public class SubjectClass {
+
+
     @SerializedName(Constant.sm_id)
     private String subjectId;
+
+    public SubjectClass(String subjectId, String subjectName) {
+        this.subjectId = subjectId;
+        this.subjectName = subjectName;
+    }
 
     @SerializedName(Constant.sm_sub_name)
     private String subjectName;
