@@ -18,7 +18,6 @@ import com.jangletech.qoogol.model.UploadQuestion;
  */
 public class SCQ_QueFragment extends Fragment {
 
-    private static final String TAG = "SCQ_QueFragment";
     private FragmentScqQueBinding mBinding;
     private UploadQuestion uploadQuestion;
 
@@ -34,10 +33,11 @@ public class SCQ_QueFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         if (getArguments() != null && getArguments().getSerializable("Question") != null) {
             uploadQuestion = (UploadQuestion) getArguments().getSerializable("Question");
+            mBinding.questionEdittext.setText(uploadQuestion.getQuestDescription());
+            mBinding.subject.setText("Subject : " + uploadQuestion.getSubjectName());
         }
 
-        mBinding.questionEdittext.setText(uploadQuestion.getQuestDescription());
-        mBinding.questiondescEdittext.setText(uploadQuestion.getQuestDescription());
+
 
     }
 }
