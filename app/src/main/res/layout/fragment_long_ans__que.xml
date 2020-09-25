@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/_10sdp">
+
+            <EditText
+                android:id="@+id/question_edittext"
+                android:background="@drawable/grey_border"
+                android:lines="2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Question"
+                android:gravity="top"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:textColor="@color/colorBlack" />
+
+
+            <EditText
+                android:id="@+id/questiondesc_edittext"
+                android:background="@drawable/grey_border"
+                android:lines="3"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Question description"
+                android:maxLines="10"
+                android:gravity="top"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/question_edittext"
+                android:textColor="@color/colorBlack" />
+
+
+
+            <EditText
+                android:id="@+id/answer_edittext"
+                android:background="@drawable/grey_border"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Answer"
+                android:gravity="top"
+                android:lines="12"
+                android:maxLines="15"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/questiondesc_edittext"
+                android:textColor="@color/colorBlack" />
+
+
+            <Button
+                android:layout_marginTop="@dimen/_20sdp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/answer_edittext"
+                android:id="@+id/save_question"
+                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/color_red"
+                android:text="@string/save"
+                android:textAllCaps="false"
+                android:layout_marginEnd="@dimen/_2sdp"
+                android:textColor="@color/colorWhite"
+                app:cornerRadius="@dimen/_50sdp"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</layout>

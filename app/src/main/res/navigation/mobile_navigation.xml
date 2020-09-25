@@ -175,6 +175,17 @@
         android:label="@string/mcq"
         tools:layout="@layout/fragment_mcq__que" />
 
+    <fragment
+        android:id="@+id/nav_shortans_question"
+        android:name="com.jangletech.qoogol.ui.upload_question.ShortAns_QueFragment"
+        android:label="@string/short_ans"
+        tools:layout="@layout/fragment_short_ans__que" />
+
+    <fragment
+        android:id="@+id/nav_longans_question"
+        android:name="com.jangletech.qoogol.ui.upload_question.LongAns_QueFragment"
+        android:label="@string/long_ans"
+        tools:layout="@layout/fragment_long_ans__que" />
 
     <fragment
         android:id="@+id/nav_blocked_connections"
