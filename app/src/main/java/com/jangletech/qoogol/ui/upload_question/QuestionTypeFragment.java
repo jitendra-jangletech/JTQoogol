@@ -46,14 +46,14 @@ public class QuestionTypeFragment extends BaseFragment implements View.OnClickLi
         mBinding.btnNext.setOnClickListener(v -> {
             Bundle bundle = new Bundle();
             bundle.putSerializable("Question", uploadQuestion);
-            if (uploadQuestion.getQuestionType().equalsIgnoreCase("SCQ")) {
-                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_scq_question, bundle);
-            } else if (uploadQuestion.getQuestionType().equalsIgnoreCase("MCQ")) {
-                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_mcq_question, bundle);
+            if (uploadQuestion.getQuestionType().equalsIgnoreCase(Constant.scq)) {
+                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_scq_question,bundle);
+            } else if (uploadQuestion.getQuestionType().equalsIgnoreCase(Constant.mcq)) {
+                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_mcq_question,bundle);
             } else if (uploadQuestion.getQuestionType().equalsIgnoreCase(Constant.short_ans)) {
-                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_shortans_question, bundle);
+                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_shortans_question,bundle);
             } else if (uploadQuestion.getQuestionType().equalsIgnoreCase(Constant.long_ans)) {
-                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_longans_question, bundle);
+                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_longans_question,bundle);
             }
         });
     }
