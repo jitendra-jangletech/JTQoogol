@@ -31,12 +31,13 @@
                     android:id="@+id/question_edittext"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/question_border"
-                    android:gravity="top"
-                    android:textSize="@dimen/_14ssp"
+                    android:background="@drawable/grey_border"
+                    android:textSize="@dimen/_12ssp"
                     android:hint="Question"
+                    android:gravity="top"
                     android:layout_marginTop="@dimen/_8sdp"
-                    android:lines="2"
+                    android:maxLines="15"
+                    android:minLines="2"
                     android:textColor="@color/colorBlack"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/subject" />
@@ -50,7 +51,7 @@
                     android:background="@drawable/grey_border"
                     android:gravity="top"
                     android:hint="Question description"
-                    android:lines="3"
+                    android:minLines="3"
                     android:textSize="@dimen/_12ssp"
                     android:maxLines="10"
                     android:textColor="@color/colorBlack"
@@ -71,6 +72,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.1"
+                        android:textSize="@dimen/_12ssp"
+                        android:textColor="@color/colorBlack"
                         android:text="A." />
 
                     <EditText
@@ -81,6 +84,7 @@
                         android:layout_weight="0.8"
                         android:hint="Option 1"
                         android:maxLines="5"
+                        android:textSize="@dimen/_12ssp"
                         android:textColor="@color/colorBlack" />
 
                     <ImageView
@@ -106,6 +110,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.1"
+                        android:textSize="@dimen/_12ssp"
+                        android:textColor="@color/colorBlack"
                         android:text="B." />
 
                     <EditText
@@ -116,6 +122,7 @@
                         android:layout_weight="0.8"
                         android:hint="Option 2"
                         android:maxLines="5"
+                        android:textSize="@dimen/_12ssp"
                         android:textColor="@color/colorBlack" />
 
                     <ImageView
@@ -141,6 +148,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.1"
+                        android:textSize="@dimen/_12ssp"
+                        android:textColor="@color/colorBlack"
                         android:text="C." />
 
                     <EditText
@@ -151,6 +160,7 @@
                         android:layout_weight="0.8"
                         android:hint="Option 3"
                         android:maxLines="5"
+                        android:textSize="@dimen/_12ssp"
                         android:textColor="@color/colorBlack" />
 
                     <ImageView
@@ -174,6 +184,8 @@
 
                     <TextView
                         android:layout_width="0dp"
+                        android:textSize="@dimen/_12ssp"
+                        android:textColor="@color/colorBlack"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.1"
                         android:text="D." />
@@ -186,6 +198,7 @@
                         android:layout_weight="0.8"
                         android:hint="Option 4"
                         android:maxLines="5"
+                        android:textSize="@dimen/_12ssp"
                         android:textColor="@color/colorBlack" />
 
                     <ImageView
@@ -206,6 +219,7 @@
                     android:background="@drawable/grey_border"
                     android:hint="Answer"
                     android:maxLines="1"
+                    android:textSize="@dimen/_12ssp"
                     android:textColor="@color/colorBlack"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/scq4_layout" />

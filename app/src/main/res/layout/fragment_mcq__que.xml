@@ -11,32 +11,47 @@
             android:layout_height="match_parent"
             android:padding="@dimen/_10sdp">
 
-            <EditText
-                android:id="@+id/question_edittext"
-                android:background="@drawable/grey_border"
-                android:lines="2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Question"
-                android:gravity="top"
+            <TextView
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:textColor="@color/colorBlack" />
+                android:id="@+id/subject"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/_12ssp"
+                android:gravity="top"
+                android:text="Subject : "
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <EditText
+                android:id="@+id/question_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/grey_border"
+                android:textSize="@dimen/_12ssp"
+                android:hint="Question"
+                android:gravity="top"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:maxLines="15"
+                android:minLines="2"
+                android:textColor="@color/colorBlack"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/subject" />
 
 
             <EditText
                 android:id="@+id/questiondesc_edittext"
-                android:background="@drawable/grey_border"
-                android:lines="3"
-                android:gravity="top"
-                android:layout_marginTop="@dimen/_5sdp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:background="@drawable/grey_border"
+                android:gravity="top"
                 android:hint="Question description"
+                android:minLines="3"
+                android:textSize="@dimen/_12ssp"
                 android:maxLines="10"
+                android:textColor="@color/colorBlack"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/question_edittext"
-                android:textColor="@color/colorBlack" />
+                app:layout_constraintTop_toBottomOf="@+id/question_edittext" />
 
             <LinearLayout
                 android:id="@+id/mcq1_layout"
@@ -51,6 +66,8 @@
                     android:layout_width="0dp"
                     android:layout_weight="0.1"
                     android:text="A."
+                    android:textSize="@dimen/_12ssp"
+                    android:textColor="@color/colorBlack"
                     android:layout_height="wrap_content"/>
 
                 <EditText
@@ -61,6 +78,7 @@
                     android:hint="Option 1"
                     android:maxLines="5"
                     android:layout_weight="0.8"
+                    android:textSize="@dimen/_12ssp"
                     android:textColor="@color/colorBlack" />
 
                 <ImageView
@@ -85,6 +103,8 @@
                     android:layout_width="0dp"
                     android:layout_weight="0.1"
                     android:text="B."
+                    android:textSize="@dimen/_12ssp"
+                    android:textColor="@color/colorBlack"
                     android:layout_height="wrap_content"/>
 
                 <EditText
@@ -95,6 +115,7 @@
                     android:hint="Option 2"
                     android:maxLines="5"
                     android:layout_weight="0.8"
+                    android:textSize="@dimen/_12ssp"
                     android:textColor="@color/colorBlack" />
 
                 <ImageView
@@ -119,6 +140,8 @@
                     android:layout_width="0dp"
                     android:layout_weight="0.1"
                     android:text="C."
+                    android:textSize="@dimen/_12ssp"
+                    android:textColor="@color/colorBlack"
                     android:layout_height="wrap_content"/>
 
                 <EditText
@@ -129,7 +152,8 @@
                     android:hint="Option 3"
                     android:maxLines="5"
                     android:layout_weight="0.8"
-                    android:textColor="@color/colorBlack" />
+                    android:textSize="@dimen/_12ssp"
+                    android:textColor="@color/colorBlack"/>
 
                 <ImageView
                     android:id="@+id/mcq3_edit"
@@ -153,6 +177,8 @@
                     android:layout_width="0dp"
                     android:layout_weight="0.1"
                     android:text="D."
+                    android:textSize="@dimen/_12ssp"
+                    android:textColor="@color/colorBlack"
                     android:layout_height="wrap_content"/>
 
                 <EditText
@@ -163,6 +189,7 @@
                     android:layout_height="wrap_content"
                     android:hint="Option 4"
                     android:layout_weight="0.8"
+                    android:textSize="@dimen/_12ssp"
                     android:textColor="@color/colorBlack" />
 
                 <ImageView
@@ -178,14 +205,15 @@
             <EditText
                 android:id="@+id/answer_edittext"
                 android:background="@drawable/grey_border"
-                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_15sdp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Answer"
                 android:maxLines="2"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/mcq4_layout"
-                android:textColor="@color/colorBlack" />
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/_12ssp"/>
 
 
             <Button

@@ -36,8 +36,5 @@ public class SCQ_QueFragment extends Fragment {
             mBinding.questionEdittext.setText(uploadQuestion.getQuestDescription());
             mBinding.subject.setText("Subject : " + uploadQuestion.getSubjectName());
         }
-
-
-
     }
 }
