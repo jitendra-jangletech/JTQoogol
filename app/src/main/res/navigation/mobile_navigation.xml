@@ -74,6 +74,11 @@
         android:label="@string/menu_scan_quest"
         tools:layout="@layout/fragment_scan_quest_desc" />
 
+    <fragment
+        android:id="@+id/nav_quest_type"
+        android:name="com.jangletech.qoogol.ui.upload_question.QuestionTypeFragment"
+        android:label="@string/menu_select_quest_type"
+        tools:layout="@layout/dialog_question_type" />
 
     <fragment
         android:id="@+id/nav_shared_by_you"

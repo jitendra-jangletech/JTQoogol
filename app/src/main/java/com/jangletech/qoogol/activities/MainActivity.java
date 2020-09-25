@@ -114,6 +114,7 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
                     || destination.getId() == R.id.nav_blocked_connections
                     || destination.getId() == R.id.nav_test_details
                     || destination.getId() == R.id.nav_scan_quest
+                    || destination.getId() == R.id.nav_quest_type
                     || destination.getId() == R.id.nav_upload_question) {
                 hideBottomNav();
             } else {

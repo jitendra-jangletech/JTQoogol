@@ -25,7 +25,9 @@
     <string name="menu_test_details">Test Details</string>
 
     //Upload Questions
+    <string name="menu_up_scq">Scan Question</string>
     <string name="menu_scan_quest">Scan Question</string>
+    <string name="menu_select_quest_type">Select Question Type</string>
 
     //Test Menu
     <string name="menu_test_practice">Practice Test</string>
@@ -822,6 +824,7 @@
     <string name="incoming_call">Incoming Call</string>
     <string name="likes">Likes</string>
     <string name="scan">Scan Question</string>
+    <string name="question_text">Question Text</string>
 
 
 </resources>
