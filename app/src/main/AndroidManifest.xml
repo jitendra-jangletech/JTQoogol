@@ -70,7 +70,7 @@
             <meta-data
                 android:name="com.google.android.gms.vision.DEPENDENCIES"
                 android:value="ocr" />
-s
+
 
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
