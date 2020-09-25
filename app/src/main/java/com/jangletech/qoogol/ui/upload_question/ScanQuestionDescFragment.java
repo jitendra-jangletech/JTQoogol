@@ -237,9 +237,6 @@ public class ScanQuestionDescFragment extends BaseFragment {
             UploadQuestion uploadQuestion = new UploadQuestion("Science", String.valueOf(detectedText));
             bundle.putSerializable("Question",uploadQuestion);
             Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_quest_type,bundle);
-            //QuestionTypeDialog bottomSheetFragment = new QuestionTypeDialog(getActivity(), new UploadQuestion("Science", String.valueOf(detectedText)));
-            //bottomSheetFragment.setCancelable(false);
-            //bottomSheetFragment.show(getActivity().getSupportFragmentManager(), bottomSheetFragment.getTag());
 
         } finally {
             textRecognizer.release();

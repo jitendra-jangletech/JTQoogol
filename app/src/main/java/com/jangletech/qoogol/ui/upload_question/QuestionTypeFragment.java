@@ -43,11 +43,11 @@ public class QuestionTypeFragment extends BaseFragment implements View.OnClickLi
         }
         mBinding.tvSubject.setText(uploadQuestion.getSubjectName());
         mBinding.questionText.setText(uploadQuestion.getQuestDescription());
-        mBinding.btnNext.setOnClickListener(v->{
-            if(uploadQuestion.getQuestionType().equalsIgnoreCase("SCQ")){
+        mBinding.btnNext.setOnClickListener(v -> {
+            if (uploadQuestion.getQuestionType().equalsIgnoreCase("SCQ")) {
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("Question",uploadQuestion);
-                //Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id/.,bundle);
+                bundle.putSerializable("Question", uploadQuestion);
+                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_scq_question,bundle);
             }
         });
     }
@@ -77,8 +77,8 @@ public class QuestionTypeFragment extends BaseFragment implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
-        if(v!=null){
-            Chip chip = (Chip)v;
+        if (v != null) {
+            Chip chip = (Chip) v;
             uploadQuestion.setQuestionType(chip.getText().toString());
         }
     }
