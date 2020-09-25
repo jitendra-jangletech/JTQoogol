@@ -11,32 +11,47 @@
             android:layout_height="match_parent"
             android:padding="@dimen/_10sdp">
 
-            <EditText
-                android:id="@+id/question_edittext"
-                android:background="@drawable/grey_border"
-                android:lines="2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Question"
-                android:gravity="top"
+            <TextView
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:textColor="@color/colorBlack" />
+                android:id="@+id/subject"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/_12ssp"
+                android:gravity="top"
+                android:text="Subject : "
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <EditText
+                android:id="@+id/question_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/grey_border"
+                android:textSize="@dimen/_12ssp"
+                android:hint="Question"
+                android:gravity="top"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:maxLines="15"
+                android:minLines="2"
+                android:textColor="@color/colorBlack"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/subject" />
 
 
             <EditText
                 android:id="@+id/questiondesc_edittext"
-                android:background="@drawable/grey_border"
-                android:lines="3"
-                android:layout_marginTop="@dimen/_5sdp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Question description"
-                android:maxLines="10"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:background="@drawable/grey_border"
                 android:gravity="top"
+                android:hint="Question description"
+                android:minLines="3"
+                android:textSize="@dimen/_12ssp"
+                android:maxLines="10"
+                android:textColor="@color/colorBlack"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/question_edittext"
-                android:textColor="@color/colorBlack" />
+                app:layout_constraintTop_toBottomOf="@+id/question_edittext" />
 
 
 
@@ -48,9 +63,10 @@
                 android:layout_height="wrap_content"
                 android:hint="Answer"
                 android:gravity="top"
-                android:lines="12"
+                android:minLines="12"
                 android:maxLines="15"
                 app:layout_constraintLeft_toLeftOf="parent"
+                android:textSize="@dimen/_12ssp"
                 app:layout_constraintTop_toBottomOf="@+id/questiondesc_edittext"
                 android:textColor="@color/colorBlack" />
 
