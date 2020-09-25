@@ -42,6 +42,14 @@
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/question_edittext" />
 
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/questiondesc_edittext">
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
                 <LinearLayout
                     android:id="@+id/scq1_layout"
                     android:layout_width="match_parent"
