@@ -215,8 +215,6 @@ public class Constant {
     public static String MCQ_IMAGE_WITH_TEXT = "6";
     public static String FILL_THE_BLANKS = "7";
     public static String TRUE_FALSE = "8";
-    public static String SINGLE_LINE_ANSWER = "9";
-    public static String MULTI_LINE_ANSWER = "10";
     public static String MATCH_PAIR = "11";
     public static String MATCH_PAIR_IMAGE = "12";
 
@@ -278,6 +276,7 @@ public class Constant {
     public static final String REFER = "sm01SignupReferredByN";
     public static final String DASHBOARD = "q110FetchDashboard";
     public static final String PROCESS_QUESTION = "q141ProcessQuestion";
+    public static final String ADD_QUESTION = "q142AddQuestion";
     public static final String PROCESS_TEST = "q133ProcessTest";
     public static final String START_RESUME_TEST = "q131StartResumeTest";
     public static final String TEST_DETAILS = "q132FetchTestDetails";

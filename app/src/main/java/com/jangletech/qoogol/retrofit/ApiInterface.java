@@ -625,6 +625,20 @@ public interface ApiInterface {
                                         @Field(Constant.qlc_feedback) String feedback);
 
     @FormUrlEncoded
+    @POST(Constant.ADD_QUESTION)
+    Call<ResponseObj> addQuestionsApi(@Field(Constant.u_user_id) String userid,
+                                        @Field(Constant.appName) String app,
+                                        @Field(Constant.device_id) String deviceid,
+                                        @Field(Constant.sm_id) int subjectId,
+                                        @Field(Constant.q_quest) String question,
+                                        @Field(Constant.q_quest_desc) String questiondesc,
+                                        @Field(Constant.q_option_type) String optiontype,
+                                        @Field(Constant.q_mcq_op_1) String op1,
+                                        @Field(Constant.q_mcq_op_2) String op2,
+                                        @Field(Constant.q_mcq_op_3) String op3,
+                                        @Field(Constant.q_mcq_op_4) String op4);
+
+    @FormUrlEncoded
     @POST(Constant.PROCESS_QUESTION)
     Call<ProcessQuestion> submitSubjectiveQueApi(@Field(Constant.u_user_id) int userid,
                                                  @Field(Constant.q_id) int queId,
