@@ -65,7 +65,7 @@ public class ShortAns_QueFragment extends Fragment {
 
             Call<ResponseObj> call= apiService.addSubjectiveQuestionsApi(user_id, qoogol, getDeviceId(),
                     1, mBinding.questionEdittext.getText().toString(),
-                    mBinding.questiondescEdittext.getText().toString(),SHORT_ANSWER);
+                    mBinding.questiondescEdittext.getText().toString(),SHORT_ANSWER,mBinding.answerEdittext.getText().toString());
 
             call.enqueue(new Callback<ResponseObj>() {
                 @Override

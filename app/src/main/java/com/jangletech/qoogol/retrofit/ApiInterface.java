@@ -636,7 +636,8 @@ public interface ApiInterface {
                                         @Field(Constant.q_mcq_op_1) String op1,
                                         @Field(Constant.q_mcq_op_2) String op2,
                                         @Field(Constant.q_mcq_op_3) String op3,
-                                        @Field(Constant.q_mcq_op_4) String op4);
+                                        @Field(Constant.q_mcq_op_4) String op4,
+                                        @Field(Constant.a_sub_ans) String ans);
     @FormUrlEncoded
     @POST(Constant.ADD_QUESTION)
     Call<ResponseObj> addSubjectiveQuestionsApi(@Field(Constant.u_user_id) String userid,
@@ -645,7 +646,8 @@ public interface ApiInterface {
                                       @Field(Constant.sm_id) int subjectId,
                                       @Field(Constant.q_quest) String question,
                                       @Field(Constant.q_quest_desc) String questiondesc,
-                                      @Field(Constant.q_type) String type);
+                                      @Field(Constant.q_type) String type,
+                                                @Field(Constant.a_sub_ans) String ans);
 
 
     @FormUrlEncoded
