@@ -24,50 +24,53 @@
 
             <EditText
                 android:id="@+id/question_edittext"
+                android:background="@drawable/grey_border"
+                android:minLines="2"
+                android:layout_marginTop="@dimen/_8sdp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/grey_border"
-                android:textSize="@dimen/_12ssp"
                 android:hint="Question"
                 android:gravity="top"
-                android:layout_marginTop="@dimen/_8sdp"
-                android:maxLines="15"
-                android:minLines="2"
-                android:textColor="@color/colorBlack"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/subject" />
+                app:layout_constraintTop_toBottomOf="@+id/subject"
+                android:textColor="@color/colorBlack" />
 
 
             <EditText
                 android:id="@+id/questiondesc_edittext"
+                android:background="@drawable/grey_border"
+                android:minLines="3"
+                android:gravity="top"
+                android:layout_marginTop="@dimen/_8sdp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_8sdp"
-                android:background="@drawable/grey_border"
-                android:gravity="top"
                 android:hint="Question description"
-                android:minLines="3"
-                android:textSize="@dimen/_12ssp"
                 android:maxLines="10"
-                android:textColor="@color/colorBlack"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/question_edittext" />
+                app:layout_constraintTop_toBottomOf="@+id/question_edittext"
+                android:textColor="@color/colorBlack" />
 
-
+            <ImageView
+                android:id="@+id/ans_edit"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/questiondesc_edittext"
+                app:layout_constraintRight_toRightOf="parent"
+                android:src="@drawable/ic_edit_blue" />
 
             <EditText
                 android:id="@+id/answer_edittext"
                 android:background="@drawable/grey_border"
-                android:layout_marginTop="@dimen/_10sdp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Answer"
                 android:gravity="top"
+                android:layout_marginTop="@dimen/_2sdp"
                 android:minLines="12"
                 android:maxLines="15"
                 app:layout_constraintLeft_toLeftOf="parent"
-                android:textSize="@dimen/_12ssp"
-                app:layout_constraintTop_toBottomOf="@+id/questiondesc_edittext"
+                app:layout_constraintTop_toBottomOf="@+id/ans_edit"
                 android:textColor="@color/colorBlack" />
 
 

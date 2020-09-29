@@ -54,12 +54,7 @@ public class SCQ_QueFragment extends Fragment {
             mBinding.subject.setText("Subject : " + uploadQuestion.getSubjectName());
         }
         
-        mBinding.saveQuestion.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addQuestion();
-            }
-        });
+        mBinding.saveQuestion.setOnClickListener(v -> addQuestion());
     }
 
     private void addQuestion() {
