@@ -13,6 +13,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -35,22 +36,25 @@ public class SubjectiveAnsDialog extends Dialog {
     private String strAns;
     private GetAnsListener getAnsListener;
     private int seconds, minutes;
+    private String callFrom;
     private CountDownTimer countDownTimer;
 
-    public SubjectiveAnsDialog(@NonNull Context mContext, String ans, int seconds, int minutes, GetAnsListener listener) {
+    public SubjectiveAnsDialog(@NonNull Context mContext, String ans, String callFrom, GetAnsListener listener) {
         super(mContext, android.R.style.Theme_DeviceDefault_Light_DarkActionBar);
         this.mContext = mContext;
         this.strAns = ans;
+        this.callFrom = callFrom;
         this.getAnsListener = listener;
-        this.seconds = PractiseViewPagerAdapter.gSeconds;
-        this.minutes = PractiseViewPagerAdapter.gMinutes;
     }
 
-    public void showd(int minutes,int seconds) {
+    public void showd(int minutes, int seconds) {
         super.show();
-        Log.d(TAG, "showd Minutes : "+minutes);
-        Log.d(TAG, "showd Seconds : "+seconds);
         setTimer(mBinding.tvtimer, seconds, minutes);
+    }
+
+    private void hideViewsForQuestionUpload() {
+        mBinding.timerLayout.setVisibility(View.GONE);
+        mBinding.tvWordCounter.setVisibility(View.GONE);
     }
 
     @Override
@@ -64,10 +68,12 @@ public class SubjectiveAnsDialog extends Dialog {
         setContentView(mBinding.getRoot());
         Log.d(TAG, "onCreate Seconds : " + PractiseViewPagerAdapter.gSeconds);
         Log.d(TAG, "onCreate Minutes : " + PractiseViewPagerAdapter.gMinutes);
-
         mBinding.etAns.requestFocus();
         answerCharCounter(mBinding.etAns, mBinding.tvWordCounter, 200);
         mBinding.etAns.append(strAns);
+
+        if (callFrom.equalsIgnoreCase("UP_QUESTION"))
+            hideViewsForQuestionUpload();
 
         mBinding.save.setOnClickListener(v -> {
             countDownTimer.cancel();

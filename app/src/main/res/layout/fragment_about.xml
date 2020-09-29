@@ -25,9 +25,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
+                android:adjustViewBounds="true"
                 android:contentDescription="@string/app_name"
                 android:scaleType="fitCenter"
-                android:adjustViewBounds="true"
                 android:src="@drawable/ic_graphic" />
 
             <ImageView
@@ -35,18 +35,18 @@
                 android:layout_width="@dimen/_60sdp"
                 android:layout_height="@dimen/_60sdp"
                 android:layout_below="@+id/imgFeatureGraphic"
-                android:layout_marginStart="@dimen/activity_vertical_margin"
-                android:contentDescription="@string/app_name"
                 android:layout_centerHorizontal="true"
+                android:layout_marginStart="@dimen/activity_vertical_margin"
                 android:layout_marginTop="20dp"
+                android:contentDescription="@string/app_name"
                 android:src="@drawable/logo" />
 
             <View
                 android:id="@+id/view"
                 android:layout_width="0.5dp"
                 android:layout_height="@dimen/margin_30"
-                android:layout_below="@+id/imgFeatureGraphic"
                 android:layout_above="@+id/tvDesc"
+                android:layout_below="@+id/imgFeatureGraphic"
                 android:layout_marginTop="20dp"
                 android:layout_toEndOf="@+id/imgLogo"
                 android:background="@color/colorLightGray" />
@@ -55,13 +55,13 @@
                 android:id="@+id/tvAppVersion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_above="@+id/tvDesc"
                 android:layout_below="@+id/imgFeatureGraphic"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="@dimen/margin_10"
-                android:layout_above="@+id/tvDesc"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="@dimen/activity_vertical_margin"
                 android:layout_toEndOf="@+id/view"
-                android:layout_marginTop="20dp"
                 android:gravity="center"
                 android:textSize="@dimen/small_text" />
 
@@ -73,9 +73,9 @@
                 android:layout_marginStart="@dimen/activity_vertical_margin"
                 android:layout_marginTop="@dimen/margin_10"
                 android:layout_marginEnd="@dimen/activity_vertical_margin"
-                android:textAlignment="center"
                 android:autoLink="web"
                 android:text="@string/spotmeets_desc"
+                android:textAlignment="center"
                 android:textColor="@color/colorBlack"
                 android:textSize="12sp" />
 
@@ -88,8 +88,8 @@
                 android:layout_marginTop="@dimen/margin_10"
                 android:layout_marginEnd="@dimen/activity_vertical_margin"
                 android:autoLink="email"
-                android:textAlignment="center"
                 android:text="@string/support"
+                android:textAlignment="center"
                 android:textColor="@color/colorBlack"
                 android:textSize="12sp" />
 
@@ -101,8 +101,8 @@
                 android:layout_marginStart="@dimen/activity_vertical_margin"
                 android:layout_marginTop="@dimen/margin_10"
                 android:layout_marginEnd="@dimen/activity_vertical_margin"
-                android:textAlignment="center"
                 android:text="@string/link"
+                android:textAlignment="center"
                 android:textColor="@color/colorBlack"
                 android:textSize="12sp" />
 
@@ -112,14 +112,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tvlink"
+                android:layout_centerHorizontal="true"
                 android:layout_marginStart="@dimen/activity_vertical_margin"
                 android:layout_marginTop="@dimen/margin_10"
                 android:layout_marginEnd="@dimen/activity_vertical_margin"
                 android:padding="8dp"
-                android:layout_centerHorizontal="true"
-                android:textStyle="normal"
                 android:text="@string/rate_us_on_play_store"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:textStyle="normal" />
 
             <View
                 android:id="@+id/viewHorizontal"
@@ -135,14 +135,14 @@
                 android:id="@+id/imgJanle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:adjustViewBounds="true"
-                android:scaleType="fitCenter"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="20dp"
-                android:contentDescription="@string/app_name"
                 android:layout_below="@+id/viewHorizontal"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
                 android:layout_marginStart="@dimen/activity_vertical_margin"
+                android:layout_marginTop="20dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/app_name"
+                android:scaleType="fitCenter"
                 android:src="@drawable/jangletech" />
 
             <TextView
@@ -153,8 +153,8 @@
                 android:layout_marginStart="@dimen/activity_vertical_margin"
                 android:layout_marginTop="@dimen/margin_10"
                 android:layout_marginEnd="@dimen/activity_vertical_margin"
-                android:textAlignment="center"
                 android:text="@string/about_jangletch"
+                android:textAlignment="center"
                 android:textColor="@color/colorBlack"
                 android:textSize="12sp" />
 
@@ -167,8 +167,8 @@
                 android:layout_marginTop="@dimen/margin_10"
                 android:layout_marginEnd="@dimen/activity_vertical_margin"
                 android:autoLink="email"
-                android:textAlignment="center"
                 android:text="@string/reachout_text"
+                android:textAlignment="center"
                 android:textColor="@color/colorBlack"
                 android:textSize="12sp" />
 
@@ -180,9 +180,9 @@
                 android:layout_marginStart="@dimen/activity_vertical_margin"
                 android:layout_marginTop="@dimen/margin_10"
                 android:layout_marginEnd="@dimen/activity_vertical_margin"
-                android:textAlignment="center"
                 android:layout_marginBottom="@dimen/activity_vertical_margin"
                 android:text="@string/more_info_link"
+                android:textAlignment="center"
                 android:textColor="@color/colorBlack"
                 android:textSize="12sp" />
         </RelativeLayout>

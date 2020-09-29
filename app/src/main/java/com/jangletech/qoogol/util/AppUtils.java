@@ -170,6 +170,20 @@ public class AppUtils {
         output.write(byteArray);
         return byteArray;
     }
+    public static boolean deleteDir(File dir) {
+        if (dir.isDirectory()) {
+            String[] children = dir.list();
+            for (int i=0; i<children.length; i++) {
+                boolean success = deleteDir(new File(dir, children[i]));
+                if (!success) {
+                    return false;
+                }
+            }
+        }
+
+        // The directory is now empty so delete it
+        return dir.delete();
+    }
 
     public static File getDirectory(Context context) {
         File directory = context.getExternalFilesDir("Qoogol");
@@ -188,7 +202,7 @@ public class AppUtils {
             }
         }
         Log.e(TAG, "error in creation of directory");
-        return context.getExternalFilesDir("ChatChilli");
+        return context.getExternalFilesDir("Qoogol");
     }
 
     public static void bounceAnim(Context context, View view) {

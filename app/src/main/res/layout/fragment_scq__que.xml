@@ -7,6 +7,8 @@
         android:layout_height="match_parent">
 
         <ScrollView
+            android:paddingBottom="@dimen/_50sdp"
+            android:fillViewport="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent">

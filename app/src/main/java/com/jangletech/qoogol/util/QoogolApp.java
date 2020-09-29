@@ -5,6 +5,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+
 public class QoogolApp extends Application {
 
     private static QoogolApp instance;
@@ -15,6 +16,8 @@ public class QoogolApp extends Application {
         if(instance == null){
             instance = this;
         }
+
+        //PDFBoxResourceLoader.init(this);
     }
 
     public static QoogolApp getInstance(){

@@ -118,7 +118,10 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
                     || destination.getId() == R.id.nav_longans_question
                     || destination.getId() == R.id.nav_shortans_question
                     || destination.getId() == R.id.nav_scan_quest
+                    || destination.getId() == R.id.nav_mtp_question
                     || destination.getId() == R.id.nav_quest_type
+                    || destination.getId() == R.id.nav_true_false_frag
+                    || destination.getId() == R.id.nav_fill_the_blanks
                     || destination.getId() == R.id.nav_upload_question) {
                 hideBottomNav();
             } else {
