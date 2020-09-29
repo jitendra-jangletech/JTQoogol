@@ -1487,8 +1487,7 @@ public class PractiseViewPagerAdapter extends PagerAdapter
 
         int minutes = Integer.parseInt(tvTimer.getText().toString().split(":", -1)[0]);
         int seconds = Integer.parseInt(tvTimer.getText().toString().split(":", -1)[1]);
-        SubjectiveAnsDialog subjectiveAnsDialog = new SubjectiveAnsDialog(context, decodedAns, seconds, minutes, this);
-
+        SubjectiveAnsDialog subjectiveAnsDialog = new SubjectiveAnsDialog(context, decodedAns, "", this);
         etMultiLineAns.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1503,7 +1502,7 @@ public class PractiseViewPagerAdapter extends PagerAdapter
                     etMultiLineAns.clearFocus();
                     gMinutes = Integer.parseInt(tvTimer.getText().toString().split(":", -1)[0]);
                     gSeconds = Integer.parseInt(tvTimer.getText().toString().split(":", -1)[1]);
-                    subjectiveAnsDialog.showd(gMinutes,gSeconds);
+                    subjectiveAnsDialog.showd(gMinutes, gSeconds);
                 }
             }
         });

@@ -11,20 +11,18 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 
 import com.jangletech.qoogol.R;
-import com.jangletech.qoogol.databinding.FragmentUpMtpQueBinding;
-import com.jangletech.qoogol.dialog.SubjectiveAnsDialog;
+import com.jangletech.qoogol.databinding.FragmentUpTrueFalseBinding;
 import com.jangletech.qoogol.ui.BaseFragment;
 
-public class MtpQuestFragment extends BaseFragment implements SubjectiveAnsDialog.GetAnsListener {
+public class TrueFalseFragment extends BaseFragment{
 
-    private static final String TAG = "MtpQuestFragment";
-    private FragmentUpMtpQueBinding mBinding;
-    private SubjectiveAnsDialog subjectiveAnsDialog;
+    private static final String TAG = "TrueFalseFragment";
+    private FragmentUpTrueFalseBinding mBinding;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_up_mtp_que, container, false);
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_up_true_false, container,false);
         return mBinding.getRoot();
     }
 
@@ -42,25 +40,5 @@ public class MtpQuestFragment extends BaseFragment implements SubjectiveAnsDialo
                 }
             }
         });
-
-//        mBinding.etQuestion.setOnClickListener(v -> {
-//            mBinding.etQuestion.requestFocus();
-//            subjectiveAnsDialog = new SubjectiveAnsDialog(getActivity(), mBinding.etQuestion.getText().toString().trim(), "UP_QUESTION", this);
-//        });
-//
-//        mBinding.etQuestion.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-//            @Override
-//            public void onFocusChange(View v, boolean hasFocus) {
-//                if (hasFocus) {
-//                    mBinding.etQuestion.clearFocus();
-//                    subjectiveAnsDialog.show();
-//                }
-//            }
-//        });
-    }
-
-    @Override
-    public void onAnswerEntered(String answer) {
-
     }
 }

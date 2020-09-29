@@ -12,6 +12,21 @@
         tools:layout="@layout/fragment_home"></fragment>
 
     <fragment
+        android:id="@+id/nav_true_false_frag"
+        android:name="com.jangletech.qoogol.ui.upload_question.TrueFalseFragment"
+        android:label="@string/menu_true_false"
+        tools:layout="@layout/fragment_up_true_false"></fragment>
+
+
+    <fragment
+        android:id="@+id/nav_fill_the_blanks"
+        android:name="com.jangletech.qoogol.ui.upload_question.FillTheBlanksFragment"
+        android:label="@string/menu_fill_the_blanks"
+        tools:layout="@layout/fragment_fill"></fragment>
+
+
+
+    <fragment
         android:id="@+id/nav_about"
         android:name="com.jangletech.qoogol.ui.about.AboutFragment"
         android:label="@string/about"
@@ -179,6 +194,12 @@
         android:name="com.jangletech.qoogol.ui.upload_question.MCQ_QueFragment"
         android:label="@string/mcq_label"
         tools:layout="@layout/fragment_mcq__que" />
+
+    <fragment
+        android:id="@+id/nav_mtp_question"
+        android:name="com.jangletech.qoogol.ui.upload_question.MtpQuestFragment"
+        android:label="@string/mtp_label"
+        tools:layout="@layout/fragment_up_mtp_que" />
 
     <fragment
         android:id="@+id/nav_shortans_question"

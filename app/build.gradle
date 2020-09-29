@@ -161,10 +161,23 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.iceteck.silicompressorr:silicompressor:2.2.3'
 
+    implementation 'com.droidninja:filepicker:2.2.4'
+
     // Add the Firebase Crashlytics SDK.
     implementation 'com.google.firebase:firebase-messaging:20.1.6'
     implementation 'com.google.firebase:firebase-crashlytics:17.1.1'
     implementation 'com.google.firebase:firebase-dynamic-links:19.1.0'
+
+    def prjVersion = "1.0.7"
+    implementation "com.vincent.filepicker:MultiTypeFilePicker:$prjVersion"
+
+    implementation 'com.tom_roush:pdfbox-android:1.8.10.1'
+
+    implementation 'com.itextpdf:itextg:5.5.10'
+
+    def kotlin_coroutinesVersion = "1.2.1"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlin_coroutinesVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlin_coroutinesVersion"
 
     //For in-App update
     implementation 'com.google.android.play:core:1.7.3'

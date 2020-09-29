@@ -4,49 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:padding="@dimen/_10sdp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".ui.learning.ShareFragment">
+        android:layout_height="match_parent">
+
 
         <TextView
-            android:id="@+id/tvEmptySearch"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_35sdp"
-            android:background="@color/background"
-            android:fontFamily="sans-serif-thin"
-            android:gravity="center"
-            android:text="No Search Results Found."
-            android:textStyle="bold"
-            android:visibility="gone"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            style="@style/font_style"
-            android:id="@+id/emptyview"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:padding="@dimen/_10sdp"
+            android:id="@+id/tvNoOfImages"
+            android:text=""
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Fetching Connections..."
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textColor="@color/colorSkyBlue"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/connection_swiperefresh"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvEmptySearch">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/connection_recycler"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:listitem="@layout/connection_item" />
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+            android:layout_height="wrap_content"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
