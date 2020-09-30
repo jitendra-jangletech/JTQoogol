@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -65,7 +66,7 @@ public class MCQ_QueFragment extends Fragment {
                     1, mBinding.questionEdittext.getText().toString(),
                     mBinding.questiondescEdittext.getText().toString(),MCQ,mBinding.mcq1Edittext.getText().toString(),
                     mBinding.mcq2Edittext.getText().toString(),mBinding.mcq3Edittext.getText().toString(),
-                    mBinding.mcq4Edittext.getText().toString());
+                    mBinding.mcq4Edittext.getText().toString(),mBinding.answerEdittext.getText().toString());
 
             call.enqueue(new Callback<ResponseObj>() {
                 @Override
@@ -73,6 +74,7 @@ public class MCQ_QueFragment extends Fragment {
                     try {
                         if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
                             Toast.makeText(getActivity(), "Question added successfully", Toast.LENGTH_SHORT).show();
+                            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_upload_question);
                         } else {
                             Toast.makeText(getActivity(), UtilHelper.getAPIError(String.valueOf(response.body())), Toast.LENGTH_SHORT).show();
                         }

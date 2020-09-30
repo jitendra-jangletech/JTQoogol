@@ -1,25 +1,16 @@
 package com.jangletech.qoogol.ui.upload_question;
 
-import android.Manifest;
-import android.app.AlertDialog;
-import android.content.ContentValues;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RadioButton;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.text.TextBlock;
@@ -113,6 +104,11 @@ public class SCQ_QueFragment extends BaseFragment implements AnsScanDialog.AnsSc
         if (isValidate()) {
             String user_id = new PreferenceManager(getActivity()).getUserId();
 
+           Call<ResponseObj> call= apiService.addQuestionsApi(user_id, qoogol, getDeviceId(),
+                   1, mBinding.questionEdittext.getText().toString(),
+                   mBinding.questiondescEdittext.getText().toString(),SCQ,mBinding.scq1Edittext.getText().toString(),
+                   mBinding.scq2Edittext.getText().toString(),mBinding.scq3Edittext.getText().toString(),
+                   mBinding.scq4Edittext.getText().toString(),getSelectedAns());
             Call<ResponseObj> call = getApiService().addQuestionsApi(user_id, qoogol, getDeviceId(getActivity()),
                     1, mBinding.questionEdittext.getText().toString(),
                     mBinding.questiondescEdittext.getText().toString(), SCQ, mBinding.scq1Edittext.getText().toString(),
@@ -134,6 +130,22 @@ public class SCQ_QueFragment extends BaseFragment implements AnsScanDialog.AnsSc
                         ProgressDialog.getInstance().dismiss();
                     }
                 }
+           call.enqueue(new Callback<ResponseObj>() {
+               @Override
+               public void onResponse(Call<ResponseObj> call, retrofit2.Response<ResponseObj> response) {
+                   try {
+                       if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
+                           Toast.makeText(getActivity(), "Question added successfully", Toast.LENGTH_SHORT).show();
+                           Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_upload_question);
+                       } else {
+                           Toast.makeText(getActivity(), UtilHelper.getAPIError(String.valueOf(response.body())), Toast.LENGTH_SHORT).show();
+                       }
+                       ProgressDialog.getInstance().dismiss();
+                   } catch (Exception e) {
+                       e.printStackTrace();
+                       ProgressDialog.getInstance().dismiss();
+                   }
+               }
 
                 @Override
                 public void onFailure(Call<ResponseObj> call, Throwable t) {
@@ -142,6 +154,20 @@ public class SCQ_QueFragment extends BaseFragment implements AnsScanDialog.AnsSc
                 }
             });
         }
+    }
+
+    private String getSelectedAns() {
+        String ans="";
+        int id = mBinding.radioGrpAnswer.getCheckedRadioButtonId();
+
+        View radioButton =  mBinding.radioGrpAnswer.findViewById(id);
+        if (radioButton!=null) {
+            int idx =  mBinding.radioGrpAnswer.indexOfChild(radioButton);
+            RadioButton r = (RadioButton) mBinding.radioGrpAnswer.getChildAt(idx);
+            ans =r.getText()!=null?r.getText().toString():"";
+        }
+
+        return ans;
     }
 
     private boolean isValidate() {
