@@ -232,7 +232,7 @@ public class ScanQuestionDescFragment extends BaseFragment {
                     detectedText.append("\n");
                 }
             }
-            mBinding.tvDetected.setText(detectedText);
+            mBinding.tvDetected.setText(detectedText.toString().trim());
             Bundle bundle = new Bundle();
             UploadQuestion uploadQuestion = new UploadQuestion("Science", String.valueOf(detectedText));
             bundle.putSerializable("Question",uploadQuestion);

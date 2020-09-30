@@ -806,6 +806,7 @@
     <string name="audio_video_call">Mute Audio/Video call</string>
     <string name="trending">Trending</string>
 
+    <string name="allow_login">Allow Login From Different Apps</string>
 
     <string name="internet_error">Check your internet connection and try again.</string>
     <string name="submit">Submit</string>
@@ -836,6 +837,11 @@
     <string name="question_text">Question Text</string>
     <string name="select_righ_ans">Select Right Answer</string>
     <string name="hint_right_ans">Enter Right Answer</string>
+    <string name="add_question_image">Add Image For Question</string>
+    <string name="chatchilli">Chatchilli</string>
+    <string name="mie">Mie</string>
+    <string name="select_image">Select Image</string>
+    <string name="no_images">"No Images Found. "</string>
 
 
 </resources>

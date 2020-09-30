@@ -20,6 +20,7 @@ import com.itextpdf.text.pdf.parser.PdfImageObject;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.FriendsAdapter;
 import com.jangletech.qoogol.databinding.ActivityTestingBinding;
+import com.jangletech.qoogol.dialog.AddImageDialog;
 import com.jangletech.qoogol.model.Friends;
 import com.jangletech.qoogol.model.ShareModel;
 import com.jangletech.qoogol.retrofit.ApiClient;
@@ -76,10 +77,19 @@ public class TestingActivity extends AppCompatActivity {
         intentPDF.addCategory(Intent.CATEGORY_OPENABLE);
         startActivityForResult(intentPDF, PICK_FILE_PDF);*/
 
-        Intent intent4 = new Intent(this, NormalFilePickActivity.class);
-        intent4.putExtra(Constant.MAX_NUMBER, 9);
-        intent4.putExtra(NormalFilePickActivity.SUFFIX, new String[]{"xlsx", "xls", "doc", "docx", "ppt", "pptx", "pdf"});
-        startActivityForResult(intent4, Constant.REQUEST_CODE_PICK_FILE);
+        mBinding.btnGetPdf.setOnClickListener(v -> {
+            Intent intent4 = new Intent(this, NormalFilePickActivity.class);
+            intent4.putExtra(Constant.MAX_NUMBER, 9);
+            intent4.putExtra(NormalFilePickActivity.SUFFIX, new String[]{"pdf"});
+            startActivityForResult(intent4, Constant.REQUEST_CODE_PICK_FILE);
+        });
+
+        mBinding.btnShowImages.setOnClickListener(v -> {
+            new AddImageDialog(this)
+                    .show();
+        });
+
+
     }
 
     private void readPdf(String path) {
@@ -146,14 +156,17 @@ public class TestingActivity extends AppCompatActivity {
 
                     // Check if the object is the image type object
 
-                    if (type != null && type.toString().equals(PdfName.IMAGE.toString())) {
+                    if (type != null && (type.toString().equals(PdfName.IMAGE.toString()) ||
+                            type.toString().equals(PdfName.IMAGEB.toString()) ||
+                            type.toString().equals(PdfName.IMAGEC.toString()) ||
+                            type.toString().equals(PdfName.IMAGEI.toString()))) {
 
                         imageCount++;
                         // Get the image from the stream
 
                         pdfImageObject = new PdfImageObject(prStream);
 
-                        fos = new FileOutputStream(folder.getPath() + "/image" + i + ".jpg");
+                        fos = new FileOutputStream(folder.getPath() + "/" + System.currentTimeMillis() + ".jpg");
 
                         // Read bytes of image in to an array
 
@@ -166,7 +179,6 @@ public class TestingActivity extends AppCompatActivity {
                         fos.flush();
 
                         fos.close();
-
                     }
                 }
             }

@@ -29,6 +29,18 @@
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
+                <TextView
+                    style="@style/font_style"
+                    android:textColor="@color/color_red"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:padding="@dimen/_10sdp"
+                    android:id="@+id/tvAddQuestImage"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/etQuestion"
+                    android:text="@string/add_question_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
                 <ToggleButton
                     android:background="@color/colorWhite"
                     android:textAllCaps="false"
