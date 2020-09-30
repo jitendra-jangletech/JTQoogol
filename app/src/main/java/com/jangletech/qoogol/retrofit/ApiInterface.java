@@ -649,6 +649,17 @@ public interface ApiInterface {
                                       @Field(Constant.q_type) String type,
                                                 @Field(Constant.a_sub_ans) String ans);
 
+    @FormUrlEncoded
+    @POST(Constant.ADD_QUESTION)
+    Call<ResponseObj> addTFQuestionsApi(@Field(Constant.u_user_id) String userid,
+                                                @Field(Constant.appName) String app,
+                                                @Field(Constant.device_id) String deviceid,
+                                                @Field(Constant.sm_id) int subjectId,
+                                                @Field(Constant.q_quest) String question,
+                                                @Field(Constant.q_quest_desc) String questiondesc,
+                                                @Field(Constant.q_option_type) String type,
+                                                @Field(Constant.a_sub_ans) String ans);
+
 
     @FormUrlEncoded
     @POST(Constant.PROCESS_QUESTION)

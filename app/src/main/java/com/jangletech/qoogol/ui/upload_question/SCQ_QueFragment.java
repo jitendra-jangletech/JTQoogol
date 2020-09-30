@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RadioButton;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -66,7 +67,7 @@ public class SCQ_QueFragment extends Fragment {
                    1, mBinding.questionEdittext.getText().toString(),
                    mBinding.questiondescEdittext.getText().toString(),SCQ,mBinding.scq1Edittext.getText().toString(),
                    mBinding.scq2Edittext.getText().toString(),mBinding.scq3Edittext.getText().toString(),
-                   mBinding.scq4Edittext.getText().toString(),mBinding.answerEdittext.getText().toString());
+                   mBinding.scq4Edittext.getText().toString(),getSelectedAns());
 
            call.enqueue(new Callback<ResponseObj>() {
                @Override
@@ -92,6 +93,20 @@ public class SCQ_QueFragment extends Fragment {
                }
            });
        }
+    }
+
+    private String getSelectedAns() {
+        String ans="";
+        int id = mBinding.radioGrpAnswer.getCheckedRadioButtonId();
+
+        View radioButton =  mBinding.radioGrpAnswer.findViewById(id);
+        if (radioButton!=null) {
+            int idx =  mBinding.radioGrpAnswer.indexOfChild(radioButton);
+            RadioButton r = (RadioButton) mBinding.radioGrpAnswer.getChildAt(idx);
+            ans =r.getText()!=null?r.getText().toString():"";
+        }
+
+        return ans;
     }
 
     private boolean isValidate() {

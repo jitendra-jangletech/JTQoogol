@@ -22,7 +22,7 @@
         android:id="@+id/nav_fill_the_blanks"
         android:name="com.jangletech.qoogol.ui.upload_question.FillTheBlanksFragment"
         android:label="@string/menu_fill_the_blanks"
-        tools:layout="@layout/fragment_fill"></fragment>
+        tools:layout="@layout/fragment_up_fill_the_blanks"></fragment>
 
 
 
