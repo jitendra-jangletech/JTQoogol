@@ -5,6 +5,15 @@ import android.net.Uri;
 
 public class ImageObject {
     private String name;
+    private int optionId;
+
+    public int getOptionId() {
+        return optionId;
+    }
+
+    public void setOptionId(int optionId) {
+        this.optionId = optionId;
+    }
 
     public String getOption() {
         return option;
