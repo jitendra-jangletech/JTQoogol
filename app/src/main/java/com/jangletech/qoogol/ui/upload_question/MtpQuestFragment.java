@@ -53,14 +53,11 @@ public class MtpQuestFragment extends BaseFragment implements SubjectiveAnsDialo
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mBinding.toggleAddQuestDesc.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    mBinding.etQuestionDesc.setVisibility(View.VISIBLE);
-                } else {
-                    mBinding.etQuestionDesc.setVisibility(View.GONE);
-                }
+        mBinding.toggleAddQuestDesc.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                mBinding.etQuestionDesc.setVisibility(View.VISIBLE);
+            } else {
+                mBinding.etQuestionDesc.setVisibility(View.GONE);
             }
         });
 
@@ -79,41 +76,27 @@ public class MtpQuestFragment extends BaseFragment implements SubjectiveAnsDialo
             mBinding.a4.clearCheck();
         });
 
-        mBinding.a1.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                resetRadioGroup(mBinding.a2);
-                resetRadioGroup(mBinding.a3);
-                resetRadioGroup(mBinding.a4);
-                getCheckedRadioButton(mBinding.a1, "A1");
+        mBinding.a1.setOnCheckedChangeListener((group, checkedId) -> {
+            resetRadioGroup(mBinding.a2);
+            resetRadioGroup(mBinding.a3);
+            resetRadioGroup(mBinding.a4);
+            getCheckedRadioButton(mBinding.a1, "A1");
 
-            }
         });
 
-        mBinding.a2.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                resetRadioGroup(mBinding.a3);
-                resetRadioGroup(mBinding.a4);
-                getCheckedRadioButton(mBinding.a2, "A2");
+        mBinding.a2.setOnCheckedChangeListener((group, checkedId) -> {
+            resetRadioGroup(mBinding.a3);
+            resetRadioGroup(mBinding.a4);
+            getCheckedRadioButton(mBinding.a2, "A2");
 
-            }
         });
 
-        mBinding.a3.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                resetRadioGroup(mBinding.a4);
-                getCheckedRadioButton(mBinding.a3, "A3");
-            }
+        mBinding.a3.setOnCheckedChangeListener((group, checkedId) -> {
+            resetRadioGroup(mBinding.a4);
+            getCheckedRadioButton(mBinding.a3, "A3");
         });
 
-        mBinding.a4.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                getCheckedRadioButton(mBinding.a4, "A4");
-            }
-        });
+        mBinding.a4.setOnCheckedChangeListener((group, checkedId) -> getCheckedRadioButton(mBinding.a4, "A4"));
     }
 
     @Override
