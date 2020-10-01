@@ -6,22 +6,23 @@ import java.io.Serializable;
 
 public class UploadQuestion implements Serializable{
 
-    private int subjectId;
+    private String subjectId;
     private int questionTypeId;
     private String subjectName;
     private String questionType;
     private String questDescription;
 
-    public UploadQuestion(String subjectName, String questDescription) {
+    public UploadQuestion(String subjectId, String subjectName, String questDescription) {
+        this.subjectId = subjectId;
         this.subjectName = subjectName;
         this.questDescription = questDescription;
     }
 
-    public int getSubjectId() {
+    public String getSubjectId() {
         return subjectId;
     }
 
-    public void setSubjectId(int subjectId) {
+    public void setSubjectId(String subjectId) {
         this.subjectId = subjectId;
     }
 

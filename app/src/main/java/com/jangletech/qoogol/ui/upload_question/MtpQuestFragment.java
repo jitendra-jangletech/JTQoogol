@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
+import androidx.navigation.Navigation;
 
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.FragmentUpMtpQueBinding;
@@ -52,14 +53,11 @@ public class MtpQuestFragment extends BaseFragment implements SubjectiveAnsDialo
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mBinding.toggleAddQuestDesc.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    mBinding.etQuestionDesc.setVisibility(View.VISIBLE);
-                } else {
-                    mBinding.etQuestionDesc.setVisibility(View.GONE);
-                }
+        mBinding.toggleAddQuestDesc.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                mBinding.etQuestionDesc.setVisibility(View.VISIBLE);
+            } else {
+                mBinding.etQuestionDesc.setVisibility(View.GONE);
             }
         });
 
@@ -78,41 +76,27 @@ public class MtpQuestFragment extends BaseFragment implements SubjectiveAnsDialo
             mBinding.a4.clearCheck();
         });
 
-        mBinding.a1.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                resetRadioGroup(mBinding.a2);
-                resetRadioGroup(mBinding.a3);
-                resetRadioGroup(mBinding.a4);
-                getCheckedRadioButton(mBinding.a1, "A1");
+        mBinding.a1.setOnCheckedChangeListener((group, checkedId) -> {
+            resetRadioGroup(mBinding.a2);
+            resetRadioGroup(mBinding.a3);
+            resetRadioGroup(mBinding.a4);
+            getCheckedRadioButton(mBinding.a1, "A1");
 
-            }
         });
 
-        mBinding.a2.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                resetRadioGroup(mBinding.a3);
-                resetRadioGroup(mBinding.a4);
-                getCheckedRadioButton(mBinding.a2, "A2");
+        mBinding.a2.setOnCheckedChangeListener((group, checkedId) -> {
+            resetRadioGroup(mBinding.a3);
+            resetRadioGroup(mBinding.a4);
+            getCheckedRadioButton(mBinding.a2, "A2");
 
-            }
         });
 
-        mBinding.a3.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                resetRadioGroup(mBinding.a4);
-                getCheckedRadioButton(mBinding.a3, "A3");
-            }
+        mBinding.a3.setOnCheckedChangeListener((group, checkedId) -> {
+            resetRadioGroup(mBinding.a4);
+            getCheckedRadioButton(mBinding.a3, "A3");
         });
 
-        mBinding.a4.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                getCheckedRadioButton(mBinding.a4, "A4");
-            }
-        });
+        mBinding.a4.setOnCheckedChangeListener((group, checkedId) -> getCheckedRadioButton(mBinding.a4, "A4"));
     }
 
     @Override
@@ -123,9 +107,9 @@ public class MtpQuestFragment extends BaseFragment implements SubjectiveAnsDialo
     private void addQuestion() {
         if (isValidate()) {
             String user_id = new PreferenceManager(getActivity()).getUserId();
-
+            UploadQuestion  uploadQuestion = (UploadQuestion) getArguments().getSerializable("Question");
             Call<ResponseObj> call = apiService.addTFQuestionsApi(user_id, qoogol, getDeviceId(getActivity()),
-                    1, mBinding.etQuestion.getText().toString(),
+                    uploadQuestion.getSubjectId(), mBinding.etQuestion.getText().toString(),
                     mBinding.etQuestionDesc.getText().toString(), MATCH_PAIR, getSelectedAns());
 
             call.enqueue(new Callback<ResponseObj>() {
@@ -134,6 +118,7 @@ public class MtpQuestFragment extends BaseFragment implements SubjectiveAnsDialo
                     try {
                         if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
                             Toast.makeText(getActivity(), "Question added successfully", Toast.LENGTH_SHORT).show();
+                            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_upload_question);
                         } else {
                             Toast.makeText(getActivity(), UtilHelper.getAPIError(String.valueOf(response.body())), Toast.LENGTH_SHORT).show();
                         }

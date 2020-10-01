@@ -233,10 +233,12 @@ public class ScanQuestionDescFragment extends BaseFragment {
                 }
             }
             mBinding.tvDetected.setText(detectedText.toString().trim());
-            Bundle bundle = new Bundle();
-            UploadQuestion uploadQuestion = new UploadQuestion("Science", String.valueOf(detectedText));
-            bundle.putSerializable("Question",uploadQuestion);
-            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_quest_type,bundle);
+            Bundle bundle = getArguments();
+            UploadQuestion uploadQuestion = new UploadQuestion(bundle.getString("SubjectId"),bundle.getString("SubjectName"), String.valueOf(detectedText));
+            Bundle bundle1 = new Bundle();
+            bundle1.putSerializable("Question",uploadQuestion);
+
+            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_quest_type,bundle1);
 
         } finally {
             textRecognizer.release();
