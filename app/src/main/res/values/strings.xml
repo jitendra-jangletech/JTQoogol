@@ -8,7 +8,6 @@
     <string name="menu_home">Dashboard</string>
     <string name="menu_fav">Favourite</string>
 
-
     //Learning Menu
     <string name="menu_course">Course</string>
     <string name="menu_exam">Exam</string>
@@ -25,6 +24,8 @@
     <string name="menu_test_details">Test Details</string>
 
     //Upload Questions
+    <string name="menu_scq_image">Scq Image</string>
+    <string name="menu_mcq_image">Mcq Image</string>
     <string name="menu_fill_the_blanks">Fill The Blanks</string>
     <string name="menu_true_false">True Or False</string>
     <string name="menu_up_scq">Scan Question</string>

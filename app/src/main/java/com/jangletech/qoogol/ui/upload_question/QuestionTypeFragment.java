@@ -60,6 +60,10 @@ public class QuestionTypeFragment extends BaseFragment implements View.OnClickLi
                 Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_fill_the_blanks, bundle);
             } else if (uploadQuestion.getQuestionType().equalsIgnoreCase(Constant.true_false)) {
                 Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_true_false_frag, bundle);
+            } else if (uploadQuestion.getQuestionType().equalsIgnoreCase(Constant.scq_image)) {
+                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_scq_image, bundle);
+            } else if (uploadQuestion.getQuestionType().equalsIgnoreCase(Constant.mcq_image)) {
+                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_scq_image, bundle);
             }
         });
     }
@@ -73,6 +77,8 @@ public class QuestionTypeFragment extends BaseFragment implements View.OnClickLi
         que_categoryList.add(Constant.fill_the_blanks);
         que_categoryList.add(Constant.true_false);
         que_categoryList.add(Constant.match_pair);
+        que_categoryList.add(Constant.scq_image);
+        que_categoryList.add(Constant.mcq_image);
 
         mBinding.chipGrpQuestType.removeAllViews();
         for (int i = 0; i < que_categoryList.size(); i++) {

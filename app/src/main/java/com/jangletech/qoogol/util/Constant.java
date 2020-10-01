@@ -473,6 +473,8 @@ public class Constant {
     public static final String mcq = "MCQ";
     public static final String fill_the_blanks = "Fill in the Blanks";
     public static final String true_false = "True False";
+    public static final String scq_image = "Scq Image";
+    public static final String mcq_image = "Mcq Image";
     public static final String match_pair = "Match the Pair";
 
     //Syllabus

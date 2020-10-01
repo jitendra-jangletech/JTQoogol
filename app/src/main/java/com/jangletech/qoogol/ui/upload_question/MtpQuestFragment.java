@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -118,13 +119,14 @@ public class MtpQuestFragment extends BaseFragment implements SubjectiveAnsDialo
     public void onAnswerEntered(String answer) {
 
     }
+
     private void addQuestion() {
         if (isValidate()) {
             String user_id = new PreferenceManager(getActivity()).getUserId();
 
-            Call<ResponseObj> call= apiService.addTFQuestionsApi(user_id, qoogol, getDeviceId(getActivity()),
+            Call<ResponseObj> call = apiService.addTFQuestionsApi(user_id, qoogol, getDeviceId(getActivity()),
                     1, mBinding.etQuestion.getText().toString(),
-                    mBinding.etQuestionDesc.getText().toString(),MATCH_PAIR,getSelectedAns());
+                    mBinding.etQuestionDesc.getText().toString(), MATCH_PAIR, getSelectedAns());
 
             call.enqueue(new Callback<ResponseObj>() {
                 @Override
@@ -156,31 +158,31 @@ public class MtpQuestFragment extends BaseFragment implements SubjectiveAnsDialo
         int id2 = mBinding.a2.getCheckedRadioButtonId();
         int id3 = mBinding.a3.getCheckedRadioButtonId();
         int id4 = mBinding.a4.getCheckedRadioButtonId();
-        if (id1==-1 && id2==-1 && id3==-1 && id4==-1){
+        if (id1 == -1 && id2 == -1 && id3 == -1 && id4 == -1) {
             return "";
         } else {
-                String ans="";
-                View radioButton1 =  mBinding.a1.findViewById(id1);
-                    int idx1 =  mBinding.a1.indexOfChild(radioButton1);
-                    RadioButton r1 = (RadioButton) mBinding.a1.getChildAt(idx1);
-                    ans = "A1::"+ r1.getText().toString();
+            String ans = "";
+            View radioButton1 = mBinding.a1.findViewById(id1);
+            int idx1 = mBinding.a1.indexOfChild(radioButton1);
+            RadioButton r1 = (RadioButton) mBinding.a1.getChildAt(idx1);
+            ans = "A1::" + r1.getText().toString();
 
-                View radioButton2 =  mBinding.a2.findViewById(id2);
-                int idx2 =  mBinding.a2.indexOfChild(radioButton2);
-                RadioButton r2 = (RadioButton) mBinding.a2.getChildAt(idx2);
-                ans = ans + "A1::"+ r2.getText().toString();
+            View radioButton2 = mBinding.a2.findViewById(id2);
+            int idx2 = mBinding.a2.indexOfChild(radioButton2);
+            RadioButton r2 = (RadioButton) mBinding.a2.getChildAt(idx2);
+            ans = ans + "A1::" + r2.getText().toString();
 
-                View radioButton3 =  mBinding.a3.findViewById(id3);
-                int idx3 =  mBinding.a3.indexOfChild(radioButton3);
-                RadioButton r3 = (RadioButton) mBinding.a3.getChildAt(idx3);
-                ans = ans + "A1::"+ r3.getText().toString();
+            View radioButton3 = mBinding.a3.findViewById(id3);
+            int idx3 = mBinding.a3.indexOfChild(radioButton3);
+            RadioButton r3 = (RadioButton) mBinding.a3.getChildAt(idx3);
+            ans = ans + "A1::" + r3.getText().toString();
 
-                View radioButton4 =  mBinding.a4.findViewById(id4);
-                int idx4 =  mBinding.a4.indexOfChild(radioButton4);
-                RadioButton r4 = (RadioButton) mBinding.a4.getChildAt(idx4);
-                ans = ans + "A1::"+ r4.getText().toString();
+            View radioButton4 = mBinding.a4.findViewById(id4);
+            int idx4 = mBinding.a4.indexOfChild(radioButton4);
+            RadioButton r4 = (RadioButton) mBinding.a4.getChildAt(idx4);
+            ans = ans + "A1::" + r4.getText().toString();
 
-                    return ans;
+            return ans;
 
         }
     }
@@ -197,32 +199,32 @@ public class MtpQuestFragment extends BaseFragment implements SubjectiveAnsDialo
         } else if (mBinding.etQuestion.getText().toString().isEmpty()) {
             mBinding.etQuestion.setError("Please enter question.");
             return false;
-        }else if (mBinding.opa1.getText().toString().isEmpty()) {
+        } else if (mBinding.opa1.getText().toString().isEmpty()) {
             mBinding.opa1.setError("Please enter option 1.");
             return false;
         } else if (mBinding.opb1.getText().toString().isEmpty()) {
             mBinding.opb1.setError("Please enter option 1.");
             return false;
-        }else if (mBinding.opa2.getText().toString().isEmpty()) {
+        } else if (mBinding.opa2.getText().toString().isEmpty()) {
             mBinding.opa2.setError("Please enter option 2.");
             return false;
-        }else if (mBinding.opb2.getText().toString().isEmpty()) {
+        } else if (mBinding.opb2.getText().toString().isEmpty()) {
             mBinding.opb2.setError("Please enter option 1.");
             return false;
-        }else if (mBinding.opa3.getText().toString().isEmpty()) {
+        } else if (mBinding.opa3.getText().toString().isEmpty()) {
             mBinding.opa3.setError("Please enter option 1.");
             return false;
-        }else if (mBinding.opb3.getText().toString().isEmpty()) {
+        } else if (mBinding.opb3.getText().toString().isEmpty()) {
             mBinding.opb3.setError("Please enter option 1.");
             return false;
-        }else if (mBinding.opa4.getText().toString().isEmpty()) {
+        } else if (mBinding.opa4.getText().toString().isEmpty()) {
             mBinding.opa4.setError("Please enter option 1.");
             return false;
-        }else if (mBinding.opb4.getText().toString().isEmpty()) {
+        } else if (mBinding.opb4.getText().toString().isEmpty()) {
             mBinding.opb4.setError("Please enter option 1.");
             return false;
-        } else if (id1==-1 || id2==-1 || id3==-1 || id4==-1){
-            if (id1==-1 && id2==-1 && id3==-1 && id4==-1) {
+        } else if (id1 == -1 || id2 == -1 || id3 == -1 || id4 == -1) {
+            if (id1 == -1 && id2 == -1 && id3 == -1 && id4 == -1) {
                 return true;
             } else {
                 Toast.makeText(getActivity(), "Please select all radio options or reset all", Toast.LENGTH_SHORT).show();
@@ -237,7 +239,7 @@ public class MtpQuestFragment extends BaseFragment implements SubjectiveAnsDialo
         for (int i = 0; i < radioGroup.getChildCount(); i++) {
             RadioButton radioButton = (RadioButton) radioGroup.getChildAt(i);
             if (radioButton.isChecked()) {
-                if(strSelected.equalsIgnoreCase(radioButton.getText().toString())){
+                if (strSelected.equalsIgnoreCase(radioButton.getText().toString())) {
 
                 }
             }

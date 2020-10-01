@@ -6,6 +6,16 @@ import android.net.Uri;
 public class ImageObject {
     private String name;
 
+    public String getOption() {
+        return option;
+    }
+
+    public void setOption(String option) {
+        this.option = option;
+    }
+
+    private String option;
+
     public ImageObject(String name) {
         this.name = name;
     }

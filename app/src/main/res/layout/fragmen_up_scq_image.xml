@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/_10sdp">
+
+            <TextView
+                android:id="@+id/subject"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top"
+                android:text="Subject : "
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/_12ssp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/etQuestion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:background="@drawable/grey_border"
+                android:gravity="top"
+                android:hint="Question"
+                android:lines="5"
+                android:textColor="@color/colorBlack"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/subject" />
+
+            <EditText
+                android:id="@+id/etQuestionDesc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:background="@drawable/grey_border"
+                android:gravity="top"
+                android:hint="Question description"
+                android:lines="3"
+                android:maxLines="10"
+                android:textColor="@color/colorBlack"
+                android:visibility="gone"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/toggleAddQuestDesc" />
+
+
+            <ToggleButton
+                android:id="@+id/toggleAddQuestDesc"
+                style="@style/font_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/colorWhite"
+                android:checked="false"
+                android:clickable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:textAllCaps="false"
+                android:textColor="@color/color_red"
+                android:textOff="Add Question Description"
+                android:textOn="Hide Description"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/etQuestion" />
+
+            <LinearLayout
+                android:id="@+id/imageLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@+id/etQuestionDesc">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <ImageView
+                        android:id="@+id/image1"
+                        android:layout_width="@dimen/_135sdp"
+                        android:layout_height="@dimen/_135sdp"
+                        android:layout_marginRight="@dimen/_4sdp"
+                        android:padding="@dimen/_5sdp"
+                        android:src="@drawable/add_grey" />
+
+                    <ImageView
+                        android:id="@+id/image2"
+                        android:layout_width="@dimen/_135sdp"
+                        android:layout_height="@dimen/_135sdp"
+                        android:layout_marginLeft="@dimen/_4sdp"
+                        android:padding="@dimen/_5sdp"
+                        android:src="@drawable/add_grey" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/imageLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@+id/imageLayout">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_marginRight="@dimen/_4sdp"
+                        android:padding="@dimen/_5sdp"
+                        android:layout_width="@dimen/_135sdp"
+                        android:layout_height="@dimen/_135sdp">
+
+                        <ImageView
+                            android:id="@+id/image3"
+                            android:layout_width="@dimen/_135sdp"
+                            android:layout_height="@dimen/_135sdp"
+                            android:layout_marginRight="@dimen/_4sdp"
+                            android:src="@drawable/add_grey" />
+
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/image4"
+                        android:layout_width="@dimen/_135sdp"
+                        android:layout_height="@dimen/_135sdp"
+                        android:layout_marginLeft="@dimen/_4sdp"
+                        android:padding="@dimen/_5sdp"
+                        android:src="@drawable/add_grey" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/save_question"
+                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:layout_marginEnd="@dimen/_2sdp"
+                android:backgroundTint="@color/color_red"
+                android:text="@string/save"
+                android:textAllCaps="false"
+                android:textColor="@color/colorWhite"
+                app:cornerRadius="@dimen/_50sdp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageLayout2" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+</layout>

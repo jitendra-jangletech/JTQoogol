@@ -17,14 +17,18 @@
         android:label="@string/menu_true_false"
         tools:layout="@layout/fragment_up_true_false"></fragment>
 
+    <fragment
+        android:id="@+id/nav_scq_image"
+        android:name="com.jangletech.qoogol.ui.upload_question.ScqUpImageFragment"
+        android:label="@string/menu_scq_image"
+        tools:layout="@layout/fragmen_up_scq_image"></fragment>
+
 
     <fragment
         android:id="@+id/nav_fill_the_blanks"
         android:name="com.jangletech.qoogol.ui.upload_question.FillTheBlanksFragment"
         android:label="@string/menu_fill_the_blanks"
         tools:layout="@layout/fragment_up_fill_the_blanks"></fragment>
-
-
 
     <fragment
         android:id="@+id/nav_about"
@@ -69,7 +73,6 @@
         android:label="@string/menu_learning_details"
         app:enterAnim="@anim/enter_from_left"
         tools:layout="@layout/fragment_learning_details" />
-
 
     <fragment
         android:id="@+id/nav_test_attempt_history"
