@@ -66,7 +66,7 @@ public class MCQ_QueFragment extends Fragment {
                     1, mBinding.questionEdittext.getText().toString(),
                     mBinding.questiondescEdittext.getText().toString(),MCQ,mBinding.mcq1Edittext.getText().toString(),
                     mBinding.mcq2Edittext.getText().toString(),mBinding.mcq3Edittext.getText().toString(),
-                    mBinding.mcq4Edittext.getText().toString(),mBinding.answerEdittext.getText().toString());
+                    mBinding.mcq4Edittext.getText().toString(),getSelectedAns());
 
             call.enqueue(new Callback<ResponseObj>() {
                 @Override
@@ -92,6 +92,34 @@ public class MCQ_QueFragment extends Fragment {
                 }
             });
         }
+    }
+
+    private String getSelectedAns() {
+        String ans="";
+        if (mBinding.ansA.isChecked())
+            ans = "A";
+
+        if (mBinding.ansB.isChecked()) {
+            if (ans.isEmpty())
+                ans="B";
+            else
+                ans=ans+","+"B";
+        }
+
+        if (mBinding.ansC.isChecked()) {
+            if (ans.isEmpty())
+                ans="C";
+            else
+                ans=ans+","+"C";
+        }
+
+        if (mBinding.ansD.isChecked()) {
+            if (ans.isEmpty())
+                ans="D";
+            else
+                ans=ans+","+"D";
+        }
+        return ans;
     }
 
     private boolean isValidate() {
