@@ -335,9 +335,10 @@ public class SCQ_QueFragment extends BaseFragment implements AnsScanDialog.AnsSc
 
     private void addQuestion() {
         if (isValidate()) {
+           UploadQuestion  uploadQuestion = (UploadQuestion) getArguments().getSerializable("Question");
             String user_id = new PreferenceManager(getActivity()).getUserId();
             Call<ResponseObj> call = getApiService().addQuestionsApi(user_id, qoogol, getDeviceId(getActivity()),
-                    1, mBinding.questionEdittext.getText().toString(),
+                    uploadQuestion.getSubjectId(), mBinding.questionEdittext.getText().toString(),
                     mBinding.questiondescEdittext.getText().toString(), SCQ, mBinding.scq1Edittext.getText().toString(),
                     mBinding.scq2Edittext.getText().toString(), mBinding.scq3Edittext.getText().toString(),
                     mBinding.scq4Edittext.getText().toString(), getSelectedAns());
