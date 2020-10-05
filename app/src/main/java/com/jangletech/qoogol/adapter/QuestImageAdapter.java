@@ -13,7 +13,6 @@ import com.bumptech.glide.Glide;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.ItemImageBinding;
 import com.jangletech.qoogol.model.ImageObject;
-
 import java.util.List;
 
 public class QuestImageAdapter extends RecyclerView.Adapter<QuestImageAdapter.ViewHolder> {

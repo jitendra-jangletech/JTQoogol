@@ -18,7 +18,6 @@ import com.jangletech.qoogol.adapter.QuestImageAdapter;
 import com.jangletech.qoogol.databinding.DialogAddImageBinding;
 import com.jangletech.qoogol.model.ImageObject;
 import com.jangletech.qoogol.util.ItemOffsetDecoration;
-import com.jangletech.qoogol.util.SpacesItemDecoration;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -31,10 +30,14 @@ public class AddImageDialog extends Dialog implements QuestImageAdapter.ImageCli
     private DialogAddImageBinding mBinding;
     private QuestImageAdapter imageAdapter;
     private List<ImageObject> imageObjects = new ArrayList<>();
+    private int optionId;
+    private AddImageClickListener listener;
 
-    public AddImageDialog(@NonNull Activity mContext) {
+    public AddImageDialog(@NonNull Activity mContext, int optionId, AddImageClickListener listener) {
         super(mContext, android.R.style.Theme_DeviceDefault_Light_DarkActionBar);
         this.mContext = mContext;
+        this.optionId = optionId;
+        this.listener = listener;
     }
 
     @Override
@@ -50,10 +53,12 @@ public class AddImageDialog extends Dialog implements QuestImageAdapter.ImageCli
             dismiss();
         });
 
-        int spacingInPixels = mContext.getResources().getDimensionPixelSize(R.dimen.item_offset);
-        ItemOffsetDecoration itemDecoration = new ItemOffsetDecoration(mContext, R.dimen.item_offset);
-        //mBinding.imageRecycler.addItemDecoration(new SpacesItemDecoration(spacingInPixels));
+        mBinding.tvScanPdf.setOnClickListener(v -> {
+            listener.onScanPdfClick(optionId);
+            dismiss();
+        });
 
+        ItemOffsetDecoration itemDecoration = new ItemOffsetDecoration(mContext, R.dimen.item_offset);
         imageAdapter = new QuestImageAdapter(mContext, imageObjects, this);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(mContext, 2);
         mBinding.imageRecycler.setLayoutManager(gridLayoutManager);
@@ -69,7 +74,7 @@ public class AddImageDialog extends Dialog implements QuestImageAdapter.ImageCli
                 Log.i(TAG, "getFolderImages File Path : " + file.getAbsolutePath());
                 imageObjects.add(new ImageObject(file.getAbsolutePath()));
             }
-        }else{
+        } else {
             Log.d(TAG, "Folder is Empty: ");
         }
     }
@@ -77,5 +82,12 @@ public class AddImageDialog extends Dialog implements QuestImageAdapter.ImageCli
     @Override
     public void onImageSelected(ImageObject imageObject) {
         Log.d(TAG, "onImageSelected Uri : " + imageObject);
+        listener.onImageClickListener(imageObject, optionId);
+        dismiss();
+    }
+
+    public interface AddImageClickListener {
+        void onImageClickListener(ImageObject imageObject, int opt);
+        void onScanPdfClick(int option);
     }
 }

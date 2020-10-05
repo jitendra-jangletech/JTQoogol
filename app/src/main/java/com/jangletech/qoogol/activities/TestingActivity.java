@@ -85,8 +85,8 @@ public class TestingActivity extends AppCompatActivity {
         });
 
         mBinding.btnShowImages.setOnClickListener(v -> {
-            new AddImageDialog(this)
-                    .show();
+//            new AddImageDialog(this)
+//                    .show();
         });
 
 
