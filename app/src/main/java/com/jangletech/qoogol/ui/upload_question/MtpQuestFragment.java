@@ -110,7 +110,8 @@ public class MtpQuestFragment extends BaseFragment implements SubjectiveAnsDialo
             UploadQuestion  uploadQuestion = (UploadQuestion) getArguments().getSerializable("Question");
             Call<ResponseObj> call = apiService.addTFQuestionsApi(user_id, qoogol, getDeviceId(getActivity()),
                     uploadQuestion.getSubjectId(), mBinding.etQuestion.getText().toString(),
-                    mBinding.etQuestionDesc.getText().toString(), MATCH_PAIR, getSelectedAns());
+                    mBinding.etQuestionDesc.getText().toString(), MATCH_PAIR,  mBinding.edtmarks.getText().toString(),
+                    mBinding.edtduration.getText().toString(),getSelectedDiffLevel(),getSelectedAns());
 
             call.enqueue(new Callback<ResponseObj>() {
                 @Override
@@ -136,6 +137,20 @@ public class MtpQuestFragment extends BaseFragment implements SubjectiveAnsDialo
                 }
             });
         }
+    }
+
+    private String getSelectedDiffLevel() {
+        String level = "";
+        int id = mBinding.radioDifflevel.getCheckedRadioButtonId();
+
+        View radioButton = mBinding.radioDifflevel.findViewById(id);
+        if (radioButton != null) {
+            int idx = mBinding.radioDifflevel.indexOfChild(radioButton);
+            RadioButton r = (RadioButton) mBinding.radioDifflevel.getChildAt(idx);
+            level = r.getText() != null ? r.getText().toString() : "";
+        }
+
+        return level.replace("Easy","E").replace("Medium","M").replace("Hard","h");
     }
 
     private String getSelectedAns() {

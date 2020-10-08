@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~
+  ~ /*
+  ~  * /////////////////////////////////////////////////////////////////////////////////////////////////
+  ~  * //
+  ~  * //            Copyright (c) 2020. JangleTech Systems Private Limited, Thane, India
+  ~  * //
+  ~  * /////////////////////////////////////////////////////////////////////////////////////////////////
+  ~  */
+  -->
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="3dp"
+        android:background="@drawable/round_white"
+        android:focusableInTouchMode="true"
+        android:orientation="vertical"
+        android:padding="@dimen/margin_10">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/btn_padding"
+            android:gravity="center"
+            android:text="Processing"
+            android:textColor="@color/colorDarkGray"
+            android:textSize="@dimen/textSizeMedium"
+            android:textStyle="bold" />
+
+        <ProgressBar
+            android:id="@+id/progress"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:background="@color/colorDarkGray"
+            android:max="100"
+            android:progress="1"
+            android:progressTint="@color/colorAccent" />
+
+        <TextView
+            android:id="@+id/btnCancel"
+            style="@style/ButtonStyle"
+            android:layout_gravity="end"
+            android:layout_marginTop="@dimen/btn_padding"
+            android:layout_marginBottom="@dimen/btn_padding"
+            android:gravity="center"
+            android:padding="@dimen/btn_padding"
+            android:text="Cancel"
+            android:textColor="@color/colorDarkGray"
+            android:textSize="@dimen/textSizeMedium"
+            android:textStyle="bold"
+            android:visibility="gone" />
+    </LinearLayout>
+</layout>

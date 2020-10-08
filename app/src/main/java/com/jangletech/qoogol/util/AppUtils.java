@@ -61,6 +61,15 @@ public class AppUtils {
         manager.setQueRecentFilter(inputMap.get(Constant.q_recent));
     }
 
+    @SuppressLint("SimpleDateFormat")
+    public static File createImageFile(Activity activity) {
+        // Create an image file name
+        // String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+        String mFileName = System.currentTimeMillis() + "";
+        File storageDir = getDirectory(activity);
+        return new File(storageDir, mFileName + ".jpg");
+    }
+
     public static HashMap<String, String> loadQueFilterHashMap(Context mContext) {
         HashMap<String, String> newMap = new HashMap<String, String>();
         PreferenceManager manager = new PreferenceManager(mContext);

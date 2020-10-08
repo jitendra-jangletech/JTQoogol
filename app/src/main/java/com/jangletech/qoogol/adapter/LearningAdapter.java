@@ -3482,8 +3482,8 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 tfAns = "true";
                 mBinding.btnfalse.setTextColor(activity.getResources().getColor(R.color.black));
                 mBinding.btntrue.setBackground(activity.getResources().getDrawable(R.drawable.grey_border_grey_bg));
-
             });
+
 
             mBinding.btnfalse.setOnClickListener(v ->
             {

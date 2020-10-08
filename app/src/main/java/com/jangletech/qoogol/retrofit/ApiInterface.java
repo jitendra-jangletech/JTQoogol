@@ -637,6 +637,9 @@ public interface ApiInterface {
                                         @Field(Constant.q_mcq_op_2) String op2,
                                         @Field(Constant.q_mcq_op_3) String op3,
                                         @Field(Constant.q_mcq_op_4) String op4,
+                                        @Field(Constant.q_marks) String marks,
+                                        @Field(Constant.q_duration) String duration,
+                                        @Field(Constant.q_diff_level) String difflevel,
                                         @Field(Constant.a_sub_ans) String ans);
     @FormUrlEncoded
     @POST(Constant.ADD_QUESTION)
@@ -647,6 +650,9 @@ public interface ApiInterface {
                                       @Field(Constant.q_quest) String question,
                                       @Field(Constant.q_quest_desc) String questiondesc,
                                       @Field(Constant.q_type) String type,
+                                                @Field(Constant.q_marks) String marks,
+                                                @Field(Constant.q_duration) String duration,
+                                                @Field(Constant.q_diff_level) String difflevel,
                                                 @Field(Constant.a_sub_ans) String ans);
 
     @FormUrlEncoded
@@ -658,6 +664,9 @@ public interface ApiInterface {
                                                 @Field(Constant.q_quest) String question,
                                                 @Field(Constant.q_quest_desc) String questiondesc,
                                                 @Field(Constant.q_option_type) String type,
+                                                @Field(Constant.q_marks) String marks,
+                                              @Field(Constant.q_duration) String duration,
+                                              @Field(Constant.q_diff_level) String difflevel,
                                                 @Field(Constant.a_sub_ans) String ans);
 
 

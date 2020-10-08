@@ -1,6 +1,8 @@
 package com.jangletech.qoogol.util;
 
+import android.content.ContentResolver;
 import android.content.Context;
+import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
@@ -12,6 +14,7 @@ import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 
 /**
@@ -96,6 +99,52 @@ public class UtilHelper {
            return String.valueOf(Math.round(marks));
         else
             return String.valueOf(marks);
+    }
+
+    public static boolean isImage(Uri media, Context context) {
+        ContentResolver cR = context.getContentResolver();
+        String content = cR.getType(media);
+        if (content != null) {
+            Log.d("#>content got ", content);
+            if (content.contains("image")) {
+                Log.d("#>detected ", "is image");
+                return true;
+            }
+        } else {
+            File file = new File(Objects.requireNonNull(media.getPath()));
+            String[] okFileExtensions = new String[]{"jpg", "png", "jpeg", "bmp", "tif", "tiff", "emf", "icon", "wmf"};
+            Log.d("#>file ext got ", file.getName().toLowerCase());
+            for (String extension : okFileExtensions) {
+                if (file.getName().toLowerCase().endsWith(extension)) {
+                    Log.d("#>detected ", "is image");
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public static boolean isVideo(Uri media, Context context) {
+        ContentResolver cR = context.getContentResolver();
+        String content = cR.getType(media);
+        if (content != null) {
+            Log.d("#>content got ", content);
+            if (content.contains("video")) {
+                Log.d("#>detected ", "is video");
+                return true;
+            }
+        } else {
+            File file = new File(Objects.requireNonNull(media.getPath()));
+            String[] okFileExtensions = new String[]{"mp4", "3GP", "avi", "wav", "wmv", "mpeg", "vob", "flv", "mkv", "mov", "divx", "xvid"};
+            Log.d("#>file ext got ", file.getName().toLowerCase());
+            for (String extension : okFileExtensions) {
+                if (file.getName().toLowerCase().endsWith(extension)) {
+                    Log.d("#>detected ", "is video");
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 

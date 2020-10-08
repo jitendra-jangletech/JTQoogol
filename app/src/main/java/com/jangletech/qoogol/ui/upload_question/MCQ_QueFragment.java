@@ -22,6 +22,7 @@ import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.google.android.gms.vision.Frame;
@@ -124,7 +125,8 @@ public class MCQ_QueFragment extends Fragment implements AnsScanDialog.AnsScanne
                     uploadQuestion.getSubjectId(), mBinding.questionEdittext.getText().toString(),
                     mBinding.questiondescEdittext.getText().toString(),MCQ,mBinding.mcq1Edittext.getText().toString(),
                     mBinding.mcq2Edittext.getText().toString(),mBinding.mcq3Edittext.getText().toString(),
-                    mBinding.mcq4Edittext.getText().toString(),getSelectedAns());
+                    mBinding.mcq4Edittext.getText().toString(),mBinding.edtmarks.getText().toString(),
+                    mBinding.edtduration.getText().toString(),getSelectedDiffLevel(),getSelectedAns());
 
             call.enqueue(new Callback<ResponseObj>() {
                 @Override
@@ -150,6 +152,20 @@ public class MCQ_QueFragment extends Fragment implements AnsScanDialog.AnsScanne
                 }
             });
         }
+    }
+
+    private String getSelectedDiffLevel() {
+        String level = "";
+        int id = mBinding.radioDifflevel.getCheckedRadioButtonId();
+
+        View radioButton = mBinding.radioDifflevel.findViewById(id);
+        if (radioButton != null) {
+            int idx = mBinding.radioDifflevel.indexOfChild(radioButton);
+            RadioButton r = (RadioButton) mBinding.radioDifflevel.getChildAt(idx);
+            level = r.getText() != null ? r.getText().toString() : "";
+        }
+
+        return level;
     }
 
     private String getSelectedAns() {
