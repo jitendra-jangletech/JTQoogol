@@ -94,7 +94,9 @@ public class MCQ_QueFragment extends Fragment implements AnsScanDialog.AnsScanne
             mBinding.subject.setText("Subject : " + uploadQuestion.getSubjectName());
         }
 
-        mBinding.saveQuestion.setOnClickListener(v -> addQuestion());
+        mBinding.saveQuestion.setOnClickListener(v -> {
+            //addQuestion()
+        });
 
         mBinding.mc1Edit.setOnClickListener(v -> {
             new AnsScanDialog(getActivity(), 1, this)
@@ -116,43 +118,43 @@ public class MCQ_QueFragment extends Fragment implements AnsScanDialog.AnsScanne
         });
     }
 
-    private void addQuestion() {
-        if (isValidate()) {
-            UploadQuestion  uploadQuestion = (UploadQuestion) getArguments().getSerializable("Question");
-            String user_id = new PreferenceManager(getActivity()).getUserId();
-
-            Call<ResponseObj> call= apiService.addQuestionsApi(user_id, qoogol, getDeviceId(),
-                    uploadQuestion.getSubjectId(), mBinding.questionEdittext.getText().toString(),
-                    mBinding.questiondescEdittext.getText().toString(),MCQ,mBinding.mcq1Edittext.getText().toString(),
-                    mBinding.mcq2Edittext.getText().toString(),mBinding.mcq3Edittext.getText().toString(),
-                    mBinding.mcq4Edittext.getText().toString(),mBinding.edtmarks.getText().toString(),
-                    mBinding.edtduration.getText().toString(),getSelectedDiffLevel(),getSelectedAns());
-
-            call.enqueue(new Callback<ResponseObj>() {
-                @Override
-                public void onResponse(Call<ResponseObj> call, retrofit2.Response<ResponseObj> response) {
-                    try {
-                        if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
-                            Toast.makeText(getActivity(), "Question added successfully", Toast.LENGTH_SHORT).show();
-                            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_upload_question);
-                        } else {
-                            Toast.makeText(getActivity(), UtilHelper.getAPIError(String.valueOf(response.body())), Toast.LENGTH_SHORT).show();
-                        }
-                        ProgressDialog.getInstance().dismiss();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        ProgressDialog.getInstance().dismiss();
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<ResponseObj> call, Throwable t) {
-                    t.printStackTrace();
-                    ProgressDialog.getInstance().dismiss();
-                }
-            });
-        }
-    }
+//    private void addQuestion() {
+//        if (isValidate()) {
+//            UploadQuestion  uploadQuestion = (UploadQuestion) getArguments().getSerializable("Question");
+//            String user_id = new PreferenceManager(getActivity()).getUserId();
+//
+//            Call<ResponseObj> call= apiService.addQuestionsApi(user_id, qoogol, getDeviceId(),
+//                    uploadQuestion.getSubjectId(), mBinding.questionEdittext.getText().toString(),
+//                    mBinding.questiondescEdittext.getText().toString(),MCQ,mBinding.mcq1Edittext.getText().toString(),
+//                    mBinding.mcq2Edittext.getText().toString(),mBinding.mcq3Edittext.getText().toString(),
+//                    mBinding.mcq4Edittext.getText().toString(),mBinding.edtmarks.getText().toString(),
+//                    mBinding.edtduration.getText().toString(),getSelectedDiffLevel(),getSelectedAns());
+//
+//            call.enqueue(new Callback<ResponseObj>() {
+//                @Override
+//                public void onResponse(Call<ResponseObj> call, retrofit2.Response<ResponseObj> response) {
+//                    try {
+//                        if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
+//                            Toast.makeText(getActivity(), "Question added successfully", Toast.LENGTH_SHORT).show();
+//                            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_upload_question);
+//                        } else {
+//                            Toast.makeText(getActivity(), UtilHelper.getAPIError(String.valueOf(response.body())), Toast.LENGTH_SHORT).show();
+//                        }
+//                        ProgressDialog.getInstance().dismiss();
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                        ProgressDialog.getInstance().dismiss();
+//                    }
+//                }
+//
+//                @Override
+//                public void onFailure(Call<ResponseObj> call, Throwable t) {
+//                    t.printStackTrace();
+//                    ProgressDialog.getInstance().dismiss();
+//                }
+//            });
+//        }
+//    }
 
     private String getSelectedDiffLevel() {
         String level = "";

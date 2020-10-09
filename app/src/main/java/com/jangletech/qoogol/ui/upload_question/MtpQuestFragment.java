@@ -65,7 +65,9 @@ public class MtpQuestFragment extends BaseFragment implements SubjectiveAnsDialo
         });
 
 
-        mBinding.saveQuestion.setOnClickListener(v -> addQuestion());
+        mBinding.saveQuestion.setOnClickListener(v -> {
+
+        });
 
         mBinding.reset.setOnClickListener(v -> {
             mBinding.a1.clearCheck();
@@ -111,40 +113,6 @@ public class MtpQuestFragment extends BaseFragment implements SubjectiveAnsDialo
 
     }
 
-    private void addQuestion() {
-        if (isValidate()) {
-            String user_id = new PreferenceManager(getActivity()).getUserId();
-            UploadQuestion uploadQuestion = (UploadQuestion) getArguments().getSerializable("Question");
-            Call<ResponseObj> call = getApiService().addTFQuestionsApi(user_id, qoogol, getDeviceId(getActivity()),
-                    uploadQuestion.getSubjectId(), mBinding.etQuestion.getText().toString(),
-                    mBinding.etQuestionDesc.getText().toString(), MATCH_PAIR,  mBinding.edtmarks.getText().toString(),
-                    mBinding.edtduration.getText().toString(),getSelectedDiffLevel(),getSelectedAns());
-
-            call.enqueue(new Callback<ResponseObj>() {
-                @Override
-                public void onResponse(Call<ResponseObj> call, retrofit2.Response<ResponseObj> response) {
-                    try {
-                        if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
-                            Toast.makeText(getActivity(), "Question added successfully", Toast.LENGTH_SHORT).show();
-                            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_upload_question);
-                        } else {
-                            Toast.makeText(getActivity(), UtilHelper.getAPIError(String.valueOf(response.body())), Toast.LENGTH_SHORT).show();
-                        }
-                        ProgressDialog.getInstance().dismiss();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        ProgressDialog.getInstance().dismiss();
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<ResponseObj> call, Throwable t) {
-                    t.printStackTrace();
-                    ProgressDialog.getInstance().dismiss();
-                }
-            });
-        }
-    }
 
     private String getSelectedDiffLevel() {
         String level = "";
@@ -157,7 +125,7 @@ public class MtpQuestFragment extends BaseFragment implements SubjectiveAnsDialo
             level = r.getText() != null ? r.getText().toString() : "";
         }
 
-        return level.replace("Easy","E").replace("Medium","M").replace("Hard","h");
+        return level.replace("Easy", "E").replace("Medium", "M").replace("Hard", "h");
     }
 
     private String getSelectedAns() {
@@ -277,4 +245,38 @@ public class MtpQuestFragment extends BaseFragment implements SubjectiveAnsDialo
             radioButton.setChecked(false);
         }
     }
+
+//    private void addQuestion() {
+//        if (isValidate()) {
+//            String user_id = new PreferenceManager(getActivity()).getUserId();
+//            UploadQuestion uploadQuestion = (UploadQuestion) getArguments().getSerializable("Question");
+//            Call<ResponseObj> call = getApiService().addTFQuestionsApi(user_id,qoogol,getDeviceId(getActivity()),uploadQuestion.getSubjectId(), mBinding.etQuestion.getText().toString(),
+//                    mBinding.etQuestionDesc.getText().toString(), MATCH_PAIR,mBinding.edtmarks.getText().toString(),
+//                    mBinding.edtduration.getText().toString(), getSelectedDiffLevel(), getSelectedAns());
+//            call.enqueue(new Callback<ResponseObj>(){
+//
+//                @Override
+//                public void onResponse(Call<ResponseObj> call, retrofit2.Response<ResponseObj> response) {​​​​​
+//                    try {
+//                        if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {​​​​​
+//                            Toast.makeText(getActivity(), "Question added successfully", Toast.LENGTH_SHORT).show();
+//                            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_upload_question);
+//                        } else {
+//                            Toast.makeText(getActivity(), UtilHelper.getAPIError(String.valueOf(response.body())), Toast.LENGTH_SHORT).show();
+//                        }
+//                        ProgressDialog.getInstance().dismiss();
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                        ProgressDialog.getInstance().dismiss();
+//                    }
+//                }
+//
+//                @Override
+//                public void onFailure(Call<ResponseObj> call, Throwable t) {
+//                    t.printStackTrace();
+//                    ProgressDialog.getInstance().dismiss();
+//                }
+//            });
+//        }
+//    }
 }

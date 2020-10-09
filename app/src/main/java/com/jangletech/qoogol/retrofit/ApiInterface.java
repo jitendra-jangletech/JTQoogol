@@ -627,21 +627,21 @@ public interface ApiInterface {
     @Multipart
     @POST(Constant.ADD_QUESTION)
     Call<ResponseObj> addSCQQuestionsApi(@Part(Constant.u_user_id) RequestBody userid,
-                                      @Part(Constant.appName) RequestBody app,
-                                      @Part(Constant.device_id) RequestBody deviceid,
-                                      @Part(Constant.sm_id) RequestBody subjectId,
-                                      @Part(Constant.q_quest) RequestBody question,
-                                      @Part(Constant.q_quest_desc) RequestBody questiondesc,
-                                      @Part(Constant.q_option_type) RequestBody optiontype,
-                                      @Part(Constant.q_mcq_op_1) RequestBody op1,
-                                      @Part(Constant.q_mcq_op_2) RequestBody op2,
-                                      @Part(Constant.q_mcq_op_3) RequestBody op3,
-                                      @Part(Constant.q_mcq_op_4) RequestBody op4,
-                                      @Part(Constant.q_marks) RequestBody marks,
-                                      @Part(Constant.q_duration) RequestBody duration,
-                                      @Part(Constant.q_diff_level) RequestBody difflevel,
-                                      @Part(Constant.a_sub_ans) RequestBody ans,
-                                      @Part(Constant.w_media_names) RequestBody medianames,
+                                         @Part(Constant.appName) RequestBody app,
+                                         @Part(Constant.device_id) RequestBody deviceid,
+                                         @Part(Constant.sm_id) RequestBody subjectId,
+                                         @Part(Constant.q_quest) RequestBody question,
+                                         @Part(Constant.q_quest_desc) RequestBody questiondesc,
+                                         @Part(Constant.q_option_type) RequestBody optiontype,
+                                         @Part(Constant.q_mcq_op_1) RequestBody op1,
+                                         @Part(Constant.q_mcq_op_2) RequestBody op2,
+                                         @Part(Constant.q_mcq_op_3) RequestBody op3,
+                                         @Part(Constant.q_mcq_op_4) RequestBody op4,
+                                         @Part(Constant.q_marks) RequestBody marks,
+                                         @Part(Constant.q_duration) RequestBody duration,
+                                         @Part(Constant.q_diff_level) RequestBody difflevel,
+                                         @Part(Constant.a_sub_ans) RequestBody ans,
+                                         @Part(Constant.w_media_names) RequestBody medianames,
                                          @Part MultipartBody.Part[] image);
 
     @FormUrlEncoded
@@ -659,39 +659,7 @@ public interface ApiInterface {
                                       @Field(Constant.q_mcq_op_4) String op4,
                                       @Field(Constant.a_sub_ans) String ans);
 
-                                        @Field(Constant.appName) String app,
-                                        @Field(Constant.device_id) String deviceid,
-                                        @Field(Constant.sm_id) String subjectId,
-                                        @Field(Constant.q_quest) String question,
-                                        @Field(Constant.q_quest_desc) String questiondesc,
-                                        @Field(Constant.q_option_type) String optiontype,
-                                        @Field(Constant.q_mcq_op_1) String op1,
-                                        @Field(Constant.q_mcq_op_2) String op2,
-                                        @Field(Constant.q_mcq_op_3) String op3,
-                                        @Field(Constant.q_mcq_op_4) String op4,
-                                        @Field(Constant.q_marks) String marks,
-                                        @Field(Constant.q_duration) String duration,
-                                        @Field(Constant.q_diff_level) String difflevel,
-                                        @Field(Constant.a_sub_ans) String ans);
-    @FormUrlEncoded
-    @POST(Constant.ADD_QUESTION)
-    Call<ResponseObj> addSubjectiveQuestionsApi(@Field(Constant.u_user_id) String userid,
-                                      @Field(Constant.appName) String app,
-                                      @Field(Constant.device_id) String deviceid,
-                                      @Field(Constant.sm_id) String subjectId,
-                                      @Field(Constant.q_quest) String question,
-                                      @Field(Constant.q_quest_desc) String questiondesc,
-                                      @Field(Constant.q_type) String type,
-                                                @Field(Constant.q_marks) String marks,
-                                                @Field(Constant.q_duration) String duration,
-                                                @Field(Constant.q_diff_level) String difflevel,
-                                                @Field(Constant.appName) String app,
-                                                @Field(Constant.device_id) String deviceid,
-                                                @Field(Constant.sm_id) String subjectId,
-                                                @Field(Constant.q_quest) String question,
-                                                @Field(Constant.q_quest_desc) String questiondesc,
-                                                @Field(Constant.q_type) String type,
-                                                @Field(Constant.a_sub_ans) String ans);
+
 
     @FormUrlEncoded
     @POST(Constant.ADD_QUESTION)
@@ -703,17 +671,20 @@ public interface ApiInterface {
                                         @Field(Constant.q_quest_desc) String questiondesc,
                                         @Field(Constant.q_option_type) String type,
                                         @Field(Constant.a_sub_ans) String ans);
+
+    @FormUrlEncoded
+    @POST(Constant.ADD_QUESTION)
+    Call<ResponseObj> addSubjectiveQuestionsApi(@Field(Constant.u_user_id) String userid,
                                                 @Field(Constant.appName) String app,
                                                 @Field(Constant.device_id) String deviceid,
                                                 @Field(Constant.sm_id) String subjectId,
                                                 @Field(Constant.q_quest) String question,
                                                 @Field(Constant.q_quest_desc) String questiondesc,
-                                                @Field(Constant.q_option_type) String type,
+                                                @Field(Constant.q_type) String type,
                                                 @Field(Constant.q_marks) String marks,
-                                              @Field(Constant.q_duration) String duration,
-                                              @Field(Constant.q_diff_level) String difflevel,
+                                                @Field(Constant.q_duration) String duration,
+                                                @Field(Constant.q_diff_level) String difflevel,
                                                 @Field(Constant.a_sub_ans) String ans);
-
 
     @FormUrlEncoded
     @POST(Constant.PROCESS_QUESTION)
