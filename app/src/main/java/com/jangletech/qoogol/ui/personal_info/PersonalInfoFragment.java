@@ -1158,7 +1158,6 @@ public class PersonalInfoFragment extends BaseFragment {
         Log.d(TAG, "Profile Image Params : " + params);
         Log.d(TAG, "Profile Image Size: " + imageFile.getTotalSpace());
         Log.d(TAG, "updateProfileImage Name : " + imageFile.getName());
-
         MultipartBody.Part body =
                 MultipartBody.Part.createFormData("file", imageFile.getName(), requestFile);
 

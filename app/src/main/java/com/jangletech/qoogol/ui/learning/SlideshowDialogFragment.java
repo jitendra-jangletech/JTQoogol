@@ -43,7 +43,7 @@ public class SlideshowDialogFragment extends DialogFragment {
     private MyViewPagerAdapter myViewPagerAdapter;
     private TextView lblCount, lblTitle, lblDate;
     private boolean fromGroups;
-    String type;
+    String type, img;
     //	page change listener
     ViewPager.OnPageChangeListener viewPagerPageChangeListener = new ViewPager.OnPageChangeListener() {
 
@@ -80,6 +80,7 @@ public class SlideshowDialogFragment extends DialogFragment {
         selectedPosition = getArguments().getInt("position");
         fromGroups = getArguments().getBoolean("fromGroup");
         type = getArguments().getString("type");
+        img = getArguments().getString("img");
         int rotation = getActivity().getWindowManager().getDefaultDisplay().getRotation();
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
 
@@ -167,12 +168,21 @@ public class SlideshowDialogFragment extends DialogFragment {
                         .into(imageViewPreview);
             } else {
                 String path = images.get(position);
-                Glide.with(getActivity()).load(new URL(path.trim()))
-                        .thumbnail(0.5f)
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .dontTransform()
-                        .dontAnimate()
-                        .into(imageViewPreview);
+                if (img!=null && img.equalsIgnoreCase("que_img")) {
+                    Glide.with(getActivity()).load(path.trim())
+                            .thumbnail(0.5f)
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .dontTransform()
+                            .dontAnimate()
+                            .into(imageViewPreview);
+                } else {
+                    Glide.with(getActivity()).load(new URL(path.trim()))
+                            .thumbnail(0.5f)
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .dontTransform()
+                            .dontAnimate()
+                            .into(imageViewPreview);
+                }
             }
 
 

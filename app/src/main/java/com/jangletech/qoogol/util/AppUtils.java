@@ -3,6 +3,7 @@ package com.jangletech.qoogol.util;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.net.Uri;
 import android.provider.Settings;
 import android.util.Base64;
 import android.util.Log;
@@ -38,6 +39,7 @@ import java.util.Locale;
 
 
 public class AppUtils {
+
     private static final String TAG = "AppUtils";
     public static final String NOT_CONNECTED = "NOT_CONNECTED";
     public static final String CONNECTED = "CONNECTED";
@@ -59,6 +61,19 @@ public class AppUtils {
         manager.setQueTrendingFilter(inputMap.get(Constant.q_trending));
         manager.setQuePopularFilter(inputMap.get(Constant.q_popular));
         manager.setQueRecentFilter(inputMap.get(Constant.q_recent));
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    public static File createImageFile(Context activity, Uri uri) {
+        File storageDir = getDirectory(activity);
+        String filename = new ImageOptimization(activity).getPath(activity, uri);
+        return new File(storageDir, filename.substring(filename.lastIndexOf("/") + 1));
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    public static File createImageFile(Context activity, String path) {
+        File storageDir = getDirectory(activity);
+        return new File(storageDir, path.substring(path.lastIndexOf("/") + 1));
     }
 
     @SuppressLint("SimpleDateFormat")

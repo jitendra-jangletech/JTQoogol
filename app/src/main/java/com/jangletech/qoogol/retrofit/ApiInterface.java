@@ -624,6 +624,26 @@ public interface ApiInterface {
                                         @Field(Constant.qlc_rating) String ratings,
                                         @Field(Constant.qlc_feedback) String feedback);
 
+    @Multipart
+    @POST(Constant.ADD_QUESTION)
+    Call<ResponseObj> addSCQQuestionsApi(@Part(Constant.u_user_id) RequestBody userid,
+                                      @Part(Constant.appName) RequestBody app,
+                                      @Part(Constant.device_id) RequestBody deviceid,
+                                      @Part(Constant.sm_id) RequestBody subjectId,
+                                      @Part(Constant.q_quest) RequestBody question,
+                                      @Part(Constant.q_quest_desc) RequestBody questiondesc,
+                                      @Part(Constant.q_option_type) RequestBody optiontype,
+                                      @Part(Constant.q_mcq_op_1) RequestBody op1,
+                                      @Part(Constant.q_mcq_op_2) RequestBody op2,
+                                      @Part(Constant.q_mcq_op_3) RequestBody op3,
+                                      @Part(Constant.q_mcq_op_4) RequestBody op4,
+                                      @Part(Constant.q_marks) RequestBody marks,
+                                      @Part(Constant.q_duration) RequestBody duration,
+                                      @Part(Constant.q_diff_level) RequestBody difflevel,
+                                      @Part(Constant.a_sub_ans) RequestBody ans,
+                                      @Part(Constant.w_media_names) RequestBody medianames,
+                                         @Part MultipartBody.Part[] image);
+
     @FormUrlEncoded
     @POST(Constant.ADD_QUESTION)
     Call<ResponseObj> addQuestionsApi(@Field(Constant.u_user_id) String userid,

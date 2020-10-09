@@ -45,7 +45,7 @@
                     android:adjustViewBounds="true"
                     android:contentDescription="@string/app_name"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/ic_camera"
+                    android:src="@drawable/ic_cam"
                     android:visibility="visible" />
 
                 <TextView

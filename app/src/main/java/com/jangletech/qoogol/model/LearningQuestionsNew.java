@@ -309,7 +309,7 @@ public class LearningQuestionsNew  implements Cloneable{
     }
 
     public String getPosted_on() {
-        return posted_on!=null?posted_on.substring(0, 10):"";
+        return posted_on!=null&&!posted_on.isEmpty()?posted_on.substring(0, 10):"";
     }
 
     public void setPosted_on(String posted_on) {

@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
@@ -55,7 +56,7 @@ public class PdfImageAdapter extends RecyclerView.Adapter<PdfImageAdapter.ViewHo
            if (mAllImages.get(position) != null) {
                holder.removeItem.setVisibility(View.VISIBLE);
                Glide.with(activity)
-                       .load(new URL(mAllImages.get(position).trim()))
+                       .load(mAllImages.get(position).trim())
                        .transition(DrawableTransitionOptions.withCrossFade())
                        .diskCacheStrategy(DiskCacheStrategy.DATA)
                        .placeholder(circularProgressDrawable)
