@@ -31,7 +31,7 @@
                 android:background="@drawable/grey_border"
                 android:gravity="top"
                 android:hint="Question"
-                android:lines="2"
+                android:lines="4"
                 android:textColor="@color/colorBlack"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/subject" />

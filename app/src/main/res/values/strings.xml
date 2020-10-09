@@ -315,7 +315,7 @@
     <string name="other">Other</string>
     <string name="male">Male</string>
 
-    <string name="edit">Profile</string>
+
     <string name="first_name"><![CDATA[First Name<font color=\'#cc0029\'>*</font>]]></string>
     <string name="last_name"><![CDATA[Last Name <font color=\'#cc0029\'><b>*</b></font>]]></string>
 
@@ -808,6 +808,7 @@
     <string name="trending">Trending</string>
 
     <string name="allow_login">Allow Login From Different Apps</string>
+    <string name="select_right_ans">Select Right Answer</string>
 
     <string name="internet_error">Check your internet connection and try again.</string>
     <string name="submit">Submit</string>
@@ -844,5 +845,23 @@
     <string name="select_image">Select Image</string>
     <string name="no_images">"No Images Found. "</string>
     <string name="scan_pdf">Scan New Pdf</string>
+    <string name="note_create_test">Pick a Subject to Create Test</string>
+    <string name="validate">Validate</string>
+    <string name="float_create_test">Create New Test</string>
+    <string name="float_add_section">Add New Section</string>
+    <string name="test_sections">Create Test Sections</string>
+    <string name="create_test_basic_details">Test Basic Details</string>
+    <string name="created_tests">Created Tests</string>
+    <string name="add_question">Add Test Question</string>
+    <string name="modify_syllabus">Modify Syllabus</string>
+    <string name="add_test_title">Test Title</string>
+    <string name="add_test_desc">Test Description</string>
+    <string name="total_marks">Total Marks</string>
+    <string name="test_duration">Duration(hh:mm)</string>
+    <string name="hint_duration">HH-MM</string>
+    <string name="test_type">What category of test you want to create?</string>
+    <string name="add_section_name">Section Name</string>
+    <string name="add_section_marks">Section Marks</string>
+    <string name="add_questions">Add Questions</string>
 
 </resources>

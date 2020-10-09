@@ -36,7 +36,6 @@ public class TrueFalseFragment extends BaseFragment{
     private static final String TAG = "TrueFalseFragment";
     private FragmentUpTrueFalseBinding mBinding;
     private UploadQuestion uploadQuestion;
-    ApiInterface apiService = ApiClient.getInstance().getApi();
 
     @Nullable
     @Override
@@ -48,7 +47,11 @@ public class TrueFalseFragment extends BaseFragment{
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
+        if (getArguments() != null && getArguments().getSerializable("Question") != null) {
+            uploadQuestion = (UploadQuestion) getArguments().getSerializable("Question");
+            mBinding.etQuestion.setText(uploadQuestion.getQuestDescription());
+            mBinding.subject.setText("Subject : " + uploadQuestion.getSubjectName());
+        }
         mBinding.toggleAddQuestDesc.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -60,12 +63,6 @@ public class TrueFalseFragment extends BaseFragment{
             }
         });
 
-        if (getArguments() != null && getArguments().getSerializable("Question") != null) {
-            uploadQuestion = (UploadQuestion) getArguments().getSerializable("Question");
-            mBinding.etQuestionDesc.setText(uploadQuestion.getQuestDescription());
-            mBinding.subject.setText("Subject : " + uploadQuestion.getSubjectName());
-        }
-
         mBinding.saveQuestion.setOnClickListener(v -> addQuestion());
     }
 
@@ -73,7 +70,7 @@ public class TrueFalseFragment extends BaseFragment{
         if (isValidate()) {
             String user_id = new PreferenceManager(getActivity()).getUserId();
             UploadQuestion  uploadQuestion = (UploadQuestion) getArguments().getSerializable("Question");
-            Call<ResponseObj> call= apiService.addTFQuestionsApi(user_id, qoogol, getDeviceId(getActivity()),
+            Call<ResponseObj> call= getApiService().addTFQuestionsApi(user_id, qoogol, getDeviceId(getActivity()),
                     uploadQuestion.getSubjectId(), mBinding.etQuestion.getText().toString(),
                     mBinding.etQuestionDesc.getText().toString(),TRUE_FALSE,getSelectedAns());
 

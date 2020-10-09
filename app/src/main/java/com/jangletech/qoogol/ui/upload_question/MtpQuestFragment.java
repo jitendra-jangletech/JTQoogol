@@ -1,10 +1,10 @@
 package com.jangletech.qoogol.ui.upload_question;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -20,8 +20,6 @@ import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.dialog.SubjectiveAnsDialog;
 import com.jangletech.qoogol.model.ResponseObj;
 import com.jangletech.qoogol.model.UploadQuestion;
-import com.jangletech.qoogol.retrofit.ApiClient;
-import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
@@ -38,8 +36,8 @@ public class MtpQuestFragment extends BaseFragment implements SubjectiveAnsDialo
     private FragmentUpMtpQueBinding mBinding;
     private SubjectiveAnsDialog subjectiveAnsDialog;
     private String A1 = "", A2 = "", A3 = "", A4 = "";
+    private String selectedOptions = "";
     private UploadQuestion uploadQuestion;
-    ApiInterface apiService = ApiClient.getInstance().getApi();
 
 
     @Nullable
@@ -52,6 +50,11 @@ public class MtpQuestFragment extends BaseFragment implements SubjectiveAnsDialo
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        if (getArguments() != null && getArguments().getSerializable("Question") != null) {
+            uploadQuestion = (UploadQuestion) getArguments().getSerializable("Question");
+            mBinding.etQuestion.setText(uploadQuestion.getQuestDescription());
+            mBinding.subject.setText("Subject : " + uploadQuestion.getSubjectName());
+        }
 
         mBinding.toggleAddQuestDesc.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
@@ -61,11 +64,6 @@ public class MtpQuestFragment extends BaseFragment implements SubjectiveAnsDialo
             }
         });
 
-        if (getArguments() != null && getArguments().getSerializable("Question") != null) {
-            uploadQuestion = (UploadQuestion) getArguments().getSerializable("Question");
-            mBinding.etQuestionDesc.setText(uploadQuestion.getQuestDescription());
-            mBinding.subject.setText("Subject : " + uploadQuestion.getSubjectName());
-        }
 
         mBinding.saveQuestion.setOnClickListener(v -> addQuestion());
 
@@ -74,29 +72,38 @@ public class MtpQuestFragment extends BaseFragment implements SubjectiveAnsDialo
             mBinding.a2.clearCheck();
             mBinding.a3.clearCheck();
             mBinding.a4.clearCheck();
-        });
-
-        mBinding.a1.setOnCheckedChangeListener((group, checkedId) -> {
+            resetRadioGroup(mBinding.a1);
             resetRadioGroup(mBinding.a2);
             resetRadioGroup(mBinding.a3);
             resetRadioGroup(mBinding.a4);
-            getCheckedRadioButton(mBinding.a1, "A1");
+        });
 
+        mBinding.a1.setOnCheckedChangeListener((group, checkedId) -> {
+            if (!selectedOptions.contains(getCheckedRadioButton(mBinding.a1)))
+                selectedOptions = selectedOptions + "," + getCheckedRadioButton(mBinding.a1);
+            resetRadioGroup(mBinding.a2);
+            setRadioDisable(mBinding.a2, selectedOptions);
+            setRadioDisable(mBinding.a3, selectedOptions);
+            setRadioDisable(mBinding.a4, selectedOptions);
         });
 
         mBinding.a2.setOnCheckedChangeListener((group, checkedId) -> {
+            if (!selectedOptions.contains(getCheckedRadioButton(mBinding.a2)))
+                selectedOptions = selectedOptions + "," + getCheckedRadioButton(mBinding.a2);
             resetRadioGroup(mBinding.a3);
-            resetRadioGroup(mBinding.a4);
-            getCheckedRadioButton(mBinding.a2, "A2");
+            setRadioDisable(mBinding.a3, selectedOptions);
+            setRadioDisable(mBinding.a4, selectedOptions);
 
         });
 
         mBinding.a3.setOnCheckedChangeListener((group, checkedId) -> {
+            if (!selectedOptions.contains(getCheckedRadioButton(mBinding.a3)))
+                selectedOptions = selectedOptions + "," + getCheckedRadioButton(mBinding.a3);
             resetRadioGroup(mBinding.a4);
-            getCheckedRadioButton(mBinding.a3, "A3");
+            setRadioDisable(mBinding.a4, selectedOptions);
         });
 
-        mBinding.a4.setOnCheckedChangeListener((group, checkedId) -> getCheckedRadioButton(mBinding.a4, "A4"));
+        mBinding.a4.setOnCheckedChangeListener((group, checkedId) -> getCheckedRadioButton(mBinding.a4));
     }
 
     @Override
@@ -107,8 +114,8 @@ public class MtpQuestFragment extends BaseFragment implements SubjectiveAnsDialo
     private void addQuestion() {
         if (isValidate()) {
             String user_id = new PreferenceManager(getActivity()).getUserId();
-            UploadQuestion  uploadQuestion = (UploadQuestion) getArguments().getSerializable("Question");
-            Call<ResponseObj> call = apiService.addTFQuestionsApi(user_id, qoogol, getDeviceId(getActivity()),
+            UploadQuestion uploadQuestion = (UploadQuestion) getArguments().getSerializable("Question");
+            Call<ResponseObj> call = getApiService().addTFQuestionsApi(user_id, qoogol, getDeviceId(getActivity()),
                     uploadQuestion.getSubjectId(), mBinding.etQuestion.getText().toString(),
                     mBinding.etQuestionDesc.getText().toString(), MATCH_PAIR, getSelectedAns());
 
@@ -220,26 +227,30 @@ public class MtpQuestFragment extends BaseFragment implements SubjectiveAnsDialo
         }
     }
 
-    private String getCheckedRadioButton(RadioGroup radioGroup, String strSelected) {
+    private String getCheckedRadioButton(RadioGroup radioGroup) {
         for (int i = 0; i < radioGroup.getChildCount(); i++) {
             RadioButton radioButton = (RadioButton) radioGroup.getChildAt(i);
             if (radioButton.isChecked()) {
-                if (strSelected.equalsIgnoreCase(radioButton.getText().toString())) {
-
-                }
+                return radioButton.getText().toString();
             }
         }
         return "";
     }
 
     private void setRadioDisable(RadioGroup radioGroup, String strSelected) {
+        Log.i(TAG, "setRadioDisable : " + strSelected);
         for (int i = 0; i < radioGroup.getChildCount(); i++) {
             RadioButton radioButton = (RadioButton) radioGroup.getChildAt(i);
-            if (strSelected.equalsIgnoreCase(radioButton.getText().toString())) {
-                radioButton.setChecked(false);
-                radioButton.setEnabled(false);
-            } else {
-                radioButton.setEnabled(true);
+            String[] opts = strSelected.split(",", -1);
+            for (String string : opts) {
+                if (string != null && !string.isEmpty()) {
+                    if (radioButton.getText().toString().contains(string)) {
+                        radioButton.setChecked(false);
+                        radioButton.setEnabled(false);
+                    } else {
+                        radioButton.setEnabled(true);
+                    }
+                }
             }
         }
     }

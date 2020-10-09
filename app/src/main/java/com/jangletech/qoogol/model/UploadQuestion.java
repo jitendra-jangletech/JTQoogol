@@ -1,7 +1,5 @@
 package com.jangletech.qoogol.model;
 
-import com.google.gson.annotations.SerializedName;
-
 import java.io.Serializable;
 
 public class UploadQuestion implements Serializable{
@@ -16,6 +14,10 @@ public class UploadQuestion implements Serializable{
         this.subjectId = subjectId;
         this.subjectName = subjectName;
         this.questDescription = questDescription;
+    }
+
+    public UploadQuestion(){
+
     }
 
     public String getSubjectId() {

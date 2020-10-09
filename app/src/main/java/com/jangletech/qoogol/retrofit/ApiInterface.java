@@ -314,13 +314,7 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST(Constant.FETCH_TEST_LIST)
-    Call<TestListResponse> fetchFilteredTestList(@Field(Constant.u_user_id) String userId,
-                                                 @Field(Constant.tm_id) String tmId,
-                                                 @Field(Constant.tm_recent_test) String recentTest,
-                                                 @Field(Constant.tm_popular_test) String popularTest,
-                                                 @Field(Constant.tm_diff_level) String diffLevel,
-                                                 @Field(Constant.tm_catg) String categories,
-                                                 @Field(Constant.tm_avg_rating) String avgRating);
+    Call<TestListResponse> fetchCreatedTestList(@Field(Constant.u_user_id) String userId);
 
 
     @FormUrlEncoded
@@ -547,6 +541,12 @@ public interface ApiInterface {
                                          @Field(Constant.CASE) String caseL,
                                          @Field(Constant.tlc_like_flag) int flag);
 
+    @FormUrlEncoded
+    @POST(Constant.FETCH_QA)
+    Call<LearningQuestResponse> fetchTestQuestions(@Field(Constant.u_user_id) String userid,
+                                                   @Field(Constant.device_id) String deviceId,
+                                                   @Field(Constant.appName) String appName);
+
 
     @FormUrlEncoded
     @POST(Constant.PROCESS_QUESTION)
@@ -627,38 +627,39 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST(Constant.ADD_QUESTION)
     Call<ResponseObj> addQuestionsApi(@Field(Constant.u_user_id) String userid,
-                                        @Field(Constant.appName) String app,
-                                        @Field(Constant.device_id) String deviceid,
-                                        @Field(Constant.sm_id) String subjectId,
-                                        @Field(Constant.q_quest) String question,
-                                        @Field(Constant.q_quest_desc) String questiondesc,
-                                        @Field(Constant.q_option_type) String optiontype,
-                                        @Field(Constant.q_mcq_op_1) String op1,
-                                        @Field(Constant.q_mcq_op_2) String op2,
-                                        @Field(Constant.q_mcq_op_3) String op3,
-                                        @Field(Constant.q_mcq_op_4) String op4,
-                                        @Field(Constant.a_sub_ans) String ans);
-    @FormUrlEncoded
-    @POST(Constant.ADD_QUESTION)
-    Call<ResponseObj> addSubjectiveQuestionsApi(@Field(Constant.u_user_id) String userid,
                                       @Field(Constant.appName) String app,
                                       @Field(Constant.device_id) String deviceid,
                                       @Field(Constant.sm_id) String subjectId,
                                       @Field(Constant.q_quest) String question,
                                       @Field(Constant.q_quest_desc) String questiondesc,
-                                      @Field(Constant.q_type) String type,
-                                                @Field(Constant.a_sub_ans) String ans);
+                                      @Field(Constant.q_option_type) String optiontype,
+                                      @Field(Constant.q_mcq_op_1) String op1,
+                                      @Field(Constant.q_mcq_op_2) String op2,
+                                      @Field(Constant.q_mcq_op_3) String op3,
+                                      @Field(Constant.q_mcq_op_4) String op4,
+                                      @Field(Constant.a_sub_ans) String ans);
 
     @FormUrlEncoded
     @POST(Constant.ADD_QUESTION)
-    Call<ResponseObj> addTFQuestionsApi(@Field(Constant.u_user_id) String userid,
+    Call<ResponseObj> addSubjectiveQuestionsApi(@Field(Constant.u_user_id) String userid,
                                                 @Field(Constant.appName) String app,
                                                 @Field(Constant.device_id) String deviceid,
                                                 @Field(Constant.sm_id) String subjectId,
                                                 @Field(Constant.q_quest) String question,
                                                 @Field(Constant.q_quest_desc) String questiondesc,
-                                                @Field(Constant.q_option_type) String type,
+                                                @Field(Constant.q_type) String type,
                                                 @Field(Constant.a_sub_ans) String ans);
+
+    @FormUrlEncoded
+    @POST(Constant.ADD_QUESTION)
+    Call<ResponseObj> addTFQuestionsApi(@Field(Constant.u_user_id) String userid,
+                                        @Field(Constant.appName) String app,
+                                        @Field(Constant.device_id) String deviceid,
+                                        @Field(Constant.sm_id) String subjectId,
+                                        @Field(Constant.q_quest) String question,
+                                        @Field(Constant.q_quest_desc) String questiondesc,
+                                        @Field(Constant.q_option_type) String type,
+                                        @Field(Constant.a_sub_ans) String ans);
 
 
     @FormUrlEncoded

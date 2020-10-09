@@ -396,7 +396,7 @@ public class NewUserFragment extends BaseFragment {
         Log.d(TAG, "Case2 : N");
         Log.d(TAG, "Referral Code  : " + strReferralCode);
 
-        Log.i(TAG, "doRegisterLogin Mobile Number :"+AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key4), mBinding.tilEmailMobile.getEditText().getText().toString().trim()).length());
+        Log.i(TAG, "doRegisterLogin Mobile Number :" + AESSecurities.getInstance().encrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key4), mBinding.tilEmailMobile.getEditText().getText().toString().trim()).length());
 
         /*if (!isReferralCodeVerified)
             strReferralCode = "";*/

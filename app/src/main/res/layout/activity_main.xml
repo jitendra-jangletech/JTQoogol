@@ -228,6 +228,13 @@
                             android:text="@string/upload_que" />
 
                         <TextView
+                            android:id="@+id/nav_create_test"
+                            style="@style/menu_item_style"
+                            android:drawableLeft="@drawable/nav_pending_req"
+                            android:foreground="?attr/selectableItemBackground"
+                            android:text="@string/create_test" />
+
+                        <TextView
                             android:id="@+id/nav_blocked_connections"
                             style="@style/menu_item_style"
                             android:drawableLeft="@drawable/ic_block"

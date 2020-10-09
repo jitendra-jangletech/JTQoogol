@@ -11,14 +11,16 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
+
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.SubjectAdapter;
 import com.jangletech.qoogol.databinding.FragmentUploadQueBinding;
+import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.model.SubjectClass;
 import com.jangletech.qoogol.model.SubjectResponse;
-import com.jangletech.qoogol.retrofit.ApiClient;
-import com.jangletech.qoogol.retrofit.ApiInterface;
+import com.jangletech.qoogol.model.UploadQuestion;
 import com.jangletech.qoogol.ui.BaseFragment;
+import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.ItemOffsetDecoration;
 import com.jangletech.qoogol.util.PreferenceManager;
@@ -30,8 +32,6 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 
-import static com.jangletech.qoogol.util.AppUtils.getDeviceId;
-
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -41,7 +41,6 @@ public class UploadQueFragment extends BaseFragment implements SubjectAdapter.Su
     private SubjectAdapter subjectAdapter;
     private List<SubjectClass> subjects = new ArrayList<>();
     private ItemOffsetDecoration itemDecoration;
-    private ApiInterface apiService = ApiClient.getInstance().getApi();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -54,14 +53,12 @@ public class UploadQueFragment extends BaseFragment implements SubjectAdapter.Su
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         getData();
-
-
     }
 
     private void getData() {
         subjects.clear();
-
-        Call<SubjectResponse> call = apiService.fetchSubjectList(
+        ProgressDialog.getInstance().show(getActivity());
+        Call<SubjectResponse> call = getApiService().fetchSubjectList(
                 new PreferenceManager(getActivity()).getUserId(),
                 TinyDB.getInstance(getActivity()).getString(Constant.selected_ue_id),
                 getDeviceId(getActivity()),
@@ -70,18 +67,22 @@ public class UploadQueFragment extends BaseFragment implements SubjectAdapter.Su
         call.enqueue(new Callback<SubjectResponse>() {
             @Override
             public void onResponse(Call<SubjectResponse> call, retrofit2.Response<SubjectResponse> response) {
+                ProgressDialog.getInstance().dismiss();
                 if (response.body().getResponse().equalsIgnoreCase("200")) {
                     subjects = response.body().getSubjectList();
                     initRecycler();
+                } else {
+                    AppUtils.showToast(getActivity(), null, response.body().getMessage());
                 }
             }
 
             @Override
             public void onFailure(Call<SubjectResponse> call, Throwable t) {
+                ProgressDialog.getInstance().dismiss();
+                AppUtils.showToast(getActivity(), t, "");
                 t.printStackTrace();
             }
         });
-
     }
 
     private void initRecycler() {
@@ -96,9 +97,11 @@ public class UploadQueFragment extends BaseFragment implements SubjectAdapter.Su
 
     @Override
     public void onSubjectSelected(SubjectClass subjectClass) {
+        UploadQuestion uploadQuestion = new UploadQuestion();
+        uploadQuestion.setSubjectId(subjectClass.getSubjectId());
+        uploadQuestion.setSubjectName(subjectClass.getSubjectName());
         Bundle bundle = new Bundle();
-        bundle.putString("SubjectId",subjectClass.getSubjectId());
-        bundle.putString("SubjectName",subjectClass.getSubjectName());
+        bundle.putSerializable("Question", uploadQuestion);
         Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_scan_quest, bundle);
     }
 }

@@ -69,7 +69,6 @@ public class Constant {
     public static final String SORT_LIST = "SORT_LIST";
     public static final String SORT_GRID = "SORT_GRID";
 
-
     //encrypted fields
     public static final String u_birth_date_encrypted = "107E";
     public static final String u_first_name_encrypted = "104E";
@@ -78,7 +77,6 @@ public class Constant {
 
     public static final String u_mob_1_encrypted = "108E";
     public static final String u_Email_encrypted = "199LE";
-
 
     //User table
     public static final String qoogol = "Q";

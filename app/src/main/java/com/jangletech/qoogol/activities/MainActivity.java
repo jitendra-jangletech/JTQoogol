@@ -297,6 +297,12 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
                     navToFragment(R.id.nav_shared_with_you_que, bundle);
                 }
 
+                if (navigateFlag.equalsIgnoreCase(Nav.CREATE_TEST.toString())) {
+                    navigateFlag = "";
+                    Intent i = new Intent(MainActivity.this, CreateTestActivity.class);
+                    startActivity(i);
+                }
+
                 if (navigateFlag.equals(Nav.SHARED_BY_YOU.toString())) {
                     navigateFlag = "";
                     clearFilters();
@@ -444,6 +450,12 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
                 navigateFlag = Nav.SHARED_BY_YOU.toString();
             }
         });
+
+        findViewById(R.id.nav_create_test).setOnClickListener(v -> {
+            mBinding.drawerLayout.closeDrawers();
+            navigateFlag = Nav.CREATE_TEST.toString();
+        });
+
 
         findViewById(R.id.nav_shared_by_you_que).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
