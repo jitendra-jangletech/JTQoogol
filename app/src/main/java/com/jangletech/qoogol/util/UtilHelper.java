@@ -124,6 +124,30 @@ public class UtilHelper {
         return false;
     }
 
+    public static boolean isAudio(Uri media, Context context) {
+        ContentResolver cR = context.getContentResolver();
+        String content = cR.getType(media);
+        if (content != null) {
+            Log.d("#>content got ", content);
+            if (content.contains("audio")) {
+                Log.d("#>detected ", "is audio");
+                return true;
+            }
+        } else {
+            File file = new File(Objects.requireNonNull(media.getPath()));
+            String[] okFileExtensions = new String[]{"wav", "mp3", "mp4", "m4a", "mkv", "opus"};
+            Log.d("#>file ext got ", file.getName().toLowerCase());
+            for (String extension : okFileExtensions) {
+                if (file.getName().toLowerCase().endsWith(extension)) {
+                    Log.d("#>detected ", "is audio");
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
     public static boolean isVideo(Uri media, Context context) {
         ContentResolver cR = context.getContentResolver();
         String content = cR.getType(media);

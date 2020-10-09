@@ -180,7 +180,9 @@ public class SCQ_QueFragment extends BaseFragment implements AnsScanDialog.AnsSc
                    FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
                    newFragment.show(ft, "slideshow");
                } else if (UtilHelper.isVideo(media, getActivity())) {
+
                }
+
 
             }
 
@@ -223,6 +225,8 @@ public class SCQ_QueFragment extends BaseFragment implements AnsScanDialog.AnsSc
             mediaDialog.dismiss();
         });
 
+        mediaUploadLayoutBinding.audios.setOnClickListener(view -> {
+        });
 
         mediaUploadLayoutBinding.scanPdf.setOnClickListener(v -> {
             mediaDialog.dismiss();
@@ -248,6 +252,7 @@ public class SCQ_QueFragment extends BaseFragment implements AnsScanDialog.AnsSc
                             } else if (isPictures) {
                                 getImages();
                             } else if (isAudio) {
+                                getAudio();
                             } else {
                                 getVideo();
                             }
@@ -280,12 +285,12 @@ public class SCQ_QueFragment extends BaseFragment implements AnsScanDialog.AnsSc
     }
 
     private void getAudio() {
-        Intent pickPhoto = new Intent();
-        pickPhoto.setType("audio/*");
-        pickPhoto.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        pickPhoto.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-        pickPhoto.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(pickPhoto, AUDIO_REQUEST);
+        Intent pickAudio = new Intent();
+        pickAudio.setType("audio/*");
+        pickAudio.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        pickAudio.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        pickAudio.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(pickAudio, AUDIO_REQUEST);
     }
 
     private void getImages() {
@@ -553,6 +558,29 @@ public class SCQ_QueFragment extends BaseFragment implements AnsScanDialog.AnsSc
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        } else if (requestCode == AUDIO_REQUEST) {
+            if (data.getData() != null) {
+                Uri mVideoUri = data.getData();
+                setupPreview(mVideoUri);
+            } else {
+                if (data.getClipData() != null) {
+                    ClipData mClipData = data.getClipData();
+                    if (mClipData.getItemCount() > 10) {
+                        Toast.makeText(getActivity(), "A maximum of 10 audios can be uploaded at once.", Toast.LENGTH_LONG).show();
+                    } else {
+                        for (int i = 0; i < mClipData.getItemCount(); i++) {
+                            ClipData.Item item = mClipData.getItemAt(i);
+                            Uri uri = item.getUri();
+                            if (mAllUri.size() > 10) {
+                                Toast.makeText(getActivity(), "A maximum of 10 media can be uploaded at once.", Toast.LENGTH_LONG).show();
+                            } else {
+                                setupPreview(uri);
+                            }
+                        }
+
+                    }
+                }
+            }
         }
     }
 
@@ -650,7 +678,7 @@ public class SCQ_QueFragment extends BaseFragment implements AnsScanDialog.AnsSc
         }
         try {
             // model.preview.setValue(media.toString());
-            if (UtilHelper.isImage(media, getActivity()) || UtilHelper.isVideo(media, getActivity())) {
+            if (UtilHelper.isImage(media, getActivity()) || UtilHelper.isVideo(media, getActivity()) || UtilHelper.isAudio(media, getActivity())) {
                 Log.d("#>type ", "image");
                 mAllUri.add(media);
                 mAllImages.clear();
