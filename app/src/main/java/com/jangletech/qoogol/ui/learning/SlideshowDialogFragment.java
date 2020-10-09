@@ -4,6 +4,7 @@ package com.jangletech.qoogol.ui.learning;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -16,13 +17,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.bogdwellers.pinchtozoom.ImageMatrixTouchHandler;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.jangletech.qoogol.R;
+
+import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -33,10 +38,12 @@ public class SlideshowDialogFragment extends DialogFragment {
 
     private String TAG = SlideshowDialogFragment.class.getSimpleName();
     private ArrayList<String> images;
+    private ArrayList<Uri> uriArrayList;
     private ViewPager viewPager;
     private MyViewPagerAdapter myViewPagerAdapter;
     private TextView lblCount, lblTitle, lblDate;
     private boolean fromGroups;
+    String type, img;
     //	page change listener
     ViewPager.OnPageChangeListener viewPagerPageChangeListener = new ViewPager.OnPageChangeListener() {
 
@@ -69,8 +76,11 @@ public class SlideshowDialogFragment extends DialogFragment {
         lblCount = (TextView) v.findViewById(R.id.lbl_count);
 
         images = (ArrayList<String>) getArguments().getSerializable("images");
+        uriArrayList = (ArrayList<Uri>) getArguments().getSerializable("urilist");
         selectedPosition = getArguments().getInt("position");
         fromGroups = getArguments().getBoolean("fromGroup");
+        type = getArguments().getString("type");
+        img = getArguments().getString("img");
         int rotation = getActivity().getWindowManager().getDefaultDisplay().getRotation();
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
 
@@ -109,7 +119,14 @@ public class SlideshowDialogFragment extends DialogFragment {
     }
 
     private void displayMetaInfo(int position) {
-        lblCount.setText((position + 1) + " of " + images.size());
+        try {
+            if (images!=null)
+                lblCount.setText((position + 1) + " of " + images.size());
+            else
+                lblCount.setText((position + 1) + " of " + uriArrayList.size());
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -135,16 +152,39 @@ public class SlideshowDialogFragment extends DialogFragment {
             ImageView imageViewPreview = (ImageView) view.findViewById(R.id.image_preview);
 
             imageViewPreview.setOnTouchListener(new ImageMatrixTouchHandler(view.getContext()));
-
-            String path = images.get(position);
-
             try {
-                Glide.with(getActivity()).load(new URL(path.trim()))
-                        .thumbnail(0.5f)
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .dontTransform()
-                        .dontAnimate()
+            if (type!=null && type.equalsIgnoreCase("uri")) {
+                Uri uri = uriArrayList.get(position);
+                CircularProgressDrawable circularProgressDrawable = new CircularProgressDrawable(getActivity());
+                circularProgressDrawable.setStrokeWidth(5f);
+                circularProgressDrawable.setCenterRadius(30f);
+                circularProgressDrawable.start();
+                Glide.with(getActivity())
+                        .load(uriArrayList.get(position))
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .diskCacheStrategy(DiskCacheStrategy.DATA)
+                        .placeholder(circularProgressDrawable)
+                        .error(R.drawable.ic_broken_image)
                         .into(imageViewPreview);
+            } else {
+                String path = images.get(position);
+                if (img!=null && img.equalsIgnoreCase("que_img")) {
+                    Glide.with(getActivity()).load(path.trim())
+                            .thumbnail(0.5f)
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .dontTransform()
+                            .dontAnimate()
+                            .into(imageViewPreview);
+                } else {
+                    Glide.with(getActivity()).load(new URL(path.trim()))
+                            .thumbnail(0.5f)
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .dontTransform()
+                            .dontAnimate()
+                            .into(imageViewPreview);
+                }
+            }
+
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -156,7 +196,7 @@ public class SlideshowDialogFragment extends DialogFragment {
 
         @Override
         public int getCount() {
-            return images.size();
+            return images!=null? images.size():uriArrayList.size();
         }
 
         @Override

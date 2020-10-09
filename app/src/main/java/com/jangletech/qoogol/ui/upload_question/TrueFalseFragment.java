@@ -72,7 +72,8 @@ public class TrueFalseFragment extends BaseFragment{
             UploadQuestion  uploadQuestion = (UploadQuestion) getArguments().getSerializable("Question");
             Call<ResponseObj> call= getApiService().addTFQuestionsApi(user_id, qoogol, getDeviceId(getActivity()),
                     uploadQuestion.getSubjectId(), mBinding.etQuestion.getText().toString(),
-                    mBinding.etQuestionDesc.getText().toString(),TRUE_FALSE,getSelectedAns());
+                    mBinding.etQuestionDesc.getText().toString(),TRUE_FALSE,mBinding.edtmarks.getText().toString(),
+                    mBinding.edtduration.getText().toString(),getSelectedDiffLevel(),getSelectedAns());
 
             call.enqueue(new Callback<ResponseObj>() {
                 @Override
@@ -98,6 +99,20 @@ public class TrueFalseFragment extends BaseFragment{
                 }
             });
         }
+    }
+
+    private String getSelectedDiffLevel() {
+        String level = "";
+        int id = mBinding.radioDifflevel.getCheckedRadioButtonId();
+
+        View radioButton = mBinding.radioDifflevel.findViewById(id);
+        if (radioButton != null) {
+            int idx = mBinding.radioDifflevel.indexOfChild(radioButton);
+            RadioButton r = (RadioButton) mBinding.radioDifflevel.getChildAt(idx);
+            level = r.getText() != null ? r.getText().toString() : "";
+        }
+
+        return level.replace("Easy","E").replace("Medium","M").replace("Hard","h");
     }
 
     private String getSelectedAns() {

@@ -527,6 +527,7 @@
     <string name="verify">Verify</string>
     <string name="capture">Capture</string>
     <string name="record">Record</string>
+    <string name="scanphotos">Scan photos</string>
     <string name="gallery">Gallery</string>
     <string name="documents">Documents</string>
     <string name="videos">Videos</string>

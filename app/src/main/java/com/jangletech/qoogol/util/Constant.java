@@ -274,7 +274,7 @@ public class Constant {
     public static final String REFER = "sm01SignupReferredByN";
     public static final String DASHBOARD = "q110FetchDashboard";
     public static final String PROCESS_QUESTION = "q141ProcessQuestion";
-    public static final String ADD_QUESTION = "q142AddQuestion";
+    public static final String ADD_QUESTION = "q142AddModifyQuestion ";
     public static final String PROCESS_TEST = "q133ProcessTest";
     public static final String START_RESUME_TEST = "q131StartResumeTest";
     public static final String TEST_DETAILS = "q132FetchTestDetails";

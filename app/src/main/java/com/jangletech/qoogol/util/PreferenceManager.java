@@ -118,7 +118,15 @@ public class PreferenceManager {
         //SharedPreferences sharedPref = context.getSharedPreferences(Constant.PREF_NAME, Context.MODE_PRIVATE);
         return sharedPreferences.getInt(key,0);
     }
+    public int getImageSize() {
+        return sharedPreferences.getInt(Constant.IMAGE, 10);
+    }
 
+    public void setImageSize(int size) {
+        sharedPreferences.edit()
+                .putInt(Constant.IMAGE, size)
+                .apply();
+    }
     public boolean getBoolean(String key) {
         return sharedPreferences.getBoolean(key,false);
     }

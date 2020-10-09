@@ -55,6 +55,8 @@ public class SplashActivity extends BaseActivity {
                     Log.d(TAG, "onChanged Mobile key : " + AESSecurities.getInstance().decrypt("4" + masterKey, appConfigResponse.getMobileKey()));
                     Log.d(TAG, "onChanged Email key : " + AESSecurities.getInstance().decrypt("5" + masterKey, appConfigResponse.getEmailKey()));
                     Log.d(TAG, "onChanged Password key : " + AESSecurities.getInstance().decrypt("6" + masterKey, appConfigResponse.getPasswordKey()));
+                    new PreferenceManager(SplashActivity.this).setImageSize(Integer.parseInt(appConfigResponse.getCf_image_mb()));
+
 
                     TinyDB.getInstance(SplashActivity.this).putString(Constant.cf_key1, AESSecurities.getInstance().decrypt("1" + masterKey, appConfigResponse.getFirstNameKey()));
                     TinyDB.getInstance(SplashActivity.this).putString(Constant.cf_key2, AESSecurities.getInstance().decrypt("2" + masterKey, appConfigResponse.getLastNameKey()));

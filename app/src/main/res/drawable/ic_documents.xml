@@ -1,0 +1,34 @@
+<!--
+  ~
+  ~ /*
+  ~  * /////////////////////////////////////////////////////////////////////////////////////////////////
+  ~  * //
+  ~  * //            Copyright (c) 2020. JangleTech Systems Private Limited, Thane, India
+  ~  * //
+  ~  * /////////////////////////////////////////////////////////////////////////////////////////////////
+  ~  */
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="80dp"
+    android:height="80.13559dp"
+    android:tint="?attr/customIconColorST"
+    android:viewportWidth="590"
+    android:viewportHeight="591">
+    <path
+        android:fillColor="@color/colorSkyBlue"
+        android:pathData="M141.6,102.1l-2.6,3.1 0,189.9c0,211.3 -0.6,194.8 6.8,196.9 2.6,0.8 47.5,1 151.5,0.8l147.9,-0.3 2.9,-3.3 2.9,-3.2 0,-149.7 0,-149.7 -43.7,-43.8 -43.8,-43.8 -109.6,-0 -109.7,-0 -2.6,3.1zM349,155c0,39.5 0.2,41.4 4.9,44 1.3,0.6 15.8,1 40,1l38.1,-0 0,136.5 0,136.5 -137,-0 -137,-0 0,-177.5 0,-177.5 95.5,-0 95.5,-0 0,37zM393.5,157l24,24 -24.3,-0 -24.2,-0 0,-24c0,-13.2 0.1,-24 0.3,-24 0.1,-0 11,10.8 24.2,24z"
+        android:strokeColor="@color/colorSkyBlue" />
+    <path
+        android:fillColor="@color/colorSkyBlue"
+        android:pathData="M188.1,256.6c-2.6,2.2 -3.1,3.3 -3.1,7 0,3.4 0.6,5.1 2.5,6.9l2.4,2.5 104.8,-0c80.8,-0.1 105.2,-0.3 106.4,-1.3 4.7,-3.6 5.2,-10.5 1,-14.8l-2.9,-2.9 -104,-0 -104,-0 -3.1,2.6z"
+        android:strokeColor="@color/colorSkyBlue" />
+    <path
+        android:fillColor="@color/colorSkyBlue"
+        android:pathData="M187.9,329.9c-3.9,3.9 -4.1,10 -0.4,13.6l2.4,2.5 105.1,-0 105.1,-0 2.4,-2.6c3.6,-3.9 3.4,-9.6 -0.4,-13.5l-2.9,-2.9 -104.2,-0 -104.2,-0 -2.9,2.9z"
+        android:strokeColor="@color/colorSkyBlue" />
+    <path
+        android:fillColor="@color/colorSkyBlue"
+        android:pathData="M190.4,401c-4.7,1.9 -6.9,9.2 -4.3,14.2 2.6,4.9 0.8,4.8 108.9,4.8 108.1,-0 106.3,0.1 108.9,-4.8 1.9,-3.6 1.3,-8.9 -1.3,-11.9l-2.4,-2.8 -103.9,-0.2c-57.2,-0.1 -104.8,0.2 -105.9,0.7z"
+        android:strokeColor="@color/colorSkyBlue" />
+</vector>

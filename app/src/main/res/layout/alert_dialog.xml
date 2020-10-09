@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/round_white"
+        android:layout_marginEnd="25dp"
+        android:layout_marginStart="25dp"
+        android:padding="18dp">
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:textColor="?attr/textColorBlack"
+            android:textSize="@dimen/textSizeMedium"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvDesc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvTitle"
+            android:layout_marginTop="@dimen/btn_padding"
+            android:textColor="?attr/textColorBlack"
+            android:textSize="@dimen/textSizeMedium" />
+
+        <TextView
+            android:id="@+id/btnPositive"
+            style="@style/ButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvDesc"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="@dimen/btn_padding"
+            android:paddingStart="@dimen/margin_10"
+            android:paddingTop="5dp"
+            android:paddingEnd="@dimen/margin_10"
+            android:paddingBottom="5dp"
+            android:text="Yes"
+            android:textColor="?attr/textColorWhite"
+            android:textSize="@dimen/textSizeMedium" />
+
+        <TextView
+            android:id="@+id/btnNeutral"
+            style="@style/ButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvDesc"
+            android:layout_marginTop="@dimen/btn_padding"
+            android:layout_marginEnd="@dimen/activity_vertical_margin"
+            android:layout_toStartOf="@+id/btnPositive"
+            android:backgroundTint="@color/colorDarkGray"
+            android:paddingStart="@dimen/margin_10"
+            android:paddingTop="5dp"
+            android:paddingEnd="@dimen/margin_10"
+            android:paddingBottom="5dp"
+            android:text="No"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/textSizeMedium" />
+    </RelativeLayout>
+</layout>

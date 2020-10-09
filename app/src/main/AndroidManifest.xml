@@ -42,6 +42,7 @@
             android:name=".activities.RegisterLoginActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".VideoActivity" />
         <activity
             android:name=".activities.SplashActivity"
             android:screenOrientation="portrait"

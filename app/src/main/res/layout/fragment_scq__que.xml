@@ -43,6 +43,8 @@
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/subject" />
 
+
+
                 <EditText
                     android:id="@+id/questiondesc_edittext"
                     android:layout_width="match_parent"
@@ -58,6 +60,25 @@
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/question_edittext" />
 
+                <TextView
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:id="@+id/add_images"
+                    android:textColor="@color/colorSkyBlue"
+                    android:text="Add question media"
+                    app:layout_constraintTop_toBottomOf="@+id/questiondesc_edittext"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/queimg_recycler"
+                    android:layout_width="wrap_content"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:visibility="gone"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/add_images"
+                    android:layout_height="wrap_content"/>
+
                 <LinearLayout
                     android:id="@+id/scq1_layout"
                     android:layout_width="match_parent"
@@ -66,7 +87,7 @@
                     android:orientation="horizontal"
                     android:weightSum="1"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/questiondesc_edittext">
+                    app:layout_constraintTop_toBottomOf="@+id/queimg_recycler">
 
                     <TextView
                         android:layout_width="0dp"
@@ -212,6 +233,95 @@
 
 
                 <TextView
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:id="@+id/additional_label"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/_12ssp"
+                    android:text="Additional Details:"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/scq4_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <LinearLayout
+                    android:id="@+id/marks_layout"
+                    android:layout_width="match_parent"
+                    android:orientation="horizontal"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/additional_label"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:layout_width="0dp"
+                        android:id="@+id/edtmarks"
+                        android:layout_weight="1"
+                        android:hint="Marks"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/_12ssp"
+                        android:inputType="number"
+                        android:maxLength="5"
+                        android:layout_marginRight="@dimen/_5sdp"
+                        android:layout_height="wrap_content"/>
+
+                    <EditText
+                        android:layout_width="0dp"
+                        android:id="@+id/edtduration"
+                        android:hint="Duration"
+                        android:inputType="number"
+                        android:maxLength="5"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/_12ssp"
+                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/diff_label"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:text="@string/menu_diff_level"
+                    android:textSize="@dimen/_12ssp"
+                    android:textColor="@color/grey"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/marks_layout"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"/>
+
+                <RadioGroup
+                    app:layout_constraintTop_toBottomOf="@+id/diff_label"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    android:id="@+id/radioDifflevel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:layout_marginEnd="@dimen/_15sdp"
+                        android:id="@+id/radioEasy"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/_2sdp"
+                        android:text="Easy" />
+
+                    <RadioButton
+                        android:id="@+id/radioMedium"
+                        android:layout_marginEnd="@dimen/_15sdp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/_2sdp"
+                        android:text="Medium" />
+
+                    <RadioButton
+                        android:id="@+id/radioHard"
+                        android:layout_marginEnd="@dimen/_15sdp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/_2sdp"
+                        android:text="Hard" />
+
+                </RadioGroup>
+                <TextView
                     android:id="@+id/answer_label"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -221,7 +331,7 @@
                     android:textSize="@dimen/_12ssp"
                     android:textColor="@color/colorBlack"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/scq4_layout" />
+                    app:layout_constraintTop_toBottomOf="@+id/radioDifflevel" />
 
                 <RadioGroup
                     app:layout_constraintTop_toBottomOf="@+id/answer_label"

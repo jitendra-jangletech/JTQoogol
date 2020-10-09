@@ -93,11 +93,101 @@
                     android:singleLine="true"
                     app:layout_constraintTop_toBottomOf="@+id/ans_edit" />
 
+                <TextView
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:id="@+id/additional_label"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/_12ssp"
+                    android:text="Additional Details:"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/etRightAns"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <LinearLayout
+                    android:id="@+id/marks_layout"
+                    android:layout_width="match_parent"
+                    android:orientation="horizontal"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/additional_label"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:layout_width="0dp"
+                        android:id="@+id/edtmarks"
+                        android:layout_weight="1"
+                        android:hint="Marks"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/_12ssp"
+                        android:inputType="number"
+                        android:maxLength="5"
+                        android:layout_marginRight="@dimen/_5sdp"
+                        android:layout_height="wrap_content"/>
+
+                    <EditText
+                        android:layout_width="0dp"
+                        android:id="@+id/edtduration"
+                        android:hint="Duration"
+                        android:inputType="number"
+                        android:maxLength="5"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/_12ssp"
+                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/diff_label"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:text="@string/menu_diff_level"
+                    android:textSize="@dimen/_12ssp"
+                    android:textColor="@color/grey"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/marks_layout"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"/>
+
+                <RadioGroup
+                    app:layout_constraintTop_toBottomOf="@+id/diff_label"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    android:id="@+id/radioDifflevel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:layout_marginEnd="@dimen/_15sdp"
+                        android:id="@+id/radioEasy"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/_2sdp"
+                        android:text="Easy" />
+
+                    <RadioButton
+                        android:id="@+id/radioMedium"
+                        android:layout_marginEnd="@dimen/_15sdp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/_2sdp"
+                        android:text="Medium" />
+
+                    <RadioButton
+                        android:id="@+id/radioHard"
+                        android:layout_marginEnd="@dimen/_15sdp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/_2sdp"
+                        android:text="Hard" />
+
+                </RadioGroup>
+
 
                 <Button
                     android:layout_marginTop="@dimen/_20sdp"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/etRightAns"
+                    app:layout_constraintTop_toBottomOf="@+id/radioDifflevel"
                     android:id="@+id/save_question"
                     style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
                     android:layout_width="match_parent"
