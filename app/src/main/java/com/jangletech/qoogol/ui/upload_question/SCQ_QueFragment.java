@@ -519,10 +519,10 @@ public class SCQ_QueFragment extends BaseFragment implements AnsScanDialog.AnsSc
                 ArrayList<Uri> mArrayUri = new ArrayList<>();
                 if (data.getClipData() != null) {
                     ClipData mClipData = data.getClipData();
-                    if (mClipData.getItemCount() > 10) {
-                        Toast.makeText(getActivity(), "A maximum of 10 media can be uploaded at once.", Toast.LENGTH_LONG).show();
-                    } else if (mAllUri.size() > 10) {
-                        Toast.makeText(getActivity(), "A maximum of 10 media can be uploaded at once.", Toast.LENGTH_LONG).show();
+                    if (mClipData.getItemCount() > 4) {
+                        Toast.makeText(getActivity(), "A maximum of 4 media can be uploaded at once.", Toast.LENGTH_LONG).show();
+                    } else if (mAllUri.size() > 4) {
+                        Toast.makeText(getActivity(), "A maximum of 4 media can be uploaded at once.", Toast.LENGTH_LONG).show();
                     } else {
                         for (int i = 0; i < mClipData.getItemCount(); i++) {
                             ClipData.Item item = mClipData.getItemAt(i);
@@ -532,8 +532,8 @@ public class SCQ_QueFragment extends BaseFragment implements AnsScanDialog.AnsSc
                         }
                     }
                 } else if (data.getData() != null) {
-                    if (mAllUri.size() > 10) {
-                        Toast.makeText(getActivity(), "A maximum of 10 media can be uploaded at once.", Toast.LENGTH_LONG).show();
+                    if (mAllUri.size() > 4) {
+                        Toast.makeText(getActivity(), "A maximum of 4 media can be uploaded at once.", Toast.LENGTH_LONG).show();
                     } else {
                         try {
                             final Uri imageUri = data.getData();
@@ -548,9 +548,9 @@ public class SCQ_QueFragment extends BaseFragment implements AnsScanDialog.AnsSc
                 Log.e(TAG, "onFailure onActivityResult: " + e.getMessage());
                 Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_LONG).show();
             }
-        } else if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK && data != null) {
-            if (mAllUri.size() > 10) {
-                Toast.makeText(getActivity(), "A maximum of 10 media can be uploaded at once.", Toast.LENGTH_LONG).show();
+        } else if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
+            if (mAllUri.size() > 4) {
+                Toast.makeText(getActivity(), "A maximum of 4 media can be uploaded at once.", Toast.LENGTH_LONG).show();
             } else {
                 setupPreview(mphotouri);
             }
@@ -571,8 +571,8 @@ public class SCQ_QueFragment extends BaseFragment implements AnsScanDialog.AnsSc
                     Uri mVideoUri = data.getData();
                     int quality = ImageOptimization.getQualityReductionParams(getActivity(), mVideoUri);
                     Log.i(TAG, "File reduce size: " + quality);
-                    if (mAllUri.size() > 10) {
-                        Toast.makeText(getActivity(), "A maximum of 10 media can be uploaded at once.", Toast.LENGTH_LONG).show();
+                    if (mAllUri.size() > 4) {
+                        Toast.makeText(getActivity(), "A maximum of 4 media can be uploaded at once.", Toast.LENGTH_LONG).show();
                     } else if (quality == 3) {
                         video_uri.add(mVideoUri);
                         setupPreview(mVideoUri);
@@ -589,15 +589,15 @@ public class SCQ_QueFragment extends BaseFragment implements AnsScanDialog.AnsSc
                     }
                 } else if (data.getClipData() != null) {
                     ClipData mClipData = data.getClipData();
-                    if (mClipData.getItemCount() > 10) {
-                        Toast.makeText(getActivity(), "A maximum of 10 videos can be uploaded at once.", Toast.LENGTH_LONG).show();
+                    if (mClipData.getItemCount() > 4) {
+                        Toast.makeText(getActivity(), "A maximum of 4 videos can be uploaded at once.", Toast.LENGTH_LONG).show();
                     } else {
                         for (int i = 0; i < mClipData.getItemCount(); i++) {
                             ClipData.Item item = mClipData.getItemAt(i);
                             Uri uri = item.getUri();
                             video_uri.add(uri);
-                            if (mAllUri.size() > 10) {
-                                Toast.makeText(getActivity(), "A maximum of 10 media can be uploaded at once.", Toast.LENGTH_LONG).show();
+                            if (mAllUri.size() > 4) {
+                                Toast.makeText(getActivity(), "A maximum of 4 media can be uploaded at once.", Toast.LENGTH_LONG).show();
                             } else {
                                 setupPreview(uri);
                             }
@@ -613,23 +613,23 @@ public class SCQ_QueFragment extends BaseFragment implements AnsScanDialog.AnsSc
                 ArrayList<Uri> video_uri = new ArrayList<>();
                 if (data.getData() != null) {
                     Uri mVideoUri = data.getData();
-                    if (mAllUri.size() > 10) {
-                        Toast.makeText(getActivity(), "A maximum of 10 media can be uploaded at once.", Toast.LENGTH_LONG).show();
+                    if (mAllUri.size() > 4) {
+                        Toast.makeText(getActivity(), "A maximum of 4 media can be uploaded at once.", Toast.LENGTH_LONG).show();
                     } else  {
                         video_uri.add(mVideoUri);
                         setupPreview(mVideoUri);
                     }
                 } else if (data.getClipData() != null) {
                     ClipData mClipData = data.getClipData();
-                    if (mClipData.getItemCount() > 10) {
-                        Toast.makeText(getActivity(), "A maximum of 10 videos can be uploaded at once.", Toast.LENGTH_LONG).show();
+                    if (mClipData.getItemCount() > 4) {
+                        Toast.makeText(getActivity(), "A maximum of 4 videos can be uploaded at once.", Toast.LENGTH_LONG).show();
                     } else {
                         for (int i = 0; i < mClipData.getItemCount(); i++) {
                             ClipData.Item item = mClipData.getItemAt(i);
                             Uri uri = item.getUri();
                             video_uri.add(uri);
-                            if (mAllUri.size() > 10) {
-                                Toast.makeText(getActivity(), "A maximum of 10 media can be uploaded at once.", Toast.LENGTH_LONG).show();
+                            if (mAllUri.size() > 4) {
+                                Toast.makeText(getActivity(), "A maximum of 4 media can be uploaded at once.", Toast.LENGTH_LONG).show();
                             } else {
                                 setupPreview(uri);
                             }
@@ -647,14 +647,14 @@ public class SCQ_QueFragment extends BaseFragment implements AnsScanDialog.AnsSc
             } else {
                 if (data.getClipData() != null) {
                     ClipData mClipData = data.getClipData();
-                    if (mClipData.getItemCount() > 10) {
-                        Toast.makeText(getActivity(), "A maximum of 10 audios can be uploaded at once.", Toast.LENGTH_LONG).show();
+                    if (mClipData.getItemCount() > 4) {
+                        Toast.makeText(getActivity(), "A maximum of 4 audios can be uploaded at once.", Toast.LENGTH_LONG).show();
                     } else {
                         for (int i = 0; i < mClipData.getItemCount(); i++) {
                             ClipData.Item item = mClipData.getItemAt(i);
                             Uri uri = item.getUri();
-                            if (mAllUri.size() > 10) {
-                                Toast.makeText(getActivity(), "A maximum of 10 media can be uploaded at once.", Toast.LENGTH_LONG).show();
+                            if (mAllUri.size() > 4) {
+                                Toast.makeText(getActivity(), "A maximum of 4 media can be uploaded at once.", Toast.LENGTH_LONG).show();
                             } else {
                                 setupPreview(uri);
                             }
@@ -879,6 +879,7 @@ public class SCQ_QueFragment extends BaseFragment implements AnsScanDialog.AnsSc
                         if (!imageFile.exists()) {
                             imageFile.createNewFile();
                         }
+
                         final InputStream imageStream = getActivity().getContentResolver().openInputStream(single_image);
                         AppUtils.readFully(imageStream,imageFile);
                         File file = new File(mAllUri.get(index).getPath());
@@ -999,15 +1000,17 @@ public class SCQ_QueFragment extends BaseFragment implements AnsScanDialog.AnsSc
 
     @Override
     public void onImageClickListener(ImageObject imageObject, int opt) {
-        mAllUri.clear();
-        mBinding.queimgRecycler.setVisibility(View.VISIBLE);
-        String path = imageObject.getName();
-        mAllImages.add(path);
-        pdfImageAdapter = new PdfImageAdapter(getActivity(), mAllImages, this);
-        mBinding.queimgRecycler.setHasFixedSize(true);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        mBinding.queimgRecycler.setLayoutManager(linearLayoutManager);
-        mBinding.queimgRecycler.setAdapter(pdfImageAdapter);
+        setupPreview(imageObject.getUri());
+//        mAllUri.clear();
+//        mBinding.queimgRecycler.setVisibility(View.VISIBLE);
+//        String path = imageObject.getName();
+//
+//        mAllImages.add(path);
+//        pdfImageAdapter = new PdfImageAdapter(getActivity(), mAllImages, this);
+//        mBinding.queimgRecycler.setHasFixedSize(true);
+//        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+//        mBinding.queimgRecycler.setLayoutManager(linearLayoutManager);
+//        mBinding.queimgRecycler.setAdapter(pdfImageAdapter);
     }
 
     @Override

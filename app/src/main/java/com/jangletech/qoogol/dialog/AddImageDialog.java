@@ -3,6 +3,7 @@ package com.jangletech.qoogol.dialog;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -69,17 +70,21 @@ public class AddImageDialog extends Dialog implements QuestImageAdapter.ImageCli
     }
 
     private void getFolderImages() {
-        File folder = new File(Environment.getExternalStorageDirectory() + "/Qoogol/Temp/");
-        File[] allFiles = folder.listFiles();
-        if (allFiles != null && allFiles.length > 0) {
-            for (File file : allFiles) {
-                Log.i(TAG, "getFolderImages File Path : " + file.getAbsolutePath());
-                imageObjects.add(new ImageObject(file.getAbsolutePath()));
-            }
-        } else {
-            Log.d(TAG, "Folder is Empty: ");
-            mBinding.tvNoImages.setVisibility(View.VISIBLE);
-        }
+       try {
+           File folder = new File(Environment.getExternalStorageDirectory() + "/Qoogol/Temp/");
+           File[] allFiles = folder.listFiles();
+           if (allFiles != null && allFiles.length > 0) {
+               for (File file : allFiles) {
+                   Log.i(TAG, "getFolderImages File Path : " + file.getAbsolutePath());
+                   imageObjects.add(new ImageObject(file.getAbsolutePath(), Uri.fromFile(file)));
+               }
+           } else {
+               Log.d(TAG, "Folder is Empty: ");
+               mBinding.tvNoImages.setVisibility(View.VISIBLE);
+           }
+       } catch (Exception e) {
+           e.printStackTrace();
+       }
     }
 
     @Override
