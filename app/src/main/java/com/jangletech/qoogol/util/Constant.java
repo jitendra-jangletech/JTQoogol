@@ -50,6 +50,8 @@ public class Constant {
     public static final String USER_ID = "USER_ID";
     public static final String TM_ID = "TM_ID";
 
+    public static final String TEST_SUBJECT_CHAP = "TEST_SUBJECT_CHAP";
+
     public static final String DISPLAY_NAME = "DISPLAY_NAME";
     public static final String PROFILE_PIC = "PROFILE_PIC";
     public static final String GENDER = "GENDER";
@@ -69,7 +71,6 @@ public class Constant {
     public static final String SORT_LIST = "SORT_LIST";
     public static final String SORT_GRID = "SORT_GRID";
 
-
     //encrypted fields
     public static final String u_birth_date_encrypted = "107E";
     public static final String u_first_name_encrypted = "104E";
@@ -78,7 +79,6 @@ public class Constant {
 
     public static final String u_mob_1_encrypted = "108E";
     public static final String u_Email_encrypted = "199LE";
-
 
     //User table
     public static final String qoogol = "Q";
@@ -200,6 +200,10 @@ public class Constant {
     public static String VIDEO = "3";
     public static String AUDIO = "4";
 
+    //Create Test Fields
+    public static final String tm_ss_id_1 = "1223H";
+    public static final String tm_ss_id_2 = "1223I";
+    public static final String tm_ss_id_3 = "1223J";
 
     //Question type
     public static String ONE_LINE_ANSWER = "4";
@@ -268,6 +272,11 @@ public class Constant {
     public static final String tlc_cdatetime = "1408";
     public static final String tlc_deleted = "1409";
     public static final String tlc_fav_flag = "1410";
+
+    //Create Test Api
+    public static final String CREATE_MODIFY_TEST = "q135AddModifyTest";
+    public static final String CREATE_MODIFY_TEST_QUEST = "q136AddModifyTestQuest";
+
 
     //learning
     public static final String QUESTION_IMAGES_API = "https://jtmobileappstorage.blob.core.windows.net/spotmeets/media/images/";
@@ -477,6 +486,8 @@ public class Constant {
     public static final String scq_image = "Scq Image";
     public static final String mcq_image = "Mcq Image";
     public static final String match_pair = "Match the Pair";
+
+    public static final String tm_user_id = "1202";
 
     //Syllabus
     public static final String selected_ue_id = "1516";
@@ -737,6 +748,8 @@ public class Constant {
 
     public static final String tm_attempted_by = "1198"; //test attempted by
     public static final String test_description = "1199";
+
+    public static final String test_sections = "537";
 
     //City Master Data
     public static final String ct_id = "235";

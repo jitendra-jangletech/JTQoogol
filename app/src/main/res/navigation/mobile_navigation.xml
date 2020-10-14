@@ -62,6 +62,13 @@
         tools:layout="@layout/learning_fragment" />
 
     <fragment
+        android:id="@+id/nav_create_pdf"
+        android:name="com.jangletech.qoogol.ui.create_pdf.CreatePdfFragment"
+        android:label="@string/menu_create_pdf"
+        tools:layout="@layout/fragment_create_pdf" />
+
+
+    <fragment
         android:id="@+id/nav_shared_by_you_que"
         android:name="com.jangletech.qoogol.ui.learning.SharedByYouFragment"
         android:label="@string/shared_by_you"

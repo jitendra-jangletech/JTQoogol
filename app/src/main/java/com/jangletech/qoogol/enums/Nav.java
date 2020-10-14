@@ -11,6 +11,7 @@ public enum Nav {
     ATTENDED_BY_FRIENDS,
     SHARED_WITH_YOU,
     SHARED_BY_YOU,
+    CREATE_TEST,
     MODIFY_SYLLABUS,
     FAVOURITE,
     SAVED,
@@ -28,5 +29,6 @@ public enum Nav {
     ABOUT,
     CONNECTIONS,
     CONNECTIONS_FOLLOWING,
-    DOUBTS
+    DOUBTS,
+    CREATE_PDF
 }

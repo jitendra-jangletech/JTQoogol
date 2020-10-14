@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
@@ -26,7 +27,6 @@ import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.FragmentScanQuestDescBinding;
-import com.jangletech.qoogol.dialog.QuestionTypeDialog;
 import com.jangletech.qoogol.model.UploadQuestion;
 import com.jangletech.qoogol.ui.BaseFragment;
 import com.karumi.dexter.Dexter;
@@ -54,7 +54,7 @@ public class ScanQuestionDescFragment extends BaseFragment {
     private static final int REQUEST_GALLERY = 0;
     private static final int REQUEST_CAMERA = 1;
     private Uri imageUri;
-
+    private UploadQuestion uploadQuestion;
     private static final String TAG = "ScanQuestionDescFragmen";
     private FragmentScanQuestDescBinding mBinding;
 
@@ -69,7 +69,11 @@ public class ScanQuestionDescFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        //getActivity().setTitle("Scan "+);
+        if (getArguments() != null && getArguments().getSerializable("Question") != null) {
+            uploadQuestion = (UploadQuestion) getArguments().getSerializable("Question");
+            Log.i(TAG, "onActivityCreated : " + uploadQuestion.getSubjectName());
+            getActionBar().setTitle("Scan " + uploadQuestion.getSubjectName() + " Question");
+        }
 
         mBinding.scan.setOnClickListener(v -> {
             Dexter.withActivity(getActivity())
@@ -232,13 +236,11 @@ public class ScanQuestionDescFragment extends BaseFragment {
                     detectedText.append("\n");
                 }
             }
-            mBinding.tvDetected.setText(detectedText.toString().trim());
-            Bundle bundle = getArguments();
-            UploadQuestion uploadQuestion = new UploadQuestion(bundle.getString("SubjectId"),bundle.getString("SubjectName"), String.valueOf(detectedText));
-            Bundle bundle1 = new Bundle();
-            bundle1.putSerializable("Question",uploadQuestion);
-
-            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_quest_type,bundle1);
+            //mBinding.tvDetected.setText(detectedText.toString().trim());
+            uploadQuestion.setQuestDescription(detectedText.toString().trim());
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("Question", uploadQuestion);
+            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_quest_type, bundle);
 
         } finally {
             textRecognizer.release();

@@ -220,6 +220,11 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
                     navigateFlag = "";
                     navToFragment(R.id.nav_home, Bundle.EMPTY);
                 }
+                if (navigateFlag.equals(Nav.CREATE_PDF.toString())) {
+                    navigateFlag = "";
+                    navToFragment(R.id.nav_create_pdf, Bundle.EMPTY);
+                }
+
                 if (navigateFlag.equals(Nav.PENDING_REQ.toString())) {
                     navigateFlag = "";
                     navToFragment(R.id.nav_requests, Bundle.EMPTY);
@@ -297,6 +302,12 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
                     navToFragment(R.id.nav_shared_with_you_que, bundle);
                 }
 
+                if (navigateFlag.equalsIgnoreCase(Nav.CREATE_TEST.toString())) {
+                    navigateFlag = "";
+                    Intent i = new Intent(MainActivity.this, CreateTestActivity.class);
+                    startActivity(i);
+                }
+
                 if (navigateFlag.equals(Nav.SHARED_BY_YOU.toString())) {
                     navigateFlag = "";
                     clearFilters();
@@ -365,6 +376,13 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
             mBinding.drawerLayout.closeDrawers();
             if (navController.getCurrentDestination().getId() != R.id.nav_learning) {
                 navigateFlag = Nav.LEARNING.toString();
+            }
+        });
+
+        findViewById(R.id.nav_create_pdf).setOnClickListener(v -> {
+            mBinding.drawerLayout.closeDrawers();
+            if (navController.getCurrentDestination().getId() != R.id.nav_create_pdf) {
+                navigateFlag = Nav.CREATE_PDF.toString();
             }
         });
 
@@ -444,6 +462,12 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
                 navigateFlag = Nav.SHARED_BY_YOU.toString();
             }
         });
+
+        findViewById(R.id.nav_create_test).setOnClickListener(v -> {
+            mBinding.drawerLayout.closeDrawers();
+            navigateFlag = Nav.CREATE_TEST.toString();
+        });
+
 
         findViewById(R.id.nav_shared_by_you_que).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();

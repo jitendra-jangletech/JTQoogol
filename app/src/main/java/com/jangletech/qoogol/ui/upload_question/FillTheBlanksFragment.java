@@ -86,6 +86,11 @@ public class FillTheBlanksFragment extends BaseFragment  implements AnsScanDialo
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        if (getArguments() != null && getArguments().getSerializable("Question") != null) {
+            uploadQuestion = (UploadQuestion) getArguments().getSerializable("Question");
+            mBinding.etQuestion.setText(uploadQuestion.getQuestDescription());
+            mBinding.subject.setText("Subject : " + uploadQuestion.getSubjectName());
+        }
 
         mBinding.toggleAddQuestDesc.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -97,12 +102,6 @@ public class FillTheBlanksFragment extends BaseFragment  implements AnsScanDialo
                 }
             }
         });
-
-        if (getArguments() != null && getArguments().getSerializable("Question") != null) {
-            uploadQuestion = (UploadQuestion) getArguments().getSerializable("Question");
-            mBinding.etQuestionDesc.setText(uploadQuestion.getQuestDescription());
-            mBinding.subject.setText("Subject : " + uploadQuestion.getSubjectName());
-        }
 
         mBinding.saveQuestion.setOnClickListener(v -> addQuestion());
 

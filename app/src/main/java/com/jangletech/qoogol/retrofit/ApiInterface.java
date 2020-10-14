@@ -10,6 +10,7 @@ import com.jangletech.qoogol.model.ConnectionResponse;
 import com.jangletech.qoogol.model.ContactResponse;
 import com.jangletech.qoogol.model.CountryResponse;
 import com.jangletech.qoogol.model.CourseResponse;
+import com.jangletech.qoogol.model.CreateTestResponse;
 import com.jangletech.qoogol.model.DashBoard;
 import com.jangletech.qoogol.model.DegreeResponse;
 import com.jangletech.qoogol.model.DistrictResponse;
@@ -314,13 +315,23 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST(Constant.FETCH_TEST_LIST)
-    Call<TestListResponse> fetchFilteredTestList(@Field(Constant.u_user_id) String userId,
-                                                 @Field(Constant.tm_id) String tmId,
-                                                 @Field(Constant.tm_recent_test) String recentTest,
-                                                 @Field(Constant.tm_popular_test) String popularTest,
-                                                 @Field(Constant.tm_diff_level) String diffLevel,
-                                                 @Field(Constant.tm_catg) String categories,
-                                                 @Field(Constant.tm_avg_rating) String avgRating);
+    Call<TestListResponse> fetchCreatedTestList(@Field(Constant.tm_user_id) String userId);
+
+
+    @FormUrlEncoded
+    @POST(Constant.CREATE_MODIFY_TEST)
+    Call<CreateTestResponse> createModifyTest(@Field(Constant.u_user_id) String userId,
+                                              @Field(Constant.tm_name) String name,
+                                              @Field(Constant.test_description) String descr,
+                                              @Field(Constant.tm_tot_marks) String totalMarks,
+                                              @Field(Constant.tm_duration) String duration,
+                                              @Field(Constant.tm_sm_id) String subjectId,
+                                              @Field(Constant.cm_id) String chapterId,
+                                              @Field(Constant.tm_neg_mks) String negMarks,
+                                              @Field(Constant.tm_type) String type,
+                                              @Field(Constant.tm_diff_level) String diffLevel,
+                                              @Field(Constant.tm_catg) String category,
+                                              @Field(Constant._1223G) String date);
 
 
     @FormUrlEncoded
@@ -547,6 +558,12 @@ public interface ApiInterface {
                                          @Field(Constant.CASE) String caseL,
                                          @Field(Constant.tlc_like_flag) int flag);
 
+    @FormUrlEncoded
+    @POST(Constant.FETCH_QA)
+    Call<LearningQuestResponse> fetchTestQuestions(@Field(Constant.u_user_id) String userid,
+                                                   @Field(Constant.device_id) String deviceId,
+                                                   @Field(Constant.appName) String appName);
+
 
     @FormUrlEncoded
     @POST(Constant.PROCESS_QUESTION)
@@ -627,68 +644,63 @@ public interface ApiInterface {
     @Multipart
     @POST(Constant.ADD_QUESTION)
     Call<ResponseObj> addSCQQuestionsApi(@Part(Constant.u_user_id) RequestBody userid,
-                                      @Part(Constant.appName) RequestBody app,
-                                      @Part(Constant.device_id) RequestBody deviceid,
-                                      @Part(Constant.sm_id) RequestBody subjectId,
-                                      @Part(Constant.q_quest) RequestBody question,
-                                      @Part(Constant.q_quest_desc) RequestBody questiondesc,
-                                      @Part(Constant.q_option_type) RequestBody optiontype,
-                                      @Part(Constant.q_mcq_op_1) RequestBody op1,
-                                      @Part(Constant.q_mcq_op_2) RequestBody op2,
-                                      @Part(Constant.q_mcq_op_3) RequestBody op3,
-                                      @Part(Constant.q_mcq_op_4) RequestBody op4,
-                                      @Part(Constant.q_marks) RequestBody marks,
-                                      @Part(Constant.q_duration) RequestBody duration,
-                                      @Part(Constant.q_diff_level) RequestBody difflevel,
-                                      @Part(Constant.a_sub_ans) RequestBody ans,
-                                      @Part(Constant.w_media_names) RequestBody medianames,
+                                         @Part(Constant.appName) RequestBody app,
+                                         @Part(Constant.device_id) RequestBody deviceid,
+                                         @Part(Constant.sm_id) RequestBody subjectId,
+                                         @Part(Constant.q_quest) RequestBody question,
+                                         @Part(Constant.q_quest_desc) RequestBody questiondesc,
+                                         @Part(Constant.q_option_type) RequestBody optiontype,
+                                         @Part(Constant.q_mcq_op_1) RequestBody op1,
+                                         @Part(Constant.q_mcq_op_2) RequestBody op2,
+                                         @Part(Constant.q_mcq_op_3) RequestBody op3,
+                                         @Part(Constant.q_mcq_op_4) RequestBody op4,
+                                         @Part(Constant.q_marks) RequestBody marks,
+                                         @Part(Constant.q_duration) RequestBody duration,
+                                         @Part(Constant.q_diff_level) RequestBody difflevel,
+                                         @Part(Constant.a_sub_ans) RequestBody ans,
+                                         @Part(Constant.w_media_names) RequestBody medianames,
                                          @Part MultipartBody.Part[] image);
 
     @FormUrlEncoded
     @POST(Constant.ADD_QUESTION)
     Call<ResponseObj> addQuestionsApi(@Field(Constant.u_user_id) String userid,
-                                        @Field(Constant.appName) String app,
-                                        @Field(Constant.device_id) String deviceid,
-                                        @Field(Constant.sm_id) String subjectId,
-                                        @Field(Constant.q_quest) String question,
-                                        @Field(Constant.q_quest_desc) String questiondesc,
-                                        @Field(Constant.q_option_type) String optiontype,
-                                        @Field(Constant.q_mcq_op_1) String op1,
-                                        @Field(Constant.q_mcq_op_2) String op2,
-                                        @Field(Constant.q_mcq_op_3) String op3,
-                                        @Field(Constant.q_mcq_op_4) String op4,
-                                        @Field(Constant.q_marks) String marks,
-                                        @Field(Constant.q_duration) String duration,
-                                        @Field(Constant.q_diff_level) String difflevel,
-                                        @Field(Constant.a_sub_ans) String ans);
-    @FormUrlEncoded
-    @POST(Constant.ADD_QUESTION)
-    Call<ResponseObj> addSubjectiveQuestionsApi(@Field(Constant.u_user_id) String userid,
                                       @Field(Constant.appName) String app,
                                       @Field(Constant.device_id) String deviceid,
                                       @Field(Constant.sm_id) String subjectId,
                                       @Field(Constant.q_quest) String question,
                                       @Field(Constant.q_quest_desc) String questiondesc,
-                                      @Field(Constant.q_type) String type,
-                                                @Field(Constant.q_marks) String marks,
-                                                @Field(Constant.q_duration) String duration,
-                                                @Field(Constant.q_diff_level) String difflevel,
-                                                @Field(Constant.a_sub_ans) String ans);
+                                      @Field(Constant.q_option_type) String optiontype,
+                                      @Field(Constant.q_mcq_op_1) String op1,
+                                      @Field(Constant.q_mcq_op_2) String op2,
+                                      @Field(Constant.q_mcq_op_3) String op3,
+                                      @Field(Constant.q_mcq_op_4) String op4,
+                                      @Field(Constant.a_sub_ans) String ans);
+
 
     @FormUrlEncoded
     @POST(Constant.ADD_QUESTION)
     Call<ResponseObj> addTFQuestionsApi(@Field(Constant.u_user_id) String userid,
+                                        @Field(Constant.appName) String app,
+                                        @Field(Constant.device_id) String deviceid,
+                                        @Field(Constant.sm_id) String subjectId,
+                                        @Field(Constant.q_quest) String question,
+                                        @Field(Constant.q_quest_desc) String questiondesc,
+                                        @Field(Constant.q_option_type) String type,
+                                        @Field(Constant.a_sub_ans) String ans);
+
+    @FormUrlEncoded
+    @POST(Constant.ADD_QUESTION)
+    Call<ResponseObj> addSubjectiveQuestionsApi(@Field(Constant.u_user_id) String userid,
                                                 @Field(Constant.appName) String app,
                                                 @Field(Constant.device_id) String deviceid,
                                                 @Field(Constant.sm_id) String subjectId,
                                                 @Field(Constant.q_quest) String question,
                                                 @Field(Constant.q_quest_desc) String questiondesc,
-                                                @Field(Constant.q_option_type) String type,
+                                                @Field(Constant.q_type) String type,
                                                 @Field(Constant.q_marks) String marks,
-                                              @Field(Constant.q_duration) String duration,
-                                              @Field(Constant.q_diff_level) String difflevel,
+                                                @Field(Constant.q_duration) String duration,
+                                                @Field(Constant.q_diff_level) String difflevel,
                                                 @Field(Constant.a_sub_ans) String ans);
-
 
     @FormUrlEncoded
     @POST(Constant.PROCESS_QUESTION)

@@ -9,31 +9,27 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bogdwellers.pinchtozoom.ImageMatrixTouchHandler;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
-import com.google.android.material.textfield.TextInputLayout;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.activities.MainActivity;
 import com.jangletech.qoogol.activities.RegisterLoginActivity;
@@ -60,12 +56,16 @@ public class BaseFragment extends Fragment {
     private SharedPreferences preferences;
     private ApiInterface apiService = ApiClient.getInstance().getApi();
 
-    public ApiInterface getApiService(){
+    public ApiInterface getApiService() {
         return apiService;
     }
 
-    public String getDecryptedField(String encryptText,String key){
-        return AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(key),encryptText);
+    public String getDecryptedField(String encryptText, String key) {
+        return AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(key), encryptText);
+    }
+
+    public void navigationFromCreateTest(int resId, Bundle bundle) {
+        NavHostFragment.findNavController(getParentFragment()).navigate(resId, bundle);
     }
 
     public static String getDefinedTestCategory(String strCat) {
@@ -220,7 +220,7 @@ public class BaseFragment extends Fragment {
                 .show();
     }
 
-    public List<TestModelNew> searchTests(String text, List<TestModelNew> originalList){
+    public List<TestModelNew> searchTests(String text, List<TestModelNew> originalList) {
         List<TestModelNew> filteredTestList = new ArrayList<>();
         for (TestModelNew testModelNew : originalList) {
             if (testModelNew.getAuthor().toLowerCase().contains(text) ||
@@ -366,7 +366,7 @@ public class BaseFragment extends Fragment {
         } catch (Exception ex) {
             Log.e(TAG, ex.getMessage());
         }
-        Log.d(TAG, "convertDateToDataBaseFormat : "+formattedDate);
+        Log.d(TAG, "convertDateToDataBaseFormat : " + formattedDate);
         return formattedDate;
     }
 }

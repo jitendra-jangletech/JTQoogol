@@ -152,13 +152,58 @@
 
                 </LinearLayout>
 
-                <LinearLayout
+                <TextView
+                    android:id="@+id/answer_label"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:weightSum="2">
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:hint="@string/select_righ_ans"
+                    android:maxLines="1"
+                    android:textSize="@dimen/_12ssp"
+                    android:textColor="@color/colorBlack"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/scq4_layout" />
 
-                </LinearLayout>
+                <RadioGroup
+                    app:layout_constraintTop_toBottomOf="@+id/answer_label"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    android:id="@+id/radioGrpAnswer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:layout_marginEnd="@dimen/_15sdp"
+                        android:id="@+id/radioA"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/_2sdp"
+                        android:text="A" />
+
+                    <RadioButton
+                        android:id="@+id/radioB"
+                        android:layout_marginEnd="@dimen/_15sdp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/_2sdp"
+                        android:text="B" />
+
+                    <RadioButton
+                        android:id="@+id/radioC"
+                        android:layout_marginEnd="@dimen/_15sdp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/_2sdp"
+                        android:text="C" />
+
+                    <RadioButton
+                        android:id="@+id/radioD"
+                        android:layout_marginEnd="@dimen/_15sdp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/_2sdp"
+                        android:text="D" />
+                </RadioGroup>
 
             </LinearLayout>
 

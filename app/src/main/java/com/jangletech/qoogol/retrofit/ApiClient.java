@@ -1,9 +1,12 @@
 package com.jangletech.qoogol.retrofit;
 
 import android.util.Log;
+
 import com.jangletech.qoogol.util.QoogolApp;
+
 import java.io.File;
 import java.util.concurrent.TimeUnit;
+
 import okhttp3.Cache;
 import okhttp3.CacheControl;
 import okhttp3.Interceptor;
@@ -16,7 +19,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
     private static final String TAG = "ApiClient";
-    public static final String BASE_URL_PROD = "https://spot20191210061236.azurewebsites.net/api/";
+    //public static final String BASE_URL_PROD = "https://spot20191210061236.azurewebsites.net/api/";
     public static final String BASE_URL_STAGING = "https://spot20191210061236-staging.azurewebsites.net/api/";
     public static final String HEADER_CACHE_CONTROL = "Cache-Control";
     public static final String HEADER_PRAGMA = "Pragma";

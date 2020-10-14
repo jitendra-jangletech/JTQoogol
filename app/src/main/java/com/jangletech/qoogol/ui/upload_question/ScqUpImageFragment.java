@@ -9,9 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
+
 import com.bumptech.glide.Glide;
 import com.itextpdf.text.pdf.PRStream;
 import com.itextpdf.text.pdf.PdfName;
@@ -28,6 +30,7 @@ import com.jangletech.qoogol.util.AppUtils;
 import com.vincent.filepicker.Constant;
 import com.vincent.filepicker.activity.NormalFilePickActivity;
 import com.vincent.filepicker.filter.entity.NormalFile;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -94,7 +97,6 @@ public class ScqUpImageFragment extends BaseFragment implements AddImageDialog.A
             }
         });
 
-
         mBinding.image1.setOnClickListener(v -> {
             new AddImageDialog(getActivity(), 1, this)
                     .show();
@@ -103,7 +105,6 @@ public class ScqUpImageFragment extends BaseFragment implements AddImageDialog.A
         mBinding.image2.setOnClickListener(v -> {
             new AddImageDialog(getActivity(), 2, this)
                     .show();
-
         });
         mBinding.image3.setOnClickListener(v -> {
             new AddImageDialog(getActivity(), 3, this)
@@ -158,9 +159,6 @@ public class ScqUpImageFragment extends BaseFragment implements AddImageDialog.A
         FileOutputStream fos;
 
         try {
-
-            // Create pdf reader
-            //file = new File(filepath);
 
             PdfReader reader = new PdfReader(filepath);
 
@@ -227,6 +225,7 @@ public class ScqUpImageFragment extends BaseFragment implements AddImageDialog.A
 
         } catch (IOException ioe) {
             ioe.printStackTrace();
+            extractImages(filepath);
         }
     }
 }

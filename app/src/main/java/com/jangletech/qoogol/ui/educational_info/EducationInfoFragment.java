@@ -98,13 +98,8 @@ public class EducationInfoFragment extends BaseFragment implements
         mSettings = new PreferenceManager(getActivity());
         userid = mSettings.getProfileFetchId();
         if (!isFragmentVisible) {
-            if (userid.equalsIgnoreCase(mSettings.getUserId())) {
-                fetchEducationDetails(fetch_loged_in_user);
-                mBinding.addedu.setOnClickListener(this);
-            } else {
-                fetchEducationDetails(fetch_other_user);
-                mBinding.addedu.setVisibility(View.GONE);
-            }
+            fetchEducationDetails(fetch_loged_in_user);
+            mBinding.addedu.setOnClickListener(this);
         }
 
         mViewModel.getAllEducations(getUserId(getContext())).observe(getViewLifecycleOwner(), educations -> {

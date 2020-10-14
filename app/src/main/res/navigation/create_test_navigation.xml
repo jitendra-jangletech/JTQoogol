@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/home_navigation"
+    app:startDestination="@+id/nav_create">
+
+    <fragment
+        android:id="@+id/nav_create_test_section"
+        android:name="com.jangletech.qoogol.ui.create_test.TestSectionFragment"
+        android:label="@string/test_sections"
+        tools:layout="@layout/fragment_test_section" />
+
+    <fragment
+        android:id="@+id/nav_create_test_basic_details"
+        android:name="com.jangletech.qoogol.ui.create_test.CreateTestBasicDetails"
+        android:label="@string/create_test_basic_details"
+        tools:layout="@layout/fragment_create_basic_details" />
+
+    <fragment
+        android:id="@+id/nav_create"
+        android:name="com.jangletech.qoogol.ui.create_test.CreatedTestFragment"
+        android:label="@string/created_tests"
+        tools:layout="@layout/fragment_created_test"></fragment>
+
+    <fragment
+        android:id="@+id/nav_modify_syllabus"
+        android:name="com.jangletech.qoogol.ui.create_test.SyllabusFragment"
+        android:label="@string/modify_syllabus"
+        tools:layout="@layout/fragment_syllabus" />
+
+    <fragment
+        android:id="@+id/nav_add_test_question"
+        android:name="com.jangletech.qoogol.ui.create_test.AddTestQuestionFragment"
+        android:label="@string/add_question"
+        tools:layout="@layout/fragment_add_test_question" />
+
+</navigation>
