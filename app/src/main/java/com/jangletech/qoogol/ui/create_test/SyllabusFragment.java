@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.google.gson.Gson;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.EducationAdapter;
 import com.jangletech.qoogol.databinding.FragmentSyllabusBinding;
@@ -26,6 +27,7 @@ import com.jangletech.qoogol.model.Education;
 import com.jangletech.qoogol.model.FetchEducationResponse;
 import com.jangletech.qoogol.model.SyllabusChapter;
 import com.jangletech.qoogol.model.SyllabusSubject;
+import com.jangletech.qoogol.model.TestSubjectChapterMaster;
 import com.jangletech.qoogol.model.UserPreferenceResponse;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
@@ -137,6 +139,21 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
                     saveString(getActivity(), Constant.chapterName1, userPreferences.getChapterName1());
                     saveString(getActivity(), Constant.chapterName2, userPreferences.getChapterName2());
                     saveString(getActivity(), Constant.chapterName3, userPreferences.getChapterName3());
+
+                    TestSubjectChapterMaster testSubjectChapterMaster = new TestSubjectChapterMaster();
+                    testSubjectChapterMaster.setSubjectName(userPreferences.getSubjectName());
+                    testSubjectChapterMaster.setSubjectId(userPreferences.getSubjectId());
+                    testSubjectChapterMaster.setChap1Name(userPreferences.getChapterName1());
+                    testSubjectChapterMaster.setChap1Id(userPreferences.getChapterId1());
+                    testSubjectChapterMaster.setChap2Name(userPreferences.getChapterName2());
+                    testSubjectChapterMaster.setChap2Id(userPreferences.getChapterId2());
+                    testSubjectChapterMaster.setChap3Name(userPreferences.getChapterName3());
+                    testSubjectChapterMaster.setChap3Id(userPreferences.getChapterId3());
+                    testSubjectChapterMaster.setUeId(userPreferences.getSelectedUeId());
+
+                    Gson gson = new Gson();
+                    String json = gson.toJson(testSubjectChapterMaster);
+                    TinyDB.getInstance(getActivity()).putString(Constant.TEST_SUBJECT_CHAP, json);
 
                     mBinding.subjectsChipGrp.removeAllViews();
                     mBinding.chapterChipGrp.removeAllViews();

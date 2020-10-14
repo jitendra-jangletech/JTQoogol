@@ -29,5 +29,6 @@ public enum Nav {
     ABOUT,
     CONNECTIONS,
     CONNECTIONS_FOLLOWING,
-    DOUBTS
+    DOUBTS,
+    CREATE_PDF
 }

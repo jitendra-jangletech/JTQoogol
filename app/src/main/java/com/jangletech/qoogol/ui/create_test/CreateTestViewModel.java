@@ -1,13 +1,13 @@
 package com.jangletech.qoogol.ui.create_test;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.model.TestListResponse;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.util.AppUtils;
@@ -18,6 +18,7 @@ import retrofit2.Response;
 
 public class CreateTestViewModel extends AndroidViewModel {
 
+    private static final String TAG = "CreateTestViewModel";
     private MutableLiveData<TestListResponse> testResponse;
     private Application application;
 
@@ -27,11 +28,11 @@ public class CreateTestViewModel extends AndroidViewModel {
         testResponse = new MutableLiveData<>();
     }
 
-    public void setTestResponse(TestListResponse response){
+    public void setTestResponse(TestListResponse response) {
         this.testResponse.setValue(response);
     }
 
-    public LiveData<TestListResponse> getTestListResponse(){
+    public LiveData<TestListResponse> getTestListResponse() {
         return testResponse;
     }
 
@@ -42,7 +43,7 @@ public class CreateTestViewModel extends AndroidViewModel {
             @Override
             public void onResponse(Call<TestListResponse> call, Response<TestListResponse> response) {
                 //ProgressDialog.getInstance().dismiss();
-                if (response.body() != null) {
+                if (response.body().getResponse() != null) {
                     if (response.body().getResponse().equals("200")) {
                         //setCreatedTestList(response.body().getTestList());
                         setTestResponse(response.body());
@@ -51,6 +52,8 @@ public class CreateTestViewModel extends AndroidViewModel {
                     } else {
                         //showErrorDialog(getActivity(), response.body().getResponse(), response.body().getMessage());
                     }
+                } else {
+                    Log.e(TAG, "Null Response: ");
                 }
             }
 

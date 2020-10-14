@@ -62,7 +62,6 @@ import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -70,7 +69,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-
 import io.github.kexanie.library.MathView;
 import retrofit2.Call;
 import retrofit2.Callback;

@@ -62,18 +62,18 @@ public class TestSectionFragment extends BaseFragment implements AddNewSectionDi
 
     private void setSectionAdapter() {
         mAdapter = new SectionAdapter(getActivity(), testSectionList, this);
-        mBinding.sectionRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mBinding.sectionRecyclerView.setAdapter(mAdapter);
+        mBinding.directQuestions.setLayoutManager(new LinearLayoutManager(getContext()));
+        mBinding.directQuestions.setAdapter(mAdapter);
     }
 
     @Override
-    public void onAddQuestionClick(TestSection testSection) {
-        new AddQuestionDialog(getActivity(),this)
+    public void onAddQuestionClick(TestSection testSection,int pos) {
+        new AddQuestionDialog(getActivity(),testSection,pos,this)
                 .show();
     }
 
     @Override
-    public void onSaveClick() {
-
+    public void onSaveClick(TestSection testSection,int pos) {
+        mAdapter.notifyItemChanged(pos,testSection);
     }
 }

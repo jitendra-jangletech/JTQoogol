@@ -17,6 +17,17 @@ public class TestModelNew implements Serializable {
     private String flag;
     private String userId;
 
+    public String getTest_sections() {
+        return test_sections;
+    }
+
+    public void setTest_sections(String test_sections) {
+        this.test_sections = test_sections;
+    }
+
+    @SerializedName(Constant.test_sections)
+    private String test_sections;
+
     @SerializedName(Constant.test_description)
     private String test_description;
 

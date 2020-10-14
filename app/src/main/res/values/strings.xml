@@ -850,7 +850,7 @@
     <string name="validate">Validate</string>
     <string name="float_create_test">Create New Test</string>
     <string name="float_add_section">Add New Section</string>
-    <string name="test_sections">Create Test Sections</string>
+    <string name="test_sections">Add Test Sections</string>
     <string name="create_test_basic_details">Test Basic Details</string>
     <string name="created_tests">Created Tests</string>
     <string name="add_question">Add Test Question</string>
@@ -864,5 +864,11 @@
     <string name="add_section_name">Section Name</string>
     <string name="add_section_marks">Section Marks</string>
     <string name="add_questions">Add Questions</string>
+    <string name="test_exe_type">Test Type</string>
+    <string name="select_negative_marks">Negative Marks</string>
+    <string name="test_category">Test Category</string>
+    <string name="create_pdf">Create Pdf</string>
+    <string name="generate_document">Generate Pdf</string>
+    <string name="menu_create_pdf">Create Pdf</string>
 
 </resources>

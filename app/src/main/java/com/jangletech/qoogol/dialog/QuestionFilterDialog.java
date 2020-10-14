@@ -80,47 +80,47 @@ public class QuestionFilterDialog extends BottomSheetDialogFragment implements V
         prepareQueCategory();
 
         mBinding.reset.setOnClickListener(v -> {
-           try {
-               mBinding.testDifficultyLevelChipGrp.clearCheck();
-               mBinding.queTypeChipGrp.clearCheck();
-               mBinding.queCategoryChipGrp.clearCheck();
-               mSettings.setQueDiffLevelFilter("");
-               mSettings.setQueTypeFilter("");
-               mSettings.setOptionTypeFilter("");
-               mSettings.setQueTrendingFilter("");
-               mSettings.setQuePopularFilter("");
-               mSettings.setQueRecentFilter("");
-               mSettings.setRatingsFilter("");
-               filterClickListener.onResetClick();
-               saveQueFilter(false);
-               dismiss();
-           } catch (Exception e) {
-               e.printStackTrace();
-           }
+            try {
+                mBinding.testDifficultyLevelChipGrp.clearCheck();
+                mBinding.queTypeChipGrp.clearCheck();
+                mBinding.queCategoryChipGrp.clearCheck();
+                mSettings.setQueDiffLevelFilter("");
+                mSettings.setQueTypeFilter("");
+                mSettings.setOptionTypeFilter("");
+                mSettings.setQueTrendingFilter("");
+                mSettings.setQuePopularFilter("");
+                mSettings.setQueRecentFilter("");
+                mSettings.setRatingsFilter("");
+                filterClickListener.onResetClick();
+                saveQueFilter(false);
+                dismiss();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         });
 
         mBinding.done.setOnClickListener(v -> {
             String type = getSelectedChipValues(mBinding.queTypeChipGrp);
 
-                if (type.contains(Constant.trending))
-                    params.put(Constant.q_trending,"1");
-                else
-                    params.put(Constant.q_trending,"");
+            if (type.contains(Constant.trending))
+                params.put(Constant.q_trending, "1");
+            else
+                params.put(Constant.q_trending, "");
 
-                if (type.contains(Constant.popular))
-                    params.put(Constant.q_popular,"1");
-                else
-                    params.put(Constant.q_popular,"");
+            if (type.contains(Constant.popular))
+                params.put(Constant.q_popular, "1");
+            else
+                params.put(Constant.q_popular, "");
 
-                if (type.contains(Constant.recent))
-                    params.put(Constant.q_recent,"1");
-                else
-                    params.put(Constant.q_recent,"");
+            if (type.contains(Constant.recent))
+                params.put(Constant.q_recent, "1");
+            else
+                params.put(Constant.q_recent, "");
 
-             String diffLevel = getSelectedChipValues(mBinding.testDifficultyLevelChipGrp).replace("Easy","E").replace("Medium","M").replace("Hard","H");
-             params.put(Constant.q_diff_level,diffLevel);
+            String diffLevel = getSelectedChipValues(mBinding.testDifficultyLevelChipGrp).replace("Easy", "E").replace("Medium", "M").replace("Hard", "H");
+            params.put(Constant.q_diff_level, diffLevel);
 
-             String catg = getSelectedChipValues(mBinding.queCategoryChipGrp);
+            String catg = getSelectedChipValues(mBinding.queCategoryChipGrp);
 
             StringBuilder results = new StringBuilder();
             if (catg.contains(Constant.short_ans))
@@ -131,9 +131,9 @@ public class QuestionFilterDialog extends BottomSheetDialogFragment implements V
                 results.append(",'" + Constant.FILL_THE_BLANKS + "'");
 
             if (results.toString().startsWith(",")) {
-                params.put(Constant.q_type,results.toString().substring(1));
+                params.put(Constant.q_type, results.toString().substring(1));
             } else {
-                params.put(Constant.q_type,results.toString());
+                params.put(Constant.q_type, results.toString());
             }
 
 
@@ -156,24 +156,22 @@ public class QuestionFilterDialog extends BottomSheetDialogFragment implements V
                 option_results.append(",'" + Constant.MATCH_PAIR_IMAGE + "'");
             }
             if (option_results.toString().startsWith(",")) {
-                params.put(Constant.q_option_type,option_results.toString().substring(1));
+                params.put(Constant.q_option_type, option_results.toString().substring(1));
             } else {
-                params.put(Constant.q_option_type,option_results.toString());
+                params.put(Constant.q_option_type, option_results.toString());
             }
 
-            if (mBinding.rating.getRating()>0)
-                params.put(Constant.q_avg_ratings,String.valueOf(mBinding.rating.getRating()));
+            if (mBinding.rating.getRating() > 0)
+                params.put(Constant.q_avg_ratings, String.valueOf(mBinding.rating.getRating()));
             else
-                params.put(Constant.q_avg_ratings,"");
+                params.put(Constant.q_avg_ratings, "");
 
             AppUtils.saveQueFilterHashMap(params, mContext);
-           saveQueFilter(true);
+            saveQueFilter(true);
             filterClickListener.onDoneClick(params);
             dismiss();
 
         });
-
-
 
 
         mBinding.rating.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {
@@ -211,7 +209,7 @@ public class QuestionFilterDialog extends BottomSheetDialogFragment implements V
 
     private void setRatings() {
         String rating = mSettings.getRatingsFilter();
-        if (rating!=null&& !rating.isEmpty()) {
+        if (rating != null && !rating.isEmpty()) {
             mBinding.rating.setRating(Float.parseFloat(rating));
         }
     }
@@ -230,7 +228,7 @@ public class QuestionFilterDialog extends BottomSheetDialogFragment implements V
                 mBinding.rating.setRating(Float.parseFloat(avgRating));
             }
 
-            if (diffLevel!=null && !diffLevel.isEmpty()){
+            if (diffLevel != null && !diffLevel.isEmpty()) {
                 if (diffLevel.contains("E"))
                     que_difflevelset.add("Easy");
                 if (diffLevel.contains("M"))
@@ -240,7 +238,7 @@ public class QuestionFilterDialog extends BottomSheetDialogFragment implements V
             }
 
 
-            if (q_type!=null && !q_type.isEmpty()) {
+            if (q_type != null && !q_type.isEmpty()) {
                 if (q_type.contains(Constant.SHORT_ANSWER))
                     que_categoryset.add(Constant.short_ans);
                 if (q_type.contains(Constant.LONG_ANSWER))
@@ -249,9 +247,9 @@ public class QuestionFilterDialog extends BottomSheetDialogFragment implements V
                     que_categoryset.add(Constant.fill_the_blanks);
             }
 
-            List<String> items = Arrays.asList(option_type.replace("\'","").split("\\s*,\\s*"));
+            List<String> items = Arrays.asList(option_type.replace("\'", "").split("\\s*,\\s*"));
 
-            for (int i=0;i<items.size();i++) {
+            for (int i = 0; i < items.size(); i++) {
                 if (items.get(i).equalsIgnoreCase(Constant.SCQ))
                     que_categoryset.add(Constant.scq);
                 if (items.get(i).equalsIgnoreCase(Constant.MCQ))
@@ -262,21 +260,21 @@ public class QuestionFilterDialog extends BottomSheetDialogFragment implements V
                     que_categoryset.add(Constant.match_pair);
             }
 
-            if (params.get(Constant.q_trending)!=null &&params.get(Constant.q_trending).equalsIgnoreCase("1"))
+            if (params.get(Constant.q_trending) != null && params.get(Constant.q_trending).equalsIgnoreCase("1"))
                 typeset.add(Constant.trending);
-            if (params.get(Constant.q_popular)!=null &&params.get(Constant.q_popular).equalsIgnoreCase("1"))
+            if (params.get(Constant.q_popular) != null && params.get(Constant.q_popular).equalsIgnoreCase("1"))
                 typeset.add(Constant.popular);
-            if (params.get(Constant.q_recent)!=null &&params.get(Constant.q_recent).equalsIgnoreCase("1"))
+            if (params.get(Constant.q_recent) != null && params.get(Constant.q_recent).equalsIgnoreCase("1"))
                 typeset.add(Constant.recent);
 
         }
     }
 
     private String getResult(String result, String str) {
-            if (result.isEmpty())
-                return  str;
-            else
-               return result + "," + str;
+        if (result.isEmpty())
+            return str;
+        else
+            return result + "," + str;
 
     }
 

@@ -36,6 +36,7 @@
                 android:layout_marginTop="@dimen/_10sdp"
                 android:hint="@string/add_section_name"
                 android:textColor="@color/colorBlack"
+                android:visibility="gone"
                 app:errorEnabled="true"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -48,6 +49,39 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
+            <RadioGroup
+                android:id="@+id/sectionRadioGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp">
+
+                <RadioButton
+                    android:id="@+id/section0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="None" />
+
+                <RadioButton
+                    android:text="Section 1"
+                    android:id="@+id/section1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <RadioButton
+                    android:text="Section 2"
+                    android:id="@+id/section2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <RadioButton
+                    android:text="Section 3"
+                    android:id="@+id/section3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </RadioGroup>
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilSectionMarks"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -56,6 +90,7 @@
                 android:layout_marginTop="@dimen/_10sdp"
                 android:hint="@string/add_section_marks"
                 android:textColor="@color/colorBlack"
+                android:visibility="gone"
                 app:errorEnabled="true"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -69,12 +104,11 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_gravity="center"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_gravity="center">
 
                 <Button
-                    app:layout_constraintRight_toRightOf="parent"
                     android:id="@+id/btnSave"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -82,18 +116,19 @@
                     android:backgroundTint="@color/color_red"
                     android:text="@string/save"
                     android:textAllCaps="false"
+                    app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <Button
-                    android:layout_marginRight="@dimen/_20sdp"
-                    app:layout_constraintRight_toLeftOf="@+id/btnSave"
                     android:id="@+id/btnCancel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:layout_marginRight="@dimen/_20sdp"
                     android:backgroundTint="@color/color_red"
                     android:text="@string/cancel"
                     android:textAllCaps="false"
+                    app:layout_constraintRight_toLeftOf="@+id/btnSave"
                     app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>

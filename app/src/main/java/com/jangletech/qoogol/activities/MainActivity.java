@@ -220,6 +220,11 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
                     navigateFlag = "";
                     navToFragment(R.id.nav_home, Bundle.EMPTY);
                 }
+                if (navigateFlag.equals(Nav.CREATE_PDF.toString())) {
+                    navigateFlag = "";
+                    navToFragment(R.id.nav_create_pdf, Bundle.EMPTY);
+                }
+
                 if (navigateFlag.equals(Nav.PENDING_REQ.toString())) {
                     navigateFlag = "";
                     navToFragment(R.id.nav_requests, Bundle.EMPTY);
@@ -371,6 +376,13 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
             mBinding.drawerLayout.closeDrawers();
             if (navController.getCurrentDestination().getId() != R.id.nav_learning) {
                 navigateFlag = Nav.LEARNING.toString();
+            }
+        });
+
+        findViewById(R.id.nav_create_pdf).setOnClickListener(v -> {
+            mBinding.drawerLayout.closeDrawers();
+            if (navController.getCurrentDestination().getId() != R.id.nav_create_pdf) {
+                navigateFlag = Nav.CREATE_PDF.toString();
             }
         });
 

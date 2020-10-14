@@ -30,6 +30,7 @@ import com.jangletech.qoogol.util.AppUtils;
 import com.vincent.filepicker.Constant;
 import com.vincent.filepicker.activity.NormalFilePickActivity;
 import com.vincent.filepicker.filter.entity.NormalFile;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;

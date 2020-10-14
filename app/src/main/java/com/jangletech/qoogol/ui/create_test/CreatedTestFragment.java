@@ -61,37 +61,8 @@ public class CreatedTestFragment extends BaseFragment implements CreatedTestAdap
 
         mBinding.btnCreateNewTest.setOnClickListener(v -> {
             navigationFromCreateTest(R.id.nav_create_test_basic_details, Bundle.EMPTY);
-            //NavHostFragment.findNavController(getParentFragment()).navigate(R.id.nav_create_test_basic_details, Bundle.EMPTY);
         });
     }
-
-//    private void fetchTestList() {
-//        ProgressDialog.getInstance().show(getActivity());
-//        Call<TestListResponse> call = getApiService().fetchCreatedTestList(AppUtils.getUserId());
-//        call.enqueue(new Callback<TestListResponse>() {
-//            @Override
-//            public void onResponse(Call<TestListResponse> call, Response<TestListResponse> response) {
-//                ProgressDialog.getInstance().dismiss();
-//                if (response.body() != null) {
-//                    if (response.body().getResponse().equals("200")) {
-//                        setCreatedTestList(response.body().getTestList());
-//                    } else if (response.body().getResponse().equals("501")) {
-//                        resetSettingAndLogout();
-//                    } else {
-//                        showErrorDialog(getActivity(), response.body().getResponse(), response.body().getMessage());
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<TestListResponse> call, Throwable t) {
-//                ProgressDialog.getInstance().dismiss();
-//                AppUtils.showToast(getActivity(), t, "");
-//                apiCallFailureDialog(t);
-//                t.printStackTrace();
-//            }
-//        });
-//    }
 
     private void setCreatedTestList(List<TestModelNew> createdTestList) {
         Log.i(TAG, "setCreatedTestList Size : " + createdTestList.size());
@@ -108,7 +79,8 @@ public class CreatedTestFragment extends BaseFragment implements CreatedTestAdap
     @Override
     public void onEditClick(TestModelNew testModelNew) {
         Log.i(TAG, "onEditClick : " + testModelNew.getTm_id());
-        navigationFromCreateTest(R.id.nav_create_test_basic_details, Bundle.EMPTY);
-        //NavHostFragment.findNavController(getParentFragment()).navigate(R.id.nav_create_test_basic_details, Bundle.EMPTY);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("CREATED_TEST", testModelNew);
+        navigationFromCreateTest(R.id.nav_create_test_basic_details, bundle);
     }
 }

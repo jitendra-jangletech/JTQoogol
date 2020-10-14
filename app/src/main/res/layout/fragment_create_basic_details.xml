@@ -173,121 +173,105 @@
 
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/tvDiffLevelTitle"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:id="@+id/negativeMarksLayout"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:padding="@dimen/_4sdp"
-                    android:text="@string/menu_diff_level"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/chapterLayout" />
+                    android:orientation="vertical"
+                    app:layout_constraintTop_toBottomOf="@+id/chapterLayout">
 
-                <com.google.android.material.chip.ChipGroup
-                    android:id="@+id/testDiffLevel"
-                    android:layout_width="wrap_content"
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:padding="@dimen/_4sdp"
+                        android:text="@string/select_negative_marks" />
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/testNegativeMarksGroup"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        app:selectionRequired="true"
+                        app:singleSelection="true" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/testTypeLayout"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvDiffLevelTitle"
-                    app:selectionRequired="true"
-                    app:singleSelection="true">
+                    android:orientation="vertical"
+                    app:layout_constraintTop_toBottomOf="@+id/negativeMarksLayout">
 
-                    <com.google.android.material.chip.Chip
-                        style="@style/Widget.MaterialComponents.Chip.Filter"
+                    <TextView
+                        android:id="@+id/tvTestType"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:checkable="true"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:tag="E"
-                        android:text="Easy"
-                        app:chipBackgroundColor="@color/chip_background" />
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:padding="@dimen/_4sdp"
+                        android:text="@string/test_exe_type" />
 
-                    <com.google.android.material.chip.Chip
-                        style="@style/Widget.MaterialComponents.Chip.Filter"
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/testExecuteTypeChipGroup"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:checkable="true"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:tag="M"
-                        android:text="Medium"
-                        app:chipBackgroundColor="@color/chip_background" />
+                        android:layout_marginTop="@dimen/_5sdp"
+                        app:selectionRequired="true"
+                        app:singleSelection="true" />
 
-                    <com.google.android.material.chip.Chip
-                        style="@style/Widget.MaterialComponents.Chip.Filter"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checkable="true"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:tag="H"
-                        android:text="Hard"
-                        app:chipBackgroundColor="@color/chip_background" />
+                </LinearLayout>
 
-
-                </com.google.android.material.chip.ChipGroup>
-
-
-                <TextView
-                    android:id="@+id/tvTypeTitle"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:id="@+id/DiffLevelLayout"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:padding="@dimen/_4sdp"
-                    android:text="@string/test_type"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/testDiffLevel" />
+                    android:orientation="vertical"
+                    app:layout_constraintTop_toBottomOf="@+id/testTypeLayout">
+
+                    <TextView
+                        android:id="@+id/tvDiffLevelTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:padding="@dimen/_4sdp"
+                        android:text="@string/menu_diff_level" />
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/testDiffLevel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        app:selectionRequired="true"
+                        app:singleSelection="true" />
+
+                </LinearLayout>
 
 
-                <com.google.android.material.chip.ChipGroup
-                    android:id="@+id/testTypeChipGroup"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvTypeTitle"
-                    app:selectionRequired="true"
-                    app:singleSelection="true">
+                    android:orientation="vertical"
+                    app:layout_constraintTop_toBottomOf="@+id/DiffLevelLayout">
 
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chipUnitTest"
-                        style="@style/Widget.MaterialComponents.Chip.Filter"
+                    <TextView
+                        android:id="@+id/tvTypeTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:checkable="true"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:tag="U"
-                        android:text="Unit Test"
-                        app:chipBackgroundColor="@color/chip_background" />
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:padding="@dimen/_4sdp"
+                        android:text="@string/test_category" />
 
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chipAnnual"
-                        style="@style/Widget.MaterialComponents.Chip.Filter"
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/testCategoryChipGrp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:checkable="true"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:tag="A"
-                        android:text="Annual"
-                        app:chipBackgroundColor="@color/chip_background" />
+                        android:layout_marginTop="@dimen/_5sdp"
+                        app:selectionRequired="true"
+                        app:singleSelection="true" />
 
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chipSemester"
-                        style="@style/Widget.MaterialComponents.Chip.Filter"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checkable="true"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:tag="S"
-                        android:text="Semester Final"
-                        app:chipBackgroundColor="@color/chip_background" />
-
-                </com.google.android.material.chip.ChipGroup>
+                </LinearLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

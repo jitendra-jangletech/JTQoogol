@@ -10,6 +10,7 @@ import com.jangletech.qoogol.model.ConnectionResponse;
 import com.jangletech.qoogol.model.ContactResponse;
 import com.jangletech.qoogol.model.CountryResponse;
 import com.jangletech.qoogol.model.CourseResponse;
+import com.jangletech.qoogol.model.CreateTestResponse;
 import com.jangletech.qoogol.model.DashBoard;
 import com.jangletech.qoogol.model.DegreeResponse;
 import com.jangletech.qoogol.model.DistrictResponse;
@@ -314,7 +315,23 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST(Constant.FETCH_TEST_LIST)
-    Call<TestListResponse> fetchCreatedTestList(@Field(Constant.u_user_id) String userId);
+    Call<TestListResponse> fetchCreatedTestList(@Field(Constant.tm_user_id) String userId);
+
+
+    @FormUrlEncoded
+    @POST(Constant.CREATE_MODIFY_TEST)
+    Call<CreateTestResponse> createModifyTest(@Field(Constant.u_user_id) String userId,
+                                              @Field(Constant.tm_name) String name,
+                                              @Field(Constant.test_description) String descr,
+                                              @Field(Constant.tm_tot_marks) String totalMarks,
+                                              @Field(Constant.tm_duration) String duration,
+                                              @Field(Constant.tm_sm_id) String subjectId,
+                                              @Field(Constant.cm_id) String chapterId,
+                                              @Field(Constant.tm_neg_mks) String negMarks,
+                                              @Field(Constant.tm_type) String type,
+                                              @Field(Constant.tm_diff_level) String diffLevel,
+                                              @Field(Constant.tm_catg) String category,
+                                              @Field(Constant._1223G) String date);
 
 
     @FormUrlEncoded
@@ -658,7 +675,6 @@ public interface ApiInterface {
                                       @Field(Constant.q_mcq_op_3) String op3,
                                       @Field(Constant.q_mcq_op_4) String op4,
                                       @Field(Constant.a_sub_ans) String ans);
-
 
 
     @FormUrlEncoded

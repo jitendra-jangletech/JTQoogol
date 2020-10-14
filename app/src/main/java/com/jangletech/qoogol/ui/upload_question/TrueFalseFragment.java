@@ -6,35 +6,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.RadioButton;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
-import androidx.navigation.Navigation;
 
 import com.jangletech.qoogol.R;
-import com.jangletech.qoogol.databinding.FragmentUpTrueFalseBinding;
-import com.jangletech.qoogol.dialog.ProgressDialog;
-import com.jangletech.qoogol.model.ResponseObj;
 import com.jangletech.qoogol.model.UploadQuestion;
-import com.jangletech.qoogol.retrofit.ApiClient;
-import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
-import com.jangletech.qoogol.util.PreferenceManager;
-import com.jangletech.qoogol.util.UtilHelper;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-
-import static com.jangletech.qoogol.util.AppUtils.getDeviceId;
-import static com.jangletech.qoogol.util.Constant.TRUE_FALSE;
-import static com.jangletech.qoogol.util.Constant.qoogol;
 
 public class TrueFalseFragment extends BaseFragment{
 
     private static final String TAG = "TrueFalseFragment";
-    private FragmentUpTrueFalseBinding mBinding;
+    private com.jangletech.qoogol.databinding.FragmentUpTrueFalseBinding mBinding;
     private UploadQuestion uploadQuestion;
 
     @Nullable

@@ -71,7 +71,7 @@ public class ScanQuestionDescFragment extends BaseFragment {
         super.onActivityCreated(savedInstanceState);
         if (getArguments() != null && getArguments().getSerializable("Question") != null) {
             uploadQuestion = (UploadQuestion) getArguments().getSerializable("Question");
-            Log.i(TAG, "onActivityCreated : "+uploadQuestion.getSubjectName());
+            Log.i(TAG, "onActivityCreated : " + uploadQuestion.getSubjectName());
             getActionBar().setTitle("Scan " + uploadQuestion.getSubjectName() + " Question");
         }
 
