@@ -20,12 +20,24 @@
             android:id="@+id/imageView"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:scaleType="center"
-            android:src="@drawable/ic_add_menu"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_documents"
             card_view:layout_constraintBottom_toBottomOf="parent"
             card_view:layout_constraintEnd_toEndOf="parent"
             card_view:layout_constraintStart_toStartOf="parent"
             card_view:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:visibility="gone"
+            android:src="@drawable/ic_action_play_circle_filled"
+            card_view:layout_constraintTop_toTopOf="@+id/imageView"
+            card_view:layout_constraintBottom_toBottomOf="@+id/imageView"
+            card_view:layout_constraintLeft_toLeftOf="@+id/imageView"
+            card_view:layout_constraintRight_toRightOf="@+id/imageView"
+            android:id="@+id/play"
+            android:layout_width="45dp"
+            android:layout_height="45dp"/>
+
 
         <ImageView
             android:id="@+id/removeItem"

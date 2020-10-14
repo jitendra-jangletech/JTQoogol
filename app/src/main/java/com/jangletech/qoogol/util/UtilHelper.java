@@ -147,6 +147,21 @@ public class UtilHelper {
         return false;
     }
 
+    public static boolean isDoc(Uri media, Context context) {
+
+            File file = new File(Objects.requireNonNull(media.getPath()));
+            String[] okFileExtensions = new String[]{"doc", "docx", "pdf", "ppt", "pptx", "xls","xlsx","wav","txt","rtf","HTML","HTM","ODT","ODS",
+            "docm","xps"};
+            Log.d("#>file ext got ", file.getName().toLowerCase());
+            for (String extension : okFileExtensions) {
+                if (file.getName().toLowerCase().endsWith(extension)) {
+                    Log.d("#>detected ", "is audio");
+                    return true;
+                }
+            }
+        return false;
+    }
+
 
     public static boolean isVideo(Uri media, Context context) {
         ContentResolver cR = context.getContentResolver();

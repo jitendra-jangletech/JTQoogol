@@ -7,6 +7,7 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -19,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.webkit.MimeTypeMap;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
@@ -71,6 +73,7 @@ import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.karumi.dexter.listener.single.PermissionListener;
 import com.vincent.filepicker.Constant;
+import com.vincent.filepicker.Util;
 import com.vincent.filepicker.activity.NormalFilePickActivity;
 import com.vincent.filepicker.filter.entity.NormalFile;
 
@@ -110,7 +113,7 @@ public class SCQ_QueFragment extends BaseFragment implements AnsScanDialog.AnsSc
     private Uri imageUri;
     private int ansId;
     private AlertDialog mediaDialog;
-    private static final int CAMERA_REQUEST = 1, GALLERY_REQUEST = 2, VIDEO_REQUEST = 4, AUDIO_REQUEST = 5;
+    private static final int CAMERA_REQUEST = 1, GALLERY_REQUEST = 2, PICKFILE_REQUEST_CODE=3, VIDEO_REQUEST = 4, AUDIO_REQUEST = 5;
     private Uri mphotouri;
     public ArrayList<Uri> mAllUri = new ArrayList<>();
     public ArrayList<Uri> mAllVideoUri = new ArrayList<>();
@@ -162,7 +165,6 @@ public class SCQ_QueFragment extends BaseFragment implements AnsScanDialog.AnsSc
     }
 
     private void initView() {
-
     }
 
     private void initSelectedImageView() {
@@ -170,20 +172,43 @@ public class SCQ_QueFragment extends BaseFragment implements AnsScanDialog.AnsSc
         galleryAdapter = new AdapterGallerySelectedImage(mAllUri, getActivity(), new AdapterGallerySelectedImage.GalleryUplodaHandler() {
             @Override
             public void imageClick(Uri media, int position) {
-               if ( UtilHelper.isImage(media, getActivity())) {
-                   Bundle bundle = new Bundle();
-                   bundle.putSerializable("urilist", (Serializable) mAllUri);
-                   bundle.putInt("position", 0);
-                   bundle.putString("type", "uri");
-                   SlideshowDialogFragment newFragment = SlideshowDialogFragment.newInstance();
-                   newFragment.setArguments(bundle);
-                   FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
-                   newFragment.show(ft, "slideshow");
-               } else if (UtilHelper.isVideo(media, getActivity())) {
-
-               }
-
-
+              try {
+                  if ( UtilHelper.isImage(media, getActivity())) {
+                      Bundle bundle = new Bundle();
+                      bundle.putSerializable("urilist", (Serializable) mAllUri);
+                      bundle.putInt("position", 0);
+                      bundle.putString("type", "uri");
+                      SlideshowDialogFragment newFragment = SlideshowDialogFragment.newInstance();
+                      newFragment.setArguments(bundle);
+                      FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
+                      newFragment.show(ft, "slideshow");
+                  } else if (UtilHelper.isVideo(media, getActivity())) {
+                      if (media.getPath() != null && !media.getPath().isEmpty()) {
+                          Intent intent = new Intent(getActivity(), VideoActivity.class);
+                          intent.putExtra("uri", new ImageOptimization(getActivity()).getPath(getActivity(), media));
+                          intent.putExtra("fromUrl", false);
+                          intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                          getActivity().startActivity(intent);
+                      } else {
+                          Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.server_error), Toast.LENGTH_LONG).show();
+                      }
+                  } else if (UtilHelper.isDoc(media,getActivity())) {
+                      File file = AppUtils.createImageFile(requireActivity(), media);
+                      MimeTypeMap mime = MimeTypeMap.getSingleton();
+                      String ext = file.getName().substring(file.getName().lastIndexOf(".") + 1);
+                      Intent pdfOpenintent = new Intent(Intent.ACTION_VIEW);
+                      pdfOpenintent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                      pdfOpenintent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                      if (media != null) {
+                          pdfOpenintent.setDataAndType(media,AppUtils.getType(file.getName()));
+                      } else {
+                          pdfOpenintent.setDataAndType(media, "application/octet-stream");
+                      }
+                      getActivity().startActivity(pdfOpenintent);
+                  }
+              } catch (Exception e){
+                  e.printStackTrace();
+              }
             }
 
             @Override
@@ -210,22 +235,24 @@ public class SCQ_QueFragment extends BaseFragment implements AnsScanDialog.AnsSc
         dialogBuilder.setView(mediaUploadLayoutBinding.getRoot());
         mediaUploadLayoutBinding.camera.setOnClickListener(view -> {
             mediaDialog.dismiss();
-            requestStoragePermission(true, false, false);
+            requestStoragePermission(true, false, false,false);
         });
 
 
         mediaUploadLayoutBinding.gallery.setOnClickListener(view -> {
             mediaDialog.dismiss();
-            requestStoragePermission(false, true, false);
+            requestStoragePermission(false, true, false,false);
         });
 
 
         mediaUploadLayoutBinding.videos.setOnClickListener(view -> {
-            requestStoragePermission(false, false, false);
+            requestStoragePermission(false, false, false,true);
             mediaDialog.dismiss();
         });
 
         mediaUploadLayoutBinding.audios.setOnClickListener(view -> {
+            requestStoragePermission(false, false, true,false);
+            mediaDialog.dismiss();
         });
 
         mediaUploadLayoutBinding.scanPdf.setOnClickListener(v -> {
@@ -234,12 +261,17 @@ public class SCQ_QueFragment extends BaseFragment implements AnsScanDialog.AnsSc
                     .show();
         });
 
+        mediaUploadLayoutBinding.documents.setOnClickListener(v -> {
+            mediaDialog.dismiss();
+            requestStoragePermission(false, false, false,false);
+        });
+
         mediaDialog = dialogBuilder.create();
         Objects.requireNonNull(mediaDialog.getWindow()).setBackgroundDrawableResource(android.R.color.transparent);
         mediaDialog.show();
     }
 
-    private void requestStoragePermission(final boolean isCamera, final boolean isPictures, final boolean isAudio) {
+    private void requestStoragePermission(final boolean isCamera, final boolean isPictures, final boolean isAudio,  final boolean isVideo) {
         Dexter.withActivity(requireActivity())
                 .withPermissions(Manifest.permission.READ_EXTERNAL_STORAGE,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
@@ -253,8 +285,10 @@ public class SCQ_QueFragment extends BaseFragment implements AnsScanDialog.AnsSc
                                 getImages();
                             } else if (isAudio) {
                                 getAudio();
-                            } else {
+                            } else  if (isVideo){
                                 getVideo();
+                            } else {
+                                getDocument();
                             }
                         }
                         if (report.isAnyPermissionPermanentlyDenied()) {
@@ -273,6 +307,22 @@ public class SCQ_QueFragment extends BaseFragment implements AnsScanDialog.AnsSc
                 })
                 .onSameThread()
                 .check();
+    }
+
+    protected void getDocument() {
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        String[] mimeTypes =
+                {"application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .doc & .docx
+                        "application/vnd.ms-powerpoint", "application/vnd.openxmlformats-officedocument.presentationml.presentation", // .ppt & .pptx
+                        "application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // .xls & .xlsx
+                        "text/plain","application/rtf","application/pdf","application/zip", "application/vnd.android.package-archive"};
+
+        intent.setType("application/*");
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        startActivityForResult(intent, PICKFILE_REQUEST_CODE);
     }
 
     private void getVideo() {
@@ -498,13 +548,13 @@ public class SCQ_QueFragment extends BaseFragment implements AnsScanDialog.AnsSc
                 Log.e(TAG, "onFailure onActivityResult: " + e.getMessage());
                 Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_LONG).show();
             }
-        } else if (requestCode == CAMERA_REQUEST) {
+        } else if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK && data != null) {
             if (mAllUri.size() > 10) {
                 Toast.makeText(getActivity(), "A maximum of 10 media can be uploaded at once.", Toast.LENGTH_LONG).show();
             } else {
                 setupPreview(mphotouri);
             }
-        } else if (requestCode == Constant.REQUEST_CODE_PICK_FILE) {
+        } else if (requestCode == Constant.REQUEST_CODE_PICK_FILE && resultCode == RESULT_OK && data != null) {
             if (resultCode == RESULT_OK) {
                 ArrayList<NormalFile> list = data.getParcelableArrayListExtra(Constant.RESULT_PICK_FILE);
                 //StringBuilder builder = new StringBuilder();
@@ -514,7 +564,7 @@ public class SCQ_QueFragment extends BaseFragment implements AnsScanDialog.AnsSc
                     extractImages(path);
                 }
             }
-        } else if (requestCode == VIDEO_REQUEST) {
+        } else if (requestCode == VIDEO_REQUEST && resultCode == RESULT_OK && data != null) {
             try {
                 ArrayList<Uri> video_uri = new ArrayList<>();
                 if (data.getData() != null) {
@@ -558,7 +608,39 @@ public class SCQ_QueFragment extends BaseFragment implements AnsScanDialog.AnsSc
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        } else if (requestCode == AUDIO_REQUEST) {
+        } else if (requestCode == PICKFILE_REQUEST_CODE&& resultCode == RESULT_OK && data != null) {
+            try {
+                ArrayList<Uri> video_uri = new ArrayList<>();
+                if (data.getData() != null) {
+                    Uri mVideoUri = data.getData();
+                    if (mAllUri.size() > 10) {
+                        Toast.makeText(getActivity(), "A maximum of 10 media can be uploaded at once.", Toast.LENGTH_LONG).show();
+                    } else  {
+                        video_uri.add(mVideoUri);
+                        setupPreview(mVideoUri);
+                    }
+                } else if (data.getClipData() != null) {
+                    ClipData mClipData = data.getClipData();
+                    if (mClipData.getItemCount() > 10) {
+                        Toast.makeText(getActivity(), "A maximum of 10 videos can be uploaded at once.", Toast.LENGTH_LONG).show();
+                    } else {
+                        for (int i = 0; i < mClipData.getItemCount(); i++) {
+                            ClipData.Item item = mClipData.getItemAt(i);
+                            Uri uri = item.getUri();
+                            video_uri.add(uri);
+                            if (mAllUri.size() > 10) {
+                                Toast.makeText(getActivity(), "A maximum of 10 media can be uploaded at once.", Toast.LENGTH_LONG).show();
+                            } else {
+                                setupPreview(uri);
+                            }
+                        }
+
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }else if (requestCode == AUDIO_REQUEST) {
             if (data.getData() != null) {
                 Uri mVideoUri = data.getData();
                 setupPreview(mVideoUri);
@@ -678,7 +760,7 @@ public class SCQ_QueFragment extends BaseFragment implements AnsScanDialog.AnsSc
         }
         try {
             // model.preview.setValue(media.toString());
-            if (UtilHelper.isImage(media, getActivity()) || UtilHelper.isVideo(media, getActivity()) || UtilHelper.isAudio(media, getActivity())) {
+            if (UtilHelper.isImage(media, getActivity()) || UtilHelper.isVideo(media, getActivity()) || UtilHelper.isAudio(media, getActivity()) ||  UtilHelper.isDoc(media, getActivity())) {
                 Log.d("#>type ", "image");
                 mAllUri.add(media);
                 mAllImages.clear();
@@ -788,33 +870,48 @@ public class SCQ_QueFragment extends BaseFragment implements AnsScanDialog.AnsSc
             MultipartBody.Part[] queImagesParts=null;
             String images = "";
             if (mAllUri != null && mAllUri.size() > 0) {
-              try {
-                  queImagesParts = new MultipartBody.Part[mAllUri.size()];
-                  for (int index = 0; index < mAllUri.size(); index++) {
-                      Uri single_image = mAllUri.get(index);
-                      File imageFile = AppUtils.createImageFile(requireActivity(), single_image);
-                      if (!imageFile.exists()) {
-                          imageFile.createNewFile();
-                      }
-                      File file = new File(mAllUri.get(index).getPath());
-                      long fileSizeInMB = imageFile.length() / 1048576;
-                      Log.i(TAG, "File Size: " + fileSizeInMB + " MB");
-                      if (fileSizeInMB > new PreferenceManager(getActivity()).getImageSize()) {
-                          Toast.makeText(getActivity(), "Please upload the image of size less than 10MB", Toast.LENGTH_LONG).show();
-                      } else {
-                          RequestBody queBody = RequestBody.create(MediaType.parse("image/*"),
-                                  imageFile);
-                          queImagesParts[index] = MultipartBody.Part.createFormData("file",
-                                  imageFile.getName(), queBody);
-                          if (images.isEmpty())
-                              images = imageFile.getName();
-                          else
-                              images = images + "," + imageFile.getName();
-                      }
-                  }
-              } catch (Exception e) {
-                  e.printStackTrace();
-              }
+                try {
+                    queImagesParts = new MultipartBody.Part[mAllUri.size()];
+                    for (int index = 0; index < mAllUri.size(); index++) {
+                        Uri single_image = mAllUri.get(index);
+                        File imageFile = AppUtils.createImageFile(requireActivity(), single_image);
+                        if (!imageFile.exists()) {
+                            imageFile.createNewFile();
+                        }
+                        final InputStream imageStream = getActivity().getContentResolver().openInputStream(single_image);
+                        AppUtils.readFully(imageStream,imageFile);
+                        File file = new File(mAllUri.get(index).getPath());
+                        long fileSizeInMB = imageFile.length() / 1048576;
+                        Log.i(TAG, "File Size: " + fileSizeInMB + " MB");
+                        if (fileSizeInMB > new PreferenceManager(getActivity()).getImageSize()) {
+                            Toast.makeText(getActivity(), "Please upload the image of size less than 10MB", Toast.LENGTH_LONG).show();
+                        } else {
+                            RequestBody queBody = null;
+                            if (UtilHelper.isImage(single_image,getActivity())) {
+                                queBody = RequestBody.create(MediaType.parse("image/*"),
+                                        imageFile);
+                            } else if (UtilHelper.isVideo(single_image,getActivity())) {
+                                queBody = RequestBody.create(MediaType.parse("video/*"),
+                                        imageFile);
+                            } else if (UtilHelper.isAudio(single_image,getActivity())) {
+                                queBody = RequestBody.create(MediaType.parse("audio/*"),
+                                        imageFile);
+                            }else if (UtilHelper.isDoc(single_image,getActivity())) {
+                                queBody = RequestBody.create(MediaType.parse("application/*"),
+                                        imageFile);
+                            }
+
+                            queImagesParts[index] = MultipartBody.Part.createFormData("Files",
+                                    imageFile.getName(), queBody);
+                            if (images.isEmpty())
+                                images = AppUtils.encodedString(imageFile.getName());
+                            else
+                                images = images + "," + AppUtils.encodedString(imageFile.getName());
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
             if (mAllImages!=null && mAllImages.size()>0) {
@@ -826,7 +923,8 @@ public class SCQ_QueFragment extends BaseFragment implements AnsScanDialog.AnsSc
                         if (!imageFile.exists()) {
                             imageFile.createNewFile();
                         }
-
+                        final InputStream imageStream = getActivity().getContentResolver().openInputStream(Uri.fromFile(imageFile));
+                        AppUtils.readFully(imageStream,imageFile);
                         long fileSizeInMB = imageFile.length() / 1048576;
                         Log.i(TAG, "File Size: " + fileSizeInMB + " MB");
                         if (fileSizeInMB > new PreferenceManager(getActivity()).getImageSize()) {
@@ -834,12 +932,12 @@ public class SCQ_QueFragment extends BaseFragment implements AnsScanDialog.AnsSc
                         } else {
                             RequestBody queBody = RequestBody.create(MediaType.parse("image/*"),
                                     imageFile);
-                            queImagesParts[index] = MultipartBody.Part.createFormData("file",
+                            queImagesParts[index] = MultipartBody.Part.createFormData("Files",
                                     imageFile.getName(), queBody);
                             if (images.isEmpty())
-                                images = imageFile.getName();
+                                images = AppUtils.encodedString(imageFile.getName());
                             else
-                                images = images + "," + imageFile.getName();
+                                images = images + "," + AppUtils.encodedString(imageFile.getName());
                         }
 
                     }
@@ -853,13 +951,13 @@ public class SCQ_QueFragment extends BaseFragment implements AnsScanDialog.AnsSc
             RequestBody appname = RequestBody.create(MediaType.parse("multipart/form-data"),qoogol);
             RequestBody deviceId = RequestBody.create(MediaType.parse("multipart/form-data"),getDeviceId(getActivity()));
             RequestBody subId = RequestBody.create(MediaType.parse("multipart/form-data"), uploadQuestion.getSubjectId());
-            RequestBody question = RequestBody.create(MediaType.parse("multipart/form-data"),  mBinding.questionEdittext.getText().toString());
-            RequestBody questiondesc = RequestBody.create(MediaType.parse("multipart/form-data"),  mBinding.questiondescEdittext.getText().toString());
+            RequestBody question = RequestBody.create(MediaType.parse("multipart/form-data"),  AppUtils.encodedString(mBinding.questionEdittext.getText().toString()));
+            RequestBody questiondesc = RequestBody.create(MediaType.parse("multipart/form-data"),  AppUtils.encodedString(mBinding.questiondescEdittext.getText().toString()));
             RequestBody type = RequestBody.create(MediaType.parse("multipart/form-data"), SCQ);
-            RequestBody scq1 = RequestBody.create(MediaType.parse("multipart/form-data"), mBinding.scq1Edittext.getText().toString());
-            RequestBody scq2 = RequestBody.create(MediaType.parse("multipart/form-data"), mBinding.scq2Edittext.getText().toString());
-            RequestBody scq3 = RequestBody.create(MediaType.parse("multipart/form-data"), mBinding.scq3Edittext.getText().toString());
-            RequestBody scq4 = RequestBody.create(MediaType.parse("multipart/form-data"), mBinding.scq4Edittext.getText().toString());
+            RequestBody scq1 = RequestBody.create(MediaType.parse("multipart/form-data"),AppUtils.encodedString( mBinding.scq1Edittext.getText().toString()));
+            RequestBody scq2 = RequestBody.create(MediaType.parse("multipart/form-data"), AppUtils.encodedString(mBinding.scq2Edittext.getText().toString()));
+            RequestBody scq3 = RequestBody.create(MediaType.parse("multipart/form-data"), AppUtils.encodedString(mBinding.scq3Edittext.getText().toString()));
+            RequestBody scq4 = RequestBody.create(MediaType.parse("multipart/form-data"), AppUtils.encodedString(mBinding.scq4Edittext.getText().toString()));
             RequestBody marks = RequestBody.create(MediaType.parse("multipart/form-data"), mBinding.edtmarks.getText().toString());
             RequestBody duration = RequestBody.create(MediaType.parse("multipart/form-data"), mBinding.edtduration.getText().toString());
             RequestBody difflevel = RequestBody.create(MediaType.parse("multipart/form-data"), getSelectedDiffLevel());
@@ -893,6 +991,8 @@ public class SCQ_QueFragment extends BaseFragment implements AnsScanDialog.AnsSc
             });
         }
     }
+
+
 
     @Override
     public void onImageClickListener(ImageObject imageObject, int opt) {

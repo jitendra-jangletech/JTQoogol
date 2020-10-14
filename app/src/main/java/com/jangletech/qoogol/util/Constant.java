@@ -205,6 +205,8 @@ public class Constant {
     public static String ONE_LINE_ANSWER = "4";
     public static String SHORT_ANSWER = "5";
     public static String LONG_ANSWER = "6";
+    public static String FILL_THE_BLANKS = "7";
+
 
     //Options type
     public static String SCQ = "1";
@@ -213,7 +215,6 @@ public class Constant {
     public static String MCQ = "4";
     public static String MCQ_IMAGE = "5";
     public static String MCQ_IMAGE_WITH_TEXT = "6";
-    public static String FILL_THE_BLANKS = "7";
     public static String TRUE_FALSE = "8";
     public static String MATCH_PAIR = "11";
     public static String MATCH_PAIR_IMAGE = "12";

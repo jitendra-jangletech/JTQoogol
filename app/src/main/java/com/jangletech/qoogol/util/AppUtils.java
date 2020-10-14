@@ -229,6 +229,36 @@ public class AppUtils {
         return context.getExternalFilesDir("Qoogol");
     }
 
+    public static String getType(String name) {
+        if (name.contains(".doc") || name.contains(".docx")) {
+            // Word document
+            return "application/msword";
+        } else if (name.contains(".pdf")) {
+            // PDF file
+            return "application/pdf";
+        } else if (name.contains(".ppt") || name.contains(".pptx")) {
+            // Powerpoint file
+            return "application/vnd.ms-powerpoint";
+        } else if (name.contains(".xls") || name.contains(".xlsx")) {
+            // Excel file
+            return "application/vnd.ms-excel";
+        } else if (name.contains(".wav") || name.contains(".mp3") || name.contains(".mp4")
+                || name.contains(".m4a") || name.contains(".mkv") || name.contains(".opus")) {
+            // WAV audio file
+            return "audio/x-wav";
+        } else if (name.contains(".zip") || name.contains(".rar")) {
+            // WAV audio file
+            return "application/x-wav";
+        } else if (name.contains(".rtf")) {
+            // RTF file
+            return "application/rtf";
+        } else if (name.contains(".txt")) {
+            // RTF file
+            return "text/*";
+        } else
+            return "application/*";
+    }
+
     public static void bounceAnim(Context context, View view) {
         Animation anim = AnimationUtils.loadAnimation(context, R.anim.bounce);
         BounceInterpolator interpolator = new BounceInterpolator(0.1, 20);
