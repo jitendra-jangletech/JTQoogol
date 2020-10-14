@@ -867,6 +867,7 @@ public class SCQ_QueFragment extends BaseFragment implements AnsScanDialog.AnsSc
 
     private void addQuestion() {
         if (isValidate()) {
+            ProgressDialog.getInstance().show(getActivity());
             MultipartBody.Part[] queImagesParts=null;
             String images = "";
             if (mAllUri != null && mAllUri.size() > 0) {
@@ -911,6 +912,7 @@ public class SCQ_QueFragment extends BaseFragment implements AnsScanDialog.AnsSc
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
+                    ProgressDialog.getInstance().dismiss();
                 }
             }
 
@@ -943,6 +945,7 @@ public class SCQ_QueFragment extends BaseFragment implements AnsScanDialog.AnsSc
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
+                    ProgressDialog.getInstance().dismiss();
                 }
             }
 
