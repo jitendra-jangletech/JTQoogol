@@ -9,6 +9,17 @@ public class UserPreferenceResponse {
 
     private String Message;
 
+    @SerializedName(Constant.test_sections)
+    private String sections;
+
+    public String getSections() {
+        return sections;
+    }
+
+    public void setSections(String sections) {
+        this.sections = sections;
+    }
+
     public String getMessage() {
         return Message;
     }

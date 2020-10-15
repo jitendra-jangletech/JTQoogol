@@ -60,25 +60,29 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
+                    android:tag="0"
                     android:text="None" />
 
                 <RadioButton
-                    android:text="Section 1"
                     android:id="@+id/section1"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:tag="1"
+                    android:text="Section 1" />
 
                 <RadioButton
-                    android:text="Section 2"
                     android:id="@+id/section2"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:tag="2"
+                    android:text="Section 2" />
 
                 <RadioButton
-                    android:text="Section 3"
                     android:id="@+id/section3"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:tag="3"
+                    android:text="Section 3" />
 
             </RadioGroup>
 

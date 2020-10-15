@@ -55,15 +55,11 @@ public class CreateTestBasicDetails extends BaseFragment implements TextWatcher,
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        testSubjectChapterMaster = getSyllabusDetails();
 
         if (getArguments() != null && getArguments().getSerializable("CREATED_TEST") != null) {
             testModelNew = (TestModelNew) getArguments().getSerializable("CREATED_TEST");
         }
-
-        Gson gson = new Gson();
-        String json = TinyDB.getInstance(getActivity()).getString(Constant.TEST_SUBJECT_CHAP);
-        testSubjectChapterMaster = gson.fromJson(json, TestSubjectChapterMaster.class);
-
 
         HashMap<String, String> diffLevel = new HashMap<>();
         diffLevel.put("E", "Easy");
@@ -219,10 +215,10 @@ public class CreateTestBasicDetails extends BaseFragment implements TextWatcher,
             testModelNew.setTm_type(strTestType);
             testModelNew.setTm_diff_level(difficulty);
             testModelNew.setTm_catg(category);
-            createTest(testModelNew);
+            //createTest(testModelNew);
 
-//            TinyDB.getInstance(getActivity()).putString("SECTIONS", testModelNew.getTest_sections());
-//            navigationFromCreateTest(R.id.nav_create_test_section, Bundle.EMPTY);
+            //TinyDB.getInstance(getActivity()).putString("SECTIONS", testModelNew.getTest_sections());
+            navigationFromCreateTest(R.id.nav_create_test_section, Bundle.EMPTY);
         });
     }
 

@@ -141,6 +141,7 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
                     saveString(getActivity(), Constant.chapterName3, userPreferences.getChapterName3());
 
                     TestSubjectChapterMaster testSubjectChapterMaster = new TestSubjectChapterMaster();
+                    testSubjectChapterMaster.setSections(userPreferences.getSections());
                     testSubjectChapterMaster.setSubjectName(userPreferences.getSubjectName());
                     testSubjectChapterMaster.setSubjectId(userPreferences.getSubjectId());
                     testSubjectChapterMaster.setChap1Name(userPreferences.getChapterName1());

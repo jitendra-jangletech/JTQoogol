@@ -30,11 +30,13 @@ import com.bogdwellers.pinchtozoom.ImageMatrixTouchHandler;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.gson.Gson;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.activities.MainActivity;
 import com.jangletech.qoogol.activities.RegisterLoginActivity;
 import com.jangletech.qoogol.model.LearningQuestionsNew;
 import com.jangletech.qoogol.model.TestModelNew;
+import com.jangletech.qoogol.model.TestSubjectChapterMaster;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.util.AESSecurities;
@@ -58,6 +60,12 @@ public class BaseFragment extends Fragment {
 
     public ApiInterface getApiService() {
         return apiService;
+    }
+
+    public TestSubjectChapterMaster getSyllabusDetails() {
+        Gson gson = new Gson();
+        String json = TinyDB.getInstance(getActivity()).getString(Constant.TEST_SUBJECT_CHAP);
+        return gson.fromJson(json, TestSubjectChapterMaster.class);
     }
 
     public String getDecryptedField(String encryptText, String key) {

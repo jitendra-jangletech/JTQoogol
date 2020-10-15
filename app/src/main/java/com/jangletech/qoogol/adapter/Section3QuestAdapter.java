@@ -6,45 +6,47 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.ItemQuestBinding;
 import com.jangletech.qoogol.model.LearningQuestionsNew;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class AddTestQuestionAdapter extends RecyclerView.Adapter<AddTestQuestionAdapter.ViewHolder> {
+public class Section3QuestAdapter extends RecyclerView.Adapter<Section3QuestAdapter.ViewHolder> {
 
     private static final String TAG = "AddTestQuestionAdapter";
     private Context mContext;
     private List<LearningQuestionsNew> learningQuestionsNewList;
     private ItemQuestBinding itemQuestBinding;
     private List<LearningQuestionsNew> tempList;
-    private AddTestQuestionListener listener;
+    private Section3TestQuestAdapterListener listener;
     private boolean flag;
     private int sectionPos;
 
-    public AddTestQuestionAdapter(Context mContext, List<LearningQuestionsNew> learningQuestionsNewList,
-                                  boolean flag, AddTestQuestionListener listener) {
+    public Section3QuestAdapter(Context mContext, List<LearningQuestionsNew> learningQuestionsNewList,
+                                boolean flag, Section3TestQuestAdapterListener listener) {
         this.mContext = mContext;
         this.learningQuestionsNewList = learningQuestionsNewList;
         this.listener = listener;
         this.flag = flag;
-        this.sectionPos = sectionPos;
         tempList = new ArrayList<>();
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public Section3QuestAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         itemQuestBinding = DataBindingUtil.inflate(LayoutInflater.from(mContext), R.layout.item_quest, parent, false);
-        return new AddTestQuestionAdapter.ViewHolder(itemQuestBinding);
+        return new Section3QuestAdapter.ViewHolder(itemQuestBinding);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull Section3QuestAdapter.ViewHolder holder, int position) {
         LearningQuestionsNew learningQuestionsNew = learningQuestionsNewList.get(position);
         holder.itemQuestBinding.tvQuest.setText(learningQuestionsNew.getQuestion());
 
@@ -58,20 +60,20 @@ public class AddTestQuestionAdapter extends RecyclerView.Adapter<AddTestQuestion
 
         holder.itemQuestBinding.remove.setOnClickListener(v -> {
             Log.i(TAG, "onBindViewHolder: ");
-            listener.onRemoveClick(learningQuestionsNew, holder.getAdapterPosition());
+            listener.onSection3RemoveClick(learningQuestionsNew, holder.getAdapterPosition());
         });
 
         holder.itemQuestBinding.checkQuest.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                if(isChecked){
+                if (isChecked) {
                     tempList.add(learningQuestionsNew);
-                }else{
+                } else {
                     tempList.remove(learningQuestionsNew);
                 }
 
-                listener.onQuestSelected(tempList);
+                listener.onSection3QuestSelected(tempList);
             }
         });
     }
@@ -90,13 +92,12 @@ public class AddTestQuestionAdapter extends RecyclerView.Adapter<AddTestQuestion
         }
     }
 
-    public interface AddTestQuestionListener {
-        void onQuestSelected(List<LearningQuestionsNew> learningQuestionsNewList);
-
-        void onRemoveClick(LearningQuestionsNew learningQuestionsNew, int questPos);
+    public interface Section3TestQuestAdapterListener {
+        void onSection3QuestSelected(List<LearningQuestionsNew> learningQuestionsNewList);
+        void onSection3RemoveClick(LearningQuestionsNew learningQuestionsNew, int questPos);
     }
 
-    public void deleteTestQuest(int pos,LearningQuestionsNew learningQuestionsNew){
+    public void deleteTestQuest(int pos, LearningQuestionsNew learningQuestionsNew) {
         learningQuestionsNewList.remove(pos);
         notifyItemRemoved(pos);
         notifyItemRangeChanged(pos, getItemCount());

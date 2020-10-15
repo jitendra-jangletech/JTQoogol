@@ -3,6 +3,7 @@ package com.jangletech.qoogol.dialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Window;
 
@@ -14,7 +15,6 @@ import com.jangletech.qoogol.adapter.AddTestQuestionAdapter;
 import com.jangletech.qoogol.databinding.DialogAddQuestionBinding;
 import com.jangletech.qoogol.model.LearningQuestResponse;
 import com.jangletech.qoogol.model.LearningQuestionsNew;
-import com.jangletech.qoogol.model.TestSection;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.util.AppUtils;
 
@@ -31,14 +31,13 @@ public class AddQuestionDialog extends Dialog implements AddTestQuestionAdapter.
     private DialogAddQuestionBinding mBinding;
     private AddTestQuestionAdapter addTestQuestionAdapter;
     private AddQuestionDialogClickListener listener;
-    private TestSection testSection;
     private int pos;
+    private List<LearningQuestionsNew> learningQuestionsNewList;
 
-    public AddQuestionDialog(Context mContext, TestSection testSection, int pos, AddQuestionDialogClickListener listener) {
+    public AddQuestionDialog(Context mContext, int pos, AddQuestionDialogClickListener listener) {
         super(mContext, android.R.style.Theme_DeviceDefault_Light_DarkActionBar);
         this.mContext = mContext;
         this.listener = listener;
-        this.testSection = testSection;
         this.pos = pos;
     }
 
@@ -52,7 +51,7 @@ public class AddQuestionDialog extends Dialog implements AddTestQuestionAdapter.
         fetchTestQuestList();
 
         mBinding.btnSave.setOnClickListener(v -> {
-            listener.onSaveClick(testSection, pos);
+            listener.onSaveClick(learningQuestionsNewList,pos);
             dismiss();
         });
     }
@@ -81,32 +80,30 @@ public class AddQuestionDialog extends Dialog implements AddTestQuestionAdapter.
             @Override
             public void onFailure(Call<LearningQuestResponse> call, Throwable t) {
                 ProgressDialog.getInstance().dismiss();
-                //AppUtils.showToast(getActivity(), t, "");
-                //apiCallFailureDialog(t);
                 t.printStackTrace();
             }
         });
     }
 
     private void setTestQuestList(List<LearningQuestionsNew> question_list) {
-        addTestQuestionAdapter = new AddTestQuestionAdapter(mContext, question_list, true,-1,this);
+        addTestQuestionAdapter = new AddTestQuestionAdapter(mContext, question_list, true, this);
         mBinding.questionRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mBinding.questionRecyclerView.setAdapter(addTestQuestionAdapter);
     }
 
     @Override
-    public void onQuestSelected(List<LearningQuestionsNew> learningQuestionsNewList) {
-        testSection.setSectionQuestions(learningQuestionsNewList);
-        listener.onSaveClick(testSection, pos);
+    public void onQuestSelected(List<LearningQuestionsNew> list) {
+        Log.i(TAG, "onQuestSelected Size : " + list.size());
+        //Log.i(TAG, "onQuestSelected Questions : " + list);
+        this.learningQuestionsNewList = list;
     }
 
     @Override
-    public void onRemoveClick(LearningQuestionsNew learningQuestionsNew, int sectionPos, int questPos) {
+    public void onRemoveClick(LearningQuestionsNew learningQuestionsNew, int questPos) {
 
     }
 
-
     public interface AddQuestionDialogClickListener {
-        void onSaveClick(TestSection testSection, int pos);
+        void onSaveClick(List<LearningQuestionsNew> learningQuestionsNewList, int pos);
     }
 }

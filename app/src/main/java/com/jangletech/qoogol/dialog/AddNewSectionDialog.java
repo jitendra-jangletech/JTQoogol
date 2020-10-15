@@ -15,9 +15,11 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.DialogFragment;
 
-import com.google.android.material.chip.Chip;
+import com.google.gson.Gson;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.DialogAddNewSectionBinding;
+import com.jangletech.qoogol.model.TestSubjectChapterMaster;
+import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.TinyDB;
 
 public class AddNewSectionDialog extends DialogFragment implements TextWatcher {
@@ -27,6 +29,7 @@ public class AddNewSectionDialog extends DialogFragment implements TextWatcher {
     private AddNewSectionClickListener listener;
     private String[] sectionsAvailable;
     private String sectionName = "None";
+    private int pos;
 
     public AddNewSectionDialog(AddNewSectionClickListener listener) {
         this.listener = listener;
@@ -53,17 +56,18 @@ public class AddNewSectionDialog extends DialogFragment implements TextWatcher {
         mBinding.etSectionName.addTextChangedListener(this);
         mBinding.etSectionMarks.addTextChangedListener(this);
         mBinding.btnSave.setOnClickListener(v -> {
-            if (mBinding.etSectionName.getText().toString().trim().isEmpty()) {
-                mBinding.tilSectionName.setError("Enter Section Name");
-                return;
-            } else if (mBinding.tilSectionMarks.getVisibility() == View.VISIBLE &&
+            if (mBinding.tilSectionMarks.getVisibility() == View.VISIBLE &&
                     mBinding.etSectionMarks.getText().toString().trim().isEmpty()) {
                 mBinding.tilSectionMarks.setError("Enter Section Marks");
                 return;
             } else {
-                String name = mBinding.etSectionName.getText().toString().trim();
-                int marks = Integer.parseInt(mBinding.etSectionMarks.getText().toString().trim());
-                listener.onSaveClick(name, marks);
+                //String name = mBinding.etSectionName.getText().toString().trim();
+                if (mBinding.tilSectionMarks.getVisibility() == View.GONE) {
+                    listener.onSaveClick(sectionName, 0, pos);
+                } else {
+                    int marks = Integer.parseInt(mBinding.etSectionMarks.getText().toString().trim());
+                    listener.onSaveClick(sectionName, marks, pos);
+                }
                 dismiss();
             }
         });
@@ -73,7 +77,15 @@ public class AddNewSectionDialog extends DialogFragment implements TextWatcher {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 RadioButton radioButton = group.findViewById(checkedId);
                 if (radioButton != null) {
+                    pos = Integer.parseInt(radioButton.getTag().toString());
                     sectionName = radioButton.getText().toString();
+
+                    if (sectionName.equalsIgnoreCase("None")) {
+                        mBinding.tilSectionMarks.getEditText().setText("");
+                        mBinding.tilSectionMarks.setVisibility(View.GONE);
+                    } else {
+                        mBinding.tilSectionMarks.setVisibility(View.VISIBLE);
+                    }
                 }
             }
         });
@@ -84,31 +96,31 @@ public class AddNewSectionDialog extends DialogFragment implements TextWatcher {
     }
 
     private void setSections() {
-        if (TinyDB.getInstance(getActivity()).getString("SECTIONS") != null ||
-                !TinyDB.getInstance(getActivity()).getString("SECTIONS").isEmpty()) {
-            sectionsAvailable = TinyDB.getInstance(getActivity()).getString("SECTIONS").split(",", -1);
-
-            for (int i = 0; i < sectionsAvailable.length; i++) {
-                Log.i(TAG, "setSections: " + sectionsAvailable[i]);
-                if (i == 0) {
-                    if (!sectionsAvailable[i].isEmpty())
-                        mBinding.section1.setVisibility(View.GONE);
-                    mBinding.section1.setText(sectionsAvailable[i]);
-                }
-                if (i == 1) {
-                    if (!sectionsAvailable[i].isEmpty())
-                        mBinding.section2.setVisibility(View.GONE);
-
-                    mBinding.section2.setText(sectionsAvailable[i]);
-                }
-                if (i == 2) {
-                    if (!sectionsAvailable[i].isEmpty())
-                        mBinding.section3.setVisibility(View.GONE);
-
-                    mBinding.section3.setText(sectionsAvailable[i]);
-                }
-            }
-
+        Gson gson = new Gson();
+        String json = TinyDB.getInstance(getActivity()).getString(Constant.TEST_SUBJECT_CHAP);
+        TestSubjectChapterMaster testSubjectChapterMaster = gson.fromJson(json, TestSubjectChapterMaster.class);
+        Log.i(TAG, "setSections : " + testSubjectChapterMaster.getSections());
+        int sectionCount = 0;
+        String[] sectns = new String[5];
+        if (testSubjectChapterMaster.getSections() != null) {
+            sectns = testSubjectChapterMaster.getSections().split(",", -1);
+            sectionCount = sectns.length;
+        }
+        if (sectionCount == 1) {
+            mBinding.section1.setVisibility(View.VISIBLE);
+            mBinding.section1.setText(sectns[0]);
+        } else if (sectionCount == 2) {
+            mBinding.section1.setVisibility(View.VISIBLE);
+            mBinding.section1.setText(sectns[0]);
+            mBinding.section2.setVisibility(View.VISIBLE);
+            mBinding.section2.setText(sectns[1]);
+        } else if (sectionCount == 3) {
+            mBinding.section1.setVisibility(View.VISIBLE);
+            mBinding.section1.setText(sectns[0]);
+            mBinding.section2.setVisibility(View.VISIBLE);
+            mBinding.section2.setText(sectns[1]);
+            mBinding.section3.setVisibility(View.VISIBLE);
+            mBinding.section3.setText(sectns[2]);
         }
     }
 
@@ -131,6 +143,6 @@ public class AddNewSectionDialog extends DialogFragment implements TextWatcher {
     }
 
     public interface AddNewSectionClickListener {
-        void onSaveClick(String name, int marks);
+        void onSaveClick(String name, int marks, int pos);
     }
 }
