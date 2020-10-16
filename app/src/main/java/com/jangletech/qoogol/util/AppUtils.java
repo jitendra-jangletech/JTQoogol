@@ -151,7 +151,7 @@ public class AppUtils {
             String encoded = Base64.encodeToString(plainText.getBytes(StandardCharsets.UTF_8), Base64.DEFAULT);
             encodedString = StringUtils.stripAccents(encoded);
         }
-        return encodedString;
+        return encodedString.trim();
     }
 
     public static String getStringField(Object object) {

@@ -5,6 +5,7 @@ import android.net.Uri;
 
 public class ImageObject {
     private String name;
+    private Uri uri;
     private int optionId;
 
     public int getOptionId() {
@@ -25,8 +26,17 @@ public class ImageObject {
 
     private String option;
 
-    public ImageObject(String name) {
+    public ImageObject(String name,Uri uri) {
         this.name = name;
+        this.uri = uri;
+    }
+
+    public Uri getUri() {
+        return uri;
+    }
+
+    public void setUri(Uri uri) {
+        this.uri = uri;
     }
 
     private Uri imageUri;

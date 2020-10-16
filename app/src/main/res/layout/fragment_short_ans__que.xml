@@ -30,6 +30,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Question"
+                android:maxLines="10"
                 android:gravity="top"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/subject"
@@ -49,13 +50,31 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/question_edittext"
                 android:textColor="@color/colorBlack" />
+            <TextView
+                android:layout_marginTop="@dimen/_8sdp"
+                android:id="@+id/add_images"
+                android:textColor="@color/colorSkyBlue"
+                android:text="Add question media"
+                app:layout_constraintTop_toBottomOf="@+id/questiondesc_edittext"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/queimg_recycler"
+                android:layout_width="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:visibility="gone"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/add_images"
+                android:layout_height="wrap_content"/>
 
             <ImageView
                 android:id="@+id/ans_edit"
                 android:layout_marginTop="@dimen/_15sdp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@+id/questiondesc_edittext"
+                app:layout_constraintTop_toBottomOf="@+id/queimg_recycler"
                 app:layout_constraintRight_toRightOf="parent"
                 android:src="@drawable/ic_edit_blue" />
 

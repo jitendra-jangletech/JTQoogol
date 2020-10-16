@@ -37,26 +37,11 @@
                     android:gravity="top"
                     android:hint="Question"
                     android:layout_marginTop="@dimen/_8sdp"
-                    android:lines="2"
+                    android:minLines="2"
                     android:textColor="@color/colorBlack"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/subject" />
 
-                <ToggleButton
-                    android:id="@+id/toggleAddQuestDesc"
-                    style="@style/font_style"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@color/colorWhite"
-                    android:checked="false"
-                    android:clickable="true"
-                    android:foreground="?attr/selectableItemBackground"
-                    android:textAllCaps="false"
-                    android:textColor="@color/color_red"
-                    android:textOff="Add Question Description"
-                    android:textOn="Hide Description"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/etQuestion" />
 
 
                 <EditText
@@ -67,12 +52,30 @@
                     android:background="@drawable/grey_border"
                     android:gravity="top"
                     android:hint="Question description"
-                    android:lines="3"
+                    android:minLines="3"
                     android:maxLines="10"
                     android:textColor="@color/colorBlack"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/etQuestion" />
+
+                <TextView
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:id="@+id/add_images"
+                    android:textColor="@color/colorSkyBlue"
+                    android:text="Add question media"
+                    app:layout_constraintTop_toBottomOf="@+id/etQuestionDesc"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/queimg_recycler"
+                    android:layout_width="wrap_content"
+                    android:layout_marginTop="@dimen/_8sdp"
                     android:visibility="gone"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/toggleAddQuestDesc" />
+                    app:layout_constraintTop_toBottomOf="@+id/add_images"
+                    android:layout_height="wrap_content"/>
 
                 <TextView
                     android:layout_marginTop="@dimen/_15sdp"
@@ -81,7 +84,7 @@
                     android:textSize="@dimen/_12ssp"
                     android:text="Additional Details:"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/etQuestionDesc"
+                    app:layout_constraintTop_toBottomOf="@+id/queimg_recycler"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 

@@ -693,30 +693,36 @@ public interface ApiInterface {
                                       @Field(Constant.a_sub_ans) String ans);
 
 
-    @FormUrlEncoded
+    @Multipart
     @POST(Constant.ADD_QUESTION)
-    Call<ResponseObj> addTFQuestionsApi(@Field(Constant.u_user_id) String userid,
-                                        @Field(Constant.appName) String app,
-                                        @Field(Constant.device_id) String deviceid,
-                                        @Field(Constant.sm_id) String subjectId,
-                                        @Field(Constant.q_quest) String question,
-                                        @Field(Constant.q_quest_desc) String questiondesc,
-                                        @Field(Constant.q_option_type) String type,
-                                        @Field(Constant.a_sub_ans) String ans);
-
-    @FormUrlEncoded
+    Call<ResponseObj> addTFQuestionsApi(@Part(Constant.u_user_id) RequestBody userid,
+                                        @Part(Constant.appName) RequestBody app,
+                                        @Part(Constant.device_id) RequestBody deviceid,
+                                        @Part(Constant.sm_id) RequestBody subjectId,
+                                        @Part(Constant.q_quest) RequestBody question,
+                                        @Part(Constant.q_quest_desc) RequestBody questiondesc,
+                                        @Part(Constant.q_option_type) RequestBody type,
+                                        @Part(Constant.q_marks) RequestBody marks,
+                                        @Part(Constant.q_duration) RequestBody duration,
+                                        @Part(Constant.q_diff_level) RequestBody difflevel,
+                                        @Part(Constant.a_sub_ans) RequestBody ans,
+                                        @Part(Constant.w_media_names) RequestBody medianames,
+                                        @Part MultipartBody.Part[] image);
+    @Multipart
     @POST(Constant.ADD_QUESTION)
-    Call<ResponseObj> addSubjectiveQuestionsApi(@Field(Constant.u_user_id) String userid,
-                                                @Field(Constant.appName) String app,
-                                                @Field(Constant.device_id) String deviceid,
-                                                @Field(Constant.sm_id) String subjectId,
-                                                @Field(Constant.q_quest) String question,
-                                                @Field(Constant.q_quest_desc) String questiondesc,
-                                                @Field(Constant.q_type) String type,
-                                                @Field(Constant.q_marks) String marks,
-                                                @Field(Constant.q_duration) String duration,
-                                                @Field(Constant.q_diff_level) String difflevel,
-                                                @Field(Constant.a_sub_ans) String ans);
+    Call<ResponseObj> addSubjectiveQuestionsApi(@Part(Constant.u_user_id) RequestBody userid,
+                                                @Part(Constant.appName) RequestBody app,
+                                                @Part(Constant.device_id) RequestBody deviceid,
+                                                @Part(Constant.sm_id) RequestBody subjectId,
+                                                @Part(Constant.q_quest) RequestBody question,
+                                                @Part(Constant.q_quest_desc) RequestBody questiondesc,
+                                                @Part(Constant.q_type) RequestBody type,
+                                                @Part(Constant.q_marks) RequestBody marks,
+                                                @Part(Constant.q_duration) RequestBody duration,
+                                                @Part(Constant.q_diff_level) RequestBody difflevel,
+                                                @Part(Constant.a_sub_ans) RequestBody ans,
+                                                @Part(Constant.w_media_names) RequestBody medianames,
+                                                @Part MultipartBody.Part[] image);
 
     @FormUrlEncoded
     @POST(Constant.PROCESS_QUESTION)
