@@ -1,5 +1,7 @@
 package com.jangletech.qoogol.activities;
 
+import android.Manifest;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -8,13 +10,19 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.VectorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
@@ -29,12 +37,22 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.itextpdf.text.pdf.PRStream;
+import com.itextpdf.text.pdf.PdfName;
+import com.itextpdf.text.pdf.PdfObject;
+import com.itextpdf.text.pdf.PdfReader;
+import com.itextpdf.text.pdf.parser.PdfImageObject;
 import com.jangletech.qoogol.BuildConfig;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.ActivityMainBinding;
+import com.jangletech.qoogol.databinding.AlertDialogBinding;
+import com.jangletech.qoogol.databinding.MediaUploadLayoutBinding;
+import com.jangletech.qoogol.dialog.AddImageDialog;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.dialog.PublicProfileDialog;
 import com.jangletech.qoogol.enums.Nav;
+import com.jangletech.qoogol.listeners.QueMediaListener;
+import com.jangletech.qoogol.model.ImageObject;
 import com.jangletech.qoogol.model.UserProfile;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
@@ -42,10 +60,21 @@ import com.jangletech.qoogol.ui.personal_info.PersonalInfoViewModel;
 import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
+import com.vincent.filepicker.activity.NormalFilePickActivity;
+import com.vincent.filepicker.filter.entity.NormalFile;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -56,7 +85,7 @@ import static com.jangletech.qoogol.ui.BaseFragment.getUserName;
 import static com.jangletech.qoogol.util.Constant.CALL_FROM;
 import static com.jangletech.qoogol.util.Constant.profile;
 
-public class MainActivity extends BaseActivity implements PublicProfileDialog.PublicProfileClickListener {
+public class MainActivity extends BaseActivity implements PublicProfileDialog.PublicProfileClickListener,AddImageDialog.AddImageClickListener {
 
     private static final String TAG = "MainActivity";
     private AppBarConfiguration mAppBarConfiguration;
@@ -72,6 +101,11 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
     private ApiInterface apiService = ApiClient.getInstance().getApi();
     public static BottomNavigationView bottomNavigationView;
     public static String userId = "";
+    QueMediaListener queMediaListener;
+    private static final int CAMERA_REQUEST = 1, GALLERY_REQUEST = 2, PICKFILE_REQUEST_CODE=3, VIDEO_REQUEST = 4, AUDIO_REQUEST = 5;
+    private Uri mphotouri;
+    private AlertDialog mediaDialog;
+    private int optionId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -555,6 +589,10 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
         });
     }
 
+    public void setOnDataListener(QueMediaListener queMediaListener){
+       this.queMediaListener =queMediaListener;
+    }
+
     private void getNotificationIntent(Intent intent) {
         if (intent != null) {
             if (intent.hasExtra("bundle")) {
@@ -592,6 +630,280 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
             }
         }
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == com.vincent.filepicker.Constant.REQUEST_CODE_PICK_FILE && resultCode == RESULT_OK && data != null) {
+            if (resultCode == RESULT_OK) {
+                ArrayList<NormalFile> list = data.getParcelableArrayListExtra(com.vincent.filepicker.Constant.RESULT_PICK_FILE);
+                //StringBuilder builder = new StringBuilder();
+                for (NormalFile file : list) {
+                    String path = file.getPath();
+                    Log.i(TAG, "onActivityResult File Path : " + file.getPath());
+                    extractImages(path);
+                }
+            }
+        } else {
+            if (queMediaListener !=null)
+                queMediaListener.onMediaReceived(requestCode,resultCode,data,mphotouri);
+        }
+
+    }
+
+    private void extractImages(String filepath) {
+        Log.i(TAG, "extractImages Copied File Path : " + filepath);
+        PRStream prStream;
+
+        File file;
+
+        PdfObject pdfObject;
+
+        PdfImageObject pdfImageObject;
+
+        FileOutputStream fos;
+
+        try {
+
+            // Create pdf reader
+            //file = new File(filepath);
+
+            PdfReader reader = new PdfReader(filepath);
+
+            File folder = new File(Environment.getExternalStorageDirectory() + "/Qoogol/Temp");
+
+            if (!folder.exists())
+                folder.mkdir();
+            else
+                AppUtils.deleteDir(folder);
+
+            // Get number of objects in pdf document
+
+            int numOfObject = reader.getXrefSize();
+            int imageCount = 0;
+
+            Log.i(TAG, "No. Of Objects Found : " + numOfObject);
+
+            for (int i = 0; i < numOfObject; i++) {
+
+                // Get PdfObject
+
+                pdfObject = reader.getPdfObject(i);
+
+                if (pdfObject != null && pdfObject.isStream()) {
+
+                    prStream = (PRStream) pdfObject; //cast object to stream
+
+                    PdfObject type = prStream.get(PdfName.SUBTYPE); //get the object type
+
+                    // Check if the object is the image type object
+
+                    if (type != null && (type.toString().equals(PdfName.IMAGE.toString()))) {
+//                            type.toString().equals(PdfName.IMAGEB.toString()) ||
+//                            type.toString().equals(PdfName.IMAGEC.toString()) ||
+//                            type.toString().equals(PdfName.IMAGEI.toString()))) {
+
+                        imageCount++;
+                        // Get the image from the stream
+                        pdfImageObject = new PdfImageObject(prStream);
+                        fos = new FileOutputStream(folder.getPath() + "/" + System.currentTimeMillis() + ".jpg");
+
+                        // Read bytes of image in to an array
+
+                        byte[] imgdata = pdfImageObject.getImageAsBytes();
+
+                        // Write the bytes array to file
+
+                        fos.write(imgdata, 0, imgdata.length);
+
+                        fos.flush();
+
+                        fos.close();
+                    }
+                }
+            }
+
+            //mBinding.tvNoOfImages.setText("Images Found : " + imageCount);
+            showToast("Images Extracted : " + imageCount);
+            new AddImageDialog(this, optionId, this)
+                    .show();
+            Log.i(TAG, "extractImages Total Image Count : " + imageCount);
+
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+    }
+
+    public void openMediaDialog() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        MediaUploadLayoutBinding mediaUploadLayoutBinding = DataBindingUtil.inflate(
+                LayoutInflater.from(this),
+                R.layout.media_upload_layout, null, false);
+        dialogBuilder.setView(mediaUploadLayoutBinding.getRoot());
+        mediaUploadLayoutBinding.camera.setOnClickListener(view -> {
+            mediaDialog.dismiss();
+            requestStoragePermission(true, false, false,false);
+        });
+
+
+        mediaUploadLayoutBinding.gallery.setOnClickListener(view -> {
+            mediaDialog.dismiss();
+            requestStoragePermission(false, true, false,false);
+        });
+
+
+        mediaUploadLayoutBinding.videos.setOnClickListener(view -> {
+            requestStoragePermission(false, false, false,true);
+            mediaDialog.dismiss();
+        });
+
+        mediaUploadLayoutBinding.audios.setOnClickListener(view -> {
+            requestStoragePermission(false, false, true,false);
+            mediaDialog.dismiss();
+        });
+
+        mediaUploadLayoutBinding.scanPdf.setOnClickListener(v -> {
+            mediaDialog.dismiss();
+            new AddImageDialog(this, 1, this)
+                    .show();
+        });
+
+        mediaUploadLayoutBinding.documents.setOnClickListener(v -> {
+            mediaDialog.dismiss();
+            requestStoragePermission(false, false, false,false);
+        });
+
+        mediaDialog = dialogBuilder.create();
+        Objects.requireNonNull(mediaDialog.getWindow()).setBackgroundDrawableResource(android.R.color.transparent);
+        mediaDialog.show();
+    }
+
+    private void requestStoragePermission(final boolean isCamera, final boolean isPictures, final boolean isAudio,  final boolean isVideo) {
+        Dexter.withActivity(this)
+                .withPermissions(Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
+                .withListener(new MultiplePermissionsListener() {
+                    @Override
+                    public void onPermissionsChecked(MultiplePermissionsReport report) {
+                        if (report.areAllPermissionsGranted()) {
+                            if (isCamera) {
+                                dispatchTakePictureIntent();
+                            } else if (isPictures) {
+                                getImages();
+                            } else if (isAudio) {
+                                getAudio();
+                            } else  if (isVideo){
+                                getVideo();
+                            } else {
+                                getDocument();
+                            }
+                        }
+                        if (report.isAnyPermissionPermanentlyDenied()) {
+                            showSettingsDialog();
+                        }
+                    }
+
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions,
+                                                                   PermissionToken token) {
+                        token.continuePermissionRequest();
+                    }
+                })
+                .withErrorListener(error -> {
+                    // Toast.makeText(mContext, "Error occurred! ", Toast.LENGTH_SHORT).show();
+                })
+                .onSameThread()
+                .check();
+    }
+    protected void getDocument() {
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        String[] mimeTypes =
+                {"application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .doc & .docx
+                        "application/vnd.ms-powerpoint", "application/vnd.openxmlformats-officedocument.presentationml.presentation", // .ppt & .pptx
+                        "application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // .xls & .xlsx
+                        "text/plain","application/rtf","application/pdf","application/zip", "application/vnd.android.package-archive"};
+
+        intent.setType("application/*");
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        startActivityForResult(intent, PICKFILE_REQUEST_CODE);
+    }
+
+    private void getVideo() {
+        Intent pickPhoto = new Intent();
+        pickPhoto.setType("video/*");
+        pickPhoto.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        pickPhoto.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        pickPhoto.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(pickPhoto, VIDEO_REQUEST);
+    }
+
+    private void getAudio() {
+        Intent pickAudio = new Intent();
+        pickAudio.setType("audio/*");
+        pickAudio.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        pickAudio.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        pickAudio.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(pickAudio, AUDIO_REQUEST);
+    }
+
+    private void getImages() {
+        Intent pickPhoto = new Intent();
+        pickPhoto.setType("image/*");
+        pickPhoto.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        pickPhoto.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        pickPhoto.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(pickPhoto, "Select Picture"), GALLERY_REQUEST);
+    }
+
+    private void showSettingsDialog() {
+        Dialog builder = new Dialog(this);
+        builder.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        AlertDialogBinding alertDialogBinding = DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.alert_dialog, null, false);
+        builder.setContentView(alertDialogBinding.getRoot());
+        alertDialogBinding.tvTitle.setText("Need Permissions");
+        alertDialogBinding.tvDesc.setText("This app needs permission to use this feature. You can grant them in app settings.");
+        alertDialogBinding.btnPositive.setText("GOTO SETTINGS");
+        alertDialogBinding.btnPositive.setOnClickListener(view -> {
+            builder.dismiss();
+            openSettings();
+        });
+        alertDialogBinding.btnNeutral.setText("Cancel");
+        alertDialogBinding.btnNeutral.setOnClickListener(view -> builder.dismiss());
+        Objects.requireNonNull(builder.getWindow()).setBackgroundDrawableResource(android.R.color.transparent);
+        builder.show();
+    }
+
+    private void openSettings() {
+        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        Uri uri = Uri.fromParts("package",getPackageName(), null);
+        intent.setData(uri);
+        startActivityForResult(intent, 101);
+    }
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            File photoFile = null;
+            try {
+                photoFile = AppUtils.createImageFile(this);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        BuildConfig.APPLICATION_ID + ".provider",
+                        photoFile);
+
+                mphotouri = photoURI;
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, CAMERA_REQUEST);
+            }
+        }
+    }
+
 
     private void navToFragment(int resId, Bundle bundle) {
         try {
@@ -783,5 +1095,20 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
     @Override
     public void onViewImage(String path) {
         showFullScreen(path);
+    }
+
+    @Override
+    public void onImageClickListener(ImageObject imageObject, int opt) {
+        if (queMediaListener!=null)
+        queMediaListener.onScanImageClick(imageObject.getUri());
+    }
+
+    @Override
+    public void onScanPdfClick(int option) {
+        optionId = option;
+        Intent intent4 = new Intent(this, NormalFilePickActivity.class);
+        intent4.putExtra(com.vincent.filepicker.Constant.MAX_NUMBER, 1);
+        intent4.putExtra(NormalFilePickActivity.SUFFIX, new String[]{"pdf"});
+        startActivityForResult(intent4, com.vincent.filepicker.Constant.REQUEST_CODE_PICK_FILE);
     }
 }
