@@ -49,6 +49,8 @@ import com.jangletech.qoogol.model.UserProfileResponse;
 import com.jangletech.qoogol.model.VerifyResponse;
 import com.jangletech.qoogol.util.Constant;
 
+import org.json.JSONObject;
+
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -321,8 +323,13 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST(Constant.CREATE_MODIFY_TEST)
     Call<CreateTestResponse> createModifyTest(@Field(Constant.u_user_id) String userId,
+                                              @Field(Constant.device_id) String deviceId,
+                                              @Field(Constant.appName) String appName,
+                                              @Field(Constant.tm_id) String tmId,
+                                              @Field(Constant.CASE) String caseI,
                                               @Field(Constant.tm_name) String name,
                                               @Field(Constant.test_description) String descr,
+                                              @Field(Constant.quest_count) String questCount,
                                               @Field(Constant.tm_tot_marks) String totalMarks,
                                               @Field(Constant.tm_duration) String duration,
                                               @Field(Constant.tm_sm_id) String subjectId,
@@ -331,8 +338,17 @@ public interface ApiInterface {
                                               @Field(Constant.tm_type) String type,
                                               @Field(Constant.tm_diff_level) String diffLevel,
                                               @Field(Constant.tm_catg) String category,
-                                              @Field(Constant._1223G) String date);
+                                              @Field(Constant.publishedDate) String date);
 
+
+    @FormUrlEncoded
+    @POST(Constant.CREATE_MODIFY_TEST_QUEST)
+    Call<CreateTestResponse> createModifyTestQuest(@Field(Constant.u_user_id) String userId,
+                                                   @Field(Constant.device_id) String deviceId,
+                                                   @Field(Constant.appName) String appName,
+                                                   @Field(Constant.tm_id) String tmId,
+                                                   @Field(Constant.CASE) String caseR,
+                                                   @Field(Constant.DataList) String json);
 
     @FormUrlEncoded
     @POST(Constant.FETCH_NOTIFICATIONS)

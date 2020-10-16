@@ -7,20 +7,32 @@
         android:background="@color/colorBg"
         android:layout_height="match_parent">
 
+        <ImageView
+            android:layout_margin="@dimen/_2sdp"
+            android:src="@drawable/add_grey"
+            app:layout_constraintTop_toTopOf="parent"
+            android:id="@+id/btnAddImage"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_width="@dimen/_120sdp"
+            android:layout_height="@dimen/_120sdp"/>
+
         <androidx.recyclerview.widget.RecyclerView
+            app:layout_constraintStart_toEndOf="@+id/btnAddImage"
+            android:scrollbars="horizontal"
             android:id="@+id/recyclerView"
             tools:listitem="@layout/item_create_pdf"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            android:backgroundTint="@color/color_red"
-            android:id="@+id/btnAddImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+<!--        <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            app:layout_constraintLeft_toLeftOf="parent"-->
+<!--            android:backgroundTint="@color/color_red"-->
+<!--            android:id="@+id/btnAddImage"-->
+<!--            android:visibility="gone"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"/>-->
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/btnGeneratePdf"

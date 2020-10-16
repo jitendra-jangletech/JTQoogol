@@ -1,4 +1,4 @@
-package com.jangletech.qoogol.ui.create_test;
+package com.jangletech.qoogol.dialog;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -9,9 +9,9 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.material.chip.Chip;
@@ -20,8 +20,6 @@ import com.google.gson.Gson;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.EducationAdapter;
 import com.jangletech.qoogol.databinding.FragmentSyllabusBinding;
-import com.jangletech.qoogol.dialog.EducationListDialog;
-import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.enums.Module;
 import com.jangletech.qoogol.model.Education;
 import com.jangletech.qoogol.model.FetchEducationResponse;
@@ -31,7 +29,6 @@ import com.jangletech.qoogol.model.TestSubjectChapterMaster;
 import com.jangletech.qoogol.model.UserPreferenceResponse;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
-import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.ui.educational_info.AddEduDialog;
 import com.jangletech.qoogol.ui.educational_info.EducationInfoViewModel;
 import com.jangletech.qoogol.ui.test.my_test.MyTestViewModel;
@@ -47,7 +44,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SyllabusFragment extends BaseFragment implements View.OnClickListener, EducationListDialog.EducationDialogClickListener, AddEduDialog.ApiCallListener, EducationAdapter.EducationItemClickListener {
+
+public class SyllabusDialog extends DialogFragment implements EducationAdapter.EducationItemClickListener, View.OnClickListener, AddEduDialog.ApiCallListener {
+
 
     private static final String TAG = "SettingsFragment";
     private MyTestViewModel mViewModel;
@@ -60,12 +59,18 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
     private ApiInterface apiService = ApiClient.getInstance().getApi();
     private HashMap<String, String> params = new HashMap<>();
     private Call<FetchEducationResponse> call;
+    private SyllabusClickListener listener;
 
-    public static SyllabusFragment newInstance() {
-        return new SyllabusFragment();
+    public SyllabusDialog(SyllabusClickListener listener) {
+        this.listener = listener;
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setStyle(STYLE_NO_FRAME, android.R.style.Theme_Holo_Light);
+    }
+
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_syllabus, container, false);
@@ -74,8 +79,8 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
         Log.d(TAG, "onCreateView UEID : " + TinyDB.getInstance(getActivity()).getString(Constant.selected_ue_id));
         params.put(Constant.selected_ue_id, TinyDB.getInstance(getActivity()).getString(Constant.selected_ue_id));
         params.put(Constant.appName, Constant.APP_NAME);
-        params.put(Constant.u_user_id, getUserId(getActivity()));
-        params.put(Constant.device_id, getDeviceId(getActivity()));
+        params.put(Constant.u_user_id, AppUtils.getUserId());
+        params.put(Constant.device_id, AppUtils.getDeviceId());
         params.put(Constant.CASE, "L");
         params.put(Constant.subjectId, "");
         params.put(Constant.chapterId1, "");
@@ -87,7 +92,6 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mBinding.topLayout.setVisibility(View.GONE);
         fetchUpdatePreferences(params);
         fetchEducationDetails();
         mBinding.subjectsChipGrp.setOnCheckedChangeListener(new ChipGroup.OnCheckedChangeListener() {
@@ -110,7 +114,7 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
             }
         });
 
-        educationInfoViewModel.getAllEducations(getUserId(getContext())).observe(getViewLifecycleOwner(), educations -> {
+        educationInfoViewModel.getAllEducations(AppUtils.getUserId()).observe(getViewLifecycleOwner(), educations -> {
             Log.d(TAG, "onChanged Education List Size : " + educations.size());
             if (educations != null) {
                 educationList = educations;
@@ -135,11 +139,11 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
 
                     Log.d(TAG, "onChanged UeId : " + userPreferences.getSelectedUeId());
 
-                    saveString(getActivity(), Constant.selected_ue_id, userPreferences.getSelectedUeId());
-                    saveString(getActivity(), Constant.subjectName, userPreferences.getSubjectName());
-                    saveString(getActivity(), Constant.chapterName1, userPreferences.getChapterName1());
-                    saveString(getActivity(), Constant.chapterName2, userPreferences.getChapterName2());
-                    saveString(getActivity(), Constant.chapterName3, userPreferences.getChapterName3());
+                    //saveString(getActivity(), Constant.selected_ue_id, userPreferences.getSelectedUeId());
+                    //saveString(getActivity(), Constant.subjectName, userPreferences.getSubjectName());
+                    //saveString(getActivity(), Constant.chapterName1, userPreferences.getChapterName1());
+                    //saveString(getActivity(), Constant.chapterName2, userPreferences.getChapterName2());
+                    //saveString(getActivity(), Constant.chapterName3, userPreferences.getChapterName3());
 
                     TestSubjectChapterMaster testSubjectChapterMaster = new TestSubjectChapterMaster();
                     testSubjectChapterMaster.setSections(userPreferences.getSections());
@@ -175,23 +179,50 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
         });
 
         mBinding.btnSave.setOnClickListener(v -> {
-            Navigation.findNavController(requireActivity(), R.id.nav_host_create_test).navigate(R.id.nav_create_test_basic_details, Bundle.EMPTY);
+            listener.onSyllabusSaveClick();
+            dismiss();
+            //Navigation.findNavController(requireActivity(), R.id.nav_host_create_test).navigate(R.id.nav_create_test_basic_details, Bundle.EMPTY);
         });
 
         mBinding.btnAddEdu.setOnClickListener(v -> {
             AddEduDialog addEduDialog = new AddEduDialog(getActivity(), null, false, this, 0);
             addEduDialog.show();
         });
+    }
 
-        /*mBinding.rootLayout.setOnClickListener(v -> {
-            if (response != null) {
-                new EducationListDialog(getActivity(), response.getSelectedUeId(), this)
-                        .show();
-            } else {
-                new EducationListDialog(getActivity(), "", this)
-                        .show();
+    private void fetchUpdatePreferences(HashMap<String, String> params) {
+        Log.d(TAG, "fetchUpdatePreferences PARAMS : " + params);
+        Log.d(TAG, "UEID FMK : " + TinyDB.getInstance(getActivity()).getString(Constant.selected_ue_id));
+        ProgressDialog.getInstance().show(requireActivity());
+        Call<UserPreferenceResponse> call = apiService.fetchUserSyllabus(
+                params.get(Constant.u_user_id),
+                params.get(Constant.device_id),
+                params.get(Constant.appName),
+                params.get(Constant.CASE),
+                TinyDB.getInstance(getActivity()).getString(Constant.selected_ue_id),
+                params.get(Constant.subjectId),
+                params.get(Constant.chapterId1),
+                params.get(Constant.chapterId2),
+                params.get(Constant.chapterId3)
+        );
+        call.enqueue(new Callback<UserPreferenceResponse>() {
+            @Override
+            public void onResponse(Call<UserPreferenceResponse> call, Response<UserPreferenceResponse> response) {
+                ProgressDialog.getInstance().dismiss();
+                if (response.body() != null && response.body().getResponseCode() == 200) {
+                    mViewModel.setUserPreference(response.body());
+                } else {
+                    AppUtils.showToast(getActivity(), null, response.body().getMessage());
+                }
             }
-        });*/
+
+            @Override
+            public void onFailure(Call<UserPreferenceResponse> call, Throwable t) {
+                ProgressDialog.getInstance().dismiss();
+                t.printStackTrace();
+                AppUtils.showToast(getActivity(), t, "");
+            }
+        });
     }
 
     private void setEducationListAdapter(List<Education> educationList) {
@@ -236,7 +267,7 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
             chip.setCheckable(true);
             if (response.getSubjectId().equals(list.get(i).getSubjectId())) {
                 Log.d(TAG, "prepareSubjectChips Checked : " + response.getSubjectName());
-                saveString(getActivity(), Constant.subjectName, response.getSubjectName());
+                //saveString(getActivity(), Constant.subjectName, response.getSubjectName());
                 chip.setChecked(true);
             }
             mBinding.subjectsChipGrp.addView(chip);
@@ -266,68 +297,26 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
         }
     }
 
-    private void fetchEducationDetails() {
-        ProgressDialog.getInstance().show(getActivity());
-        call = apiService.fetchUserEdu(getUserId(getActivity()), "L", getDeviceId(getActivity()), Constant.APP_NAME);
-        call.enqueue(new Callback<FetchEducationResponse>() {
-            @Override
-            public void onResponse(Call<FetchEducationResponse> call, Response<FetchEducationResponse> response) {
-                ProgressDialog.getInstance().dismiss();
-                if (response.body() != null &&
-                        response.body().getResponseCode().equals("200")) {
-                    Log.d(TAG, "onResponse List : " + response.body().getEducationList());
-                    educationInfoViewModel.insert(response.body().getEducationList());
-                } else {
-                    AppUtils.showToast(getActivity(), null, response.body().getMessage());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<FetchEducationResponse> call, Throwable t) {
-                ProgressDialog.getInstance().dismiss();
-                t.printStackTrace();
-                apiCallFailureDialog(t);
-            }
-        });
+    @Override
+    public void onItemClick(Education education, int position) {
+        TinyDB.getInstance(getActivity()).putString(Constant.selected_ue_id, education.getUe_id());
+        params.put(Constant.CASE, "U");
+        params.put(Constant.selected_ue_id, education.getUe_id());
+        params.put(Constant.subjectId, "");
+        params.put(Constant.chapterId1, "");
+        params.put(Constant.chapterId2, "");
+        params.put(Constant.chapterId3, "");
+        fetchUpdatePreferences(params);
     }
 
-    private void fetchUpdatePreferences(HashMap<String, String> params) {
-        Log.d(TAG, "fetchUpdatePreferences PARAMS : " + params);
-        Log.d(TAG, "UEID FMK : " + TinyDB.getInstance(getActivity()).getString(Constant.selected_ue_id));
-        ProgressDialog.getInstance().show(requireActivity());
-        Call<UserPreferenceResponse> call = apiService.fetchUserSyllabus(
-                params.get(Constant.u_user_id),
-                params.get(Constant.device_id),
-                params.get(Constant.appName),
-                params.get(Constant.CASE),
-                TinyDB.getInstance(getActivity()).getString(Constant.selected_ue_id),
-                params.get(Constant.subjectId),
-                params.get(Constant.chapterId1),
-                params.get(Constant.chapterId2),
-                params.get(Constant.chapterId3)
-        );
-        call.enqueue(new Callback<UserPreferenceResponse>() {
-            @Override
-            public void onResponse(Call<UserPreferenceResponse> call, Response<UserPreferenceResponse> response) {
-                ProgressDialog.getInstance().dismiss();
-                if (response.body() != null && response.body().getResponseCode() == 200) {
-                    mViewModel.setUserPreference(response.body());
-                } else {
-                    AppUtils.showToast(getActivity(), null, response.body().getMessage());
-                }
-            }
+    @Override
+    public void onDeleteClick(Education education, int position) {
 
-            @Override
-            public void onFailure(Call<UserPreferenceResponse> call, Throwable t) {
-                ProgressDialog.getInstance().dismiss();
-                t.printStackTrace();
-                AppUtils.showToast(getActivity(), t, "");
-            }
-        });
     }
 
     @Override
     public void onClick(View v) {
+
         if (v != null) {
             List<String> selectedChapterId = new ArrayList<>();
             Chip chip = (Chip) v;
@@ -345,7 +334,7 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
             }
             if (Counter > 3) {
                 chip.setChecked(false);
-                showToast("You can select only 3 chapters.");
+                AppUtils.showToast(getActivity(), "You can select only 3 chapters.");
             } else {
                 //update chapter ids
                 for (int i = 0; i < selectedChapterId.size(); i++) {
@@ -373,42 +362,8 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
     }
 
     @Override
-    public void onSaveButtonClick(Education education) {
-        if (education != null) {
-            Log.d(TAG, "onSaveButtonClick UEID : " + education.getUe_id());
-            saveString(getActivity(), Constant.selected_ue_id, education.getUe_id());
-            TinyDB.getInstance(getActivity()).putString(Constant.selected_ue_id, education.getUe_id());
-            /*mBinding.tvUniversity.setText(education.getUbm_board_name());
-            mBinding.tvInstitute.setText(education.getIom_name());
-            mBinding.tvDegree.setText(education.getDm_degree_name());
-            mBinding.tvCourse.setText(education.getCo_name());
-            mBinding.tvCourseYear.setText(education.getUe_cy_num());
-            mBinding.tvStartDate.setText(DateUtils.getFormattedDate(education.getUe_startdate()));
-            mBinding.tvEndDate.setText(DateUtils.getFormattedDate(education.getUe_enddate()));*/
-            params.put(Constant.CASE, "U");
-            params.put(Constant.selected_ue_id, education.getUe_id());
-            params.put(Constant.subjectId, "");
-            params.put(Constant.chapterId1, "");
-            params.put(Constant.chapterId2, "");
-            params.put(Constant.chapterId3, "");
-            fetchUpdatePreferences(params);
-            showToast("Education Preference Updated.");
-        } else {
-            Log.d(TAG, "onSaveButtonClick Education Null: ");
-        }
-    }
-
-    @Override
-    public void onAddEduClick() {
-        AddEduDialog addEduDialog = new AddEduDialog(getActivity(), null, false, this, 0);
-        addEduDialog.show();
-    }
-
-    @Override
     public void onSuccess() {
-        Log.d(TAG, "Education Added Successfully.");
-        fetchEducationDetails();
-        fetchUpdatePreferences(params);
+
     }
 
     @Override
@@ -416,20 +371,31 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
 
     }
 
-    @Override
-    public void onItemClick(Education education, int position) {
-        TinyDB.getInstance(getActivity()).putString(Constant.selected_ue_id, education.getUe_id());
-        params.put(Constant.CASE, "U");
-        params.put(Constant.selected_ue_id, education.getUe_id());
-        params.put(Constant.subjectId, "");
-        params.put(Constant.chapterId1, "");
-        params.put(Constant.chapterId2, "");
-        params.put(Constant.chapterId3, "");
-        fetchUpdatePreferences(params);
+    private void fetchEducationDetails() {
+        ProgressDialog.getInstance().show(getActivity());
+        call = apiService.fetchUserEdu(AppUtils.getUserId(), "L", AppUtils.getDeviceId(), Constant.APP_NAME);
+        call.enqueue(new Callback<FetchEducationResponse>() {
+            @Override
+            public void onResponse(Call<FetchEducationResponse> call, Response<FetchEducationResponse> response) {
+                ProgressDialog.getInstance().dismiss();
+                if (response.body() != null &&
+                        response.body().getResponseCode().equals("200")) {
+                    Log.d(TAG, "onResponse List : " + response.body().getEducationList());
+                    educationInfoViewModel.insert(response.body().getEducationList());
+                } else {
+                    AppUtils.showToast(getActivity(), null, response.body().getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<FetchEducationResponse> call, Throwable t) {
+                ProgressDialog.getInstance().dismiss();
+                t.printStackTrace();
+            }
+        });
     }
 
-    @Override
-    public void onDeleteClick(Education education, int position) {
-
+    public interface SyllabusClickListener {
+        void onSyllabusSaveClick();
     }
 }

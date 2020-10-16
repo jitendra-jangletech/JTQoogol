@@ -43,7 +43,6 @@ public class Constant {
     public static final String w_media_name = "534";
     public static final String md_from_type = "425A";
 
-
     //Selected Board
     public static final String BOARD = "BOARD";
     public static final String MOBILE = "MOBILE";

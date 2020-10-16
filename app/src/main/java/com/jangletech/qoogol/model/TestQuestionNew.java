@@ -7,6 +7,17 @@ import java.io.Serializable;
 
 public class TestQuestionNew implements Serializable {
 
+    @SerializedName(Constant.tq_tm_id)
+    private String tq_tm_id;
+
+    public String getTq_tm_id() {
+        return tq_tm_id;
+    }
+
+    public void setTq_tm_id(String tq_tm_id) {
+        this.tq_tm_id = tq_tm_id;
+    }
+
     private boolean isAnsweredRight;
 
     public boolean isAnsSubmitted() {

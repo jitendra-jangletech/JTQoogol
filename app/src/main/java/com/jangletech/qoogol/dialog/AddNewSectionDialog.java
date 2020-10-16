@@ -63,10 +63,10 @@ public class AddNewSectionDialog extends DialogFragment implements TextWatcher {
             } else {
                 //String name = mBinding.etSectionName.getText().toString().trim();
                 if (mBinding.tilSectionMarks.getVisibility() == View.GONE) {
-                    listener.onSaveClick(sectionName, 0, pos);
+                    listener.onNewSectionSaveClick(sectionName, 0, pos);
                 } else {
                     int marks = Integer.parseInt(mBinding.etSectionMarks.getText().toString().trim());
-                    listener.onSaveClick(sectionName, marks, pos);
+                    listener.onNewSectionSaveClick(sectionName, marks, pos);
                 }
                 dismiss();
             }
@@ -108,19 +108,19 @@ public class AddNewSectionDialog extends DialogFragment implements TextWatcher {
         }
         if (sectionCount == 1) {
             mBinding.section1.setVisibility(View.VISIBLE);
-            mBinding.section1.setText(sectns[0]);
+            mBinding.section1.setText(sectns[0].split("=", -1)[1]);
         } else if (sectionCount == 2) {
             mBinding.section1.setVisibility(View.VISIBLE);
-            mBinding.section1.setText(sectns[0]);
+            mBinding.section1.setText(sectns[0].split("=", -1)[1]);
             mBinding.section2.setVisibility(View.VISIBLE);
-            mBinding.section2.setText(sectns[1]);
+            mBinding.section2.setText(sectns[1].split("=", -1)[1]);
         } else if (sectionCount == 3) {
             mBinding.section1.setVisibility(View.VISIBLE);
-            mBinding.section1.setText(sectns[0]);
+            mBinding.section1.setText(sectns[0].split("=", -1)[1]);
             mBinding.section2.setVisibility(View.VISIBLE);
-            mBinding.section2.setText(sectns[1]);
+            mBinding.section2.setText(sectns[1].split("=", -1)[1]);
             mBinding.section3.setVisibility(View.VISIBLE);
-            mBinding.section3.setText(sectns[2]);
+            mBinding.section3.setText(sectns[2].split("=", -1)[1]);
         }
     }
 
@@ -143,6 +143,6 @@ public class AddNewSectionDialog extends DialogFragment implements TextWatcher {
     }
 
     public interface AddNewSectionClickListener {
-        void onSaveClick(String name, int marks, int pos);
+        void onNewSectionSaveClick(String name, int marks, int pos);
     }
 }

@@ -49,6 +49,8 @@ public class CreatedTestAdapter extends RecyclerView.Adapter<CreatedTestAdapter.
         holder.itemCreatedTestBinding.tvRanking.setText(testModelNew.getTm_ranking());
         holder.itemCreatedTestBinding.tvQuestCount.setText(testModelNew.getQuest_count());
         holder.itemCreatedTestBinding.tvAuthorName.setText(testModelNew.getAuthor());
+        holder.itemCreatedTestBinding.tvRanking.setText(testModelNew.getTm_ranking());
+        holder.itemCreatedTestBinding.tvAttendedBy.setText(testModelNew.getTm_attempted_by());
         if (testModelNew.getPublishedDate() != null)
             holder.itemCreatedTestBinding.tvPublishedDate.setText(DateUtils.getFormattedDate(testModelNew.getPublishedDate().substring(0, 10)));
 

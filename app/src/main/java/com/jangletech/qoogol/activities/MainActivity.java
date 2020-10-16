@@ -120,6 +120,7 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
                     || destination.getId() == R.id.nav_scan_quest
                     || destination.getId() == R.id.nav_mtp_question
                     || destination.getId() == R.id.nav_quest_type
+                    || destination.getId() == R.id.nav_create_pdf
                     || destination.getId() == R.id.nav_true_false_frag
                     || destination.getId() == R.id.nav_fill_the_blanks
                     || destination.getId() == R.id.nav_scq_image
@@ -651,6 +652,7 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
                         navController.getCurrentDestination().getId() == R.id.nav_shared_with_you ||
                         navController.getCurrentDestination().getId() == R.id.nav_connections ||
                         navController.getCurrentDestination().getId() == R.id.nav_upload_question ||
+                        navController.getCurrentDestination().getId() == R.id.nav_create_pdf ||
                         navController.getCurrentDestination().getId() == R.id.nav_requests) {
                     navController.navigate(R.id.nav_home);
                 } else if (navController.getCurrentDestination().getId() == R.id.nav_syllabus) {

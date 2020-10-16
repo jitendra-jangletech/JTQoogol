@@ -49,6 +49,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 
@@ -66,6 +67,27 @@ public class BaseFragment extends Fragment {
         Gson gson = new Gson();
         String json = TinyDB.getInstance(getActivity()).getString(Constant.TEST_SUBJECT_CHAP);
         return gson.fromJson(json, TestSubjectChapterMaster.class);
+    }
+
+    public String getFormattedDate() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-M-yyyy");
+        String date = sdf.format(new Date());
+        Log.i(TAG, "getFormattedDate: " + date);
+        return date;
+    }
+
+    public String getKeyFromValuea(Map<String, String> map, String name) {
+        Log.i(TAG, "getKeyFromValuea Name : " + name);
+        String selectedKey = "";
+        for (Map.Entry<String, String> e : map.entrySet()) {
+            String key = e.getKey();
+            String value = e.getValue();
+            if (value.equals(name)) {
+                selectedKey = key;
+                break;
+            }
+        }
+        return selectedKey;
     }
 
     public String getDecryptedField(String encryptText, String key) {
@@ -142,7 +164,6 @@ public class BaseFragment extends Fragment {
 
         dialog.show();
     }
-
 
     public String getLanguageArray(Object languages) {
         String res = "";
