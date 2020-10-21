@@ -7,7 +7,9 @@ import androidx.room.TypeConverters;
 import com.google.gson.annotations.SerializedName;
 import com.jangletech.qoogol.database.converter.Converters;
 import com.jangletech.qoogol.util.Constant;
+
 import org.jetbrains.annotations.NotNull;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -283,7 +285,7 @@ public class TestModelNew implements Serializable {
     }
 
     public String getQuest_count() {
-        return quest_count;
+        return quest_count != null ? quest_count : "";
     }
 
     public void setQuest_count(String quest_count) {

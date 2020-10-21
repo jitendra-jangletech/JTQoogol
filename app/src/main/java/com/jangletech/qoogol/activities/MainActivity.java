@@ -85,7 +85,7 @@ import static com.jangletech.qoogol.ui.BaseFragment.getUserName;
 import static com.jangletech.qoogol.util.Constant.CALL_FROM;
 import static com.jangletech.qoogol.util.Constant.profile;
 
-public class MainActivity extends BaseActivity implements PublicProfileDialog.PublicProfileClickListener,AddImageDialog.AddImageClickListener {
+public class MainActivity extends BaseActivity implements PublicProfileDialog.PublicProfileClickListener, AddImageDialog.AddImageClickListener {
 
     private static final String TAG = "MainActivity";
     private AppBarConfiguration mAppBarConfiguration;
@@ -102,7 +102,7 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
     public static BottomNavigationView bottomNavigationView;
     public static String userId = "";
     QueMediaListener queMediaListener;
-    private static final int CAMERA_REQUEST = 1, GALLERY_REQUEST = 2, PICKFILE_REQUEST_CODE=3, VIDEO_REQUEST = 4, AUDIO_REQUEST = 5;
+    private static final int CAMERA_REQUEST = 1, GALLERY_REQUEST = 2, PICKFILE_REQUEST_CODE = 3, VIDEO_REQUEST = 4, AUDIO_REQUEST = 5;
     private Uri mphotouri;
     private AlertDialog mediaDialog;
     private int optionId;
@@ -590,8 +590,8 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
         });
     }
 
-    public void setOnDataListener(QueMediaListener queMediaListener){
-       this.queMediaListener =queMediaListener;
+    public void setOnDataListener(QueMediaListener queMediaListener) {
+        this.queMediaListener = queMediaListener;
     }
 
     private void getNotificationIntent(Intent intent) {
@@ -646,8 +646,8 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
                 }
             }
         } else {
-            if (queMediaListener !=null)
-                queMediaListener.onMediaReceived(requestCode,resultCode,data,mphotouri);
+            if (queMediaListener != null)
+                queMediaListener.onMediaReceived(requestCode, resultCode, data, mphotouri);
         }
 
     }
@@ -743,23 +743,23 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
         dialogBuilder.setView(mediaUploadLayoutBinding.getRoot());
         mediaUploadLayoutBinding.camera.setOnClickListener(view -> {
             mediaDialog.dismiss();
-            requestStoragePermission(true, false, false,false);
+            requestStoragePermission(true, false, false, false);
         });
 
 
         mediaUploadLayoutBinding.gallery.setOnClickListener(view -> {
             mediaDialog.dismiss();
-            requestStoragePermission(false, true, false,false);
+            requestStoragePermission(false, true, false, false);
         });
 
 
         mediaUploadLayoutBinding.videos.setOnClickListener(view -> {
-            requestStoragePermission(false, false, false,true);
+            requestStoragePermission(false, false, false, true);
             mediaDialog.dismiss();
         });
 
         mediaUploadLayoutBinding.audios.setOnClickListener(view -> {
-            requestStoragePermission(false, false, true,false);
+            requestStoragePermission(false, false, true, false);
             mediaDialog.dismiss();
         });
 
@@ -771,7 +771,7 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
 
         mediaUploadLayoutBinding.documents.setOnClickListener(v -> {
             mediaDialog.dismiss();
-            requestStoragePermission(false, false, false,false);
+            requestStoragePermission(false, false, false, false);
         });
 
         mediaDialog = dialogBuilder.create();
@@ -779,7 +779,7 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
         mediaDialog.show();
     }
 
-    private void requestStoragePermission(final boolean isCamera, final boolean isPictures, final boolean isAudio,  final boolean isVideo) {
+    private void requestStoragePermission(final boolean isCamera, final boolean isPictures, final boolean isAudio, final boolean isVideo) {
         Dexter.withActivity(this)
                 .withPermissions(Manifest.permission.READ_EXTERNAL_STORAGE,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
@@ -793,7 +793,7 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
                                 getImages();
                             } else if (isAudio) {
                                 getAudio();
-                            } else  if (isVideo){
+                            } else if (isVideo) {
                                 getVideo();
                             } else {
                                 getDocument();
@@ -816,13 +816,14 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
                 .onSameThread()
                 .check();
     }
+
     protected void getDocument() {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         String[] mimeTypes =
                 {"application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .doc & .docx
                         "application/vnd.ms-powerpoint", "application/vnd.openxmlformats-officedocument.presentationml.presentation", // .ppt & .pptx
                         "application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // .xls & .xlsx
-                        "text/plain","application/rtf","application/pdf","application/zip", "application/vnd.android.package-archive"};
+                        "text/plain", "application/rtf", "application/pdf", "application/zip", "application/vnd.android.package-archive"};
 
         intent.setType("application/*");
         intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
@@ -879,7 +880,7 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
 
     private void openSettings() {
         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-        Uri uri = Uri.fromParts("package",getPackageName(), null);
+        Uri uri = Uri.fromParts("package", getPackageName(), null);
         intent.setData(uri);
         startActivityForResult(intent, 101);
     }
@@ -1101,8 +1102,8 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
 
     @Override
     public void onImageClickListener(ImageObject imageObject, int opt) {
-        if (queMediaListener!=null)
-        queMediaListener.onScanImageClick(imageObject.getUri());
+        if (queMediaListener != null)
+            queMediaListener.onScanImageClick(imageObject.getUri());
     }
 
     @Override

@@ -11,18 +11,14 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AlertDialog;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.jangletech.qoogol.R;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringEscapeUtils;
 import org.joda.time.LocalDate;
 import org.joda.time.Period;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -36,7 +32,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
-
 
 public class AppUtils {
 
@@ -274,7 +269,6 @@ public class AppUtils {
                     .setMessage("Check your internet connection.")
                     .setPositiveButton("OK", null)
                     .show();
-
         }
     }
 }

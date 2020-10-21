@@ -7,7 +7,6 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-
 import com.jangletech.qoogol.R;
 
 public class CreateTestActivity extends AppCompatActivity {
@@ -19,12 +18,15 @@ public class CreateTestActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_test);
-        navController = Navigation.findNavController(CreateTestActivity.this, R.id.nav_host_create_test);
-        mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_create)
-                .build();
-        NavigationUI.setupActionBarWithNavController(CreateTestActivity.this, navController);
-
+        try {
+            navController = Navigation.findNavController(CreateTestActivity.this, R.id.nav_host_create_test);
+            mAppBarConfiguration = new AppBarConfiguration.Builder(
+                    R.id.nav_create)
+                    .build();
+            NavigationUI.setupActionBarWithNavController(CreateTestActivity.this, navController);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

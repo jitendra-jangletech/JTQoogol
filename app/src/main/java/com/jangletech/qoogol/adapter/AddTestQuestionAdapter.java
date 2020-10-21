@@ -51,6 +51,8 @@ public class AddTestQuestionAdapter extends RecyclerView.Adapter<AddTestQuestion
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         LearningQuestionsNew learningQuestionsNew = learningQuestionsNewList.get(position);
         Log.i(TAG, "onBindViewHolder : " + learningQuestionsNew.getQuestion_id() + "," + learningQuestionsNew.getQuestion() + "," + learningQuestionsNew.getMarks());
+        Log.e(TAG, "onBindViewHolder 1346 : " + learningQuestionsNew.getType());
+        Log.e(TAG, "onBindViewHolder 1362 : " + learningQuestionsNew.getQue_option_type());
 
         holder.itemQuestBinding.tvQuestSerial.setText(String.valueOf(learningQuestionsNew.getQuestion_id()));
         holder.itemQuestBinding.tvQuest.setText(AppUtils.decodedString(learningQuestionsNew.getQuestion()));
@@ -58,7 +60,6 @@ public class AddTestQuestionAdapter extends RecyclerView.Adapter<AddTestQuestion
 
         if (flag) {
             holder.itemQuestBinding.remove.setVisibility(View.GONE);
-            //holder.itemQuestBinding.checkQuest.setVisibility(View.VISIBLE);
             holder.itemQuestBinding.rootLayout.setBackgroundColor(learningQuestionsNew.isSelected() ? Color.CYAN : Color.WHITE);
             holder.itemQuestBinding.rootLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -72,35 +73,15 @@ public class AddTestQuestionAdapter extends RecyclerView.Adapter<AddTestQuestion
         } else {
             holder.itemQuestBinding.checkQuest.setVisibility(View.GONE);
             holder.itemQuestBinding.remove.setVisibility(View.VISIBLE);
+            holder.itemQuestBinding.rootLayout.setOnClickListener(v -> {
+                listener.onSectionMarks(learningQuestionsNew, holder.getAdapterPosition());
+            });
         }
 
         holder.itemQuestBinding.remove.setOnClickListener(v -> {
             Log.i(TAG, "onBindViewHolder: ");
             listener.onRemoveClick(learningQuestionsNew, holder.getAdapterPosition());
         });
-
-        /*holder.itemQuestBinding.checkQuest.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    tempList.add(learningQuestionsNew);
-                } else {
-                    tempList.remove(learningQuestionsNew);
-                }
-
-                listener.onQuestSelected(tempList);
-            }
-        });*/
-
-        /*holder.itemQuestBinding.checkQuest.setOnClickListener(v -> {
-            if (holder.itemQuestBinding.checkQuest.isChecked()) {
-                tempList.add(learningQuestionsNew);
-            } else {
-                tempList.remove(learningQuestionsNew);
-            }
-
-            listener.onQuestSelected(tempList);
-        });*/
     }
 
     @Override
@@ -121,6 +102,8 @@ public class AddTestQuestionAdapter extends RecyclerView.Adapter<AddTestQuestion
         void onQuestSelected(List<LearningQuestionsNew> learningQuestionsNewList);
 
         void onRemoveClick(LearningQuestionsNew learningQuestionsNew, int questPos);
+
+        void onSectionMarks(LearningQuestionsNew learningQuestionsNew, int quesPos);
     }
 
     public void deleteTestQuest(int pos, LearningQuestionsNew learningQuestionsNew) {
@@ -129,16 +112,14 @@ public class AddTestQuestionAdapter extends RecyclerView.Adapter<AddTestQuestion
         notifyItemRangeChanged(pos, getItemCount());
     }
 
-//    public void addToList(LearningQuestionsNew learningQuestionsNew) {
-//        if (!tempList.contains(learningQuestionsNew)) {
-//            Log.i(TAG, "Not Added.");
-//
-//        } else {
-//            Log.i(TAG, "Already Added.");
-//        }
-//    }
-
-    public void updateQuestMarks(){
-
+    public void updateQuestList(List<LearningQuestionsNew> newList) {
+        learningQuestionsNewList = newList;
+        notifyDataSetChanged();
     }
+
+    public void updateMarks(LearningQuestionsNew item, int pos) {
+        learningQuestionsNewList.set(pos, item);
+        notifyItemChanged(pos);
+    }
+
 }

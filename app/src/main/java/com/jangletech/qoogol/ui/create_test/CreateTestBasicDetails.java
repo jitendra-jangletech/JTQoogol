@@ -30,6 +30,7 @@ import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
+import com.jangletech.qoogol.util.TinyDB;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -68,6 +69,7 @@ public class CreateTestBasicDetails extends BaseFragment implements TextWatcher,
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        Log.i(TAG, "onActivityCreated Executed: ");
         bundle = new Bundle();
         initializeHashMaps();
         mcurrentTime = Calendar.getInstance();
@@ -130,11 +132,13 @@ public class CreateTestBasicDetails extends BaseFragment implements TextWatcher,
         mBinding.chipSubject.setOnClickListener(v -> {
             //navigationFromCreateTest(R.id.nav_modify_syllabus, Bundle.EMPTY);
             DialogFragment syllabusDialog = new SyllabusDialog(this);
-            syllabusDialog.show(getParentFragmentManager(), "dialog");
+            syllabusDialog.show(getParentFragmentManager(), "syllabus_dialog");
         });
 
         mBinding.chipChapter.setOnClickListener(v -> {
-            navigationFromCreateTest(R.id.nav_modify_syllabus, Bundle.EMPTY);
+            //navigationFromCreateTest(R.id.nav_modify_syllabus, Bundle.EMPTY);
+            DialogFragment syllabusDialog = new SyllabusDialog(this);
+            syllabusDialog.show(getParentFragmentManager(), "syllabus_dialog");
         });
 
         mBinding.testCategoryChipGrp.setOnCheckedChangeListener(new ChipGroup.OnCheckedChangeListener() {
@@ -240,6 +244,7 @@ public class CreateTestBasicDetails extends BaseFragment implements TextWatcher,
                 testModelNew.setTm_diff_level(difficulty);
                 testModelNew.setTm_catg(category);
                 testModelNew.setQuest_count(mBinding.etNoOfQuests.getText().toString());
+                TinyDB.getInstance(getActivity()).putString(Constant.tm_tot_marks, mBinding.etTotalMarks.getText().toString().trim());
                 createTest(testModelNew);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -271,6 +276,12 @@ public class CreateTestBasicDetails extends BaseFragment implements TextWatcher,
 
     private void setCreatedTestDetails(TestModelNew testModelNew) {
         Log.i(TAG, "setCreatedTestDetails TmId : " + testModelNew.getTm_id());
+        category = testModelNew.getTm_catg();
+        strTestType = testModelNew.getTm_type();
+        difficulty = testModelNew.getTm_diff_level();
+        strNegativeMarks = testModelNew.getTm_neg_mks();
+
+
         mBinding.etTestTitle.setText(testModelNew.getTm_name());
         mBinding.etTestDesc.setText(testModelNew.getTest_description());
         mBinding.etNoOfQuests.setText(testModelNew.getQuest_count());
@@ -349,66 +360,70 @@ public class CreateTestBasicDetails extends BaseFragment implements TextWatcher,
     }
 
     private void createTest(TestModelNew testModelNew) {
-        ProgressDialog.getInstance().show(getActivity());
-        Gson gson = new Gson();
-        String json = gson.toJson(testModelNew);
+        try {
+            ProgressDialog.getInstance().show(getActivity());
+            Gson gson = new Gson();
+            String json = gson.toJson(testModelNew);
 
-        if (testModelNew.getTm_id() == 0) {
-            tmId = "";
-        } else {
-            tmId = String.valueOf(testModelNew.getTm_id());
-        }
-        bundle.putSerializable(Constant.tm_id, tmId);
-        Log.i(TAG, "createTest Object : " + json);
-        Log.i(TAG, "createTest Publish Date : " + new Date().toString());
-        Log.i(TAG, "createTest Final TmId : " + tmId);
-        Call<CreateTestResponse> call = ApiClient.getInstance().getApi()
-                .createModifyTest(
-                        AppUtils.getUserId(),
-                        AppUtils.getDeviceId(),
-                        Constant.APP_NAME,
-                        tmId,
-                        "I",
-                        testModelNew.getTm_name(),
-                        testModelNew.getTest_description(),
-                        testModelNew.getQuest_count(),
-                        testModelNew.getTm_tot_marks(),
-                        testModelNew.getTm_duration(),
-                        testModelNew.getTm_sm_id(),
-                        testModelNew.getTm_cm_id(),
-                        testModelNew.getTm_neg_mks(),
-                        testModelNew.getTm_type(),
-                        testModelNew.getTm_diff_level(),
-                        testModelNew.getTm_catg(),
-                        getFormattedDate()
-                );
-        call.enqueue(new Callback<CreateTestResponse>() {
-            @Override
-            public void onResponse(Call<CreateTestResponse> call, Response<CreateTestResponse> response) {
-                ProgressDialog.getInstance().dismiss();
-                try {
-                    if (response.body().getResponse() == 200) {
-                        Log.i(TAG, "onResponse : " + response.body());
-                        testModelNew.setTm_id(Integer.parseInt(response.body().getTmId()));
-                        navigationFromCreateTest(R.id.nav_create_test_section, bundle);
-                    } else {
-                        navigationFromCreateTest(R.id.nav_create_test_section, bundle);
-                        AppUtils.showToast(getActivity(), null, response.body().getMessage());
-                        Log.e(TAG, "Response Code : " + response.body().getResponse());
+            if (testModelNew.getTm_id() == 0) {
+                tmId = "";
+            } else {
+                tmId = String.valueOf(testModelNew.getTm_id());
+            }
+            bundle.putString(Constant.tm_id, tmId);
+            Log.i(TAG, "createTest Object : " + json);
+            Log.i(TAG, "createTest Publish Date : " + new Date().toString());
+            Log.i(TAG, "createTest Final TmId : " + tmId);
+            Call<CreateTestResponse> call = ApiClient.getInstance().getApi()
+                    .createModifyTest(
+                            AppUtils.getUserId(),
+                            AppUtils.getDeviceId(),
+                            Constant.APP_NAME,
+                            tmId,
+                            "I",
+                            testModelNew.getTm_name(),
+                            testModelNew.getTest_description(),
+                            testModelNew.getQuest_count(),
+                            testModelNew.getTm_tot_marks(),
+                            testModelNew.getTm_duration(),
+                            testModelNew.getTm_sm_id(),
+                            testModelNew.getTm_cm_id(),
+                            testModelNew.getTm_neg_mks(),
+                            testModelNew.getTm_type(),
+                            testModelNew.getTm_diff_level(),
+                            testModelNew.getTm_catg(),
+                            getFormattedDate()
+                    );
+            call.enqueue(new Callback<CreateTestResponse>() {
+                @Override
+                public void onResponse(Call<CreateTestResponse> call, Response<CreateTestResponse> response) {
+                    ProgressDialog.getInstance().dismiss();
+                    try {
+                        if (response.body().getResponse() == 200) {
+                            Log.i(TAG, "onResponse : " + response.body());
+                            bundle.putString(Constant.tm_id, response.body().getTmId());
+                            navigationFromCreateTest(R.id.nav_create_test_section, bundle);
+                        } else {
+                            //navigationFromCreateTest(R.id.nav_create_test_section, bundle);
+                            AppUtils.showToast(getActivity(), null, response.body().getMessage());
+                            Log.e(TAG, "Response Code : " + response.body().getResponse());
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                }catch (Exception e){
-                    e.printStackTrace();
                 }
-            }
 
-            @Override
-            public void onFailure(Call<CreateTestResponse> call, Throwable t) {
-                ProgressDialog.getInstance().dismiss();
-                AppUtils.showToast(getActivity(), t, "");
-                apiCallFailureDialog(t);
-                t.printStackTrace();
-            }
-        });
+                @Override
+                public void onFailure(Call<CreateTestResponse> call, Throwable t) {
+                    ProgressDialog.getInstance().dismiss();
+                    AppUtils.showToast(getActivity(), t, "");
+                    apiCallFailureDialog(t);
+                    t.printStackTrace();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

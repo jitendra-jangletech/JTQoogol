@@ -64,28 +64,28 @@
                     android:text="None" />
 
                 <RadioButton
-                    android:visibility="gone"
                     android:id="@+id/section1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:tag="1"
-                    android:text="Section 1" />
+                    android:text="Section 1"
+                    android:visibility="gone" />
 
                 <RadioButton
-                    android:visibility="gone"
                     android:id="@+id/section2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:tag="2"
-                    android:text="Section 2" />
+                    android:text="Section 2"
+                    android:visibility="gone" />
 
                 <RadioButton
-                    android:visibility="gone"
                     android:id="@+id/section3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:tag="3"
-                    android:text="Section 3" />
+                    android:text="Section 3"
+                    android:visibility="gone" />
 
             </RadioGroup>
 

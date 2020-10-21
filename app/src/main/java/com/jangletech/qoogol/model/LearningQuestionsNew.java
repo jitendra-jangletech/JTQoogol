@@ -374,7 +374,7 @@ public class LearningQuestionsNew implements Cloneable {
     }
 
     public String getMarks() {
-        return marks != null ? marks : "0.0";
+        return marks != null ? marks : "0";
     }
 
     public String getFormatedMarks() {

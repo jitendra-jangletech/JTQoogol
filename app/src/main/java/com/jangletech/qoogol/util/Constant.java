@@ -472,6 +472,14 @@ public class Constant {
     public static final String remove_follower = "XF";
 
 
+    //section & Marks
+    public static final String section_marks = "101";
+    public static final int section = 1;
+    public static final int mrks = 2;
+    public static final String test_mode = "test_mode";
+    public static final String test_mode_edit = "EDIT";
+    public static final String test_mode_new = "NEW";
+
     //Filters
     public static final String trending = "Trending";
     public static final String popular = "Popular";

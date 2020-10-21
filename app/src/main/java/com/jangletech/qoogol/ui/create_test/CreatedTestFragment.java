@@ -19,6 +19,8 @@ import com.jangletech.qoogol.databinding.FragmentCreatedTestBinding;
 import com.jangletech.qoogol.model.TestListResponse;
 import com.jangletech.qoogol.model.TestModelNew;
 import com.jangletech.qoogol.ui.BaseFragment;
+import com.jangletech.qoogol.util.Constant;
+import com.jangletech.qoogol.util.TinyDB;
 
 import java.util.List;
 
@@ -60,6 +62,7 @@ public class CreatedTestFragment extends BaseFragment implements CreatedTestAdap
         });
 
         mBinding.btnCreateNewTest.setOnClickListener(v -> {
+            TinyDB.getInstance(getActivity()).putString(Constant.test_mode, Constant.test_mode_new);
             navigationFromCreateTest(R.id.nav_create_test_basic_details, Bundle.EMPTY);
         });
     }
@@ -79,6 +82,7 @@ public class CreatedTestFragment extends BaseFragment implements CreatedTestAdap
     @Override
     public void onEditClick(TestModelNew testModelNew) {
         Log.i(TAG, "onEditClick : " + testModelNew.getTm_id());
+        TinyDB.getInstance(getActivity()).putString(Constant.test_mode, Constant.test_mode_edit);
         Bundle bundle = new Bundle();
         bundle.putSerializable("CREATED_TEST", testModelNew);
         navigationFromCreateTest(R.id.nav_create_test_basic_details, bundle);

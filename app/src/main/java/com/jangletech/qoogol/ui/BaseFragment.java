@@ -303,10 +303,32 @@ public class BaseFragment extends Fragment {
 
     public void showToast(String msg) {
         try {
-            Toast.makeText(requireActivity(), msg, Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireActivity(), msg,Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void showToast(String msg,int length) {
+        try {
+            Toast.makeText(requireActivity(), msg,length).show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void showAlert(String msg){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogStyle);
+        builder.setTitle("Alert")
+                .setMessage(msg)
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setCancelable(false)
+                .show();
     }
 
     public void saveFilter(boolean value) {
