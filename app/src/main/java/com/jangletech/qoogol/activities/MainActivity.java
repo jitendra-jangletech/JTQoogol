@@ -156,6 +156,7 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
                     || destination.getId() == R.id.nav_scan_quest
                     || destination.getId() == R.id.nav_mtp_question
                     || destination.getId() == R.id.nav_quest_type
+                    || destination.getId() == R.id.nav_create_pdf
                     || destination.getId() == R.id.nav_true_false_frag
                     || destination.getId() == R.id.nav_fill_the_blanks
                     || destination.getId() == R.id.nav_scq_image
@@ -269,10 +270,6 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
                 if (navigateFlag.equals(Nav.UPLOAD_QUE.toString())) {
                     navigateFlag = "";
                     navToFragment(R.id.nav_upload_question, Bundle.EMPTY);
-                }
-                if (navigateFlag.equals(Nav.MY_QUE.toString())) {
-                    navigateFlag = "";
-                    navToFragment(R.id.nav_my_questions, Bundle.EMPTY);
                 }
                 if (navigateFlag.equals(Nav.BLOCKED_CONN.toString())) {
                     navigateFlag = "";
@@ -438,13 +435,6 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
             mBinding.drawerLayout.closeDrawers();
             if (navController.getCurrentDestination().getId() != R.id.nav_upload_question) {
                 navigateFlag = Nav.UPLOAD_QUE.toString();
-            }
-        });
-
-        findViewById(R.id.nav_my_questions).setOnClickListener(v -> {
-            mBinding.drawerLayout.closeDrawers();
-            if (navController.getCurrentDestination().getId() != R.id.nav_my_questions) {
-                navigateFlag = Nav.MY_QUE.toString();
             }
         });
 
@@ -748,20 +738,12 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
         }
     }
 
-    public void openMediaDialog(int call_from) {
-        optionId = call_from;
+    public void openMediaDialog() {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         MediaUploadLayoutBinding mediaUploadLayoutBinding = DataBindingUtil.inflate(
                 LayoutInflater.from(this),
                 R.layout.media_upload_layout, null, false);
         dialogBuilder.setView(mediaUploadLayoutBinding.getRoot());
-
-        if (call_from!=Constant.QUESTION) {
-            mediaUploadLayoutBinding.videos.setVisibility(View.GONE);
-            mediaUploadLayoutBinding.audios.setVisibility(View.GONE);
-            mediaUploadLayoutBinding.documents.setVisibility(View.GONE);
-        }
-
         mediaUploadLayoutBinding.camera.setOnClickListener(view -> {
             mediaDialog.dismiss();
             requestStoragePermission(true, false, false,false);
@@ -786,7 +768,7 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
 
         mediaUploadLayoutBinding.scanPdf.setOnClickListener(v -> {
             mediaDialog.dismiss();
-            new AddImageDialog(this, optionId, this)
+            new AddImageDialog(this, 1, this)
                     .show();
         });
 
@@ -875,8 +857,7 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
         Intent pickPhoto = new Intent();
         pickPhoto.setType("image/*");
         pickPhoto.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        if (optionId==QUESTION)
-            pickPhoto.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        pickPhoto.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         pickPhoto.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(pickPhoto, "Select Picture"), GALLERY_REQUEST);
     }
@@ -987,6 +968,7 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
                         navController.getCurrentDestination().getId() == R.id.nav_connections ||
                         navController.getCurrentDestination().getId() == R.id.nav_upload_question ||
                         navController.getCurrentDestination().getId() == R.id.nav_my_questions ||
+                        navController.getCurrentDestination().getId() == R.id.nav_create_pdf ||
                         navController.getCurrentDestination().getId() == R.id.nav_requests) {
                     navController.navigate(R.id.nav_home);
                 } else if (navController.getCurrentDestination().getId() == R.id.nav_syllabus) {

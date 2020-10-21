@@ -1,5 +1,6 @@
 package com.jangletech.qoogol.ui.create_pdf;
 
+import android.Manifest;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.net.Uri;
@@ -20,6 +21,12 @@ import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.CreatePdfAdapter;
 import com.jangletech.qoogol.databinding.FragmentCreatePdfBinding;
 import com.jangletech.qoogol.ui.BaseFragment;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.single.PermissionListener;
 import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.util.ArrayList;
@@ -48,21 +55,44 @@ public class CreatePdfFragment extends BaseFragment implements CreatePdfAdapter.
         super.onActivityCreated(savedInstanceState);
 
         mAdapter = new CreatePdfAdapter(getActivity(), images, this);
-        mBinding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mBinding.recyclerView.setHasFixedSize(true);
+        mBinding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, true));
         mBinding.recyclerView.setAdapter(mAdapter);
 
         mBinding.btnAddImage.setOnClickListener(v -> {
 
-            String filename = System.currentTimeMillis() + ".jpg";
-            ContentValues values = new ContentValues();
-            values.put(MediaStore.Images.Media.TITLE, filename);
-            values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
-            imageUri = getActivity().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+            Dexter.withActivity(getActivity())
+                    .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    .withListener(new PermissionListener() {
+                        @Override
+                        public void onPermissionGranted(PermissionGrantedResponse response) {
+                            String filename = System.currentTimeMillis() + ".jpg";
+                            ContentValues values = new ContentValues();
+                            values.put(MediaStore.Images.Media.TITLE, filename);
+                            values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+                            imageUri = getActivity().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
 
-            Intent intent = new Intent();
-            intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-            startActivityForResult(intent, REQUEST_CAMERA);
+                            Intent intent = new Intent();
+                            intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+                            intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                            startActivityForResult(intent, REQUEST_CAMERA);
+                        }
+
+                        @Override
+                        public void onPermissionDenied(PermissionDeniedResponse response) {
+                            Toast.makeText(getActivity(), "Storage permission denied.", Toast.LENGTH_LONG).show();
+                        }
+
+                        @Override
+                        public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+                            token.continuePermissionRequest();
+                        }
+                    })
+                    .withErrorListener(error ->
+                            Toast.makeText(getActivity(), "Error occurred! ", Toast.LENGTH_SHORT).show())
+                    .onSameThread()
+                    .check();
+
 
         });
 
@@ -90,7 +120,7 @@ public class CreatePdfFragment extends BaseFragment implements CreatePdfAdapter.
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (result != null && resultCode == RESULT_OK) {
                 Log.i(TAG, "onActivityResult Uri : " + result.getUri());
-                Log.i(TAG, "onActivityResult Size : "+images.size());
+                Log.i(TAG, "onActivityResult Size : " + images.size());
                 images.add(result.getUri());
                 mAdapter.updateList(images);
             }

@@ -357,33 +357,37 @@ public class MyTestFragment extends BaseFragment
             public void onResponse(Call<TestListResponse> call, Response<TestListResponse> response) {
                 mBinding.swipeToRefresh.setRefreshing(false);
                 mBinding.progress.setVisibility(View.GONE);
-                if (response.body() != null) {
-                    if (response.body().getResponse().equals("200")) {
-                        testListResponse = response.body();
-                        if (finalParameters.get(Constant.tm_id) != null &&
-                                !(finalParameters.get(Constant.tm_id).isEmpty())) {
-                            if (response.body().getTestList().size() > 0) {
-                                mAdapter.updateList(response.body().getTestList());
+                try {
+                    if (response.body() != null) {
+                        if (response.body().getResponse().equals("200")) {
+                            testListResponse = response.body();
+                            if (finalParameters.get(Constant.tm_id) != null &&
+                                    !(finalParameters.get(Constant.tm_id).isEmpty())) {
+                                if (response.body().getTestList().size() > 0) {
+                                    mAdapter.updateList(response.body().getTestList());
+                                } else {
+                                    mBinding.tvNoTest.setVisibility(View.VISIBLE);
+                                }
                             } else {
-                                mBinding.tvNoTest.setVisibility(View.VISIBLE);
+                                List<TestModelNew> newList = response.body().getTestList();
+                                for (TestModelNew testModelNew : newList) {
+                                    testModelNew.setFlag("PRACTICE");
+                                    Log.d(TAG, "PRACTICE UserId : " + MainActivity.userId);
+                                    testModelNew.setUserId(MainActivity.userId);
+                                }
+                                mViewModel.insert(newList);
+                                if (isFilterApplied) {
+                                    setFilteredTestList(response.body());
+                                }
                             }
+                        } else if (response.body().getResponse().equals("501")) {
+                            resetSettingAndLogout();
                         } else {
-                            List<TestModelNew> newList = response.body().getTestList();
-                            for (TestModelNew testModelNew : newList) {
-                                testModelNew.setFlag("PRACTICE");
-                                Log.d(TAG, "PRACTICE UserId : " + MainActivity.userId);
-                                testModelNew.setUserId(MainActivity.userId);
-                            }
-                            mViewModel.insert(newList);
-                            if (isFilterApplied) {
-                                setFilteredTestList(response.body());
-                            }
+                            showErrorDialog(getActivity(), response.body().getResponse(), response.body().getMessage());
                         }
-                    } else if (response.body().getResponse().equals("501")) {
-                        resetSettingAndLogout();
-                    } else {
-                        showErrorDialog(getActivity(), response.body().getResponse(), response.body().getMessage());
                     }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
 

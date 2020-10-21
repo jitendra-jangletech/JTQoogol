@@ -37,7 +37,6 @@ public class CreateTestViewModel extends AndroidViewModel {
     }
 
     public void fetchTestList() {
-        //ProgressDialog.getInstance().show(application);
         Call<TestListResponse> call = ApiClient.getInstance().getApi().fetchCreatedTestList(AppUtils.getUserId());
         call.enqueue(new Callback<TestListResponse>() {
             @Override
@@ -54,6 +53,7 @@ public class CreateTestViewModel extends AndroidViewModel {
                     }
                 } else {
                     Log.e(TAG, "Null Response: ");
+                    setTestResponse(response.body());
                 }
             }
 

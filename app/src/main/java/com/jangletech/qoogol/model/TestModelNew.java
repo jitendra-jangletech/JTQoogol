@@ -348,7 +348,6 @@ public class TestModelNew implements Serializable {
         this.tm_attempted_by = tm_attempted_by;
     }
 
-
     public int getTm_id() {
         return tm_id;
     }

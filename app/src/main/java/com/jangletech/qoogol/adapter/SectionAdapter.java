@@ -46,11 +46,11 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.ViewHold
             listener.onAddQuestionClick(testSection,position);
         });
 
-        if (testSection.getSectionQuestions().size() > 0) {
+        /*if (testSection.getSectionQuestions().size() > 0) {
             addTestQuestionAdapter = new AddTestQuestionAdapter(mContext, testSection.getSectionQuestions(),false,position,this);
             holder.itemTestSectionBinding.questRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
             holder.itemTestSectionBinding.questRecyclerView.setAdapter(addTestQuestionAdapter);
-        }
+        }*/
     }
 
 
@@ -65,12 +65,12 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.ViewHold
     }
 
     @Override
-    public void onRemoveClick(LearningQuestionsNew learningQuestionsNew, int sectionPos, int questPos) {
-        TestSection testSection = testSections.get(sectionPos);
+    public void onRemoveClick(LearningQuestionsNew learningQuestionsNew, int questPos) {
+       /* TestSection testSection = testSections.get(sectionPos);
         List<LearningQuestionsNew> testQuestions = testSections.get(sectionPos).getSectionQuestions();
         testQuestions.remove(questPos);
         testSection.setSectionQuestions(testQuestions);
-        notifyItemChanged(sectionPos);
+        notifyItemChanged(sectionPos);*/
     }
 
 

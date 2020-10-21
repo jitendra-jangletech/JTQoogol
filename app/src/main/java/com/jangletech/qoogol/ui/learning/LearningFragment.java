@@ -399,7 +399,6 @@ public class LearningFragment extends BaseFragment implements LearningAdapter.on
     }
 
 
-
     @Override
     public void onResetClick() {
         isFilterApplied = false;

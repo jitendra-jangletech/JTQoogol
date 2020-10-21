@@ -55,6 +55,29 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilTotalQuest"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/_2sdp"
+                    android:hint="@string/total_no_of_quest"
+                    app:errorEnabled="true"
+                    app:layout_constraintTop_toBottomOf="@+id/tilTestDesc">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etNoOfQuests"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textNoSuggestions|number"
+                    android:maxLength="3"
+                    android:scrollbars="vertical"
+                    android:textColor="@color/colorBlack" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+
                 <LinearLayout
                     android:id="@+id/marksDurationLayout"
                     android:layout_width="match_parent"
@@ -62,7 +85,7 @@
                     android:layout_marginTop="@dimen/_10sdp"
                     android:orientation="horizontal"
                     android:weightSum="2"
-                    app:layout_constraintTop_toBottomOf="@+id/tilTestDesc">
+                    app:layout_constraintTop_toBottomOf="@+id/tilTotalQuest">
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/tilTotalMarks"
@@ -100,7 +123,6 @@
                             android:id="@+id/etDuration"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:maxLength="5"
                             android:scrollbars="vertical"
                             android:singleLine="true"
                             android:textColor="@color/colorBlack" />

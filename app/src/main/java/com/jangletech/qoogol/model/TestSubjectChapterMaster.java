@@ -2,7 +2,17 @@ package com.jangletech.qoogol.model;
 
 public class TestSubjectChapterMaster {
 
+    private String sections;
     private String subjectName;
+
+    public String getSections() {
+        return sections;
+    }
+
+    public void setSections(String sections) {
+        this.sections = sections;
+    }
+
     private String subjectId;
     private String chap1Name;
     private String chap2Name;

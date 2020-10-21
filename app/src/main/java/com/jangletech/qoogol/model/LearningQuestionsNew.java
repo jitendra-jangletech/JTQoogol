@@ -41,6 +41,16 @@ public class LearningQuestionsNew implements Cloneable, Serializable {
         return super.clone();
     }
 
+    private boolean isSelected = false;
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
+
     public boolean isAttempted() {
         return isAttempted;
     }
@@ -203,7 +213,7 @@ public class LearningQuestionsNew implements Cloneable, Serializable {
     }
 
     public String getIsSave() {
-        return isSave!=null?isSave:"";
+        return isSave != null ? isSave : "";
     }
 
     public void setIsSave(String isSave) {
@@ -211,7 +221,7 @@ public class LearningQuestionsNew implements Cloneable, Serializable {
     }
 
     public String getFeedback() {
-        return feedback!=null?feedback:"";
+        return feedback != null ? feedback : "";
     }
 
     public void setFeedback(String feedback) {
@@ -236,7 +246,7 @@ public class LearningQuestionsNew implements Cloneable, Serializable {
     }
 
     public String getQuestiondesc() {
-        return questiondesc!=null?questiondesc:"";
+        return questiondesc != null ? questiondesc : "";
     }
 
     public void setQuestiondesc(String questiondesc) {
@@ -251,14 +261,14 @@ public class LearningQuestionsNew implements Cloneable, Serializable {
         } else if (getType().equalsIgnoreCase(LONG_ANSWER)) {
             return "Long Answer";
         } else {
-            if (getQue_option_type().equalsIgnoreCase(SCQ) || getQue_option_type().equalsIgnoreCase(SCQ_IMAGE) ||getQue_option_type().equalsIgnoreCase(SCQ_IMAGE_WITH_TEXT)) {
+            if (getQue_option_type().equalsIgnoreCase(SCQ) || getQue_option_type().equalsIgnoreCase(SCQ_IMAGE) || getQue_option_type().equalsIgnoreCase(SCQ_IMAGE_WITH_TEXT)) {
                 return "SCQ";
-            }   else if (getQue_option_type().equalsIgnoreCase(MCQ_IMAGE_WITH_TEXT) || getQue_option_type().equalsIgnoreCase(MCQ_IMAGE) || getQue_option_type().equalsIgnoreCase(MCQ)) {
+            } else if (getQue_option_type().equalsIgnoreCase(MCQ_IMAGE_WITH_TEXT) || getQue_option_type().equalsIgnoreCase(MCQ_IMAGE) || getQue_option_type().equalsIgnoreCase(MCQ)) {
                 return "MCQ";
-            }  else if (getQue_option_type().equalsIgnoreCase(TRUE_FALSE)) {
-                return "True False" ;
+            } else if (getQue_option_type().equalsIgnoreCase(TRUE_FALSE)) {
+                return "True False";
             } else if (getQue_option_type().equalsIgnoreCase(MATCH_PAIR)) {
-                return "Match the Pairs" ;
+                return "Match the Pairs";
             } else if (getQue_option_type().equalsIgnoreCase(MATCH_PAIR_IMAGE)) {
                 return "Match the Pairs";
             } else
@@ -271,7 +281,7 @@ public class LearningQuestionsNew implements Cloneable, Serializable {
     }
 
     public String getSubject() {
-        return subject!=null?subject:"";
+        return subject != null ? subject : "";
     }
 
     public void setSubject(String subject) {
@@ -279,7 +289,7 @@ public class LearningQuestionsNew implements Cloneable, Serializable {
     }
 
     public String getChapter() {
-        return chapter!=null?chapter:"";
+        return chapter != null ? chapter : "";
     }
 
     public void setChapter(String chapter) {
@@ -287,7 +297,7 @@ public class LearningQuestionsNew implements Cloneable, Serializable {
     }
 
     public String getRating() {
-        return rating!=null? UtilHelper.roundAvoid(rating):"0";
+        return rating != null ? UtilHelper.roundAvoid(rating) : "0";
     }
 
     public void setRating(String rating) {
@@ -295,7 +305,7 @@ public class LearningQuestionsNew implements Cloneable, Serializable {
     }
 
     public String getDifficulty_level() {
-        return difficulty_level!=null?difficulty_level:"";
+        return difficulty_level != null ? difficulty_level : "";
     }
 
     public void setDifficulty_level(String difficulty_level) {
@@ -303,7 +313,7 @@ public class LearningQuestionsNew implements Cloneable, Serializable {
     }
 
     public String getTopic() {
-        return topic!=null?topic:"";
+        return topic != null ? topic : "";
     }
 
     public void setTopic(String topic) {
@@ -311,7 +321,7 @@ public class LearningQuestionsNew implements Cloneable, Serializable {
     }
 
     public String getPosted_on() {
-        return posted_on!=null&&!posted_on.isEmpty()?posted_on.substring(0, 10):"";
+        return posted_on != null && !posted_on.isEmpty() ? posted_on.substring(0, 10) : "";
     }
 
     public void setPosted_on(String posted_on) {
@@ -319,7 +329,7 @@ public class LearningQuestionsNew implements Cloneable, Serializable {
     }
 
     public String getLastused_on() {
-        return lastused_on!=null&&!lastused_on.equalsIgnoreCase("")?lastused_on.substring(0, 10):"";
+        return lastused_on != null && !lastused_on.equalsIgnoreCase("") ? lastused_on.substring(0, 10) : "";
     }
 
     public void setLastused_on(String lastused_on) {
@@ -327,7 +337,7 @@ public class LearningQuestionsNew implements Cloneable, Serializable {
     }
 
     public String getLikes() {
-        return likes!=null?likes:"0";
+        return likes != null ? likes : "0";
     }
 
     public void setLikes(String likes) {
@@ -335,7 +345,7 @@ public class LearningQuestionsNew implements Cloneable, Serializable {
     }
 
     public String getComments() {
-        return comments!=null?comments:"0";
+        return comments != null ? comments : "0";
     }
 
     public void setComments(String comments) {
@@ -343,7 +353,7 @@ public class LearningQuestionsNew implements Cloneable, Serializable {
     }
 
     public String getShares() {
-        return shares!=null?shares:"0";
+        return shares != null ? shares : "0";
     }
 
     public void setShares(String shares) {
@@ -351,7 +361,7 @@ public class LearningQuestionsNew implements Cloneable, Serializable {
     }
 
     public String getRecommended_time() {
-        return recommended_time!=null?recommended_time.contains("Time")?recommended_time:"Time: " + recommended_time + " Sec":"";
+        return recommended_time != null ? recommended_time.contains("Time") ? recommended_time : "Time: " + recommended_time + " Sec" : "";
     }
 
     public void setRecommended_time(String recommended_time) {
@@ -367,11 +377,11 @@ public class LearningQuestionsNew implements Cloneable, Serializable {
     }
 
     public String getMarks() {
-         return marks!=null?marks:"";
+        return marks != null ? marks : "0.0";
     }
 
     public String getFormatedMarks() {
-        return marks!=null?"Marks : " + UtilHelper.formatMarks(Float.parseFloat(marks)):"";
+        return marks != null ? "Marks : " + UtilHelper.formatMarks(Float.parseFloat(marks)) : "";
     }
 
     public void setMarks(String marks) {
@@ -379,7 +389,7 @@ public class LearningQuestionsNew implements Cloneable, Serializable {
     }
 
     public String getMcq1() {
-        return mcq1!=null?mcq1:"";
+        return mcq1 != null ? mcq1 : "";
     }
 
     public void setMcq1(String mcq1) {
@@ -387,7 +397,7 @@ public class LearningQuestionsNew implements Cloneable, Serializable {
     }
 
     public String getMcq2() {
-        return mcq2!=null?mcq2:"";
+        return mcq2 != null ? mcq2 : "";
     }
 
     public void setMcq2(String mcq2) {
@@ -395,7 +405,7 @@ public class LearningQuestionsNew implements Cloneable, Serializable {
     }
 
     public String getMcq3() {
-        return mcq3!=null?mcq3:"";
+        return mcq3 != null ? mcq3 : "";
     }
 
     public void setMcq3(String mcq3) {
@@ -403,7 +413,7 @@ public class LearningQuestionsNew implements Cloneable, Serializable {
     }
 
     public String getMcq4() {
-        return mcq4!=null?mcq4:"";
+        return mcq4 != null ? mcq4 : "";
     }
 
     public void setMcq4(String mcq4) {
@@ -411,7 +421,7 @@ public class LearningQuestionsNew implements Cloneable, Serializable {
     }
 
     public String getMcq5() {
-        return mcq5!=null?mcq5:"";
+        return mcq5 != null ? mcq5 : "";
     }
 
     public void setMcq5(String mcq5) {
@@ -419,7 +429,7 @@ public class LearningQuestionsNew implements Cloneable, Serializable {
     }
 
     public String getAttended_by() {
-        return attended_by!=null?attended_by:"0";
+        return attended_by != null ? attended_by : "0";
     }
 
     public void setAttended_by(String attended_by) {
@@ -427,7 +437,7 @@ public class LearningQuestionsNew implements Cloneable, Serializable {
     }
 
     public String getSolve_right() {
-        return solve_right!=null?solve_right:"";
+        return solve_right != null ? solve_right : "";
     }
 
     public void setSolve_right(String solve_right) {
@@ -435,7 +445,7 @@ public class LearningQuestionsNew implements Cloneable, Serializable {
     }
 
     public String getIs_liked() {
-        return is_liked!=null?is_liked:"";
+        return is_liked != null ? is_liked : "";
     }
 
     public void setIs_liked(String is_liked) {
@@ -443,7 +453,7 @@ public class LearningQuestionsNew implements Cloneable, Serializable {
     }
 
     public String getIs_fav() {
-        return is_fav!=null?is_fav:"";
+        return is_fav != null ? is_fav : "";
     }
 
     public void setIs_fav(String is_fav) {
@@ -451,7 +461,7 @@ public class LearningQuestionsNew implements Cloneable, Serializable {
     }
 
     public String getType() {
-        return type!=null?type:"";
+        return type != null ? type : "";
     }
 
     public void setType(String type) {
@@ -459,7 +469,7 @@ public class LearningQuestionsNew implements Cloneable, Serializable {
     }
 
     public String getAnswer() {
-        return answer!=null?answer:"";
+        return answer != null ? answer : "";
     }
 
     public void setAnswer(String answer) {
@@ -475,7 +485,7 @@ public class LearningQuestionsNew implements Cloneable, Serializable {
     }
 
     public String getQue_option_type() {
-        return que_option_type!=null?que_option_type:"";
+        return que_option_type != null ? que_option_type : "";
     }
 
     public void setQue_option_type(String que_option_type) {
@@ -491,7 +501,7 @@ public class LearningQuestionsNew implements Cloneable, Serializable {
     }
 
     public String getAns_mediaId() {
-        return ans_mediaId!=null?ans_mediaId:"";
+        return ans_mediaId != null ? ans_mediaId : "";
     }
 
     public void setAns_mediaId(String ans_mediaId) {
@@ -507,7 +517,7 @@ public class LearningQuestionsNew implements Cloneable, Serializable {
     }
 
     public String getSubject_id() {
-        return subject_id!=null?subject_id:"";
+        return subject_id != null ? subject_id : "";
     }
 
     public void setSubject_id(String subject_id) {
@@ -523,7 +533,7 @@ public class LearningQuestionsNew implements Cloneable, Serializable {
     }
 
     public String getTrending() {
-        return trending!=null?trending:"";
+        return trending != null ? trending : "";
     }
 
     public void setTrending(String trending) {
@@ -531,7 +541,7 @@ public class LearningQuestionsNew implements Cloneable, Serializable {
     }
 
     public String getPopular() {
-        return popular!=null?popular:"";
+        return popular != null ? popular : "";
     }
 
     public void setPopular(String popular) {
@@ -539,7 +549,7 @@ public class LearningQuestionsNew implements Cloneable, Serializable {
     }
 
     public String getRecent() {
-        return recent!=null?recent:"";
+        return recent != null ? recent : "";
     }
 
     public void setRecent(String recent) {
@@ -547,15 +557,15 @@ public class LearningQuestionsNew implements Cloneable, Serializable {
     }
 
     public int getQueTextviwVisibility() {
-        return getQuestion().contains("$") ? 2 :0;
+        return getQuestion().contains("$") ? 2 : 0;
     }
 
     public int getQueMathviwVisibility() {
-        return getQuestion().contains("$") ? 0 :2;
+        return getQuestion().contains("$") ? 0 : 2;
     }
 
     public String getImageList() {
-        String imglist="";
+        String imglist = "";
 
 
         List<String> img = new ArrayList<>();
@@ -575,10 +585,10 @@ public class LearningQuestionsNew implements Cloneable, Serializable {
             }
         }
 
-        if (img.size()>0)
-        imglist = StringUtils.join(img,",");
+        if (img.size() > 0)
+            imglist = StringUtils.join(img, ",");
 
-        if (que_images!=null)
+        if (que_images != null)
             imglist = imglist + que_images;
 
         return imglist;
