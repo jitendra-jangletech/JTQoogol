@@ -35,6 +35,7 @@ import com.jangletech.qoogol.model.UploadQuestion;
 import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.ui.learning.SlideshowDialogFragment;
 import com.jangletech.qoogol.util.AppUtils;
+import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.ImageOptimization;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
@@ -91,7 +92,7 @@ public class MtpQuestFragment extends BaseFragment implements SubjectiveAnsDialo
 
         mBinding.saveQuestion.setOnClickListener(v -> addQuestion());
 
-        mBinding.addImages.setOnClickListener(v -> ((MainActivity) getActivity()).openMediaDialog());
+        mBinding.addImages.setOnClickListener(v -> ((MainActivity) getActivity()).openMediaDialog(Constant.QUESTION));
 
         mBinding.reset.setOnClickListener(v -> {
             mBinding.a1.clearCheck();
@@ -266,21 +267,9 @@ public class MtpQuestFragment extends BaseFragment implements SubjectiveAnsDialo
             mBinding.opa2.setError("Please enter option 2.");
             return false;
         } else if (mBinding.opb2.getText().toString().isEmpty()) {
-            mBinding.opb2.setError("Please enter option 1.");
+            mBinding.opb2.setError("Please enter option 2.");
             return false;
-        } else if (mBinding.opa3.getText().toString().isEmpty()) {
-            mBinding.opa3.setError("Please enter option 1.");
-            return false;
-        } else if (mBinding.opb3.getText().toString().isEmpty()) {
-            mBinding.opb3.setError("Please enter option 1.");
-            return false;
-        } else if (mBinding.opa4.getText().toString().isEmpty()) {
-            mBinding.opa4.setError("Please enter option 1.");
-            return false;
-        } else if (mBinding.opb4.getText().toString().isEmpty()) {
-            mBinding.opb4.setError("Please enter option 1.");
-            return false;
-        } else if (id1 == -1 || id2 == -1 || id3 == -1 || id4 == -1) {
+        }  else if (id1 == -1 || id2 == -1 || id3 == -1 || id4 == -1) {
             if (id1 == -1 && id2 == -1 && id3 == -1 && id4 == -1) {
                 return true;
             } else {
@@ -329,7 +318,7 @@ public class MtpQuestFragment extends BaseFragment implements SubjectiveAnsDialo
     }
 
     @Override
-    public void onMediaReceived(int requestCode, int resultCode, Intent data, Uri photouri) {
+    public void onMediaReceived(int requestCode, int resultCode, Intent data, Uri photouri, int optionId) {
         if (requestCode == GALLERY_REQUEST && resultCode == RESULT_OK && data != null) {
             try {
                 ArrayList<Uri> mArrayUri = new ArrayList<>();
@@ -520,8 +509,9 @@ public class MtpQuestFragment extends BaseFragment implements SubjectiveAnsDialo
     }
 
     @Override
-    public void onScanImageClick(Uri uri) {
-        setupPreview(uri);
+    public void onScanImageClick(Uri uri, int opt) {
+        if (opt==Constant.QUESTION)
+            setupPreview(uri);
     }
 
 
@@ -530,7 +520,7 @@ public class MtpQuestFragment extends BaseFragment implements SubjectiveAnsDialo
 
             ProgressDialog.getInstance().show(getActivity());
             MultipartBody.Part[] queImagesParts = null;
-            String images = "";
+            String images = "", pair1 = "", pair2 = "", pair3 = "", pair4 = "";
             if (mAllUri != null && mAllUri.size() > 0) {
                 try {
                     queImagesParts = new MultipartBody.Part[mAllUri.size()];
@@ -580,6 +570,11 @@ public class MtpQuestFragment extends BaseFragment implements SubjectiveAnsDialo
 
             String user_id = new PreferenceManager(getActivity()).getUserId();
 
+            pair1 = mBinding.opa1.getText().toString() + "::" + mBinding.opb1.getText().toString();
+            pair2 = mBinding.opa2.getText().toString() + "::" + mBinding.opb2.getText().toString();
+            pair3 = mBinding.opa3.getText().toString() + "::" + mBinding.opb3.getText().toString();
+            pair4 = mBinding.opa4.getText().toString() + "::" + mBinding.opb4.getText().toString();
+
             UploadQuestion uploadQuestion = (UploadQuestion) getArguments().getSerializable("Question");
             RequestBody userId = RequestBody.create(MediaType.parse("multipart/form-data"), user_id);
             RequestBody appname = RequestBody.create(MediaType.parse("multipart/form-data"), qoogol);
@@ -587,7 +582,11 @@ public class MtpQuestFragment extends BaseFragment implements SubjectiveAnsDialo
             RequestBody subId = RequestBody.create(MediaType.parse("multipart/form-data"), uploadQuestion.getSubjectId());
             RequestBody question = RequestBody.create(MediaType.parse("multipart/form-data"), AppUtils.encodedString(mBinding.etQuestion.getText().toString()));
             RequestBody questiondesc = RequestBody.create(MediaType.parse("multipart/form-data"), AppUtils.encodedString(mBinding.etQuestionDesc.getText().toString()));
-            RequestBody type = RequestBody.create(MediaType.parse("multipart/form-data"), SCQ);
+            RequestBody type = RequestBody.create(MediaType.parse("multipart/form-data"), MATCH_PAIR);
+            RequestBody selectedpair1 = RequestBody.create(MediaType.parse("multipart/form-data"), pair1);
+            RequestBody selectedpair2 = RequestBody.create(MediaType.parse("multipart/form-data"), pair2);
+            RequestBody selectedpair3 = RequestBody.create(MediaType.parse("multipart/form-data"), pair3);
+            RequestBody selectedpair4 = RequestBody.create(MediaType.parse("multipart/form-data"), pair4);
             RequestBody marks = RequestBody.create(MediaType.parse("multipart/form-data"), mBinding.edtmarks.getText().toString());
             RequestBody duration = RequestBody.create(MediaType.parse("multipart/form-data"), mBinding.edtduration.getText().toString());
             RequestBody difflevel = RequestBody.create(MediaType.parse("multipart/form-data"), getSelectedDiffLevel());
@@ -596,8 +595,8 @@ public class MtpQuestFragment extends BaseFragment implements SubjectiveAnsDialo
 
 
 
-            Call<ResponseObj> call = getApiService().addTFQuestionsApi(userId, appname, deviceId,
-                    subId, question, questiondesc, type, marks, duration, difflevel, ans, imgname, queImagesParts);
+            Call<ResponseObj> call = getApiService().addSCQQuestionsApi(userId, appname, deviceId,
+                    subId, question, questiondesc, type, selectedpair1, selectedpair2, selectedpair3, selectedpair4, marks, duration, difflevel, ans, imgname, queImagesParts);
             call.enqueue(new Callback<ResponseObj>() {
                 @Override
                 public void onResponse(Call<ResponseObj> call, retrofit2.Response<ResponseObj> response) {

@@ -36,7 +36,6 @@ import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.VideoActivity;
 import com.jangletech.qoogol.activities.MainActivity;
 import com.jangletech.qoogol.adapter.AdapterGallerySelectedImage;
-import com.jangletech.qoogol.adapter.PdfImageAdapter;
 import com.jangletech.qoogol.databinding.FragmentScqQueBinding;
 import com.jangletech.qoogol.dialog.AnsScanDialog;
 import com.jangletech.qoogol.dialog.ProgressDialog;
@@ -46,6 +45,7 @@ import com.jangletech.qoogol.model.UploadQuestion;
 import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.ui.learning.SlideshowDialogFragment;
 import com.jangletech.qoogol.util.AppUtils;
+import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.ImageOptimization;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
@@ -136,7 +136,7 @@ public class SCQ_QueFragment extends BaseFragment implements AnsScanDialog.AnsSc
 
         mBinding.saveQuestion.setOnClickListener(v -> addQuestion());
 
-        mBinding.addImages.setOnClickListener(v -> ((MainActivity) getActivity()).openMediaDialog());
+        mBinding.addImages.setOnClickListener(v -> ((MainActivity) getActivity()).openMediaDialog(Constant.QUESTION));
     }
 
 
@@ -562,7 +562,7 @@ public class SCQ_QueFragment extends BaseFragment implements AnsScanDialog.AnsSc
     }
 
     @Override
-    public void onMediaReceived(int requestCode, int resultCode, Intent data, Uri photouri) {
+    public void onMediaReceived(int requestCode, int resultCode, Intent data, Uri photouri, int optionId) {
         if (requestCode == REQUEST_GALLERY && resultCode == RESULT_OK && data != null || requestCode == GALLERY_REQUEST && resultCode == RESULT_OK && data != null) {
             try {
                 ArrayList<Uri> mArrayUri = new ArrayList<>();
@@ -728,7 +728,8 @@ public class SCQ_QueFragment extends BaseFragment implements AnsScanDialog.AnsSc
     }
 
     @Override
-    public void onScanImageClick(Uri uri) {
-        setupPreview(uri);
+    public void onScanImageClick(Uri uri, int opt) {
+        if (opt==Constant.QUESTION)
+            setupPreview(uri);
     }
 }

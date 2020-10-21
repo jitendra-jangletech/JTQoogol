@@ -1,27 +1,11 @@
 package com.jangletech.qoogol.ui.upload_question;
 
-
-import android.Manifest;
 import android.content.ClipData;
-import android.content.ContentValues;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.util.SparseArray;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.webkit.MimeTypeMap;
-import android.widget.RadioButton;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -30,21 +14,27 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.vision.Frame;
-import com.google.android.gms.vision.text.TextBlock;
-import com.google.android.gms.vision.text.TextRecognizer;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
+import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.VideoActivity;
 import com.jangletech.qoogol.activities.MainActivity;
 import com.jangletech.qoogol.adapter.AdapterGallerySelectedImage;
-import com.jangletech.qoogol.databinding.FragmentShortAnsQueBinding;
-import com.jangletech.qoogol.dialog.AnsScanDialog;
+import com.jangletech.qoogol.databinding.FragmentMtpImageBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.listeners.QueMediaListener;
 import com.jangletech.qoogol.model.ResponseObj;
 import com.jangletech.qoogol.model.UploadQuestion;
-import com.jangletech.qoogol.retrofit.ApiClient;
-import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.ui.learning.SlideshowDialogFragment;
 import com.jangletech.qoogol.util.AppUtils;
@@ -53,25 +43,11 @@ import com.jangletech.qoogol.util.ImageOptimization;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
 import com.jangletech.qoogol.videocompressions.DialogProcessFile;
-import com.karumi.dexter.Dexter;
-import com.karumi.dexter.MultiplePermissionsReport;
-import com.karumi.dexter.PermissionToken;
-import com.karumi.dexter.listener.PermissionDeniedResponse;
-import com.karumi.dexter.listener.PermissionGrantedResponse;
-import com.karumi.dexter.listener.PermissionRequest;
-import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
-import com.karumi.dexter.listener.single.PermissionListener;
-import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -80,32 +56,43 @@ import retrofit2.Call;
 import retrofit2.Callback;
 
 import static android.app.Activity.RESULT_OK;
+import static com.jangletech.qoogol.util.Constant.A1;
+import static com.jangletech.qoogol.util.Constant.A2;
+import static com.jangletech.qoogol.util.Constant.A3;
+import static com.jangletech.qoogol.util.Constant.A4;
+import static com.jangletech.qoogol.util.Constant.B1;
+import static com.jangletech.qoogol.util.Constant.B2;
+import static com.jangletech.qoogol.util.Constant.B3;
+import static com.jangletech.qoogol.util.Constant.B4;
+import static com.jangletech.qoogol.util.Constant.MATCH_PAIR_IMAGE;
 import static com.jangletech.qoogol.util.Constant.SCQ;
-import static com.jangletech.qoogol.util.Constant.SHORT_ANSWER;
+import static com.jangletech.qoogol.util.Constant.SCQ1;
+import static com.jangletech.qoogol.util.Constant.SCQ2;
+import static com.jangletech.qoogol.util.Constant.SCQ3;
+import static com.jangletech.qoogol.util.Constant.SCQ4;
 import static com.jangletech.qoogol.util.Constant.qoogol;
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class ShortAns_QueFragment extends BaseFragment implements AnsScanDialog.AnsScannerListener, QueMediaListener {
+public class MTPImageFragment extends BaseFragment implements QueMediaListener {
 
-    private FragmentShortAnsQueBinding mBinding;
-    private UploadQuestion uploadQuestion;
-    ApiInterface apiService = ApiClient.getInstance().getApi();
-    private static final int REQUEST_GALLERY = 0;
-    private static final int REQUEST_CAMERA = 1;
-    private Uri imageUri;
-    private int ansId;
-    private static final String TAG = "ShortAns_QueFragment";
+    FragmentMtpImageBinding mBinding;
     private static final int CAMERA_REQUEST = 1, GALLERY_REQUEST = 2, PICKFILE_REQUEST_CODE = 3, VIDEO_REQUEST = 4, AUDIO_REQUEST = 5;
     public ArrayList<Uri> mAllUri = new ArrayList<>();
     private AdapterGallerySelectedImage galleryAdapter;
+    private Uri[] mOptionsUri = new Uri[8];
+    private static final String TAG = "MTPImageFragment";
+    private UploadQuestion uploadQuestion;
 
+      @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_short_ans__que, container, false);
+        // Inflate the layout for this fragment
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_mtp_image, container, false);
         ((MainActivity) getActivity()).setOnDataListener(this);
         return mBinding.getRoot();
     }
@@ -115,21 +102,48 @@ public class ShortAns_QueFragment extends BaseFragment implements AnsScanDialog.
         super.onActivityCreated(savedInstanceState);
         if (getArguments() != null && getArguments().getSerializable("Question") != null) {
             uploadQuestion = (UploadQuestion) getArguments().getSerializable("Question");
-            mBinding.questionEdittext.setText(uploadQuestion.getQuestDescription());
+            mBinding.etQuestion.setText(uploadQuestion.getQuestDescription());
             mBinding.subject.setText("Subject : " + uploadQuestion.getSubjectName());
         }
+
         initSelectedImageView();
+
+
+        mBinding.image1.setOnClickListener(v -> {
+            ((MainActivity) getActivity()).openMediaDialog(A1);
+        });
+
+        mBinding.image2.setOnClickListener(v -> {
+            ((MainActivity) getActivity()).openMediaDialog(B1);
+        });
+
+        mBinding.image3.setOnClickListener(v -> {
+            ((MainActivity) getActivity()).openMediaDialog(A2);
+        });
+
+        mBinding.image4.setOnClickListener(v -> {
+            ((MainActivity) getActivity()).openMediaDialog(B2);
+        });
+
+        mBinding.image5.setOnClickListener(v -> {
+            ((MainActivity) getActivity()).openMediaDialog(A3);
+        });
+
+        mBinding.image6.setOnClickListener(v -> {
+            ((MainActivity) getActivity()).openMediaDialog(B3);
+        });
+
+        mBinding.image7.setOnClickListener(v -> {
+            ((MainActivity) getActivity()).openMediaDialog(A4);
+        });
+
+        mBinding.image8.setOnClickListener(v -> {
+            ((MainActivity) getActivity()).openMediaDialog(B4);
+        });
 
         mBinding.saveQuestion.setOnClickListener(v -> addQuestion());
 
         mBinding.addImages.setOnClickListener(v -> ((MainActivity) getActivity()).openMediaDialog(Constant.QUESTION));
-
-        mBinding.saveQuestion.setOnClickListener(v -> addQuestion());
-
-        mBinding.ansEdit.setOnClickListener(v -> {
-            new AnsScanDialog(getActivity(), 1, this)
-                    .show();
-        });
     }
 
     private void initSelectedImageView() {
@@ -222,7 +236,7 @@ public class ShortAns_QueFragment extends BaseFragment implements AnsScanDialog.
 
             ProgressDialog.getInstance().show(getActivity());
             MultipartBody.Part[] queImagesParts = null;
-            String images = "";
+            String images = "", pair1 = "", pair2 = "", pair3 = "", pair4 = "";
             if (mAllUri != null && mAllUri.size() > 0) {
                 try {
                     queImagesParts = new MultipartBody.Part[mAllUri.size()];
@@ -272,22 +286,36 @@ public class ShortAns_QueFragment extends BaseFragment implements AnsScanDialog.
 
             String user_id = new PreferenceManager(getActivity()).getUserId();
 
+            String op5 = mOptionsUri[5]!=null?AppUtils.encodedString(mOptionsUri[5].toString()):"";
+            String op6 = mOptionsUri[7]!=null?AppUtils.encodedString(mOptionsUri[75].toString()):"";
+
+            pair1 = AppUtils.encodedString(mOptionsUri[0].toString()) + "::" + AppUtils.encodedString(mOptionsUri[1].toString());
+            pair2 = AppUtils.encodedString(mOptionsUri[2].toString()) + "::" + AppUtils.encodedString(mOptionsUri[3].toString());
+            pair3 =  mOptionsUri[4] !=null ? AppUtils.encodedString(mOptionsUri[4].toString()) :"" + "::" + op5 ;
+            pair4 =mOptionsUri[6] !=null? AppUtils.encodedString(mOptionsUri[6].toString()) :"" + "::" + op6;
+
             UploadQuestion uploadQuestion = (UploadQuestion) getArguments().getSerializable("Question");
             RequestBody userId = RequestBody.create(MediaType.parse("multipart/form-data"), user_id);
             RequestBody appname = RequestBody.create(MediaType.parse("multipart/form-data"), qoogol);
             RequestBody deviceId = RequestBody.create(MediaType.parse("multipart/form-data"), getDeviceId(getActivity()));
             RequestBody subId = RequestBody.create(MediaType.parse("multipart/form-data"), uploadQuestion.getSubjectId());
-            RequestBody question = RequestBody.create(MediaType.parse("multipart/form-data"), AppUtils.encodedString(mBinding.questionEdittext.getText().toString()));
-            RequestBody questiondesc = RequestBody.create(MediaType.parse("multipart/form-data"), AppUtils.encodedString(mBinding.questiondescEdittext.getText().toString()));
-            RequestBody type = RequestBody.create(MediaType.parse("multipart/form-data"), SHORT_ANSWER);
+            RequestBody question = RequestBody.create(MediaType.parse("multipart/form-data"), AppUtils.encodedString(mBinding.etQuestion.getText().toString()));
+            RequestBody questiondesc = RequestBody.create(MediaType.parse("multipart/form-data"), AppUtils.encodedString(mBinding.etQuestionDesc.getText().toString()));
+            RequestBody type = RequestBody.create(MediaType.parse("multipart/form-data"), MATCH_PAIR_IMAGE);
+            RequestBody selectedpair1 = RequestBody.create(MediaType.parse("multipart/form-data"), pair1);
+            RequestBody selectedpair2 = RequestBody.create(MediaType.parse("multipart/form-data"), pair2);
+            RequestBody selectedpair3 = RequestBody.create(MediaType.parse("multipart/form-data"), pair3);
+            RequestBody selectedpair4 = RequestBody.create(MediaType.parse("multipart/form-data"), pair4);
             RequestBody marks = RequestBody.create(MediaType.parse("multipart/form-data"), mBinding.edtmarks.getText().toString());
             RequestBody duration = RequestBody.create(MediaType.parse("multipart/form-data"), mBinding.edtduration.getText().toString());
             RequestBody difflevel = RequestBody.create(MediaType.parse("multipart/form-data"), getSelectedDiffLevel());
-            RequestBody ans = RequestBody.create(MediaType.parse("multipart/form-data"), mBinding.answerEdittext.getText().toString());
+            RequestBody ans = RequestBody.create(MediaType.parse("multipart/form-data"), getSelectedAns());
             RequestBody imgname = RequestBody.create(MediaType.parse("multipart/form-data"), images);
 
-            Call<ResponseObj> call = getApiService().addSubjectiveQuestionsApi(userId, appname, deviceId,
-                    subId, question, questiondesc, type, marks, duration, difflevel, ans, imgname, queImagesParts);
+
+
+            Call<ResponseObj> call = getApiService().addSCQQuestionsApi(userId, appname, deviceId,
+                    subId, question, questiondesc, type, selectedpair1, selectedpair2, selectedpair3, selectedpair4, marks, duration, difflevel, ans, imgname, queImagesParts);
             call.enqueue(new Callback<ResponseObj>() {
                 @Override
                 public void onResponse(Call<ResponseObj> call, retrofit2.Response<ResponseObj> response) {
@@ -328,196 +356,85 @@ public class ShortAns_QueFragment extends BaseFragment implements AnsScanDialog.
         return level.replace("Easy", "E").replace("Medium", "M").replace("Hard", "h");
     }
 
+    private String getSelectedAns() {
+        int id1 = mBinding.a1.getCheckedRadioButtonId();
+        int id2 = mBinding.a2.getCheckedRadioButtonId();
+        int id3 = mBinding.a3.getCheckedRadioButtonId();
+        int id4 = mBinding.a4.getCheckedRadioButtonId();
+        if (id1 == -1 && id2 == -1 && id3 == -1 && id4 == -1) {
+            return "";
+        } else {
+            String ans = "";
+            View radioButton1 = mBinding.a1.findViewById(id1);
+            int idx1 = mBinding.a1.indexOfChild(radioButton1);
+            RadioButton r1 = (RadioButton) mBinding.a1.getChildAt(idx1);
+            ans = "A1::" + r1.getText().toString();
+
+            View radioButton2 = mBinding.a2.findViewById(id2);
+            int idx2 = mBinding.a2.indexOfChild(radioButton2);
+            RadioButton r2 = (RadioButton) mBinding.a2.getChildAt(idx2);
+            ans = ans + "A1::" + r2.getText().toString();
+
+            View radioButton3 = mBinding.a3.findViewById(id3);
+            int idx3 = mBinding.a3.indexOfChild(radioButton3);
+            RadioButton r3 = (RadioButton) mBinding.a3.getChildAt(idx3);
+            ans = ans + "A1::" + r3.getText().toString();
+
+            View radioButton4 = mBinding.a4.findViewById(id4);
+            int idx4 = mBinding.a4.indexOfChild(radioButton4);
+            RadioButton r4 = (RadioButton) mBinding.a4.getChildAt(idx4);
+            ans = ans + "A1::" + r4.getText().toString();
+
+            return ans;
+
+        }
+    }
+
     private boolean isValidate() {
+        int id1 = mBinding.a1.getCheckedRadioButtonId();
+        int id2 = mBinding.a2.getCheckedRadioButtonId();
+        int id3 = mBinding.a3.getCheckedRadioButtonId();
+        int id4 = mBinding.a4.getCheckedRadioButtonId();
+
         if (mBinding.subject.getText().toString().isEmpty()) {
             mBinding.subject.setError("Please select subject.");
             return false;
-        }
-        if (mBinding.questionEdittext.getText().toString().isEmpty()) {
-            mBinding.questionEdittext.setError("Please enter question.");
+        } else if (mBinding.etQuestion.getText().toString().isEmpty()) {
+            mBinding.etQuestion.setError("Please enter question.");
             return false;
+        } else if (mOptionsUri[0]==null) {
+            Toast.makeText(getActivity(), "Please select minimum 2 option pairs", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (mOptionsUri[1]==null) {
+            Toast.makeText(getActivity(), "Please select minimum 2 option pairs", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (mOptionsUri[2]==null) {
+            Toast.makeText(getActivity(), "Please select minimum 2 option pairs", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (mOptionsUri[3]==null) {
+            Toast.makeText(getActivity(), "Please select minimum 2 option pairs", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (id1 == -1 || id2 == -1 || id3 == -1 || id4 == -1) {
+            if (id1 == -1 && id2 == -1 && id3 == -1 && id4 == -1) {
+                return true;
+            } else {
+                Toast.makeText(getActivity(), "Please select all radio options or reset all", Toast.LENGTH_SHORT).show();
+                return false;
+            }
         } else {
             return true;
         }
     }
 
-    @Override
-    public void onCamScannerClick(int id) {
-        ansId = id;
-        Dexter.withActivity(getActivity())
-                .withPermissions(
-                        Manifest.permission.CAMERA,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE
-                ).withListener(new MultiplePermissionsListener() {
-            @Override
-            public void onPermissionsChecked(MultiplePermissionsReport report) {
-                if (report.areAllPermissionsGranted()) {
-                    String filename = System.currentTimeMillis() + ".jpg";
-                    ContentValues values = new ContentValues();
-                    values.put(MediaStore.Images.Media.TITLE, filename);
-                    values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
-                    imageUri = getActivity().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-
-                    Intent intent = new Intent();
-                    intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-                    intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-                    startActivityForResult(intent, REQUEST_CAMERA);
-                    //dispatchTakePictureIntent();
-                } else {
-                    Log.e(TAG, "onPermissionsChecked Error : ");
-                }
-            }
-
-            @Override
-            public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {/* ... */}
-        }).check();
-
+    private void setImage(Uri path, ImageView img) {
+        Glide.with(getActivity())
+                .load(path)
+                .transition(DrawableTransitionOptions.withCrossFade())
+                .diskCacheStrategy(DiskCacheStrategy.DATA)
+                .error(R.drawable.ic_broken_image)
+                .into(img);
     }
 
-    @Override
-    public void onGalleryClick(int id) {
-        ansId = id;
-        Dexter.withActivity(getActivity())
-                .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                .withListener(new PermissionListener() {
-                    @Override
-                    public void onPermissionGranted(PermissionGrantedResponse response) {
-                        Intent i = new Intent(
-                                Intent.ACTION_PICK,
-                                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                        startActivityForResult(i, REQUEST_GALLERY);
-                    }
-
-                    @Override
-                    public void onPermissionDenied(PermissionDeniedResponse response) {
-                        Toast.makeText(getActivity(), "Storage permission denied.", Toast.LENGTH_LONG).show();
-                    }
-
-                    @Override
-                    public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
-                        token.continuePermissionRequest();
-                    }
-                })
-                .withErrorListener(error ->
-                        Toast.makeText(getActivity(), "Error occurred! ", Toast.LENGTH_SHORT).show())
-                .onSameThread()
-                .check();
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_GALLERY && resultCode == RESULT_OK && data != null) {
-            try {
-                CropImage.activity(data.getData())
-                        .start(getContext(), this);
-            } catch (Exception e) {
-                e.printStackTrace();
-                Log.e(TAG, "onFailure onActivityResult: " + e.getMessage());
-                Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_LONG).show();
-            }
-        }
-        if (requestCode == REQUEST_CAMERA) {
-            Log.d(TAG, "onActivityResult REQUEST_CAMERA: " + imageUri);
-            try {
-                CropImage.activity(imageUri)
-                        .start(getContext(), this);
-            } catch (Exception e) {
-                e.printStackTrace();
-                Log.e(TAG, "onFailure onActivityResult: " + e.getMessage());
-                Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_LONG).show();
-            }
-        }
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE &&
-                resultCode == RESULT_OK && data != null) {
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            if (result != null && resultCode == RESULT_OK) {
-                inspect(result.getUri());
-            }
-        }
-    }
-
-    private void inspect(Uri uri) {
-        Log.d(TAG, "inspect Uri : " + uri);
-        InputStream is = null;
-        Bitmap bitmap = null;
-        try {
-            is = getActivity().getContentResolver().openInputStream(uri);
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-            options.inSampleSize = 2;
-            options.inScreenDensity = DisplayMetrics.DENSITY_LOW;
-            bitmap = BitmapFactory.decodeStream(is, null, options);
-            inspectFromBitmap(bitmap);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            Log.w(TAG, "Failed to find the file: " + uri, e);
-        } finally {
-
-            if (bitmap != null && !bitmap.isRecycled()) {
-                bitmap.recycle();
-                bitmap = null;
-            }
-
-            if (is != null) {
-                try {
-                    is.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    Log.w(TAG, "Failed to close InputStream", e);
-                }
-            }
-        }
-    }
-
-    private void inspectFromBitmap(Bitmap bitmap) {
-        TextRecognizer textRecognizer = new TextRecognizer.Builder(getActivity()).build();
-        try {
-            if (!textRecognizer.isOperational()) {
-                new AlertDialog.
-                        Builder(getActivity()).
-                        setMessage("Text recognizer could not be set up on your device").show();
-                return;
-            }
-
-            Frame frame = new Frame.Builder().setBitmap(bitmap).build();
-            SparseArray<TextBlock> origTextBlocks = textRecognizer.detect(frame);
-            List<TextBlock> textBlocks = new ArrayList<>();
-            for (int i = 0; i < origTextBlocks.size(); i++) {
-                TextBlock textBlock = origTextBlocks.valueAt(i);
-                textBlocks.add(textBlock);
-            }
-            Collections.sort(textBlocks, new Comparator<TextBlock>() {
-                @Override
-                public int compare(TextBlock o1, TextBlock o2) {
-                    int diffOfTops = o1.getBoundingBox().top - o2.getBoundingBox().top;
-                    int diffOfLefts = o1.getBoundingBox().left - o2.getBoundingBox().left;
-                    if (diffOfTops != 0) {
-                        return diffOfTops;
-                    }
-                    return diffOfLefts;
-                }
-            });
-
-            StringBuilder detectedText = new StringBuilder();
-            for (TextBlock textBlock : textBlocks) {
-                if (textBlock != null && textBlock.getValue() != null) {
-                    detectedText.append(textBlock.getValue());
-                    detectedText.append("\n");
-                }
-            }
-            setScanAns(detectedText.toString().trim());
-
-        } finally {
-            textRecognizer.release();
-        }
-    }
-
-    private void setScanAns(String text) {
-        if (ansId == 1)
-            mBinding.answerEdittext.setText(text);
-
-    }
 
     @Override
     public void onMediaReceived(int requestCode, int resultCode, Intent data, Uri photouri, int optionId) {
@@ -535,24 +452,15 @@ public class ShortAns_QueFragment extends BaseFragment implements AnsScanDialog.
                             ClipData.Item item = mClipData.getItemAt(i);
                             Uri uri = item.getUri();
                             mArrayUri.add(uri);
-                            if (mAllUri.size() > 3) {
-                                Toast.makeText(getActivity(), "A maximum of 4 media can be uploaded at once.", Toast.LENGTH_LONG).show();
-                            } else {
-                                setupPreview(uri);
-                            }
-
+                            loadImage(uri, optionId);
                         }
                     }
                 } else if (data.getData() != null) {
-                    if (mAllUri.size() > 3) {
-                        Toast.makeText(getActivity(), "A maximum of 4 media can be uploaded at once.", Toast.LENGTH_LONG).show();
-                    } else {
-                        try {
-                            final Uri imageUri = data.getData();
-                            setupPreview(imageUri);
-                        } catch (Exception e) {
-                            Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_LONG).show();
-                        }
+                    try {
+                        final Uri imageUri = data.getData();
+                        loadImage(imageUri, optionId);
+                    } catch (Exception e) {
+                        Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_LONG).show();
                     }
                 }
             } catch (Exception e) {
@@ -561,11 +469,7 @@ public class ShortAns_QueFragment extends BaseFragment implements AnsScanDialog.
                 Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_LONG).show();
             }
         } else if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
-            if (mAllUri.size() > 3) {
-                Toast.makeText(getActivity(), "A maximum of 4 media can be uploaded at once.", Toast.LENGTH_LONG).show();
-            } else {
-                setupPreview(photouri);
-            }
+            loadImage(photouri, optionId);
         } else if (requestCode == VIDEO_REQUEST && resultCode == RESULT_OK && data != null) {
             try {
                 ArrayList<Uri> video_uri = new ArrayList<>();
@@ -687,7 +591,43 @@ public class ShortAns_QueFragment extends BaseFragment implements AnsScanDialog.
 
     @Override
     public void onScanImageClick(Uri uri, int opt) {
-        if (opt==Constant.QUESTION)
-            setupPreview(uri);
+        loadImage(uri, opt);
+    }
+
+    private void loadImage(Uri uri, int opt) {
+        try {
+            if (opt == Constant.QUESTION) {
+                if (mAllUri.size() > 3)
+                    Toast.makeText(getActivity(), "A maximum of 4 media can be uploaded at once.", Toast.LENGTH_LONG).show();
+                else
+                    setupPreview(uri);
+            } else if (opt==A1) {
+                mOptionsUri[0] = uri;
+                setImage(uri,mBinding.image1);
+            }else if (opt==B1) {
+                mOptionsUri[1] = uri;
+                setImage(uri,mBinding.image2);
+            } else if (opt==A2) {
+                mOptionsUri[2] = uri;
+                setImage(uri,mBinding.image3);
+            } else if (opt==B2) {
+                mOptionsUri[3] = uri;
+                setImage(uri,mBinding.image4);
+            }  else if (opt==A3){
+                mOptionsUri[4] = uri;
+                setImage(uri,mBinding.image5);
+            } else if (opt==B3){
+                mOptionsUri[5] = uri;
+                setImage(uri,mBinding.image6);
+            }else if (opt==A4){
+                mOptionsUri[6] = uri;
+                setImage(uri,mBinding.image7);
+            }else if (opt==B4){
+                mOptionsUri[7] = uri;
+                setImage(uri,mBinding.image8);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

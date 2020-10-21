@@ -491,7 +491,10 @@ public class Constant {
     public static final String fill_the_blanks = "Fill in the Blanks";
     public static final String true_false = "True False";
     public static final String scq_image = "Scq Image";
+    public static final String scq_imagetxt = "Scq Image with Text";
+    public static final String mcq_imagetxt = "Mcq Image with Text";
     public static final String mcq_image = "Mcq Image";
+    public static final String mtp_image = "Match the Pair Image";
     public static final String match_pair = "Match the Pair";
 
     public static final String tm_user_id = "1202";
@@ -578,7 +581,6 @@ public class Constant {
     public static final String q_cm_id = "1326";
     public static final String q_md_id = "1327";
     public static final String q_sm_id = "1328";
-    public static final String q_up_u_id = "1329";
     public static final String q_credit = "1330";
     public static final String q_mcq_op_1 = "1331";
     public static final String q_mcq_op_2 = "1332";
@@ -842,6 +844,8 @@ public class Constant {
     public static final String w_media_paths = "1703";
     public static final String SCR_CO_ID = "2672";
 
+    public static final String q_user_id = "1329";
+
     public static final String comment_like_flag = "1705";
 
 
@@ -850,4 +854,23 @@ public class Constant {
     public static final String crms_cdatetime = "380";
     public static final String crms_likes = "383D";
     public static final String crms_views = "383C";
+
+
+
+    //Call from
+    public static final int ADD = 0;
+    public static final int UPDATE = 1;
+    public static final int QUESTION = 0;
+    public static final int SCQ1 = 1;
+    public static final int SCQ2 = 2;
+    public static final int SCQ3 = 3;
+    public static final int SCQ4 = 4;
+    public static final int A1 = 1;
+    public static final int B1 = 2;
+    public static final int A2 = 3;
+    public static final int B2 = 4;
+    public static final int A3 = 5;
+    public static final int B3 = 6;
+    public static final int A4 = 7;
+    public static final int B4 = 8;
 }

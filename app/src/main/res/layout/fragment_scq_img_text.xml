@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/_10sdp">
+
+            <TextView
+                android:id="@+id/subject"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top"
+                android:text="Subject : "
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/_12ssp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/etQuestion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:background="@drawable/grey_border"
+                android:gravity="top"
+                android:hint="Question"
+                android:minLines="2"
+                android:maxLines="10"
+                android:textColor="@color/colorBlack"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/subject" />
+
+            <EditText
+                android:id="@+id/etQuestionDesc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:background="@drawable/grey_border"
+                android:gravity="top"
+                android:hint="Question description"
+                android:minLines="3"
+                android:maxLines="10"
+                android:textColor="@color/colorBlack"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/etQuestion" />
+
+
+            <TextView
+                android:layout_marginTop="@dimen/_8sdp"
+                android:id="@+id/add_images"
+                android:textColor="@color/colorSkyBlue"
+                android:text="Add question media"
+                app:layout_constraintTop_toBottomOf="@+id/etQuestionDesc"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/queimg_recycler"
+                android:layout_width="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:visibility="gone"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/add_images"
+                android:layout_height="wrap_content"/>
+
+
+            <LinearLayout
+                android:id="@+id/imageLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@+id/queimg_recycler">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <LinearLayout
+                        android:layout_weight="1"
+                        android:weightSum="2"
+                        android:orientation="vertical"
+                        android:layout_width="0dp"
+                        android:layout_marginRight="@dimen/_4sdp"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:layout_weight="1"
+                            android:id="@+id/image1"
+                            android:layout_width="match_parent"
+                            android:scaleType="fitXY"
+                            android:layout_height="@dimen/_135sdp"
+                            android:layout_marginRight="@dimen/_4sdp"
+                            android:src="@drawable/add_grey" />
+
+                        <EditText
+                            android:textAlignment="center"
+                            android:layout_marginTop="0dp"
+                            android:paddingTop="0dp"
+                            android:id="@+id/text1"
+                            android:hint="A1 text"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/_11ssp"
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_weight="1"
+                        android:weightSum="2"
+                        android:orientation="vertical"
+                        android:layout_width="0dp"
+                        android:layout_marginLeft="@dimen/_4sdp"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:layout_weight="1"
+                            android:id="@+id/image2"
+                            android:layout_width="@dimen/_135sdp"
+                            android:layout_height="@dimen/_135sdp"
+                            android:src="@drawable/add_grey" />
+
+                        <EditText
+                            android:layout_marginTop="0dp"
+                            android:paddingTop="0dp"
+                            android:textAlignment="center"
+                            android:id="@+id/text2"
+                            android:hint="A1 text"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/_11ssp"
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <LinearLayout
+                        android:layout_weight="1"
+                        android:weightSum="2"
+                        android:orientation="vertical"
+                        android:layout_width="0dp"
+                        android:layout_marginRight="@dimen/_4sdp"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:layout_weight="1"
+                            android:id="@+id/image3"
+                            android:layout_width="match_parent"
+                            android:scaleType="fitXY"
+                            android:layout_height="@dimen/_135sdp"
+                            android:layout_marginRight="@dimen/_4sdp"
+                            android:src="@drawable/add_grey" />
+
+                        <EditText
+                            android:textAlignment="center"
+                            android:layout_marginTop="0dp"
+                            android:paddingTop="0dp"
+                            android:id="@+id/text3"
+                            android:hint="A1 text"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/_11ssp"
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_weight="1"
+                        android:weightSum="2"
+                        android:orientation="vertical"
+                        android:layout_width="0dp"
+                        android:layout_marginLeft="@dimen/_4sdp"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:layout_weight="1"
+                            android:id="@+id/image4"
+                            android:layout_width="@dimen/_135sdp"
+                            android:layout_height="@dimen/_135sdp"
+                            android:src="@drawable/add_grey" />
+
+                        <EditText
+                            android:layout_marginTop="0dp"
+                            android:paddingTop="0dp"
+                            android:textAlignment="center"
+                            android:id="@+id/text4"
+                            android:hint="A1 text"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/_11ssp"
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_marginTop="@dimen/_15sdp"
+                android:id="@+id/additional_label"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/_12ssp"
+                android:text="Additional Details:"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <LinearLayout
+                android:id="@+id/marks_layout"
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/additional_label"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:layout_width="0dp"
+                    android:id="@+id/edtmarks"
+                    android:layout_weight="1"
+                    android:hint="Marks"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/_12ssp"
+                    android:inputType="number"
+                    android:maxLength="5"
+                    android:layout_marginRight="@dimen/_5sdp"
+                    android:layout_height="wrap_content"/>
+
+                <EditText
+                    android:layout_width="0dp"
+                    android:id="@+id/edtduration"
+                    android:hint="Duration"
+                    android:inputType="number"
+                    android:maxLength="5"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/_12ssp"
+                    android:layout_marginLeft="@dimen/_5sdp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/diff_label"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:text="@string/menu_diff_level"
+                android:textSize="@dimen/_12ssp"
+                android:textColor="@color/grey"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/marks_layout"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"/>
+
+            <RadioGroup
+                app:layout_constraintTop_toBottomOf="@+id/diff_label"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:id="@+id/radioDifflevel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:layout_marginEnd="@dimen/_15sdp"
+                    android:id="@+id/radioEasy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/_2sdp"
+                    android:text="Easy" />
+
+                <RadioButton
+                    android:id="@+id/radioMedium"
+                    android:layout_marginEnd="@dimen/_15sdp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/_2sdp"
+                    android:text="Medium" />
+
+                <RadioButton
+                    android:id="@+id/radioHard"
+                    android:layout_marginEnd="@dimen/_15sdp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/_2sdp"
+                    android:text="Hard" />
+
+            </RadioGroup>
+
+
+            <LinearLayout
+                android:id="@+id/imageLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@+id/radioDifflevel">
+
+                <TextView
+                    android:id="@+id/answer_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:hint="@string/select_righ_ans"
+                    android:maxLines="1"
+                    android:textSize="@dimen/_12ssp"
+                    android:textColor="@color/colorBlack"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/scq4_layout" />
+
+                <RadioGroup
+                    app:layout_constraintTop_toBottomOf="@+id/answer_label"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    android:id="@+id/radioGrpAnswer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:layout_marginEnd="@dimen/_15sdp"
+                        android:id="@+id/radioA"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/_2sdp"
+                        android:text="A" />
+
+                    <RadioButton
+                        android:id="@+id/radioB"
+                        android:layout_marginEnd="@dimen/_15sdp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/_2sdp"
+                        android:text="B" />
+
+                    <RadioButton
+                        android:id="@+id/radioC"
+                        android:layout_marginEnd="@dimen/_15sdp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/_2sdp"
+                        android:text="C" />
+
+                    <RadioButton
+                        android:id="@+id/radioD"
+                        android:layout_marginEnd="@dimen/_15sdp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/_2sdp"
+                        android:text="D" />
+                </RadioGroup>
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/save_question"
+                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:layout_marginEnd="@dimen/_2sdp"
+                android:backgroundTint="@color/color_red"
+                android:text="@string/save"
+                android:textAllCaps="false"
+                android:textColor="@color/colorWhite"
+                app:cornerRadius="@dimen/_50sdp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageLayout2" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+</layout>

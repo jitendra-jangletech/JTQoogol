@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
-import android.widget.CompoundButton;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
@@ -33,6 +32,7 @@ import com.jangletech.qoogol.model.UploadQuestion;
 import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.ui.learning.SlideshowDialogFragment;
 import com.jangletech.qoogol.util.AppUtils;
+import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.ImageOptimization;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
@@ -83,7 +83,7 @@ public class TrueFalseFragment extends BaseFragment implements QueMediaListener 
 
         mBinding.saveQuestion.setOnClickListener(v -> addQuestion());
 
-        mBinding.addImages.setOnClickListener(v -> ((MainActivity) getActivity()).openMediaDialog());
+        mBinding.addImages.setOnClickListener(v -> ((MainActivity) getActivity()).openMediaDialog(Constant.QUESTION));
     }
 
     private void initSelectedImageView() {
@@ -208,7 +208,7 @@ public class TrueFalseFragment extends BaseFragment implements QueMediaListener 
             RequestBody subId = RequestBody.create(MediaType.parse("multipart/form-data"), uploadQuestion.getSubjectId());
             RequestBody question = RequestBody.create(MediaType.parse("multipart/form-data"), AppUtils.encodedString(mBinding.etQuestion.getText().toString()));
             RequestBody questiondesc = RequestBody.create(MediaType.parse("multipart/form-data"), AppUtils.encodedString(mBinding.etQuestionDesc.getText().toString()));
-            RequestBody type = RequestBody.create(MediaType.parse("multipart/form-data"), SCQ);
+            RequestBody type = RequestBody.create(MediaType.parse("multipart/form-data"), TRUE_FALSE);
             RequestBody marks = RequestBody.create(MediaType.parse("multipart/form-data"), mBinding.edtmarks.getText().toString());
             RequestBody duration = RequestBody.create(MediaType.parse("multipart/form-data"), mBinding.edtduration.getText().toString());
             RequestBody difflevel = RequestBody.create(MediaType.parse("multipart/form-data"), getSelectedDiffLevel());
@@ -286,7 +286,7 @@ public class TrueFalseFragment extends BaseFragment implements QueMediaListener 
     }
 
     @Override
-    public void onMediaReceived(int requestCode, int resultCode, Intent data, Uri photouri) {
+    public void onMediaReceived(int requestCode, int resultCode, Intent data, Uri photouri, int optionId) {
         if (requestCode == GALLERY_REQUEST && resultCode == RESULT_OK && data != null) {
             try {
                 ArrayList<Uri> mArrayUri = new ArrayList<>();
@@ -477,7 +477,8 @@ public class TrueFalseFragment extends BaseFragment implements QueMediaListener 
     }
 
     @Override
-    public void onScanImageClick(Uri uri) {
-        setupPreview(uri);
+    public void onScanImageClick(Uri uri, int opt) {
+        if (opt==Constant.QUESTION)
+            setupPreview(uri);
     }
 }

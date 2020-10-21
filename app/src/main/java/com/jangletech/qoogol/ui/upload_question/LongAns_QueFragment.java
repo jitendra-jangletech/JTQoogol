@@ -49,6 +49,7 @@ import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.ui.learning.SlideshowDialogFragment;
 import com.jangletech.qoogol.util.AppUtils;
+import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.ImageOptimization;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
@@ -80,7 +81,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 
 import static android.app.Activity.RESULT_OK;
-import static com.jangletech.qoogol.util.AppUtils.getDeviceId;
 import static com.jangletech.qoogol.util.Constant.LONG_ANSWER;
 import static com.jangletech.qoogol.util.Constant.SCQ;
 import static com.jangletech.qoogol.util.Constant.qoogol;
@@ -123,7 +123,7 @@ public class LongAns_QueFragment extends BaseFragment implements AnsScanDialog.A
 
         mBinding.saveQuestion.setOnClickListener(v -> addQuestion());
 
-        mBinding.addImages.setOnClickListener(v -> ((MainActivity) getActivity()).openMediaDialog());
+        mBinding.addImages.setOnClickListener(v -> ((MainActivity) getActivity()).openMediaDialog(Constant.QUESTION));
 
         mBinding.ansEdit.setOnClickListener(v -> {
             new AnsScanDialog(getActivity(), 1, this)
@@ -278,7 +278,7 @@ public class LongAns_QueFragment extends BaseFragment implements AnsScanDialog.A
             RequestBody subId = RequestBody.create(MediaType.parse("multipart/form-data"), uploadQuestion.getSubjectId());
             RequestBody question = RequestBody.create(MediaType.parse("multipart/form-data"), AppUtils.encodedString(mBinding.questionEdittext.getText().toString()));
             RequestBody questiondesc = RequestBody.create(MediaType.parse("multipart/form-data"), AppUtils.encodedString(mBinding.questiondescEdittext.getText().toString()));
-            RequestBody type = RequestBody.create(MediaType.parse("multipart/form-data"), SCQ);
+            RequestBody type = RequestBody.create(MediaType.parse("multipart/form-data"), LONG_ANSWER);
             RequestBody marks = RequestBody.create(MediaType.parse("multipart/form-data"), mBinding.edtmarks.getText().toString());
             RequestBody duration = RequestBody.create(MediaType.parse("multipart/form-data"), mBinding.edtduration.getText().toString());
             RequestBody difflevel = RequestBody.create(MediaType.parse("multipart/form-data"), getSelectedDiffLevel());
@@ -517,7 +517,7 @@ public class LongAns_QueFragment extends BaseFragment implements AnsScanDialog.A
     }
 
     @Override
-    public void onMediaReceived(int requestCode, int resultCode, Intent data, Uri photouri) {
+    public void onMediaReceived(int requestCode, int resultCode, Intent data, Uri photouri, int optionId) {
         if (requestCode == GALLERY_REQUEST && resultCode == RESULT_OK && data != null) {
             try {
                 ArrayList<Uri> mArrayUri = new ArrayList<>();
@@ -683,7 +683,8 @@ public class LongAns_QueFragment extends BaseFragment implements AnsScanDialog.A
     }
 
     @Override
-    public void onScanImageClick(Uri uri) {
-        setupPreview(uri);
+    public void onScanImageClick(Uri uri, int opt) {
+        if (opt==Constant.QUESTION)
+            setupPreview(uri);
     }
 }

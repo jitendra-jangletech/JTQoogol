@@ -9,38 +9,63 @@
         android:id="@+id/nav_home"
         android:name="com.jangletech.qoogol.ui.home.HomeFragment"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home"></fragment>
+        tools:layout="@layout/fragment_home"/>
 
     <fragment
         android:id="@+id/nav_true_false_frag"
         android:name="com.jangletech.qoogol.ui.upload_question.TrueFalseFragment"
         android:label="@string/menu_true_false"
-        tools:layout="@layout/fragment_up_true_false"></fragment>
+        tools:layout="@layout/fragment_up_true_false"/>
 
     <fragment
         android:id="@+id/nav_scq_image"
         android:name="com.jangletech.qoogol.ui.upload_question.ScqUpImageFragment"
         android:label="@string/menu_scq_image"
-        tools:layout="@layout/fragmen_up_scq_image"></fragment>
+        tools:layout="@layout/fragmen_up_scq_image"/>
+
+    <fragment
+        android:id="@+id/nav_mcq_image"
+        android:name="com.jangletech.qoogol.ui.upload_question.MCQImageFragment"
+        android:label="@string/menu_mcq_image"
+        tools:layout="@layout/fragment_mcq_image"/>
+
+    <fragment
+        android:id="@+id/nav_mcq_imagetxt"
+        android:name="com.jangletech.qoogol.ui.upload_question.MCQImgTextFragment"
+        android:label="@string/menu_mcq_imagetxt"
+        tools:layout="@layout/fragment_mcq_img_text"/>
+
+
+    <fragment
+        android:id="@+id/nav_mtp_image"
+        android:name="com.jangletech.qoogol.ui.upload_question.MTPImageFragment"
+        android:label="@string/menu_mtp_image"
+        tools:layout="@layout/fragment_mtp_image"/>
+
+    <fragment
+        android:id="@+id/nav_scq_imagetxt"
+        android:name="com.jangletech.qoogol.ui.upload_question.SCQImgTextFragment"
+        android:label="@string/menu_scq_imagetxt"
+        tools:layout="@layout/fragment_scq_img_text"/>
 
 
     <fragment
         android:id="@+id/nav_fill_the_blanks"
         android:name="com.jangletech.qoogol.ui.upload_question.FillTheBlanksFragment"
         android:label="@string/menu_fill_the_blanks"
-        tools:layout="@layout/fragment_up_fill_the_blanks"></fragment>
+        tools:layout="@layout/fragment_up_fill_the_blanks"/>
 
     <fragment
         android:id="@+id/nav_about"
         android:name="com.jangletech.qoogol.ui.about.AboutFragment"
         android:label="@string/about"
-        tools:layout="@layout/fragment_about"></fragment>
+        tools:layout="@layout/fragment_about"/>
 
     <fragment
         android:id="@+id/nav_code_conduct"
         android:name="com.jangletech.qoogol.ui.CodeConductFragment"
         android:label="@string/code_conduct"
-        tools:layout="@layout/fragment_code_conduct"></fragment>
+        tools:layout="@layout/fragment_code_conduct"/>
 
 
     <fragment
@@ -192,6 +217,12 @@
         android:name="com.jangletech.qoogol.ui.upload_question.UploadQueFragment"
         android:label="@string/upload_que"
         tools:layout="@layout/fragment_upload_que" />
+
+    <fragment
+        android:id="@+id/nav_my_questions"
+        android:name="com.jangletech.qoogol.ui.upload_question.MyQuestionsFragment"
+        android:label="@string/my_que"
+        tools:layout="@layout/fragment_my_questions" />
 
     <fragment
         android:id="@+id/nav_scq_question"
