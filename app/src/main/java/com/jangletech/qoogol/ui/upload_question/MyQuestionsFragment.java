@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -90,6 +91,11 @@ public class MyQuestionsFragment extends BaseFragment implements MyQuestionsAdap
         apiService = ApiClient.getInstance().getApi();
         mSettings = new PreferenceManager(getActivity());
         questionsNewList = new ArrayList<>();
+
+        mBinding.queSwiperefresh.setOnRefreshListener(() -> {
+            pageCount="0";
+            getData();
+        });
         mBinding.queRecycler.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {

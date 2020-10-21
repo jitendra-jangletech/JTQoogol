@@ -49,7 +49,7 @@ public class MyQuestionsAdapter extends RecyclerView.Adapter<MyQuestionsAdapter.
         LearningQuestionsNew learningQuestionsNew = questionsList.get(position);
         holder.itemBinding.question.setText(learningQuestionsNew.getQuestion());
         holder.itemBinding.type.setText("Type : " + learningQuestionsNew.getCategory());
-        holder.itemBinding.marks.setText("Marks : " + learningQuestionsNew.getMarks());
+        holder.itemBinding.marks.setText(learningQuestionsNew.getFormatedMarks());
         holder.itemBinding.question.setText(learningQuestionsNew.getQuestion());
 
         holder.itemBinding.edit.setOnClickListener(v -> {
