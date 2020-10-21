@@ -64,6 +64,13 @@ public class QuestionTypeFragment extends BaseFragment implements View.OnClickLi
                 } else if (uploadQuestion.getQuestionType().equalsIgnoreCase(Constant.scq_image)) {
                     Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_scq_image, bundle);
                 } else if (uploadQuestion.getQuestionType().equalsIgnoreCase(Constant.mcq_image)) {
+                    Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_mcq_image, bundle);
+                }else if (uploadQuestion.getQuestionType().equalsIgnoreCase(Constant.mtp_image)) {
+                    Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_mtp_image, bundle);
+                }else if (uploadQuestion.getQuestionType().equalsIgnoreCase(Constant.scq_imagetxt)) {
+                    Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_scq_imagetxt, bundle);
+                } else if (uploadQuestion.getQuestionType().equalsIgnoreCase(Constant.mcq_imagetxt)) {
+                    Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_mcq_imagetxt, bundle);
                 }
             }else{
                 showToast("Select Question Type.");
@@ -76,12 +83,15 @@ public class QuestionTypeFragment extends BaseFragment implements View.OnClickLi
         que_categoryList.add(Constant.short_ans);
         que_categoryList.add(Constant.long_ans);
         que_categoryList.add(Constant.scq);
+        que_categoryList.add(Constant.scq_image);
+        que_categoryList.add(Constant.scq_imagetxt);
         que_categoryList.add(Constant.mcq);
+        que_categoryList.add(Constant.mcq_image);
+        que_categoryList.add(Constant.mcq_imagetxt);
         que_categoryList.add(Constant.fill_the_blanks);
         que_categoryList.add(Constant.true_false);
         que_categoryList.add(Constant.match_pair);
-        que_categoryList.add(Constant.scq_image);
-        que_categoryList.add(Constant.mcq_image);
+        que_categoryList.add(Constant.mtp_image);
 
         mBinding.chipGrpQuestType.removeAllViews();
         for (int i = 0; i < que_categoryList.size(); i++) {
@@ -95,6 +105,9 @@ public class QuestionTypeFragment extends BaseFragment implements View.OnClickLi
             mBinding.chipGrpQuestType.addView(chip);
         }
     }
+
+
+
 
     @Override
     public void onClick(View v) {

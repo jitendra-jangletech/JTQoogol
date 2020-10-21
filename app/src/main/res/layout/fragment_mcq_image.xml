@@ -156,6 +156,7 @@
                         android:src="@drawable/add_grey" />
 
                 </LinearLayout>
+
                 <TextView
                     android:layout_marginTop="@dimen/_15sdp"
                     android:id="@+id/additional_label"
@@ -245,6 +246,7 @@
                         android:text="Hard" />
 
                 </RadioGroup>
+
                 <TextView
                     android:id="@+id/answer_label"
                     android:layout_width="match_parent"
@@ -257,46 +259,50 @@
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/radioDifflevel" />
 
-                <RadioGroup
-                    app:layout_constraintTop_toBottomOf="@+id/answer_label"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    android:id="@+id/radioGrpAnswer"
-                    android:layout_width="wrap_content"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:id="@+id/ans_layout"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/answer">
 
-                    <RadioButton
-                        android:layout_marginEnd="@dimen/_15sdp"
-                        android:id="@+id/radioA"
+                    <com.google.android.material.checkbox.MaterialCheckBox
+                        android:id="@+id/ans_a"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/_2sdp"
-                        android:text="A" />
+                        android:text="A"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                    <RadioButton
-                        android:id="@+id/radioB"
-                        android:layout_marginEnd="@dimen/_15sdp"
+                    <com.google.android.material.checkbox.MaterialCheckBox
+                        android:id="@+id/ans_b"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/_2sdp"
-                        android:text="B" />
+                        android:layout_marginStart="@dimen/_15sdp"
+                        android:text="B"
+                        app:layout_constraintLeft_toRightOf="@+id/ans_a"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                    <RadioButton
-                        android:id="@+id/radioC"
-                        android:layout_marginEnd="@dimen/_15sdp"
+                    <com.google.android.material.checkbox.MaterialCheckBox
+                        android:id="@+id/ans_c"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/_2sdp"
-                        android:text="C" />
+                        android:layout_marginStart="@dimen/_15sdp"
+                        android:text="C"
+                        app:layout_constraintLeft_toRightOf="@+id/ans_b"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                    <RadioButton
-                        android:id="@+id/radioD"
-                        android:layout_marginEnd="@dimen/_15sdp"
+                    <com.google.android.material.checkbox.MaterialCheckBox
+                        android:id="@+id/ans_d"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/_2sdp"
-                        android:text="D" />
-                </RadioGroup>
+                        android:layout_marginStart="@dimen/_15sdp"
+                        android:text="D"
+                        app:layout_constraintLeft_toRightOf="@+id/ans_c"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
             </LinearLayout>
 

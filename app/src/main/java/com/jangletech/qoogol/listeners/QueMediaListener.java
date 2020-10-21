@@ -7,6 +7,6 @@ import android.net.Uri;
  * Created by Pritali on 10/16/2020.
  */
 public interface QueMediaListener {
-    void onMediaReceived(int requestCode, int resultCode, Intent data, Uri mphotouri);
-    void onScanImageClick(Uri uri);
+    void onMediaReceived(int requestCode, int resultCode, Intent data, Uri mphotouri, int optionId);
+    void onScanImageClick(Uri uri, int opt);
 }

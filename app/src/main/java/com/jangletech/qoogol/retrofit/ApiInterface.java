@@ -487,8 +487,15 @@ public interface ApiInterface {
                                            @Field(Constant.q_type) String question_type,
                                            @Field(Constant.q_option_type) String option_type,
                                            @Field(Constant.ue_id) String ueId,
-                                           @Field(Constant.pagestart) String page
-    );
+                                           @Field(Constant.pagestart) String page);
+
+    @FormUrlEncoded
+    @POST(Constant.FETCH_QA)
+    Call<LearningQuestResponse> fetchMyQuestionsApi(@Field(Constant.u_user_id) String userid,
+                                                    @Field(Constant.device_id) String deviceId,
+                                                    @Field(Constant.appName) String appName,
+                                           @Field(Constant.ue_id) String ueId,
+                                           @Field(Constant.pagestart) String page);
 
     @FormUrlEncoded
     @POST(Constant.FETCH_QA)

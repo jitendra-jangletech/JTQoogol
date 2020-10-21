@@ -1,27 +1,20 @@
 package com.jangletech.qoogol.ui.upload_question;
 
-import android.Manifest;
 import android.content.ClipData;
-import android.content.ContentValues;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.Navigation;
@@ -29,21 +22,20 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.vision.Frame;
-import com.google.android.gms.vision.text.TextBlock;
-import com.google.android.gms.vision.text.TextRecognizer;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.VideoActivity;
 import com.jangletech.qoogol.activities.MainActivity;
 import com.jangletech.qoogol.adapter.AdapterGallerySelectedImage;
-import com.jangletech.qoogol.databinding.FragmentUpFillTheBlanksBinding;
-import com.jangletech.qoogol.dialog.AnsScanDialog;
+import com.jangletech.qoogol.databinding.FragmenUpScqImageBinding;
+import com.jangletech.qoogol.databinding.FragmentMcqImageBinding;
+import com.jangletech.qoogol.dialog.AddImageDialog;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.listeners.QueMediaListener;
 import com.jangletech.qoogol.model.ResponseObj;
 import com.jangletech.qoogol.model.UploadQuestion;
-import com.jangletech.qoogol.retrofit.ApiClient;
-import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.ui.learning.SlideshowDialogFragment;
 import com.jangletech.qoogol.util.AppUtils;
@@ -52,25 +44,11 @@ import com.jangletech.qoogol.util.ImageOptimization;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
 import com.jangletech.qoogol.videocompressions.DialogProcessFile;
-import com.karumi.dexter.Dexter;
-import com.karumi.dexter.MultiplePermissionsReport;
-import com.karumi.dexter.PermissionToken;
-import com.karumi.dexter.listener.PermissionDeniedResponse;
-import com.karumi.dexter.listener.PermissionGrantedResponse;
-import com.karumi.dexter.listener.PermissionRequest;
-import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
-import com.karumi.dexter.listener.single.PermissionListener;
-import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -79,31 +57,35 @@ import retrofit2.Call;
 import retrofit2.Callback;
 
 import static android.app.Activity.RESULT_OK;
-import static com.jangletech.qoogol.util.Constant.FILL_THE_BLANKS;
-import static com.jangletech.qoogol.util.Constant.SCQ;
+import static com.jangletech.qoogol.util.Constant.MCQ_IMAGE;
+import static com.jangletech.qoogol.util.Constant.SCQ1;
+import static com.jangletech.qoogol.util.Constant.SCQ2;
+import static com.jangletech.qoogol.util.Constant.SCQ3;
+import static com.jangletech.qoogol.util.Constant.SCQ4;
+import static com.jangletech.qoogol.util.Constant.SCQ_IMAGE;
 import static com.jangletech.qoogol.util.Constant.qoogol;
 
-public class FillTheBlanksFragment extends BaseFragment  implements AnsScanDialog.AnsScannerListener, QueMediaListener {
+public class MCQImageFragment extends BaseFragment implements QueMediaListener {
 
-    private static final String TAG = "FillTheBlanksFragment";
-    private FragmentUpFillTheBlanksBinding mBinding;
+    private static final String TAG = "ScqUpImageFragment";
     private UploadQuestion uploadQuestion;
-    ApiInterface apiService = ApiClient.getInstance().getApi();
-    private static final int REQUEST_GALLERY = 0;
-    private static final int REQUEST_CAMERA = 1;
-    private Uri imageUri;
-    private int ansId;
+    private FragmentMcqImageBinding mBinding;
+    private AddImageDialog addImageDialog;
+    private int optionId;
     private static final int CAMERA_REQUEST = 1, GALLERY_REQUEST = 2, PICKFILE_REQUEST_CODE = 3, VIDEO_REQUEST = 4, AUDIO_REQUEST = 5;
     public ArrayList<Uri> mAllUri = new ArrayList<>();
+    private Uri[] mOptionsUri = new Uri[4];
+    public ArrayList<String> mAllImages = new ArrayList<>();
     private AdapterGallerySelectedImage galleryAdapter;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_up_fill_the_blanks, container, false);
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_mcq_image, container, false);
         ((MainActivity) getActivity()).setOnDataListener(this);
         return mBinding.getRoot();
     }
+
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -112,21 +94,227 @@ public class FillTheBlanksFragment extends BaseFragment  implements AnsScanDialo
             uploadQuestion = (UploadQuestion) getArguments().getSerializable("Question");
             mBinding.etQuestion.setText(uploadQuestion.getQuestDescription());
             mBinding.subject.setText("Subject : " + uploadQuestion.getSubjectName());
+            getActionBar().setTitle("Scq Image");
         }
 
-
-
         initSelectedImageView();
+
+
+        mBinding.image1.setOnClickListener(v -> {
+            ((MainActivity) getActivity()).openMediaDialog(SCQ1);
+        });
+
+        mBinding.image2.setOnClickListener(v -> {
+            ((MainActivity) getActivity()).openMediaDialog(SCQ2);
+        });
+
+        mBinding.image3.setOnClickListener(v -> {
+            ((MainActivity) getActivity()).openMediaDialog(SCQ3);
+        });
+
+        mBinding.image4.setOnClickListener(v -> {
+            ((MainActivity) getActivity()).openMediaDialog(SCQ4);
+        });
 
         mBinding.saveQuestion.setOnClickListener(v -> addQuestion());
 
         mBinding.addImages.setOnClickListener(v -> ((MainActivity) getActivity()).openMediaDialog(Constant.QUESTION));
-
-        mBinding.ansEdit.setOnClickListener(v -> {
-            new AnsScanDialog(getActivity(), 1, this)
-                    .show();
-        });
     }
+
+    private void addQuestion() {
+        if (isValidate()) {
+            ProgressDialog.getInstance().show(getActivity());
+            MultipartBody.Part[] queImagesParts = null;
+            String images = "", SCQ1 = "", SCQ2 = "", SCQ3 = "", SCQ4 = "";
+            if (mAllUri != null && mAllUri.size() > 0) {
+                try {
+                    queImagesParts = new MultipartBody.Part[mAllUri.size()];
+                    for (int index = 0; index < mAllUri.size(); index++) {
+                        Uri single_image = mAllUri.get(index);
+                        File imageFile = AppUtils.createImageFile(requireActivity(), single_image);
+                        if (!imageFile.exists()) {
+                            imageFile.createNewFile();
+                        }
+
+                        final InputStream imageStream = getActivity().getContentResolver().openInputStream(single_image);
+                        AppUtils.readFully(imageStream, imageFile);
+                        File file = new File(mAllUri.get(index).getPath());
+                        long fileSizeInMB = imageFile.length() / 1048576;
+                        Log.i(TAG, "File Size: " + fileSizeInMB + " MB");
+                        if (fileSizeInMB > new PreferenceManager(getActivity()).getImageSize()) {
+                            Toast.makeText(getActivity(), "Please upload the image of size less than 10MB", Toast.LENGTH_LONG).show();
+                        } else {
+                            RequestBody queBody = null;
+                            if (UtilHelper.isImage(single_image, getActivity())) {
+                                queBody = RequestBody.create(MediaType.parse("image/*"),
+                                        imageFile);
+                            } else if (UtilHelper.isVideo(single_image, getActivity())) {
+                                queBody = RequestBody.create(MediaType.parse("video/*"),
+                                        imageFile);
+                            } else if (UtilHelper.isAudio(single_image, getActivity())) {
+                                queBody = RequestBody.create(MediaType.parse("audio/*"),
+                                        imageFile);
+                            } else if (UtilHelper.isDoc(single_image, getActivity())) {
+                                queBody = RequestBody.create(MediaType.parse("application/*"),
+                                        imageFile);
+                            }
+
+                            queImagesParts[index] = MultipartBody.Part.createFormData("Files",
+                                    imageFile.getName(), queBody);
+                            if (images.isEmpty())
+                                images = AppUtils.encodedString(imageFile.getName());
+                            else
+                                images = images + "," + AppUtils.encodedString(imageFile.getName());
+                        }
+                    }
+
+                    for (int index = 0; index < mOptionsUri.length; index++) {
+                        Uri single_image = mOptionsUri[index];
+                        File imageFile = AppUtils.createImageFile(requireActivity(), single_image);
+                        if (!imageFile.exists()) {
+                            imageFile.createNewFile();
+                        }
+
+                        final InputStream imageStream = getActivity().getContentResolver().openInputStream(single_image);
+                        AppUtils.readFully(imageStream, imageFile);
+                        File file = new File(mOptionsUri[index].getPath());
+                        long fileSizeInMB = imageFile.length() / 1048576;
+                        Log.i(TAG, "File Size: " + fileSizeInMB + " MB");
+                        if (fileSizeInMB > new PreferenceManager(getActivity()).getImageSize()) {
+                            Toast.makeText(getActivity(), "Please upload the image of size less than 10MB", Toast.LENGTH_LONG).show();
+                        } else {
+                            RequestBody queBody = null;
+                            if (UtilHelper.isImage(single_image, getActivity())) {
+                                queBody = RequestBody.create(MediaType.parse("image/*"),
+                                        imageFile);
+                            }
+
+                            queImagesParts[index] = MultipartBody.Part.createFormData("Files",
+                                    imageFile.getName(), queBody);
+                            if (single_image != null) {
+                                if (index == 0)
+                                    SCQ1 = AppUtils.encodedString(imageFile.getName());
+                                else if (index == 1)
+                                    SCQ2 = AppUtils.encodedString(imageFile.getName());
+                                else if (index == 2)
+                                    SCQ3 = AppUtils.encodedString(imageFile.getName());
+                                else if (index == 3)
+                                    SCQ4 = AppUtils.encodedString(imageFile.getName());
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    ProgressDialog.getInstance().dismiss();
+                }
+            }
+
+
+            UploadQuestion uploadQuestion = (UploadQuestion) getArguments().getSerializable("Question");
+            RequestBody userId = RequestBody.create(MediaType.parse("multipart/form-data"), new PreferenceManager(getActivity()).getUserId());
+            RequestBody appname = RequestBody.create(MediaType.parse("multipart/form-data"), qoogol);
+            RequestBody deviceId = RequestBody.create(MediaType.parse("multipart/form-data"), getDeviceId(getActivity()));
+            RequestBody subId = RequestBody.create(MediaType.parse("multipart/form-data"), uploadQuestion.getSubjectId());
+            RequestBody question = RequestBody.create(MediaType.parse("multipart/form-data"), AppUtils.encodedString(mBinding.etQuestion.getText().toString()));
+            RequestBody questiondesc = RequestBody.create(MediaType.parse("multipart/form-data"), AppUtils.encodedString(mBinding.etQuestionDesc.getText().toString()));
+            RequestBody type = RequestBody.create(MediaType.parse("multipart/form-data"), MCQ_IMAGE);
+            RequestBody scq1 = RequestBody.create(MediaType.parse("multipart/form-data"), SCQ1);
+            RequestBody scq2 = RequestBody.create(MediaType.parse("multipart/form-data"), SCQ2);
+            RequestBody scq3 = RequestBody.create(MediaType.parse("multipart/form-data"), SCQ3);
+            RequestBody scq4 = RequestBody.create(MediaType.parse("multipart/form-data"), SCQ4);
+            RequestBody marks = RequestBody.create(MediaType.parse("multipart/form-data"), mBinding.edtmarks.getText().toString());
+            RequestBody duration = RequestBody.create(MediaType.parse("multipart/form-data"), mBinding.edtduration.getText().toString());
+            RequestBody difflevel = RequestBody.create(MediaType.parse("multipart/form-data"), getSelectedDiffLevel());
+            RequestBody ans = RequestBody.create(MediaType.parse("multipart/form-data"), getSelectedAns());
+            RequestBody imgname = RequestBody.create(MediaType.parse("multipart/form-data"), images);
+
+            Call<ResponseObj> call = getApiService().addSCQQuestionsApi(userId, appname, deviceId,
+                    subId, question, questiondesc, type, scq1, scq2, scq3, scq4, marks, duration, difflevel, ans, imgname, queImagesParts);
+            call.enqueue(new Callback<ResponseObj>() {
+                @Override
+                public void onResponse(Call<ResponseObj> call, retrofit2.Response<ResponseObj> response) {
+                    try {
+                        if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
+                            Toast.makeText(getActivity(), "Question added successfully", Toast.LENGTH_SHORT).show();
+                            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_upload_question);
+                        } else {
+                            Toast.makeText(getActivity(), UtilHelper.getAPIError(String.valueOf(response.body())), Toast.LENGTH_SHORT).show();
+                        }
+                        ProgressDialog.getInstance().dismiss();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        ProgressDialog.getInstance().dismiss();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ResponseObj> call, Throwable t) {
+                    t.printStackTrace();
+                    ProgressDialog.getInstance().dismiss();
+                }
+            });
+        }
+    }
+
+    private String getSelectedAns() {
+        String ans="";
+        if (mBinding.ansA.isChecked())
+            ans = "A";
+
+        if (mBinding.ansB.isChecked()) {
+            if (ans.isEmpty())
+                ans="B";
+            else
+                ans=ans+","+"B";
+        }
+
+        if (mBinding.ansC.isChecked()) {
+            if (ans.isEmpty())
+                ans="C";
+            else
+                ans=ans+","+"C";
+        }
+
+        if (mBinding.ansD.isChecked()) {
+            if (ans.isEmpty())
+                ans="D";
+            else
+                ans=ans+","+"D";
+        }
+        return ans;
+    }
+
+    private String getSelectedDiffLevel() {
+        String level = "";
+        int id = mBinding.radioDifflevel.getCheckedRadioButtonId();
+
+        View radioButton = mBinding.radioDifflevel.findViewById(id);
+        if (radioButton != null) {
+            int idx = mBinding.radioDifflevel.indexOfChild(radioButton);
+            RadioButton r = (RadioButton) mBinding.radioDifflevel.getChildAt(idx);
+            level = r.getText() != null ? r.getText().toString() : "";
+        }
+
+        return level.replace("Easy", "E").replace("Medium", "M").replace("Hard", "h");
+    }
+
+    private boolean isValidate() {
+        if (mBinding.subject.getText().toString().isEmpty()) {
+            mBinding.subject.setError("Please select subject.");
+            return false;
+        }
+        if (mBinding.etQuestion.getText().toString().isEmpty()) {
+            mBinding.etQuestion.setError("Please enter question.");
+            return false;
+        }
+        if (mOptionsUri == null || mOptionsUri.length < 2) {
+            Toast.makeText(getActivity(), "Please add minimum 2 options", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
+    }
+
+
     private void initSelectedImageView() {
         setupPreview(null);
         galleryAdapter = new AdapterGallerySelectedImage(mAllUri, getActivity(), new AdapterGallerySelectedImage.GalleryUplodaHandler() {
@@ -187,331 +375,18 @@ public class FillTheBlanksFragment extends BaseFragment  implements AnsScanDialo
 
     }
 
-    private void setupPreview(Uri media) {
-        if (media == null) {
-            Log.d("#>Empty data", "add image");
-            // model.preview.setValue(LocalImages.ADD_UPLOAD.value);
-            mBinding.queimgRecycler.setVisibility(View.GONE);
-            return;
-        }
-        try {
-            // model.preview.setValue(media.toString());
-            if (UtilHelper.isImage(media, getActivity()) || UtilHelper.isVideo(media, getActivity()) || UtilHelper.isAudio(media, getActivity()) || UtilHelper.isDoc(media, getActivity())) {
-                Log.d("#>type ", "image");
-                mAllUri.add(media);
-                RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-                mBinding.queimgRecycler.setLayoutManager(mLayoutManager);
-                mBinding.queimgRecycler.setItemAnimator(new DefaultItemAnimator());
-                mBinding.queimgRecycler.setAdapter(galleryAdapter);
-                mBinding.queimgRecycler.setVisibility(View.VISIBLE);
-            } else {
-                Toast.makeText(getActivity(), "Upload the proper media", Toast.LENGTH_LONG).show();
-            }
-        } catch (Exception ex) {
-            Log.e(TAG, ex.getMessage());
-        }
+
+
+
+    private void setImage(Uri path, ImageView img) {
+        Glide.with(getActivity())
+                .load(path)
+                .transition(DrawableTransitionOptions.withCrossFade())
+                .diskCacheStrategy(DiskCacheStrategy.DATA)
+                .error(R.drawable.ic_broken_image)
+                .into(img);
     }
 
-    private void addQuestion() {
-        if (isValidate()) {
-
-            ProgressDialog.getInstance().show(getActivity());
-            MultipartBody.Part[] queImagesParts = null;
-            String images = "";
-            if (mAllUri != null && mAllUri.size() > 0) {
-                try {
-                    queImagesParts = new MultipartBody.Part[mAllUri.size()];
-                    for (int index = 0; index < mAllUri.size(); index++) {
-                        Uri single_image = mAllUri.get(index);
-                        File imageFile = AppUtils.createImageFile(requireActivity(), single_image);
-                        if (!imageFile.exists()) {
-                            imageFile.createNewFile();
-                        }
-
-                        final InputStream imageStream = getActivity().getContentResolver().openInputStream(single_image);
-                        AppUtils.readFully(imageStream, imageFile);
-                        File file = new File(mAllUri.get(index).getPath());
-                        long fileSizeInMB = imageFile.length() / 1048576;
-                        Log.i(TAG, "File Size: " + fileSizeInMB + " MB");
-                        if (fileSizeInMB > new PreferenceManager(getActivity()).getImageSize()) {
-                            Toast.makeText(getActivity(), "Please upload the image of size less than 10MB", Toast.LENGTH_LONG).show();
-                        } else {
-                            RequestBody queBody = null;
-                            if (UtilHelper.isImage(single_image, getActivity())) {
-                                queBody = RequestBody.create(MediaType.parse("image/*"),
-                                        imageFile);
-                            } else if (UtilHelper.isVideo(single_image, getActivity())) {
-                                queBody = RequestBody.create(MediaType.parse("video/*"),
-                                        imageFile);
-                            } else if (UtilHelper.isAudio(single_image, getActivity())) {
-                                queBody = RequestBody.create(MediaType.parse("audio/*"),
-                                        imageFile);
-                            } else if (UtilHelper.isDoc(single_image, getActivity())) {
-                                queBody = RequestBody.create(MediaType.parse("application/*"),
-                                        imageFile);
-                            }
-
-                            queImagesParts[index] = MultipartBody.Part.createFormData("Files",
-                                    imageFile.getName(), queBody);
-                            if (images.isEmpty())
-                                images = AppUtils.encodedString(imageFile.getName());
-                            else
-                                images = images + "," + AppUtils.encodedString(imageFile.getName());
-                        }
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    ProgressDialog.getInstance().dismiss();
-                }
-            }
-
-            String user_id = new PreferenceManager(getActivity()).getUserId();
-
-            UploadQuestion uploadQuestion = (UploadQuestion) getArguments().getSerializable("Question");
-            RequestBody userId = RequestBody.create(MediaType.parse("multipart/form-data"), user_id);
-            RequestBody appname = RequestBody.create(MediaType.parse("multipart/form-data"), qoogol);
-            RequestBody deviceId = RequestBody.create(MediaType.parse("multipart/form-data"), getDeviceId(getActivity()));
-            RequestBody subId = RequestBody.create(MediaType.parse("multipart/form-data"), uploadQuestion.getSubjectId());
-            RequestBody question = RequestBody.create(MediaType.parse("multipart/form-data"), AppUtils.encodedString(mBinding.etQuestion.getText().toString()));
-            RequestBody questiondesc = RequestBody.create(MediaType.parse("multipart/form-data"), AppUtils.encodedString(mBinding.etQuestionDesc.getText().toString()));
-            RequestBody type = RequestBody.create(MediaType.parse("multipart/form-data"), FILL_THE_BLANKS);
-            RequestBody marks = RequestBody.create(MediaType.parse("multipart/form-data"), mBinding.edtmarks.getText().toString());
-            RequestBody duration = RequestBody.create(MediaType.parse("multipart/form-data"), mBinding.edtduration.getText().toString());
-            RequestBody difflevel = RequestBody.create(MediaType.parse("multipart/form-data"), getSelectedDiffLevel());
-            RequestBody ans = RequestBody.create(MediaType.parse("multipart/form-data"), mBinding.etRightAns.getText().toString());
-            RequestBody imgname = RequestBody.create(MediaType.parse("multipart/form-data"), images);
-
-            Call<ResponseObj> call = getApiService().addSubjectiveQuestionsApi(userId, appname, deviceId,
-                    subId, question, questiondesc, type, marks, duration, difflevel, ans, imgname, queImagesParts);
-            call.enqueue(new Callback<ResponseObj>() {
-                @Override
-                public void onResponse(Call<ResponseObj> call, retrofit2.Response<ResponseObj> response) {
-                    try {
-                        if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
-                            Toast.makeText(getActivity(), "Question added successfully", Toast.LENGTH_SHORT).show();
-                            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_upload_question);
-                        } else {
-                            Toast.makeText(getActivity(), UtilHelper.getAPIError(String.valueOf(response.body())), Toast.LENGTH_SHORT).show();
-                        }
-                        ProgressDialog.getInstance().dismiss();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        ProgressDialog.getInstance().dismiss();
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<ResponseObj> call, Throwable t) {
-                    t.printStackTrace();
-                    ProgressDialog.getInstance().dismiss();
-                }
-            });
-        }
-    }
-
-    private String getSelectedDiffLevel() {
-        String level = "";
-        int id = mBinding.radioDifflevel.getCheckedRadioButtonId();
-
-        View radioButton = mBinding.radioDifflevel.findViewById(id);
-        if (radioButton != null) {
-            int idx = mBinding.radioDifflevel.indexOfChild(radioButton);
-            RadioButton r = (RadioButton) mBinding.radioDifflevel.getChildAt(idx);
-            level = r.getText() != null ? r.getText().toString() : "";
-        }
-
-        return level.replace("Easy","E").replace("Medium","M").replace("Hard","h");
-    }
-
-    private boolean isValidate() {
-        if (mBinding.subject.getText().toString().isEmpty()) {
-            mBinding.subject.setError("Please select subject.");
-            return false;
-        } if (mBinding.etQuestion.getText().toString().isEmpty()) {
-            mBinding.etQuestion.setError("Please enter question.");
-            return false;
-        }  else {
-            return true;
-        }
-    }
-
-    @Override
-    public void onCamScannerClick(int id) {
-        ansId = id;
-        Dexter.withActivity(getActivity())
-                .withPermissions(
-                        Manifest.permission.CAMERA,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE
-                ).withListener(new MultiplePermissionsListener() {
-            @Override
-            public void onPermissionsChecked(MultiplePermissionsReport report) {
-                if (report.areAllPermissionsGranted()) {
-                    String filename = System.currentTimeMillis() + ".jpg";
-                    ContentValues values = new ContentValues();
-                    values.put(MediaStore.Images.Media.TITLE, filename);
-                    values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
-                    imageUri = getActivity().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-
-                    Intent intent = new Intent();
-                    intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-                    intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-                    startActivityForResult(intent, REQUEST_CAMERA);
-                    //dispatchTakePictureIntent();
-                } else {
-                    Log.e(TAG, "onPermissionsChecked Error : ");
-                }
-            }
-
-            @Override
-            public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {/* ... */}
-        }).check();
-    }
-
-    @Override
-    public void onGalleryClick(int id) {
-        ansId = id;
-        Dexter.withActivity(getActivity())
-                .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                .withListener(new PermissionListener() {
-                    @Override
-                    public void onPermissionGranted(PermissionGrantedResponse response) {
-                        Intent i = new Intent(
-                                Intent.ACTION_PICK,
-                                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                        startActivityForResult(i, REQUEST_GALLERY);
-                    }
-
-                    @Override
-                    public void onPermissionDenied(PermissionDeniedResponse response) {
-                        Toast.makeText(getActivity(), "Storage permission denied.", Toast.LENGTH_LONG).show();
-                    }
-
-                    @Override
-                    public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
-                        token.continuePermissionRequest();
-                    }
-                })
-                .withErrorListener(error ->
-                        Toast.makeText(getActivity(), "Error occurred! ", Toast.LENGTH_SHORT).show())
-                .onSameThread()
-                .check();
-    }
-
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_GALLERY && resultCode == RESULT_OK && data != null) {
-            try {
-                CropImage.activity(data.getData())
-                        .start(getContext(), this);
-            } catch (Exception e) {
-                e.printStackTrace();
-                Log.e(TAG, "onFailure onActivityResult: " + e.getMessage());
-                Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_LONG).show();
-            }
-        }
-        if (requestCode == REQUEST_CAMERA) {
-            Log.d(TAG, "onActivityResult REQUEST_CAMERA: " + imageUri);
-            try {
-                CropImage.activity(imageUri)
-                        .start(getContext(), this);
-            } catch (Exception e) {
-                e.printStackTrace();
-                Log.e(TAG, "onFailure onActivityResult: " + e.getMessage());
-                Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_LONG).show();
-            }
-        }
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE &&
-                resultCode == RESULT_OK && data != null) {
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            if (result != null && resultCode == RESULT_OK) {
-                inspect(result.getUri());
-            }
-        }
-    }
-
-    private void inspect(Uri uri) {
-        Log.d(TAG, "inspect Uri : " + uri);
-        InputStream is = null;
-        Bitmap bitmap = null;
-        try {
-            is = getActivity().getContentResolver().openInputStream(uri);
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-            options.inSampleSize = 2;
-            options.inScreenDensity = DisplayMetrics.DENSITY_LOW;
-            bitmap = BitmapFactory.decodeStream(is, null, options);
-            inspectFromBitmap(bitmap);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            Log.w(TAG, "Failed to find the file: " + uri, e);
-        } finally {
-
-            if (bitmap != null && !bitmap.isRecycled()) {
-                bitmap.recycle();
-                bitmap = null;
-            }
-
-            if (is != null) {
-                try {
-                    is.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    Log.w(TAG, "Failed to close InputStream", e);
-                }
-            }
-        }
-    }
-
-    private void inspectFromBitmap(Bitmap bitmap) {
-        TextRecognizer textRecognizer = new TextRecognizer.Builder(getActivity()).build();
-        try {
-            if (!textRecognizer.isOperational()) {
-                new AlertDialog.
-                        Builder(getActivity()).
-                        setMessage("Text recognizer could not be set up on your device").show();
-                return;
-            }
-
-            Frame frame = new Frame.Builder().setBitmap(bitmap).build();
-            SparseArray<TextBlock> origTextBlocks = textRecognizer.detect(frame);
-            List<TextBlock> textBlocks = new ArrayList<>();
-            for (int i = 0; i < origTextBlocks.size(); i++) {
-                TextBlock textBlock = origTextBlocks.valueAt(i);
-                textBlocks.add(textBlock);
-            }
-            Collections.sort(textBlocks, new Comparator<TextBlock>() {
-                @Override
-                public int compare(TextBlock o1, TextBlock o2) {
-                    int diffOfTops = o1.getBoundingBox().top - o2.getBoundingBox().top;
-                    int diffOfLefts = o1.getBoundingBox().left - o2.getBoundingBox().left;
-                    if (diffOfTops != 0) {
-                        return diffOfTops;
-                    }
-                    return diffOfLefts;
-                }
-            });
-
-            StringBuilder detectedText = new StringBuilder();
-            for (TextBlock textBlock : textBlocks) {
-                if (textBlock != null && textBlock.getValue() != null) {
-                    detectedText.append(textBlock.getValue());
-                    detectedText.append("\n");
-                }
-            }
-            setScanAns(detectedText.toString().trim());
-
-        } finally {
-            textRecognizer.release();
-        }
-    }
-
-    private void setScanAns(String text) {
-        if (ansId == 1)
-            mBinding.etRightAns.setText(text);
-
-    }
 
     @Override
     public void onMediaReceived(int requestCode, int resultCode, Intent data, Uri photouri, int optionId) {
@@ -529,24 +404,15 @@ public class FillTheBlanksFragment extends BaseFragment  implements AnsScanDialo
                             ClipData.Item item = mClipData.getItemAt(i);
                             Uri uri = item.getUri();
                             mArrayUri.add(uri);
-                            if (mAllUri.size() > 3) {
-                                Toast.makeText(getActivity(), "A maximum of 4 media can be uploaded at once.", Toast.LENGTH_LONG).show();
-                            } else {
-                                setupPreview(uri);
-                            }
-
+                            loadImage(uri, optionId);
                         }
                     }
                 } else if (data.getData() != null) {
-                    if (mAllUri.size() > 3) {
-                        Toast.makeText(getActivity(), "A maximum of 4 media can be uploaded at once.", Toast.LENGTH_LONG).show();
-                    } else {
-                        try {
-                            final Uri imageUri = data.getData();
-                            setupPreview(imageUri);
-                        } catch (Exception e) {
-                            Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_LONG).show();
-                        }
+                    try {
+                        final Uri imageUri = data.getData();
+                        loadImage(imageUri, optionId);
+                    } catch (Exception e) {
+                        Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_LONG).show();
                     }
                 }
             } catch (Exception e) {
@@ -555,11 +421,7 @@ public class FillTheBlanksFragment extends BaseFragment  implements AnsScanDialo
                 Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_LONG).show();
             }
         } else if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
-            if (mAllUri.size() > 3) {
-                Toast.makeText(getActivity(), "A maximum of 4 media can be uploaded at once.", Toast.LENGTH_LONG).show();
-            } else {
-                setupPreview(photouri);
-            }
+            loadImage(photouri, optionId);
         } else if (requestCode == VIDEO_REQUEST && resultCode == RESULT_OK && data != null) {
             try {
                 ArrayList<Uri> video_uri = new ArrayList<>();
@@ -679,9 +541,59 @@ public class FillTheBlanksFragment extends BaseFragment  implements AnsScanDialo
         }
     }
 
+    private void setupPreview(Uri media) {
+        if (media == null) {
+            Log.d("#>Empty data", "add image");
+            // model.preview.setValue(LocalImages.ADD_UPLOAD.value);
+            mBinding.queimgRecycler.setVisibility(View.GONE);
+            return;
+        }
+        try {
+            // model.preview.setValue(media.toString());
+            if (UtilHelper.isImage(media, getActivity()) || UtilHelper.isVideo(media, getActivity()) || UtilHelper.isAudio(media, getActivity()) || UtilHelper.isDoc(media, getActivity())) {
+                Log.d("#>type ", "image");
+                mAllUri.add(media);
+                RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+                mBinding.queimgRecycler.setLayoutManager(mLayoutManager);
+                mBinding.queimgRecycler.setItemAnimator(new DefaultItemAnimator());
+                mBinding.queimgRecycler.setAdapter(galleryAdapter);
+                mBinding.queimgRecycler.setVisibility(View.VISIBLE);
+            } else {
+                Toast.makeText(getActivity(), "Upload the proper media", Toast.LENGTH_LONG).show();
+            }
+        } catch (Exception ex) {
+            Log.e(TAG, ex.getMessage());
+        }
+    }
+
     @Override
     public void onScanImageClick(Uri uri, int opt) {
-        if (opt==Constant.QUESTION)
-            setupPreview(uri);
+        loadImage(uri, opt);
+    }
+
+    private void loadImage(Uri uri, int opt) {
+        try {
+            if (opt == Constant.QUESTION) {
+                if (mAllUri.size() > 3)
+                    Toast.makeText(getActivity(), "A maximum of 4 media can be uploaded at once.", Toast.LENGTH_LONG).show();
+                else
+                    setupPreview(uri);
+            } else if (opt == SCQ1) {
+                mOptionsUri[0] = uri;
+                setImage(uri, mBinding.image1);
+            } else if (opt == SCQ2) {
+                mOptionsUri[1] = uri;
+                setImage(uri, mBinding.image2);
+            } else if (opt == SCQ3) {
+                mOptionsUri[2] = uri;
+                setImage(uri, mBinding.image3);
+            } else if (opt == SCQ4) {
+                mOptionsUri[3] = uri;
+                setImage(uri, mBinding.image4);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

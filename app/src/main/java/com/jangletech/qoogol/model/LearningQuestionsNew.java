@@ -6,11 +6,13 @@ import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
 import com.jangletech.qoogol.R;
+import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.UtilHelper;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +35,7 @@ import static com.jangletech.qoogol.util.Constant.TRUE_FALSE;
  * Created by Pritali on 4/24/2020.
  */
 @Entity
-public class LearningQuestionsNew  implements Cloneable{
+public class LearningQuestionsNew implements Cloneable, Serializable {
 
     protected Object clone() throws CloneNotSupportedException {
         return super.clone();
@@ -226,7 +228,7 @@ public class LearningQuestionsNew  implements Cloneable{
     }
 
     public String getQuestion() {
-        return question!=null?question:"";
+        return question!=null? AppUtils.decodedString(question) :"";
     }
 
     public void setQuestion(String question) {
@@ -365,7 +367,7 @@ public class LearningQuestionsNew  implements Cloneable{
     }
 
     public String getMarks() {
-         return marks;
+         return marks!=null?marks:"";
     }
 
     public String getFormatedMarks() {

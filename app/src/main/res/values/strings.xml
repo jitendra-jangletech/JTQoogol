@@ -25,7 +25,10 @@
 
     //Upload Questions
     <string name="menu_scq_image">Scq Image</string>
+    <string name="menu_scq_imagetxt">Scq Image with Text</string>
     <string name="menu_mcq_image">Mcq Image</string>
+    <string name="menu_mcq_imagetxt">Mcq Image with Text</string>
+    <string name="menu_mtp_image">Match the Pair Image</string>
     <string name="menu_fill_the_blanks">Fill The Blanks</string>
     <string name="menu_true_false">True Or False</string>
     <string name="menu_up_scq">Scan Question</string>
@@ -286,6 +289,7 @@
     <string name="follow_req">Follow Requests</string>
     <string name="pending_req">Pending Requests</string>
     <string name="upload_que">Upload Questions</string>
+    <string name="my_que">My Questions</string>
     <string name="scq_label">SCQ</string>
     <string name="mcq_label">MCQ</string>
     <string name="mtp_label">Match the pairs</string>
