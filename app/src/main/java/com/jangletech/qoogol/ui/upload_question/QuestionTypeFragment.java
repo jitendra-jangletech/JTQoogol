@@ -21,6 +21,9 @@ import com.jangletech.qoogol.util.Constant;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.jangletech.qoogol.util.Constant.ADD;
+import static com.jangletech.qoogol.util.Constant.UPDATE;
+
 public class QuestionTypeFragment extends BaseFragment implements View.OnClickListener {
 
     private Activity mContext;
@@ -46,6 +49,7 @@ public class QuestionTypeFragment extends BaseFragment implements View.OnClickLi
         mBinding.btnNext.setOnClickListener(v -> {
             Bundle bundle = new Bundle();
             bundle.putSerializable("Question", uploadQuestion);
+            bundle.putInt("call_from",ADD);
             if (uploadQuestion.getQuestionType() != null) {
                 if (uploadQuestion.getQuestionType().equalsIgnoreCase(Constant.scq)) {
                     Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_scq_question, bundle);

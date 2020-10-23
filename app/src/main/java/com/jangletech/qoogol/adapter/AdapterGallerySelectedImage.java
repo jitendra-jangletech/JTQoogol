@@ -1,11 +1,8 @@
 package com.jangletech.qoogol.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.media.MediaPlayer;
-import android.media.ThumbnailUtils;
 import android.net.Uri;
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,8 +21,9 @@ import com.bumptech.glide.request.RequestOptions;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.util.UtilHelper;
 
-import java.io.IOException;
 import java.util.List;
+
+import static com.jangletech.qoogol.util.Constant.ADD;
 
 /*
  *
@@ -46,11 +44,15 @@ public class AdapterGallerySelectedImage extends RecyclerView.Adapter<AdapterGal
     boolean isplaying = false;
     MediaPlayer mediaPlayer = new MediaPlayer();
     private RequestManager requestManager;
+    List<String> tempimgList;
+    int call_from;
 
-    public AdapterGallerySelectedImage(List<Uri> uriList, Context context, GalleryUplodaHandler galleryUplodaHandler) {
+    public AdapterGallerySelectedImage(List<Uri> uriList, List<String> tempimgList, int call_from, Context context, GalleryUplodaHandler galleryUplodaHandler) {
         this.uriList = uriList;
         this.mContext = context;
         this.galleryUplodaHandler = galleryUplodaHandler;
+        this.tempimgList = tempimgList;
+        this.call_from = call_from;
         requestManager = Glide.with(mContext);
     }
 

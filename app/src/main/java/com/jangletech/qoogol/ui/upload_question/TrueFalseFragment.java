@@ -27,6 +27,7 @@ import com.jangletech.qoogol.activities.MainActivity;
 import com.jangletech.qoogol.adapter.AdapterGallerySelectedImage;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.listeners.QueMediaListener;
+import com.jangletech.qoogol.model.LearningQuestionsNew;
 import com.jangletech.qoogol.model.ResponseObj;
 import com.jangletech.qoogol.model.UploadQuestion;
 import com.jangletech.qoogol.ui.BaseFragment;
@@ -42,6 +43,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -50,8 +52,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 
 import static android.app.Activity.RESULT_OK;
-import static com.jangletech.qoogol.util.Constant.SCQ;
+import static com.jangletech.qoogol.util.Constant.ADD;
 import static com.jangletech.qoogol.util.Constant.TRUE_FALSE;
+import static com.jangletech.qoogol.util.Constant.UPDATE;
 import static com.jangletech.qoogol.util.Constant.qoogol;
 
 public class TrueFalseFragment extends BaseFragment implements QueMediaListener {
@@ -62,6 +65,10 @@ public class TrueFalseFragment extends BaseFragment implements QueMediaListener 
     private static final int CAMERA_REQUEST = 1, GALLERY_REQUEST = 2, PICKFILE_REQUEST_CODE = 3, VIDEO_REQUEST = 4, AUDIO_REQUEST = 5;
     public ArrayList<Uri> mAllUri = new ArrayList<>();
     private AdapterGallerySelectedImage galleryAdapter;
+    String questionId = "";
+    List<String> tempimgList = new ArrayList<>();
+    int call_from;
+
 
     @Nullable
     @Override
@@ -74,11 +81,19 @@ public class TrueFalseFragment extends BaseFragment implements QueMediaListener 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if (getArguments() != null && getArguments().getSerializable("Question") != null) {
-            uploadQuestion = (UploadQuestion) getArguments().getSerializable("Question");
-            mBinding.etQuestion.setText(uploadQuestion.getQuestDescription());
-            mBinding.subject.setText("Subject : " + uploadQuestion.getSubjectName());
+        if (getArguments().getInt("call_from")==ADD) {
+            call_from=ADD;
+            if (getArguments() != null && getArguments().getSerializable("Question") != null) {
+                uploadQuestion = (UploadQuestion) getArguments().getSerializable("Question");
+                mBinding.etQuestion.setText(uploadQuestion.getQuestDescription());
+                mBinding.subject.setText("Subject : " + uploadQuestion.getSubjectName());
+            }
+        }else if (getArguments().getInt("call_from")==UPDATE) {
+            call_from=UPDATE;
+            LearningQuestionsNew learningQuestionsNew = (LearningQuestionsNew) getArguments().getSerializable("data");
+            setData(learningQuestionsNew);
         }
+        
         initSelectedImageView();
 
         mBinding.saveQuestion.setOnClickListener(v -> addQuestion());
@@ -86,9 +101,12 @@ public class TrueFalseFragment extends BaseFragment implements QueMediaListener 
         mBinding.addImages.setOnClickListener(v -> ((MainActivity) getActivity()).openMediaDialog(Constant.QUESTION));
     }
 
+    private void setData(LearningQuestionsNew learningQuestionsNew) {
+    }
+
     private void initSelectedImageView() {
         setupPreview(null);
-        galleryAdapter = new AdapterGallerySelectedImage(mAllUri, getActivity(), new AdapterGallerySelectedImage.GalleryUplodaHandler() {
+        galleryAdapter = new AdapterGallerySelectedImage(mAllUri, tempimgList, call_from, getActivity(), new AdapterGallerySelectedImage.GalleryUplodaHandler() {
             @Override
             public void imageClick(Uri media, int position) {
                 try {
@@ -480,5 +498,10 @@ public class TrueFalseFragment extends BaseFragment implements QueMediaListener 
     public void onScanImageClick(Uri uri, int opt) {
         if (opt==Constant.QUESTION)
             setupPreview(uri);
+    }
+
+    @Override
+    public void onScanText(String text, int ansId) {
+
     }
 }

@@ -246,7 +246,7 @@ public class LearningQuestionsNew implements Cloneable, Serializable {
     }
 
     public String getQuestiondesc() {
-        return questiondesc != null ? questiondesc : "";
+        return questiondesc != null ? AppUtils.decodedString(questiondesc) : "";
     }
 
     public void setQuestiondesc(String questiondesc) {
@@ -254,11 +254,11 @@ public class LearningQuestionsNew implements Cloneable, Serializable {
     }
 
     public String getCategory() {
-        if (getType().equalsIgnoreCase(FILL_THE_BLANKS)) {
+        if (getQue_option_type().equalsIgnoreCase(FILL_THE_BLANKS)) {
             return "Fill in the Blanks";
-        } else if (getType().equalsIgnoreCase(ONE_LINE_ANSWER) || getType().equalsIgnoreCase(SHORT_ANSWER)) {
+        } else if (getQue_option_type().equalsIgnoreCase(ONE_LINE_ANSWER) || getQue_option_type().equalsIgnoreCase(SHORT_ANSWER)) {
             return "Short Answer";
-        } else if (getType().equalsIgnoreCase(LONG_ANSWER)) {
+        } else if (getQue_option_type().equalsIgnoreCase(LONG_ANSWER)) {
             return "Long Answer";
         } else {
             if (getQue_option_type().equalsIgnoreCase(SCQ) || getQue_option_type().equalsIgnoreCase(SCQ_IMAGE) || getQue_option_type().equalsIgnoreCase(SCQ_IMAGE_WITH_TEXT)) {
@@ -364,6 +364,10 @@ public class LearningQuestionsNew implements Cloneable, Serializable {
         return recommended_time!=null?recommended_time:"";
     }
 
+    public String getDuration() {
+        return recommended_time != null ? recommended_time : "";
+    }
+
     public void setRecommended_time(String recommended_time) {
         this.recommended_time = recommended_time;
     }
@@ -389,7 +393,7 @@ public class LearningQuestionsNew implements Cloneable, Serializable {
     }
 
     public String getMcq1() {
-        return mcq1 != null ? mcq1 : "";
+        return mcq1 != null ? AppUtils.decodedString(mcq1) : "";
     }
 
     public void setMcq1(String mcq1) {
@@ -397,7 +401,7 @@ public class LearningQuestionsNew implements Cloneable, Serializable {
     }
 
     public String getMcq2() {
-        return mcq2 != null ? mcq2 : "";
+        return mcq2 != null ? AppUtils.decodedString(mcq2) : "";
     }
 
     public void setMcq2(String mcq2) {
@@ -405,7 +409,7 @@ public class LearningQuestionsNew implements Cloneable, Serializable {
     }
 
     public String getMcq3() {
-        return mcq3 != null ? mcq3 : "";
+        return mcq3 != null ? AppUtils.decodedString(mcq3) : "";
     }
 
     public void setMcq3(String mcq3) {
@@ -413,7 +417,7 @@ public class LearningQuestionsNew implements Cloneable, Serializable {
     }
 
     public String getMcq4() {
-        return mcq4 != null ? mcq4 : "";
+        return mcq4 != null ? AppUtils.decodedString(mcq4) : "";
     }
 
     public void setMcq4(String mcq4) {
@@ -570,7 +574,7 @@ public class LearningQuestionsNew implements Cloneable, Serializable {
 
         List<String> img = new ArrayList<>();
 
-        if (!getType().equalsIgnoreCase(FILL_THE_BLANKS) || !getType().equalsIgnoreCase(LONG_ANSWER) || !getType().equalsIgnoreCase(ONE_LINE_ANSWER)) {
+        if (!getQue_option_type().equalsIgnoreCase(FILL_THE_BLANKS) || !getQue_option_type().equalsIgnoreCase(LONG_ANSWER) || !getQue_option_type().equalsIgnoreCase(ONE_LINE_ANSWER)) {
             if (getQue_option_type().equalsIgnoreCase(SCQ_IMAGE) || getQue_option_type().equalsIgnoreCase(MCQ_IMAGE)) {
                 img.add(mcq1);
                 img.add(mcq2);

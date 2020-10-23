@@ -408,11 +408,11 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public int getItemViewType(int position) {
         LearningQuestionsNew learningQuestions = learningQuestionsList.get(position);
-        if (learningQuestions.getType().equalsIgnoreCase(FILL_THE_BLANKS)) {
+        if (learningQuestions.getQue_option_type().equalsIgnoreCase(FILL_THE_BLANKS)) {
             return Integer.parseInt(FILL_THE_BLANKS);
-        } else if (learningQuestions.getType().equalsIgnoreCase(ONE_LINE_ANSWER) || learningQuestions.getType().equalsIgnoreCase(SHORT_ANSWER)) {
+        } else if (learningQuestions.getQue_option_type().equalsIgnoreCase(ONE_LINE_ANSWER) || learningQuestions.getQue_option_type().equalsIgnoreCase(SHORT_ANSWER)) {
             return Integer.parseInt(ONE_LINE_ANSWER);
-        } else if (learningQuestions.getType().equalsIgnoreCase(LONG_ANSWER)) {
+        } else if (learningQuestions.getQue_option_type().equalsIgnoreCase(LONG_ANSWER)) {
             return Integer.parseInt(LONG_ANSWER);
         } else {
             if (learningQuestions.getQue_option_type().equalsIgnoreCase(SCQ)) {
@@ -762,7 +762,7 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         learningQuestions.setQue_media_typs(learningQuestionsNew.getQue_media_typs());
         learningQuestions.setQue_option_type(learningQuestionsNew.getQue_option_type());
         learningQuestions.setMcq5(learningQuestionsNew.getMcq5());
-        learningQuestions.setType(learningQuestionsNew.getType());
+        learningQuestions.setType(learningQuestionsNew.getQue_option_type());
 //            learningQuestions.setSolve_right(learningQuestionsNew.getSolve_right());
         learningQuestions.setVisited(learningQuestionsNew.isVisited());
         learningQuestions.setSubject_id(learningQuestionsNew.getSubject_id());

@@ -734,15 +734,15 @@ public class SavedQueAdapter extends RecyclerView.Adapter<SavedQueAdapter.ViewHo
 
         private void showLayout() {
             LearningQuestions learningQuestions = learningQuestionsList.get(getAdapterPosition());
-            if (learningQuestions.getType().equalsIgnoreCase(FILL_THE_BLANKS)) {
+            if (learningQuestions.getQue_option_type().equalsIgnoreCase(FILL_THE_BLANKS)) {
                 learningItemBinding.fillInTheBlanks.setVisibility(View.VISIBLE);
                 learningItemBinding.categoryTextview.setText("Fill in the Blanks");
-            } else if (learningQuestions.getType().equalsIgnoreCase(ONE_LINE_ANSWER) || learningQuestions.getType().equalsIgnoreCase(SHORT_ANSWER)) {
+            } else if (learningQuestions.getQue_option_type().equalsIgnoreCase(ONE_LINE_ANSWER) || learningQuestions.getQue_option_type().equalsIgnoreCase(SHORT_ANSWER)) {
                 learningItemBinding.singleLine.setVisibility(View.VISIBLE);
                 learningItemBinding.singleLineCounter.setVisibility(View.VISIBLE);
                 learningItemBinding.categoryTextview.setText("Short Answer");
                 answerCharCounter(learningItemBinding.singleLine, learningItemBinding.singleLineCounter, 200);
-            } else if (learningQuestions.getType().equalsIgnoreCase(LONG_ANSWER)) {
+            } else if (learningQuestions.getQue_option_type().equalsIgnoreCase(LONG_ANSWER)) {
                 learningItemBinding.multiLine.setVisibility(View.VISIBLE);
                 learningItemBinding.multiLineCounter.setVisibility(View.VISIBLE);
                 answerCharCounter(learningItemBinding.multiLine, learningItemBinding.multiLineCounter, 400);
@@ -907,7 +907,7 @@ public class SavedQueAdapter extends RecyclerView.Adapter<SavedQueAdapter.ViewHo
         }
 
         private void submitFunction(LearningQuestions learningQuestions) {
-            if (learningQuestions.getType().equalsIgnoreCase(FILL_THE_BLANKS)) {
+            if (learningQuestions.getQue_option_type().equalsIgnoreCase(FILL_THE_BLANKS)) {
                 if (learningQuestions.getQue_option_type().equalsIgnoreCase(FILL_THE_BLANKS)) {
                     learningItemBinding.fillInTheBlanks.setBackground(activity.getResources().getDrawable(R.drawable.grey_border));
                     if (!learningItemBinding.fillInTheBlanks.getText().toString().trim().equalsIgnoreCase("")) {
@@ -926,7 +926,7 @@ public class SavedQueAdapter extends RecyclerView.Adapter<SavedQueAdapter.ViewHo
                         Toast.makeText(activity, "Please enter answer first.", Toast.LENGTH_SHORT).show();
                     }
                 }
-            } else if (learningQuestions.getType().equalsIgnoreCase(ONE_LINE_ANSWER) || learningQuestions.getType().equalsIgnoreCase(SHORT_ANSWER)) {
+            } else if (learningQuestions.getQue_option_type().equalsIgnoreCase(ONE_LINE_ANSWER) || learningQuestions.getQue_option_type().equalsIgnoreCase(SHORT_ANSWER)) {
                 if (learningItemBinding.singleLine.getText().toString().isEmpty()) {
                     Toast.makeText(activity, "Please enter answer first.", Toast.LENGTH_SHORT).show();
                 } else {
@@ -934,7 +934,7 @@ public class SavedQueAdapter extends RecyclerView.Adapter<SavedQueAdapter.ViewHo
                     ProcessQuestionAPI(learningQuestions.getQuestion_id(), 0, ONE_LINE_ANSWER,"","",getAdapterPosition(),learningItemBinding.singleLine.getText().toString());
                 }
 
-            } else if (learningQuestions.getType().equalsIgnoreCase(LONG_ANSWER)) {
+            } else if (learningQuestions.getQue_option_type().equalsIgnoreCase(LONG_ANSWER)) {
                 if (learningItemBinding.multiLine.getText().toString().isEmpty()) {
                     Toast.makeText(activity, "Please enter answer first.", Toast.LENGTH_SHORT).show();
                 } else {
