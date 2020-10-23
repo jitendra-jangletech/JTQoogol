@@ -30,6 +30,7 @@ import com.jangletech.qoogol.databinding.FragmentUpMtpQueBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.dialog.SubjectiveAnsDialog;
 import com.jangletech.qoogol.listeners.QueMediaListener;
+import com.jangletech.qoogol.model.LearningQuestionsNew;
 import com.jangletech.qoogol.model.ResponseObj;
 import com.jangletech.qoogol.model.UploadQuestion;
 import com.jangletech.qoogol.ui.BaseFragment;
@@ -45,6 +46,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -53,8 +55,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 
 import static android.app.Activity.RESULT_OK;
+import static com.jangletech.qoogol.util.Constant.ADD;
 import static com.jangletech.qoogol.util.Constant.MATCH_PAIR;
-import static com.jangletech.qoogol.util.Constant.SCQ;
+import static com.jangletech.qoogol.util.Constant.UPDATE;
 import static com.jangletech.qoogol.util.Constant.qoogol;
 
 public class MtpQuestFragment extends BaseFragment implements SubjectiveAnsDialog.GetAnsListener, QueMediaListener {
@@ -68,6 +71,10 @@ public class MtpQuestFragment extends BaseFragment implements SubjectiveAnsDialo
     private static final int CAMERA_REQUEST = 1, GALLERY_REQUEST = 2, PICKFILE_REQUEST_CODE = 3, VIDEO_REQUEST = 4, AUDIO_REQUEST = 5;
     public ArrayList<Uri> mAllUri = new ArrayList<>();
     private AdapterGallerySelectedImage galleryAdapter;
+    String questionId = "", subjectId = "";
+    List<String> tempimgList = new ArrayList<>();
+    int call_from;
+
 
 
     @Nullable
@@ -81,14 +88,22 @@ public class MtpQuestFragment extends BaseFragment implements SubjectiveAnsDialo
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if (getArguments() != null && getArguments().getSerializable("Question") != null) {
-            uploadQuestion = (UploadQuestion) getArguments().getSerializable("Question");
-            mBinding.etQuestion.setText(uploadQuestion.getQuestDescription());
-            mBinding.subject.setText("Subject : " + uploadQuestion.getSubjectName());
+        initSelectedImageView();
+
+        if (getArguments().getInt("call_from")==ADD) {
+            call_from=ADD;
+            if (getArguments() != null && getArguments().getSerializable("Question") != null) {
+                uploadQuestion = (UploadQuestion) getArguments().getSerializable("Question");
+                mBinding.etQuestion.setText(uploadQuestion.getQuestDescription());
+                mBinding.subject.setText("Subject : " + uploadQuestion.getSubjectName());
+                subjectId = uploadQuestion.getSubjectId();
+            }
+        }else if (getArguments().getInt("call_from")==UPDATE) {
+            call_from=UPDATE;
+            LearningQuestionsNew learningQuestionsNew = (LearningQuestionsNew) getArguments().getSerializable("data");
+            setData(learningQuestionsNew);
         }
 
-
-        initSelectedImageView();
 
         mBinding.saveQuestion.setOnClickListener(v -> addQuestion());
 
@@ -133,13 +148,16 @@ public class MtpQuestFragment extends BaseFragment implements SubjectiveAnsDialo
         mBinding.a4.setOnCheckedChangeListener((group, checkedId) -> getCheckedRadioButton(mBinding.a4));
     }
 
+    private void setData(LearningQuestionsNew learningQuestionsNew) {
+    }
+
     @Override
     public void onAnswerEntered(String answer) {
 
     }
     private void initSelectedImageView() {
         setupPreview(null);
-        galleryAdapter = new AdapterGallerySelectedImage(mAllUri, getActivity(), new AdapterGallerySelectedImage.GalleryUplodaHandler() {
+        galleryAdapter = new AdapterGallerySelectedImage(mAllUri, tempimgList, call_from, getActivity(), new AdapterGallerySelectedImage.GalleryUplodaHandler() {
             @Override
             public void imageClick(Uri media, int position) {
                 try {
@@ -514,6 +532,11 @@ public class MtpQuestFragment extends BaseFragment implements SubjectiveAnsDialo
             setupPreview(uri);
     }
 
+    @Override
+    public void onScanText(String text, int ansId) {
+
+    }
+
 
     private void addQuestion() {
         if (isValidate()) {
@@ -592,11 +615,11 @@ public class MtpQuestFragment extends BaseFragment implements SubjectiveAnsDialo
             RequestBody difflevel = RequestBody.create(MediaType.parse("multipart/form-data"), getSelectedDiffLevel());
             RequestBody ans = RequestBody.create(MediaType.parse("multipart/form-data"), getSelectedAns());
             RequestBody imgname = RequestBody.create(MediaType.parse("multipart/form-data"), images);
-
+            RequestBody question_id = RequestBody.create(MediaType.parse("multipart/form-data"), questionId);
 
 
             Call<ResponseObj> call = getApiService().addSCQQuestionsApi(userId, appname, deviceId,
-                    subId, question, questiondesc, type, selectedpair1, selectedpair2, selectedpair3, selectedpair4, marks, duration, difflevel, ans, imgname, queImagesParts);
+                    subId, question, questiondesc, type, selectedpair1, selectedpair2, selectedpair3, selectedpair4, marks, duration, difflevel, ans, imgname, queImagesParts,question_id);
             call.enqueue(new Callback<ResponseObj>() {
                 @Override
                 public void onResponse(Call<ResponseObj> call, retrofit2.Response<ResponseObj> response) {

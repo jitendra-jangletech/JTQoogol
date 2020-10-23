@@ -508,6 +508,8 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST(Constant.FETCH_QA)
     Call<LearningQuestResponse> fetchMyQuestionsApi(@Field(Constant.u_user_id) String userid,
+                                                    @Field(Constant.q_user_id) String user,
+                                                    @Field(Constant.q_id) String id,
                                                     @Field(Constant.device_id) String deviceId,
                                                     @Field(Constant.appName) String appName,
                                            @Field(Constant.ue_id) String ueId,
@@ -682,7 +684,8 @@ public interface ApiInterface {
                                          @Part(Constant.q_diff_level) RequestBody difflevel,
                                          @Part(Constant.a_sub_ans) RequestBody ans,
                                          @Part(Constant.w_media_names) RequestBody medianames,
-                                         @Part MultipartBody.Part[] image);
+                                         @Part MultipartBody.Part[] image,
+                                         @Part(Constant.q_id) RequestBody questionId);
 
     @FormUrlEncoded
     @POST(Constant.ADD_QUESTION)

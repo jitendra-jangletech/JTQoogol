@@ -7,7 +7,6 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -33,6 +32,7 @@ import com.jangletech.qoogol.adapter.AdapterGallerySelectedImage;
 import com.jangletech.qoogol.databinding.FragmentMtpImageBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.listeners.QueMediaListener;
+import com.jangletech.qoogol.model.LearningQuestionsNew;
 import com.jangletech.qoogol.model.ResponseObj;
 import com.jangletech.qoogol.model.UploadQuestion;
 import com.jangletech.qoogol.ui.BaseFragment;
@@ -48,6 +48,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -60,16 +61,13 @@ import static com.jangletech.qoogol.util.Constant.A1;
 import static com.jangletech.qoogol.util.Constant.A2;
 import static com.jangletech.qoogol.util.Constant.A3;
 import static com.jangletech.qoogol.util.Constant.A4;
+import static com.jangletech.qoogol.util.Constant.ADD;
 import static com.jangletech.qoogol.util.Constant.B1;
 import static com.jangletech.qoogol.util.Constant.B2;
 import static com.jangletech.qoogol.util.Constant.B3;
 import static com.jangletech.qoogol.util.Constant.B4;
 import static com.jangletech.qoogol.util.Constant.MATCH_PAIR_IMAGE;
-import static com.jangletech.qoogol.util.Constant.SCQ;
-import static com.jangletech.qoogol.util.Constant.SCQ1;
-import static com.jangletech.qoogol.util.Constant.SCQ2;
-import static com.jangletech.qoogol.util.Constant.SCQ3;
-import static com.jangletech.qoogol.util.Constant.SCQ4;
+import static com.jangletech.qoogol.util.Constant.UPDATE;
 import static com.jangletech.qoogol.util.Constant.qoogol;
 
 public class MTPImageFragment extends BaseFragment implements QueMediaListener {
@@ -81,8 +79,12 @@ public class MTPImageFragment extends BaseFragment implements QueMediaListener {
     private Uri[] mOptionsUri = new Uri[8];
     private static final String TAG = "MTPImageFragment";
     private UploadQuestion uploadQuestion;
+    String questionId = "";
+    List<String> tempimgList = new ArrayList<>();
+    int call_from;
 
-      @Override
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -100,10 +102,17 @@ public class MTPImageFragment extends BaseFragment implements QueMediaListener {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if (getArguments() != null && getArguments().getSerializable("Question") != null) {
-            uploadQuestion = (UploadQuestion) getArguments().getSerializable("Question");
-            mBinding.etQuestion.setText(uploadQuestion.getQuestDescription());
-            mBinding.subject.setText("Subject : " + uploadQuestion.getSubjectName());
+        if (getArguments().getInt("call_from")==ADD) {
+            call_from=ADD;
+            if (getArguments() != null && getArguments().getSerializable("Question") != null) {
+                uploadQuestion = (UploadQuestion) getArguments().getSerializable("Question");
+                mBinding.etQuestion.setText(uploadQuestion.getQuestDescription());
+                mBinding.subject.setText("Subject : " + uploadQuestion.getSubjectName());
+            }
+        }else if (getArguments().getInt("call_from")==UPDATE) {
+            call_from=UPDATE;
+            LearningQuestionsNew learningQuestionsNew = (LearningQuestionsNew) getArguments().getSerializable("data");
+            setData(learningQuestionsNew);
         }
 
         initSelectedImageView();
@@ -146,9 +155,12 @@ public class MTPImageFragment extends BaseFragment implements QueMediaListener {
         mBinding.addImages.setOnClickListener(v -> ((MainActivity) getActivity()).openMediaDialog(Constant.QUESTION));
     }
 
+    private void setData(LearningQuestionsNew learningQuestionsNew) {
+    }
+
     private void initSelectedImageView() {
         setupPreview(null);
-        galleryAdapter = new AdapterGallerySelectedImage(mAllUri, getActivity(), new AdapterGallerySelectedImage.GalleryUplodaHandler() {
+        galleryAdapter = new AdapterGallerySelectedImage(mAllUri, tempimgList, call_from, getActivity(), new AdapterGallerySelectedImage.GalleryUplodaHandler() {
             @Override
             public void imageClick(Uri media, int position) {
                 try {
@@ -311,11 +323,11 @@ public class MTPImageFragment extends BaseFragment implements QueMediaListener {
             RequestBody difflevel = RequestBody.create(MediaType.parse("multipart/form-data"), getSelectedDiffLevel());
             RequestBody ans = RequestBody.create(MediaType.parse("multipart/form-data"), getSelectedAns());
             RequestBody imgname = RequestBody.create(MediaType.parse("multipart/form-data"), images);
-
+            RequestBody question_id = RequestBody.create(MediaType.parse("multipart/form-data"), questionId);
 
 
             Call<ResponseObj> call = getApiService().addSCQQuestionsApi(userId, appname, deviceId,
-                    subId, question, questiondesc, type, selectedpair1, selectedpair2, selectedpair3, selectedpair4, marks, duration, difflevel, ans, imgname, queImagesParts);
+                    subId, question, questiondesc, type, selectedpair1, selectedpair2, selectedpair3, selectedpair4, marks, duration, difflevel, ans, imgname, queImagesParts,question_id);
             call.enqueue(new Callback<ResponseObj>() {
                 @Override
                 public void onResponse(Call<ResponseObj> call, retrofit2.Response<ResponseObj> response) {
@@ -592,6 +604,11 @@ public class MTPImageFragment extends BaseFragment implements QueMediaListener {
     @Override
     public void onScanImageClick(Uri uri, int opt) {
         loadImage(uri, opt);
+    }
+
+    @Override
+    public void onScanText(String text, int ansId) {
+
     }
 
     private void loadImage(Uri uri, int opt) {

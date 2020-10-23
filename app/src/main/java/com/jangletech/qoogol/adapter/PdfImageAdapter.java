@@ -19,9 +19,11 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.ui.upload_question.SCQ_QueFragment;
+import com.jangletech.qoogol.util.AppUtils;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Pritali on 10/8/2020.
@@ -29,13 +31,12 @@ import java.util.ArrayList;
 public class PdfImageAdapter extends RecyclerView.Adapter<PdfImageAdapter.ViewHolder> {
 
     Activity activity;
-    ArrayList<String> mAllImages;
+    List<String> mAllImages;
     pdfImageItemClick pdfImageItemClick;
 
-    public PdfImageAdapter(Activity activity, ArrayList<String> mAllImages, pdfImageItemClick pdfImageItemClick) {
+    public PdfImageAdapter(Activity activity, List<String> mAllImages) {
         this.activity = activity;
         this.mAllImages = mAllImages;
-        this.pdfImageItemClick = pdfImageItemClick;
     }
 
     @NonNull
@@ -56,7 +57,7 @@ public class PdfImageAdapter extends RecyclerView.Adapter<PdfImageAdapter.ViewHo
            if (mAllImages.get(position) != null) {
                holder.removeItem.setVisibility(View.VISIBLE);
                Glide.with(activity)
-                       .load(mAllImages.get(position).trim())
+                       .load(AppUtils.getMedialUrl(activity, mAllImages.get(position).split("=", -1)[0], mAllImages.get(position).split("=", -1)[1]))
                        .transition(DrawableTransitionOptions.withCrossFade())
                        .diskCacheStrategy(DiskCacheStrategy.DATA)
                        .placeholder(circularProgressDrawable)
@@ -78,6 +79,11 @@ public class PdfImageAdapter extends RecyclerView.Adapter<PdfImageAdapter.ViewHo
        } catch (Exception e) {
            e.printStackTrace();
        }
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return super.getItemViewType(position);
     }
 
     @Override

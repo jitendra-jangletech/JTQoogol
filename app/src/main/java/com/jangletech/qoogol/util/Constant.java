@@ -206,9 +206,7 @@ public class Constant {
 
     //Question type
     public static String ONE_LINE_ANSWER = "4";
-    public static String SHORT_ANSWER = "5";
-    public static String LONG_ANSWER = "6";
-    public static String FILL_THE_BLANKS = "7";
+
 
 
     //Options type
@@ -221,6 +219,10 @@ public class Constant {
     public static String TRUE_FALSE = "8";
     public static String MATCH_PAIR = "11";
     public static String MATCH_PAIR_IMAGE = "12";
+    public static String SHORT_ANSWER = "21";
+    public static String LONG_ANSWER = "22";
+    public static String FILL_THE_BLANKS = "23";
+
 
     public static final String blob_path = "425E";
     public static final String mdt_type_id = "272";

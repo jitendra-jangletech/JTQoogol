@@ -9,4 +9,5 @@ import android.net.Uri;
 public interface QueMediaListener {
     void onMediaReceived(int requestCode, int resultCode, Intent data, Uri mphotouri, int optionId);
     void onScanImageClick(Uri uri, int opt);
+    void onScanText(String text, int ansId);
 }

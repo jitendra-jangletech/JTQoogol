@@ -226,11 +226,11 @@ public class LearningQuestions implements Serializable {
     }
 
     public String getCategory() {
-        if (getType().equalsIgnoreCase(FILL_THE_BLANKS)) {
+        if (getQue_option_type().equalsIgnoreCase(FILL_THE_BLANKS)) {
             return "Fill in the Blanks";
-        } else if (getType().equalsIgnoreCase(ONE_LINE_ANSWER) || getType().equalsIgnoreCase(SHORT_ANSWER)) {
+        } else if (getQue_option_type().equalsIgnoreCase(ONE_LINE_ANSWER) || getQue_option_type().equalsIgnoreCase(SHORT_ANSWER)) {
             return "Short Answer";
-        } else if (getType().equalsIgnoreCase(LONG_ANSWER)) {
+        } else if (getQue_option_type().equalsIgnoreCase(LONG_ANSWER)) {
             return "Long Answer";
         } else {
             if (getQue_option_type().equalsIgnoreCase(SCQ) || getQue_option_type().equalsIgnoreCase(SCQ_IMAGE) ||getQue_option_type().equalsIgnoreCase(SCQ_IMAGE_WITH_TEXT)) {
@@ -521,7 +521,7 @@ public class LearningQuestions implements Serializable {
 
         List<String> img = new ArrayList<>();
 
-        if (!getType().equalsIgnoreCase(FILL_THE_BLANKS) || !getType().equalsIgnoreCase(LONG_ANSWER) || !getType().equalsIgnoreCase(ONE_LINE_ANSWER)) {
+        if (!getQue_option_type().equalsIgnoreCase(FILL_THE_BLANKS) || !getQue_option_type().equalsIgnoreCase(LONG_ANSWER) || !getQue_option_type().equalsIgnoreCase(ONE_LINE_ANSWER)) {
             if (getQue_option_type().equalsIgnoreCase(SCQ_IMAGE) || getQue_option_type().equalsIgnoreCase(MCQ_IMAGE)) {
                 img.add(mcq1);
                 img.add(mcq2);
