@@ -20,7 +20,6 @@ import com.itextpdf.text.pdf.parser.PdfImageObject;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.FriendsAdapter;
 import com.jangletech.qoogol.databinding.ActivityTestingBinding;
-import com.jangletech.qoogol.dialog.AddImageDialog;
 import com.jangletech.qoogol.model.Friends;
 import com.jangletech.qoogol.model.ShareModel;
 import com.jangletech.qoogol.retrofit.ApiClient;

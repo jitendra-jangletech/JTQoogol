@@ -20,7 +20,7 @@ public class TestModelNew implements Serializable {
     private String userId;
 
     public String getTest_sections() {
-        return test_sections;
+        return test_sections != null ? test_sections : "";
     }
 
     public void setTest_sections(String test_sections) {
@@ -495,7 +495,7 @@ public class TestModelNew implements Serializable {
     }
 
     public String getTm_duration() {
-        return tm_duration;
+        return tm_duration != null ? tm_duration : "";
     }
 
     public void setTm_duration(String tm_duration) {

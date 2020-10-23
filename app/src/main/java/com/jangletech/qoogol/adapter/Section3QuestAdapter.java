@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.ItemQuestBinding;
 import com.jangletech.qoogol.model.LearningQuestionsNew;
-import com.jangletech.qoogol.util.AppUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,13 +50,15 @@ public class Section3QuestAdapter extends RecyclerView.Adapter<Section3QuestAdap
         LearningQuestionsNew learningQuestionsNew = learningQuestionsNewList.get(position);
         Log.i(TAG, "onBindViewHolder : " + learningQuestionsNew.getQuestion_id() + "," + learningQuestionsNew.getQuestion() + "," + learningQuestionsNew.getMarks());
 
+        String duration = !learningQuestionsNew.getRecommended_time().isEmpty() ? learningQuestionsNew.getRecommended_time() + " Sec" : "";
+        holder.itemQuestBinding.tvQuestDuration.setText(duration);
+
         holder.itemQuestBinding.tvQuestSerial.setText(String.valueOf(learningQuestionsNew.getQuestion_id()));
-        holder.itemQuestBinding.tvQuest.setText(AppUtils.decodedString(learningQuestionsNew.getQuestion()));
+        holder.itemQuestBinding.tvQuest.setText(learningQuestionsNew.getQuestion());
         holder.itemQuestBinding.tvQuestMarks.setText("Marks(" + learningQuestionsNew.getMarks() + ")");
 
         if (flag) {
             holder.itemQuestBinding.remove.setVisibility(View.GONE);
-            //holder.itemQuestBinding.checkQuest.setVisibility(View.VISIBLE);
             holder.itemQuestBinding.rootLayout.setBackgroundColor(learningQuestionsNew.isSelected() ? Color.CYAN : Color.WHITE);
             holder.itemQuestBinding.rootLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -100,6 +101,7 @@ public class Section3QuestAdapter extends RecyclerView.Adapter<Section3QuestAdap
         void onSection3QuestSelected(List<LearningQuestionsNew> learningQuestionsNewList);
 
         void onSection3RemoveClick(LearningQuestionsNew learningQuestionsNew, int questPos);
+
         void onSection3Marks(LearningQuestionsNew learningQuestionsNew, int quesPos);
     }
 

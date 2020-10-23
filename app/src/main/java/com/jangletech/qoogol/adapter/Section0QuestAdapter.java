@@ -49,9 +49,10 @@ public class Section0QuestAdapter extends RecyclerView.Adapter<Section0QuestAdap
     public void onBindViewHolder(@NonNull Section0QuestAdapter.ViewHolder holder, int position) {
         LearningQuestionsNew learningQuestionsNew = learningQuestionsNewList.get(position);
         Log.i(TAG, "onBindViewHolder : " + learningQuestionsNew.getQuestion_id() + "," + learningQuestionsNew.getQuestion() + "," + learningQuestionsNew.getMarks());
-
+        String duration = !learningQuestionsNew.getRecommended_time().isEmpty() ? learningQuestionsNew.getRecommended_time() + " Sec" : "";
+        holder.itemQuestBinding.tvQuestDuration.setText(duration);
         holder.itemQuestBinding.tvQuestSerial.setText(String.valueOf(learningQuestionsNew.getQuestion_id()));
-        holder.itemQuestBinding.tvQuest.setText(AppUtils.decodedString(learningQuestionsNew.getQuestion()));
+        holder.itemQuestBinding.tvQuest.setText(learningQuestionsNew.getQuestion());
         holder.itemQuestBinding.tvQuestMarks.setText("Marks(" + learningQuestionsNew.getMarks() + ")");
 
         if (flag) {

@@ -1,5 +1,6 @@
 package com.jangletech.qoogol.ui.create_test;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.jangletech.qoogol.R;
+import com.jangletech.qoogol.activities.PracticeTestActivity;
 import com.jangletech.qoogol.adapter.CreatedTestAdapter;
 import com.jangletech.qoogol.databinding.FragmentCreatedTestBinding;
 import com.jangletech.qoogol.model.TestListResponse;
@@ -53,7 +55,6 @@ public class CreatedTestFragment extends BaseFragment implements CreatedTestAdap
                         mBinding.tvNoTest.setVisibility(View.GONE);
                         setCreatedTestList(testListResponse.getTestList());
                     } else {
-                        //NO Tests Found
                         mBinding.tvNoTest.setText("No Tests Created");
                         mBinding.tvNoTest.setVisibility(View.VISIBLE);
                     }
@@ -77,6 +78,10 @@ public class CreatedTestFragment extends BaseFragment implements CreatedTestAdap
     @Override
     public void onValidateClick(TestModelNew testModelNew) {
         Log.i(TAG, "onValidateClick : " + testModelNew.getTm_id());
+        Intent intent = new Intent(getActivity(), PracticeTestActivity.class);
+        intent.putExtra(Constant.TM_ID, testModelNew.getTm_id());
+        intent.putExtra(Constant.PREVIEW_FLAG, Constant.PREVIEW_FLAG);
+        startActivity(intent);
     }
 
     @Override

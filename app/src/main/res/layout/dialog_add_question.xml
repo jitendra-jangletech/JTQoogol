@@ -34,10 +34,10 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
+                    android:padding="@dimen/_4sdp"
                     android:id="@+id/btnClose"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_margin="@dimen/_10sdp"
                     android:gravity="center"
                     android:src="?attr/homeAsUpIndicator"
                     android:textColor="@color/colorWhite"
@@ -46,11 +46,11 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
+                    android:padding="@dimen/_4sdp"
                     android:id="@+id/titletv"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
-                    android:layout_margin="@dimen/_10sdp"
                     android:gravity="center_vertical"
                     android:text="Select Questions"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"

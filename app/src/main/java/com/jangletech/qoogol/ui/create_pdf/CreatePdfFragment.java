@@ -3,8 +3,11 @@ package com.jangletech.qoogol.ui.create_pdf;
 import android.Manifest;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,6 +32,9 @@ import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
 import com.theartofdev.edmodo.cropper.CropImage;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -122,6 +128,7 @@ public class CreatePdfFragment extends BaseFragment implements CreatePdfAdapter.
                 Log.i(TAG, "onActivityResult Uri : " + result.getUri());
                 Log.i(TAG, "onActivityResult Size : " + images.size());
                 images.add(result.getUri());
+                createNewPdfPage(result.getUri());
                 mAdapter.updateList(images);
             }
         }
@@ -131,4 +138,58 @@ public class CreatePdfFragment extends BaseFragment implements CreatePdfAdapter.
     public void onRemoveClick(int position) {
         Log.i(TAG, "onRemoveClick : " + position);
     }
+
+    private void createNewPdfPage(Uri uri) {
+        try {
+            Bitmap bmp = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uri);
+            Bitmap resizedBmp = Bitmap.createScaledBitmap(bmp, 960, 1280, false);
+            PdfDocument pdfDocument = new PdfDocument();
+            PdfDocument.PageInfo myPageInfo = new PdfDocument.PageInfo.Builder(960, 1280, 1).create();
+            PdfDocument.Page page = pdfDocument.startPage(myPageInfo);
+
+            page.getCanvas().drawBitmap(resizedBmp, 0, 0, null);
+            pdfDocument.finishPage(page);
+
+            String pdfPath = Environment.getExternalStorageDirectory()
+                    .getAbsolutePath() + "/Qoogol/pdf_2.pdf";
+            File myPDFFile = new File(pdfPath);
+
+            try {
+                pdfDocument.writeTo(new FileOutputStream(myPDFFile));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            pdfDocument.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+//    private void mergePdf() {
+//        try {
+//            String pdfPath = Environment.getExternalStorageDirectory()
+//                    .getAbsolutePath() + "/Qoogol/merged.pdf";
+//
+//            String pdfPath1 = Environment.getExternalStorageDirectory()
+//                    .getAbsolutePath() + "/Qoogol/pdf_1.pdf";
+//            File myPDFFile1 = new File(pdfPath1);
+//
+//            String pdfPath2 = Environment.getExternalStorageDirectory()
+//                    .getAbsolutePath() + "/Qoogol/pdf_2.pdf";
+//            File myPDFFile2 = new File(pdfPath2);
+//
+//            com.itextpdf.kernel.pdf.PdfDocument pdfDocument = new com.itextpdf.kernel.pdf.PdfDocument(new PdfReader(pdfPath1), new PdfWriter(pdfPath));
+//            com.itextpdf.kernel.pdf.PdfDocument pdfDocument2 = new com.itextpdf.kernel.pdf.PdfDocument(new PdfReader(pdfPath2));
+//
+//            Pdf merger = new PdfMerger(pdfDocument);
+//            merger.merge(pdfDocument2, 1, pdfDocument2.getNumberOfPages());
+//
+//            pdfDocument2.close();
+//            pdfDocument.close();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 }

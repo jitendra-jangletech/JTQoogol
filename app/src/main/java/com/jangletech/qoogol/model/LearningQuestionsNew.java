@@ -361,7 +361,7 @@ public class LearningQuestionsNew implements Cloneable, Serializable {
     }
 
     public String getRecommended_time() {
-        return recommended_time != null ? recommended_time.contains("Time") ? recommended_time : "Time: " + recommended_time + " Sec" : "";
+        return recommended_time!=null?recommended_time:"";
     }
 
     public void setRecommended_time(String recommended_time) {

@@ -11,14 +11,18 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AlertDialog;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.jangletech.qoogol.R;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringEscapeUtils;
 import org.joda.time.LocalDate;
 import org.joda.time.Period;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -83,13 +87,13 @@ public class AppUtils {
     public static HashMap<String, String> loadQueFilterHashMap(Context mContext) {
         HashMap<String, String> newMap = new HashMap<String, String>();
         PreferenceManager manager = new PreferenceManager(mContext);
-        newMap.put(Constant.q_avg_ratings,manager.getRatingsFilter());
-        newMap.put(Constant.q_diff_level,manager.getQueDiffLevelFilter());
-        newMap.put(Constant.q_type,manager.getQuetionTypeFilter());
-        newMap.put(Constant.q_option_type,manager.getOptionTypeFilter());
-        newMap.put(Constant.q_trending,manager.getQueTrandingFilter());
-        newMap.put(Constant.q_popular,manager.getQuePopularFilter());
-        newMap.put(Constant.q_recent,manager.getQueRecentFilter());
+        newMap.put(Constant.q_avg_ratings, manager.getRatingsFilter());
+        newMap.put(Constant.q_diff_level, manager.getQueDiffLevelFilter());
+        newMap.put(Constant.q_type, manager.getQuetionTypeFilter());
+        newMap.put(Constant.q_option_type, manager.getOptionTypeFilter());
+        newMap.put(Constant.q_trending, manager.getQueTrandingFilter());
+        newMap.put(Constant.q_popular, manager.getQuePopularFilter());
+        newMap.put(Constant.q_recent, manager.getQueRecentFilter());
         return newMap;
     }
 
@@ -100,7 +104,7 @@ public class AppUtils {
         HashMap<String, String> newMap = new HashMap<String, String>();
         newMap = (HashMap<String, String>) gson.fromJson(new PreferenceManager(mContext).getString(Constant.FILTER), newMap.getClass());
         Log.d(TAG, "Saved Hashmaps : " + newMap);
-            return newMap;
+        return newMap;
     }
 
     public static String getDateFormat(String strDate) throws ParseException {
@@ -157,17 +161,17 @@ public class AppUtils {
         Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
     }
 
-    public static void showToast(Context context,Throwable t ,String msg) {
-        if(t instanceof UnknownHostException){
+    public static void showToast(Context context, Throwable t, String msg) {
+        if (t instanceof UnknownHostException) {
             Toast.makeText(context, "Check Your Internet Connection.", Toast.LENGTH_LONG).show();
-        }else{
+        } else {
             Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
         }
     }
 
-    public static String getMedialUrl(Activity activity,String mdtId,String path){
-        Log.d(TAG, "getMedialUrl: "+TinyDB.getInstance(activity).getString(mdtId)+path);
-        return TinyDB.getInstance(activity).getString(mdtId)+path;
+    public static String getMedialUrl(Activity activity, String mdtId, String path) {
+        Log.d(TAG, "getMedialUrl: " + TinyDB.getInstance(activity).getString(mdtId) + path);
+        return TinyDB.getInstance(activity).getString(mdtId) + path;
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -189,10 +193,11 @@ public class AppUtils {
         output.write(byteArray);
         return byteArray;
     }
+
     public static boolean deleteDir(File dir) {
         if (dir.isDirectory()) {
             String[] children = dir.list();
-            for (int i=0; i<children.length; i++) {
+            for (int i = 0; i < children.length; i++) {
                 boolean success = deleteDir(new File(dir, children[i]));
                 if (!success) {
                     return false;

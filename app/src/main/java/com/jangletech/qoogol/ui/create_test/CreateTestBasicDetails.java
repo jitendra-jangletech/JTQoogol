@@ -32,10 +32,12 @@ import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.TinyDB;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;
@@ -70,39 +72,28 @@ public class CreateTestBasicDetails extends BaseFragment implements TextWatcher,
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Log.i(TAG, "onActivityCreated Executed: ");
-        bundle = new Bundle();
-        initializeHashMaps();
-        mcurrentTime = Calendar.getInstance();
-        testSubjectChapterMaster = getSyllabusDetails();
+        try {
+            bundle = new Bundle();
+            initializeHashMaps();
+            mcurrentTime = Calendar.getInstance();
+            //testSubjectChapterMaster = getSyllabusDetails();
 
-        if (getArguments() != null && getArguments().getSerializable("CREATED_TEST") != null) {
-            testModelNew = (TestModelNew) getArguments().getSerializable("CREATED_TEST");
-            setCreatedTestDetails(testModelNew);
-        } else {
-            prepareChips(mBinding.testDiffLevel, diffLevel, "");
-            prepareChips(mBinding.testExecuteTypeChipGroup, testType, "");
-            prepareChips(mBinding.testNegativeMarksGroup, negativeMarks, "0");
-            prepareChips(mBinding.testCategoryChipGrp, testCategory, "");
-        }
+            if (getArguments() != null && getArguments().getSerializable("CREATED_TEST") != null) {
+                testModelNew = (TestModelNew) getArguments().getSerializable("CREATED_TEST");
+                setCreatedTestDetails(testModelNew);
+            } else {
+                mcurrentTime.set(Calendar.HOUR_OF_DAY, 0);
+                mcurrentTime.set(Calendar.MINUTE, 30);
+                mBinding.etDuration.setText("00:30");
 
-        if (getString(Constant.subjectName) != null && !getString(Constant.subjectName).isEmpty())
-            mBinding.chipSubject.setText(getString(Constant.subjectName));
-
-        if (getString(Constant.chapterName1) != null &&
-                !getString(Constant.chapterName1).isEmpty()) {
-            chapters = chapters + getString(Constant.chapterName1);
+                prepareChips(mBinding.testDiffLevel, diffLevel, "");
+                prepareChips(mBinding.testExecuteTypeChipGroup, testType, "");
+                prepareChips(mBinding.testNegativeMarksGroup, negativeMarks, "0");
+                prepareChips(mBinding.testCategoryChipGrp, testCategory, "");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        if (getString(Constant.chapterName2) != null &&
-                !getString(Constant.chapterName2).isEmpty()) {
-            chapters = chapters + "," + getString(Constant.chapterName2);
-        }
-        if (getString(Constant.chapterName3) != null &&
-                !getString(Constant.chapterName3).isEmpty()) {
-            chapters = chapters + "," + getString(Constant.chapterName3);
-        }
-
-        if (!chapters.isEmpty())
-            mBinding.chipChapter.setText(chapters);
 
         mBinding.etTestTitle.addTextChangedListener(this);
         mBinding.etTotalMarks.addTextChangedListener(this);
@@ -116,7 +107,7 @@ public class CreateTestBasicDetails extends BaseFragment implements TextWatcher,
                     mTimePicker = new TimePickerDialog(getActivity(), android.R.style.Theme_Holo_Dialog, new TimePickerDialog.OnTimeSetListener() {
                         @Override
                         public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                            String duration = String.format("%02d:%02d", selectedHour, selectedMinute) + ":00";
+                            String duration = String.format("%02d:%02d", selectedHour, selectedMinute);
                             mBinding.etDuration.setText(duration);
                             mcurrentTime.set(Calendar.HOUR_OF_DAY, selectedHour);
                             mcurrentTime.set(Calendar.MINUTE, selectedMinute);
@@ -130,12 +121,6 @@ public class CreateTestBasicDetails extends BaseFragment implements TextWatcher,
         });
 
         mBinding.chipSubject.setOnClickListener(v -> {
-            //navigationFromCreateTest(R.id.nav_modify_syllabus, Bundle.EMPTY);
-            DialogFragment syllabusDialog = new SyllabusDialog(this);
-            syllabusDialog.show(getParentFragmentManager(), "syllabus_dialog");
-        });
-
-        mBinding.chipChapter.setOnClickListener(v -> {
             //navigationFromCreateTest(R.id.nav_modify_syllabus, Bundle.EMPTY);
             DialogFragment syllabusDialog = new SyllabusDialog(this);
             syllabusDialog.show(getParentFragmentManager(), "syllabus_dialog");
@@ -181,7 +166,6 @@ public class CreateTestBasicDetails extends BaseFragment implements TextWatcher,
             }
         });
 
-
         mBinding.btnNext.setOnClickListener(v -> {
             try {
                 if (mBinding.etTestTitle.getText().toString().isEmpty()) {
@@ -208,13 +192,9 @@ public class CreateTestBasicDetails extends BaseFragment implements TextWatcher,
                     return;
                 }
 
-                if (testSubjectChapterMaster.getSubjectName() == null) {
+                if (mBinding.chipSubject.getText().toString().equalsIgnoreCase("No Subject") ||
+                        mBinding.chipSubject.getText().toString().isEmpty()) {
                     showToast("Please select subject.");
-                    return;
-                }
-
-                if (testSubjectChapterMaster.getChap1Name() == null) {
-                    showToast("Please select chapters.");
                     return;
                 }
 
@@ -236,9 +216,9 @@ public class CreateTestBasicDetails extends BaseFragment implements TextWatcher,
                 testModelNew.setTest_description(mBinding.etTestDesc.getText().toString().trim());
                 testModelNew.setTm_tot_marks(mBinding.etTotalMarks.getText().toString().trim());
                 testModelNew.setTm_duration(mBinding.etDuration.getText().toString());
-                testModelNew.setSm_sub_name(testSubjectChapterMaster.getSubjectName());
-                testModelNew.setTm_sm_id(testSubjectChapterMaster.getSubjectId()); //subjectId
-                testModelNew.setTm_cm_id(testSubjectChapterMaster.getChap1Id()); //todo Comma seperated Chapter Ids
+                testModelNew.setSm_sub_name(testModelNew.getSm_sub_name());
+                testModelNew.setTm_sm_id(testModelNew.getTm_sm_id()); //subjectId
+                testModelNew.setTm_cm_id(testModelNew.getTm_cm_id()); //
                 testModelNew.setTm_neg_mks(strNegativeMarks);
                 testModelNew.setTm_type(strTestType);
                 testModelNew.setTm_diff_level(difficulty);
@@ -275,18 +255,32 @@ public class CreateTestBasicDetails extends BaseFragment implements TextWatcher,
     }
 
     private void setCreatedTestDetails(TestModelNew testModelNew) {
+
         Log.i(TAG, "setCreatedTestDetails TmId : " + testModelNew.getTm_id());
+        Log.i(TAG, "setCreatedTestDetails: " + testModelNew.getTest_sections());
+        Log.i(TAG, "setCreatedTestDetails Sections : " + testModelNew.getTest_sections());
+        TinyDB.getInstance(getActivity()).putString(Constant.TEST_SUBJECT_CHAP, testModelNew.getTest_sections());
         category = testModelNew.getTm_catg();
         strTestType = testModelNew.getTm_type();
         difficulty = testModelNew.getTm_diff_level();
         strNegativeMarks = testModelNew.getTm_neg_mks();
-
+        //testSubjectChapterMaster.setSubjectName(testModelNew.getSm_sub_name());
+        //testSubjectChapterMaster.setSubjectId(testModelNew.getTm_sm_id());
+        //testSubjectChapterMaster.setChap1Id(testModelNew.getTm_cm_id());
+        Log.i(TAG, "setCreatedTestDetails duration: " + testModelNew.getTm_duration());
+        if (testModelNew.getTm_duration() != null && !testModelNew.getTm_duration().isEmpty()) {
+            String[] duration = testModelNew.getTm_duration().split(":", -1);
+            mcurrentTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(duration[0]));
+            mcurrentTime.set(Calendar.MINUTE, Integer.parseInt(duration[1]));
+        }
 
         mBinding.etTestTitle.setText(testModelNew.getTm_name());
         mBinding.etTestDesc.setText(testModelNew.getTest_description());
         mBinding.etNoOfQuests.setText(testModelNew.getQuest_count());
         mBinding.etDuration.setText(testModelNew.getTm_duration());
         mBinding.etTotalMarks.setText(testModelNew.getTm_tot_marks());
+        mBinding.chipSubject.setText(testModelNew.getSm_sub_name());
+        mBinding.chipSubject.setEnabled(false);
         prepareChips(mBinding.testDiffLevel, diffLevel, testModelNew.getTm_diff_level());
         prepareChips(mBinding.testExecuteTypeChipGroup, testType, testModelNew.getTm_type());
 
@@ -294,6 +288,7 @@ public class CreateTestBasicDetails extends BaseFragment implements TextWatcher,
 
         prepareChips(mBinding.testNegativeMarksGroup, negativeMarks, testModelNew.getTm_neg_mks());
         prepareChips(mBinding.testCategoryChipGrp, testCategory, testModelNew.getTm_catg());
+
     }
 
     @Override
@@ -345,7 +340,10 @@ public class CreateTestBasicDetails extends BaseFragment implements TextWatcher,
     @Override
     public void onClick(View v) {
         if (v != null) {
-
+            if (v.getTag().equals("CHAPTER")) {
+                DialogFragment syllabusDialog = new SyllabusDialog(this);
+                syllabusDialog.show(getParentFragmentManager(), "syllabus_dialog");
+            }
         }
     }
 
@@ -426,14 +424,35 @@ public class CreateTestBasicDetails extends BaseFragment implements TextWatcher,
         }
     }
 
+
     @Override
     public void onSyllabusSaveClick() {
-        //todo set subect and chapters
         testSubjectChapterMaster = getSyllabusDetails();
         mBinding.chipSubject.setText(testSubjectChapterMaster.getSubjectName());
-        mBinding.chipChapter.setText(testSubjectChapterMaster.getChap1Name());
+        List<String> listChapters = new ArrayList<>();
+        listChapters.add(testSubjectChapterMaster.getChap1Name());
+        listChapters.add(testSubjectChapterMaster.getChap2Name());
+        listChapters.add(testSubjectChapterMaster.getChap3Name());
+        prepareChapteChips(listChapters);
         testModelNew.setSm_sub_name(testSubjectChapterMaster.getSubjectName());
         testModelNew.setTm_sm_id(testSubjectChapterMaster.getSubjectId());
         testModelNew.setTm_cm_id(testSubjectChapterMaster.getChap1Id());
+    }
+
+    private void prepareChapteChips(List<String> list) {
+        mBinding.chipGrpChapter.removeAllViews();
+        int id = 0;
+        for (String string : list) {
+            if (string != null && !string.isEmpty()) {
+                Chip chip = (Chip) LayoutInflater.from(mBinding.chipGrpChapter.getContext()).inflate(R.layout.chip_new, mBinding.chipGrpChapter, false);
+                chip.setText(string);
+                chip.setTag("CHAPTER");
+                chip.setId(id);
+                chip.setClickable(true);
+                chip.setCheckable(true);
+                chip.setOnClickListener(this);
+                mBinding.chipGrpChapter.addView(chip);
+            }
+        }
     }
 }

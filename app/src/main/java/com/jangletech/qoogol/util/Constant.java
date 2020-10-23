@@ -43,6 +43,9 @@ public class Constant {
     public static final String w_media_name = "534";
     public static final String md_from_type = "425A";
 
+    public static final String test_section_id = "1236";
+    public static final String PREVIEW_FLAG = "PREVIEW_FLAG";
+
     //Selected Board
     public static final String BOARD = "BOARD";
     public static final String MOBILE = "MOBILE";
@@ -854,7 +857,6 @@ public class Constant {
     public static final String crms_cdatetime = "380";
     public static final String crms_likes = "383D";
     public static final String crms_views = "383C";
-
 
 
     //Call from

@@ -92,7 +92,7 @@ public class TestSectionFragment extends BaseFragment implements AddNewSectionDi
 
         mBinding.btnAddSection.setOnClickListener(v -> {
             try {
-                DialogFragment addSectionDialog = new AddNewSectionDialog(this, Constant.section, 0);
+                DialogFragment addSectionDialog = new AddNewSectionDialog(this, Constant.section,0 ,"");
                 addSectionDialog.show(getParentFragmentManager(), "dialog");
             } catch (Exception e) {
                 e.printStackTrace();
@@ -121,17 +121,18 @@ public class TestSectionFragment extends BaseFragment implements AddNewSectionDi
 
         mBinding.btnSubmitTest.setOnClickListener(v -> {
             try {
+                String msg = "All section Questions Marks should be equal to test total marks tap on each question to re-arrange marks.";
                 if (learningQuestionsNewList0.isEmpty() && learningQuestionsNewList1.isEmpty()) {
                     //showToast("Add Questions to Section.", Toast.LENGTH_LONG);
                     showAlert("Add Questions to Section.");
                     return;
                 } else if (getAllSectionMarks() > testTotalMarks) {
                     //showToast("All section Questions Marks should be equal to test total marks", Toast.LENGTH_LONG);
-                    showAlert("All section Questions Marks should be equal to test total marks");
+                    showAlert(msg);
                     return;
                 } else if (getAllSectionMarks() < testTotalMarks) {
                     //showToast("All section Questions Marks should be equal to test total marks", Toast.LENGTH_LONG);
-                    showAlert("All section Questions Marks should be equal to test total marks");
+                    showAlert(msg);
                     return;
                 } else {
                     //call api to submit Questions
@@ -170,10 +171,11 @@ public class TestSectionFragment extends BaseFragment implements AddNewSectionDi
     }
 
     @Override
-    public void onNewSectionSaveClick(String name, float marks, int pos) {
+    public void onNewSectionSaveClick(String name, float marks, String duration, int pos) {
         Log.i(TAG, "onNewSectionSaveClick Position : " + pos);
         Log.i(TAG, "onSaveClick Section Name : " + name);
         Log.i(TAG, "onSaveClick Section Marks : " + marks);
+        Log.i(TAG, "onNewSectionSaveClick Duration : " + duration);
         if (!name.equalsIgnoreCase("Marks")) {
             if (pos == 1) {
                 mBinding.section1Layout.setVisibility(View.VISIBLE);
@@ -197,32 +199,30 @@ public class TestSectionFragment extends BaseFragment implements AddNewSectionDi
             Log.i(TAG, "onNewSectionSaveClick Question Position: " + qPosition);
             if (secPos == 1) {
                 Log.i(TAG, "onNewSectionSaveClick Quest Pos : " + qPosition);
-                LearningQuestionsNew item = learningQuestionsNewList1.get(qPosition);
-                item.setMarks(String.valueOf(marks));
-                section0QuestAdapter.updateMarks(item, qPosition);
+                section0QuestAdapter.updateMarks(updateLearningItem(learningQuestionsNewList1.get(qPosition), marks, duration), qPosition);
             } else if (secPos == 2) {
                 Log.i(TAG, "onNewSectionSaveClick Quest Pos : " + qPosition);
-                LearningQuestionsNew item = learningQuestionsNewList2.get(qPosition);
-                item.setMarks(String.valueOf(marks));
-                section2QuestAdapter.updateMarks(item, qPosition);
+                //LearningQuestionsNew item = learningQuestionsNewList2.get(qPosition);
+                //item.setMarks(String.valueOf(marks));
+                section2QuestAdapter.updateMarks(updateLearningItem(learningQuestionsNewList2.get(qPosition), marks, duration), qPosition);
             } else if (secPos == 3) {
                 Log.i(TAG, "onNewSectionSaveClick Quest Pos : " + qPosition);
-                LearningQuestionsNew item = learningQuestionsNewList3.get(qPosition);
-                item.setMarks(String.valueOf(marks));
-                section3QuestAdapter.updateMarks(item, qPosition);
+                //LearningQuestionsNew item = learningQuestionsNewList3.get(qPosition);
+                //item.setMarks(String.valueOf(marks));
+                section3QuestAdapter.updateMarks(updateLearningItem(learningQuestionsNewList3.get(qPosition), marks, duration), qPosition);
             } else if (secPos == 0) {
                 Log.i(TAG, "onNewSectionSaveClick Quest Pos : " + qPosition);
-                LearningQuestionsNew item = learningQuestionsNewList0.get(qPosition);
-                item.setMarks(String.valueOf(marks));
-                addTestQuestionAdapter1.updateMarks(item, qPosition);
+                //LearningQuestionsNew item = learningQuestionsNewList0.get(qPosition);
+                //item.setMarks(String.valueOf(marks));
+                addTestQuestionAdapter1.updateMarks(updateLearningItem(learningQuestionsNewList0.get(qPosition), marks, duration), qPosition);
             }
         }
     }
 
-    private void setSectionAdapter() {
-        mAdapter = new SectionAdapter(getActivity(), testSectionList, this);
-        mBinding.directQuestions.setLayoutManager(new LinearLayoutManager(getContext()));
-        mBinding.directQuestions.setAdapter(mAdapter);
+    private LearningQuestionsNew updateLearningItem(LearningQuestionsNew item, float marks, String duration) {
+        item.setMarks(String.valueOf(marks));
+        item.setRecommended_time(duration);
+        return item;
     }
 
     @Override
@@ -307,44 +307,9 @@ public class TestSectionFragment extends BaseFragment implements AddNewSectionDi
         }
     }
 
-    private void calculateMarksValidation(List<LearningQuestionsNew> list, int sectionGivenMarks) {
-        try {
-            float testTotalMarks = Float.parseFloat(TinyDB.getInstance(getActivity()).getString(Constant.tm_tot_marks));
-            float totalSectionMarks = 0;
-            for (LearningQuestionsNew learningQuestionsNew : list) {
-                totalSectionMarks = totalSectionMarks + Float.parseFloat(learningQuestionsNew.getMarks());
-            }
-
-            String msg = "";
-
-            if (totalSectionMarks > testTotalMarks) {
-                msg = "Test total marks exceeded by the section marks. please re-arrange marks on tapping each question.";
-            }
-
-            if (totalSectionMarks > sectionGivenMarks) {
-                msg = "Added question marks are exceeding given section marks.";
-            }
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogStyle);
-            builder.setTitle("Alert")
-                    .setMessage(msg)
-                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    })
-                    .setCancelable(false)
-                    .show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     private void addTestQuest(List<LearningQuestionsNew> newTempList) {
         SubmitTest submitTest = new SubmitTest();
         int seq = 1;
-
         List<TestQuestionNew> testQuestionNewList = new ArrayList<>();
         try {
             for (LearningQuestionsNew learningQuestionsNew : newTempList) {
@@ -437,6 +402,7 @@ public class TestSectionFragment extends BaseFragment implements AddNewSectionDi
                 learningQuestionsNewList0.add(obj);
             }
             Log.d(TAG, "setQuestAdapter: " + learningQuestionsNewList0.size());
+            showHideSubmitButton(learningQuestionsNewList0);
 
             if (learningQuestionsNewList0.size() > 0) {
                 addTestQuestionAdapter1 = new AddTestQuestionAdapter(getActivity(), learningQuestionsNewList0, false, this);
@@ -452,12 +418,6 @@ public class TestSectionFragment extends BaseFragment implements AddNewSectionDi
         }
     }
 
-   /* private void setFetchedApiQuestion(List<TestQuestionNew> testQuestionNewList) {
-        section0QuestAdapter = new Section0QuestAdapter(getActivity(), response.body().getTestQuestionNewList(), false, this);
-        mBinding.directQuestions.setLayoutManager(new LinearLayoutManager(getContext()));
-        mBinding.directQuestions.setHasFixedSize(true);
-        mBinding.directQuestions.setAdapter(section0QuestAdapter);
-    }*/
 
     @Override
     public void onQuestSelected(List<LearningQuestionsNew> learningQuestionsNewList) {
@@ -547,7 +507,8 @@ public class TestSectionFragment extends BaseFragment implements AddNewSectionDi
             qPosition = pos;
             Log.i(TAG, "onSection0MarksClick Marks : " + item.getMarks());
             float marks = Float.parseFloat(item.getMarks());
-            DialogFragment addSectionDialog = new AddNewSectionDialog(this, Constant.mrks, marks);
+            String duration = item.getRecommended_time().trim().split(" ", -1)[0];
+            DialogFragment addSectionDialog = new AddNewSectionDialog(this, Constant.mrks, marks, duration);
             addSectionDialog.show(getParentFragmentManager(), "dialog_marks");
         } catch (Exception e) {
             e.printStackTrace();

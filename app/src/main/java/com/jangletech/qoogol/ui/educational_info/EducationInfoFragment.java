@@ -38,7 +38,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.jangletech.qoogol.util.Constant.fetch_loged_in_user;
-import static com.jangletech.qoogol.util.Constant.fetch_other_user;
 
 public class EducationInfoFragment extends BaseFragment implements
         EducationAdapter.EducationItemClickListener
@@ -96,7 +95,6 @@ public class EducationInfoFragment extends BaseFragment implements
 
     private void initViews() {
         mSettings = new PreferenceManager(getActivity());
-        userid = mSettings.getProfileFetchId();
         if (!isFragmentVisible) {
             fetchEducationDetails(fetch_loged_in_user);
             mBinding.addedu.setOnClickListener(this);
@@ -108,10 +106,7 @@ public class EducationInfoFragment extends BaseFragment implements
                 educationList = educations;
                 if (educations.size() > 0) {
                     mBinding.emptytv.setVisibility(View.GONE);
-                    if (userid.equalsIgnoreCase(mSettings.getUserId()))
-                        setEducationListAdapter(educations, fetch_loged_in_user);
-                    else
-                        setEducationListAdapter(educations, fetch_other_user);
+                    setEducationListAdapter(educations, fetch_loged_in_user);
                 } else {
                     mBinding.emptytv.setText("No Education Added.");
                     mBinding.emptytv.setVisibility(View.VISIBLE);
@@ -160,11 +155,7 @@ public class EducationInfoFragment extends BaseFragment implements
 
     private void fetchEducationDetails(int call_from) {
         ProgressDialog.getInstance().show(getActivity());
-        if (call_from == fetch_loged_in_user)
-            call = apiService.fetchUserEdu(userid, "L", getDeviceId(getActivity()), Constant.APP_NAME);
-        else
-            call = apiService.fetchOtherUSersUserEdu(mSettings.getUserId(), "L", getDeviceId(getActivity()), Constant.APP_NAME, userid);
-
+        call = apiService.fetchUserEdu(getUserId(getActivity()), "L", getDeviceId(getActivity()), Constant.APP_NAME);
         call.enqueue(new Callback<FetchEducationResponse>() {
             @Override
             public void onResponse(Call<FetchEducationResponse> call, Response<FetchEducationResponse> response) {

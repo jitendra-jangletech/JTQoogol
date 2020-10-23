@@ -2,9 +2,11 @@ package com.jangletech.qoogol.activities;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.VectorDrawable;
@@ -13,13 +15,16 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -35,6 +40,9 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.google.android.gms.vision.Frame;
+import com.google.android.gms.vision.text.TextBlock;
+import com.google.android.gms.vision.text.TextRecognizer;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.itextpdf.text.pdf.PRStream;
@@ -48,6 +56,7 @@ import com.jangletech.qoogol.databinding.ActivityMainBinding;
 import com.jangletech.qoogol.databinding.AlertDialogBinding;
 import com.jangletech.qoogol.databinding.MediaUploadLayoutBinding;
 import com.jangletech.qoogol.dialog.AddImageDialog;
+import com.jangletech.qoogol.dialog.AnsScanDialog;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.dialog.PublicProfileDialog;
 import com.jangletech.qoogol.enums.Nav;
@@ -63,15 +72,23 @@ import com.jangletech.qoogol.util.PreferenceManager;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
+import com.karumi.dexter.listener.single.PermissionListener;
+import com.theartofdev.edmodo.cropper.CropImage;
 import com.vincent.filepicker.activity.NormalFilePickActivity;
 import com.vincent.filepicker.filter.entity.NormalFile;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -86,7 +103,8 @@ import static com.jangletech.qoogol.util.Constant.CALL_FROM;
 import static com.jangletech.qoogol.util.Constant.QUESTION;
 import static com.jangletech.qoogol.util.Constant.profile;
 
-public class MainActivity extends BaseActivity implements PublicProfileDialog.PublicProfileClickListener, AddImageDialog.AddImageClickListener {
+public class MainActivity extends BaseActivity implements PublicProfileDialog.PublicProfileClickListener,
+        AddImageDialog.AddImageClickListener, AnsScanDialog.AnsScannerListener {
 
     private static final String TAG = "MainActivity";
     private AppBarConfiguration mAppBarConfiguration;
@@ -103,10 +121,12 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
     public static BottomNavigationView bottomNavigationView;
     public static String userId = "";
     QueMediaListener queMediaListener;
-    private static final int CAMERA_REQUEST = 1, GALLERY_REQUEST = 2, PICKFILE_REQUEST_CODE = 3, VIDEO_REQUEST = 4, AUDIO_REQUEST = 5;
+    private static final int CAMERA_REQUEST = 1, GALLERY_REQUEST = 2, PICKFILE_REQUEST_CODE=3, VIDEO_REQUEST = 4, AUDIO_REQUEST = 5,REQUEST_GALLERY = 6,REQUEST_CAMERA = 7;;
     private Uri mphotouri;
     private AlertDialog mediaDialog;
     private int optionId;
+    private int ansId;
+    private Uri imageUri;
 
 
     @Override
@@ -603,8 +623,8 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
         });
     }
 
-    public void setOnDataListener(QueMediaListener queMediaListener) {
-        this.queMediaListener = queMediaListener;
+    public void setOnDataListener(QueMediaListener queMediaListener){
+        this.queMediaListener =queMediaListener;
     }
 
     private void getNotificationIntent(Intent intent) {
@@ -648,7 +668,34 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == com.vincent.filepicker.Constant.REQUEST_CODE_PICK_FILE && resultCode == RESULT_OK && data != null) {
+        if (requestCode == REQUEST_GALLERY && resultCode == RESULT_OK && data != null) {
+            try {
+                CropImage.activity(data.getData())
+                        .setInitialCropWindowPaddingRatio(0.0f)
+                        .start(this);
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.e(TAG, "onFailure onActivityResult: " + e.getMessage());
+                Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG).show();
+            }
+        }else if (requestCode == REQUEST_CAMERA) {
+            Log.d(TAG, "onActivityResult REQUEST_CAMERA: " + imageUri);
+            try {
+                CropImage.activity(data.getData())
+                        .setInitialCropWindowPaddingRatio(0.0f)
+                        .start(this);
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.e(TAG, "onFailure onActivityResult: " + e.getMessage());
+                Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG).show();
+            }
+        } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE &&
+                resultCode == RESULT_OK && data != null) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (result != null && resultCode == RESULT_OK) {
+                inspect(result.getUri());
+            }
+        }else if (requestCode == com.vincent.filepicker.Constant.REQUEST_CODE_PICK_FILE && resultCode == RESULT_OK && data != null) {
             if (resultCode == RESULT_OK) {
                 ArrayList<NormalFile> list = data.getParcelableArrayListExtra(com.vincent.filepicker.Constant.RESULT_PICK_FILE);
                 //StringBuilder builder = new StringBuilder();
@@ -659,10 +706,86 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
                 }
             }
         } else {
-            if (queMediaListener != null)
-                queMediaListener.onMediaReceived(requestCode, resultCode, data, mphotouri,optionId);
+            if (queMediaListener !=null)
+                queMediaListener.onMediaReceived(requestCode,resultCode,data,mphotouri,optionId);
         }
 
+    }
+
+    private void inspect(Uri uri) {
+        Log.d(TAG, "inspect Uri : " + uri);
+        InputStream is = null;
+        Bitmap bitmap = null;
+        try {
+            is = getContentResolver().openInputStream(uri);
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+            options.inSampleSize = 2;
+            options.inScreenDensity = DisplayMetrics.DENSITY_LOW;
+            bitmap = BitmapFactory.decodeStream(is, null, options);
+            inspectFromBitmap(bitmap);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            Log.w(TAG, "Failed to find the file: " + uri, e);
+        } finally {
+
+            if (bitmap != null && !bitmap.isRecycled()) {
+                bitmap.recycle();
+                bitmap = null;
+            }
+
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Log.w(TAG, "Failed to close InputStream", e);
+                }
+            }
+        }
+    }
+
+    private void inspectFromBitmap(Bitmap bitmap) {
+        TextRecognizer textRecognizer = new TextRecognizer.Builder(this).build();
+        try {
+            if (!textRecognizer.isOperational()) {
+                new AlertDialog.
+                        Builder(this).
+                        setMessage("Text recognizer could not be set up on your device").show();
+                return;
+            }
+
+            Frame frame = new Frame.Builder().setBitmap(bitmap).build();
+            SparseArray<TextBlock> origTextBlocks = textRecognizer.detect(frame);
+            List<TextBlock> textBlocks = new ArrayList<>();
+            for (int i = 0; i < origTextBlocks.size(); i++) {
+                TextBlock textBlock = origTextBlocks.valueAt(i);
+                textBlocks.add(textBlock);
+            }
+            Collections.sort(textBlocks, new Comparator<TextBlock>() {
+                @Override
+                public int compare(TextBlock o1, TextBlock o2) {
+                    int diffOfTops = o1.getBoundingBox().top - o2.getBoundingBox().top;
+                    int diffOfLefts = o1.getBoundingBox().left - o2.getBoundingBox().left;
+                    if (diffOfTops != 0) {
+                        return diffOfTops;
+                    }
+                    return diffOfLefts;
+                }
+            });
+
+            StringBuilder detectedText = new StringBuilder();
+            for (TextBlock textBlock : textBlocks) {
+                if (textBlock != null && textBlock.getValue() != null) {
+                    detectedText.append(textBlock.getValue());
+                    detectedText.append("\n");
+                }
+            }
+            queMediaListener.onScanText(detectedText.toString().trim(),ansId);
+
+        } finally {
+            textRecognizer.release();
+        }
     }
 
     private void extractImages(String filepath) {
@@ -748,6 +871,11 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
         }
     }
 
+    public void openAnsScanDialog(int call_from) {
+        new AnsScanDialog(this, call_from, this)
+                .show();
+    }
+
     public void openMediaDialog(int call_from) {
         optionId = call_from;
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
@@ -764,23 +892,23 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
 
         mediaUploadLayoutBinding.camera.setOnClickListener(view -> {
             mediaDialog.dismiss();
-            requestStoragePermission(true, false, false, false);
+            requestStoragePermission(true, false, false,false);
         });
 
 
         mediaUploadLayoutBinding.gallery.setOnClickListener(view -> {
             mediaDialog.dismiss();
-            requestStoragePermission(false, true, false, false);
+            requestStoragePermission(false, true, false,false);
         });
 
 
         mediaUploadLayoutBinding.videos.setOnClickListener(view -> {
-            requestStoragePermission(false, false, false, true);
+            requestStoragePermission(false, false, false,true);
             mediaDialog.dismiss();
         });
 
         mediaUploadLayoutBinding.audios.setOnClickListener(view -> {
-            requestStoragePermission(false, false, true, false);
+            requestStoragePermission(false, false, true,false);
             mediaDialog.dismiss();
         });
 
@@ -792,7 +920,7 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
 
         mediaUploadLayoutBinding.documents.setOnClickListener(v -> {
             mediaDialog.dismiss();
-            requestStoragePermission(false, false, false, false);
+            requestStoragePermission(false, false, false,false);
         });
 
         mediaDialog = dialogBuilder.create();
@@ -800,7 +928,7 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
         mediaDialog.show();
     }
 
-    private void requestStoragePermission(final boolean isCamera, final boolean isPictures, final boolean isAudio, final boolean isVideo) {
+    private void requestStoragePermission(final boolean isCamera, final boolean isPictures, final boolean isAudio,  final boolean isVideo) {
         Dexter.withActivity(this)
                 .withPermissions(Manifest.permission.READ_EXTERNAL_STORAGE,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
@@ -814,7 +942,7 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
                                 getImages();
                             } else if (isAudio) {
                                 getAudio();
-                            } else if (isVideo) {
+                            } else  if (isVideo){
                                 getVideo();
                             } else {
                                 getDocument();
@@ -837,14 +965,13 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
                 .onSameThread()
                 .check();
     }
-
     protected void getDocument() {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         String[] mimeTypes =
                 {"application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .doc & .docx
                         "application/vnd.ms-powerpoint", "application/vnd.openxmlformats-officedocument.presentationml.presentation", // .ppt & .pptx
                         "application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // .xls & .xlsx
-                        "text/plain", "application/rtf", "application/pdf", "application/zip", "application/vnd.android.package-archive"};
+                        "text/plain","application/rtf","application/pdf","application/zip", "application/vnd.android.package-archive"};
 
         intent.setType("application/*");
         intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
@@ -902,7 +1029,7 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
 
     private void openSettings() {
         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-        Uri uri = Uri.fromParts("package", getPackageName(), null);
+        Uri uri = Uri.fromParts("package",getPackageName(), null);
         intent.setData(uri);
         startActivityForResult(intent, 101);
     }
@@ -1124,7 +1251,7 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
 
     @Override
     public void onImageClickListener(ImageObject imageObject, int opt) {
-        if (queMediaListener != null)
+        if (queMediaListener!=null)
             queMediaListener.onScanImageClick(imageObject.getUri(),opt);
     }
 
@@ -1135,5 +1262,67 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
         intent4.putExtra(com.vincent.filepicker.Constant.MAX_NUMBER, 1);
         intent4.putExtra(NormalFilePickActivity.SUFFIX, new String[]{"pdf"});
         startActivityForResult(intent4, com.vincent.filepicker.Constant.REQUEST_CODE_PICK_FILE);
+    }
+
+    @Override
+    public void onCamScannerClick(int id) {
+        ansId = id;
+        Dexter.withActivity(this)
+                .withPermissions(
+                        Manifest.permission.CAMERA,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ).withListener(new MultiplePermissionsListener() {
+            @Override
+            public void onPermissionsChecked(MultiplePermissionsReport report) {
+                if (report.areAllPermissionsGranted()) {
+                    String filename = System.currentTimeMillis() + ".jpg";
+                    ContentValues values = new ContentValues();
+                    values.put(MediaStore.Images.Media.TITLE, filename);
+                    values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+                    imageUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+
+                    Intent intent = new Intent();
+                    intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                    startActivityForResult(intent, REQUEST_CAMERA);
+                    //dispatchTakePictureIntent();
+                } else {
+                    Log.e(TAG, "onPermissionsChecked Error : ");
+                }
+            }
+
+            @Override
+            public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {/* ... */}
+        }).check();
+    }
+
+    @Override
+    public void onGalleryClick(int id) {
+        ansId = id;
+        Dexter.withActivity(this)
+                .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .withListener(new PermissionListener() {
+                    @Override
+                    public void onPermissionGranted(PermissionGrantedResponse response) {
+                        Intent i = new Intent(
+                                Intent.ACTION_PICK,
+                                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        startActivityForResult(i, REQUEST_GALLERY);
+                    }
+
+                    @Override
+                    public void onPermissionDenied(PermissionDeniedResponse response) {
+                        Toast.makeText(MainActivity.this, "Storage permission denied.", Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+                        token.continuePermissionRequest();
+                    }
+                })
+                .withErrorListener(error ->
+                        Toast.makeText(MainActivity.this, "Error occurred! ", Toast.LENGTH_SHORT).show())
+                .onSameThread()
+                .check();
     }
 }

@@ -7,6 +7,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+
 import com.jangletech.qoogol.R;
 
 public class CreateTestActivity extends AppCompatActivity {
@@ -33,5 +34,16 @@ public class CreateTestActivity extends AppCompatActivity {
     public boolean onSupportNavigateUp() {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (navController.getCurrentDestination() != null) {
+            if (navController.getCurrentDestination().getId() == R.id.nav_create) {
+                finish();
+            } else {
+                super.onBackPressed();
+            }
+        }
     }
 }

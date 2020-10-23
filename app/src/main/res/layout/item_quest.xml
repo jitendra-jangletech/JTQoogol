@@ -46,10 +46,23 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/_5sdp"
-                    android:text="(5 Marks)"
+                    android:text=""
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textColor="@color/colorSkyBlue"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvQuest" />
+
+                <TextView
+                    android:textColor="@color/colorSkyBlue"
+                    android:id="@+id/tvQuestDuration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/_5sdp"
+                    android:text=""
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tvQuest" />
 
                 <ImageView

@@ -68,7 +68,6 @@ android {
     }
 
 
-
     googleServices {
         disableVersionCheck = true
     }
@@ -177,6 +176,7 @@ dependencies {
     implementation 'com.tom_roush:pdfbox-android:1.8.10.1'
 
     implementation 'com.itextpdf:itextg:5.5.10'
+    //implementation 'com.itextpdf:itext7-core:7.0.2'
 
     def kotlin_coroutinesVersion = "1.2.1"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlin_coroutinesVersion"

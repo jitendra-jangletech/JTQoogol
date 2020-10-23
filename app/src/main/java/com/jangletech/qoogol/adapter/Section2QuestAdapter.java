@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.ItemQuestBinding;
 import com.jangletech.qoogol.model.LearningQuestionsNew;
-import com.jangletech.qoogol.util.AppUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,8 +50,10 @@ public class Section2QuestAdapter extends RecyclerView.Adapter<Section2QuestAdap
         LearningQuestionsNew learningQuestionsNew = learningQuestionsNewList.get(position);
         Log.i(TAG, "onBindViewHolder : " + learningQuestionsNew.getQuestion_id() + "," + learningQuestionsNew.getQuestion() + "," + learningQuestionsNew.getMarks());
 
+        String duration = !learningQuestionsNew.getRecommended_time().isEmpty() ? learningQuestionsNew.getRecommended_time() + " Sec" : "";
+        holder.itemQuestBinding.tvQuestDuration.setText(duration);
         holder.itemQuestBinding.tvQuestSerial.setText(String.valueOf(learningQuestionsNew.getQuestion_id()));
-        holder.itemQuestBinding.tvQuest.setText(AppUtils.decodedString(learningQuestionsNew.getQuestion()));
+        holder.itemQuestBinding.tvQuest.setText(learningQuestionsNew.getQuestion());
         holder.itemQuestBinding.tvQuestMarks.setText("Marks(" + learningQuestionsNew.getMarks() + ")");
 
         if (flag) {

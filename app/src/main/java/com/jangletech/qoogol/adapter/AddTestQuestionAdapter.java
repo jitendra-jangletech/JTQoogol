@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.ItemQuestBinding;
 import com.jangletech.qoogol.model.LearningQuestionsNew;
-import com.jangletech.qoogol.util.AppUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,12 +49,14 @@ public class AddTestQuestionAdapter extends RecyclerView.Adapter<AddTestQuestion
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         LearningQuestionsNew learningQuestionsNew = learningQuestionsNewList.get(position);
-        Log.i(TAG, "onBindViewHolder : " + learningQuestionsNew.getQuestion_id() + "," + learningQuestionsNew.getQuestion() + "," + learningQuestionsNew.getMarks());
-        Log.e(TAG, "onBindViewHolder 1346 : " + learningQuestionsNew.getType());
-        Log.e(TAG, "onBindViewHolder 1362 : " + learningQuestionsNew.getQue_option_type());
-
+        //Log.i(TAG, "onBindViewHolder : " + learningQuestionsNew.getQuestion_id() + "," + learningQuestionsNew.getQuestion() + "," + learningQuestionsNew.getMarks());
+        //Log.e(TAG, "onBindViewHolder 1346 : " + learningQuestionsNew.getType());
+        //Log.e(TAG, "onBindViewHolder 1362 : " + learningQuestionsNew.getQue_option_type());
+        Log.i(TAG, "onBindViewHolder: " + learningQuestionsNew.getQuestion());
+        String duration = !learningQuestionsNew.getRecommended_time().isEmpty() ? learningQuestionsNew.getRecommended_time() + " Sec" : "";
+        holder.itemQuestBinding.tvQuestDuration.setText(duration);
         holder.itemQuestBinding.tvQuestSerial.setText(String.valueOf(learningQuestionsNew.getQuestion_id()));
-        holder.itemQuestBinding.tvQuest.setText(AppUtils.decodedString(learningQuestionsNew.getQuestion()));
+        holder.itemQuestBinding.tvQuest.setText(learningQuestionsNew.getQuestion());
         holder.itemQuestBinding.tvQuestMarks.setText("Marks(" + learningQuestionsNew.getMarks() + ")");
 
         if (flag) {
@@ -121,5 +122,4 @@ public class AddTestQuestionAdapter extends RecyclerView.Adapter<AddTestQuestion
         learningQuestionsNewList.set(pos, item);
         notifyItemChanged(pos);
     }
-
 }

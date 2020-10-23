@@ -4,10 +4,10 @@
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
-        android:padding="@dimen/_2sdp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/bg_recycler">
+        android:background="@color/bg_recycler"
+        android:padding="@dimen/_2sdp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/topLayout"
@@ -29,29 +29,6 @@
                     android:padding="@dimen/_2sdp">
 
                     <TextView
-                        android:id="@+id/tvCourse"
-                        style="@style/font_style"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Course : "
-                        android:textSize="@dimen/_9ssp"
-                        android:visibility="gone"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/tvCourseValue"
-                        style="@style/font_style"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=""
-                        android:textColor="@color/colorBlack"
-                        android:textSize="@dimen/_9ssp"
-                        android:visibility="gone"
-                        app:layout_constraintLeft_toRightOf="@+id/tvCourse"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
                         android:id="@+id/tvSubject"
                         style="@style/font_style"
                         android:layout_width="wrap_content"
@@ -59,7 +36,7 @@
                         android:text="Subject : "
                         android:textSize="@dimen/_9ssp"
                         app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tvCourse" />
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/tvSubjectValue"
@@ -70,28 +47,30 @@
                         android:textColor="@color/colorBlack"
                         android:textSize="@dimen/_9ssp"
                         app:layout_constraintStart_toEndOf="@+id/tvSubject"
-                        app:layout_constraintTop_toBottomOf="@+id/tvCourseValue" />
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/tvChapter"
                         style="@style/font_style"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_2sdp"
                         android:text="Chapters : "
                         android:textSize="@dimen/_9ssp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintLeft_toLeftOf="parent" />
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tvSubject" />
 
                     <TextView
                         android:id="@+id/tvChapterValue"
                         style="@style/font_style"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_2sdp"
                         android:text="No Chapters Selected"
                         android:textColor="@color/colorBlack"
                         android:textSize="@dimen/_9ssp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintLeft_toRightOf="@+id/tvChapter" />
+                        app:layout_constraintStart_toEndOf="@+id/tvChapter"
+                        app:layout_constraintTop_toBottomOf="@+id/tvSubjectValue" />
 
                     <TextView
                         android:id="@+id/tvInfo"
@@ -101,11 +80,10 @@
                         android:clickable="true"
                         android:drawableTint="@color/black"
                         android:foreground="?attr/selectableItemBackground"
-                        android:padding="@dimen/_5sdp"
+                        android:padding="@dimen/_4sdp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
-
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

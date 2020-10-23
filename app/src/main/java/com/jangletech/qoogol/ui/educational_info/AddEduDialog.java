@@ -95,7 +95,6 @@ public class AddEduDialog extends Dialog {
         params = new HashMap<>();
     }
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -200,48 +199,52 @@ public class AddEduDialog extends Dialog {
         });
 
         addEditEducationBinding.btnSave.setOnClickListener(v -> {
-            if (addEditEducationBinding.universityBoardAutocompleteView.getText().toString().trim().isEmpty()) {
-                addEditEducationBinding.universityBoardAutocompleteView.setError("Please select university.");
-                return;
-            } else if (addEditEducationBinding.instituteAutocompleteView.getText().toString().trim().isEmpty()) {
-                addEditEducationBinding.instituteAutocompleteView.setError("Please select institute.");
-                return;
-            } else if (addEditEducationBinding.degreeAutocompleteView.getText().toString().trim().isEmpty()) {
-                addEditEducationBinding.degreeAutocompleteView.setError("Please select degree.");
-                return;
-            } else if (addEditEducationBinding.courseAutocompleteView.getText().toString().trim().isEmpty()) {
-                addEditEducationBinding.courseAutocompleteView.setError("Please select course.");
-                return;
-            } else if (addEditEducationBinding.courseYearAutocompleteView.getText().toString().trim().isEmpty()) {
-                addEditEducationBinding.courseYearAutocompleteView.setError("Please select course year.");
-                return;
-            } else if (addEditEducationBinding.etstartdate.getText().toString().trim().isEmpty()) {
-                addEditEducationBinding.tilStartdate.setError("Please select start date.");
-                return;
-            } else if (addEditEducationBinding.etenddate.getText().toString().trim().isEmpty()) {
-                addEditEducationBinding.tilEnddate.setError("Please select end date.");
-                return;
-            }
+            try {
+                if (addEditEducationBinding.universityBoardAutocompleteView.getText().toString().trim().isEmpty()) {
+                    addEditEducationBinding.universityBoardAutocompleteView.setError("Please select university.");
+                    return;
+                } else if (addEditEducationBinding.instituteAutocompleteView.getText().toString().trim().isEmpty()) {
+                    addEditEducationBinding.instituteAutocompleteView.setError("Please select institute.");
+                    return;
+                } else if (addEditEducationBinding.degreeAutocompleteView.getText().toString().trim().isEmpty()) {
+                    addEditEducationBinding.degreeAutocompleteView.setError("Please select degree.");
+                    return;
+                } else if (addEditEducationBinding.courseAutocompleteView.getText().toString().trim().isEmpty()) {
+                    addEditEducationBinding.courseAutocompleteView.setError("Please select course.");
+                    return;
+                } else if (addEditEducationBinding.courseYearAutocompleteView.getText().toString().trim().isEmpty()) {
+                    addEditEducationBinding.courseYearAutocompleteView.setError("Please select course year.");
+                    return;
+                } else if (addEditEducationBinding.etstartdate.getText().toString().trim().isEmpty()) {
+                    addEditEducationBinding.tilStartdate.setError("Please select start date.");
+                    return;
+                } else if (addEditEducationBinding.etenddate.getText().toString().trim().isEmpty()) {
+                    addEditEducationBinding.tilEnddate.setError("Please select end date.");
+                    return;
+                }
 
-            params.put(Constant.u_user_id, String.valueOf(new PreferenceManager(context).getInt(Constant.USER_ID)));
-            params.put(Constant.appName, Constant.APP_NAME);
-            params.put(Constant.device_id, BaseFragment.getDeviceId(getContext()));
-            params.put(Constant.ubm_id, addEditEducationBinding.universityBoardAutocompleteView.getTag().toString());
-            params.put(Constant.iom_id, addEditEducationBinding.instituteAutocompleteView.getTag().toString());
-            params.put(Constant.dm_id, addEditEducationBinding.degreeAutocompleteView.getTag().toString());
-            params.put(Constant.co_id, addEditEducationBinding.courseAutocompleteView.getTag().toString());
-            params.put(Constant.ue_startdate, addEditEducationBinding.etstartdate.getText().toString());
-            params.put(Constant.ue_enddate, addEditEducationBinding.etenddate.getText().toString());
-            if (addEditEducationBinding.courseYearAutocompleteView.getTag() != null)
-                params.put(Constant.ue_cy_num, addEditEducationBinding.courseYearAutocompleteView.getTag().toString());
+                params.put(Constant.u_user_id, String.valueOf(new PreferenceManager(context).getInt(Constant.USER_ID)));
+                params.put(Constant.appName, Constant.APP_NAME);
+                params.put(Constant.device_id, BaseFragment.getDeviceId(getContext()));
+                params.put(Constant.ubm_id, addEditEducationBinding.universityBoardAutocompleteView.getTag().toString());
+                params.put(Constant.iom_id, addEditEducationBinding.instituteAutocompleteView.getTag().toString());
+                params.put(Constant.dm_id, addEditEducationBinding.degreeAutocompleteView.getTag().toString());
+                params.put(Constant.co_id, addEditEducationBinding.courseAutocompleteView.getTag().toString());
+                params.put(Constant.ue_startdate, addEditEducationBinding.etstartdate.getText().toString());
+                params.put(Constant.ue_enddate, addEditEducationBinding.etenddate.getText().toString());
+                if (addEditEducationBinding.courseYearAutocompleteView.getTag() != null)
+                    params.put(Constant.ue_cy_num, addEditEducationBinding.courseYearAutocompleteView.getTag().toString());
 
-            if (education != null) {
-                params.put(Constant.CASE, "U");
-                params.put(Constant.ue_id, education.getUe_id());
-                updateUserEducation(params);
-            } else {
-                params.put(Constant.CASE, "I");
-                updateUserEducation(params);
+                if (education != null) {
+                    params.put(Constant.CASE, "U");
+                    params.put(Constant.ue_id, education.getUe_id());
+                    updateUserEducation(params);
+                } else {
+                    params.put(Constant.CASE, "I");
+                    updateUserEducation(params);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
 
@@ -312,29 +315,33 @@ public class AddEduDialog extends Dialog {
 
     private void fetchClassList(String courseId) {
         Log.d(TAG, "fetchClassList: " + courseId);
-        ProgressDialog.getInstance().show(context);
-        Call<ClassList> call = apiService.fetchClasses(courseId);
-        call.enqueue(new Callback<ClassList>() {
-            @Override
-            public void onResponse(Call<ClassList> call, Response<ClassList> response) {
-                ProgressDialog.getInstance().dismiss();
-                if (response.body() != null) {
-                    List<String> list = new ArrayList<>();
-                    for (int i = 0; i < response.body().getClassResponseList().size(); i++) {
-                        list.add(response.body().getClassResponseList().get(i).getClm_class_num());
+        try {
+            ProgressDialog.getInstance().show(context);
+            Call<ClassList> call = apiService.fetchClasses(courseId);
+            call.enqueue(new Callback<ClassList>() {
+                @Override
+                public void onResponse(Call<ClassList> call, Response<ClassList> response) {
+                    ProgressDialog.getInstance().dismiss();
+                    if (response.body() != null) {
+                        List<String> list = new ArrayList<>();
+                        for (int i = 0; i < response.body().getClassResponseList().size(); i++) {
+                            list.add(response.body().getClassResponseList().get(i).getClm_class_num());
+                        }
+                        populateClasses(list);
+                    } else {
+                        AppUtils.showToast(getContext(), null, response.body().getMessage());
                     }
-                    populateClasses(list);
-                } else {
-                    AppUtils.showToast(getContext(), null, response.body().getMessage());
                 }
-            }
 
-            @Override
-            public void onFailure(Call<ClassList> call, Throwable t) {
-                ProgressDialog.getInstance().dismiss();
-                AppUtils.showToast(getContext(), t, "");
-            }
-        });
+                @Override
+                public void onFailure(Call<ClassList> call, Throwable t) {
+                    ProgressDialog.getInstance().dismiss();
+                    AppUtils.showToast(getContext(), t, "");
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void showAddElementDialog(String title) {
@@ -464,44 +471,48 @@ public class AddEduDialog extends Dialog {
     }
 
     private void updateUserEducation(HashMap<String, String> params) {
-        Log.d(TAG, "Update User Education Params : " + params);
-        Log.e(TAG, "Save Degree Id : " + params.get(Constant.dm_id));
-        ProgressDialog.getInstance().show(context);
-        Call<VerifyResponse> call = apiService.updateUserEdu(
-                params.get(Constant.u_user_id),
-                params.get(Constant.CASE),
-                params.get(Constant.device_id),
-                params.get(Constant.appName),
-                params.get(Constant.ue_startdate),
-                params.get(Constant.ue_enddate),
-                params.get(Constant.ue_marks),
-                params.get(Constant.ue_grade),
-                params.get(Constant.ubm_id),
-                params.get(Constant.iom_id),
-                params.get(Constant.co_id),
-                params.get(Constant.dm_id),
-                params.get(Constant.ue_id),
-                params.get(Constant.ue_cy_num)
-        );
-        call.enqueue(new Callback<VerifyResponse>() {
-            @Override
-            public void onResponse(Call<VerifyResponse> call, Response<VerifyResponse> response) {
-                ProgressDialog.getInstance().dismiss();
-                if (response.body() != null && response.body().getResponse().equals("200")) {
-                    Toast.makeText(context, "Education Details Updated Successfully.", Toast.LENGTH_SHORT).show();
-                    apiCallListener.onSuccess();
-                    dismiss();
-                } else {
-                    AppUtils.showToast(context, null, response.body().getErrorMsg());
+        try {
+            Log.d(TAG, "Update User Education Params : " + params);
+            Log.e(TAG, "Save Degree Id : " + params.get(Constant.dm_id));
+            ProgressDialog.getInstance().show(context);
+            Call<VerifyResponse> call = apiService.updateUserEdu(
+                    params.get(Constant.u_user_id),
+                    params.get(Constant.CASE),
+                    params.get(Constant.device_id),
+                    params.get(Constant.appName),
+                    params.get(Constant.ue_startdate),
+                    params.get(Constant.ue_enddate),
+                    params.get(Constant.ue_marks),
+                    params.get(Constant.ue_grade),
+                    params.get(Constant.ubm_id),
+                    params.get(Constant.iom_id),
+                    params.get(Constant.co_id),
+                    params.get(Constant.dm_id),
+                    params.get(Constant.ue_id),
+                    params.get(Constant.ue_cy_num)
+            );
+            call.enqueue(new Callback<VerifyResponse>() {
+                @Override
+                public void onResponse(Call<VerifyResponse> call, Response<VerifyResponse> response) {
+                    ProgressDialog.getInstance().dismiss();
+                    if (response.body() != null && response.body().getResponse().equals("200")) {
+                        Toast.makeText(context, "Education Details Updated Successfully.", Toast.LENGTH_SHORT).show();
+                        apiCallListener.onSuccess();
+                        dismiss();
+                    } else {
+                        AppUtils.showToast(context, null, response.body().getErrorMsg());
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<VerifyResponse> call, Throwable t) {
-                ProgressDialog.getInstance().dismiss();
-                AppUtils.showToast(getContext(), t, "");
-            }
-        });
+                @Override
+                public void onFailure(Call<VerifyResponse> call, Throwable t) {
+                    ProgressDialog.getInstance().dismiss();
+                    AppUtils.showToast(getContext(), t, "");
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void addNewUniversity(String text) {
