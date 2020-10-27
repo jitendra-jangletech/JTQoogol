@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.ExistingUserFragment">
@@ -64,26 +65,29 @@
                         android:textColor="@color/colorBlack" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.card.MaterialCardView
+                <Button
                     android:id="@+id/sendOtp"
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/_30sdp"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="0.6"
+                    android:backgroundTint="@color/colorBlack"
                     android:foreground="?attr/selectableItemBackground"
-                    app:cardBackgroundColor="@color/colorBlack"
-                    app:cardCornerRadius="@dimen/_20sdp">
+                    android:text="Send OTP"
+                    android:textAllCaps="false">
 
-                    <TextView
-                        android:id="@+id/tvSendOtp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:gravity="center_horizontal"
-                        android:text="Send OTP"
-                        android:textColor="@color/colorWhite"
-                        android:textStyle="bold" />
-                </com.google.android.material.card.MaterialCardView>
+                    <!--
+                                        <TextView
+                                            android:id="@+id/tvSendOtp"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center"
+                                            android:gravity="center_horizontal"
+                                            android:text="Send OTP"
+                                            android:textColor="@color/colorWhite"
+                                            android:textStyle="bold" />
+                    -->
+                </Button>
 
             </LinearLayout>
 
@@ -97,25 +101,26 @@
                 android:text="@string/terms_and_conditions"
                 android:textSize="@dimen/_8ssp" />
 
-            <com.google.android.material.card.MaterialCardView
+            <Button
                 android:id="@+id/login"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_35sdp"
+                android:layout_width="396dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/_5sdp"
+                android:backgroundTint="@color/colorBlack"
                 android:foreground="?attr/selectableItemBackground"
-                app:cardBackgroundColor="@color/colorBlack"
-                app:cardCornerRadius="@dimen/_20sdp">
+                android:text="Login"
+                android:textAllCaps="false">
 
-                <TextView
+                <!--<TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center_horizontal"
                     android:text="Login"
                     android:textColor="@color/colorWhite"
-                    android:textStyle="bold" />
-            </com.google.android.material.card.MaterialCardView>
+                    android:textStyle="bold" />-->
+            </Button>
 
             <TextView
                 android:id="@+id/tvNewUser"

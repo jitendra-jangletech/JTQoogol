@@ -87,8 +87,6 @@ public class TestingActivity extends AppCompatActivity {
 //            new AddImageDialog(this)
 //                    .show();
         });
-
-
     }
 
     private void readPdf(String path) {
@@ -106,7 +104,6 @@ public class TestingActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-
 
     private void extractImages(String filepath) {
         Log.i(TAG, "extractImages Copied File Path : " + filepath);

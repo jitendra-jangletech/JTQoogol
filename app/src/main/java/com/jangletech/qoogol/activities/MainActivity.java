@@ -121,7 +121,8 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
     public static BottomNavigationView bottomNavigationView;
     public static String userId = "";
     QueMediaListener queMediaListener;
-    private static final int CAMERA_REQUEST = 1, GALLERY_REQUEST = 2, PICKFILE_REQUEST_CODE=3, VIDEO_REQUEST = 4, AUDIO_REQUEST = 5,REQUEST_GALLERY = 6,REQUEST_CAMERA = 7;;
+    private static final int CAMERA_REQUEST = 1, GALLERY_REQUEST = 2, PICKFILE_REQUEST_CODE = 3, VIDEO_REQUEST = 4, AUDIO_REQUEST = 5, REQUEST_GALLERY = 6, REQUEST_CAMERA = 7;
+    ;
     private Uri mphotouri;
     private AlertDialog mediaDialog;
     private int optionId;
@@ -179,6 +180,8 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
                     || destination.getId() == R.id.nav_true_false_frag
                     || destination.getId() == R.id.nav_fill_the_blanks
                     || destination.getId() == R.id.nav_scq_image
+                    || destination.getId() == R.id.nav_create_pdf
+                    || destination.getId() == R.id.nav_my_pdf
                     || destination.getId() == R.id.nav_my_questions
                     || destination.getId() == R.id.nav_upload_question) {
                 hideBottomNav();
@@ -623,8 +626,8 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
         });
     }
 
-    public void setOnDataListener(QueMediaListener queMediaListener){
-        this.queMediaListener =queMediaListener;
+    public void setOnDataListener(QueMediaListener queMediaListener) {
+        this.queMediaListener = queMediaListener;
     }
 
     private void getNotificationIntent(Intent intent) {
@@ -678,7 +681,7 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
                 Log.e(TAG, "onFailure onActivityResult: " + e.getMessage());
                 Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG).show();
             }
-        }else if (requestCode == REQUEST_CAMERA) {
+        } else if (requestCode == REQUEST_CAMERA) {
             Log.d(TAG, "onActivityResult REQUEST_CAMERA: " + imageUri);
             try {
                 CropImage.activity(data.getData())
@@ -695,7 +698,7 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
             if (result != null && resultCode == RESULT_OK) {
                 inspect(result.getUri());
             }
-        }else if (requestCode == com.vincent.filepicker.Constant.REQUEST_CODE_PICK_FILE && resultCode == RESULT_OK && data != null) {
+        } else if (requestCode == com.vincent.filepicker.Constant.REQUEST_CODE_PICK_FILE && resultCode == RESULT_OK && data != null) {
             if (resultCode == RESULT_OK) {
                 ArrayList<NormalFile> list = data.getParcelableArrayListExtra(com.vincent.filepicker.Constant.RESULT_PICK_FILE);
                 //StringBuilder builder = new StringBuilder();
@@ -706,10 +709,9 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
                 }
             }
         } else {
-            if (queMediaListener !=null)
-                queMediaListener.onMediaReceived(requestCode,resultCode,data,mphotouri,optionId);
+            if (queMediaListener != null)
+                queMediaListener.onMediaReceived(requestCode, resultCode, data, mphotouri, optionId);
         }
-
     }
 
     private void inspect(Uri uri) {
@@ -781,7 +783,7 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
                     detectedText.append("\n");
                 }
             }
-            queMediaListener.onScanText(detectedText.toString().trim(),ansId);
+            queMediaListener.onScanText(detectedText.toString().trim(), ansId);
 
         } finally {
             textRecognizer.release();
@@ -884,7 +886,7 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
                 R.layout.media_upload_layout, null, false);
         dialogBuilder.setView(mediaUploadLayoutBinding.getRoot());
 
-        if (call_from!=Constant.QUESTION) {
+        if (call_from != Constant.QUESTION) {
             mediaUploadLayoutBinding.videos.setVisibility(View.GONE);
             mediaUploadLayoutBinding.audios.setVisibility(View.GONE);
             mediaUploadLayoutBinding.documents.setVisibility(View.GONE);
@@ -892,23 +894,23 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
 
         mediaUploadLayoutBinding.camera.setOnClickListener(view -> {
             mediaDialog.dismiss();
-            requestStoragePermission(true, false, false,false);
+            requestStoragePermission(true, false, false, false);
         });
 
 
         mediaUploadLayoutBinding.gallery.setOnClickListener(view -> {
             mediaDialog.dismiss();
-            requestStoragePermission(false, true, false,false);
+            requestStoragePermission(false, true, false, false);
         });
 
 
         mediaUploadLayoutBinding.videos.setOnClickListener(view -> {
-            requestStoragePermission(false, false, false,true);
+            requestStoragePermission(false, false, false, true);
             mediaDialog.dismiss();
         });
 
         mediaUploadLayoutBinding.audios.setOnClickListener(view -> {
-            requestStoragePermission(false, false, true,false);
+            requestStoragePermission(false, false, true, false);
             mediaDialog.dismiss();
         });
 
@@ -920,7 +922,7 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
 
         mediaUploadLayoutBinding.documents.setOnClickListener(v -> {
             mediaDialog.dismiss();
-            requestStoragePermission(false, false, false,false);
+            requestStoragePermission(false, false, false, false);
         });
 
         mediaDialog = dialogBuilder.create();
@@ -928,7 +930,7 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
         mediaDialog.show();
     }
 
-    private void requestStoragePermission(final boolean isCamera, final boolean isPictures, final boolean isAudio,  final boolean isVideo) {
+    private void requestStoragePermission(final boolean isCamera, final boolean isPictures, final boolean isAudio, final boolean isVideo) {
         Dexter.withActivity(this)
                 .withPermissions(Manifest.permission.READ_EXTERNAL_STORAGE,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
@@ -942,7 +944,7 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
                                 getImages();
                             } else if (isAudio) {
                                 getAudio();
-                            } else  if (isVideo){
+                            } else if (isVideo) {
                                 getVideo();
                             } else {
                                 getDocument();
@@ -965,13 +967,14 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
                 .onSameThread()
                 .check();
     }
+
     protected void getDocument() {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         String[] mimeTypes =
                 {"application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .doc & .docx
                         "application/vnd.ms-powerpoint", "application/vnd.openxmlformats-officedocument.presentationml.presentation", // .ppt & .pptx
                         "application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // .xls & .xlsx
-                        "text/plain","application/rtf","application/pdf","application/zip", "application/vnd.android.package-archive"};
+                        "text/plain", "application/rtf", "application/pdf", "application/zip", "application/vnd.android.package-archive"};
 
         intent.setType("application/*");
         intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
@@ -1003,7 +1006,7 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
         Intent pickPhoto = new Intent();
         pickPhoto.setType("image/*");
         pickPhoto.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        if (optionId==QUESTION)
+        if (optionId == QUESTION)
             pickPhoto.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         pickPhoto.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(pickPhoto, "Select Picture"), GALLERY_REQUEST);
@@ -1029,7 +1032,7 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
 
     private void openSettings() {
         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-        Uri uri = Uri.fromParts("package",getPackageName(), null);
+        Uri uri = Uri.fromParts("package", getPackageName(), null);
         intent.setData(uri);
         startActivityForResult(intent, 101);
     }
@@ -1113,6 +1116,7 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
                         navController.getCurrentDestination().getId() == R.id.nav_shared_by_you ||
                         navController.getCurrentDestination().getId() == R.id.nav_shared_with_you ||
                         navController.getCurrentDestination().getId() == R.id.nav_connections ||
+                        navController.getCurrentDestination().getId() == R.id.nav_create_pdf ||
                         navController.getCurrentDestination().getId() == R.id.nav_upload_question ||
                         navController.getCurrentDestination().getId() == R.id.nav_my_questions ||
                         navController.getCurrentDestination().getId() == R.id.nav_requests) {
@@ -1126,7 +1130,8 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
                         navToFragment(R.id.nav_learning, bundle);
                     }
                 } else {
-                    navController.popBackStack();
+                    //navController.popBackStack();
+                    super.onBackPressed();
                 }
             }
         }
@@ -1251,8 +1256,8 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
 
     @Override
     public void onImageClickListener(ImageObject imageObject, int opt) {
-        if (queMediaListener!=null)
-            queMediaListener.onScanImageClick(imageObject.getUri(),opt);
+        if (queMediaListener != null)
+            queMediaListener.onScanImageClick(imageObject.getUri(), opt);
     }
 
     @Override

@@ -2,12 +2,14 @@ package com.jangletech.qoogol.ui.create_pdf;
 
 import android.Manifest;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,24 +19,31 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.DataBindingUtil;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.GridLayoutManager;
 
+import com.itextpdf.text.Document;
+import com.itextpdf.text.pdf.PdfCopy;
+import com.itextpdf.text.pdf.PdfReader;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.CreatePdfAdapter;
 import com.jangletech.qoogol.databinding.FragmentCreatePdfBinding;
 import com.jangletech.qoogol.ui.BaseFragment;
+import com.jangletech.qoogol.util.ItemOffsetDecoration;
 import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
-import com.karumi.dexter.listener.PermissionDeniedResponse;
-import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
-import com.karumi.dexter.listener.single.PermissionListener;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
+import com.shockwave.pdfium.PdfiumCore;
 import com.theartofdev.edmodo.cropper.CropImage;
+
+import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,9 +54,12 @@ public class CreatePdfFragment extends BaseFragment implements CreatePdfAdapter.
     private static final String TAG = "CreatePdfFragment";
     private FragmentCreatePdfBinding mBinding;
     private CreatePdfAdapter mAdapter;
+    private GridLayoutManager gridLayoutManager;
+    private ItemOffsetDecoration itemDecoration;
     private Uri imageUri;
     private List<Uri> images = new ArrayList<>();
     private static final int REQUEST_CAMERA = 1;
+
 
     @Nullable
     @Override
@@ -59,52 +71,68 @@ public class CreatePdfFragment extends BaseFragment implements CreatePdfAdapter.
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        itemDecoration = new ItemOffsetDecoration(requireActivity(), R.dimen.item_offset);
+        setPdfSamplePdfAdapter();
 
-        mAdapter = new CreatePdfAdapter(getActivity(), images, this);
-        mBinding.recyclerView.setHasFixedSize(true);
-        mBinding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, true));
-        mBinding.recyclerView.setAdapter(mAdapter);
+        mBinding.tvMyPdfs.setOnClickListener(v -> {
+            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_my_pdf, Bundle.EMPTY);
+        });
 
         mBinding.btnAddImage.setOnClickListener(v -> {
-
             Dexter.withActivity(getActivity())
-                    .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    .withListener(new PermissionListener() {
-                        @Override
-                        public void onPermissionGranted(PermissionGrantedResponse response) {
-                            String filename = System.currentTimeMillis() + ".jpg";
-                            ContentValues values = new ContentValues();
-                            values.put(MediaStore.Images.Media.TITLE, filename);
-                            values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
-                            imageUri = getActivity().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+                    .withPermissions(
+                            Manifest.permission.CAMERA,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    ).withListener(new MultiplePermissionsListener() {
+                @Override
+                public void onPermissionsChecked(MultiplePermissionsReport report) {
+                    String filename = System.currentTimeMillis() + ".jpg";
+                    ContentValues values = new ContentValues();
+                    values.put(MediaStore.Images.Media.TITLE, filename);
+                    values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+                    imageUri = getActivity().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
 
-                            Intent intent = new Intent();
-                            intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-                            intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-                            startActivityForResult(intent, REQUEST_CAMERA);
-                        }
+                    Intent intent = new Intent();
+                    intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                    startActivityForResult(intent, REQUEST_CAMERA);
+                }
 
-                        @Override
-                        public void onPermissionDenied(PermissionDeniedResponse response) {
-                            Toast.makeText(getActivity(), "Storage permission denied.", Toast.LENGTH_LONG).show();
-                        }
-
-                        @Override
-                        public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
-                            token.continuePermissionRequest();
-                        }
-                    })
-                    .withErrorListener(error ->
-                            Toast.makeText(getActivity(), "Error occurred! ", Toast.LENGTH_SHORT).show())
-                    .onSameThread()
-                    .check();
+                @Override
+                public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {/* ... */}
+            }).check();
 
 
         });
 
         mBinding.btnGeneratePdf.setOnClickListener(v -> {
-
+            if (getAllFilesFromDirectory(tempPdfPath) != null &&
+                    getAllFilesFromDirectory(tempPdfPath).length > 0) {
+                mergePdf();
+                /*for (File file : getAllFilesFromDirectory(tempPdfPath)) {
+                    generateImageFromPdf(Uri.fromFile(file));
+                }*/
+            } else {
+                showAlert("No Pdf Files Added to generate document. Please add pdf files then try again!!");
+            }
         });
+    }
+
+    private void setPdfSamplePdfAdapter() {
+        images.clear();
+        if (getAllFilesFromDirectory(tempPdfPath) != null) {
+            File[] files = getAllFilesFromDirectory(tempPdfPath);
+            for (File file : files) {
+                Log.i(TAG, "setPdfSamplePdfAdapter: " + Uri.fromFile(new File(file.getAbsolutePath())));
+                images.add(Uri.fromFile(new File(file.getAbsolutePath())));
+            }
+
+        }
+        mAdapter = new CreatePdfAdapter(getActivity(), images, 1, this);
+        gridLayoutManager = new GridLayoutManager(getActivity(), 3);
+        mBinding.recyclerView.setLayoutManager(gridLayoutManager);
+        mBinding.recyclerView.addItemDecoration(itemDecoration);
+        mBinding.recyclerView.setAdapter(mAdapter);
     }
 
     @Override
@@ -126,17 +154,30 @@ public class CreatePdfFragment extends BaseFragment implements CreatePdfAdapter.
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (result != null && resultCode == RESULT_OK) {
                 Log.i(TAG, "onActivityResult Uri : " + result.getUri());
-                Log.i(TAG, "onActivityResult Size : " + images.size());
                 images.add(result.getUri());
+                Log.i(TAG, "onActivityResult Size : " + images.size());
                 createNewPdfPage(result.getUri());
-                mAdapter.updateList(images);
+                // mAdapter.updateList(images);
             }
         }
     }
 
     @Override
-    public void onRemoveClick(int position) {
+    public void onRemoveClick(Uri uri, int position) {
         Log.i(TAG, "onRemoveClick : " + position);
+        mAdapter.deleteItem(position);
+        deleteFile(uri.toString());
+    }
+
+    @Override
+    public void onShareClick(Uri uri, int position) {
+        Log.i(TAG, "onShareClick: ");
+    }
+
+    @Override
+    public void onItemClick(Uri uri, int position) {
+        Log.i(TAG, "onItemClick: " + uri);
+        showPdf(uri);
     }
 
     private void createNewPdfPage(Uri uri) {
@@ -147,49 +188,105 @@ public class CreatePdfFragment extends BaseFragment implements CreatePdfAdapter.
             PdfDocument.PageInfo myPageInfo = new PdfDocument.PageInfo.Builder(960, 1280, 1).create();
             PdfDocument.Page page = pdfDocument.startPage(myPageInfo);
 
-            page.getCanvas().drawBitmap(resizedBmp, 0, 0, null);
+            page.getCanvas().drawBitmap(resizedBmp, 0, 25, null);
             pdfDocument.finishPage(page);
 
-            String pdfPath = Environment.getExternalStorageDirectory()
-                    .getAbsolutePath() + "/Qoogol/pdf_2.pdf";
-            File myPDFFile = new File(pdfPath);
-
-            try {
-                pdfDocument.writeTo(new FileOutputStream(myPDFFile));
-            } catch (IOException e) {
-                e.printStackTrace();
+            File pdfFile = new File(tempPdfPath);
+            if (!pdfFile.exists()) {
+                pdfFile.mkdirs();
             }
-
+            String pdfPageName = tempPdfPath + "Page_" + System.currentTimeMillis() + ".pdf";
+            pdfDocument.writeTo(new FileOutputStream(new File(pdfPageName)));
             pdfDocument.close();
+
+            setPdfSamplePdfAdapter();
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-//    private void mergePdf() {
-//        try {
-//            String pdfPath = Environment.getExternalStorageDirectory()
-//                    .getAbsolutePath() + "/Qoogol/merged.pdf";
-//
-//            String pdfPath1 = Environment.getExternalStorageDirectory()
-//                    .getAbsolutePath() + "/Qoogol/pdf_1.pdf";
-//            File myPDFFile1 = new File(pdfPath1);
-//
-//            String pdfPath2 = Environment.getExternalStorageDirectory()
-//                    .getAbsolutePath() + "/Qoogol/pdf_2.pdf";
-//            File myPDFFile2 = new File(pdfPath2);
-//
-//            com.itextpdf.kernel.pdf.PdfDocument pdfDocument = new com.itextpdf.kernel.pdf.PdfDocument(new PdfReader(pdfPath1), new PdfWriter(pdfPath));
-//            com.itextpdf.kernel.pdf.PdfDocument pdfDocument2 = new com.itextpdf.kernel.pdf.PdfDocument(new PdfReader(pdfPath2));
-//
-//            Pdf merger = new PdfMerger(pdfDocument);
-//            merger.merge(pdfDocument2, 1, pdfDocument2.getNumberOfPages());
-//
-//            pdfDocument2.close();
-//            pdfDocument.close();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
+    private void mergePdf() {
+        File finalDocs = new File(finalPdfDocs);
+        String mergedPdfName = finalPdfDocs + "Final_" + System.currentTimeMillis() + ".pdf";
+
+        if (!finalDocs.exists()) {
+            finalDocs.mkdirs();
+            Log.i(TAG, "Folder Created : ");
+        }
+
+        File[] pdfFiles = getAllFilesFromDirectory(tempPdfPath);
+
+        try {
+            Document document = new Document();
+            PdfCopy copy = new PdfCopy(document, new FileOutputStream(mergedPdfName));
+            document.open();
+            for (File file : pdfFiles) {
+                Log.i(TAG, "mergePdf Name: " + file.getName());
+                Log.i(TAG, "mergePdf Path : " + file.getAbsolutePath());
+                PdfReader reader = new PdfReader(file.getAbsolutePath());
+                copy.addDocument(reader);
+            }
+            document.close();
+            FileUtils.deleteDirectory(new File(tempPdfPath));
+            setPdfSamplePdfAdapter();
+            showSuccessAlert(mergedPdfName);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showSuccessAlert(String fileName) {
+        Uri uri = Uri.fromFile(new File(fileName));
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogStyle);
+        builder.setTitle("Success")
+                .setMessage("Pdf document generated successfully. please check my pdf link to see all generated documents.")
+                .setPositiveButton("View", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        showPdf(uri);
+                    }
+                })
+                .show();
+    }
+
+    void generateImageFromPdf(Uri pdfUri) {
+        int pageNumber = 0;
+        PdfiumCore pdfiumCore = new PdfiumCore(getActivity());
+        try {
+            ParcelFileDescriptor fd = getActivity().getContentResolver().openFileDescriptor(pdfUri, "r");
+            com.shockwave.pdfium.PdfDocument pdfDocument = pdfiumCore.newDocument(fd);
+            pdfiumCore.openPage(pdfDocument, pageNumber);
+            int width = pdfiumCore.getPageWidthPoint(pdfDocument, pageNumber);
+            int height = pdfiumCore.getPageHeightPoint(pdfDocument, pageNumber);
+            Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+            pdfiumCore.renderPageBitmap(pdfDocument, bmp, pageNumber, 0, 0, width, height);
+            saveImage(bmp);
+            pdfiumCore.closeDocument(pdfDocument); // important!
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void saveImage(Bitmap bmp) {
+        String thumbnail = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Qoogol/Thumbnails/";
+        FileOutputStream out = null;
+        try {
+            File folder = new File(thumbnail);
+            if (!folder.exists())
+                folder.mkdirs();
+            File file = new File(folder, System.currentTimeMillis() + ".png");
+            out = new FileOutputStream(file);
+            bmp.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (out != null)
+                    out.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }

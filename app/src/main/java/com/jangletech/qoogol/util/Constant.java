@@ -53,6 +53,7 @@ public class Constant {
     public static final String TM_ID = "TM_ID";
 
     public static final String TEST_SUBJECT_CHAP = "TEST_SUBJECT_CHAP";
+    public static final String SECTION = "SECTION";
 
     public static final String DISPLAY_NAME = "DISPLAY_NAME";
     public static final String PROFILE_PIC = "PROFILE_PIC";
@@ -209,7 +210,6 @@ public class Constant {
 
     //Question type
     public static String ONE_LINE_ANSWER = "4";
-
 
 
     //Options type

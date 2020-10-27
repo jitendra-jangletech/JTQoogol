@@ -9,63 +9,63 @@
         android:id="@+id/nav_home"
         android:name="com.jangletech.qoogol.ui.home.HomeFragment"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home"/>
+        tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/nav_true_false_frag"
         android:name="com.jangletech.qoogol.ui.upload_question.TrueFalseFragment"
         android:label="@string/menu_true_false"
-        tools:layout="@layout/fragment_up_true_false"/>
+        tools:layout="@layout/fragment_up_true_false" />
 
     <fragment
         android:id="@+id/nav_scq_image"
         android:name="com.jangletech.qoogol.ui.upload_question.ScqUpImageFragment"
         android:label="@string/menu_scq_image"
-        tools:layout="@layout/fragmen_up_scq_image"/>
+        tools:layout="@layout/fragmen_up_scq_image" />
 
     <fragment
         android:id="@+id/nav_mcq_image"
         android:name="com.jangletech.qoogol.ui.upload_question.MCQImageFragment"
         android:label="@string/menu_mcq_image"
-        tools:layout="@layout/fragment_mcq_image"/>
+        tools:layout="@layout/fragment_mcq_image" />
 
     <fragment
         android:id="@+id/nav_mcq_imagetxt"
         android:name="com.jangletech.qoogol.ui.upload_question.MCQImgTextFragment"
         android:label="@string/menu_mcq_imagetxt"
-        tools:layout="@layout/fragment_mcq_img_text"/>
+        tools:layout="@layout/fragment_mcq_img_text" />
 
 
     <fragment
         android:id="@+id/nav_mtp_image"
         android:name="com.jangletech.qoogol.ui.upload_question.MTPImageFragment"
         android:label="@string/menu_mtp_image"
-        tools:layout="@layout/fragment_mtp_image"/>
+        tools:layout="@layout/fragment_mtp_image" />
 
     <fragment
         android:id="@+id/nav_scq_imagetxt"
         android:name="com.jangletech.qoogol.ui.upload_question.SCQImgTextFragment"
         android:label="@string/menu_scq_imagetxt"
-        tools:layout="@layout/fragment_scq_img_text"/>
+        tools:layout="@layout/fragment_scq_img_text" />
 
 
     <fragment
         android:id="@+id/nav_fill_the_blanks"
         android:name="com.jangletech.qoogol.ui.upload_question.FillTheBlanksFragment"
         android:label="@string/menu_fill_the_blanks"
-        tools:layout="@layout/fragment_up_fill_the_blanks"/>
+        tools:layout="@layout/fragment_up_fill_the_blanks" />
 
     <fragment
         android:id="@+id/nav_about"
         android:name="com.jangletech.qoogol.ui.about.AboutFragment"
         android:label="@string/about"
-        tools:layout="@layout/fragment_about"/>
+        tools:layout="@layout/fragment_about" />
 
     <fragment
         android:id="@+id/nav_code_conduct"
         android:name="com.jangletech.qoogol.ui.CodeConductFragment"
         android:label="@string/code_conduct"
-        tools:layout="@layout/fragment_code_conduct"/>
+        tools:layout="@layout/fragment_code_conduct" />
 
 
     <fragment
@@ -92,6 +92,11 @@
         android:label="@string/menu_create_pdf"
         tools:layout="@layout/fragment_create_pdf" />
 
+    <fragment
+        android:id="@+id/nav_my_pdf"
+        android:name="com.jangletech.qoogol.ui.create_pdf.MyPdfsFragment"
+        android:label="@string/my_pdf"
+        tools:layout="@layout/fragment_my_pdf" />
 
     <fragment
         android:id="@+id/nav_shared_by_you_que"
@@ -222,7 +227,7 @@
         android:id="@+id/nav_my_questions"
         android:name="com.jangletech.qoogol.ui.upload_question.MyQuestionsFragment"
         android:label="@string/my_que"
-        tools:layout="@layout/fragment_my_questions" >
+        tools:layout="@layout/fragment_my_questions">
         <action
             android:id="@+id/action_nav_my_questions_to_nav_scq_question"
             app:destination="@id/nav_scq_question" />
@@ -232,7 +237,7 @@
         android:id="@+id/nav_scq_question"
         android:name="com.jangletech.qoogol.ui.upload_question.SCQ_QueFragment"
         android:label="@string/scq_label"
-        tools:layout="@layout/fragment_scq__que" >
+        tools:layout="@layout/fragment_scq__que">
         <action
             android:id="@+id/action_nav_scq_question_to_nav_my_questions"
             app:destination="@id/nav_my_questions" />

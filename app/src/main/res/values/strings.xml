@@ -8,6 +8,9 @@
     <string name="menu_home">Dashboard</string>
     <string name="menu_fav">Favourite</string>
 
+
+    <string name="my_pdf">My Pdf Documents</string>
+
     //Learning Menu
     <string name="menu_course">Course</string>
     <string name="menu_exam">Exam</string>

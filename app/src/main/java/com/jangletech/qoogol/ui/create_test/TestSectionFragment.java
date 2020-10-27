@@ -1,6 +1,5 @@
 package com.jangletech.qoogol.ui.create_test;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,7 +9,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
@@ -80,9 +78,8 @@ public class TestSectionFragment extends BaseFragment implements AddNewSectionDi
         mViewModel = new ViewModelProvider(this).get(TestSectionViewModel.class);
         testTotalMarks = Integer.parseInt(TinyDB.getInstance(getActivity()).getString(Constant.tm_tot_marks));
         mBinding.tvTotalMarks.setText("Test Total Marks : " + testTotalMarks);
-
         try {
-            if (getArguments().getString(Constant.tm_id) != null) {
+            if(getArguments().getString(Constant.tm_id) != null) {
                 tmId = getArguments().getString(Constant.tm_id);
                 addTestQuestApi(null, "L", -1, -1, null);
             }
@@ -92,7 +89,7 @@ public class TestSectionFragment extends BaseFragment implements AddNewSectionDi
 
         mBinding.btnAddSection.setOnClickListener(v -> {
             try {
-                DialogFragment addSectionDialog = new AddNewSectionDialog(this, Constant.section,0 ,"");
+                DialogFragment addSectionDialog = new AddNewSectionDialog(this, Constant.section, 0, "");
                 addSectionDialog.show(getParentFragmentManager(), "dialog");
             } catch (Exception e) {
                 e.printStackTrace();
@@ -250,12 +247,16 @@ public class TestSectionFragment extends BaseFragment implements AddNewSectionDi
         //List<LearningQuestionsNew> newTempList = new ArrayList<>();
         for (LearningQuestionsNew questionsNew : learningQuestionsNewList) {
             if (questionsNew.isSelected() && pos == 1 && !isAlreadyAdded(learningQuestionsNewList1, questionsNew)) {
+                questionsNew.setSection_id("1");
                 learningQuestionsNewList1.add(questionsNew);
             } else if (questionsNew.isSelected() && pos == 2 && !learningQuestionsNewList2.contains(questionsNew)) {
+                questionsNew.setSection_id("2");
                 learningQuestionsNewList2.add(questionsNew);
             } else if (questionsNew.isSelected() && pos == 3 && !learningQuestionsNewList3.contains(questionsNew)) {
+                questionsNew.setSection_id("3");
                 learningQuestionsNewList3.add(questionsNew);
             } else if (questionsNew.isSelected() && pos == 0 && !isAlreadyAdded(learningQuestionsNewList0, questionsNew)) {
+                questionsNew.setSection_id("0");
                 learningQuestionsNewList0.add(questionsNew);
             }
         }
@@ -321,6 +322,7 @@ public class TestSectionFragment extends BaseFragment implements AddNewSectionDi
                 testQuestionNew.setQ_quest_desc(learningQuestionsNew.getQuestiondesc());
                 testQuestionNew.setTq_quest_seq_num(seq);
                 testQuestionNew.setTq_duration(learningQuestionsNew.getRecommended_time());
+                testQuestionNew.setSection_id(learningQuestionsNew.getSection_id());
                 testQuestionNewList.add(testQuestionNew);
                 seq++;
             }
@@ -391,7 +393,6 @@ public class TestSectionFragment extends BaseFragment implements AddNewSectionDi
     }
 
     private void setQuestAdapter(List<TestQuestionNew> testQuestionNewList) {
-        mBinding.section0Layout.setVisibility(View.VISIBLE);
 
         try {
             //List<LearningQuestionsNew> list = new ArrayList<>();
@@ -399,19 +400,51 @@ public class TestSectionFragment extends BaseFragment implements AddNewSectionDi
                 LearningQuestionsNew obj = new LearningQuestionsNew();
                 obj.setQuestion_id(testQuestionNew.getTq_q_id());
                 obj.setMarks(String.valueOf(testQuestionNew.getTq_marks()));
-                learningQuestionsNewList0.add(obj);
+                obj.setQuestion(testQuestionNew.getQ_quest_desc());
+                if (testQuestionNew.getSection_id().equals("0")) {
+                    learningQuestionsNewList0.add(obj);
+                }
+                if (testQuestionNew.getSection_id().equals("1")) {
+                    learningQuestionsNewList1.add(obj);
+                }
+                if (testQuestionNew.getSection_id().equals("2")) {
+                    learningQuestionsNewList2.add(obj);
+                }
+                if (testQuestionNew.getSection_id().equals("3")) {
+                    learningQuestionsNewList3.add(obj);
+                }
             }
             Log.d(TAG, "setQuestAdapter: " + learningQuestionsNewList0.size());
             showHideSubmitButton(learningQuestionsNewList0);
 
             if (learningQuestionsNewList0.size() > 0) {
+                mBinding.section0Layout.setVisibility(View.VISIBLE);
                 addTestQuestionAdapter1 = new AddTestQuestionAdapter(getActivity(), learningQuestionsNewList0, false, this);
                 mBinding.directQuestions.setLayoutManager(new LinearLayoutManager(getContext()));
                 mBinding.directQuestions.setHasFixedSize(true);
                 mBinding.directQuestions.setAdapter(addTestQuestionAdapter1);
+            } else if (learningQuestionsNewList1.size() > 0) {
+                mBinding.section1Layout.setVisibility(View.VISIBLE);
+                section0QuestAdapter = new Section0QuestAdapter(getActivity(), learningQuestionsNewList1, false, this);
+                mBinding.section1Recycler.setLayoutManager(new LinearLayoutManager(getContext()));
+                mBinding.section1Recycler.setHasFixedSize(true);
+                mBinding.section1Recycler.setAdapter(section0QuestAdapter);
+            } else if (learningQuestionsNewList2.size() > 0) {
+                mBinding.section2Layout.setVisibility(View.VISIBLE);
+                section2QuestAdapter = new Section2QuestAdapter(getActivity(), learningQuestionsNewList2, false, this);
+                mBinding.section2Recycler.setLayoutManager(new LinearLayoutManager(getContext()));
+                mBinding.section2Recycler.setHasFixedSize(true);
+                mBinding.section2Recycler.setAdapter(section2QuestAdapter);
+
+            } else if (learningQuestionsNewList3.size() > 0) {
+                mBinding.section3Layout.setVisibility(View.VISIBLE);
+                section3QuestAdapter = new Section3QuestAdapter(getActivity(), learningQuestionsNewList3, false, this);
+                mBinding.section3Recycler.setLayoutManager(new LinearLayoutManager(getContext()));
+                mBinding.section3Recycler.setHasFixedSize(true);
+                mBinding.section3Recycler.setAdapter(section3QuestAdapter);
             } else {
                 showToast("No Questions Added.", Toast.LENGTH_SHORT);
-                mBinding.section0Layout.setVisibility(View.GONE);
+                //mBinding.section0Layout.setVisibility(View.GONE);
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -8,7 +8,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
@@ -44,6 +46,9 @@ import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.TinyDB;
 
+import java.io.File;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -58,6 +63,10 @@ public class BaseFragment extends Fragment {
     private static final String TAG = "BaseFragment";
     private SharedPreferences preferences;
     private ApiInterface apiService = ApiClient.getInstance().getApi();
+
+    public String finalPdfDocs = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Qoogol/Generated/";
+    public String tempPdfPath = Environment.getExternalStorageDirectory()
+            .getAbsolutePath() + "/Qoogol/Sample/";
 
     public ApiInterface getApiService() {
         return apiService;
@@ -76,6 +85,13 @@ public class BaseFragment extends Fragment {
         return date;
     }
 
+    public File[] getAllFilesFromDirectory(String folderPath) {
+        Log.i("Files", "Path: " + folderPath);
+        File directory = new File(folderPath);
+        File[] files = directory.listFiles();
+        return files;
+    }
+
     public String getKeyFromValuea(Map<String, String> map, String name) {
         Log.i(TAG, "getKeyFromValuea Name : " + name);
         String selectedKey = "";
@@ -92,6 +108,26 @@ public class BaseFragment extends Fragment {
 
     public String getDecryptedField(String encryptText, String key) {
         return AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(key), encryptText);
+    }
+
+    public void showPdf(Uri uri) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setDataAndType(uri, "application/pdf");
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+    }
+
+    public void deleteFile(String path) {
+        try {
+            File file = new File(new URI(path));
+            if (file.exists()) {
+                file.delete();
+            }
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void navigationFromCreateTest(int resId, Bundle bundle) {
@@ -303,21 +339,21 @@ public class BaseFragment extends Fragment {
 
     public void showToast(String msg) {
         try {
-            Toast.makeText(requireActivity(), msg,Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireActivity(), msg, Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void showToast(String msg,int length) {
+    public void showToast(String msg, int length) {
         try {
-            Toast.makeText(requireActivity(), msg,length).show();
+            Toast.makeText(requireActivity(), msg, length).show();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void showAlert(String msg){
+    public void showAlert(String msg) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogStyle);
         builder.setTitle("Alert")
                 .setMessage(msg)

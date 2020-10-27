@@ -349,8 +349,7 @@ public class MyTestFragment extends BaseFragment
                 parameters.get(Constant.tm_id),
                 parameters.get(Constant.tm_catg),
                 pageStart,
-                TinyDB.getInstance(getActivity()).getString(Constant.selected_ue_id)
-        );
+                TinyDB.getInstance(getActivity()).getString(Constant.selected_ue_id));
         HashMap<String, String> finalParameters = parameters;
         call.enqueue(new Callback<TestListResponse>() {
             @Override

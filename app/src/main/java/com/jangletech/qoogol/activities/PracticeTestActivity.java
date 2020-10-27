@@ -174,7 +174,11 @@ public class PracticeTestActivity extends BaseActivity implements
                         tvTestTitle.setText(startResumeTestResponse.getTm_name());
                         mBinding.tvTestTitle.setText(startTestResponse.getTm_name());
                         questionsNewList = startResumeTestResponse.getTestQuestionNewList();
-                        setupViewPager(startResumeTestResponse);
+                        try {
+                            setupViewPager(startResumeTestResponse);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             });

@@ -15,8 +15,10 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.DialogFragment;
 
+import com.google.gson.Gson;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.DialogAddNewSectionBinding;
+import com.jangletech.qoogol.model.TestSubjectChapterMaster;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.TinyDB;
 
@@ -31,7 +33,9 @@ public class AddNewSectionDialog extends DialogFragment implements TextWatcher {
     private int testTotMarks = 0;
     private int type;
     private float qMarks;
+    private TestSubjectChapterMaster testSubjectChapterMaster;
     private String duration = "";
+    private String sections = "";
 
     public AddNewSectionDialog(AddNewSectionClickListener listener, int type, float qMarks, String duration) {
         this.listener = listener;
@@ -156,40 +160,48 @@ public class AddNewSectionDialog extends DialogFragment implements TextWatcher {
         //String json = TinyDB.getInstance(getActivity()).getString(Constant.TEST_SUBJECT_CHAP);
         //TestSubjectChapterMaster testSubjectChapterMaster = gson.fromJson(json, TestSubjectChapterMaster.class);
         //Log.i(TAG, "setSections : " + testSubjectChapterMaster.getSections());
-        String sections = TinyDB.getInstance(getActivity()).getString(Constant.TEST_SUBJECT_CHAP);
+        String json = TinyDB.getInstance(getActivity()).getString(Constant.TEST_SUBJECT_CHAP);
+        Gson gson = new Gson();
+        testSubjectChapterMaster = gson.fromJson(json,
+                TestSubjectChapterMaster.class);
+        if (testSubjectChapterMaster != null)
+            sections = testSubjectChapterMaster.getSections();
         int sectionCount = 0;
+        Log.i(TAG, "setSections ndbsd: " + sections);
         String[] sectns = new String[5];
-        if (sections != null) {
-            sectns = sections.split(",", -1);
-            sectionCount = sectns.length;
-            Log.i(TAG, "setSections : " + sectns);
-            Log.i(TAG, "setSections : " + sectionCount);
-        }
-        if (sectionCount == 1) {
-            Log.i(TAG, "setSections First : " + sectns[0]);
-            mBinding.section1.setVisibility(View.VISIBLE);
-            mBinding.section1.setText(sectns[0].split("=", -1)[1]);
-            mBinding.section1.setTag(sectns[0].split("=", -1)[0]);
-        } else if (sectionCount == 2) {
-            mBinding.section1.setVisibility(View.VISIBLE);
-            mBinding.section1.setText(sectns[0].split("=", -1)[1]);
-            mBinding.section1.setTag(sectns[0].split("=", -1)[0]);
+        if (!sections.isEmpty()) {
+            if (sections != null) {
+                sectns = sections.split(",", -1);
+                sectionCount = sectns.length;
+                Log.i(TAG, "setSections : " + sectns);
+                Log.i(TAG, "setSections : " + sectionCount);
+            }
+            if (sectionCount == 1) {
+                Log.i(TAG, "setSections First : " + sectns[0]);
+                mBinding.section1.setVisibility(View.VISIBLE);
+                mBinding.section1.setText(sectns[0].split("=", -1)[1]);
+                mBinding.section1.setTag(sectns[0].split("=", -1)[0]);
+            } else if (sectionCount == 2) {
+                mBinding.section1.setVisibility(View.VISIBLE);
+                mBinding.section1.setText(sectns[0].split("=", -1)[1]);
+                mBinding.section1.setTag(sectns[0].split("=", -1)[0]);
 
-            mBinding.section2.setVisibility(View.VISIBLE);
-            mBinding.section2.setText(sectns[1].split("=", -1)[1]);
-            mBinding.section2.setTag(sectns[1].split("=", -1)[0]);
-        } else if (sectionCount == 3) {
-            mBinding.section1.setVisibility(View.VISIBLE);
-            mBinding.section1.setText(sectns[0].split("=", -1)[1]);
-            mBinding.section1.setTag(sectns[0].split("=", -1)[0]);
+                mBinding.section2.setVisibility(View.VISIBLE);
+                mBinding.section2.setText(sectns[1].split("=", -1)[1]);
+                mBinding.section2.setTag(sectns[1].split("=", -1)[0]);
+            } else if (sectionCount == 3) {
+                mBinding.section1.setVisibility(View.VISIBLE);
+                mBinding.section1.setText(sectns[0].split("=", -1)[1]);
+                mBinding.section1.setTag(sectns[0].split("=", -1)[0]);
 
-            mBinding.section2.setVisibility(View.VISIBLE);
-            mBinding.section2.setText(sectns[1].split("=", -1)[1]);
-            mBinding.section2.setTag(sectns[1].split("=", -1)[0]);
+                mBinding.section2.setVisibility(View.VISIBLE);
+                mBinding.section2.setText(sectns[1].split("=", -1)[1]);
+                mBinding.section2.setTag(sectns[1].split("=", -1)[0]);
 
-            mBinding.section3.setVisibility(View.VISIBLE);
-            mBinding.section3.setText(sectns[2].split("=", -1)[1]);
-            mBinding.section3.setTag(sectns[2].split("=", -1)[0]);
+                mBinding.section3.setVisibility(View.VISIBLE);
+                mBinding.section3.setText(sectns[2].split("=", -1)[1]);
+                mBinding.section3.setTag(sectns[2].split("=", -1)[0]);
+            }
         }
     }
 

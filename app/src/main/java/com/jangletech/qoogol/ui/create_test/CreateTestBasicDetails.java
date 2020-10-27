@@ -55,7 +55,7 @@ public class CreateTestBasicDetails extends BaseFragment implements TextWatcher,
     private HashMap<String, String> testType = new HashMap<>();
     private TestModelNew testModelNew = new TestModelNew();
     private HashMap<String, String> negativeMarks = new HashMap<>();
-    private TestSubjectChapterMaster testSubjectChapterMaster;
+    private TestSubjectChapterMaster testSubjectChapterMaster = new TestSubjectChapterMaster();
     private Calendar mcurrentTime;
     private TimePickerDialog mTimePicker;
     private String tmId = "";

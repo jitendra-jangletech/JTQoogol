@@ -4,42 +4,49 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:background="@color/colorBg"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/colorBg">
 
-        <ImageView
-            android:layout_margin="@dimen/_2sdp"
-            android:src="@drawable/add_grey"
-            app:layout_constraintTop_toTopOf="parent"
+        <TextView
             android:id="@+id/btnAddImage"
-            app:layout_constraintLeft_toLeftOf="parent"
             android:layout_width="@dimen/_120sdp"
-            android:layout_height="@dimen/_120sdp"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-            app:layout_constraintStart_toEndOf="@+id/btnAddImage"
-            android:scrollbars="horizontal"
-            android:id="@+id/recyclerView"
-            tools:listitem="@layout/item_create_pdf"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/_120sdp"
+            android:layout_margin="@dimen/_2sdp"
+            android:background="@color/colorDarkGray"
+            android:gravity="center"
+            android:src="@drawable/add_grey"
+            android:text="Add Page"
+            android:textColor="@color/colorSkyBlue"
+            android:visibility="visible"
+            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-<!--        <com.google.android.material.floatingactionbutton.FloatingActionButton-->
-<!--            app:layout_constraintTop_toTopOf="parent"-->
-<!--            app:layout_constraintLeft_toLeftOf="parent"-->
-<!--            android:backgroundTint="@color/color_red"-->
-<!--            android:id="@+id/btnAddImage"-->
-<!--            android:visibility="gone"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"/>-->
+        <TextView
+            android:id="@+id/tvMyPdfs"
+            android:layout_width="@dimen/_120sdp"
+            android:layout_height="@dimen/_120sdp"
+            android:background="@color/colorDarkGray"
+            android:gravity="center"
+            android:text="My Pdfs"
+            android:textColor="@color/colorSkyBlue"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:clipToPadding="false"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnAddImage"
+            tools:listitem="@layout/item_create_pdf" />
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/btnGeneratePdf"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/_16sdp"
-            android:alpha="0.5"
             android:backgroundTint="@color/color_red"
             android:text="@string/generate_document"
             android:textColor="@color/colorWhite"
