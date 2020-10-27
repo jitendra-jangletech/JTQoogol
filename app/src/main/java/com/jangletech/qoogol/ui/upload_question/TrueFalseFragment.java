@@ -38,11 +38,13 @@ import com.jangletech.qoogol.util.ImageOptimization;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
 import com.jangletech.qoogol.videocompressions.DialogProcessFile;
+import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.io.File;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import okhttp3.MediaType;
@@ -65,7 +67,7 @@ public class TrueFalseFragment extends BaseFragment implements QueMediaListener 
     private static final int CAMERA_REQUEST = 1, GALLERY_REQUEST = 2, PICKFILE_REQUEST_CODE = 3, VIDEO_REQUEST = 4, AUDIO_REQUEST = 5;
     public ArrayList<Uri> mAllUri = new ArrayList<>();
     private AdapterGallerySelectedImage galleryAdapter;
-    String questionId = "";
+    String questionId = "", subjectId = "";
     List<String> tempimgList = new ArrayList<>();
     int call_from;
 
@@ -81,12 +83,15 @@ public class TrueFalseFragment extends BaseFragment implements QueMediaListener 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        initSelectedImageView();
+
         if (getArguments().getInt("call_from")==ADD) {
             call_from=ADD;
             if (getArguments() != null && getArguments().getSerializable("Question") != null) {
                 uploadQuestion = (UploadQuestion) getArguments().getSerializable("Question");
                 mBinding.etQuestion.setText(uploadQuestion.getQuestDescription());
                 mBinding.subject.setText("Subject : " + uploadQuestion.getSubjectName());
+                subjectId = uploadQuestion.getSubjectId();
             }
         }else if (getArguments().getInt("call_from")==UPDATE) {
             call_from=UPDATE;
@@ -94,7 +99,6 @@ public class TrueFalseFragment extends BaseFragment implements QueMediaListener 
             setData(learningQuestionsNew);
         }
         
-        initSelectedImageView();
 
         mBinding.saveQuestion.setOnClickListener(v -> addQuestion());
 
@@ -102,6 +106,36 @@ public class TrueFalseFragment extends BaseFragment implements QueMediaListener 
     }
 
     private void setData(LearningQuestionsNew learningQuestionsNew) {
+        questionId = String.valueOf(learningQuestionsNew.getQuestion_id());
+        subjectId = learningQuestionsNew.getSubject_id();
+        mBinding.subject.setText("Subject : " + learningQuestionsNew.getSubject());
+        mBinding.etQuestion.setText(learningQuestionsNew.getQuestion());
+        mBinding.etQuestionDesc.setText(learningQuestionsNew.getQuestiondesc());
+
+        mBinding.edtmarks.setText(learningQuestionsNew.getMarks());
+        mBinding.edtduration.setText(learningQuestionsNew.getDuration());
+
+        if (learningQuestionsNew.getDifficulty_level().equalsIgnoreCase("E"))
+            mBinding.radioEasy.setChecked(true);
+        else if (learningQuestionsNew.getDifficulty_level().equalsIgnoreCase("M"))
+            mBinding.radioMedium.setChecked(true);
+        else if (learningQuestionsNew.getDifficulty_level().equalsIgnoreCase("H"))
+            mBinding.radioHard.setChecked(true);
+
+
+        if (learningQuestionsNew.getAnswer().equalsIgnoreCase("true"))
+            mBinding.radioTrue.setChecked(true);
+        else
+            mBinding.radioFalse.setChecked(true);
+
+        if (learningQuestionsNew.getQue_images() != null && !learningQuestionsNew.getQue_images().isEmpty()) {
+            String[] stringrray = learningQuestionsNew.getQue_images().split(",");
+            tempimgList = Arrays.asList(stringrray);
+            for (int i = 0; i < stringrray.length; i++) {
+                String s = AppUtils.getMedialUrl(getActivity(), tempimgList.get(i).split(":", -1)[1], tempimgList.get(i).split(":", -1)[2]);
+                setupPreview(Uri.parse(s));
+            }
+        }
     }
 
     private void initSelectedImageView() {
@@ -154,15 +188,53 @@ public class TrueFalseFragment extends BaseFragment implements QueMediaListener 
 
             @Override
             public void actionRemoved(int position) {
-                mAllUri.remove(position);
-                galleryAdapter.notifyItemRemoved(position);
-                galleryAdapter.notifyItemRangeChanged(position, mAllUri.size());
-                if (mAllUri.size() == 0)
-                    mBinding.queimgRecycler.setVisibility(View.GONE);
+                Uri uri = mAllUri.get(position);
+                if (uri.toString().contains("http")) {
+                    deleteApiCall(position);
+                } else {
+                    deleteImage(position);
+                }
             }
         });
 
     }
+
+    private void deleteApiCall(int position) {
+        Call<ResponseObj> call = getApiService().deleteMedia(new PreferenceManager(getActivity()).getUserId(), getDeviceId(getActivity()),
+                tempimgList.get(position).split(":", -1)[0]);
+        call.enqueue(new Callback<ResponseObj>() {
+            @Override
+            public void onResponse(Call<ResponseObj> call, retrofit2.Response<ResponseObj> response) {
+                try {
+                    if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
+                        deleteImage(position);
+                        tempimgList.remove(position);
+                    } else {
+                        Toast.makeText(getActivity(), UtilHelper.getAPIError(String.valueOf(response.body())), Toast.LENGTH_SHORT).show();
+                    }
+                    ProgressDialog.getInstance().dismiss();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    ProgressDialog.getInstance().dismiss();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseObj> call, Throwable t) {
+                t.printStackTrace();
+                ProgressDialog.getInstance().dismiss();
+            }
+        });
+    }
+
+    private void deleteImage(int position) {
+        mAllUri.remove(position);
+        galleryAdapter.notifyItemRemoved(position);
+        galleryAdapter.notifyItemRangeChanged(position, mAllUri.size());
+        if (mAllUri.size() == 0)
+            mBinding.queimgRecycler.setVisibility(View.GONE);
+    }
+
 
     private void addQuestion() {
         if (isValidate()) {
@@ -175,41 +247,44 @@ public class TrueFalseFragment extends BaseFragment implements QueMediaListener 
                     queImagesParts = new MultipartBody.Part[mAllUri.size()];
                     for (int index = 0; index < mAllUri.size(); index++) {
                         Uri single_image = mAllUri.get(index);
-                        File imageFile = AppUtils.createImageFile(requireActivity(), single_image);
-                        if (!imageFile.exists()) {
-                            imageFile.createNewFile();
-                        }
-
-                        final InputStream imageStream = getActivity().getContentResolver().openInputStream(single_image);
-                        AppUtils.readFully(imageStream, imageFile);
-                        File file = new File(mAllUri.get(index).getPath());
-                        long fileSizeInMB = imageFile.length() / 1048576;
-                        Log.i(TAG, "File Size: " + fileSizeInMB + " MB");
-                        if (fileSizeInMB > new PreferenceManager(getActivity()).getImageSize()) {
-                            Toast.makeText(getActivity(), "Please upload the image of size less than 10MB", Toast.LENGTH_LONG).show();
-                        } else {
-                            RequestBody queBody = null;
-                            if (UtilHelper.isImage(single_image, getActivity())) {
-                                queBody = RequestBody.create(MediaType.parse("image/*"),
-                                        imageFile);
-                            } else if (UtilHelper.isVideo(single_image, getActivity())) {
-                                queBody = RequestBody.create(MediaType.parse("video/*"),
-                                        imageFile);
-                            } else if (UtilHelper.isAudio(single_image, getActivity())) {
-                                queBody = RequestBody.create(MediaType.parse("audio/*"),
-                                        imageFile);
-                            } else if (UtilHelper.isDoc(single_image, getActivity())) {
-                                queBody = RequestBody.create(MediaType.parse("application/*"),
-                                        imageFile);
+                        if (!single_image.toString().contains("https")) {
+                            File imageFile = AppUtils.createImageFile(requireActivity(), single_image);
+                            if (!imageFile.exists()) {
+                                imageFile.createNewFile();
                             }
 
-                            queImagesParts[index] = MultipartBody.Part.createFormData("Files",
-                                    imageFile.getName(), queBody);
-                            if (images.isEmpty())
-                                images = AppUtils.encodedString(imageFile.getName());
-                            else
-                                images = images + "," + AppUtils.encodedString(imageFile.getName());
+                            final InputStream imageStream = getActivity().getContentResolver().openInputStream(single_image);
+                            AppUtils.readFully(imageStream, imageFile);
+                            File file = new File(mAllUri.get(index).getPath());
+                            long fileSizeInMB = imageFile.length() / 1048576;
+                            Log.i(TAG, "File Size: " + fileSizeInMB + " MB");
+                            if (fileSizeInMB > new PreferenceManager(getActivity()).getImageSize()) {
+                                Toast.makeText(getActivity(), "Please upload the image of size less than 10MB", Toast.LENGTH_LONG).show();
+                            } else {
+                                RequestBody queBody = null;
+                                if (UtilHelper.isImage(single_image, getActivity())) {
+                                    queBody = RequestBody.create(MediaType.parse("image/*"),
+                                            imageFile);
+                                } else if (UtilHelper.isVideo(single_image, getActivity())) {
+                                    queBody = RequestBody.create(MediaType.parse("video/*"),
+                                            imageFile);
+                                } else if (UtilHelper.isAudio(single_image, getActivity())) {
+                                    queBody = RequestBody.create(MediaType.parse("audio/*"),
+                                            imageFile);
+                                } else if (UtilHelper.isDoc(single_image, getActivity())) {
+                                    queBody = RequestBody.create(MediaType.parse("application/*"),
+                                            imageFile);
+                                }
+
+                                queImagesParts[index] = MultipartBody.Part.createFormData("Files",
+                                        imageFile.getName(), queBody);
+                                if (images.isEmpty())
+                                    images = AppUtils.encodedString(imageFile.getName());
+                                else
+                                    images = images + "," + AppUtils.encodedString(imageFile.getName());
+                            }
                         }
+
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -219,11 +294,10 @@ public class TrueFalseFragment extends BaseFragment implements QueMediaListener 
 
             String user_id = new PreferenceManager(getActivity()).getUserId();
 
-            UploadQuestion uploadQuestion = (UploadQuestion) getArguments().getSerializable("Question");
             RequestBody userId = RequestBody.create(MediaType.parse("multipart/form-data"), user_id);
             RequestBody appname = RequestBody.create(MediaType.parse("multipart/form-data"), qoogol);
             RequestBody deviceId = RequestBody.create(MediaType.parse("multipart/form-data"), getDeviceId(getActivity()));
-            RequestBody subId = RequestBody.create(MediaType.parse("multipart/form-data"), uploadQuestion.getSubjectId());
+            RequestBody subId = RequestBody.create(MediaType.parse("multipart/form-data"), subjectId);
             RequestBody question = RequestBody.create(MediaType.parse("multipart/form-data"), AppUtils.encodedString(mBinding.etQuestion.getText().toString()));
             RequestBody questiondesc = RequestBody.create(MediaType.parse("multipart/form-data"), AppUtils.encodedString(mBinding.etQuestionDesc.getText().toString()));
             RequestBody type = RequestBody.create(MediaType.parse("multipart/form-data"), TRUE_FALSE);
@@ -304,6 +378,20 @@ public class TrueFalseFragment extends BaseFragment implements QueMediaListener 
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (result != null && resultCode == RESULT_OK) {
+                Log.i(TAG, "onActivityResult Uri : " + result.getUri());
+                setupPreview(result.getUri());
+            }
+        }
+    }
+
+
+
+    @Override
     public void onMediaReceived(int requestCode, int resultCode, Intent data, Uri photouri, int optionId) {
         if (requestCode == GALLERY_REQUEST && resultCode == RESULT_OK && data != null) {
             try {
@@ -333,7 +421,9 @@ public class TrueFalseFragment extends BaseFragment implements QueMediaListener 
                     } else {
                         try {
                             final Uri imageUri = data.getData();
-                            setupPreview(imageUri);
+                            CropImage.activity(imageUri)
+                                    .setInitialCropWindowPaddingRatio(0.0f)
+                                    .start(getActivity(), TrueFalseFragment.this);
                         } catch (Exception e) {
                             Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_LONG).show();
                         }
@@ -348,7 +438,9 @@ public class TrueFalseFragment extends BaseFragment implements QueMediaListener 
             if (mAllUri.size() >3) {
                 Toast.makeText(getActivity(), "A maximum of 4 media can be uploaded at once.", Toast.LENGTH_LONG).show();
             } else {
-                setupPreview(photouri);
+                CropImage.activity(photouri)
+                        .setInitialCropWindowPaddingRatio(0.0f)
+                        .start(getActivity(), TrueFalseFragment.this);
             }
         } else if (requestCode == VIDEO_REQUEST && resultCode == RESULT_OK && data != null) {
             try {

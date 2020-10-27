@@ -381,11 +381,11 @@ public class LearningQuestionsNew implements Cloneable, Serializable {
     }
 
     public String getMarks() {
-        return marks != null ? UtilHelper.formatMarks(Float.parseFloat(marks)) : "0.0";
+        return marks != null ? UtilHelper.formatMarks(Float.parseFloat(marks)) : "";
     }
 
     public String getFormatedMarks() {
-        return marks != null ? "Marks : " + UtilHelper.formatMarks(Float.parseFloat(marks)) : "";
+        return marks != null  && !marks.isEmpty()? "Marks : " + UtilHelper.formatMarks(Float.parseFloat(marks)) : "";
     }
 
     public void setMarks(String marks) {

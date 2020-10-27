@@ -172,7 +172,7 @@ public class AppUtils {
 
     public static String getMedialUrl(Activity activity,String mdtId,String path){
         Log.d(TAG, "getMedialUrl: "+TinyDB.getInstance(activity).getString(mdtId)+path);
-        return TinyDB.getInstance(activity).getString(mdtId)+path;
+        return TinyDB.getInstance(activity).getString(mdtId)+path.trim();
     }
 
     @SuppressLint("SimpleDateFormat")
