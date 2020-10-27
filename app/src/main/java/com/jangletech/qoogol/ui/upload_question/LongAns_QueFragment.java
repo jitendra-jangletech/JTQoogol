@@ -166,7 +166,7 @@ public class LongAns_QueFragment extends BaseFragment implements QueMediaListene
             String[] stringrray = learningQuestionsNew.getQue_images().split(",");
             tempimgList = Arrays.asList(stringrray);
             for (int i = 0; i < stringrray.length; i++) {
-                String s = AppUtils.getMedialUrl(getActivity(), tempimgList.get(i).split("=", -1)[0], tempimgList.get(i).split("=", -1)[1]);
+                String s = AppUtils.getMedialUrl(getActivity(), tempimgList.get(i).split(";", -1)[1], tempimgList.get(i).split(";", -1)[2]);
                 setupPreview(Uri.parse(s));
             }
         }

@@ -290,6 +290,7 @@ public class Constant {
     public static final String REFER = "sm01SignupReferredByN";
     public static final String DASHBOARD = "q110FetchDashboard";
     public static final String PROCESS_QUESTION = "q141ProcessQuestion";
+    public static final String DELETE_MEDIA = "q143DeleteQueMedia";
     public static final String ADD_QUESTION = "q142AddModifyQuestion ";
     public static final String PROCESS_TEST = "q133ProcessTest";
     public static final String START_RESUME_TEST = "q131StartResumeTest";
@@ -637,6 +638,7 @@ public class Constant {
     public static final String stq_cdatetime = "1471";
     public static final String stq_mst_id = "1472";
     public static final String group_name = "386";
+    public static final String md_id = "420";
 
     public static final String lc_user_id = "3434";
 

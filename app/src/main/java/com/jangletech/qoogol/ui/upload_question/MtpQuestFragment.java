@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
@@ -41,11 +42,13 @@ import com.jangletech.qoogol.util.ImageOptimization;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
 import com.jangletech.qoogol.videocompressions.DialogProcessFile;
+import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.io.File;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import okhttp3.MediaType;
@@ -55,17 +58,24 @@ import retrofit2.Call;
 import retrofit2.Callback;
 
 import static android.app.Activity.RESULT_OK;
+import static com.jangletech.qoogol.util.Constant.A1;
+import static com.jangletech.qoogol.util.Constant.A2;
+import static com.jangletech.qoogol.util.Constant.A3;
+import static com.jangletech.qoogol.util.Constant.A4;
 import static com.jangletech.qoogol.util.Constant.ADD;
+import static com.jangletech.qoogol.util.Constant.B1;
+import static com.jangletech.qoogol.util.Constant.B2;
+import static com.jangletech.qoogol.util.Constant.B3;
+import static com.jangletech.qoogol.util.Constant.B4;
 import static com.jangletech.qoogol.util.Constant.MATCH_PAIR;
 import static com.jangletech.qoogol.util.Constant.UPDATE;
 import static com.jangletech.qoogol.util.Constant.qoogol;
 
-public class MtpQuestFragment extends BaseFragment implements SubjectiveAnsDialog.GetAnsListener, QueMediaListener {
+public class MtpQuestFragment extends BaseFragment implements SubjectiveAnsDialog.GetAnsListener, QueMediaListener, View.OnTouchListener {
 
     private static final String TAG = "MtpQuestFragment";
     private FragmentUpMtpQueBinding mBinding;
     private SubjectiveAnsDialog subjectiveAnsDialog;
-    private String A1 = "", A2 = "", A3 = "", A4 = "";
     private String selectedOptions = "";
     private UploadQuestion uploadQuestion;
     private static final int CAMERA_REQUEST = 1, GALLERY_REQUEST = 2, PICKFILE_REQUEST_CODE = 3, VIDEO_REQUEST = 4, AUDIO_REQUEST = 5;
@@ -74,7 +84,7 @@ public class MtpQuestFragment extends BaseFragment implements SubjectiveAnsDialo
     String questionId = "", subjectId = "";
     List<String> tempimgList = new ArrayList<>();
     int call_from;
-
+    int optionId;
 
 
     @Nullable
@@ -104,6 +114,14 @@ public class MtpQuestFragment extends BaseFragment implements SubjectiveAnsDialo
             setData(learningQuestionsNew);
         }
 
+        mBinding.opa1.setOnTouchListener(this);
+        mBinding.opb1.setOnTouchListener(this);
+        mBinding.opa2.setOnTouchListener(this);
+        mBinding.opb2.setOnTouchListener(this);
+        mBinding.opa3.setOnTouchListener(this);
+        mBinding.opb3.setOnTouchListener(this);
+        mBinding.opa4.setOnTouchListener(this);
+        mBinding.opb4.setOnTouchListener(this);
 
         mBinding.saveQuestion.setOnClickListener(v -> addQuestion());
 
@@ -149,12 +167,54 @@ public class MtpQuestFragment extends BaseFragment implements SubjectiveAnsDialo
     }
 
     private void setData(LearningQuestionsNew learningQuestionsNew) {
+        questionId = String.valueOf(learningQuestionsNew.getQuestion_id());
+        subjectId = learningQuestionsNew.getSubject_id();
+        mBinding.subject.setText("Subject : " + learningQuestionsNew.getSubject());
+        mBinding.etQuestion.setText(learningQuestionsNew.getQuestion());
+        mBinding.etQuestionDesc.setText(learningQuestionsNew.getQuestiondesc());
+        mBinding.opa1.setText(learningQuestionsNew.getMcq1().split("::", -1)[0]);
+        mBinding.opb1.setText(learningQuestionsNew.getMcq1().split("::", -1)[1]);
+        mBinding.opa2.setText(learningQuestionsNew.getMcq2().split("::", -1)[0]);
+        mBinding.opa2.setText(learningQuestionsNew.getMcq2().split("::", -1)[1]);
+        mBinding.opa3.setText(learningQuestionsNew.getMcq3().split("::", -1)[0]);
+        mBinding.opb3.setText(learningQuestionsNew.getMcq3().split("::", -1)[1]);
+        mBinding.opa4.setText(learningQuestionsNew.getMcq4().split("::", -1)[0]);
+        mBinding.opb4.setText(learningQuestionsNew.getMcq4().split("::", -1)[1]);
+        mBinding.edtmarks.setText(learningQuestionsNew.getMarks());
+        mBinding.edtduration.setText(learningQuestionsNew.getDuration());
+
+        if (learningQuestionsNew.getDifficulty_level().equalsIgnoreCase("E"))
+            mBinding.radioEasy.setChecked(true);
+        else if (learningQuestionsNew.getDifficulty_level().equalsIgnoreCase("M"))
+            mBinding.radioMedium.setChecked(true);
+        else if (learningQuestionsNew.getDifficulty_level().equalsIgnoreCase("H"))
+            mBinding.radioHard.setChecked(true);
+
+
+//        if (learningQuestionsNew.getAnswer().equalsIgnoreCase("A"))
+//            mBinding.radioA.setChecked(true);
+//        else if (learningQuestionsNew.getAnswer().equalsIgnoreCase("B"))
+//            mBinding.radioB.setChecked(true);
+//        else if (learningQuestionsNew.getAnswer().equalsIgnoreCase("C"))
+//            mBinding.radioC.setChecked(true);
+//        else if (learningQuestionsNew.getAnswer().equalsIgnoreCase("D"))
+//            mBinding.radioD.setChecked(true);
+
+        if (learningQuestionsNew.getQue_images() != null && !learningQuestionsNew.getQue_images().isEmpty()) {
+            String[] stringrray = learningQuestionsNew.getQue_images().split(",");
+            tempimgList = Arrays.asList(stringrray);
+            for (int i = 0; i < stringrray.length; i++) {
+                String s = AppUtils.getMedialUrl(getActivity(), tempimgList.get(i).split(":", -1)[1], tempimgList.get(i).split(":", -1)[2]);
+                setupPreview(Uri.parse(s));
+            }
+        }
     }
 
     @Override
     public void onAnswerEntered(String answer) {
 
     }
+
     private void initSelectedImageView() {
         setupPreview(null);
         galleryAdapter = new AdapterGallerySelectedImage(mAllUri, tempimgList, call_from, getActivity(), new AdapterGallerySelectedImage.GalleryUplodaHandler() {
@@ -205,14 +265,51 @@ public class MtpQuestFragment extends BaseFragment implements SubjectiveAnsDialo
 
             @Override
             public void actionRemoved(int position) {
-                mAllUri.remove(position);
-                galleryAdapter.notifyItemRemoved(position);
-                galleryAdapter.notifyItemRangeChanged(position, mAllUri.size());
-                if (mAllUri.size() == 0)
-                    mBinding.queimgRecycler.setVisibility(View.GONE);
+                Uri uri = mAllUri.get(position);
+                if (uri.toString().contains("http")) {
+                    deleteApiCall(position);
+                } else {
+                    deleteImage(position);
+                }
             }
         });
 
+    }
+
+    private void deleteApiCall(int position) {
+        Call<ResponseObj> call = getApiService().deleteMedia(new PreferenceManager(getActivity()).getUserId(), getDeviceId(getActivity()),
+                tempimgList.get(position).split(":", -1)[0]);
+        call.enqueue(new Callback<ResponseObj>() {
+            @Override
+            public void onResponse(Call<ResponseObj> call, retrofit2.Response<ResponseObj> response) {
+                try {
+                    if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
+                        deleteImage(position);
+                        tempimgList.remove(position);
+                    } else {
+                        Toast.makeText(getActivity(), UtilHelper.getAPIError(String.valueOf(response.body())), Toast.LENGTH_SHORT).show();
+                    }
+                    ProgressDialog.getInstance().dismiss();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    ProgressDialog.getInstance().dismiss();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseObj> call, Throwable t) {
+                t.printStackTrace();
+                ProgressDialog.getInstance().dismiss();
+            }
+        });
+    }
+
+    private void deleteImage(int position) {
+        mAllUri.remove(position);
+        galleryAdapter.notifyItemRemoved(position);
+        galleryAdapter.notifyItemRangeChanged(position, mAllUri.size());
+        if (mAllUri.size() == 0)
+            mBinding.queimgRecycler.setVisibility(View.GONE);
     }
 
     private String getSelectedDiffLevel() {
@@ -336,6 +433,20 @@ public class MtpQuestFragment extends BaseFragment implements SubjectiveAnsDialo
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (result != null && resultCode == RESULT_OK) {
+                Log.i(TAG, "onActivityResult Uri : " + result.getUri());
+                setupPreview(result.getUri());
+            }
+        }
+    }
+
+
+
+    @Override
     public void onMediaReceived(int requestCode, int resultCode, Intent data, Uri photouri, int optionId) {
         if (requestCode == GALLERY_REQUEST && resultCode == RESULT_OK && data != null) {
             try {
@@ -365,7 +476,9 @@ public class MtpQuestFragment extends BaseFragment implements SubjectiveAnsDialo
                     } else {
                         try {
                             final Uri imageUri = data.getData();
-                            setupPreview(imageUri);
+                            CropImage.activity(imageUri)
+                                    .setInitialCropWindowPaddingRatio(0.0f)
+                                    .start(getActivity(), MtpQuestFragment.this);
                         } catch (Exception e) {
                             Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_LONG).show();
                         }
@@ -380,7 +493,9 @@ public class MtpQuestFragment extends BaseFragment implements SubjectiveAnsDialo
             if (mAllUri.size() >3) {
                 Toast.makeText(getActivity(), "A maximum of 4 media can be uploaded at once.", Toast.LENGTH_LONG).show();
             } else {
-                setupPreview(photouri);
+                CropImage.activity(photouri)
+                        .setInitialCropWindowPaddingRatio(0.0f)
+                        .start(getActivity(), MtpQuestFragment.this);
             }
         } else if (requestCode == VIDEO_REQUEST && resultCode == RESULT_OK && data != null) {
             try {
@@ -534,6 +649,22 @@ public class MtpQuestFragment extends BaseFragment implements SubjectiveAnsDialo
 
     @Override
     public void onScanText(String text, int ansId) {
+        if (ansId==A1)
+            mBinding.opa1.setText(text);
+         else  if (ansId==B1)
+            mBinding.opb1.setText(text);
+        else  if (ansId==A2)
+            mBinding.opa2.setText(text);
+        else  if (ansId==B2)
+            mBinding.opb2.setText(text);
+        else  if (ansId==A3)
+            mBinding.opa3.setText(text);
+        else  if (ansId==B3)
+            mBinding.opb3.setText(text);
+        else  if (ansId==A4)
+            mBinding.opa4.setText(text);
+        else  if (ansId==B4)
+            mBinding.opb4.setText(text);
 
     }
 
@@ -549,41 +680,44 @@ public class MtpQuestFragment extends BaseFragment implements SubjectiveAnsDialo
                     queImagesParts = new MultipartBody.Part[mAllUri.size()];
                     for (int index = 0; index < mAllUri.size(); index++) {
                         Uri single_image = mAllUri.get(index);
-                        File imageFile = AppUtils.createImageFile(requireActivity(), single_image);
-                        if (!imageFile.exists()) {
-                            imageFile.createNewFile();
-                        }
-
-                        final InputStream imageStream = getActivity().getContentResolver().openInputStream(single_image);
-                        AppUtils.readFully(imageStream, imageFile);
-                        File file = new File(mAllUri.get(index).getPath());
-                        long fileSizeInMB = imageFile.length() / 1048576;
-                        Log.i(TAG, "File Size: " + fileSizeInMB + " MB");
-                        if (fileSizeInMB > new PreferenceManager(getActivity()).getImageSize()) {
-                            Toast.makeText(getActivity(), "Please upload the image of size less than 10MB", Toast.LENGTH_LONG).show();
-                        } else {
-                            RequestBody queBody = null;
-                            if (UtilHelper.isImage(single_image, getActivity())) {
-                                queBody = RequestBody.create(MediaType.parse("image/*"),
-                                        imageFile);
-                            } else if (UtilHelper.isVideo(single_image, getActivity())) {
-                                queBody = RequestBody.create(MediaType.parse("video/*"),
-                                        imageFile);
-                            } else if (UtilHelper.isAudio(single_image, getActivity())) {
-                                queBody = RequestBody.create(MediaType.parse("audio/*"),
-                                        imageFile);
-                            } else if (UtilHelper.isDoc(single_image, getActivity())) {
-                                queBody = RequestBody.create(MediaType.parse("application/*"),
-                                        imageFile);
+                        if (!single_image.toString().contains("https")) {
+                            File imageFile = AppUtils.createImageFile(requireActivity(), single_image);
+                            if (!imageFile.exists()) {
+                                imageFile.createNewFile();
                             }
 
-                            queImagesParts[index] = MultipartBody.Part.createFormData("Files",
-                                    imageFile.getName(), queBody);
-                            if (images.isEmpty())
-                                images = AppUtils.encodedString(imageFile.getName());
-                            else
-                                images = images + "," + AppUtils.encodedString(imageFile.getName());
+                            final InputStream imageStream = getActivity().getContentResolver().openInputStream(single_image);
+                            AppUtils.readFully(imageStream, imageFile);
+                            File file = new File(mAllUri.get(index).getPath());
+                            long fileSizeInMB = imageFile.length() / 1048576;
+                            Log.i(TAG, "File Size: " + fileSizeInMB + " MB");
+                            if (fileSizeInMB > new PreferenceManager(getActivity()).getImageSize()) {
+                                Toast.makeText(getActivity(), "Please upload the image of size less than 10MB", Toast.LENGTH_LONG).show();
+                            } else {
+                                RequestBody queBody = null;
+                                if (UtilHelper.isImage(single_image, getActivity())) {
+                                    queBody = RequestBody.create(MediaType.parse("image/*"),
+                                            imageFile);
+                                } else if (UtilHelper.isVideo(single_image, getActivity())) {
+                                    queBody = RequestBody.create(MediaType.parse("video/*"),
+                                            imageFile);
+                                } else if (UtilHelper.isAudio(single_image, getActivity())) {
+                                    queBody = RequestBody.create(MediaType.parse("audio/*"),
+                                            imageFile);
+                                } else if (UtilHelper.isDoc(single_image, getActivity())) {
+                                    queBody = RequestBody.create(MediaType.parse("application/*"),
+                                            imageFile);
+                                }
+
+                                queImagesParts[index] = MultipartBody.Part.createFormData("Files",
+                                        imageFile.getName(), queBody);
+                                if (images.isEmpty())
+                                    images = AppUtils.encodedString(imageFile.getName());
+                                else
+                                    images = images + "," + AppUtils.encodedString(imageFile.getName());
+                            }
                         }
+
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -598,11 +732,10 @@ public class MtpQuestFragment extends BaseFragment implements SubjectiveAnsDialo
             pair3 = mBinding.opa3.getText().toString() + "::" + mBinding.opb3.getText().toString();
             pair4 = mBinding.opa4.getText().toString() + "::" + mBinding.opb4.getText().toString();
 
-            UploadQuestion uploadQuestion = (UploadQuestion) getArguments().getSerializable("Question");
             RequestBody userId = RequestBody.create(MediaType.parse("multipart/form-data"), user_id);
             RequestBody appname = RequestBody.create(MediaType.parse("multipart/form-data"), qoogol);
             RequestBody deviceId = RequestBody.create(MediaType.parse("multipart/form-data"), getDeviceId(getActivity()));
-            RequestBody subId = RequestBody.create(MediaType.parse("multipart/form-data"), uploadQuestion.getSubjectId());
+            RequestBody subId = RequestBody.create(MediaType.parse("multipart/form-data"), subjectId);
             RequestBody question = RequestBody.create(MediaType.parse("multipart/form-data"), AppUtils.encodedString(mBinding.etQuestion.getText().toString()));
             RequestBody questiondesc = RequestBody.create(MediaType.parse("multipart/form-data"), AppUtils.encodedString(mBinding.etQuestionDesc.getText().toString()));
             RequestBody type = RequestBody.create(MediaType.parse("multipart/form-data"), MATCH_PAIR);
@@ -646,5 +779,42 @@ public class MtpQuestFragment extends BaseFragment implements SubjectiveAnsDialo
         }
     }
 
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        final int DRAWABLE_LEFT = 0;
+        final int DRAWABLE_TOP = 1;
+        final int DRAWABLE_RIGHT = 2;
+        final int DRAWABLE_BOTTOM = 3;
+
+        if(event.getAction() == MotionEvent.ACTION_UP) {
+            if(event.getRawX() >= (mBinding.opa1.getRight() - mBinding.opa1.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                ((MainActivity) getActivity()).openAnsScanDialog(A1);
+                return true;
+            } else if(event.getRawX() >= (mBinding.opb1.getRight() - mBinding.opb1.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                ((MainActivity) getActivity()).openAnsScanDialog(B1);
+                return true;
+            } else if(event.getRawX() >= (mBinding.opa2.getRight() - mBinding.opa2.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                ((MainActivity) getActivity()).openAnsScanDialog(A2);
+                return true;
+            } else if(event.getRawX() >= (mBinding.opb2.getRight() - mBinding.opb2.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                ((MainActivity) getActivity()).openAnsScanDialog(B2);
+                return true;
+            } else if(event.getRawX() >= (mBinding.opa3.getRight() - mBinding.opa3.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                ((MainActivity) getActivity()).openAnsScanDialog(A3);
+                return true;
+            } else if(event.getRawX() >= (mBinding.opb3.getRight() - mBinding.opb3.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                ((MainActivity) getActivity()).openAnsScanDialog(B3);
+                return true;
+            } else if(event.getRawX() >= (mBinding.opa4.getRight() - mBinding.opa4.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                ((MainActivity) getActivity()).openAnsScanDialog(A4);
+                return true;
+            } else if(event.getRawX() >= (mBinding.opb4.getRight() - mBinding.opb4.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                ((MainActivity) getActivity()).openAnsScanDialog(B4);
+                return true;
+            }
+        }
+        return false;
+    }
 
 }

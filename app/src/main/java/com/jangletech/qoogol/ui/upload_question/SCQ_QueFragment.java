@@ -157,7 +157,7 @@ public class SCQ_QueFragment extends BaseFragment implements QueMediaListener {
             String[] stringrray = learningQuestionsNew.getQue_images().split(",");
             tempimgList = Arrays.asList(stringrray);
             for (int i = 0; i < stringrray.length; i++) {
-                String s = AppUtils.getMedialUrl(getActivity(), tempimgList.get(i).split("=", -1)[0], tempimgList.get(i).split("=", -1)[1]);
+                String s = AppUtils.getMedialUrl(getActivity(), tempimgList.get(i).split(":", -1)[1], tempimgList.get(i).split(":", -1)[2]);
                 setupPreview(Uri.parse(s));
             }
         }
@@ -233,7 +233,31 @@ public class SCQ_QueFragment extends BaseFragment implements QueMediaListener {
     }
 
     private void deleteApiCall(int position) {
-        deleteImage(position);
+        Call<ResponseObj> call = getApiService().deleteMedia(new PreferenceManager(getActivity()).getUserId(), getDeviceId(getActivity()),
+                tempimgList.get(position).split(":", -1)[0]);
+        call.enqueue(new Callback<ResponseObj>() {
+            @Override
+            public void onResponse(Call<ResponseObj> call, retrofit2.Response<ResponseObj> response) {
+                try {
+                    if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
+                        deleteImage(position);
+                        tempimgList.remove(position);
+                    } else {
+                        Toast.makeText(getActivity(), UtilHelper.getAPIError(String.valueOf(response.body())), Toast.LENGTH_SHORT).show();
+                    }
+                    ProgressDialog.getInstance().dismiss();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    ProgressDialog.getInstance().dismiss();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseObj> call, Throwable t) {
+                t.printStackTrace();
+                ProgressDialog.getInstance().dismiss();
+            }
+        });
     }
 
     private void deleteImage(int position) {

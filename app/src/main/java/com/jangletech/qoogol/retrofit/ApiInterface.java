@@ -500,7 +500,7 @@ public interface ApiInterface {
                                            @Field(Constant.q_trending) String trending,
                                            @Field(Constant.q_popular) String popular,
                                            @Field(Constant.q_recent) String recent,
-                                           @Field(Constant.q_type) String question_type,
+                                           @Field(Constant.q_option_type) String question_type,
                                            @Field(Constant.q_option_type) String option_type,
                                            @Field(Constant.ue_id) String ueId,
                                            @Field(Constant.pagestart) String page);
@@ -524,7 +524,7 @@ public interface ApiInterface {
                                                  @Field(Constant.q_trending) String trending,
                                                  @Field(Constant.q_popular) String popular,
                                                  @Field(Constant.q_recent) String recent,
-                                                 @Field(Constant.q_type) String question_type,
+                                                 @Field(Constant.q_option_type) String question_type,
                                                  @Field(Constant.q_option_type) String option_type);
 
     @FormUrlEncoded
@@ -659,6 +659,12 @@ public interface ApiInterface {
                                  @Field(Constant.qlc_fav_flag) int like);
 
     @FormUrlEncoded
+    @POST(Constant.DELETE_MEDIA)
+    Call<ResponseObj> deleteMedia(@Field(Constant.u_user_id) String userid,
+                                        @Field(Constant.device_id) String deviceId,
+                                        @Field(Constant.md_id) String mdId);
+
+    @FormUrlEncoded
     @POST(Constant.PROCESS_QUESTION)
     Call<ProcessQuestion> addRatingsApi(@Field(Constant.u_user_id) int userid,
                                         @Field(Constant.q_id) int queId,
@@ -726,7 +732,7 @@ public interface ApiInterface {
                                                 @Part(Constant.sm_id) RequestBody subjectId,
                                                 @Part(Constant.q_quest) RequestBody question,
                                                 @Part(Constant.q_quest_desc) RequestBody questiondesc,
-                                                @Part(Constant.q_type) RequestBody type,
+                                                @Part(Constant.q_option_type) RequestBody type,
                                                 @Part(Constant.q_marks) RequestBody marks,
                                                 @Part(Constant.q_duration) RequestBody duration,
                                                 @Part(Constant.q_diff_level) RequestBody difflevel,

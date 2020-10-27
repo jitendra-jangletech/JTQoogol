@@ -116,8 +116,7 @@ public class AdapterGallerySelectedImage extends RecyclerView.Adapter<AdapterGal
                 }else {
                     Glide.with(mContext)
                             .load(uriList.get(position))
-                            .transition(DrawableTransitionOptions.withCrossFade())
-                            .diskCacheStrategy(DiskCacheStrategy.DATA)
+                            .dontAnimate()
                             .placeholder(circularProgressDrawable)
                             .error(R.drawable.ic_broken_image)
                             .into(holder.image);

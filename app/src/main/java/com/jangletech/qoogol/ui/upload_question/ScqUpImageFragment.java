@@ -138,21 +138,21 @@ public class ScqUpImageFragment extends BaseFragment implements QueMediaListener
         mBinding.etQuestion.setText(learningQuestionsNew.getQuestion());
         mBinding.etQuestionDesc.setText(learningQuestionsNew.getQuestiondesc());
 
-        Uri uri1 = Uri.parse(AppUtils.getMedialUrl(getActivity(), learningQuestionsNew.getMcq1().split("=", -1)[0], learningQuestionsNew.getMcq1().split("=", -1)[1]));
+        Uri uri1 = Uri.parse(AppUtils.getMedialUrl(getActivity(), learningQuestionsNew.getMcq1().split(":", -1)[1], learningQuestionsNew.getMcq1().split(":", -1)[2]));
         mOptionsUri[0] = uri1;
         setImage(uri1, mBinding.image1);
 
-        Uri uri2 = Uri.parse(AppUtils.getMedialUrl(getActivity(), learningQuestionsNew.getMcq2().split("=", -1)[0], learningQuestionsNew.getMcq2().split("=", -1)[1]));
+        Uri uri2 = Uri.parse(AppUtils.getMedialUrl(getActivity(), learningQuestionsNew.getMcq2().split(":", -1)[1], learningQuestionsNew.getMcq2().split(":", -1)[2]));
         mOptionsUri[0] = uri2;
-        setImage(uri2, mBinding.image1);
+        setImage(uri2, mBinding.image2);
 
-        Uri uri3 = Uri.parse(AppUtils.getMedialUrl(getActivity(), learningQuestionsNew.getMcq3().split("=", -1)[0], learningQuestionsNew.getMcq3().split("=", -1)[1]));
+        Uri uri3 = Uri.parse(AppUtils.getMedialUrl(getActivity(), learningQuestionsNew.getMcq3().split(":", -1)[1], learningQuestionsNew.getMcq3().split(":", -1)[2]));
         mOptionsUri[0] = uri3;
-        setImage(uri3, mBinding.image1);
+        setImage(uri3, mBinding.image3);
 
-        Uri uri4 = Uri.parse(AppUtils.getMedialUrl(getActivity(), learningQuestionsNew.getMcq4().split("=", -1)[0], learningQuestionsNew.getMcq4().split("=", -1)[1]));
+        Uri uri4 = Uri.parse(AppUtils.getMedialUrl(getActivity(), learningQuestionsNew.getMcq4().split(":", -1)[1], learningQuestionsNew.getMcq4().split(":", -1)[2]));
         mOptionsUri[0] = uri4;
-        setImage(uri4, mBinding.image1);
+        setImage(uri4, mBinding.image4);
 
         mBinding.edtmarks.setText(learningQuestionsNew.getMarks());
         mBinding.edtduration.setText(learningQuestionsNew.getDuration());
@@ -178,7 +178,7 @@ public class ScqUpImageFragment extends BaseFragment implements QueMediaListener
             String[] stringrray = learningQuestionsNew.getQue_images().split(",");
             tempimgList = Arrays.asList(stringrray);
             for (int i = 0; i < stringrray.length; i++) {
-                String s = AppUtils.getMedialUrl(getActivity(), tempimgList.get(i).split("=", -1)[0], tempimgList.get(i).split("=", -1)[1]);
+                String s = AppUtils.getMedialUrl(getActivity(), tempimgList.get(i).split(";", -1)[1], tempimgList.get(i).split(";", -1)[2]);
                 setupPreview(Uri.parse(s));
             }
         }
@@ -416,7 +416,31 @@ public class ScqUpImageFragment extends BaseFragment implements QueMediaListener
     }
 
     private void deleteApiCall(int position) {
-        deleteImage(position);
+        Call<ResponseObj> call = getApiService().deleteMedia(new PreferenceManager(getActivity()).getUserId(), getDeviceId(getActivity()),
+                tempimgList.get(position).split(":", -1)[0]);
+        call.enqueue(new Callback<ResponseObj>() {
+            @Override
+            public void onResponse(Call<ResponseObj> call, retrofit2.Response<ResponseObj> response) {
+                try {
+                    if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
+                        deleteImage(position);
+                        tempimgList.remove(position);
+                    } else {
+                        Toast.makeText(getActivity(), UtilHelper.getAPIError(String.valueOf(response.body())), Toast.LENGTH_SHORT).show();
+                    }
+                    ProgressDialog.getInstance().dismiss();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    ProgressDialog.getInstance().dismiss();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseObj> call, Throwable t) {
+                t.printStackTrace();
+                ProgressDialog.getInstance().dismiss();
+            }
+        });
     }
 
     private void deleteImage(int position) {
@@ -426,6 +450,7 @@ public class ScqUpImageFragment extends BaseFragment implements QueMediaListener
         if (mAllUri.size() == 0)
             mBinding.queimgRecycler.setVisibility(View.GONE);
     }
+
 
 
     private String getSelectedAns() {
