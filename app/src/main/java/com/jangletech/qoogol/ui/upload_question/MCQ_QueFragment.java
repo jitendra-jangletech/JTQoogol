@@ -411,7 +411,7 @@ public class MCQ_QueFragment extends BaseFragment implements QueMediaListener {
             level = r.getText() != null ? r.getText().toString() : "";
         }
 
-        return level;
+        return level.replace("Easy", "E").replace("Medium", "M").replace("Hard", "h");
     }
 
     private String getSelectedAns() {
