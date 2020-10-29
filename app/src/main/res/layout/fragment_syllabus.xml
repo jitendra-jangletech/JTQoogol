@@ -27,6 +27,7 @@
             android:orientation="vertical">
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:visibility="gone"
                 android:id="@+id/top_layout"
                 android:layout_width="match_parent"
                 android:layout_height="?android:attr/actionBarSize"

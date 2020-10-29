@@ -6,7 +6,9 @@ import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
+
 import com.jangletech.qoogol.BuildConfig;
+
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
@@ -204,7 +206,6 @@ public class UtilHelper {
         Log.e(TAG, "error in creation of directory");
         return context.getExternalFilesDir("Qoogol");
     }
-
 
     public static String getProfilePath(String userId, String endPath) {
         String paddedString = "0000000000".substring(userId.length());

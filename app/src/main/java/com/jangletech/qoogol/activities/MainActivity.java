@@ -122,7 +122,6 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
     public static String userId = "";
     QueMediaListener queMediaListener;
     private static final int CAMERA_REQUEST = 1, GALLERY_REQUEST = 2, PICKFILE_REQUEST_CODE = 3, VIDEO_REQUEST = 4, AUDIO_REQUEST = 5, REQUEST_GALLERY = 6, REQUEST_CAMERA = 7;
-    ;
     private Uri mphotouri;
     private AlertDialog mediaDialog;
     private int optionId;
@@ -155,7 +154,7 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
                 R.id.nav_shared_with_you,
                 R.id.nav_shared_by_you, R.id.nav_notifications, R.id.saved_questions,
                 R.id.nav_share_app, R.id.nav_about,
-                R.id.nav_faq, R.id.nav_fav, R.id.nav_syllabus, R.id.nav_edit_profile,
+                R.id.nav_faq, R.id.nav_fav, R.id.nav_edit_profile,
                 R.id.nav_settings, R.id.nav_requests, R.id.nav_import_contacts,
                 R.id.nav_code_conduct,
                 R.id.nav_home, R.id.nav_learning, R.id.nav_shared_with_you_que, R.id.nav_shared_by_you_que, R.id.nav_test_my, R.id.nav_doubts)
@@ -505,20 +504,6 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
                 navigateFlag = Nav.MY_TEST.toString();
             }
         });
-
-        /*findViewById(R.id.nav_test_popular).setOnClickListener(v -> {
-            mBinding.drawerLayout.closeDrawers();
-            if (navController.getCurrentDestination().getId() != R.id.nav_test_popular) {
-                navigateFlag = Nav.POPULAR_TEST.toString();
-            }
-        });
-
-        findViewById(R.id.nav_attended_by_friends).setOnClickListener(v -> {
-            mBinding.drawerLayout.closeDrawers();
-            if (navController.getCurrentDestination().getId() != R.id.nav_attended_by_friends) {
-                navigateFlag = Nav.ATTENDED_BY_FRIENDS.toString();
-            }
-        });*/
 
         findViewById(R.id.nav_shared_with_you).setOnClickListener(v -> {
             mBinding.drawerLayout.closeDrawers();
@@ -1082,12 +1067,11 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
             drawerLayout.closeDrawer(Gravity.LEFT);
         }
         if (navController.getCurrentDestination() != null) {
-            if (navController.getCurrentDestination() != null &&
-                    (navController.getCurrentDestination().getId() == R.id.nav_home ||
-                            navController.getCurrentDestination().getId() == R.id.nav_notifications ||
-                            navController.getCurrentDestination().getId() == R.id.nav_doubts ||
-                            navController.getCurrentDestination().getId() == R.id.nav_test_my ||
-                            navController.getCurrentDestination().getId() == R.id.nav_learning)) {
+            if (navController.getCurrentDestination().getId() == R.id.nav_home ||
+                    navController.getCurrentDestination().getId() == R.id.nav_notifications ||
+                    navController.getCurrentDestination().getId() == R.id.nav_doubts ||
+                    navController.getCurrentDestination().getId() == R.id.nav_test_my ||
+                    navController.getCurrentDestination().getId() == R.id.nav_learning){
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogStyle);
                 builder.setTitle("Exit")
@@ -1101,7 +1085,7 @@ public class MainActivity extends BaseActivity implements PublicProfileDialog.Pu
                         .setNegativeButton("Cancel", null)
                         .show();
 
-            } else {
+            } else{
                 if (navController.getCurrentDestination().getId() == R.id.nav_edit_profile ||
                         navController.getCurrentDestination().getId() == R.id.nav_settings ||
                         navController.getCurrentDestination().getId() == R.id.nav_about ||

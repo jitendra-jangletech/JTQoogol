@@ -1,6 +1,7 @@
 package com.jangletech.qoogol.ui;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.Html;
@@ -157,14 +158,15 @@ public class ExistingUserFragment extends BaseFragment {
         countDownTimer = new CountDownTimer(120000, 1000) {
             public void onTick(long millisUntilFinished) {
                 mBinding.sendOtp.setEnabled(false);
-                mBinding.tvSendOtp.setEnabled(false);
-                mBinding.tvSendOtp.setText(String.format(Locale.ENGLISH, "%d:%d sec", millisUntilFinished / (60 * 1000) % 60, millisUntilFinished / 1000 % 60));
+                mBinding.sendOtp.setTextColor(Color.WHITE);
+                Log.i(TAG, "onTick : " + String.format(Locale.ENGLISH, "%d:%d sec", millisUntilFinished / (60 * 1000) % 60, millisUntilFinished / 1000 % 60));
+                mBinding.sendOtp.setText(String.format(Locale.ENGLISH, "%d:%d sec", millisUntilFinished / (60 * 1000) % 60, millisUntilFinished / 1000 % 60));
             }
 
             public void onFinish() {
                 try {
-                    mBinding.tvSendOtp.setText(getResources().getString(R.string.resend_otp));
-                    mBinding.tvSendOtp.setEnabled(true);
+                    mBinding.sendOtp.setText(getResources().getString(R.string.resend_otp));
+                    mBinding.sendOtp.setEnabled(true);
                     mBinding.sendOtp.setEnabled(true);
                 } catch (Exception e) {
                     e.printStackTrace();

@@ -2,6 +2,7 @@ package com.jangletech.qoogol.ui;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -465,13 +466,14 @@ public class NewUserFragment extends BaseFragment {
         showToast("Otp Sent Successfully");
         countDownTimer = new CountDownTimer(120000, 1000) {
             public void onTick(long millisUntilFinished) {
-                mBinding.tvSendOtp.setEnabled(false);
-                mBinding.tvSendOtp.setText(String.format(Locale.ENGLISH, "%d:%d sec", millisUntilFinished / (60 * 1000) % 60, millisUntilFinished / 1000 % 60));
+                mBinding.sendOtp.setEnabled(false);
+                mBinding.sendOtp.setTextColor(Color.WHITE);
+                mBinding.sendOtp.setText(String.format(Locale.ENGLISH, "%d:%d sec", millisUntilFinished / (60 * 1000) % 60, millisUntilFinished / 1000 % 60));
             }
 
             public void onFinish() {
-                mBinding.tvSendOtp.setText(getResources().getString(R.string.resend_otp));
-                mBinding.tvSendOtp.setEnabled(true);
+                mBinding.sendOtp.setText(getResources().getString(R.string.resend_otp));
+                mBinding.sendOtp.setEnabled(true);
             }
         }.start();
     }

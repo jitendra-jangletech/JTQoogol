@@ -8,7 +8,6 @@ import android.graphics.Bitmap;
 import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -21,6 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.DialogFragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 
@@ -30,7 +30,9 @@ import com.itextpdf.text.pdf.PdfReader;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.CreatePdfAdapter;
 import com.jangletech.qoogol.databinding.FragmentCreatePdfBinding;
+import com.jangletech.qoogol.dialog.SaveFileDialog;
 import com.jangletech.qoogol.ui.BaseFragment;
+import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.ItemOffsetDecoration;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
@@ -44,12 +46,13 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 
-public class CreatePdfFragment extends BaseFragment implements CreatePdfAdapter.CreatePdfClickListener {
+public class CreatePdfFragment extends BaseFragment implements CreatePdfAdapter.CreatePdfClickListener, SaveFileDialog.SaveFileClickListener {
 
     private static final String TAG = "CreatePdfFragment";
     private FragmentCreatePdfBinding mBinding;
@@ -59,7 +62,6 @@ public class CreatePdfFragment extends BaseFragment implements CreatePdfAdapter.
     private Uri imageUri;
     private List<Uri> images = new ArrayList<>();
     private static final int REQUEST_CAMERA = 1;
-
 
     @Nullable
     @Override
@@ -101,32 +103,56 @@ public class CreatePdfFragment extends BaseFragment implements CreatePdfAdapter.
                 @Override
                 public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {/* ... */}
             }).check();
-
-
         });
 
         mBinding.btnGeneratePdf.setOnClickListener(v -> {
-            if (getAllFilesFromDirectory(tempPdfPath) != null &&
-                    getAllFilesFromDirectory(tempPdfPath).length > 0) {
-                mergePdf();
-                /*for (File file : getAllFilesFromDirectory(tempPdfPath)) {
-                    generateImageFromPdf(Uri.fromFile(file));
-                }*/
+            List<File> fileList = new ArrayList<>();
+            fileList = getAllFilesFromDirectory(tempPdfPath, FILE_TYPE_PDF);
+            Log.i(TAG, "onActivityCreated Size : " + fileList.size());
+            if (fileList != null &&
+                    fileList.size() > 0) {
+                DialogFragment saveFileDialog = new SaveFileDialog(this);
+                saveFileDialog.show(getParentFragmentManager(), "dialog_save_file");
             } else {
                 showAlert("No Pdf Files Added to generate document. Please add pdf files then try again!!");
             }
         });
     }
 
+//    private void showSaveFileDialog() {
+//        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity(), R.style.AlertDialogStyle);
+//        alertDialog.setTitle("Save File");
+//        final EditText input = new EditText(getActivity());
+//        input.setHint("Enter File Name");
+//        input.setKeyListener(DigitsKeyListener.getInstance("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_"));
+//        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+//                LinearLayout.LayoutParams.MATCH_PARENT,
+//                LinearLayout.LayoutParams.MATCH_PARENT);
+//        input.setLayoutParams(lp);
+//        alertDialog.setView(input);
+//        alertDialog.setPositiveButton("Save",
+//                new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        String fileName = input.getText().toString().trim();
+//                        if (fileName.length() > 0) {
+//                            mergePdf(fileName);
+//                        } else {
+//                            showToast("Please enter file name.");
+//                        }
+//                    }
+//                });
+//        alertDialog.show();
+//    }
+
     private void setPdfSamplePdfAdapter() {
         images.clear();
-        if (getAllFilesFromDirectory(tempPdfPath) != null) {
-            File[] files = getAllFilesFromDirectory(tempPdfPath);
-            for (File file : files) {
+        List<File> tempList = new ArrayList<>();
+        tempList = getAllFilesFromDirectory(tempPdfPath, FILE_TYPE_PNG);
+        if (tempList != null && tempList.size() > 0) {
+            for (File file : tempList) {
                 Log.i(TAG, "setPdfSamplePdfAdapter: " + Uri.fromFile(new File(file.getAbsolutePath())));
                 images.add(Uri.fromFile(new File(file.getAbsolutePath())));
             }
-
         }
         mAdapter = new CreatePdfAdapter(getActivity(), images, 1, this);
         gridLayoutManager = new GridLayoutManager(getActivity(), 3);
@@ -142,6 +168,7 @@ public class CreatePdfFragment extends BaseFragment implements CreatePdfAdapter.
             Log.d(TAG, "onActivityResult REQUEST_CAMERA: " + imageUri);
             try {
                 CropImage.activity(imageUri)
+                        .setInitialCropWindowPaddingRatio(0.0f)
                         .start(getContext(), this);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -157,7 +184,6 @@ public class CreatePdfFragment extends BaseFragment implements CreatePdfAdapter.
                 images.add(result.getUri());
                 Log.i(TAG, "onActivityResult Size : " + images.size());
                 createNewPdfPage(result.getUri());
-                // mAdapter.updateList(images);
             }
         }
     }
@@ -195,10 +221,13 @@ public class CreatePdfFragment extends BaseFragment implements CreatePdfAdapter.
             if (!pdfFile.exists()) {
                 pdfFile.mkdirs();
             }
-            String pdfPageName = tempPdfPath + "Page_" + System.currentTimeMillis() + ".pdf";
-            pdfDocument.writeTo(new FileOutputStream(new File(pdfPageName)));
+            String pdfPageName = tempPdfPath + "Page_" + System.currentTimeMillis();
+            String finalFileName = pdfPageName + ".pdf";
+            String pngFileName = pdfPageName + ".png";
+            pdfDocument.writeTo(new FileOutputStream(new File(finalFileName)));
             pdfDocument.close();
-
+            writePngFile(uri, pngFileName);
+            //generateImageFromPdf(uri, pdfPageName);
             setPdfSamplePdfAdapter();
 
         } catch (Exception e) {
@@ -206,33 +235,48 @@ public class CreatePdfFragment extends BaseFragment implements CreatePdfAdapter.
         }
     }
 
-    private void mergePdf() {
+    private void writePngFile(Uri uri, String path) {
+        try {
+            final InputStream imageStream = getActivity().getContentResolver().openInputStream(uri);
+            AppUtils.readFully(imageStream, new File(path));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void mergePdf(String fileName) {
         File finalDocs = new File(finalPdfDocs);
-        String mergedPdfName = finalPdfDocs + "Final_" + System.currentTimeMillis() + ".pdf";
+        String mergedPdfName = finalPdfDocs + fileName + ".pdf";
 
         if (!finalDocs.exists()) {
             finalDocs.mkdirs();
             Log.i(TAG, "Folder Created : ");
         }
 
-        File[] pdfFiles = getAllFilesFromDirectory(tempPdfPath);
+        List<File> temget = new ArrayList<>();
+        temget = getAllFilesFromDirectory(tempPdfPath, FILE_TYPE_PDF);
+        Log.i(TAG, "mergePdf Size : " + temget.size());
 
-        try {
-            Document document = new Document();
-            PdfCopy copy = new PdfCopy(document, new FileOutputStream(mergedPdfName));
-            document.open();
-            for (File file : pdfFiles) {
-                Log.i(TAG, "mergePdf Name: " + file.getName());
-                Log.i(TAG, "mergePdf Path : " + file.getAbsolutePath());
-                PdfReader reader = new PdfReader(file.getAbsolutePath());
-                copy.addDocument(reader);
+        if (!new File(mergedPdfName).exists()) {
+            try {
+                Document document = new Document();
+                PdfCopy copy = new PdfCopy(document, new FileOutputStream(mergedPdfName));
+                document.open();
+                for (File file : temget) {
+                    Log.i(TAG, "mergePdf Name: " + file.getName());
+                    Log.i(TAG, "mergePdf Path : " + file.getAbsolutePath());
+                    PdfReader reader = new PdfReader(file.getAbsolutePath());
+                    copy.addDocument(reader);
+                }
+                document.close();
+                FileUtils.deleteDirectory(new File(tempPdfPath));
+                setPdfSamplePdfAdapter();
+                showSuccessAlert(mergedPdfName);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            document.close();
-            FileUtils.deleteDirectory(new File(tempPdfPath));
-            setPdfSamplePdfAdapter();
-            showSuccessAlert(mergedPdfName);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } else {
+            showToast("File Name Already Exists. Please try with different file name.");
         }
     }
 
@@ -250,7 +294,7 @@ public class CreatePdfFragment extends BaseFragment implements CreatePdfAdapter.
                 .show();
     }
 
-    void generateImageFromPdf(Uri pdfUri) {
+    void generateImageFromPdf(Uri pdfUri, String fileName) {
         int pageNumber = 0;
         PdfiumCore pdfiumCore = new PdfiumCore(getActivity());
         try {
@@ -261,21 +305,21 @@ public class CreatePdfFragment extends BaseFragment implements CreatePdfAdapter.
             int height = pdfiumCore.getPageHeightPoint(pdfDocument, pageNumber);
             Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
             pdfiumCore.renderPageBitmap(pdfDocument, bmp, pageNumber, 0, 0, width, height);
-            saveImage(bmp);
+            saveImage(bmp, fileName);
             pdfiumCore.closeDocument(pdfDocument); // important!
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private void saveImage(Bitmap bmp) {
-        String thumbnail = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Qoogol/Thumbnails/";
+    private void saveImage(Bitmap bmp, String fileName) {
+        //String thumbnail = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Qoogol/Thumbnails/";
         FileOutputStream out = null;
         try {
-            File folder = new File(thumbnail);
+            File folder = new File(fileName);
             if (!folder.exists())
                 folder.mkdirs();
-            File file = new File(folder, System.currentTimeMillis() + ".png");
+            File file = new File(folder, fileName + ".png");
             out = new FileOutputStream(file);
             bmp.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
         } catch (Exception e) {
@@ -288,5 +332,11 @@ public class CreatePdfFragment extends BaseFragment implements CreatePdfAdapter.
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public void onSaveClick(String name) {
+        Log.i(TAG, "onSaveClick File Name : " + name);
+        mergePdf(name);
     }
 }

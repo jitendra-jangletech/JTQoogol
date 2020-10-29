@@ -12,6 +12,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.ItemCreatePdfBinding;
 import com.jangletech.qoogol.databinding.ItemMyPdfListBinding;
@@ -51,8 +52,12 @@ public class CreatePdfAdapter extends RecyclerView.Adapter<CreatePdfAdapter.View
     @Override
     public void onBindViewHolder(@NonNull CreatePdfAdapter.ViewHolder holder, int position) {
         Uri uri = imageUri.get(position);
+        //String path = uri.toString();
         Log.i(TAG, "onBindViewHolder Uri : " + uri.toString());
         if (flag == 1) {
+            Log.i(TAG, "onBindViewHolder Size : " + imageUri.size());
+            Glide.with(mContext).load(uri).into(holder.itemCreatePdfBinding.imageView);
+
             holder.itemCreatePdfBinding.removeItem.setOnClickListener(v -> {
                 listener.onRemoveClick(uri, position);
             });

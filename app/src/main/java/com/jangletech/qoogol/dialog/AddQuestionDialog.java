@@ -55,11 +55,11 @@ public class AddQuestionDialog extends Dialog implements AddTestQuestionAdapter.
 
     private void initCategoryMap() {
         categoryMap.put("All", "0");
-        categoryMap.put(Constant.short_ans, "5");
-        categoryMap.put(Constant.long_ans, "6");
+        categoryMap.put(Constant.short_ans, "21");
+        categoryMap.put(Constant.long_ans, "22");
         categoryMap.put(Constant.scq, "1");
         categoryMap.put(Constant.mcq, "4");
-        categoryMap.put(Constant.fill_the_blanks, "7");
+        categoryMap.put(Constant.fill_the_blanks, "23");
         categoryMap.put(Constant.true_false, "8");
         categoryMap.put(Constant.match_pair, "11");
     }
@@ -147,7 +147,6 @@ public class AddQuestionDialog extends Dialog implements AddTestQuestionAdapter.
                 ProgressDialog.getInstance().dismiss();
                 if (response.body() != null) {
                     if (response.body().getResponse().equals("200")) {
-                        //setCreatedTestList(response.body().getTestList());
                         learningQuestionsNewList.clear();
                         learningQuestionsNewList.addAll(response.body().getQuestion_list());
                         Log.i(TAG, "onResponse List Size : " + learningQuestionsNewList.size());
@@ -207,7 +206,6 @@ public class AddQuestionDialog extends Dialog implements AddTestQuestionAdapter.
     @Override
     public void onQuestSelected(List<LearningQuestionsNew> list) {
         Log.i(TAG, "onQuestSelected Size : " + list.size());
-        //this.learningQuestionsNewList = list;
     }
 
     @Override

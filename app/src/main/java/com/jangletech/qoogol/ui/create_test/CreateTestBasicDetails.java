@@ -35,8 +35,8 @@ import com.jangletech.qoogol.util.TinyDB;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -50,11 +50,11 @@ public class CreateTestBasicDetails extends BaseFragment implements TextWatcher,
     private FragmentCreateBasicDetailsBinding mBinding;
     private String difficulty = "", category = "", strTestType = "", strNegativeMarks = "";
     private String chapters = "";
-    private HashMap<String, String> diffLevel = new HashMap<>();
-    private HashMap<String, String> testCategory = new HashMap<>();
-    private HashMap<String, String> testType = new HashMap<>();
+    private LinkedHashMap<String, String> diffLevel = new LinkedHashMap<>();
+    private LinkedHashMap<String, String> testCategory = new LinkedHashMap<>();
+    private LinkedHashMap<String, String> testType = new LinkedHashMap<>();
     private TestModelNew testModelNew = new TestModelNew();
-    private HashMap<String, String> negativeMarks = new HashMap<>();
+    private LinkedHashMap<String, String> negativeMarks = new LinkedHashMap<>();
     private TestSubjectChapterMaster testSubjectChapterMaster = new TestSubjectChapterMaster();
     private Calendar mcurrentTime;
     private TimePickerDialog mTimePicker;
@@ -207,7 +207,7 @@ public class CreateTestBasicDetails extends BaseFragment implements TextWatcher,
                     showToast("Please select difficulty level.");
                     return;
                 }
-                if (getSelectedChipValue(mBinding.testCategoryChipGrp).isEmpty()) {
+                if(getSelectedChipValue(mBinding.testCategoryChipGrp).isEmpty()) {
                     showToast("Please select Category.");
                     return;
                 }
@@ -255,7 +255,6 @@ public class CreateTestBasicDetails extends BaseFragment implements TextWatcher,
     }
 
     private void setCreatedTestDetails(TestModelNew testModelNew) {
-
         Log.i(TAG, "setCreatedTestDetails TmId : " + testModelNew.getTm_id());
         Log.i(TAG, "setCreatedTestDetails: " + testModelNew.getTest_sections());
         Log.i(TAG, "setCreatedTestDetails Sections : " + testModelNew.getTest_sections());
@@ -264,9 +263,6 @@ public class CreateTestBasicDetails extends BaseFragment implements TextWatcher,
         strTestType = testModelNew.getTm_type();
         difficulty = testModelNew.getTm_diff_level();
         strNegativeMarks = testModelNew.getTm_neg_mks();
-        //testSubjectChapterMaster.setSubjectName(testModelNew.getSm_sub_name());
-        //testSubjectChapterMaster.setSubjectId(testModelNew.getTm_sm_id());
-        //testSubjectChapterMaster.setChap1Id(testModelNew.getTm_cm_id());
         Log.i(TAG, "setCreatedTestDetails duration: " + testModelNew.getTm_duration());
         if (testModelNew.getTm_duration() != null && !testModelNew.getTm_duration().isEmpty()) {
             String[] duration = testModelNew.getTm_duration().split(":", -1);
@@ -312,7 +308,7 @@ public class CreateTestBasicDetails extends BaseFragment implements TextWatcher,
         }
     }
 
-    private void prepareChips(ChipGroup chipGroup, HashMap<String, String> params, String chekedKey) {
+    private void prepareChips(ChipGroup chipGroup, LinkedHashMap<String, String> params, String chekedKey) {
         chipGroup.removeAllViews();
         int counter = 0;
         Iterator<Map.Entry<String, String>> itr = params.entrySet().iterator();

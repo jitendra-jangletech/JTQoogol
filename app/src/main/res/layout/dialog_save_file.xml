@@ -13,7 +13,7 @@
             android:background="@color/color_red"
             android:gravity="center"
             android:padding="@dimen/_4sdp"
-            android:text="Add Section"
+            android:text="Save File"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/colorWhite"
             android:textStyle="bold"
@@ -56,13 +56,13 @@
                 android:layout_marginTop="@dimen/_10sdp">
 
                 <RadioButton
-                    android:visibility="gone"
                     android:id="@+id/section0"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
                     android:tag="0"
-                    android:text="None" />
+                    android:text="None"
+                    android:visibility="gone" />
 
                 <RadioButton
                     android:id="@+id/section1"
@@ -91,43 +91,23 @@
             </RadioGroup>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilSectionMarks"
+                android:id="@+id/tilFileName"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
-                android:hint="@string/add_section_marks"
+                android:hint="@string/enter_file_name"
                 android:textColor="@color/colorBlack"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:errorEnabled="true"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etSectionMarks"
+                    android:id="@+id/etFileName"
+                    android:digits="@string/file_name_chars"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="number|textNoSuggestions"
-                    android:textColor="@color/colorBlack" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilQuestDuration"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:hint="@string/add_quest_duration"
-                android:textColor="@color/colorBlack"
-                android:visibility="gone"
-                app:errorEnabled="true"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etQuestDuration"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="number|textNoSuggestions"
+                    android:inputType="text|textNoSuggestions"
                     android:textColor="@color/colorBlack" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -162,9 +142,7 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-
         </LinearLayout>
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

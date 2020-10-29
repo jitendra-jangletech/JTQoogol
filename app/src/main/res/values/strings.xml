@@ -10,6 +10,7 @@
 
 
     <string name="my_pdf">My Pdf Documents</string>
+    <string name="file_name_chars">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_</string>
 
     //Learning Menu
     <string name="menu_course">Course</string>
@@ -880,5 +881,6 @@
     <string name="total_no_of_quest">Total No. of Questions</string>
     <string name="add_quest_duration">Question Recommended Time</string>
     <string name="preview">Preview</string>
+    <string name="enter_file_name">Enter File Name</string>
 
 </resources>

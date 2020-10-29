@@ -52,6 +52,7 @@ import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -63,6 +64,9 @@ public class BaseFragment extends Fragment {
     private static final String TAG = "BaseFragment";
     private SharedPreferences preferences;
     private ApiInterface apiService = ApiClient.getInstance().getApi();
+    public int FILE_TYPE_PDF = 1;
+    public int FILE_TYPE_ANY = 0;
+    public int FILE_TYPE_PNG = 2;
 
     public String finalPdfDocs = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Qoogol/Generated/";
     public String tempPdfPath = Environment.getExternalStorageDirectory()
@@ -85,11 +89,33 @@ public class BaseFragment extends Fragment {
         return date;
     }
 
-    public File[] getAllFilesFromDirectory(String folderPath) {
-        Log.i("Files", "Path: " + folderPath);
+    public List<File> getAllFilesFromDirectory(String folderPath, int type) {
+        //File[] files = new File[100];
+        List<File> tempList = new ArrayList<>();
         File directory = new File(folderPath);
-        File[] files = directory.listFiles();
-        return files;
+        int index = 0;
+        if (type == FILE_TYPE_PDF) {
+            Log.i("Files", "Path: " + folderPath);
+            for (File file : directory.listFiles()) {
+                String[] ext = file.getAbsolutePath().split("\\.", -1);
+                if (ext[1].equalsIgnoreCase("pdf")) {
+                    tempList.add(file);
+                }
+            }
+        }
+        if (type == FILE_TYPE_PNG) {
+            Log.i("Files", "Path: " + folderPath);
+            for (File file : directory.listFiles()) {
+                String[] ext = file.getAbsolutePath().split("\\.", -1);
+                Log.i(TAG, "getAllFilesFromDirectory ext : " + ext[1]);
+                if (ext[1].equalsIgnoreCase("png")) {
+                    tempList.add(file);
+                }
+            }
+        } else {
+            tempList.addAll(Arrays.asList(directory.listFiles()));
+        }
+        return tempList;
     }
 
     public String getKeyFromValuea(Map<String, String> map, String name) {
@@ -363,6 +389,15 @@ public class BaseFragment extends Fragment {
                         dialog.dismiss();
                     }
                 })
+                .setCancelable(false)
+                .show();
+    }
+
+    public void showAlert(String msg, String positiveBtnText, DialogInterface.OnClickListener dialogInterface) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogStyle);
+        builder.setTitle("Alert")
+                .setMessage(msg)
+                .setPositiveButton(positiveBtnText, dialogInterface)
                 .setCancelable(false)
                 .show();
     }

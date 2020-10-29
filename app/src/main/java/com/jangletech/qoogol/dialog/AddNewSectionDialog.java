@@ -201,6 +201,8 @@ public class AddNewSectionDialog extends DialogFragment implements TextWatcher {
                 mBinding.section3.setVisibility(View.VISIBLE);
                 mBinding.section3.setText(sectns[2].split("=", -1)[1]);
                 mBinding.section3.setTag(sectns[2].split("=", -1)[0]);
+            } else {
+                mBinding.section0.setVisibility(View.VISIBLE);
             }
         }
     }

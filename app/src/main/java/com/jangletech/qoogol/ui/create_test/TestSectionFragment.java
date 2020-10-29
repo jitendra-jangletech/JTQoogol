@@ -1,5 +1,6 @@
 package com.jangletech.qoogol.ui.create_test;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -79,7 +80,7 @@ public class TestSectionFragment extends BaseFragment implements AddNewSectionDi
         testTotalMarks = Integer.parseInt(TinyDB.getInstance(getActivity()).getString(Constant.tm_tot_marks));
         mBinding.tvTotalMarks.setText("Test Total Marks : " + testTotalMarks);
         try {
-            if(getArguments().getString(Constant.tm_id) != null) {
+            if (getArguments().getString(Constant.tm_id) != null) {
                 tmId = getArguments().getString(Constant.tm_id);
                 addTestQuestApi(null, "L", -1, -1, null);
             }
@@ -123,35 +124,39 @@ public class TestSectionFragment extends BaseFragment implements AddNewSectionDi
                     //showToast("Add Questions to Section.", Toast.LENGTH_LONG);
                     showAlert("Add Questions to Section.");
                     return;
-                } else if (getAllSectionMarks() > testTotalMarks) {
+                } else if (getAllSectionMarks() > testTotalMarks || getAllSectionMarks() < testTotalMarks) {
                     //showToast("All section Questions Marks should be equal to test total marks", Toast.LENGTH_LONG);
-                    showAlert(msg);
+                    showAlert(msg, "Continue to submit test", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            addTestQuestions();
+                            dialog.dismiss();
+                        }
+                    });
                     return;
-                } else if (getAllSectionMarks() < testTotalMarks) {
-                    //showToast("All section Questions Marks should be equal to test total marks", Toast.LENGTH_LONG);
-                    showAlert(msg);
-                    return;
-                } else {
-                    //call api to submit Questions
-                    List<LearningQuestionsNew> finalTestQuestList = new ArrayList<>();
-                    if (!learningQuestionsNewList0.isEmpty()) {
-                        finalTestQuestList.addAll(learningQuestionsNewList0);
-                    }
-                    if (!learningQuestionsNewList1.isEmpty()) {
-                        finalTestQuestList.addAll(learningQuestionsNewList1);
-                    }
-                    if (!learningQuestionsNewList2.isEmpty()) {
-                        finalTestQuestList.addAll(learningQuestionsNewList2);
-                    }
-                    if (!learningQuestionsNewList3.isEmpty()) {
-                        finalTestQuestList.addAll(learningQuestionsNewList3);
-                    }
-                    addTestQuest(finalTestQuestList);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         });
+    }
+
+    private void addTestQuestions() {
+        //call api to submit Questions
+        List<LearningQuestionsNew> finalTestQuestList = new ArrayList<>();
+        if (!learningQuestionsNewList0.isEmpty()) {
+            finalTestQuestList.addAll(learningQuestionsNewList0);
+        }
+        if (!learningQuestionsNewList1.isEmpty()) {
+            finalTestQuestList.addAll(learningQuestionsNewList1);
+        }
+        if (!learningQuestionsNewList2.isEmpty()) {
+            finalTestQuestList.addAll(learningQuestionsNewList2);
+        }
+        if (!learningQuestionsNewList3.isEmpty()) {
+            finalTestQuestList.addAll(learningQuestionsNewList3);
+        }
+        addTestQuest(finalTestQuestList);
     }
 
     private float getAllSectionMarks() {

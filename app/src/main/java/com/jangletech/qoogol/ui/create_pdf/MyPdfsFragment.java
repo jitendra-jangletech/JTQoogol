@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
@@ -22,6 +23,7 @@ import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -61,9 +63,10 @@ public class MyPdfsFragment extends BaseFragment implements CreatePdfAdapter.Cre
 
     private void setPdfSamplePdfAdapter() {
         images.clear();
-        if (getAllFilesFromDirectory(finalPdfDocs) != null) {
-            File[] files = getAllFilesFromDirectory(finalPdfDocs);
-            for (File file : files) {
+        List<File> fileList = new ArrayList<>();
+        fileList = getAllFilesFromDirectory(finalPdfDocs, FILE_TYPE_ANY);
+        if (fileList != null) {
+            for (File file : fileList) {
                 Log.i(TAG, "setPdfSamplePdfAdapter: " + Uri.fromFile(new File(file.getAbsolutePath())));
                 images.add(Uri.fromFile(new File(file.getAbsolutePath())));
             }

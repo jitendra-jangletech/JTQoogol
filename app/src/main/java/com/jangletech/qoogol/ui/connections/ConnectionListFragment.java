@@ -156,28 +156,30 @@ public class ConnectionListFragment extends BaseFragment implements ConnectionAd
             public void onResponse(Call<ConnectionResponse> call, retrofit2.Response<ConnectionResponse> response) {
                 dismissRefresh(mBinding.connectionSwiperefresh);
                 try {
-                    if (response.body().getResponse().equalsIgnoreCase("200")) {
-                        connectionResponse = response.body();
-                        List<Connections> newConnections = new ArrayList<>();
-                        for (Connections connections : response.body().getConnection_list()) {
-                            String fName = AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key1), connections.getU_first_name());
-                            String lName = AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key2), connections.getU_last_name());
-                            connections.setU_first_name(fName);
-                            connections.setU_last_name(lName);
-                            newConnections.add(connections);
+                    if (response.body().getResponse() != null) {
+                        if (response.body().getResponse().equalsIgnoreCase("200")) {
+                            connectionResponse = response.body();
+                            List<Connections> newConnections = new ArrayList<>();
+                            for (Connections connections : response.body().getConnection_list()) {
+                                String fName = AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key1), connections.getU_first_name());
+                                String lName = AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key2), connections.getU_last_name());
+                                connections.setU_first_name(fName);
+                                connections.setU_last_name(lName);
+                                newConnections.add(connections);
+                            }
+                            mViewModel.insert(newConnections);
+                        } else if (response.body().getResponse().equals("501")) {
+                            resetSettingAndLogout();
+                        } else {
+                            showToast("Error Code : " + response.body().getResponse());
                         }
-                        //mViewModel.insert(response.body().getConnection_list());
-                        mViewModel.insert(newConnections);
-                    } else if (response.body().getResponse().equals("501")) {
-                        resetSettingAndLogout();
                     } else {
-                        showToast("Error Code : " + response.body().getResponse());
+                        mBinding.emptyview.setText("No Connections Added.");
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
-
             @Override
             public void onFailure(Call<ConnectionResponse> call, Throwable t) {
                 t.printStackTrace();

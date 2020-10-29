@@ -2,6 +2,7 @@ package com.jangletech.qoogol.model;
 
 import com.google.gson.annotations.SerializedName;
 import com.jangletech.qoogol.util.Constant;
+
 import java.io.Serializable;
 
 public class TestQuestionNew implements Serializable {
@@ -10,7 +11,7 @@ public class TestQuestionNew implements Serializable {
     private String section_id;
 
     public String getSection_id() {
-        return section_id!=null?section_id:"0";
+        return section_id != null ? section_id : "0";
     }
 
     public void setSection_id(String section_id) {

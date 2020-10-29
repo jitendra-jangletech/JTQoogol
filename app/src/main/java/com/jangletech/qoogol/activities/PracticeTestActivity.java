@@ -178,6 +178,8 @@ public class PracticeTestActivity extends BaseActivity implements
                             setupViewPager(startResumeTestResponse);
                         } catch (Exception e) {
                             e.printStackTrace();
+                            //todo finish activity
+                            Log.e(TAG, "onChanged: " + e.getLocalizedMessage());
                         }
                     }
                 }
