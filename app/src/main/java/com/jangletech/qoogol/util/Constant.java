@@ -866,6 +866,7 @@ public class Constant {
     //Call from
     public static final int ADD = 0;
     public static final int UPDATE = 1;
+    public static final int LEARNING = 2;
     public static final int QUESTION = 0;
     public static final int SCQ1 = 1;
     public static final int SCQ2 = 2;

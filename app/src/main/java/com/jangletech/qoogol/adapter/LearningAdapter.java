@@ -4,7 +4,9 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.ClipData;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.Editable;
@@ -17,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -24,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -32,6 +36,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.google.android.material.card.MaterialCardView;
 import com.jangletech.qoogol.R;
+import com.jangletech.qoogol.VideoActivity;
 import com.jangletech.qoogol.activities.MainActivity;
 import com.jangletech.qoogol.activities.PracticeTestActivity;
 import com.jangletech.qoogol.database.repo.AppRepository;
@@ -61,6 +66,7 @@ import com.jangletech.qoogol.ui.doubts.DoubtListingDialog;
 import com.jangletech.qoogol.ui.learning.SlideshowDialogFragment;
 import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
+import com.jangletech.qoogol.util.ImageOptimization;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
 import com.jangletech.qoogol.view.ExpandableTextView;
@@ -86,6 +92,7 @@ import retrofit2.Callback;
 
 import static com.jangletech.qoogol.util.Constant.FILL_THE_BLANKS;
 import static com.jangletech.qoogol.util.Constant.IMAGE;
+import static com.jangletech.qoogol.util.Constant.LEARNING;
 import static com.jangletech.qoogol.util.Constant.LONG_ANSWER;
 import static com.jangletech.qoogol.util.Constant.MATCH_PAIR;
 import static com.jangletech.qoogol.util.Constant.MATCH_PAIR_IMAGE;
@@ -157,7 +164,7 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             return new LongAnsHolder(longansBinding);
 
         }
-        if (viewType == Integer.parseInt(ONE_LINE_ANSWER)) {
+        if (viewType == Integer.parseInt(SHORT_ANSWER)) {
             onelineansBinding = DataBindingUtil.inflate(
                     LayoutInflater.from(parent.getContext()),
                     R.layout.learning_onelineans, parent, false);
@@ -264,7 +271,7 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 longAnsHolder.mBinding.setQuestion(learningQuestions);
                 longAnsHolder.mBinding.categoryTextview.setText("Long Answer");
                 setData(learningQuestions, longAnsHolder.mBinding.questionMathview, longAnsHolder.mBinding.questionTextview, longAnsHolder.mBinding.questiondescTextview, longAnsHolder.mBinding.questionMathview, longAnsHolder.mBinding.saveQue, longAnsHolder.mBinding.like, longAnsHolder.mBinding.favorite, longAnsHolder.mBinding.queImg1, longAnsHolder.mBinding.imgRecycler);
-            } else if (getItemViewType(position) == Integer.parseInt(ONE_LINE_ANSWER)) {
+            } else if (getItemViewType(position) == Integer.parseInt(SHORT_ANSWER)) {
                 OneLineAnsHolder oneLineAnsHolder = (OneLineAnsHolder)holder;
                 oneLineAnsHolder.mBinding.setQuestion(learningQuestions);
                 oneLineAnsHolder.mBinding.categoryTextview.setText("Short Answer");
@@ -338,45 +345,73 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             favorite.setImageDrawable(learningQuestions.getIs_fav().equalsIgnoreCase("true") ? activity.getResources().getDrawable(R.drawable.ic_favorite_black_24dp) : activity.getResources().getDrawable(R.drawable.ic_fav));
             like.setImageDrawable(learningQuestions.getIs_liked().equalsIgnoreCase("true") ? activity.getResources().getDrawable(R.drawable.ic_thumb_up_black_24dp) : activity.getResources().getDrawable(R.drawable.ic_like));
 
-            if (learningQuestions.getQue_media_typs() != null && learningQuestions.getQue_media_typs().equalsIgnoreCase(IMAGE) && learningQuestions.getQue_images() != null) {
+            if (learningQuestions.getQue_images() != null && !learningQuestions.getQue_images().isEmpty()) {
                 String[] stringrray = learningQuestions.getQue_images().split(",");
-                List<String> tempimgList = new ArrayList<>();
-                tempimgList = Arrays.asList(stringrray);
-                if (tempimgList != null && tempimgList.size() != 0) {
-                    if (tempimgList.size() == 1) {
-                        try {
-                            queImg1.setVisibility(View.VISIBLE);
-                            Glide.with(activity).load(new URL(tempimgList.get(0))).placeholder(R.drawable.no_image).error(R.drawable.no_image).into(queImg1);
-                            List<String> finalTempimgList = tempimgList;
-                            queImg1.setOnClickListener(v -> {
-                                Bundle bundle = new Bundle();
-                                bundle.putSerializable("images", (Serializable) finalTempimgList);
-                                bundle.putInt("position", 0);
-                                FragmentTransaction fragmentTransaction = null;
-                                if (activity instanceof MainActivity) {
-                                    fragmentTransaction = ((MainActivity) activity).getSupportFragmentManager().beginTransaction();
-                                }
 
-                                if (activity instanceof PracticeTestActivity) {
-                                    fragmentTransaction = ((PracticeTestActivity) activity).getSupportFragmentManager().beginTransaction();
-                                }
+                List<String> tempimgList = new ArrayList<>();
+                List<Uri> imgList = new ArrayList<>();
+                tempimgList = Arrays.asList(stringrray);
+
+                for (int i = 0; i < stringrray.length; i++) {
+                    String s = AppUtils.getMedialUrl(activity, tempimgList.get(i).split(":", -1)[1], tempimgList.get(i).split(":", -1)[2]);
+                   imgList.add(Uri.parse(s));
+                }
+
+                AdapterGallerySelectedImage galleryAdapter = new AdapterGallerySelectedImage(imgList, null, LEARNING, activity, new AdapterGallerySelectedImage.GalleryUplodaHandler() {
+                    @Override
+                    public void imageClick(Uri media, int position) {
+                        try {
+                            if (UtilHelper.isImage(media,activity)) {
+                                Bundle bundle = new Bundle();
+                                bundle.putSerializable("urilist", (Serializable) imgList);
+                                bundle.putInt("position", 0);
+                                bundle.putString("type", "uri");
                                 SlideshowDialogFragment newFragment = SlideshowDialogFragment.newInstance();
                                 newFragment.setArguments(bundle);
-                                newFragment.show(fragmentTransaction, "slideshow");
-                            });
+                                FragmentTransaction ft = ((AppCompatActivity) activity).getSupportFragmentManager().beginTransaction();
+                                newFragment.show(ft, "slideshow");
+                            } else if (UtilHelper.isVideo(media, activity)) {
+                                if (media.getPath() != null && !media.getPath().isEmpty()) {
+                                    Intent intent = new Intent(activity, VideoActivity.class);
+                                    intent.putExtra("uri", new ImageOptimization(activity).getPath(activity, media));
+                                    intent.putExtra("fromUrl", false);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    activity.startActivity(intent);
+                                } else {
+                                    Toast.makeText(activity, activity.getResources().getString(R.string.server_error), Toast.LENGTH_LONG).show();
+                                }
+                            } else if (UtilHelper.isDoc(media, activity)) {
+                                File file = AppUtils.createImageFile(activity, media);
+                                MimeTypeMap mime = MimeTypeMap.getSingleton();
+                                String ext = file.getName().substring(file.getName().lastIndexOf(".") + 1);
+                                Intent pdfOpenintent = new Intent(Intent.ACTION_VIEW);
+                                pdfOpenintent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                pdfOpenintent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                                if (media != null) {
+                                    pdfOpenintent.setDataAndType(media, AppUtils.getType(file.getName()));
+                                } else {
+                                    pdfOpenintent.setDataAndType(media, "application/octet-stream");
+                                }
+                                activity.startActivity(pdfOpenintent);
+                            }
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-                    } else if (tempimgList.size() > 1) {
-                        queImg1.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void addClick(Uri media, int position) { }
+
+                    @Override
+                    public void actionRemoved(int position) {              }
+                });
+
+                queImg1.setVisibility(View.GONE);
                         imgRecycler.setVisibility(View.VISIBLE);
-                        ImageAdapter imageAdapter = new ImageAdapter(activity, tempimgList);
                         imgRecycler.setHasFixedSize(true);
                         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false);
                         imgRecycler.setLayoutManager(linearLayoutManager);
-                        imgRecycler.setAdapter(imageAdapter);
-                    }
-                }
+                        imgRecycler.setAdapter(galleryAdapter);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -410,8 +445,8 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         LearningQuestionsNew learningQuestions = learningQuestionsList.get(position);
         if (learningQuestions.getQue_option_type().equalsIgnoreCase(FILL_THE_BLANKS)) {
             return Integer.parseInt(FILL_THE_BLANKS);
-        } else if (learningQuestions.getQue_option_type().equalsIgnoreCase(ONE_LINE_ANSWER) || learningQuestions.getQue_option_type().equalsIgnoreCase(SHORT_ANSWER)) {
-            return Integer.parseInt(ONE_LINE_ANSWER);
+        } else if (learningQuestions.getQue_option_type().equalsIgnoreCase(SHORT_ANSWER) || learningQuestions.getQue_option_type().equalsIgnoreCase(SHORT_ANSWER)) {
+            return Integer.parseInt(SHORT_ANSWER);
         } else if (learningQuestions.getQue_option_type().equalsIgnoreCase(LONG_ANSWER)) {
             return Integer.parseInt(LONG_ANSWER);
         } else {
@@ -691,7 +726,7 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                 learningQuestionsNew.setIs_fav("true");
                                 executor.execute(() -> new AppRepository(activity).updateQuestion(learningQuestionsNew.getQuestion_id(), "true"));
                             }
-                        } else if (call_from.equalsIgnoreCase(ONE_LINE_ANSWER)) {
+                        } else if (call_from.equalsIgnoreCase(SHORT_ANSWER)) {
                             if (response.body().getSolved_right().equalsIgnoreCase("true")) {
                                 onValueChhangeListener.onOneLineAnsChange(R.drawable.green_border, response.body().getA_sub_ans());
                             } else {
@@ -748,7 +783,6 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         learningQuestions.setCategory(learningQuestionsNew.getCategory());
         learningQuestions.setSubject(learningQuestionsNew.getSubject());
-//            learningQuestions.setAns_media_names(learningQuestionsNew.getAns_media_names());
         learningQuestions.setAns_mediaId(learningQuestionsNew.getAns_mediaId());
         learningQuestions.setAttended_by(learningQuestionsNew.getAttended_by());
         learningQuestions.setFeedback(learningQuestionsNew.getFeedback());
@@ -763,7 +797,6 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         learningQuestions.setQue_option_type(learningQuestionsNew.getQue_option_type());
         learningQuestions.setMcq5(learningQuestionsNew.getMcq5());
         learningQuestions.setType(learningQuestionsNew.getQue_option_type());
-//            learningQuestions.setSolve_right(learningQuestionsNew.getSolve_right());
         learningQuestions.setVisited(learningQuestionsNew.isVisited());
         learningQuestions.setSubject_id(learningQuestionsNew.getSubject_id());
         learningQuestions.setRating(learningQuestionsNew.getRating());
@@ -3699,7 +3732,7 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 isAttempted = 1;
                 String encoded = Base64.encodeToString(mBinding.singleLine.getText().toString().getBytes(StandardCharsets.UTF_8), Base64.DEFAULT);
                 String encodedText = StringUtils.stripAccents(encoded);
-                ProcessQuestionAPI(learningQuestions.getQuestion_id(), 0, ONE_LINE_ANSWER, "", "", getAdapterPosition(), encodedText, this);
+                ProcessQuestionAPI(learningQuestions.getQuestion_id(), 0, SHORT_ANSWER, "", "", getAdapterPosition(), encodedText, this);
             }
         }
 

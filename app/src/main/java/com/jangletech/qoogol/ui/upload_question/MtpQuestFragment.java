@@ -71,7 +71,7 @@ import static com.jangletech.qoogol.util.Constant.MATCH_PAIR;
 import static com.jangletech.qoogol.util.Constant.UPDATE;
 import static com.jangletech.qoogol.util.Constant.qoogol;
 
-public class MtpQuestFragment extends BaseFragment implements SubjectiveAnsDialog.GetAnsListener, QueMediaListener, View.OnTouchListener {
+public class MtpQuestFragment extends BaseFragment implements SubjectiveAnsDialog.GetAnsListener, QueMediaListener {
 
     private static final String TAG = "MtpQuestFragment";
     private FragmentUpMtpQueBinding mBinding;
@@ -114,14 +114,15 @@ public class MtpQuestFragment extends BaseFragment implements SubjectiveAnsDialo
             setData(learningQuestionsNew);
         }
 
-        mBinding.opa1.setOnTouchListener(this);
-        mBinding.opb1.setOnTouchListener(this);
-        mBinding.opa2.setOnTouchListener(this);
-        mBinding.opb2.setOnTouchListener(this);
-        mBinding.opa3.setOnTouchListener(this);
-        mBinding.opb3.setOnTouchListener(this);
-        mBinding.opa4.setOnTouchListener(this);
-        mBinding.opb4.setOnTouchListener(this);
+
+        mBinding.opa1Edit.setOnClickListener(v -> ((MainActivity) getActivity()).openAnsScanDialog(A1));
+        mBinding.opa2Edit.setOnClickListener(v -> ((MainActivity) getActivity()).openAnsScanDialog(A2));
+        mBinding.opa3Edit.setOnClickListener(v -> ((MainActivity) getActivity()).openAnsScanDialog(A3));
+        mBinding.opa4Edit.setOnClickListener(v -> ((MainActivity) getActivity()).openAnsScanDialog(A4));
+        mBinding.opb1Edit.setOnClickListener(v -> ((MainActivity) getActivity()).openAnsScanDialog(B1));
+        mBinding.opb2Edit.setOnClickListener(v -> ((MainActivity) getActivity()).openAnsScanDialog(B2));
+        mBinding.opb3Edit.setOnClickListener(v -> ((MainActivity) getActivity()).openAnsScanDialog(B3));
+        mBinding.opb4Edit.setOnClickListener(v -> ((MainActivity) getActivity()).openAnsScanDialog(B4));
 
         mBinding.saveQuestion.setOnClickListener(v -> addQuestion());
 
@@ -323,7 +324,7 @@ public class MtpQuestFragment extends BaseFragment implements SubjectiveAnsDialo
             level = r.getText() != null ? r.getText().toString() : "";
         }
 
-        return level.replace("Easy", "E").replace("Medium", "M").replace("Hard", "h");
+        return level.replace("Easy", "E").replace("Medium", "M").replace("Hard", "H");
     }
 
     private String getSelectedAns() {
@@ -777,44 +778,6 @@ public class MtpQuestFragment extends BaseFragment implements SubjectiveAnsDialo
                 }
             });
         }
-    }
-
-
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        final int DRAWABLE_LEFT = 0;
-        final int DRAWABLE_TOP = 1;
-        final int DRAWABLE_RIGHT = 2;
-        final int DRAWABLE_BOTTOM = 3;
-
-        if(event.getAction() == MotionEvent.ACTION_UP) {
-            if(event.getRawX() >= (mBinding.opa1.getRight() - mBinding.opa1.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                ((MainActivity) getActivity()).openAnsScanDialog(A1);
-                return true;
-            } else if(event.getRawX() >= (mBinding.opb1.getRight() - mBinding.opb1.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                ((MainActivity) getActivity()).openAnsScanDialog(B1);
-                return true;
-            } else if(event.getRawX() >= (mBinding.opa2.getRight() - mBinding.opa2.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                ((MainActivity) getActivity()).openAnsScanDialog(A2);
-                return true;
-            } else if(event.getRawX() >= (mBinding.opb2.getRight() - mBinding.opb2.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                ((MainActivity) getActivity()).openAnsScanDialog(B2);
-                return true;
-            } else if(event.getRawX() >= (mBinding.opa3.getRight() - mBinding.opa3.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                ((MainActivity) getActivity()).openAnsScanDialog(A3);
-                return true;
-            } else if(event.getRawX() >= (mBinding.opb3.getRight() - mBinding.opb3.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                ((MainActivity) getActivity()).openAnsScanDialog(B3);
-                return true;
-            } else if(event.getRawX() >= (mBinding.opa4.getRight() - mBinding.opa4.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                ((MainActivity) getActivity()).openAnsScanDialog(A4);
-                return true;
-            } else if(event.getRawX() >= (mBinding.opb4.getRight() - mBinding.opb4.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                ((MainActivity) getActivity()).openAnsScanDialog(B4);
-                return true;
-            }
-        }
-        return false;
     }
 
 }

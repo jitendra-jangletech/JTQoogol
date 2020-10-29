@@ -4,8 +4,10 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.ClipData;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.Editable;
@@ -17,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -24,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -32,6 +36,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.google.android.material.card.MaterialCardView;
 import com.jangletech.qoogol.R;
+import com.jangletech.qoogol.VideoActivity;
 import com.jangletech.qoogol.activities.MainActivity;
 import com.jangletech.qoogol.activities.PracticeTestActivity;
 import com.jangletech.qoogol.database.repo.AppRepository;
@@ -45,7 +50,9 @@ import com.jangletech.qoogol.model.ProcessQuestion;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.learning.SlideshowDialogFragment;
+import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
+import com.jangletech.qoogol.util.ImageOptimization;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.UtilHelper;
 
@@ -66,6 +73,7 @@ import retrofit2.Callback;
 
 import static com.jangletech.qoogol.util.Constant.FILL_THE_BLANKS;
 import static com.jangletech.qoogol.util.Constant.IMAGE;
+import static com.jangletech.qoogol.util.Constant.LEARNING;
 import static com.jangletech.qoogol.util.Constant.LONG_ANSWER;
 import static com.jangletech.qoogol.util.Constant.MATCH_PAIR;
 import static com.jangletech.qoogol.util.Constant.MATCH_PAIR_IMAGE;
@@ -143,45 +151,72 @@ public class SavedQueAdapter extends RecyclerView.Adapter<SavedQueAdapter.ViewHo
             holder.learningItemBinding.favorite.setImageDrawable(learningQuestions.getIs_fav().equalsIgnoreCase("true") ? activity.getResources().getDrawable(R.drawable.ic_favorite_black_24dp) : activity.getResources().getDrawable(R.drawable.ic_fav));
             holder.learningItemBinding.like.setImageDrawable(learningQuestions.getIs_liked().equalsIgnoreCase("true") ? activity.getResources().getDrawable(R.drawable.ic_thumb_up_black_24dp) : activity.getResources().getDrawable(R.drawable.ic_like));
 
-            if (learningQuestions.getQue_media_typs() != null && learningQuestions.getQue_media_typs().equalsIgnoreCase(IMAGE) && learningQuestions.getQue_images() != null) {
+            if (learningQuestions.getQue_images() != null && !learningQuestions.getQue_images().isEmpty()) {
                 String[] stringrray = learningQuestions.getQue_images().split(",");
-                List<String> tempimgList = new ArrayList<>();
-                tempimgList = Arrays.asList(stringrray);
-                if (tempimgList != null && tempimgList.size() != 0) {
-                    if (tempimgList.size() == 1) {
-                        try {
-                            holder.learningItemBinding.queImg1.setVisibility(View.VISIBLE);
-                            Glide.with(activity).load(new URL(tempimgList.get(0))).into(holder.learningItemBinding.queImg1);
-                            List<String> finalTempimgList = tempimgList;
-                            holder.learningItemBinding.queImg1.setOnClickListener(v -> {
-                                Bundle bundle = new Bundle();
-                                bundle.putSerializable("images", (Serializable) finalTempimgList);
-                                bundle.putInt("position", 0);
-                                FragmentTransaction fragmentTransaction = null;
-                                if (activity instanceof MainActivity) {
-                                    fragmentTransaction = ((MainActivity) activity).getSupportFragmentManager().beginTransaction();
-                                }
 
-                                if (activity instanceof PracticeTestActivity) {
-                                    fragmentTransaction = ((PracticeTestActivity) activity).getSupportFragmentManager().beginTransaction();
-                                }
+                List<String> tempimgList = new ArrayList<>();
+                List<Uri> imgList = new ArrayList<>();
+                tempimgList = Arrays.asList(stringrray);
+
+                for (int i = 0; i < stringrray.length; i++) {
+                    String s = AppUtils.getMedialUrl(activity, tempimgList.get(i).split(":", -1)[1], tempimgList.get(i).split(":", -1)[2]);
+                    imgList.add(Uri.parse(s));
+                }
+
+                AdapterGallerySelectedImage galleryAdapter = new AdapterGallerySelectedImage(imgList, null, LEARNING, activity, new AdapterGallerySelectedImage.GalleryUplodaHandler() {
+                    @Override
+                    public void imageClick(Uri media, int position) {
+                        try {
+                            if (UtilHelper.isImage(media,activity)) {
+                                Bundle bundle = new Bundle();
+                                bundle.putSerializable("urilist", (Serializable) imgList);
+                                bundle.putInt("position", 0);
+                                bundle.putString("type", "uri");
                                 SlideshowDialogFragment newFragment = SlideshowDialogFragment.newInstance();
                                 newFragment.setArguments(bundle);
-                                newFragment.show(fragmentTransaction, "slideshow");
-                            });
+                                FragmentTransaction ft = ((AppCompatActivity) activity).getSupportFragmentManager().beginTransaction();
+                                newFragment.show(ft, "slideshow");
+                            } else if (UtilHelper.isVideo(media, activity)) {
+                                if (media.getPath() != null && !media.getPath().isEmpty()) {
+                                    Intent intent = new Intent(activity, VideoActivity.class);
+                                    intent.putExtra("uri", new ImageOptimization(activity).getPath(activity, media));
+                                    intent.putExtra("fromUrl", false);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    activity.startActivity(intent);
+                                } else {
+                                    Toast.makeText(activity, activity.getResources().getString(R.string.server_error), Toast.LENGTH_LONG).show();
+                                }
+                            } else if (UtilHelper.isDoc(media, activity)) {
+                                File file = AppUtils.createImageFile(activity, media);
+                                MimeTypeMap mime = MimeTypeMap.getSingleton();
+                                String ext = file.getName().substring(file.getName().lastIndexOf(".") + 1);
+                                Intent pdfOpenintent = new Intent(Intent.ACTION_VIEW);
+                                pdfOpenintent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                pdfOpenintent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                                if (media != null) {
+                                    pdfOpenintent.setDataAndType(media, AppUtils.getType(file.getName()));
+                                } else {
+                                    pdfOpenintent.setDataAndType(media, "application/octet-stream");
+                                }
+                                activity.startActivity(pdfOpenintent);
+                            }
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-                    } else if (tempimgList.size() > 1) {
-                        holder.learningItemBinding.queImg1.setVisibility(View.GONE);
-                        holder.learningItemBinding.imgRecycler.setVisibility(View.VISIBLE);
-                        ImageAdapter imageAdapter = new ImageAdapter(activity, tempimgList);
-                        holder.learningItemBinding.imgRecycler.setHasFixedSize(true);
-                        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false);
-                        holder.learningItemBinding.imgRecycler.setLayoutManager(linearLayoutManager);
-                        holder.learningItemBinding.imgRecycler.setAdapter(imageAdapter);
                     }
-                }
+
+                    @Override
+                    public void addClick(Uri media, int position) { }
+
+                    @Override
+                    public void actionRemoved(int position) {              }
+                });
+
+                learningItemBinding.imgRecycler.setVisibility(View.VISIBLE);
+                learningItemBinding.imgRecycler.setHasFixedSize(true);
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false);
+                learningItemBinding.imgRecycler.setLayoutManager(linearLayoutManager);
+                learningItemBinding.imgRecycler.setAdapter(galleryAdapter);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -320,9 +355,6 @@ public class SavedQueAdapter extends RecyclerView.Adapter<SavedQueAdapter.ViewHo
                     learningQuestionsNew.setIs_fav("true");
                     ProcessQuestionAPI(learningQuestionsNew.getQuestion_id(), 1, "save","","",getAdapterPosition(),"");
                 }
-
-
-
             });
 
 
@@ -737,7 +769,7 @@ public class SavedQueAdapter extends RecyclerView.Adapter<SavedQueAdapter.ViewHo
             if (learningQuestions.getQue_option_type().equalsIgnoreCase(FILL_THE_BLANKS)) {
                 learningItemBinding.fillInTheBlanks.setVisibility(View.VISIBLE);
                 learningItemBinding.categoryTextview.setText("Fill in the Blanks");
-            } else if (learningQuestions.getQue_option_type().equalsIgnoreCase(ONE_LINE_ANSWER) || learningQuestions.getQue_option_type().equalsIgnoreCase(SHORT_ANSWER)) {
+            } else if (learningQuestions.getQue_option_type().equalsIgnoreCase(SHORT_ANSWER) || learningQuestions.getQue_option_type().equalsIgnoreCase(SHORT_ANSWER)) {
                 learningItemBinding.singleLine.setVisibility(View.VISIBLE);
                 learningItemBinding.singleLineCounter.setVisibility(View.VISIBLE);
                 learningItemBinding.categoryTextview.setText("Short Answer");
@@ -926,12 +958,12 @@ public class SavedQueAdapter extends RecyclerView.Adapter<SavedQueAdapter.ViewHo
                         Toast.makeText(activity, "Please enter answer first.", Toast.LENGTH_SHORT).show();
                     }
                 }
-            } else if (learningQuestions.getQue_option_type().equalsIgnoreCase(ONE_LINE_ANSWER) || learningQuestions.getQue_option_type().equalsIgnoreCase(SHORT_ANSWER)) {
+            } else if (learningQuestions.getQue_option_type().equalsIgnoreCase(SHORT_ANSWER) || learningQuestions.getQue_option_type().equalsIgnoreCase(SHORT_ANSWER)) {
                 if (learningItemBinding.singleLine.getText().toString().isEmpty()) {
                     Toast.makeText(activity, "Please enter answer first.", Toast.LENGTH_SHORT).show();
                 } else {
                     isAttempted = 1;
-                    ProcessQuestionAPI(learningQuestions.getQuestion_id(), 0, ONE_LINE_ANSWER,"","",getAdapterPosition(),learningItemBinding.singleLine.getText().toString());
+                    ProcessQuestionAPI(learningQuestions.getQuestion_id(), 0, SHORT_ANSWER,"","",getAdapterPosition(),learningItemBinding.singleLine.getText().toString());
                 }
 
             } else if (learningQuestions.getQue_option_type().equalsIgnoreCase(LONG_ANSWER)) {
@@ -2190,7 +2222,7 @@ public class SavedQueAdapter extends RecyclerView.Adapter<SavedQueAdapter.ViewHo
                                     Glide.with(activity).load(activity.getResources().getDrawable(R.drawable.ic_favorite_black_24dp)).into(learningItemBinding.favorite);
                                     learningQuestionsNew.setIs_fav("true");
                                 }
-                            } else if (call_from.equalsIgnoreCase(ONE_LINE_ANSWER)) {
+                            } else if (call_from.equalsIgnoreCase(SHORT_ANSWER)) {
                                 if (response.body().getSolved_right().equalsIgnoreCase("true")) {
                                     learningItemBinding.singleLine.setBackground(activity.getResources().getDrawable(R.drawable.green_border));
                                 } else {

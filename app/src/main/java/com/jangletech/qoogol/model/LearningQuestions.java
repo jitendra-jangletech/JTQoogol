@@ -6,6 +6,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
+import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.UtilHelper;
 
@@ -210,7 +211,7 @@ public class LearningQuestions implements Serializable {
     }*/
 
     public String getQuestion() {
-        return question!=null?question:"";
+        return question!=null? AppUtils.decodedString(question) :"";
     }
 
     public void setQuestion(String question) {
@@ -218,7 +219,7 @@ public class LearningQuestions implements Serializable {
     }
 
     public String getQuestiondesc() {
-        return questiondesc;
+        return questiondesc != null ? AppUtils.decodedString(questiondesc) : "";
     }
 
     public void setQuestiondesc(String questiondesc) {
@@ -228,7 +229,7 @@ public class LearningQuestions implements Serializable {
     public String getCategory() {
         if (getQue_option_type().equalsIgnoreCase(FILL_THE_BLANKS)) {
             return "Fill in the Blanks";
-        } else if (getQue_option_type().equalsIgnoreCase(ONE_LINE_ANSWER) || getQue_option_type().equalsIgnoreCase(SHORT_ANSWER)) {
+        } else if (getQue_option_type().equalsIgnoreCase(SHORT_ANSWER) || getQue_option_type().equalsIgnoreCase(SHORT_ANSWER)) {
             return "Short Answer";
         } else if (getQue_option_type().equalsIgnoreCase(LONG_ANSWER)) {
             return "Long Answer";
@@ -293,7 +294,7 @@ public class LearningQuestions implements Serializable {
     }
 
     public String getPosted_on() {
-        return posted_on!=null?posted_on.substring(0, 10):"";
+        return posted_on != null && !posted_on.isEmpty() ? posted_on.substring(0, 10) : "";
     }
 
     public void setPosted_on(String posted_on) {
@@ -349,7 +350,7 @@ public class LearningQuestions implements Serializable {
     }
 
     public String getMarks() {
-        return marks;
+        return marks != null ? UtilHelper.formatMarks(Float.parseFloat(marks)) : "";
     }
 
     public String getFormatedMarks() {
@@ -521,7 +522,7 @@ public class LearningQuestions implements Serializable {
 
         List<String> img = new ArrayList<>();
 
-        if (!getQue_option_type().equalsIgnoreCase(FILL_THE_BLANKS) || !getQue_option_type().equalsIgnoreCase(LONG_ANSWER) || !getQue_option_type().equalsIgnoreCase(ONE_LINE_ANSWER)) {
+        if (!getQue_option_type().equalsIgnoreCase(FILL_THE_BLANKS) || !getQue_option_type().equalsIgnoreCase(LONG_ANSWER) || !getQue_option_type().equalsIgnoreCase(SHORT_ANSWER)) {
             if (getQue_option_type().equalsIgnoreCase(SCQ_IMAGE) || getQue_option_type().equalsIgnoreCase(MCQ_IMAGE)) {
                 img.add(mcq1);
                 img.add(mcq2);
