@@ -59,6 +59,7 @@ import retrofit2.Callback;
 
 import static android.app.Activity.RESULT_OK;
 import static com.jangletech.qoogol.util.Constant.ADD;
+import static com.jangletech.qoogol.util.Constant.MCQ;
 import static com.jangletech.qoogol.util.Constant.SCQ;
 import static com.jangletech.qoogol.util.Constant.UPDATE;
 import static com.jangletech.qoogol.util.Constant.qoogol;
@@ -160,7 +161,7 @@ public class MCQ_QueFragment extends BaseFragment implements QueMediaListener {
             String[] stringrray = learningQuestionsNew.getQue_images().split(",");
             tempimgList = Arrays.asList(stringrray);
             for (int i = 0; i < stringrray.length; i++) {
-                String s = AppUtils.getMedialUrl(getActivity(), tempimgList.get(i).split(";", -1)[1], tempimgList.get(i).split(";", -1)[2]);
+                String s = AppUtils.getMedialUrl(getActivity(), tempimgList.get(i).split(":", -1)[1], tempimgList.get(i).split(":", -1)[2]);
                 setupPreview(Uri.parse(s));
             }
         }
@@ -359,7 +360,7 @@ public class MCQ_QueFragment extends BaseFragment implements QueMediaListener {
             RequestBody subId = RequestBody.create(MediaType.parse("multipart/form-data"), subjectId);
             RequestBody question = RequestBody.create(MediaType.parse("multipart/form-data"), AppUtils.encodedString(mBinding.questionEdittext.getText().toString()));
             RequestBody questiondesc = RequestBody.create(MediaType.parse("multipart/form-data"), AppUtils.encodedString(mBinding.questiondescEdittext.getText().toString()));
-            RequestBody type = RequestBody.create(MediaType.parse("multipart/form-data"), SCQ);
+            RequestBody type = RequestBody.create(MediaType.parse("multipart/form-data"), MCQ);
             RequestBody scq1 = RequestBody.create(MediaType.parse("multipart/form-data"), AppUtils.encodedString(mBinding.mcq1Edittext.getText().toString()));
             RequestBody scq2 = RequestBody.create(MediaType.parse("multipart/form-data"), AppUtils.encodedString(mBinding.mcq2Edittext.getText().toString()));
             RequestBody scq3 = RequestBody.create(MediaType.parse("multipart/form-data"), AppUtils.encodedString(mBinding.mcq3Edittext.getText().toString()));

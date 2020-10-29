@@ -24,6 +24,7 @@ import com.jangletech.qoogol.util.UtilHelper;
 import java.util.List;
 
 import static com.jangletech.qoogol.util.Constant.ADD;
+import static com.jangletech.qoogol.util.Constant.LEARNING;
 
 /*
  *
@@ -77,13 +78,15 @@ public class AdapterGallerySelectedImage extends RecyclerView.Adapter<AdapterGal
     @Override
     public void onBindViewHolder(@NonNull GalleryViewHolder holder, int position) {
         try {
+            if (call_from==LEARNING) {
+                holder.removeItem.setVisibility(View.GONE);
+            }
             CircularProgressDrawable circularProgressDrawable = new CircularProgressDrawable(mContext);
             circularProgressDrawable.setStrokeWidth(5f);
             circularProgressDrawable.setCenterRadius(30f);
             circularProgressDrawable.start();
             Uri uri = uriList.get(position);
             if (uri != null) {
-                holder.removeItem.setVisibility(View.VISIBLE);
                 if (UtilHelper.isAudio(uriList.get(position),mContext)){
                     loadImage(R.drawable.ic_mp3,holder.image);
                     holder.play.setVisibility(View.VISIBLE);
@@ -125,7 +128,6 @@ public class AdapterGallerySelectedImage extends RecyclerView.Adapter<AdapterGal
 
                 holder.image.setOnClickListener(view -> galleryUplodaHandler.imageClick(uriList.get(position), position));
             } else {
-                holder.removeItem.setVisibility(View.GONE);
                 Glide.with(mContext)
                         .load(R.drawable.ic_add_gray)
                         .placeholder(circularProgressDrawable)

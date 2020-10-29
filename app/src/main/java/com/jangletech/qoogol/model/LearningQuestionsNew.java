@@ -256,7 +256,7 @@ public class LearningQuestionsNew implements Cloneable, Serializable {
     public String getCategory() {
         if (getQue_option_type().equalsIgnoreCase(FILL_THE_BLANKS)) {
             return "Fill in the Blanks";
-        } else if (getQue_option_type().equalsIgnoreCase(ONE_LINE_ANSWER) || getQue_option_type().equalsIgnoreCase(SHORT_ANSWER)) {
+        } else if (getQue_option_type().equalsIgnoreCase(SHORT_ANSWER) || getQue_option_type().equalsIgnoreCase(SHORT_ANSWER)) {
             return "Short Answer";
         } else if (getQue_option_type().equalsIgnoreCase(LONG_ANSWER)) {
             return "Long Answer";
@@ -574,7 +574,7 @@ public class LearningQuestionsNew implements Cloneable, Serializable {
 
         List<String> img = new ArrayList<>();
 
-        if (!getQue_option_type().equalsIgnoreCase(FILL_THE_BLANKS) || !getQue_option_type().equalsIgnoreCase(LONG_ANSWER) || !getQue_option_type().equalsIgnoreCase(ONE_LINE_ANSWER)) {
+        if (!getQue_option_type().equalsIgnoreCase(FILL_THE_BLANKS) || !getQue_option_type().equalsIgnoreCase(LONG_ANSWER) || !getQue_option_type().equalsIgnoreCase(SHORT_ANSWER)) {
             if (getQue_option_type().equalsIgnoreCase(SCQ_IMAGE) || getQue_option_type().equalsIgnoreCase(MCQ_IMAGE)) {
                 img.add(mcq1);
                 img.add(mcq2);

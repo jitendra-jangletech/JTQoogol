@@ -150,12 +150,17 @@ public class LearningViewModel extends AndroidViewModel {
 
 
     private void getDataFromApi(String q_id, String CASE,HashMap<String, String> params) {
+        String type = "";
+        if (!params.get(Constant.q_type).trim().isEmpty())
+            type = params.get(Constant.q_type);
+        else type = params.get(Constant.q_option_type);
         if (CASE.equalsIgnoreCase(""))
             call = apiService.fetchQAApi(new PreferenceManager(getApplication()).getUserId(), q_id, params.get(Constant.q_avg_ratings), params.get(Constant.q_diff_level),params.get(Constant.q_trending),params.get(Constant.q_popular)
-                    ,params.get(Constant.q_recent),params.get(Constant.q_type),params.get(Constant.q_option_type),new PreferenceManager(getApplication()).getString(Constant.ue_id),String.valueOf(pageCount));
+                    ,params.get(Constant.q_recent),type,new PreferenceManager(getApplication()).getString(Constant.ue_id),String.valueOf(pageCount));
+
         else
             call = apiService.fetchQAByCaseApi(new PreferenceManager(getApplication()).getUserId(), q_id, CASE,params.get(Constant.q_avg_ratings), params.get(Constant.q_diff_level),params.get(Constant.q_trending),params.get(Constant.q_popular)
-                    ,params.get(Constant.q_recent),params.get(Constant.q_type),params.get(Constant.q_option_type));
+                    ,params.get(Constant.q_recent),type);
         call.enqueue(new Callback<LearningQuestResponse>() {
             @Override
             public void onResponse(Call<LearningQuestResponse> call, retrofit2.Response<LearningQuestResponse> response) {

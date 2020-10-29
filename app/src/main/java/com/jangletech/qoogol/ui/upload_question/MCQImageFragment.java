@@ -143,19 +143,19 @@ public class MCQImageFragment extends BaseFragment implements QueMediaListener {
         mBinding.etQuestion.setText(learningQuestionsNew.getQuestion());
         mBinding.etQuestionDesc.setText(learningQuestionsNew.getQuestiondesc());
 
-        Uri uri1 = Uri.parse(AppUtils.getMedialUrl(getActivity(), learningQuestionsNew.getMcq1().split(";", -1)[1], learningQuestionsNew.getMcq1().split(";", -1)[2]));
+        Uri uri1 = Uri.parse(AppUtils.getMedialUrl(getActivity(), learningQuestionsNew.getMcq1().split(":", -1)[1], learningQuestionsNew.getMcq1().split(":", -1)[2]));
         mOptionsUri[0] = uri1;
         setImage(uri1, mBinding.image1);
 
-        Uri uri2 = Uri.parse(AppUtils.getMedialUrl(getActivity(), learningQuestionsNew.getMcq2().split(";", -1)[1], learningQuestionsNew.getMcq2().split(";", -1)[2]));
+        Uri uri2 = Uri.parse(AppUtils.getMedialUrl(getActivity(), learningQuestionsNew.getMcq2().split(":", -1)[1], learningQuestionsNew.getMcq2().split(":", -1)[2]));
         mOptionsUri[0] = uri2;
         setImage(uri2, mBinding.image2);
 
-        Uri uri3 = Uri.parse(AppUtils.getMedialUrl(getActivity(), learningQuestionsNew.getMcq3().split(";", -1)[1], learningQuestionsNew.getMcq3().split(";", -1)[2]));
+        Uri uri3 = Uri.parse(AppUtils.getMedialUrl(getActivity(), learningQuestionsNew.getMcq3().split(":", -1)[1], learningQuestionsNew.getMcq3().split(":", -1)[2]));
         mOptionsUri[0] = uri3;
         setImage(uri3, mBinding.image3);
 
-        Uri uri4 = Uri.parse(AppUtils.getMedialUrl(getActivity(), learningQuestionsNew.getMcq4().split(";", -1)[1], learningQuestionsNew.getMcq4().split(";", -1)[2]));
+        Uri uri4 = Uri.parse(AppUtils.getMedialUrl(getActivity(), learningQuestionsNew.getMcq4().split(":", -1)[1], learningQuestionsNew.getMcq4().split(":", -1)[2]));
         mOptionsUri[0] = uri4;
         setImage(uri4, mBinding.image4);
 
@@ -183,7 +183,7 @@ public class MCQImageFragment extends BaseFragment implements QueMediaListener {
             String[] stringrray = learningQuestionsNew.getQue_images().split(",");
             tempimgList = Arrays.asList(stringrray);
             for (int i = 0; i < stringrray.length; i++) {
-                String s = AppUtils.getMedialUrl(getActivity(), tempimgList.get(i).split(";", -1)[1], tempimgList.get(i).split(";", -1)[2]);
+                String s = AppUtils.getMedialUrl(getActivity(), tempimgList.get(i).split(":", -1)[1], tempimgList.get(i).split(":", -1)[2]);
                 setupPreview(Uri.parse(s));
             }
         }

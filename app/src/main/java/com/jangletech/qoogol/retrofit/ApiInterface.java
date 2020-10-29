@@ -500,7 +500,6 @@ public interface ApiInterface {
                                            @Field(Constant.q_trending) String trending,
                                            @Field(Constant.q_popular) String popular,
                                            @Field(Constant.q_recent) String recent,
-                                           @Field(Constant.q_option_type) String question_type,
                                            @Field(Constant.q_option_type) String option_type,
                                            @Field(Constant.ue_id) String ueId,
                                            @Field(Constant.pagestart) String page);
@@ -524,7 +523,6 @@ public interface ApiInterface {
                                                  @Field(Constant.q_trending) String trending,
                                                  @Field(Constant.q_popular) String popular,
                                                  @Field(Constant.q_recent) String recent,
-                                                 @Field(Constant.q_option_type) String question_type,
                                                  @Field(Constant.q_option_type) String option_type);
 
     @FormUrlEncoded
