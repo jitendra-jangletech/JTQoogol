@@ -1,13 +1,13 @@
 package com.jangletech.qoogol.ui.connections;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import com.jangletech.qoogol.database.repo.AppRepository;
-import com.jangletech.qoogol.databinding.ActivityPracticeTestBinding;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.model.Friends;
 import com.jangletech.qoogol.model.FriendsResponse;
@@ -35,6 +35,7 @@ import static com.jangletech.qoogol.util.Constant.qoogol;
  * Created by Pritali on 6/8/2020.
  */
 public class FriendsViewModel extends AndroidViewModel {
+    private static final String TAG = "FriendsViewModel";
     private ApiInterface apiService;
     public final AppRepository mAppRepository;
     private Call<FriendsResponse> call;
@@ -77,18 +78,24 @@ public class FriendsViewModel extends AndroidViewModel {
             public void onResponse(Call<FriendsResponse> call, retrofit2.Response<FriendsResponse> response) {
                 try {
                     ProgressDialog.getInstance().dismiss();
-                    if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
-                        pageStart = response.body().getRow_count();
-                        List<Friends> friends = new ArrayList<>();
-                        for (Friends friend : response.body().getFriends_list()){
-                            friend.setU_first_name(AESSecurities.getInstance().decrypt(TinyDB.getInstance(application).getString(Constant.cf_key1), friend.getU_first_name()));
-                            friend.setU_last_name(AESSecurities.getInstance().decrypt(TinyDB.getInstance(application).getString(Constant.cf_key2), friend.getU_last_name()));
-                            friends.add(friend);
+
+                    if (response.body() != null && response.body().getResponse() != null) {
+                        if (response.body().getResponse().equalsIgnoreCase("200")) {
+                            pageStart = response.body().getRow_count();
+                            List<Friends> friends = new ArrayList<>();
+                            for (Friends friend : response.body().getFriends_list()) {
+                                friend.setU_first_name(AESSecurities.getInstance().decrypt(TinyDB.getInstance(application).getString(Constant.cf_key1), friend.getU_first_name()));
+                                friend.setU_last_name(AESSecurities.getInstance().decrypt(TinyDB.getInstance(application).getString(Constant.cf_key2), friend.getU_last_name()));
+                                friends.add(friend);
+                            }
+                            ExecutorService executor = Executors.newSingleThreadExecutor();
+                            executor.execute(() -> mAppRepository.insertFriends(friends));
+                        } else if (response.body().getResponse().equals("501")) {
+                            //resetSettingAndLogout();
+                            Log.i(TAG, "onResponse: ");
                         }
-                        ExecutorService executor = Executors.newSingleThreadExecutor();
-                        executor.execute(() -> mAppRepository.insertFriends(friends));
-                    } else if (response.body().getResponse().equals("501")) {
-                        //resetSettingAndLogout();
+                    } else {
+                        Log.i(TAG, "onResponse Empty Response: ");
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

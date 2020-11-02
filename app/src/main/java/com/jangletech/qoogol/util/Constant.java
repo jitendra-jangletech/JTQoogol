@@ -43,6 +43,9 @@ public class Constant {
     public static final String w_media_name = "534";
     public static final String md_from_type = "425A";
 
+    public static final String test_section_id = "1236";
+    public static final String PREVIEW_FLAG = "PREVIEW_FLAG";
+
     //Selected Board
     public static final String BOARD = "BOARD";
     public static final String MOBILE = "MOBILE";
@@ -50,6 +53,7 @@ public class Constant {
     public static final String TM_ID = "TM_ID";
 
     public static final String TEST_SUBJECT_CHAP = "TEST_SUBJECT_CHAP";
+    public static final String SECTION = "SECTION";
 
     public static final String DISPLAY_NAME = "DISPLAY_NAME";
     public static final String PROFILE_PIC = "PROFILE_PIC";
@@ -206,7 +210,6 @@ public class Constant {
 
     //Question type
     public static String ONE_LINE_ANSWER = "4";
-
 
 
     //Options type
@@ -474,6 +477,14 @@ public class Constant {
     public static final String unfollow = "UF";
     public static final String remove_follower = "XF";
 
+
+    //section & Marks
+    public static final String section_marks = "101";
+    public static final int section = 1;
+    public static final int mrks = 2;
+    public static final String test_mode = "test_mode";
+    public static final String test_mode_edit = "EDIT";
+    public static final String test_mode_new = "NEW";
 
     //Filters
     public static final String trending = "Trending";
@@ -750,10 +761,8 @@ public class Constant {
     public static final String ttqa_saved = "1268";    //saved  Quest
     public static final String ttqa_visited = "1269";  //visited Quest
     public static final String ttqa_attempted = "1270"; //Attempted Quest
-
     public static final String tm_attempted_by = "1198"; //test attempted by
     public static final String test_description = "1199";
-
     public static final String test_sections = "537";
 
     //City Master Data
@@ -839,18 +848,14 @@ public class Constant {
     public static final String w_media_names = "1702";
     public static final String w_media_paths = "1703";
     public static final String SCR_CO_ID = "2672";
-
     public static final String q_user_id = "1329";
-
     public static final String comment_like_flag = "1705";
-
 
     //Doubts
     public static final String crms_id = "376";
     public static final String crms_cdatetime = "380";
     public static final String crms_likes = "383D";
     public static final String crms_views = "383C";
-
 
 
     //Call from

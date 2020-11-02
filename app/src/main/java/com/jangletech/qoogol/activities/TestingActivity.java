@@ -20,7 +20,6 @@ import com.itextpdf.text.pdf.parser.PdfImageObject;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.FriendsAdapter;
 import com.jangletech.qoogol.databinding.ActivityTestingBinding;
-import com.jangletech.qoogol.dialog.AddImageDialog;
 import com.jangletech.qoogol.model.Friends;
 import com.jangletech.qoogol.model.ShareModel;
 import com.jangletech.qoogol.retrofit.ApiClient;
@@ -88,8 +87,6 @@ public class TestingActivity extends AppCompatActivity {
 //            new AddImageDialog(this)
 //                    .show();
         });
-
-
     }
 
     private void readPdf(String path) {
@@ -108,23 +105,15 @@ public class TestingActivity extends AppCompatActivity {
         }
     }
 
-
     private void extractImages(String filepath) {
         Log.i(TAG, "extractImages Copied File Path : " + filepath);
         PRStream prStream;
-
         File file;
-
         PdfObject pdfObject;
-
         PdfImageObject pdfImageObject;
-
         FileOutputStream fos;
 
         try {
-
-            // Create pdf reader
-            //file = new File(filepath);
 
             PdfReader reader = new PdfReader(filepath);
 
@@ -134,8 +123,6 @@ public class TestingActivity extends AppCompatActivity {
                 folder.mkdir();
             else
                 AppUtils.deleteDir(folder);
-
-            // Get number of objects in pdf document
 
             int numOfObject = reader.getXrefSize();
             int imageCount = 0;
@@ -202,7 +189,6 @@ public class TestingActivity extends AppCompatActivity {
                     for (NormalFile file : list) {
                         String path = file.getPath();
                         Log.i(TAG, "onActivityResult File Path : " + file.getPath());
-                        //builder.append(path + "\n");
                         extractImages(path);
                     }
                 }
@@ -231,38 +217,3 @@ public class TestingActivity extends AppCompatActivity {
         }
     }
 }
-
-        /*linearLayoutManager = new LinearLayoutManager(this);
-        mAdapter = new FriendsAdapter(this, connectionsList, friends, this);
-        mBinding.connectionRecycler.setHasFixedSize(true);
-        mBinding.connectionRecycler.setLayoutManager(linearLayoutManager);
-        mBinding.connectionRecycler.setAdapter(mAdapter);*/
-       /* mViewModel.fetchFriendsData(false);
-
-        mViewModel.getFriendList().observe(this, friendsList -> {
-            if (friendsList != null) {
-                mAdapter.updateList(friendsList);
-                //setFriendsList(friendsList);
-            }
-        });
-    }*/
-
-    /*private void setFriendsList(List<Friends> friendsList) {
-        if (friendsList.size() > 0) {
-            mBinding.emptyview.setVisibility(View.GONE);
-            mAdapter.updateList(friendsList);
-        } else {
-            mBinding.emptyview.setText("No Friends Added.");
-            mBinding.emptyview.setVisibility(View.VISIBLE);
-        }
-    }*/
-
-    /*@Override
-    public void onUpdateConnection(String user) {
-
-    }
-
-    @Override
-    public void showProfileClick(Bundle bundle) {
-
-    }*/

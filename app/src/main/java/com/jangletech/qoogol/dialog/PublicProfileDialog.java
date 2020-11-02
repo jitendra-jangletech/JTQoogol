@@ -143,7 +143,7 @@ public class PublicProfileDialog extends Dialog {
                 mBinding.imgBadge.setImageDrawable(activity.getDrawable(R.drawable.platinum));
 
             mBinding.tvName.setText(AESSecurities.getInstance().decrypt(TinyDB.getInstance(activity).getString(Constant.cf_key1), userProfile.getFirstName()) + " " + AESSecurities.getInstance().decrypt(TinyDB.getInstance(activity).getString(Constant.cf_key2), userProfile.getLastName()));
-            mBinding.tvDobs.setText(DateUtils.getFormattedDate(AESSecurities.getInstance().decrypt(TinyDB.getInstance(activity).getString(Constant.cf_key3), userProfile.getDob())));
+            //mBinding.tvDobs.setText(DateUtils.getFormattedDate(AESSecurities.getInstance().decrypt(TinyDB.getInstance(activity).getString(Constant.cf_key3), userProfile.getDob())));
 
             if (userProfile.getStrGender() != null && userProfile.getStrGender().equalsIgnoreCase("M")) {
                 mBinding.tvGender.setText("Male");

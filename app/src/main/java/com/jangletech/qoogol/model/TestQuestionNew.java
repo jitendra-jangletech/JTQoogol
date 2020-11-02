@@ -7,6 +7,17 @@ import java.io.Serializable;
 
 public class TestQuestionNew implements Serializable {
 
+    @SerializedName(Constant.test_section_id)
+    private String section_id;
+
+    public String getSection_id() {
+        return section_id != null ? section_id : "0";
+    }
+
+    public void setSection_id(String section_id) {
+        this.section_id = section_id;
+    }
+
     @SerializedName(Constant.tq_tm_id)
     private String tq_tm_id;
 
@@ -256,7 +267,7 @@ public class TestQuestionNew implements Serializable {
     }
 
     public String getType() {
-        return type;
+        return type != null ? type : "";
     }
 
     public void setType(String type) {
@@ -557,7 +568,7 @@ public class TestQuestionNew implements Serializable {
     }
 
     public String getQ_quest() {
-        return q_quest;
+        return q_quest != null ? q_quest : "";
     }
 
     public void setQ_quest(String q_quest) {

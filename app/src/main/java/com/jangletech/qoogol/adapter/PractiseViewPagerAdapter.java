@@ -126,7 +126,7 @@ public class PractiseViewPagerAdapter extends PagerAdapter
         LayoutInflater inflater = LayoutInflater.from(context);
         Log.d(TAG, "instantiateItem Position : " + position);
         TestQuestionNew testQuestionNew = testQuestionNewList.get(position);
-        if (testQuestionNew.getType().equalsIgnoreCase(Constant.LONG_ANSWER) ||
+        /*if (testQuestionNew.getType().equalsIgnoreCase(Constant.LONG_ANSWER) ||
                 testQuestionNew.getType().equalsIgnoreCase(Constant.SHORT_ANSWER) ||
                 testQuestionNew.getType().equalsIgnoreCase(Constant.FILL_THE_BLANKS) ||
                 testQuestionNew.getType().equalsIgnoreCase(Constant.ONE_LINE_ANSWER)) {
@@ -136,72 +136,82 @@ public class PractiseViewPagerAdapter extends PagerAdapter
             collection.addView(layout);
             layout.setTag(position);
             return layout;
-        } else {
-            if (testQuestionNew.getQue_option_type().equalsIgnoreCase(Constant.SCQ) ||
-                    testQuestionNew.getQue_option_type().equalsIgnoreCase(Constant.TRUE_FALSE)) {
-                ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.practice_scq, collection, false);
-                practiceScqBinding = DataBindingUtil.inflate(inflater, R.layout.practice_scq, collection, false);
-                initViews(layout, testQuestionNew, position);
-                initScq(layout, testQuestionNew);
-                collection.addView(layout);
-                layout.setTag(position);
-                return layout;
-            }
-            if (testQuestionNew.getQue_option_type().equalsIgnoreCase(Constant.SCQ_IMAGE)) {
-                ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.practice_scq_image, collection, false);
-                initViews(layout, testQuestionNew, position);
-                initScqImage(layout, testQuestionNew);
-                collection.addView(layout);
-                layout.setTag(position);
-                return layout;
-            }
+        } else {*/
+        if (testQuestionNew.getQue_option_type().equalsIgnoreCase(Constant.SCQ) ||
+                testQuestionNew.getQue_option_type().equalsIgnoreCase(Constant.TRUE_FALSE)) {
+            ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.practice_scq, collection, false);
+            practiceScqBinding = DataBindingUtil.inflate(inflater, R.layout.practice_scq, collection, false);
+            initViews(layout, testQuestionNew, position);
+            initScq(layout, testQuestionNew);
+            collection.addView(layout);
+            layout.setTag(position);
+            return layout;
+        }
+        if (testQuestionNew.getQue_option_type().equalsIgnoreCase(Constant.SCQ_IMAGE)) {
+            ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.practice_scq_image, collection, false);
+            initViews(layout, testQuestionNew, position);
+            initScqImage(layout, testQuestionNew);
+            collection.addView(layout);
+            layout.setTag(position);
+            return layout;
+        }
 
-            if (testQuestionNew.getQue_option_type().equalsIgnoreCase(Constant.SCQ_IMAGE_WITH_TEXT)) {
-                ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.practice_scq_image_text, collection, false);
-                initViews(layout, testQuestionNew, position);
-                initScqImageText(layout, testQuestionNew);
-                collection.addView(layout);
-                layout.setTag(position);
-                return layout;
-            }
+        if (testQuestionNew.getQue_option_type().equalsIgnoreCase(Constant.SCQ_IMAGE_WITH_TEXT)) {
+            ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.practice_scq_image_text, collection, false);
+            initViews(layout, testQuestionNew, position);
+            initScqImageText(layout, testQuestionNew);
+            collection.addView(layout);
+            layout.setTag(position);
+            return layout;
+        }
 
-            if (testQuestionNew.getQue_option_type().equalsIgnoreCase(Constant.MCQ)) {
-                ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.practice_mcq, collection, false);
-                practiceMcqBinding = DataBindingUtil.inflate(inflater, R.layout.practice_mcq, collection, false);
-                initViews(layout, testQuestionNew, position);
-                initMcq(layout, testQuestionNew);
-                collection.addView(layout);
-                layout.setTag(position);
-                return layout;
-            }
+        if (testQuestionNew.getQue_option_type().equalsIgnoreCase(Constant.MCQ)) {
+            ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.practice_mcq, collection, false);
+            practiceMcqBinding = DataBindingUtil.inflate(inflater, R.layout.practice_mcq, collection, false);
+            initViews(layout, testQuestionNew, position);
+            initMcq(layout, testQuestionNew);
+            collection.addView(layout);
+            layout.setTag(position);
+            return layout;
+        }
 
-            if (testQuestionNew.getQue_option_type().equalsIgnoreCase(Constant.MATCH_PAIR)) {
-                ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.practice_mtp, collection, false);
-                practiceMtpBinding = DataBindingUtil.inflate(inflater, R.layout.practice_mtp, collection, false);
-                initViews(practiceMtpBinding.getRoot(), testQuestionNew, position);
-                initMtp(practiceMtpBinding.getRoot(), testQuestionNew);
-                collection.addView(practiceMtpBinding.getRoot());
-                practiceMtpBinding.getRoot().setTag(position);
-                return practiceMtpBinding.getRoot();
-            }
-            if (testQuestionNew.getQue_option_type().equalsIgnoreCase(Constant.MATCH_PAIR_IMAGE)) {
-                ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.practice_mtp_image, collection, false);
-                practiceMtpImageBinding = DataBindingUtil.inflate(inflater, R.layout.practice_mtp_image, collection, false);
-                initViews(practiceMtpImageBinding.getRoot(), testQuestionNew, position);
-                initMtpImage(testQuestionNew);
-                collection.addView(practiceMtpImageBinding.getRoot());
-                practiceMtpImageBinding.getRoot().setTag(position);
-                return practiceMtpImageBinding.getRoot();
-            }
+        if (testQuestionNew.getQue_option_type().equalsIgnoreCase(Constant.MATCH_PAIR)) {
+            ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.practice_mtp, collection, false);
+            practiceMtpBinding = DataBindingUtil.inflate(inflater, R.layout.practice_mtp, collection, false);
+            initViews(practiceMtpBinding.getRoot(), testQuestionNew, position);
+            initMtp(practiceMtpBinding.getRoot(), testQuestionNew);
+            collection.addView(practiceMtpBinding.getRoot());
+            practiceMtpBinding.getRoot().setTag(position);
+            return practiceMtpBinding.getRoot();
+        }
+        if (testQuestionNew.getQue_option_type().equalsIgnoreCase(Constant.MATCH_PAIR_IMAGE)) {
+            ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.practice_mtp_image, collection, false);
+            practiceMtpImageBinding = DataBindingUtil.inflate(inflater, R.layout.practice_mtp_image, collection, false);
+            initViews(practiceMtpImageBinding.getRoot(), testQuestionNew, position);
+            initMtpImage(testQuestionNew);
+            collection.addView(practiceMtpImageBinding.getRoot());
+            practiceMtpImageBinding.getRoot().setTag(position);
+            return practiceMtpImageBinding.getRoot();
+        }
 
-            if (testQuestionNew.getQue_option_type().equalsIgnoreCase(Constant.FILL_THE_BLANKS)) {
-                ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.practice_fill_the_blanks, collection, false);
-                initViews(layout, testQuestionNew, position);
-                initFillTheBlanks(layout, testQuestionNew);
-                collection.addView(layout);
-                layout.setTag(position);
-                return layout;
-            }
+        if (testQuestionNew.getQue_option_type().equalsIgnoreCase(Constant.FILL_THE_BLANKS)) {
+            ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.practice_fill_the_blanks, collection, false);
+            initViews(layout, testQuestionNew, position);
+            initFillTheBlanks(layout, testQuestionNew);
+            collection.addView(layout);
+            layout.setTag(position);
+            return layout;
+        }
+
+        if (testQuestionNew.getQue_option_type().equalsIgnoreCase(Constant.LONG_ANSWER) ||
+                testQuestionNew.getQue_option_type().equalsIgnoreCase(Constant.SHORT_ANSWER) ||
+                testQuestionNew.getQue_option_type().equalsIgnoreCase(Constant.ONE_LINE_ANSWER)) {
+            ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.practice_subjective, collection, false);
+            initViews(layout, testQuestionNew, position);
+            initSubjective(layout, testQuestionNew);
+            collection.addView(layout);
+            layout.setTag(position);
+            return layout;
         }
         return null;
     }
@@ -1096,34 +1106,39 @@ public class PractiseViewPagerAdapter extends PagerAdapter
         Log.e(TAG, "initScq Option 3 : " + testQuestionNew.getQ_mcq_op_3());
         Log.e(TAG, "initScq Option 4 : " + testQuestionNew.getQ_mcq_op_4());
 
+        String opt1 = AppUtils.decodedString(testQuestionNew.getQ_mcq_op_1());
+        String opt2 = AppUtils.decodedString(testQuestionNew.getQ_mcq_op_2());
+        String opt3 = AppUtils.decodedString(testQuestionNew.getQ_mcq_op_3());
+        String opt4 = AppUtils.decodedString(testQuestionNew.getQ_mcq_op_4());
+
         if (testQuestionNew.getQ_mcq_op_1().contains("\\")) {
             scq1.setVisibility(View.GONE);
             scq1Math.setVisibility(View.VISIBLE);
-            scq1Math.setText(testQuestionNew.getQ_mcq_op_1());
+            scq1Math.setText(opt1);
         } else {
             scq1Math.setVisibility(View.GONE);
             scq1.setVisibility(View.VISIBLE);
-            scq1.setText(testQuestionNew.getQ_mcq_op_1());
+            scq1.setText(opt1);
         }
 
         if (testQuestionNew.getQ_mcq_op_2().contains("\\")) {
             scq2.setVisibility(View.GONE);
             scq2Math.setVisibility(View.VISIBLE);
-            scq2Math.setText(testQuestionNew.getQ_mcq_op_2());
+            scq2Math.setText(opt2);
         } else {
             scq2Math.setVisibility(View.GONE);
             scq2.setVisibility(View.VISIBLE);
-            scq2.setText(testQuestionNew.getQ_mcq_op_2());
+            scq2.setText(opt2);
         }
 
         if (testQuestionNew.getQ_mcq_op_3().contains("\\")) {
             scq3.setVisibility(View.GONE);
             scq3Math.setVisibility(View.VISIBLE);
-            scq3Math.setText(testQuestionNew.getQ_mcq_op_3());
+            scq3Math.setText(opt3);
         } else {
             scq3Math.setVisibility(View.GONE);
             scq3.setVisibility(View.VISIBLE);
-            scq3.setText(testQuestionNew.getQ_mcq_op_3());
+            scq3.setText(opt3);
         }
 
         //scq4Math.setText(testQuestionNew.getQ_mcq_op_4());
@@ -1131,11 +1146,11 @@ public class PractiseViewPagerAdapter extends PagerAdapter
         if (testQuestionNew.getQ_mcq_op_4().contains("\\")) {
             scq4.setVisibility(View.GONE);
             scq4Math.setVisibility(View.VISIBLE);
-            scq4Math.setText(testQuestionNew.getQ_mcq_op_4());
+            scq4Math.setText(opt4);
         } else {
             scq4Math.setVisibility(View.GONE);
             scq4.setVisibility(View.VISIBLE);
-            scq4.setText(testQuestionNew.getQ_mcq_op_4());
+            scq4.setText(opt4);
         }
 
         if (testQuestionNew.getQ_mcq_op_5().contains("\\")) {
@@ -1640,11 +1655,11 @@ public class PractiseViewPagerAdapter extends PagerAdapter
         if (testQuestionNew.getQ_quest().contains("\\")) {
             tvQuestion.setVisibility(View.GONE);
             questMath.setVisibility(View.VISIBLE);
-            questMath.setText(testQuestionNew.getQ_quest());
+            questMath.setText(AppUtils.decodedString(testQuestionNew.getQ_quest()));
         } else {
             questMath.setVisibility(View.GONE);
             tvQuestion.setVisibility(View.VISIBLE);
-            tvQuestion.setText(testQuestionNew.getQ_quest());
+            tvQuestion.setText(AppUtils.decodedString(testQuestionNew.getQ_quest()));
         }
 
         tvQuestNo.setText(String.valueOf(testQuestionNew.getTq_quest_seq_num()));
@@ -1657,7 +1672,7 @@ public class PractiseViewPagerAdapter extends PagerAdapter
         tvShareValue.setText(testQuestionNew.getShares());
 
         //set Answer in solution Layout
-        solutionDesc.setText(testQuestionNew.getA_sub_ans());
+        solutionDesc.setText(AppUtils.decodedString(testQuestionNew.getA_sub_ans()));
 
         if (favorite != null) {
             favorite.setChecked(testQuestionNew.isQlc_fav_flag() ? true : false);

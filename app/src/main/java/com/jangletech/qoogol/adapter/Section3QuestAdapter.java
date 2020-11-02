@@ -1,11 +1,11 @@
 package com.jangletech.qoogol.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
@@ -48,33 +48,38 @@ public class Section3QuestAdapter extends RecyclerView.Adapter<Section3QuestAdap
     @Override
     public void onBindViewHolder(@NonNull Section3QuestAdapter.ViewHolder holder, int position) {
         LearningQuestionsNew learningQuestionsNew = learningQuestionsNewList.get(position);
+        Log.i(TAG, "onBindViewHolder : " + learningQuestionsNew.getQuestion_id() + "," + learningQuestionsNew.getQuestion() + "," + learningQuestionsNew.getMarks());
+
+        String duration = !learningQuestionsNew.getRecommended_time().isEmpty() ? learningQuestionsNew.getRecommended_time() + " Sec" : "";
+        holder.itemQuestBinding.tvQuestDuration.setText(duration);
+
+        holder.itemQuestBinding.tvQuestSerial.setText(String.valueOf(learningQuestionsNew.getQuestion_id()));
         holder.itemQuestBinding.tvQuest.setText(learningQuestionsNew.getQuestion());
+        holder.itemQuestBinding.tvQuestMarks.setText("Marks(" + learningQuestionsNew.getMarks() + ")");
 
         if (flag) {
             holder.itemQuestBinding.remove.setVisibility(View.GONE);
-            holder.itemQuestBinding.checkQuest.setVisibility(View.VISIBLE);
+            holder.itemQuestBinding.rootLayout.setBackgroundColor(learningQuestionsNew.isSelected() ? Color.CYAN : Color.WHITE);
+            holder.itemQuestBinding.rootLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    learningQuestionsNew.setSelected(!learningQuestionsNew.isSelected());
+                    holder.itemQuestBinding.rootLayout.setBackgroundColor(learningQuestionsNew.isSelected() ? Color.CYAN : Color.WHITE);
+                    tempList.add(learningQuestionsNew);
+                    listener.onSection3QuestSelected(tempList);
+                }
+            });
         } else {
             holder.itemQuestBinding.checkQuest.setVisibility(View.GONE);
             holder.itemQuestBinding.remove.setVisibility(View.VISIBLE);
+            holder.itemQuestBinding.rootLayout.setOnClickListener(v -> {
+                listener.onSection3Marks(learningQuestionsNew, holder.getAdapterPosition());
+            });
         }
 
         holder.itemQuestBinding.remove.setOnClickListener(v -> {
             Log.i(TAG, "onBindViewHolder: ");
             listener.onSection3RemoveClick(learningQuestionsNew, holder.getAdapterPosition());
-        });
-
-        holder.itemQuestBinding.checkQuest.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-                if (isChecked) {
-                    tempList.add(learningQuestionsNew);
-                } else {
-                    tempList.remove(learningQuestionsNew);
-                }
-
-                listener.onSection3QuestSelected(tempList);
-            }
         });
     }
 
@@ -94,7 +99,10 @@ public class Section3QuestAdapter extends RecyclerView.Adapter<Section3QuestAdap
 
     public interface Section3TestQuestAdapterListener {
         void onSection3QuestSelected(List<LearningQuestionsNew> learningQuestionsNewList);
+
         void onSection3RemoveClick(LearningQuestionsNew learningQuestionsNew, int questPos);
+
+        void onSection3Marks(LearningQuestionsNew learningQuestionsNew, int quesPos);
     }
 
     public void deleteTestQuest(int pos, LearningQuestionsNew learningQuestionsNew) {
@@ -102,4 +110,10 @@ public class Section3QuestAdapter extends RecyclerView.Adapter<Section3QuestAdap
         notifyItemRemoved(pos);
         notifyItemRangeChanged(pos, getItemCount());
     }
+
+    public void updateMarks(LearningQuestionsNew item, int pos) {
+        learningQuestionsNewList.set(pos, item);
+        notifyItemChanged(pos);
+    }
+
 }

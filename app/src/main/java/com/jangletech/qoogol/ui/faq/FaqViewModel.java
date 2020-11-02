@@ -1,14 +1,10 @@
 package com.jangletech.qoogol.ui.faq;
-
 import android.app.Application;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-
 import com.jangletech.qoogol.model.FAQModel;
-
 import java.util.List;
 
 public class FaqViewModel extends AndroidViewModel {

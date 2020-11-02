@@ -164,7 +164,6 @@ public class SubjectiveAnsDialog extends Dialog {
                 if (wordCount == maxWordLength) {
                     etAnswer.setFilters(new InputFilter[]{new InputFilter.LengthFilter(s.length())});
                 }
-
                 tvCounter.setText("Words Remaining : " + (maxWordLength - wordCount + "/" + String.valueOf(maxWordLength)));
             }
         });

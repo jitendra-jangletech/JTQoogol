@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.Window;
 
 import androidx.databinding.DataBindingUtil;
@@ -12,6 +13,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.AddTestQuestionAdapter;
 import com.jangletech.qoogol.databinding.DialogAddQuestionBinding;
@@ -22,6 +24,7 @@ import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -37,7 +40,9 @@ public class AddQuestionDialog extends Dialog implements AddTestQuestionAdapter.
     private AddQuestionDialogClickListener listener;
     private int pos;
     private FragmentManager fragmentManager;
-    private List<LearningQuestionsNew> learningQuestionsNewList;
+    private List<LearningQuestionsNew> learningQuestionsNewList = new ArrayList<>();
+    private List<LearningQuestionsNew> filteredList = new ArrayList<>();
+    private HashMap<String, String> categoryMap = new HashMap<>();
 
     public AddQuestionDialog(Activity mContext, int pos, FragmentManager fragmentManager, AddQuestionDialogClickListener listener) {
         super(mContext, android.R.style.Theme_DeviceDefault_Light_DarkActionBar);
@@ -45,6 +50,55 @@ public class AddQuestionDialog extends Dialog implements AddTestQuestionAdapter.
         this.listener = listener;
         this.pos = pos;
         this.fragmentManager = fragmentManager;
+        initCategoryMap();
+    }
+
+    private void initCategoryMap() {
+        categoryMap.put("All", "0");
+        categoryMap.put(Constant.short_ans, "21");
+        categoryMap.put(Constant.long_ans, "22");
+        categoryMap.put(Constant.scq, "1");
+        categoryMap.put(Constant.mcq, "4");
+        categoryMap.put(Constant.fill_the_blanks, "23");
+        categoryMap.put(Constant.true_false, "8");
+        categoryMap.put(Constant.match_pair, "11");
+    }
+
+    private void filterList(String text, String id) {
+        Log.i(TAG, "filterList Text : " + text);
+        Log.i(TAG, "filterList Id : " + id);
+        Log.i(TAG, "learningQuestionsNewList Size : " + learningQuestionsNewList.size());
+        filteredList.clear();
+        if (text.equalsIgnoreCase(Constant.short_ans) ||
+                text.equalsIgnoreCase(Constant.long_ans)
+                || text.equalsIgnoreCase(Constant.fill_the_blanks)) {
+            for (LearningQuestionsNew learningQuestionsNew : learningQuestionsNewList) {
+                Log.i(TAG, "filterList Category : " + learningQuestionsNew.getType());
+                if (learningQuestionsNew.getType().equalsIgnoreCase(id))
+                    filteredList.add(learningQuestionsNew);
+            }
+        } else {
+            for (LearningQuestionsNew learningQuestionsNew : learningQuestionsNewList) {
+                Log.i(TAG, "filterList Category : " + learningQuestionsNew.getType());
+                if (learningQuestionsNew.getQue_option_type().equalsIgnoreCase(id))
+                    filteredList.add(learningQuestionsNew);
+            }
+        }
+
+        if (text.equalsIgnoreCase("All")) {
+            filteredList.addAll(learningQuestionsNewList);
+        }
+
+        Log.i(TAG, "filterList Size : " + filteredList.size());
+        addTestQuestionAdapter.updateQuestList(filteredList);
+        if (filteredList.size() > 0) {
+            mBinding.tvEmptyview.setVisibility(View.GONE);
+            mBinding.questionRecyclerView.setVisibility(View.VISIBLE);
+        } else {
+            mBinding.questionRecyclerView.setVisibility(View.GONE);
+            mBinding.tvEmptyview.setVisibility(View.VISIBLE);
+            mBinding.tvEmptyview.setText("No Questions Found.");
+        }
     }
 
     @Override
@@ -59,6 +113,21 @@ public class AddQuestionDialog extends Dialog implements AddTestQuestionAdapter.
 
         mBinding.btnClose.setOnClickListener(v -> {
             dismiss();
+        });
+
+        mBinding.questChipGroup.setOnCheckedChangeListener(new ChipGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(ChipGroup group, int checkedId) {
+                Chip chip = group.findViewById(checkedId);
+                if (chip != null) {
+                    try {
+                        filterList(chip.getText().toString(), categoryMap.get(chip.getText().toString()));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    //AppUtils.showToast(mContext, categoryMap.get(chip.getText().toString()));
+                }
+            }
         });
 
         mBinding.btnSave.setOnClickListener(v -> {
@@ -78,12 +147,15 @@ public class AddQuestionDialog extends Dialog implements AddTestQuestionAdapter.
                 ProgressDialog.getInstance().dismiss();
                 if (response.body() != null) {
                     if (response.body().getResponse().equals("200")) {
-                        //setCreatedTestList(response.body().getTestList());
+                        learningQuestionsNewList.clear();
+                        learningQuestionsNewList.addAll(response.body().getQuestion_list());
+                        Log.i(TAG, "onResponse List Size : " + learningQuestionsNewList.size());
                         setTestQuestList(response.body().getQuestion_list());
-                    } else if (response.body().getResponse().equals("501")) {
-                        //resetSettingAndLogout();
                     } else {
-                        //showErrorDialog(getActivity(), response.body().getResponse(), response.body().getMessage());
+                        AppUtils.showToast(getContext(), response.body().getMessage());
+                        //mBinding.questionRecyclerView.setVisibility(View.GONE);
+                        //mBinding.tvEmptyview.setVisibility(View.VISIBLE);
+                        //mBinding.tvEmptyview.setText("No Questions Found.");
                     }
                 }
             }
@@ -97,13 +169,21 @@ public class AddQuestionDialog extends Dialog implements AddTestQuestionAdapter.
     }
 
     private void setTestQuestList(List<LearningQuestionsNew> question_list) {
-        addTestQuestionAdapter = new AddTestQuestionAdapter(mContext, question_list, true, this);
-        mBinding.questionRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mBinding.questionRecyclerView.setAdapter(addTestQuestionAdapter);
+        if (question_list.size() > 0) {
+            mBinding.questionRecyclerView.setVisibility(View.VISIBLE);
+            mBinding.tvEmptyview.setVisibility(View.GONE);
+            addTestQuestionAdapter = new AddTestQuestionAdapter(mContext, question_list, true, this);
+            mBinding.questionRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            mBinding.questionRecyclerView.setAdapter(addTestQuestionAdapter);
+        } else {
+            mBinding.tvEmptyview.setVisibility(View.VISIBLE);
+            mBinding.questionRecyclerView.setVisibility(View.GONE);
+        }
     }
 
     private void prepareQueCategory() {
         List que_categoryList = new ArrayList();
+        que_categoryList.add("All");
         que_categoryList.add(Constant.short_ans);
         que_categoryList.add(Constant.long_ans);
         que_categoryList.add(Constant.scq);
@@ -126,14 +206,15 @@ public class AddQuestionDialog extends Dialog implements AddTestQuestionAdapter.
     @Override
     public void onQuestSelected(List<LearningQuestionsNew> list) {
         Log.i(TAG, "onQuestSelected Size : " + list.size());
-        this.learningQuestionsNewList = list;
-        //DialogFragment addSectionDialog = new AddNewSectionDialog(this);
-        //addSectionDialog.show(fragmentManager, "dialog");
-
     }
 
     @Override
     public void onRemoveClick(LearningQuestionsNew learningQuestionsNew, int questPos) {
+
+    }
+
+    @Override
+    public void onSectionMarks(LearningQuestionsNew learningQuestionsNew, int quesPos) {
 
     }
 

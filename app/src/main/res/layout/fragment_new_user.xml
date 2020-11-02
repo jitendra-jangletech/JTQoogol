@@ -163,17 +163,20 @@
                                 android:textColor="@color/colorBlack" />
                         </com.google.android.material.textfield.TextInputLayout>
 
-                        <com.google.android.material.card.MaterialCardView
+                        <Button
                             android:id="@+id/sendOtp"
                             android:layout_width="0dp"
-                            android:layout_height="@dimen/_30sdp"
+                            android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_weight="0.6"
+                            android:backgroundTint="@color/colorBlack"
                             android:foreground="?attr/selectableItemBackground"
+                            android:text="Send OTP"
+                            android:textAllCaps="false"
                             app:cardBackgroundColor="@color/colorBlack"
                             app:cardCornerRadius="@dimen/_20sdp">
 
-                            <TextView
+                            <!--<TextView
                                 android:id="@+id/tvSendOtp"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -181,8 +184,8 @@
                                 android:gravity="center_horizontal"
                                 android:text="Send OTP"
                                 android:textColor="@color/colorWhite"
-                                android:textStyle="bold" />
-                        </com.google.android.material.card.MaterialCardView>
+                                android:textStyle="bold" />-->
+                        </Button>
 
                     </LinearLayout>
 
@@ -293,25 +296,28 @@
                         android:gravity="center"
                         android:textSize="@dimen/_8ssp" />
 
-                    <com.google.android.material.card.MaterialCardView
+                    <Button
                         android:id="@+id/register"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_35sdp"
                         android:layout_gravity="center"
                         android:layout_marginTop="@dimen/_5sdp"
+                        android:backgroundTint="@color/colorBlack"
                         android:foreground="?attr/selectableItemBackground"
+                        android:text="Register"
+                        android:textAllCaps="false"
                         app:cardBackgroundColor="@color/colorBlack"
                         app:cardCornerRadius="@dimen/_20sdp">
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:gravity="center_horizontal"
-                            android:text="Register"
-                            android:textColor="@color/colorWhite"
-                            android:textStyle="bold" />
-                    </com.google.android.material.card.MaterialCardView>
+                        <!-- <TextView
+                             android:layout_width="match_parent"
+                             android:layout_height="wrap_content"
+                             android:layout_gravity="center"
+                             android:gravity="center_horizontal"
+                             android:text="Register"
+                             android:textColor="@color/colorWhite"
+                             android:textStyle="bold" />-->
+                    </Button>
 
                     <TextView
                         android:id="@+id/tvExistingUser"

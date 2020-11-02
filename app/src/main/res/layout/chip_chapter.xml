@@ -8,5 +8,6 @@
     android:clickable="true"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground"
+    android:tag="U"
     android:text=""
     app:chipBackgroundColor="@color/chip_background" />

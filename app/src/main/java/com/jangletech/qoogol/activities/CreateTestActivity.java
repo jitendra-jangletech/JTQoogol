@@ -19,17 +19,31 @@ public class CreateTestActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_test);
-        navController = Navigation.findNavController(CreateTestActivity.this, R.id.nav_host_create_test);
-        mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_create)
-                .build();
-        NavigationUI.setupActionBarWithNavController(CreateTestActivity.this, navController);
-
+        try {
+            navController = Navigation.findNavController(CreateTestActivity.this, R.id.nav_host_create_test);
+            mAppBarConfiguration = new AppBarConfiguration.Builder(
+                    R.id.nav_create)
+                    .build();
+            NavigationUI.setupActionBarWithNavController(CreateTestActivity.this, navController);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public boolean onSupportNavigateUp() {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (navController.getCurrentDestination() != null) {
+            if (navController.getCurrentDestination().getId() == R.id.nav_create) {
+                finish();
+            } else {
+                super.onBackPressed();
+            }
+        }
     }
 }

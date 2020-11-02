@@ -89,13 +89,15 @@ public class FriendRequestFragment extends BaseFragment implements FriendReqAdap
             @Override
             public void onResponse(Call<FriendRequestResponse> call, retrofit2.Response<FriendRequestResponse> response) {
                 dismissRefresh(mBinding.requestsSwiperefresh);
-                if (response.body() != null &&
-                        response.body().getResponse().equalsIgnoreCase("200")) {
-                    Log.d(TAG, "onResponse: ");
-                    mViewModel.insert(response.body().getFriend_req_list());
-                } else {
-                    if (response.body() != null)
+                if (response.body() != null && response.body().getResponse() != null) {
+                    if (response.body().getResponse().equalsIgnoreCase("200")) {
+                        mViewModel.insert(response.body().getFriend_req_list());
+                    } else {
                         showToast("Error : " + response.body().getResponse());
+                    }
+                } else {
+                    //response code is null
+                    Log.e(TAG, "onResponse Code : " + response.body());
                 }
             }
 

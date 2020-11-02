@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.core.view.MenuItemCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -141,6 +142,15 @@ public class FollowersFragment extends BaseFragment implements FollowersAdapter.
                 checkRefresh();
                 connectionsList = followersList;
                 setFollowersList(followersList);
+            }
+        });
+
+        mViewModel.getStatus().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if(aBoolean){
+                    mBinding.emptyview.setText("No Followers Found.");
+                }
             }
         });
     }

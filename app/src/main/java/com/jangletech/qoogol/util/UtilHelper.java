@@ -95,8 +95,8 @@ public class UtilHelper {
     }
 
     public static String formatMarks(Float marks) {
-        if (marks %1 ==0)
-           return String.valueOf(Math.round(marks));
+        if (marks % 1 == 0)
+            return String.valueOf(Math.round(marks));
         else
             return String.valueOf(marks);
     }
@@ -149,16 +149,16 @@ public class UtilHelper {
 
     public static boolean isDoc(Uri media, Context context) {
 
-            File file = new File(Objects.requireNonNull(media.getPath()));
-            String[] okFileExtensions = new String[]{"doc", "docx", "pdf", "ppt", "pptx", "xls","xlsx","wav","txt","rtf","HTML","HTM","ODT","ODS",
-            "docm","xps"};
-            Log.d("#>file ext got ", file.getName().toLowerCase());
-            for (String extension : okFileExtensions) {
-                if (file.getName().toLowerCase().endsWith(extension)) {
-                    Log.d("#>detected ", "is audio");
-                    return true;
-                }
+        File file = new File(Objects.requireNonNull(media.getPath()));
+        String[] okFileExtensions = new String[]{"doc", "docx", "pdf", "ppt", "pptx", "xls", "xlsx", "wav", "txt", "rtf", "HTML", "HTM", "ODT", "ODS",
+                "docm", "xps"};
+        Log.d("#>file ext got ", file.getName().toLowerCase());
+        for (String extension : okFileExtensions) {
+            if (file.getName().toLowerCase().endsWith(extension)) {
+                Log.d("#>detected ", "is audio");
+                return true;
             }
+        }
         return false;
     }
 
@@ -207,15 +207,14 @@ public class UtilHelper {
         return context.getExternalFilesDir("Qoogol");
     }
 
-
-    public static String getProfilePath (String userId, String endPath) {
+    public static String getProfilePath(String userId, String endPath) {
         String paddedString = "0000000000".substring(userId.length());
-        return Constant.PRODUCTION_BASE_FILE_API + paddedString  +  userId + "/" + endPath;
+        return Constant.PRODUCTION_BASE_FILE_API + paddedString + userId + "/" + endPath;
     }
 
-    public static String getGroupProfilePath (String chatRoomId) {
+    public static String getGroupProfilePath(String chatRoomId) {
         String paddedString = "G" + "0000000000".substring(String.valueOf(chatRoomId).length());
-        String profilePath = Constant.PRODUCTION_BASE_FILE_API +  paddedString + chatRoomId + "/" + paddedString + chatRoomId + "0001.png";
+        String profilePath = Constant.PRODUCTION_BASE_FILE_API + paddedString + chatRoomId + "/" + paddedString + chatRoomId + "0001.png";
         return profilePath;
     }
 

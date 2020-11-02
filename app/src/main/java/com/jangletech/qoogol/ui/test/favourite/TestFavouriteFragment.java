@@ -119,13 +119,17 @@ public class TestFavouriteFragment extends BaseFragment implements TestListAdapt
             @Override
             public void onResponse(Call<TestListResponse> call, Response<TestListResponse> response) {
                 mBinding.swipeToRefresh.setRefreshing(false);
-                if (response.body() != null && response.body().getResponse().equals("200")) {
-                    Log.d(TAG, "Fav List Size is  : " + response.body().getTestList().size());
-                    mViewModel.setAllTestList(response.body().getTestList());
-                } else if (response.body().getResponse().equals("501")) {
-                    resetSettingAndLogout();
-                } else {
-                    AppUtils.showToast(getActivity(), null, response.body().getMessage());
+                try {
+                    if (response.body() != null && response.body().getResponse().equals("200")) {
+                        Log.d(TAG, "Fav List Size is  : " + response.body().getTestList().size());
+                        mViewModel.setAllTestList(response.body().getTestList());
+                    } else if (response.body().getResponse().equals("501")) {
+                        resetSettingAndLogout();
+                    } else {
+                        AppUtils.showToast(getActivity(), null, response.body().getMessage());
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
 

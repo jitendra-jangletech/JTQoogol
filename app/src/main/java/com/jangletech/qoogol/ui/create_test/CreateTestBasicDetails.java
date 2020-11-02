@@ -30,11 +30,14 @@ import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
+import com.jangletech.qoogol.util.TinyDB;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;
@@ -47,12 +50,12 @@ public class CreateTestBasicDetails extends BaseFragment implements TextWatcher,
     private FragmentCreateBasicDetailsBinding mBinding;
     private String difficulty = "", category = "", strTestType = "", strNegativeMarks = "";
     private String chapters = "";
-    private HashMap<String, String> diffLevel = new HashMap<>();
-    private HashMap<String, String> testCategory = new HashMap<>();
-    private HashMap<String, String> testType = new HashMap<>();
+    private LinkedHashMap<String, String> diffLevel = new LinkedHashMap<>();
+    private LinkedHashMap<String, String> testCategory = new LinkedHashMap<>();
+    private LinkedHashMap<String, String> testType = new LinkedHashMap<>();
     private TestModelNew testModelNew = new TestModelNew();
-    private HashMap<String, String> negativeMarks = new HashMap<>();
-    private TestSubjectChapterMaster testSubjectChapterMaster;
+    private LinkedHashMap<String, String> negativeMarks = new LinkedHashMap<>();
+    private TestSubjectChapterMaster testSubjectChapterMaster = new TestSubjectChapterMaster();
     private Calendar mcurrentTime;
     private TimePickerDialog mTimePicker;
     private String tmId = "";
@@ -68,39 +71,29 @@ public class CreateTestBasicDetails extends BaseFragment implements TextWatcher,
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        bundle = new Bundle();
-        initializeHashMaps();
-        mcurrentTime = Calendar.getInstance();
-        testSubjectChapterMaster = getSyllabusDetails();
+        Log.i(TAG, "onActivityCreated Executed: ");
+        try {
+            bundle = new Bundle();
+            initializeHashMaps();
+            mcurrentTime = Calendar.getInstance();
+            //testSubjectChapterMaster = getSyllabusDetails();
 
-        if (getArguments() != null && getArguments().getSerializable("CREATED_TEST") != null) {
-            testModelNew = (TestModelNew) getArguments().getSerializable("CREATED_TEST");
-            setCreatedTestDetails(testModelNew);
-        } else {
-            prepareChips(mBinding.testDiffLevel, diffLevel, "");
-            prepareChips(mBinding.testExecuteTypeChipGroup, testType, "");
-            prepareChips(mBinding.testNegativeMarksGroup, negativeMarks, "0");
-            prepareChips(mBinding.testCategoryChipGrp, testCategory, "");
-        }
+            if (getArguments() != null && getArguments().getSerializable("CREATED_TEST") != null) {
+                testModelNew = (TestModelNew) getArguments().getSerializable("CREATED_TEST");
+                setCreatedTestDetails(testModelNew);
+            } else {
+                mcurrentTime.set(Calendar.HOUR_OF_DAY, 0);
+                mcurrentTime.set(Calendar.MINUTE, 30);
+                mBinding.etDuration.setText("00:30");
 
-        if (getString(Constant.subjectName) != null && !getString(Constant.subjectName).isEmpty())
-            mBinding.chipSubject.setText(getString(Constant.subjectName));
-
-        if (getString(Constant.chapterName1) != null &&
-                !getString(Constant.chapterName1).isEmpty()) {
-            chapters = chapters + getString(Constant.chapterName1);
+                prepareChips(mBinding.testDiffLevel, diffLevel, "");
+                prepareChips(mBinding.testExecuteTypeChipGroup, testType, "");
+                prepareChips(mBinding.testNegativeMarksGroup, negativeMarks, "0");
+                prepareChips(mBinding.testCategoryChipGrp, testCategory, "");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        if (getString(Constant.chapterName2) != null &&
-                !getString(Constant.chapterName2).isEmpty()) {
-            chapters = chapters + "," + getString(Constant.chapterName2);
-        }
-        if (getString(Constant.chapterName3) != null &&
-                !getString(Constant.chapterName3).isEmpty()) {
-            chapters = chapters + "," + getString(Constant.chapterName3);
-        }
-
-        if (!chapters.isEmpty())
-            mBinding.chipChapter.setText(chapters);
 
         mBinding.etTestTitle.addTextChangedListener(this);
         mBinding.etTotalMarks.addTextChangedListener(this);
@@ -114,7 +107,7 @@ public class CreateTestBasicDetails extends BaseFragment implements TextWatcher,
                     mTimePicker = new TimePickerDialog(getActivity(), android.R.style.Theme_Holo_Dialog, new TimePickerDialog.OnTimeSetListener() {
                         @Override
                         public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                            String duration = String.format("%02d:%02d", selectedHour, selectedMinute) + ":00";
+                            String duration = String.format("%02d:%02d", selectedHour, selectedMinute);
                             mBinding.etDuration.setText(duration);
                             mcurrentTime.set(Calendar.HOUR_OF_DAY, selectedHour);
                             mcurrentTime.set(Calendar.MINUTE, selectedMinute);
@@ -130,11 +123,7 @@ public class CreateTestBasicDetails extends BaseFragment implements TextWatcher,
         mBinding.chipSubject.setOnClickListener(v -> {
             //navigationFromCreateTest(R.id.nav_modify_syllabus, Bundle.EMPTY);
             DialogFragment syllabusDialog = new SyllabusDialog(this);
-            syllabusDialog.show(getParentFragmentManager(), "dialog");
-        });
-
-        mBinding.chipChapter.setOnClickListener(v -> {
-            navigationFromCreateTest(R.id.nav_modify_syllabus, Bundle.EMPTY);
+            syllabusDialog.show(getParentFragmentManager(), "syllabus_dialog");
         });
 
         mBinding.testCategoryChipGrp.setOnCheckedChangeListener(new ChipGroup.OnCheckedChangeListener() {
@@ -177,7 +166,6 @@ public class CreateTestBasicDetails extends BaseFragment implements TextWatcher,
             }
         });
 
-
         mBinding.btnNext.setOnClickListener(v -> {
             try {
                 if (mBinding.etTestTitle.getText().toString().isEmpty()) {
@@ -204,13 +192,9 @@ public class CreateTestBasicDetails extends BaseFragment implements TextWatcher,
                     return;
                 }
 
-                if (testSubjectChapterMaster.getSubjectName() == null) {
+                if (mBinding.chipSubject.getText().toString().equalsIgnoreCase("No Subject") ||
+                        mBinding.chipSubject.getText().toString().isEmpty()) {
                     showToast("Please select subject.");
-                    return;
-                }
-
-                if (testSubjectChapterMaster.getChap1Name() == null) {
-                    showToast("Please select chapters.");
                     return;
                 }
 
@@ -232,14 +216,15 @@ public class CreateTestBasicDetails extends BaseFragment implements TextWatcher,
                 testModelNew.setTest_description(mBinding.etTestDesc.getText().toString().trim());
                 testModelNew.setTm_tot_marks(mBinding.etTotalMarks.getText().toString().trim());
                 testModelNew.setTm_duration(mBinding.etDuration.getText().toString());
-                testModelNew.setSm_sub_name(testSubjectChapterMaster.getSubjectName());
-                testModelNew.setTm_sm_id(testSubjectChapterMaster.getSubjectId()); //subjectId
-                testModelNew.setTm_cm_id(testSubjectChapterMaster.getChap1Id()); //todo Comma seperated Chapter Ids
+                testModelNew.setSm_sub_name(testModelNew.getSm_sub_name());
+                testModelNew.setTm_sm_id(testModelNew.getTm_sm_id()); //subjectId
+                testModelNew.setTm_cm_id(testModelNew.getTm_cm_id()); //
                 testModelNew.setTm_neg_mks(strNegativeMarks);
                 testModelNew.setTm_type(strTestType);
                 testModelNew.setTm_diff_level(difficulty);
                 testModelNew.setTm_catg(category);
                 testModelNew.setQuest_count(mBinding.etNoOfQuests.getText().toString());
+                TinyDB.getInstance(getActivity()).putString(Constant.tm_tot_marks, mBinding.etTotalMarks.getText().toString().trim());
                 createTest(testModelNew);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -266,16 +251,37 @@ public class CreateTestBasicDetails extends BaseFragment implements TextWatcher,
         negativeMarks.put("50", "50%");
         negativeMarks.put("75", "75%");
         negativeMarks.put("100", "100%");
-
     }
 
     private void setCreatedTestDetails(TestModelNew testModelNew) {
+        Log.i(TAG, "setCreatedTestDetails Tm_Sm_Id : " + testModelNew.getTm_sm_id());
         Log.i(TAG, "setCreatedTestDetails TmId : " + testModelNew.getTm_id());
+        Log.i(TAG, "setCreatedTestDetails: " + testModelNew.getTest_sections());
+        Log.i(TAG, "setCreatedTestDetails Sections : " + testModelNew.getTest_sections());
+        TestSubjectChapterMaster testSubjectChapterMaster = new TestSubjectChapterMaster();
+        testSubjectChapterMaster.setSections(testModelNew.getTest_sections());
+        Gson gson = new Gson();
+        String json = gson.toJson(testSubjectChapterMaster);
+        TinyDB.getInstance(getActivity()).putString(Constant.TEST_SUBJECT_CHAP, json);
+
+        category = testModelNew.getTm_catg();
+        strTestType = testModelNew.getTm_type();
+        difficulty = testModelNew.getTm_diff_level();
+        strNegativeMarks = testModelNew.getTm_neg_mks();
+        Log.i(TAG, "setCreatedTestDetails duration: " + testModelNew.getTm_duration());
+        if (testModelNew.getTm_duration() != null && !testModelNew.getTm_duration().isEmpty()) {
+            String[] duration = testModelNew.getTm_duration().split(":", -1);
+            mcurrentTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(duration[0]));
+            mcurrentTime.set(Calendar.MINUTE, Integer.parseInt(duration[1]));
+        }
+
         mBinding.etTestTitle.setText(testModelNew.getTm_name());
         mBinding.etTestDesc.setText(testModelNew.getTest_description());
         mBinding.etNoOfQuests.setText(testModelNew.getQuest_count());
         mBinding.etDuration.setText(testModelNew.getTm_duration());
         mBinding.etTotalMarks.setText(testModelNew.getTm_tot_marks());
+        mBinding.chipSubject.setText(testModelNew.getSm_sub_name());
+        mBinding.chipSubject.setEnabled(false);
         prepareChips(mBinding.testDiffLevel, diffLevel, testModelNew.getTm_diff_level());
         prepareChips(mBinding.testExecuteTypeChipGroup, testType, testModelNew.getTm_type());
 
@@ -283,6 +289,7 @@ public class CreateTestBasicDetails extends BaseFragment implements TextWatcher,
 
         prepareChips(mBinding.testNegativeMarksGroup, negativeMarks, testModelNew.getTm_neg_mks());
         prepareChips(mBinding.testCategoryChipGrp, testCategory, testModelNew.getTm_catg());
+
     }
 
     @Override
@@ -306,7 +313,7 @@ public class CreateTestBasicDetails extends BaseFragment implements TextWatcher,
         }
     }
 
-    private void prepareChips(ChipGroup chipGroup, HashMap<String, String> params, String chekedKey) {
+    private void prepareChips(ChipGroup chipGroup, LinkedHashMap<String, String> params, String chekedKey) {
         chipGroup.removeAllViews();
         int counter = 0;
         Iterator<Map.Entry<String, String>> itr = params.entrySet().iterator();
@@ -325,7 +332,6 @@ public class CreateTestBasicDetails extends BaseFragment implements TextWatcher,
             if (entry.getKey().equalsIgnoreCase(chekedKey)) {
                 chip.setChecked(true);
             }
-
             System.out.println("Key = " + entry.getKey() +
                     ", Value = " + entry.getValue());
         }
@@ -334,7 +340,10 @@ public class CreateTestBasicDetails extends BaseFragment implements TextWatcher,
     @Override
     public void onClick(View v) {
         if (v != null) {
-
+            if (v.getTag().equals("CHAPTER")) {
+                DialogFragment syllabusDialog = new SyllabusDialog(this);
+                syllabusDialog.show(getParentFragmentManager(), "syllabus_dialog");
+            }
         }
     }
 
@@ -349,76 +358,102 @@ public class CreateTestBasicDetails extends BaseFragment implements TextWatcher,
     }
 
     private void createTest(TestModelNew testModelNew) {
-        ProgressDialog.getInstance().show(getActivity());
-        Gson gson = new Gson();
-        String json = gson.toJson(testModelNew);
+        try {
+            ProgressDialog.getInstance().show(getActivity());
+            Gson gson = new Gson();
+            String json = gson.toJson(testModelNew);
 
-        if (testModelNew.getTm_id() == 0) {
-            tmId = "";
-        } else {
-            tmId = String.valueOf(testModelNew.getTm_id());
-        }
-        bundle.putSerializable(Constant.tm_id, tmId);
-        Log.i(TAG, "createTest Object : " + json);
-        Log.i(TAG, "createTest Publish Date : " + new Date().toString());
-        Log.i(TAG, "createTest Final TmId : " + tmId);
-        Call<CreateTestResponse> call = ApiClient.getInstance().getApi()
-                .createModifyTest(
-                        AppUtils.getUserId(),
-                        AppUtils.getDeviceId(),
-                        Constant.APP_NAME,
-                        tmId,
-                        "I",
-                        testModelNew.getTm_name(),
-                        testModelNew.getTest_description(),
-                        testModelNew.getQuest_count(),
-                        testModelNew.getTm_tot_marks(),
-                        testModelNew.getTm_duration(),
-                        testModelNew.getTm_sm_id(),
-                        testModelNew.getTm_cm_id(),
-                        testModelNew.getTm_neg_mks(),
-                        testModelNew.getTm_type(),
-                        testModelNew.getTm_diff_level(),
-                        testModelNew.getTm_catg(),
-                        getFormattedDate()
-                );
-        call.enqueue(new Callback<CreateTestResponse>() {
-            @Override
-            public void onResponse(Call<CreateTestResponse> call, Response<CreateTestResponse> response) {
-                ProgressDialog.getInstance().dismiss();
-                try {
-                    if (response.body().getResponse() == 200) {
-                        Log.i(TAG, "onResponse : " + response.body());
-                        testModelNew.setTm_id(Integer.parseInt(response.body().getTmId()));
-                        navigationFromCreateTest(R.id.nav_create_test_section, bundle);
-                    } else {
-                        navigationFromCreateTest(R.id.nav_create_test_section, bundle);
-                        AppUtils.showToast(getActivity(), null, response.body().getMessage());
-                        Log.e(TAG, "Response Code : " + response.body().getResponse());
+            if (testModelNew.getTm_id() == 0) {
+                tmId = "";
+            } else {
+                tmId = String.valueOf(testModelNew.getTm_id());
+            }
+            bundle.putString(Constant.tm_id, tmId);
+            Log.i(TAG, "createTest Object : " + json);
+            Log.i(TAG, "createTest Publish Date : " + new Date().toString());
+            Log.i(TAG, "createTest Final TmId : " + tmId);
+            Log.i(TAG, "createTest tm_sm_id : " + testModelNew.getTm_sm_id());
+            Call<CreateTestResponse> call = ApiClient.getInstance().getApi()
+                    .createModifyTest(
+                            AppUtils.getUserId(),
+                            AppUtils.getDeviceId(),
+                            Constant.APP_NAME,
+                            tmId,
+                            "I",
+                            testModelNew.getTm_name(),
+                            testModelNew.getTest_description(),
+                            testModelNew.getQuest_count(),
+                            testModelNew.getTm_tot_marks(),
+                            testModelNew.getTm_duration(),
+                            testModelNew.getTm_sm_id(),
+                            testModelNew.getTm_cm_id(),
+                            testModelNew.getTm_neg_mks(),
+                            testModelNew.getTm_type(),
+                            testModelNew.getTm_diff_level(),
+                            testModelNew.getTm_catg(),
+                            getFormattedDate()
+                    );
+            call.enqueue(new Callback<CreateTestResponse>() {
+                @Override
+                public void onResponse(Call<CreateTestResponse> call, Response<CreateTestResponse> response) {
+                    ProgressDialog.getInstance().dismiss();
+                    bundle.putString(Constant.tm_id, response.body().getTmId());
+                    try {
+                        if (response.body().getResponse() == 200) {
+                            Log.i(TAG, "onResponse : " + response.body());
+                            navigationFromCreateTest(R.id.nav_create_test_section, bundle);
+                        } else {
+                            navigationFromCreateTest(R.id.nav_create_test_section, bundle);
+                            AppUtils.showToast(getActivity(), null, response.body().getMessage());
+                            Log.e(TAG, "Response Code : " + response.body().getResponse());
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                }catch (Exception e){
-                    e.printStackTrace();
                 }
-            }
 
-            @Override
-            public void onFailure(Call<CreateTestResponse> call, Throwable t) {
-                ProgressDialog.getInstance().dismiss();
-                AppUtils.showToast(getActivity(), t, "");
-                apiCallFailureDialog(t);
-                t.printStackTrace();
-            }
-        });
+                @Override
+                public void onFailure(Call<CreateTestResponse> call, Throwable t) {
+                    ProgressDialog.getInstance().dismiss();
+                    AppUtils.showToast(getActivity(), t, "");
+                    apiCallFailureDialog(t);
+                    t.printStackTrace();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
+
 
     @Override
     public void onSyllabusSaveClick() {
-        //todo set subect and chapters
         testSubjectChapterMaster = getSyllabusDetails();
         mBinding.chipSubject.setText(testSubjectChapterMaster.getSubjectName());
-        mBinding.chipChapter.setText(testSubjectChapterMaster.getChap1Name());
+        List<String> listChapters = new ArrayList<>();
+        listChapters.add(testSubjectChapterMaster.getChap1Name());
+        listChapters.add(testSubjectChapterMaster.getChap2Name());
+        listChapters.add(testSubjectChapterMaster.getChap3Name());
+        prepareChapteChips(listChapters);
         testModelNew.setSm_sub_name(testSubjectChapterMaster.getSubjectName());
         testModelNew.setTm_sm_id(testSubjectChapterMaster.getSubjectId());
         testModelNew.setTm_cm_id(testSubjectChapterMaster.getChap1Id());
+    }
+
+    private void prepareChapteChips(List<String> list) {
+        mBinding.chipGrpChapter.removeAllViews();
+        int id = 0;
+        for (String string : list) {
+            if (string != null && !string.isEmpty()) {
+                Chip chip = (Chip) LayoutInflater.from(mBinding.chipGrpChapter.getContext()).inflate(R.layout.chip_new, mBinding.chipGrpChapter, false);
+                chip.setText(string);
+                chip.setTag("CHAPTER");
+                chip.setId(id);
+                chip.setClickable(true);
+                chip.setCheckable(true);
+                chip.setOnClickListener(this);
+                mBinding.chipGrpChapter.addView(chip);
+            }
+        }
     }
 }

@@ -17,7 +17,6 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 
-import com.jangletech.qoogol.BuildConfig;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.activities.RegisterLoginActivity;
 import com.jangletech.qoogol.databinding.SettingsFragmentBinding;
@@ -32,6 +31,7 @@ import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.QoogolApp;
+import com.tom_roush.pdfbox.BuildConfig;
 
 import retrofit2.Call;
 import retrofit2.Callback;

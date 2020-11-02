@@ -1,6 +1,7 @@
 package com.jangletech.qoogol.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -39,6 +40,10 @@ public class CreatedTestAdapter extends RecyclerView.Adapter<CreatedTestAdapter.
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         TestModelNew testModelNew = createdTestList.get(position);
+
+        if (testModelNew.getTm_id() == 107) {
+            holder.itemCreatedTestBinding.tvTestNameSubject.setTextColor(Color.BLACK);
+        }
 
         holder.itemCreatedTestBinding.tvTestNameSubject.setText(testModelNew.getTm_name() + "(" + testModelNew.getSm_sub_name() + ")");
         holder.itemCreatedTestBinding.tvCategory.setText(BaseFragment.getDefinedTestCategory(testModelNew.getTm_catg()));

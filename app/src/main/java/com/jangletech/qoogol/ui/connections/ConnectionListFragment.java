@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.SearchView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.MenuItemCompat;
@@ -19,22 +21,24 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.adapter.ConnectionAdapter;
 import com.jangletech.qoogol.databinding.FragmentFriendsBinding;
 import com.jangletech.qoogol.dialog.PublicProfileDialog;
 import com.jangletech.qoogol.model.ConnectionResponse;
 import com.jangletech.qoogol.model.Connections;
-import com.jangletech.qoogol.retrofit.ApiClient;
-import com.jangletech.qoogol.retrofit.ApiInterface;
 import com.jangletech.qoogol.ui.BaseFragment;
 import com.jangletech.qoogol.util.AESSecurities;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.TinyDB;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
+
 import static com.jangletech.qoogol.util.Constant.connections;
 import static com.jangletech.qoogol.util.Constant.friends;
 import static com.jangletech.qoogol.util.Constant.qoogol;
@@ -151,30 +155,36 @@ public class ConnectionListFragment extends BaseFragment implements ConnectionAd
             @Override
             public void onResponse(Call<ConnectionResponse> call, retrofit2.Response<ConnectionResponse> response) {
                 dismissRefresh(mBinding.connectionSwiperefresh);
-                if (response.body().getResponse().equalsIgnoreCase("200")) {
-                    connectionResponse = response.body();
-                    List<Connections> newConnections = new ArrayList<>();
-                    for (Connections connections : response.body().getConnection_list()) {
-                        String fName = AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key1), connections.getU_first_name());
-                        String lName = AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key2), connections.getU_last_name());
-                        connections.setU_first_name(fName);
-                        connections.setU_last_name(lName);
-                        newConnections.add(connections);
+                try {
+                    if (response.body().getResponse() != null) {
+                        if (response.body().getResponse().equalsIgnoreCase("200")) {
+                            connectionResponse = response.body();
+                            List<Connections> newConnections = new ArrayList<>();
+                            for (Connections connections : response.body().getConnection_list()) {
+                                String fName = AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key1), connections.getU_first_name());
+                                String lName = AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(Constant.cf_key2), connections.getU_last_name());
+                                connections.setU_first_name(fName);
+                                connections.setU_last_name(lName);
+                                newConnections.add(connections);
+                            }
+                            mViewModel.insert(newConnections);
+                        } else if (response.body().getResponse().equals("501")) {
+                            resetSettingAndLogout();
+                        } else {
+                            showToast("Error Code : " + response.body().getResponse());
+                        }
+                    } else {
+                        mBinding.emptyview.setText("No Connections Added.");
                     }
-                    //mViewModel.insert(response.body().getConnection_list());
-                    mViewModel.insert(newConnections);
-                } else if (response.body().getResponse().equals("501")) {
-                    resetSettingAndLogout();
-                } else {
-                    showToast("Error Code : " + response.body().getResponse());
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
-
             @Override
             public void onFailure(Call<ConnectionResponse> call, Throwable t) {
                 t.printStackTrace();
                 dismissRefresh(mBinding.connectionSwiperefresh);
-                showToast("Something went wrong!!");
+                showToast("Something went wrong!!", Toast.LENGTH_SHORT);
                 apiCallFailureDialog(t);
             }
         });

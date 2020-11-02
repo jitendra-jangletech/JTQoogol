@@ -6,17 +6,15 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.databinding.ItemTestSectionBinding;
-import com.jangletech.qoogol.model.LearningQuestionsNew;
 import com.jangletech.qoogol.model.TestSection;
 
 import java.util.List;
 
-public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.ViewHolder> implements AddTestQuestionAdapter.AddTestQuestionListener {
+public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.ViewHolder> {
 
     private List<TestSection> testSections;
     private Context mContext;
@@ -43,14 +41,9 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.ViewHold
         holder.itemTestSectionBinding.tvNameMarks.setText(testSection.getSectionName() + " (" + testSection.getSectionMarks() + " Marks)");
 
         holder.itemTestSectionBinding.tvAddQuestion.setOnClickListener(v -> {
-            listener.onAddQuestionClick(testSection,position);
+            listener.onAddQuestionClick(testSection, position);
         });
 
-        /*if (testSection.getSectionQuestions().size() > 0) {
-            addTestQuestionAdapter = new AddTestQuestionAdapter(mContext, testSection.getSectionQuestions(),false,position,this);
-            holder.itemTestSectionBinding.questRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-            holder.itemTestSectionBinding.questRecyclerView.setAdapter(addTestQuestionAdapter);
-        }*/
     }
 
 
@@ -58,21 +51,6 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.ViewHold
     public int getItemCount() {
         return testSections.size();
     }
-
-    @Override
-    public void onQuestSelected(List<LearningQuestionsNew> learningQuestionsNewList) {
-
-    }
-
-    @Override
-    public void onRemoveClick(LearningQuestionsNew learningQuestionsNew, int questPos) {
-       /* TestSection testSection = testSections.get(sectionPos);
-        List<LearningQuestionsNew> testQuestions = testSections.get(sectionPos).getSectionQuestions();
-        testQuestions.remove(questPos);
-        testSection.setSectionQuestions(testQuestions);
-        notifyItemChanged(sectionPos);*/
-    }
-
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ItemTestSectionBinding itemTestSectionBinding;
@@ -83,16 +61,11 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.ViewHold
         }
     }
 
-    public void addSectionToList(List<TestSection> testSectionList) {
-        this.testSections = testSectionList;
-        notifyItemInserted(testSections.size() - 1);
-    }
-
-    public void updateItem(TestSection testSection,int pos){
+    public void updateItem(TestSection testSection, int pos) {
 
     }
 
     public interface SectionClickListener {
-        void onAddQuestionClick(TestSection testSection,int pos);
+        void onAddQuestionClick(TestSection testSection, int pos);
     }
 }

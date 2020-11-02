@@ -8,7 +8,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
@@ -44,6 +46,9 @@ import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.PreferenceManager;
 import com.jangletech.qoogol.util.TinyDB;
 
+import java.io.File;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -58,6 +63,13 @@ public class BaseFragment extends Fragment {
     private static final String TAG = "BaseFragment";
     private SharedPreferences preferences;
     private ApiInterface apiService = ApiClient.getInstance().getApi();
+    public int FILE_TYPE_PDF = 1;
+    public int FILE_TYPE_ANY = 0;
+    public int FILE_TYPE_PNG = 2;
+
+    public String finalPdfDocs = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Qoogol/Generated/";
+    public String tempPdfPath = Environment.getExternalStorageDirectory()
+            .getAbsolutePath() + "/Qoogol/Sample/";
 
     public ApiInterface getApiService() {
         return apiService;
@@ -76,6 +88,43 @@ public class BaseFragment extends Fragment {
         return date;
     }
 
+    public List<File> getAllFilesFromDirectory(String folderPath, int type) {
+        List<File> tempList = new ArrayList<>();
+        try {
+            File directory = new File(folderPath);
+            //int index = 0;
+            if (type == FILE_TYPE_PDF) {
+                Log.i("Files", "Path: " + folderPath);
+                for (File file : directory.listFiles()) {
+                    String[] ext = file.getAbsolutePath().split("\\.", -1);
+                    if (ext[1].equalsIgnoreCase("pdf")) {
+                        tempList.add(file);
+                    }
+                }
+            }
+            if (type == FILE_TYPE_PNG) {
+                Log.i("Files", "Path: " + folderPath);
+                for (File file : directory.listFiles()) {
+                    String[] ext = file.getAbsolutePath().split("\\.", -1);
+                    Log.i(TAG, "getAllFilesFromDirectory ext : " + ext[1]);
+                    if (ext[1].equalsIgnoreCase("png")) {
+                        tempList.add(file);
+                    }
+                }
+            }
+
+            if (type == FILE_TYPE_ANY) {
+                Log.i("Files", "Path: " + folderPath);
+                for (File file : directory.listFiles()) {
+                    tempList.add(file);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return tempList;
+    }
+
     public String getKeyFromValuea(Map<String, String> map, String name) {
         Log.i(TAG, "getKeyFromValuea Name : " + name);
         String selectedKey = "";
@@ -92,6 +141,48 @@ public class BaseFragment extends Fragment {
 
     public String getDecryptedField(String encryptText, String key) {
         return AESSecurities.getInstance().decrypt(TinyDB.getInstance(getActivity()).getString(key), encryptText);
+    }
+
+    public void showPdf(Uri uri) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setDataAndType(uri, "application/pdf");
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+    }
+
+
+    public Uri getPdfFileName(Uri uri, String ext) {
+        String[] path = uri.toString().split("\\.", -1);
+        if (ext.equalsIgnoreCase("pdf")) {
+            Log.i(TAG, "getPdfFileName Pdf File Name : " + Uri.parse(path[0] + ".pdf"));
+            return Uri.parse(path[0] + ".pdf");
+        }
+
+        if (ext.equalsIgnoreCase("png")) {
+            Log.i(TAG, "getPdfFileName Png File Name : " + Uri.parse(path[0] + ".png"));
+            return Uri.parse(path[0] + ".png");
+        }
+
+        return Uri.parse(path[0] + ".pdf");
+    }
+
+
+    public void deleteFile(String path) {
+        String pdfPath = path.split("\\.", -1)[0];
+        try {
+            File file = new File(new URI(path));
+            File file1 = new File(new URI(pdfPath + ".pdf"));
+            if (file.exists()) {
+                file.delete();
+            }
+            if (file1.exists()) {
+                file1.delete();
+            }
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void navigationFromCreateTest(int resId, Bundle bundle) {
@@ -307,6 +398,38 @@ public class BaseFragment extends Fragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void showToast(String msg, int length) {
+        try {
+            Toast.makeText(requireActivity(), msg, length).show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void showAlert(String msg) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogStyle);
+        builder.setTitle("Alert")
+                .setMessage(msg)
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setCancelable(false)
+                .show();
+    }
+
+    public void showAlert(String msg, String positiveBtnText, DialogInterface.OnClickListener dialogInterface) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogStyle);
+        builder.setTitle("Alert")
+                .setMessage(msg)
+                .setPositiveButton(positiveBtnText, dialogInterface)
+                .setNegativeButton("Cancel", null)
+                .setCancelable(false)
+                .show();
     }
 
     public void saveFilter(boolean value) {

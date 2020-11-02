@@ -8,6 +8,10 @@
     <string name="menu_home">Dashboard</string>
     <string name="menu_fav">Favourite</string>
 
+
+    <string name="my_pdf">My Pdf Documents</string>
+    <string name="file_name_chars">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_</string>
+
     //Learning Menu
     <string name="menu_course">Course</string>
     <string name="menu_exam">Exam</string>
@@ -856,13 +860,13 @@
     <string name="float_add_section">Add New Section</string>
     <string name="test_sections">Add Test Sections</string>
     <string name="create_test_basic_details">Test Basic Details</string>
-    <string name="created_tests">Created Tests</string>
+    <string name="created_tests">My Created Tests</string>
     <string name="add_question">Add Test Question</string>
     <string name="modify_syllabus">Modify Syllabus</string>
     <string name="add_test_title">Test Title</string>
     <string name="add_test_desc">Test Description</string>
     <string name="total_marks">Total Marks</string>
-    <string name="test_duration">Duration(hh:mm:ss)</string>
+    <string name="test_duration">Duration(hh:mm)</string>
     <string name="hint_duration">HH-MM</string>
     <string name="test_type">What category of test you want to create?</string>
     <string name="add_section_name">Section Name</string>
@@ -875,5 +879,8 @@
     <string name="generate_document">Generate Pdf</string>
     <string name="menu_create_pdf">Create Pdf</string>
     <string name="total_no_of_quest">Total No. of Questions</string>
+    <string name="add_quest_duration">Question Recommended Time</string>
+    <string name="preview">Preview</string>
+    <string name="enter_file_name">Enter File Name</string>
 
 </resources>

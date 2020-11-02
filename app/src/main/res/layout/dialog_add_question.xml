@@ -6,7 +6,21 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <TextView
+            android:id="@+id/tvEmptyview"
+            style="@style/font_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fetching Questions..."
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <LinearLayout
+            android:paddingBottom="@dimen/_40sdp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
@@ -20,10 +34,10 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
+                    android:padding="@dimen/_4sdp"
                     android:id="@+id/btnClose"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_margin="@dimen/_10sdp"
                     android:gravity="center"
                     android:src="?attr/homeAsUpIndicator"
                     android:textColor="@color/colorWhite"
@@ -32,11 +46,11 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
+                    android:padding="@dimen/_4sdp"
                     android:id="@+id/titletv"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
-                    android:layout_margin="@dimen/_10sdp"
                     android:gravity="center_vertical"
                     android:text="Select Questions"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
@@ -65,6 +79,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="@dimen/_5sdp"
                 android:background="@color/colorDarkGray"
+                android:visibility="gone"
                 tools:listitem="@layout/item_quest" />
         </LinearLayout>
 

@@ -3,15 +3,11 @@ package com.jangletech.qoogol.model;
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
-
 import com.google.gson.annotations.SerializedName;
-import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.UtilHelper;
-
 import org.apache.commons.lang3.StringUtils;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +35,17 @@ public class LearningQuestionsNew implements Cloneable, Serializable {
 
     protected Object clone() throws CloneNotSupportedException {
         return super.clone();
+    }
+
+    @SerializedName(Constant.test_section_id)
+    private String section_id;
+
+    public String getSection_id() {
+        return section_id!=null?section_id:"0";
+    }
+
+    public void setSection_id(String section_id) {
+        this.section_id = section_id;
     }
 
     private boolean isSelected = false;
@@ -238,7 +245,7 @@ public class LearningQuestionsNew implements Cloneable, Serializable {
     }
 
     public String getQuestion() {
-        return question!=null? AppUtils.decodedString(question) :"";
+        return question != null ? AppUtils.decodedString(question) : "";
     }
 
     public void setQuestion(String question) {
@@ -361,7 +368,7 @@ public class LearningQuestionsNew implements Cloneable, Serializable {
     }
 
     public String getRecommended_time() {
-        return recommended_time != null ? recommended_time.contains("Time") ? recommended_time : "Time: " + recommended_time + " Sec" : "";
+        return recommended_time != null ? recommended_time : "";
     }
 
     public String getDuration() {
@@ -381,7 +388,7 @@ public class LearningQuestionsNew implements Cloneable, Serializable {
     }
 
     public String getMarks() {
-        return marks != null ? UtilHelper.formatMarks(Float.parseFloat(marks)) : "";
+        return marks != null ? marks : "0";
     }
 
     public String getFormatedMarks() {

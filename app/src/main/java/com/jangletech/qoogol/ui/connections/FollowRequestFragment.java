@@ -87,7 +87,7 @@ public class FollowRequestFragment extends BaseFragment implements FollowReqAdap
                     initView(list);
 
                 } else {
-                    mBinding.emptyview.setText("You don't have any pending requests.");
+                    mBinding.emptyview.setText("No requests.");
                     mBinding.emptyview.setVisibility(View.VISIBLE);
                 }
             }
@@ -101,12 +101,12 @@ public class FollowRequestFragment extends BaseFragment implements FollowReqAdap
             @Override
             public void onResponse(Call<FollowRequestResponse> call, retrofit2.Response<FollowRequestResponse> response) {
                 dismissRefresh(mBinding.requestsSwiperefresh);
-                if (response.body() != null &&
-                        response.body().getResponse().equalsIgnoreCase("200")) {
-                    mViewModel.insert(response.body().getFollowreq_list());
-                } else {
-                    if (response.body() != null)
+                if (response.body() != null && response.body().getResponse() != null) {
+                    if (response.body().getResponse().equalsIgnoreCase("200")) {
+                        mViewModel.insert(response.body().getFollowreq_list());
+                    } else {
                         showToast("Error : " + response.body().getResponse());
+                    }
                 }
             }
 

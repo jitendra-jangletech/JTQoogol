@@ -30,9 +30,18 @@ public class AddNewSectionDialog extends DialogFragment implements TextWatcher {
     private String[] sectionsAvailable;
     private String sectionName = "None";
     private int pos;
+    private int testTotMarks = 0;
+    private int type;
+    private float qMarks;
+    private TestSubjectChapterMaster testSubjectChapterMaster;
+    private String duration = "";
+    private String sections = "";
 
-    public AddNewSectionDialog(AddNewSectionClickListener listener) {
+    public AddNewSectionDialog(AddNewSectionClickListener listener, int type, float qMarks, String duration) {
         this.listener = listener;
+        this.type = type;
+        this.qMarks = qMarks;
+        this.duration = duration;
     }
 
     @Override
@@ -45,82 +54,156 @@ public class AddNewSectionDialog extends DialogFragment implements TextWatcher {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.dialog_add_new_section, container, false);
-        getDialog().setCancelable(false);
+        setCancelable(false);
         return mBinding.getRoot();
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        setSections();
-        mBinding.etSectionName.addTextChangedListener(this);
-        mBinding.etSectionMarks.addTextChangedListener(this);
-        mBinding.btnSave.setOnClickListener(v -> {
-            if (mBinding.tilSectionMarks.getVisibility() == View.VISIBLE &&
-                    mBinding.etSectionMarks.getText().toString().trim().isEmpty()) {
-                mBinding.tilSectionMarks.setError("Enter Section Marks");
-                return;
-            } else {
-                //String name = mBinding.etSectionName.getText().toString().trim();
-                if (mBinding.tilSectionMarks.getVisibility() == View.GONE) {
-                    listener.onNewSectionSaveClick(sectionName, 0, pos);
-                } else {
-                    int marks = Integer.parseInt(mBinding.etSectionMarks.getText().toString().trim());
-                    listener.onNewSectionSaveClick(sectionName, marks, pos);
-                }
-                dismiss();
+        Log.i(TAG, "onActivityCreated Type : " + type);
+        try {
+            setSections();
+            testTotMarks = Integer.parseInt(TinyDB.getInstance(getActivity()).getString(Constant.tm_tot_marks));
+            Log.i(TAG, "onActivityCreated Tm Total Marks : " + testTotMarks);
+            mBinding.etSectionName.addTextChangedListener(this);
+            mBinding.etSectionMarks.addTextChangedListener(this);
+
+            if (type == Constant.mrks) {
+                mBinding.tvAddSection.setText("Add Question Marks");
+                mBinding.tilSectionMarks.setVisibility(View.VISIBLE);
+                mBinding.etSectionMarks.setText(String.valueOf(qMarks));
+                mBinding.tilSectionMarks.setHint("Question Marks");
+                mBinding.sectionRadioGroup.setVisibility(View.GONE);
+                mBinding.tilQuestDuration.setVisibility(View.VISIBLE);
+                mBinding.etQuestDuration.setText(duration);
             }
-        });
 
-        mBinding.sectionRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                RadioButton radioButton = group.findViewById(checkedId);
-                if (radioButton != null) {
-                    pos = Integer.parseInt(radioButton.getTag().toString());
-                    sectionName = radioButton.getText().toString();
+            mBinding.btnSave.setOnClickListener(v -> {
+                try {
 
-                    if (sectionName.equalsIgnoreCase("None")) {
-                        mBinding.tilSectionMarks.getEditText().setText("");
-                        mBinding.tilSectionMarks.setVisibility(View.GONE);
+                    if (type == Constant.section) {
+                        if (mBinding.tilSectionMarks.getVisibility() == View.VISIBLE &&
+                                mBinding.etSectionMarks.getText().toString().trim().isEmpty()) {
+                            mBinding.tilSectionMarks.setError("Enter Section Marks");
+                            return;
+                        } else if (mBinding.tilSectionMarks.getVisibility() == View.VISIBLE &&
+                                qMarks > testTotMarks) {
+                            mBinding.tilSectionMarks.setError("Section Marks cant be greater than Test Total Marks.");
+                            return;
+                        } else {
+                            qMarks = Float.parseFloat(mBinding.etSectionMarks.getText().toString().trim());
+                            String duration = mBinding.etQuestDuration.getText().toString().trim();
+                            if (mBinding.tilSectionMarks.getVisibility() == View.GONE) {
+                                listener.onNewSectionSaveClick(sectionName, testTotMarks, duration, pos);
+                            } else {
+                                listener.onNewSectionSaveClick(sectionName, qMarks, duration, pos);
+                            }
+                            dismiss();
+                        }
+
                     } else {
-                        mBinding.tilSectionMarks.setVisibility(View.VISIBLE);
+                        qMarks = Float.parseFloat(mBinding.etSectionMarks.getText().toString().trim());
+                        duration = mBinding.etQuestDuration.getText().toString().trim();
+                        if (mBinding.tilSectionMarks.getVisibility() == View.VISIBLE &&
+                                mBinding.etSectionMarks.getText().toString().trim().isEmpty()) {
+                            mBinding.tilSectionMarks.setError("Enter Question Marks");
+                            return;
+                        } else if (mBinding.tilSectionMarks.getVisibility() == View.VISIBLE && qMarks <= 0) {
+                            mBinding.tilSectionMarks.setError("Enter valid marks");
+                            return;
+                        } else if (mBinding.tilSectionMarks.getVisibility() == View.VISIBLE &&
+                                qMarks > testTotMarks) {
+                            mBinding.tilSectionMarks.setError("Question Marks cant be greater than Test Total Marks.");
+                            return;
+                        } else if (mBinding.tilQuestDuration.getVisibility() == View.VISIBLE &&
+                                mBinding.etQuestDuration.getText().toString().trim().isEmpty()) {
+                            mBinding.tilQuestDuration.setError("Enter Question Recommended Time.");
+                            return;
+                        } else {
+                            listener.onNewSectionSaveClick("Marks", qMarks, duration, -1);
+                            dismiss();
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+
+            mBinding.sectionRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(RadioGroup group, int checkedId) {
+                    RadioButton radioButton = group.findViewById(checkedId);
+                    if (radioButton != null) {
+                        pos = Integer.parseInt(radioButton.getTag().toString());
+                        sectionName = radioButton.getText().toString();
+                        if (sectionName.equalsIgnoreCase("None")) {
+                            mBinding.tilSectionMarks.getEditText().setText("");
+                            mBinding.tilSectionMarks.setVisibility(View.GONE);
+                        } else {
+                            mBinding.tilSectionMarks.setVisibility(View.VISIBLE);
+                        }
                     }
                 }
-            }
-        });
+            });
 
-        mBinding.btnCancel.setOnClickListener(v -> {
-            dismiss();
-        });
+            mBinding.btnCancel.setOnClickListener(v -> {
+                dismiss();
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void setSections() {
-        Gson gson = new Gson();
+        //Gson gson = new Gson();
+        //String json = TinyDB.getInstance(getActivity()).getString(Constant.TEST_SUBJECT_CHAP);
+        //TestSubjectChapterMaster testSubjectChapterMaster = gson.fromJson(json, TestSubjectChapterMaster.class);
+        //Log.i(TAG, "setSections : " + testSubjectChapterMaster.getSections());
         String json = TinyDB.getInstance(getActivity()).getString(Constant.TEST_SUBJECT_CHAP);
-        TestSubjectChapterMaster testSubjectChapterMaster = gson.fromJson(json, TestSubjectChapterMaster.class);
-        Log.i(TAG, "setSections : " + testSubjectChapterMaster.getSections());
+        Gson gson = new Gson();
+        testSubjectChapterMaster = gson.fromJson(json,
+                TestSubjectChapterMaster.class);
+        if (testSubjectChapterMaster != null)
+            sections = testSubjectChapterMaster.getSections();
         int sectionCount = 0;
+        Log.i(TAG, "setSections ndbsd: " + sections);
         String[] sectns = new String[5];
-        if (testSubjectChapterMaster.getSections() != null) {
-            sectns = testSubjectChapterMaster.getSections().split(",", -1);
-            sectionCount = sectns.length;
-        }
-        if (sectionCount == 1) {
-            mBinding.section1.setVisibility(View.VISIBLE);
-            mBinding.section1.setText(sectns[0].split("=", -1)[1]);
-        } else if (sectionCount == 2) {
-            mBinding.section1.setVisibility(View.VISIBLE);
-            mBinding.section1.setText(sectns[0].split("=", -1)[1]);
-            mBinding.section2.setVisibility(View.VISIBLE);
-            mBinding.section2.setText(sectns[1].split("=", -1)[1]);
-        } else if (sectionCount == 3) {
-            mBinding.section1.setVisibility(View.VISIBLE);
-            mBinding.section1.setText(sectns[0].split("=", -1)[1]);
-            mBinding.section2.setVisibility(View.VISIBLE);
-            mBinding.section2.setText(sectns[1].split("=", -1)[1]);
-            mBinding.section3.setVisibility(View.VISIBLE);
-            mBinding.section3.setText(sectns[2].split("=", -1)[1]);
+        if (!sections.isEmpty()) {
+            if (sections != null) {
+                sectns = sections.split(",", -1);
+                sectionCount = sectns.length;
+                Log.i(TAG, "setSections : " + sectns);
+                Log.i(TAG, "setSections : " + sectionCount);
+            }
+            if (sectionCount == 1) {
+                Log.i(TAG, "setSections First : " + sectns[0]);
+                mBinding.section1.setVisibility(View.VISIBLE);
+                mBinding.section1.setText(sectns[0].split("=", -1)[1]);
+                mBinding.section1.setTag(sectns[0].split("=", -1)[0]);
+            } else if (sectionCount == 2) {
+                mBinding.section1.setVisibility(View.VISIBLE);
+                mBinding.section1.setText(sectns[0].split("=", -1)[1]);
+                mBinding.section1.setTag(sectns[0].split("=", -1)[0]);
+
+                mBinding.section2.setVisibility(View.VISIBLE);
+                mBinding.section2.setText(sectns[1].split("=", -1)[1]);
+                mBinding.section2.setTag(sectns[1].split("=", -1)[0]);
+            } else if (sectionCount == 3) {
+                mBinding.section1.setVisibility(View.VISIBLE);
+                mBinding.section1.setText(sectns[0].split("=", -1)[1]);
+                mBinding.section1.setTag(sectns[0].split("=", -1)[0]);
+
+                mBinding.section2.setVisibility(View.VISIBLE);
+                mBinding.section2.setText(sectns[1].split("=", -1)[1]);
+                mBinding.section2.setTag(sectns[1].split("=", -1)[0]);
+
+                mBinding.section3.setVisibility(View.VISIBLE);
+                mBinding.section3.setText(sectns[2].split("=", -1)[1]);
+                mBinding.section3.setTag(sectns[2].split("=", -1)[0]);
+            } else {
+                mBinding.section0.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -143,6 +226,6 @@ public class AddNewSectionDialog extends DialogFragment implements TextWatcher {
     }
 
     public interface AddNewSectionClickListener {
-        void onNewSectionSaveClick(String name, int marks, int pos);
+        void onNewSectionSaveClick(String name, float marks, String duration, int pos);
     }
 }

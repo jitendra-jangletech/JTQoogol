@@ -17,6 +17,7 @@ import com.jangletech.qoogol.databinding.ItemQuestPracticeBinding;
 import com.jangletech.qoogol.databinding.QuestPaletItemBinding;
 import com.jangletech.qoogol.enums.QuestionSortType;
 import com.jangletech.qoogol.model.TestQuestionNew;
+import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 
 import java.util.List;
@@ -77,11 +78,11 @@ public class PracticeTestQuestPaletAdapter extends RecyclerView.Adapter<Practice
             if (practiceQuestion.getQ_quest().contains("\\")) {
                 holder.itemBinding.tvQuest.setVisibility(View.GONE);
                 holder.itemBinding.tvQuestMath.setVisibility(View.VISIBLE);
-                holder.itemBinding.tvQuestMath.setText(practiceQuestion.getQ_quest());
+                holder.itemBinding.tvQuestMath.setText(AppUtils.decodedString(practiceQuestion.getQ_quest()));
             } else {
                 holder.itemBinding.tvQuestMath.setVisibility(View.GONE);
                 holder.itemBinding.tvQuest.setVisibility(View.VISIBLE);
-                holder.itemBinding.tvQuest.setText(practiceQuestion.getQ_quest());
+                holder.itemBinding.tvQuest.setText(AppUtils.decodedString(practiceQuestion.getQ_quest()));
             }
 
             if (practiceQuestion.isTtqa_visited()) {
