@@ -409,21 +409,26 @@ public class PracticeTestActivity extends BaseActivity implements
 
     @Override
     public void onBackPressed() {
-        if (mBinding.drawerLayout.isDrawerOpen(GravityCompat.END)) {
-            mBinding.drawerLayout.closeDrawer(GravityCompat.END);
-        } else {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogStyle);
-            builder.setTitle("Pause")
-                    .setMessage("Are you sure, you want to pause this test?")
-                    .setPositiveButton("Pause", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            testCountDownTimer.cancel();
-                            submitTestQuestions("P", "0");
-                        }
-                    })
-                    .setNegativeButton("Cancel", null)
-                    .show();
+        try {
+            if (mBinding.drawerLayout.isDrawerOpen(GravityCompat.END)) {
+                mBinding.drawerLayout.closeDrawer(GravityCompat.END);
+            } else {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogStyle);
+                builder.setTitle("Pause")
+                        .setMessage("Are you sure, you want to pause this test?")
+                        .setPositiveButton("Pause", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                testCountDownTimer.cancel();
+                                submitTestQuestions("P", "0");
+                            }
+                        })
+                        .setNegativeButton("Cancel", null)
+                        .show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            finish();
         }
     }
 

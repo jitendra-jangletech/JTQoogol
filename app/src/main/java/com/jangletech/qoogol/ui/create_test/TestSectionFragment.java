@@ -82,6 +82,7 @@ public class TestSectionFragment extends BaseFragment implements AddNewSectionDi
         try {
             if (getArguments().getString(Constant.tm_id) != null) {
                 tmId = getArguments().getString(Constant.tm_id);
+                Log.d(TAG, "onActivityCreated tmId : " + tmId);
                 addTestQuestApi(null, "L", -1, -1, null);
             }
         } catch (Exception e) {
@@ -124,7 +125,8 @@ public class TestSectionFragment extends BaseFragment implements AddNewSectionDi
                     //showToast("Add Questions to Section.", Toast.LENGTH_LONG);
                     showAlert("Add Questions to Section.");
                     return;
-                } else if (getAllSectionMarks() > testTotalMarks || getAllSectionMarks() < testTotalMarks) {
+                } else if (getAllSectionMarks() >= testTotalMarks ||
+                        getAllSectionMarks() <= testTotalMarks) {
                     //showToast("All section Questions Marks should be equal to test total marks", Toast.LENGTH_LONG);
                     showAlert(msg, "Continue to submit test", new DialogInterface.OnClickListener() {
                         @Override
@@ -320,11 +322,12 @@ public class TestSectionFragment extends BaseFragment implements AddNewSectionDi
         try {
             for (LearningQuestionsNew learningQuestionsNew : newTempList) {
                 TestQuestionNew testQuestionNew = new TestQuestionNew();
-                testQuestionNew.setTq_id(String.valueOf(learningQuestionsNew.getQuestion_id()));
+                //testQuestionNew.setTq_id(String.valueOf(learningQuestionsNew.getQuestion_id()));
                 testQuestionNew.setTq_q_id(learningQuestionsNew.getQuestion_id());
                 testQuestionNew.setTq_marks(Double.parseDouble(learningQuestionsNew.getMarks()));
                 testQuestionNew.setQ_quest(learningQuestionsNew.getQuestion());
                 testQuestionNew.setQ_quest_desc(learningQuestionsNew.getQuestiondesc());
+                testQuestionNew.setType(learningQuestionsNew.getType());
                 testQuestionNew.setTq_quest_seq_num(seq);
                 testQuestionNew.setTq_duration(learningQuestionsNew.getRecommended_time());
                 testQuestionNew.setSection_id(learningQuestionsNew.getSection_id());
@@ -398,14 +401,14 @@ public class TestSectionFragment extends BaseFragment implements AddNewSectionDi
     }
 
     private void setQuestAdapter(List<TestQuestionNew> testQuestionNewList) {
-
         try {
             //List<LearningQuestionsNew> list = new ArrayList<>();
             for (TestQuestionNew testQuestionNew : testQuestionNewList) {
                 LearningQuestionsNew obj = new LearningQuestionsNew();
                 obj.setQuestion_id(testQuestionNew.getTq_q_id());
                 obj.setMarks(String.valueOf(testQuestionNew.getTq_marks()));
-                obj.setQuestion(testQuestionNew.getQ_quest_desc());
+                obj.setQuestion(testQuestionNew.getQ_quest());
+                Log.i(TAG, "setQuestAdapter Quest Desc : " + testQuestionNew.getQ_quest_desc());
                 if (testQuestionNew.getSection_id().equals("0")) {
                     learningQuestionsNewList0.add(obj);
                 }
@@ -420,22 +423,24 @@ public class TestSectionFragment extends BaseFragment implements AddNewSectionDi
                 }
             }
             Log.d(TAG, "setQuestAdapter: " + learningQuestionsNewList0.size());
-            showHideSubmitButton(learningQuestionsNewList0);
 
             if (learningQuestionsNewList0.size() > 0) {
                 mBinding.section0Layout.setVisibility(View.VISIBLE);
+                showHideSubmitButton(learningQuestionsNewList0);
                 addTestQuestionAdapter1 = new AddTestQuestionAdapter(getActivity(), learningQuestionsNewList0, false, this);
                 mBinding.directQuestions.setLayoutManager(new LinearLayoutManager(getContext()));
                 mBinding.directQuestions.setHasFixedSize(true);
                 mBinding.directQuestions.setAdapter(addTestQuestionAdapter1);
             } else if (learningQuestionsNewList1.size() > 0) {
                 mBinding.section1Layout.setVisibility(View.VISIBLE);
+                showHideSubmitButton(learningQuestionsNewList1);
                 section0QuestAdapter = new Section0QuestAdapter(getActivity(), learningQuestionsNewList1, false, this);
                 mBinding.section1Recycler.setLayoutManager(new LinearLayoutManager(getContext()));
                 mBinding.section1Recycler.setHasFixedSize(true);
                 mBinding.section1Recycler.setAdapter(section0QuestAdapter);
             } else if (learningQuestionsNewList2.size() > 0) {
                 mBinding.section2Layout.setVisibility(View.VISIBLE);
+                showHideSubmitButton(learningQuestionsNewList2);
                 section2QuestAdapter = new Section2QuestAdapter(getActivity(), learningQuestionsNewList2, false, this);
                 mBinding.section2Recycler.setLayoutManager(new LinearLayoutManager(getContext()));
                 mBinding.section2Recycler.setHasFixedSize(true);
@@ -443,6 +448,7 @@ public class TestSectionFragment extends BaseFragment implements AddNewSectionDi
 
             } else if (learningQuestionsNewList3.size() > 0) {
                 mBinding.section3Layout.setVisibility(View.VISIBLE);
+                showHideSubmitButton(learningQuestionsNewList3);
                 section3QuestAdapter = new Section3QuestAdapter(getActivity(), learningQuestionsNewList3, false, this);
                 mBinding.section3Recycler.setLayoutManager(new LinearLayoutManager(getContext()));
                 mBinding.section3Recycler.setHasFixedSize(true);

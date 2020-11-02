@@ -207,7 +207,7 @@ public class CreateTestBasicDetails extends BaseFragment implements TextWatcher,
                     showToast("Please select difficulty level.");
                     return;
                 }
-                if(getSelectedChipValue(mBinding.testCategoryChipGrp).isEmpty()) {
+                if (getSelectedChipValue(mBinding.testCategoryChipGrp).isEmpty()) {
                     showToast("Please select Category.");
                     return;
                 }
@@ -251,14 +251,19 @@ public class CreateTestBasicDetails extends BaseFragment implements TextWatcher,
         negativeMarks.put("50", "50%");
         negativeMarks.put("75", "75%");
         negativeMarks.put("100", "100%");
-
     }
 
     private void setCreatedTestDetails(TestModelNew testModelNew) {
+        Log.i(TAG, "setCreatedTestDetails Tm_Sm_Id : " + testModelNew.getTm_sm_id());
         Log.i(TAG, "setCreatedTestDetails TmId : " + testModelNew.getTm_id());
         Log.i(TAG, "setCreatedTestDetails: " + testModelNew.getTest_sections());
         Log.i(TAG, "setCreatedTestDetails Sections : " + testModelNew.getTest_sections());
-        TinyDB.getInstance(getActivity()).putString(Constant.TEST_SUBJECT_CHAP, testModelNew.getTest_sections());
+        TestSubjectChapterMaster testSubjectChapterMaster = new TestSubjectChapterMaster();
+        testSubjectChapterMaster.setSections(testModelNew.getTest_sections());
+        Gson gson = new Gson();
+        String json = gson.toJson(testSubjectChapterMaster);
+        TinyDB.getInstance(getActivity()).putString(Constant.TEST_SUBJECT_CHAP, json);
+
         category = testModelNew.getTm_catg();
         strTestType = testModelNew.getTm_type();
         difficulty = testModelNew.getTm_diff_level();
@@ -327,7 +332,6 @@ public class CreateTestBasicDetails extends BaseFragment implements TextWatcher,
             if (entry.getKey().equalsIgnoreCase(chekedKey)) {
                 chip.setChecked(true);
             }
-
             System.out.println("Key = " + entry.getKey() +
                     ", Value = " + entry.getValue());
         }
@@ -368,6 +372,7 @@ public class CreateTestBasicDetails extends BaseFragment implements TextWatcher,
             Log.i(TAG, "createTest Object : " + json);
             Log.i(TAG, "createTest Publish Date : " + new Date().toString());
             Log.i(TAG, "createTest Final TmId : " + tmId);
+            Log.i(TAG, "createTest tm_sm_id : " + testModelNew.getTm_sm_id());
             Call<CreateTestResponse> call = ApiClient.getInstance().getApi()
                     .createModifyTest(
                             AppUtils.getUserId(),
@@ -392,13 +397,13 @@ public class CreateTestBasicDetails extends BaseFragment implements TextWatcher,
                 @Override
                 public void onResponse(Call<CreateTestResponse> call, Response<CreateTestResponse> response) {
                     ProgressDialog.getInstance().dismiss();
+                    bundle.putString(Constant.tm_id, response.body().getTmId());
                     try {
                         if (response.body().getResponse() == 200) {
                             Log.i(TAG, "onResponse : " + response.body());
-                            bundle.putString(Constant.tm_id, response.body().getTmId());
                             navigationFromCreateTest(R.id.nav_create_test_section, bundle);
                         } else {
-                            //navigationFromCreateTest(R.id.nav_create_test_section, bundle);
+                            navigationFromCreateTest(R.id.nav_create_test_section, bundle);
                             AppUtils.showToast(getActivity(), null, response.body().getMessage());
                             Log.e(TAG, "Response Code : " + response.body().getResponse());
                         }

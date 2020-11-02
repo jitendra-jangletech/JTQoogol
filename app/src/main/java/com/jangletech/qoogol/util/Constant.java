@@ -761,10 +761,8 @@ public class Constant {
     public static final String ttqa_saved = "1268";    //saved  Quest
     public static final String ttqa_visited = "1269";  //visited Quest
     public static final String ttqa_attempted = "1270"; //Attempted Quest
-
     public static final String tm_attempted_by = "1198"; //test attempted by
     public static final String test_description = "1199";
-
     public static final String test_sections = "537";
 
     //City Master Data
@@ -850,11 +848,8 @@ public class Constant {
     public static final String w_media_names = "1702";
     public static final String w_media_paths = "1703";
     public static final String SCR_CO_ID = "2672";
-
     public static final String q_user_id = "1329";
-
     public static final String comment_like_flag = "1705";
-
 
     //Doubts
     public static final String crms_id = "376";

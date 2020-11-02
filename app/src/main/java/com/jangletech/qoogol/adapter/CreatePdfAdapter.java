@@ -91,9 +91,14 @@ public class CreatePdfAdapter extends RecyclerView.Adapter<CreatePdfAdapter.View
         return imageUri.size();
     }
 
-    public void updateList(List<Uri> imageList) {
-        this.imageUri = imageList;
+    public void insertItem(Uri uri) {
+        imageUri.add(imageUri.size() - 1, uri);
         notifyItemInserted(imageUri.size() - 1);
+    }
+
+    public void updateList(List<Uri> uris) {
+        imageUri = uris;
+        notifyDataSetChanged();
     }
 
     public void deleteItem(int pos) {

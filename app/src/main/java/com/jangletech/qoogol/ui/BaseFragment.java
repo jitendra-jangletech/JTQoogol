@@ -52,7 +52,6 @@ import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -90,30 +89,38 @@ public class BaseFragment extends Fragment {
     }
 
     public List<File> getAllFilesFromDirectory(String folderPath, int type) {
-        //File[] files = new File[100];
         List<File> tempList = new ArrayList<>();
-        File directory = new File(folderPath);
-        int index = 0;
-        if (type == FILE_TYPE_PDF) {
-            Log.i("Files", "Path: " + folderPath);
-            for (File file : directory.listFiles()) {
-                String[] ext = file.getAbsolutePath().split("\\.", -1);
-                if (ext[1].equalsIgnoreCase("pdf")) {
+        try {
+            File directory = new File(folderPath);
+            //int index = 0;
+            if (type == FILE_TYPE_PDF) {
+                Log.i("Files", "Path: " + folderPath);
+                for (File file : directory.listFiles()) {
+                    String[] ext = file.getAbsolutePath().split("\\.", -1);
+                    if (ext[1].equalsIgnoreCase("pdf")) {
+                        tempList.add(file);
+                    }
+                }
+            }
+            if (type == FILE_TYPE_PNG) {
+                Log.i("Files", "Path: " + folderPath);
+                for (File file : directory.listFiles()) {
+                    String[] ext = file.getAbsolutePath().split("\\.", -1);
+                    Log.i(TAG, "getAllFilesFromDirectory ext : " + ext[1]);
+                    if (ext[1].equalsIgnoreCase("png")) {
+                        tempList.add(file);
+                    }
+                }
+            }
+
+            if (type == FILE_TYPE_ANY) {
+                Log.i("Files", "Path: " + folderPath);
+                for (File file : directory.listFiles()) {
                     tempList.add(file);
                 }
             }
-        }
-        if (type == FILE_TYPE_PNG) {
-            Log.i("Files", "Path: " + folderPath);
-            for (File file : directory.listFiles()) {
-                String[] ext = file.getAbsolutePath().split("\\.", -1);
-                Log.i(TAG, "getAllFilesFromDirectory ext : " + ext[1]);
-                if (ext[1].equalsIgnoreCase("png")) {
-                    tempList.add(file);
-                }
-            }
-        } else {
-            tempList.addAll(Arrays.asList(directory.listFiles()));
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return tempList;
     }
@@ -143,11 +150,33 @@ public class BaseFragment extends Fragment {
         startActivity(intent);
     }
 
+
+    public Uri getPdfFileName(Uri uri, String ext) {
+        String[] path = uri.toString().split("\\.", -1);
+        if (ext.equalsIgnoreCase("pdf")) {
+            Log.i(TAG, "getPdfFileName Pdf File Name : " + Uri.parse(path[0] + ".pdf"));
+            return Uri.parse(path[0] + ".pdf");
+        }
+
+        if (ext.equalsIgnoreCase("png")) {
+            Log.i(TAG, "getPdfFileName Png File Name : " + Uri.parse(path[0] + ".png"));
+            return Uri.parse(path[0] + ".png");
+        }
+
+        return Uri.parse(path[0] + ".pdf");
+    }
+
+
     public void deleteFile(String path) {
+        String pdfPath = path.split("\\.", -1)[0];
         try {
             File file = new File(new URI(path));
+            File file1 = new File(new URI(pdfPath + ".pdf"));
             if (file.exists()) {
                 file.delete();
+            }
+            if (file1.exists()) {
+                file1.delete();
             }
         } catch (URISyntaxException e) {
             e.printStackTrace();
@@ -398,6 +427,7 @@ public class BaseFragment extends Fragment {
         builder.setTitle("Alert")
                 .setMessage(msg)
                 .setPositiveButton(positiveBtnText, dialogInterface)
+                .setNegativeButton("Cancel", null)
                 .setCancelable(false)
                 .show();
     }

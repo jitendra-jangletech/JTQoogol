@@ -98,7 +98,7 @@
         <item name="android:background">@drawable/button_background</item>
         <item name="android:paddingLeft">@dimen/btn_padding</item>
         <item name="android:paddingRight">@dimen/btn_padding</item>
-        <item name="android:textColor">?attr/textColorWhite</item>
+        <item name="android:textColor">@color/colorWhite</item>
         <item name="android:textStyle">bold</item>
         <item name="android:fontFamily">@font/roboto_regular</item>
         <item name="android:textSize">@dimen/textSizeMedium</item>

@@ -74,7 +74,7 @@ public class CreatePdfFragment extends BaseFragment implements CreatePdfAdapter.
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         itemDecoration = new ItemOffsetDecoration(requireActivity(), R.dimen.item_offset);
-        setPdfSamplePdfAdapter();
+        setPdfSamplePdfAdapter(1);
 
         mBinding.tvMyPdfs.setOnClickListener(v -> {
             Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_my_pdf, Bundle.EMPTY);
@@ -144,7 +144,7 @@ public class CreatePdfFragment extends BaseFragment implements CreatePdfAdapter.
 //        alertDialog.show();
 //    }
 
-    private void setPdfSamplePdfAdapter() {
+    private void setPdfSamplePdfAdapter(int flag) {
         images.clear();
         List<File> tempList = new ArrayList<>();
         tempList = getAllFilesFromDirectory(tempPdfPath, FILE_TYPE_PNG);
@@ -154,11 +154,15 @@ public class CreatePdfFragment extends BaseFragment implements CreatePdfAdapter.
                 images.add(Uri.fromFile(new File(file.getAbsolutePath())));
             }
         }
-        mAdapter = new CreatePdfAdapter(getActivity(), images, 1, this);
-        gridLayoutManager = new GridLayoutManager(getActivity(), 3);
-        mBinding.recyclerView.setLayoutManager(gridLayoutManager);
-        mBinding.recyclerView.addItemDecoration(itemDecoration);
-        mBinding.recyclerView.setAdapter(mAdapter);
+        if (flag == 1) {
+            mAdapter = new CreatePdfAdapter(getActivity(), images, 1, this);
+            gridLayoutManager = new GridLayoutManager(getActivity(), 3);
+            mBinding.recyclerView.setLayoutManager(gridLayoutManager);
+            mBinding.recyclerView.addItemDecoration(itemDecoration);
+            mBinding.recyclerView.setAdapter(mAdapter);
+        } else {
+            mAdapter.updateList(images);
+        }
     }
 
     @Override
@@ -181,8 +185,7 @@ public class CreatePdfFragment extends BaseFragment implements CreatePdfAdapter.
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (result != null && resultCode == RESULT_OK) {
                 Log.i(TAG, "onActivityResult Uri : " + result.getUri());
-                images.add(result.getUri());
-                Log.i(TAG, "onActivityResult Size : " + images.size());
+                //images.add(result.getUri());
                 createNewPdfPage(result.getUri());
             }
         }
@@ -203,8 +206,16 @@ public class CreatePdfFragment extends BaseFragment implements CreatePdfAdapter.
     @Override
     public void onItemClick(Uri uri, int position) {
         Log.i(TAG, "onItemClick: " + uri);
-        showPdf(uri);
+        Log.i(TAG, "getFileName  View Click : " + uri.toString().substring(uri.toString().lastIndexOf('/')));
+        if (uri.toString().contains("png")) {
+            //String[] path = uri.toString().split("\\.", -1);
+            //Uri myUri = Uri.parse(path[1]);
+            showPdf(getPdfFileName(uri, "pdf"));
+        } else {
+            showPdf(uri);
+        }
     }
+
 
     private void createNewPdfPage(Uri uri) {
         try {
@@ -227,8 +238,7 @@ public class CreatePdfFragment extends BaseFragment implements CreatePdfAdapter.
             pdfDocument.writeTo(new FileOutputStream(new File(finalFileName)));
             pdfDocument.close();
             writePngFile(uri, pngFileName);
-            //generateImageFromPdf(uri, pdfPageName);
-            setPdfSamplePdfAdapter();
+            setPdfSamplePdfAdapter(0);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -239,6 +249,7 @@ public class CreatePdfFragment extends BaseFragment implements CreatePdfAdapter.
         try {
             final InputStream imageStream = getActivity().getContentResolver().openInputStream(uri);
             AppUtils.readFully(imageStream, new File(path));
+            //mAdapter.insertItem(Uri.parse(path));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -270,7 +281,7 @@ public class CreatePdfFragment extends BaseFragment implements CreatePdfAdapter.
                 }
                 document.close();
                 FileUtils.deleteDirectory(new File(tempPdfPath));
-                setPdfSamplePdfAdapter();
+                setPdfSamplePdfAdapter(0);
                 showSuccessAlert(mergedPdfName);
             } catch (Exception e) {
                 e.printStackTrace();

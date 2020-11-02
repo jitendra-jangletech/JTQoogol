@@ -267,7 +267,7 @@ public class TestQuestionNew implements Serializable {
     }
 
     public String getType() {
-        return type;
+        return type != null ? type : "";
     }
 
     public void setType(String type) {
@@ -568,7 +568,7 @@ public class TestQuestionNew implements Serializable {
     }
 
     public String getQ_quest() {
-        return q_quest;
+        return q_quest != null ? q_quest : "";
     }
 
     public void setQ_quest(String q_quest) {
