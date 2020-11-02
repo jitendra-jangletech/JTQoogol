@@ -10,6 +10,7 @@
   -->
 
 <layout>
+
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -18,35 +19,35 @@
         android:orientation="vertical">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="match_parent"
             android:id="@+id/filter_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_height="wrap_content"/>
+            android:layout_alignParentEnd="true" />
 
         <androidx.appcompat.widget.AppCompatCheckBox
             android:id="@+id/selectCheckBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/filter_recycler"
             android:layout_alignParentEnd="true"
             android:layout_gravity="end"
+            android:layout_marginRight="@dimen/_20sdp"
             android:button="@null"
             android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
-           android:layout_below="@+id/filter_recycler"
-            android:text="Select All"
-            android:layout_marginRight="@dimen/_20sdp"
-            android:textColor="@color/colorBlack"
             android:gravity="center_vertical"
+            android:text="Select All"
+            android:textColor="@color/colorBlack"
             android:textSize="14sp" />
 
         <LinearLayout
-            android:visibility="gone"
             android:id="@+id/llSelect"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/filter_recycler"
             android:layout_alignParentEnd="true"
             android:orientation="horizontal"
+            android:visibility="gone"
             android:weightSum="2">
 
             <TextView
@@ -86,27 +87,27 @@
             android:id="@+id/swipeToRefresh"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/llSelect" >
+            android:layout_below="@+id/llSelect">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/contactRc"
-                android:layout_below="@+id/selectCheckBox"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_below="@+id/selectCheckBox"
                 android:background="@color/colorWhite" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <TextView
-            android:visibility="gone"
+            android:id="@+id/tvNoContacts"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/tvNoContacts"
             android:layout_centerInParent="true"
             android:layout_gravity="center_vertical"
             android:gravity="center_horizontal"
             android:text="@string/no_contacts"
             android:textColor="?attr/colorPrimary"
-            android:textSize="22sp" />
+            android:textSize="22sp"
+            android:visibility="gone" />
 
     </RelativeLayout>
 </layout>

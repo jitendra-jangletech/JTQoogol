@@ -7,10 +7,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
+import android.widget.AbsListView;
 
+import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
@@ -43,6 +46,10 @@ public class AddQuestionDialog extends Dialog implements AddTestQuestionAdapter.
     private List<LearningQuestionsNew> learningQuestionsNewList = new ArrayList<>();
     private List<LearningQuestionsNew> filteredList = new ArrayList<>();
     private HashMap<String, String> categoryMap = new HashMap<>();
+    private Boolean isScrolling = false;
+    private int currentItems, scrolledOutItems, totalItems;
+    private LinearLayoutManager linearLayoutManager;
+
 
     public AddQuestionDialog(Activity mContext, int pos, FragmentManager fragmentManager, AddQuestionDialogClickListener listener) {
         super(mContext, android.R.style.Theme_DeviceDefault_Light_DarkActionBar);
@@ -74,7 +81,7 @@ public class AddQuestionDialog extends Dialog implements AddTestQuestionAdapter.
                 || text.equalsIgnoreCase(Constant.fill_the_blanks)) {
             for (LearningQuestionsNew learningQuestionsNew : learningQuestionsNewList) {
                 Log.i(TAG, "filterList Category : " + learningQuestionsNew.getType());
-                if (learningQuestionsNew.getType().equalsIgnoreCase(id))
+                if (learningQuestionsNew.getQue_option_type().equalsIgnoreCase(id))
                     filteredList.add(learningQuestionsNew);
             }
         } else {
@@ -134,6 +141,31 @@ public class AddQuestionDialog extends Dialog implements AddTestQuestionAdapter.
             listener.onTestQuestSaveClick(learningQuestionsNewList, pos);
             dismiss();
         });
+
+//        mBinding.questionRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+//                super.onScrollStateChanged(recyclerView, newState);
+//                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+//                    isScrolling = true;
+//                }
+//            }
+//
+//            @Override
+//            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+//                super.onScrolled(recyclerView, dx, dy);
+//                currentItems = linearLayoutManager.getChildCount();
+//                totalItems = linearLayoutManager.getItemCount();
+//                scrolledOutItems = linearLayoutManager.findFirstVisibleItemPosition();
+//                if (dy > 0) {
+//                    if (isScrolling && !isMoreDataAvailable &&
+//                            (currentItems + scrolledOutItems == totalItems)) {
+//                        isScrolling = false;
+//                        getData(pageCount, "");
+//                    }
+//                }
+//            }
+//        });
     }
 
     public void fetchTestQuestList() {

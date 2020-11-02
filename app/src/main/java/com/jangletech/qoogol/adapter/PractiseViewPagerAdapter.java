@@ -1522,16 +1522,16 @@ public class PractiseViewPagerAdapter extends PagerAdapter
             }
         });
 
-        if (testQuestionNew.getType().equalsIgnoreCase(Constant.ONE_LINE_ANSWER) ||
-                testQuestionNew.getType().equalsIgnoreCase(Constant.FILL_THE_BLANKS)) {
+        if (testQuestionNew.getQue_option_type().equalsIgnoreCase(Constant.ONE_LINE_ANSWER) ||
+                testQuestionNew.getQue_option_type().equalsIgnoreCase(Constant.FILL_THE_BLANKS)) {
             Log.d(TAG, "FILL_THE_BLANKS");
             fillTheBlanksLayout.setVisibility(View.VISIBLE);
             answerCharCounter(etSinlgeineAns, tvFtbWordCounter, 10, testQuestionNew);
             etSinlgeineAns.setText(decodedAns);
         }
 
-        if (testQuestionNew.getType().equalsIgnoreCase(Constant.SHORT_ANSWER) ||
-                testQuestionNew.getType().equalsIgnoreCase(Constant.LONG_ANSWER)) {
+        if (testQuestionNew.getQue_option_type().equalsIgnoreCase(Constant.SHORT_ANSWER) ||
+                testQuestionNew.getQue_option_type().equalsIgnoreCase(Constant.LONG_ANSWER)) {
             Log.d(TAG, "SHORT_ANSWER OR LONG_ANSWER");
             multiLineAnswerLayout.setVisibility(View.VISIBLE);
             answerCharCounter(etMultiLineAns, tvWordCounter, 200, testQuestionNew);

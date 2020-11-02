@@ -3,11 +3,14 @@ package com.jangletech.qoogol.model;
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+
 import com.google.gson.annotations.SerializedName;
 import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.UtilHelper;
+
 import org.apache.commons.lang3.StringUtils;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +22,6 @@ import static com.jangletech.qoogol.util.Constant.MATCH_PAIR_IMAGE;
 import static com.jangletech.qoogol.util.Constant.MCQ;
 import static com.jangletech.qoogol.util.Constant.MCQ_IMAGE;
 import static com.jangletech.qoogol.util.Constant.MCQ_IMAGE_WITH_TEXT;
-import static com.jangletech.qoogol.util.Constant.ONE_LINE_ANSWER;
 import static com.jangletech.qoogol.util.Constant.SCQ;
 import static com.jangletech.qoogol.util.Constant.SCQ_IMAGE;
 import static com.jangletech.qoogol.util.Constant.SCQ_IMAGE_WITH_TEXT;
@@ -41,7 +43,7 @@ public class LearningQuestionsNew implements Cloneable, Serializable {
     private String section_id;
 
     public String getSection_id() {
-        return section_id!=null?section_id:"0";
+        return section_id != null ? section_id : "0";
     }
 
     public void setSection_id(String section_id) {
@@ -392,7 +394,7 @@ public class LearningQuestionsNew implements Cloneable, Serializable {
     }
 
     public String getFormatedMarks() {
-        return marks != null  && !marks.isEmpty()? "Marks : " + UtilHelper.formatMarks(Float.parseFloat(marks)) : "";
+        return marks != null && !marks.isEmpty() ? "Marks : " + UtilHelper.formatMarks(Float.parseFloat(marks)) : "";
     }
 
     public void setMarks(String marks) {

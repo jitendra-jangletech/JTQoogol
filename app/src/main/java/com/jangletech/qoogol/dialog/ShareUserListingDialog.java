@@ -40,7 +40,7 @@ import static com.jangletech.qoogol.util.Constant.sharedby;
  * Created by Pritali on 6/4/2020.
  */
 public class ShareUserListingDialog extends Dialog implements ShareUserAdapter.onItemClickListener {
-    ShareuserDialogBinding shareuserDialogBinding;
+    private ShareuserDialogBinding shareuserDialogBinding;
     private Activity context;
     ApiInterface apiService = ApiClient.getInstance().getApi();
     List<SharedQuestions> sharedQuestions;

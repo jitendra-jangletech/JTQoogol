@@ -256,7 +256,7 @@
     <string name="confirm_new_password">Confirm New Password</string>
     <string name="old_password">Current Password</string>
     <string name="select_country">Please select country.</string>
-    <string name="import_permission_desc">Provide permission to send and store your phone contacts data to our Microsoft Azure servers to enable you to send SMS invites and add them as friends in future. This data will be visible only to you and will never be shared with anyone. It will be deleted when you deactivate the account.</string>
+    <string name="import_permission_desc">Send Invites to your study buddies from your contact list to make your course exam preparation easy.  Enjoy all Qoogol features together!</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -882,5 +882,6 @@
     <string name="add_quest_duration">Question Recommended Time</string>
     <string name="preview">Preview</string>
     <string name="enter_file_name">Enter File Name</string>
+    <string name="allow_cotact">Allow Contact</string>
 
 </resources>

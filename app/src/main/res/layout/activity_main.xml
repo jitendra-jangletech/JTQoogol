@@ -261,7 +261,7 @@
                             android:drawableLeft="@drawable/ic_phone_contacts"
                             android:foreground="?attr/selectableItemBackground"
                             android:text="@string/importContacts"
-                            android:visibility="gone" />
+                            android:visibility="visible" />
 
 
                         <!--<TextView

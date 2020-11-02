@@ -140,8 +140,6 @@ public class ContactListFragment extends BaseFragment implements ContactListAdap
 
         mBinding.filterRecycler.setLayoutManager(filterlinear);
         mBinding.filterRecycler.setAdapter(filterAdapter);
-
-
     }
 
     @Override
