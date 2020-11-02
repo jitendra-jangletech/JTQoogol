@@ -579,10 +579,7 @@ public class LearningQuestionsNew implements Cloneable, Serializable {
 
     public String getImageList() {
         String imglist = "";
-
-
         List<String> img = new ArrayList<>();
-
         if (!getQue_option_type().equalsIgnoreCase(FILL_THE_BLANKS) || !getQue_option_type().equalsIgnoreCase(LONG_ANSWER) || !getQue_option_type().equalsIgnoreCase(SHORT_ANSWER)) {
             if (getQue_option_type().equalsIgnoreCase(SCQ_IMAGE) || getQue_option_type().equalsIgnoreCase(MCQ_IMAGE)) {
                 img.add(mcq1);
