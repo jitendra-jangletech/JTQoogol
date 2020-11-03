@@ -27,7 +27,6 @@
             android:padding="@dimen/_5sdp"
             app:layout_constraintTop_toBottomOf="@+id/tvAddSection">
 
-
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilSectionName"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -56,13 +55,13 @@
                 android:layout_marginTop="@dimen/_10sdp">
 
                 <RadioButton
-                    android:visibility="gone"
                     android:id="@+id/section0"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
                     android:tag="0"
-                    android:text="None" />
+                    android:text="None"
+                    android:visibility="gone" />
 
                 <RadioButton
                     android:id="@+id/section1"

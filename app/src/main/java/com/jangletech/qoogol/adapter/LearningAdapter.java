@@ -37,8 +37,6 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.card.MaterialCardView;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.VideoActivity;
-import com.jangletech.qoogol.activities.MainActivity;
-import com.jangletech.qoogol.activities.PracticeTestActivity;
 import com.jangletech.qoogol.database.repo.AppRepository;
 import com.jangletech.qoogol.databinding.LearningFillintheblanksBinding;
 import com.jangletech.qoogol.databinding.LearningItemBinding;
@@ -91,7 +89,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 
 import static com.jangletech.qoogol.util.Constant.FILL_THE_BLANKS;
-import static com.jangletech.qoogol.util.Constant.IMAGE;
 import static com.jangletech.qoogol.util.Constant.LEARNING;
 import static com.jangletech.qoogol.util.Constant.LONG_ANSWER;
 import static com.jangletech.qoogol.util.Constant.MATCH_PAIR;
@@ -99,7 +96,6 @@ import static com.jangletech.qoogol.util.Constant.MATCH_PAIR_IMAGE;
 import static com.jangletech.qoogol.util.Constant.MCQ;
 import static com.jangletech.qoogol.util.Constant.MCQ_IMAGE;
 import static com.jangletech.qoogol.util.Constant.MCQ_IMAGE_WITH_TEXT;
-import static com.jangletech.qoogol.util.Constant.ONE_LINE_ANSWER;
 import static com.jangletech.qoogol.util.Constant.SCQ;
 import static com.jangletech.qoogol.util.Constant.SCQ_IMAGE;
 import static com.jangletech.qoogol.util.Constant.SCQ_IMAGE_WITH_TEXT;
@@ -259,7 +255,7 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         try {
             LearningQuestionsNew learningQuestions = learningQuestionsList.get(position);
             if (getItemViewType(position) == Integer.parseInt(FILL_THE_BLANKS)) {
-                FilltheBlanksHolder filltheBlanksHolder = (FilltheBlanksHolder)holder;
+                FilltheBlanksHolder filltheBlanksHolder = (FilltheBlanksHolder) holder;
                 filltheBlanksHolder.mBinding.setQuestion(learningQuestions);
                 filltheBlanksHolder.mBinding.categoryTextview.setText("Fill the Blanks");
                 setData(learningQuestions, filltheBlanksHolder.mBinding.questionMathview, filltheBlanksHolder.mBinding.questionTextview,
@@ -267,12 +263,12 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         filltheBlanksHolder.mBinding.saveQue, filltheBlanksHolder.mBinding.like, filltheBlanksHolder.mBinding.favorite,
                         filltheBlanksHolder.mBinding.queImg1, filltheBlanksHolder.mBinding.imgRecycler);
             } else if (getItemViewType(position) == Integer.parseInt(LONG_ANSWER)) {
-                LongAnsHolder longAnsHolder = (LongAnsHolder)holder;
+                LongAnsHolder longAnsHolder = (LongAnsHolder) holder;
                 longAnsHolder.mBinding.setQuestion(learningQuestions);
                 longAnsHolder.mBinding.categoryTextview.setText("Long Answer");
                 setData(learningQuestions, longAnsHolder.mBinding.questionMathview, longAnsHolder.mBinding.questionTextview, longAnsHolder.mBinding.questiondescTextview, longAnsHolder.mBinding.questionMathview, longAnsHolder.mBinding.saveQue, longAnsHolder.mBinding.like, longAnsHolder.mBinding.favorite, longAnsHolder.mBinding.queImg1, longAnsHolder.mBinding.imgRecycler);
             } else if (getItemViewType(position) == Integer.parseInt(SHORT_ANSWER)) {
-                OneLineAnsHolder oneLineAnsHolder = (OneLineAnsHolder)holder;
+                OneLineAnsHolder oneLineAnsHolder = (OneLineAnsHolder) holder;
                 oneLineAnsHolder.mBinding.setQuestion(learningQuestions);
                 oneLineAnsHolder.mBinding.categoryTextview.setText("Short Answer");
                 setData(learningQuestions, oneLineAnsHolder.mBinding.questionMathview, oneLineAnsHolder.mBinding.questionTextview, oneLineAnsHolder.mBinding.questiondescTextview, oneLineAnsHolder.mBinding.questionMathview, oneLineAnsHolder.mBinding.saveQue, oneLineAnsHolder.mBinding.like, oneLineAnsHolder.mBinding.favorite, oneLineAnsHolder.mBinding.queImg1, oneLineAnsHolder.mBinding.imgRecycler);
@@ -354,14 +350,14 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
                 for (int i = 0; i < stringrray.length; i++) {
                     String s = AppUtils.getMedialUrl(activity, tempimgList.get(i).split(":", -1)[1], tempimgList.get(i).split(":", -1)[2]);
-                   imgList.add(Uri.parse(s));
+                    imgList.add(Uri.parse(s));
                 }
 
                 AdapterGallerySelectedImage galleryAdapter = new AdapterGallerySelectedImage(imgList, null, LEARNING, activity, new AdapterGallerySelectedImage.GalleryUplodaHandler() {
                     @Override
                     public void imageClick(Uri media, int position) {
                         try {
-                            if (UtilHelper.isImage(media,activity)) {
+                            if (UtilHelper.isImage(media, activity)) {
                                 Bundle bundle = new Bundle();
                                 bundle.putSerializable("urilist", (Serializable) imgList);
                                 bundle.putInt("position", 0);
@@ -400,18 +396,20 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     }
 
                     @Override
-                    public void addClick(Uri media, int position) { }
+                    public void addClick(Uri media, int position) {
+                    }
 
                     @Override
-                    public void actionRemoved(int position) {              }
+                    public void actionRemoved(int position) {
+                    }
                 });
 
                 queImg1.setVisibility(View.GONE);
-                        imgRecycler.setVisibility(View.VISIBLE);
-                        imgRecycler.setHasFixedSize(true);
-                        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false);
-                        imgRecycler.setLayoutManager(linearLayoutManager);
-                        imgRecycler.setAdapter(galleryAdapter);
+                imgRecycler.setVisibility(View.VISIBLE);
+                imgRecycler.setHasFixedSize(true);
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false);
+                imgRecycler.setLayoutManager(linearLayoutManager);
+                imgRecycler.setAdapter(galleryAdapter);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -507,7 +505,6 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         });
     }
 
-
     @Override
     public int getItemCount() {
         return learningQuestionsList.size();
@@ -526,6 +523,7 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         void onSubmitClick(int questionId, int isRight);
 
         void onLikeClick(String userId);
+
         void onFavClick();
     }
 
@@ -735,9 +733,9 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
                         } else if (call_from.equalsIgnoreCase(LONG_ANSWER)) {
                             if (response.body().getSolved_right().equalsIgnoreCase("true")) {
-                                onValueChhangeListener.onLongAnsChange(R.drawable.green_border,response.body().getA_sub_ans());
+                                onValueChhangeListener.onLongAnsChange(R.drawable.green_border, response.body().getA_sub_ans());
                             } else {
-                                onValueChhangeListener.onLongAnsChange(R.drawable.red_border,response.body().getA_sub_ans());
+                                onValueChhangeListener.onLongAnsChange(R.drawable.red_border, response.body().getA_sub_ans());
                             }
                         }
 
@@ -956,7 +954,7 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 submitFunction();
                 if (isAttempted == 1) {
                     countDownTimer.cancel();
-                    if (call_from==submit_rate)
+                    if (call_from == submit_rate)
                         displayRatingDialog(learningQuestionsList.get(getAdapterPosition()), getAdapterPosition(), this);
                     onIconClick.onSubmitClick(learningQuestions.getQuestion_id(), isSolvedRight);
                 }
@@ -1503,7 +1501,7 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 submitFunction();
                 if (isAttempted == 1) {
                     countDownTimer.cancel();
-                    if (call_from==submit_rate)
+                    if (call_from == submit_rate)
                         displayRatingDialog(learningQuestionsList.get(getAdapterPosition()), getAdapterPosition(), this);
                     onIconClick.onSubmitClick(learningQuestions.getQuestion_id(), isSolvedRight);
                 }
@@ -2005,7 +2003,7 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 submitFunction(learningQuestions);
                 if (isAttempted == 1) {
                     countDownTimer.cancel();
-                    if (call_from==submit_rate)
+                    if (call_from == submit_rate)
                         displayRatingDialog(learningQuestionsList.get(getAdapterPosition()), getAdapterPosition(), this);
                     onIconClick.onSubmitClick(learningQuestions.getQuestion_id(), isSolvedRight);
                 }
@@ -2303,7 +2301,7 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 submitFunction(learningQuestions);
                 if (isAttempted == 1) {
                     countDownTimer.cancel();
-                    if (call_from==submit_rate)
+                    if (call_from == submit_rate)
                         displayRatingDialog(learningQuestionsList.get(getAdapterPosition()), getAdapterPosition(), this);
                     onIconClick.onSubmitClick(learningQuestions.getQuestion_id(), isSolvedRight);
                 }
@@ -2578,7 +2576,7 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 submitFunction(learningQuestions);
                 if (isAttempted == 1) {
                     countDownTimer.cancel();
-                    if (call_from==submit_rate)
+                    if (call_from == submit_rate)
                         displayRatingDialog(learningQuestionsList.get(getAdapterPosition()), getAdapterPosition(), this);
                     onIconClick.onSubmitClick(learningQuestions.getQuestion_id(), isSolvedRight);
                 }
@@ -2839,7 +2837,7 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 submitFunction(learningQuestions);
                 if (isAttempted == 1) {
                     countDownTimer.cancel();
-                    if (call_from==submit_rate)
+                    if (call_from == submit_rate)
                         displayRatingDialog(learningQuestionsList.get(getAdapterPosition()), getAdapterPosition(), this);
                     onIconClick.onSubmitClick(learningQuestions.getQuestion_id(), isSolvedRight);
                 }
@@ -3087,7 +3085,7 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 submitFunction(learningQuestions);
                 if (isAttempted == 1) {
                     countDownTimer.cancel();
-                    if (call_from==submit_rate)
+                    if (call_from == submit_rate)
                         displayRatingDialog(learningQuestionsList.get(getAdapterPosition()), getAdapterPosition(), this);
                     onIconClick.onSubmitClick(learningQuestions.getQuestion_id(), isSolvedRight);
                 }
@@ -3324,7 +3322,7 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 LearningQuestionsNew learningQuestions = learningQuestionsList.get(getAdapterPosition());
                 submitFunction(learningQuestions);
                 if (isAttempted == 1) {
-                    if (call_from==submit_rate)
+                    if (call_from == submit_rate)
                         displayRatingDialog(learningQuestionsList.get(getAdapterPosition()), getAdapterPosition(), this);
                     countDownTimer.cancel();
                     onIconClick.onSubmitClick(learningQuestions.getQuestion_id(), isSolvedRight);
@@ -3544,7 +3542,7 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 submitFunction(learningQuestions);
                 if (isAttempted == 1) {
                     countDownTimer.cancel();
-                    if (call_from==submit_rate)
+                    if (call_from == submit_rate)
                         displayRatingDialog(learningQuestionsList.get(getAdapterPosition()), getAdapterPosition(), this);
                     onIconClick.onSubmitClick(learningQuestions.getQuestion_id(), isSolvedRight);
                 }
@@ -3716,7 +3714,7 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 submitFunction(learningQuestions);
                 if (isAttempted == 1) {
                     countDownTimer.cancel();
-                    if (call_from==submit_rate)
+                    if (call_from == submit_rate)
                         displayRatingDialog(learningQuestionsList.get(getAdapterPosition()), getAdapterPosition(), this);
                     onIconClick.onSubmitClick(learningQuestions.getQuestion_id(), isSolvedRight);
                 }
@@ -3855,7 +3853,7 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 submitFunction(learningQuestions);
                 if (isAttempted == 1) {
                     countDownTimer.cancel();
-                    if (call_from==submit_rate)
+                    if (call_from == submit_rate)
                         displayRatingDialog(learningQuestionsList.get(getAdapterPosition()), getAdapterPosition(), this);
                     onIconClick.onSubmitClick(learningQuestions.getQuestion_id(), isSolvedRight);
                 }
@@ -3993,7 +3991,7 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 submitFunction(learningQuestions);
                 if (isAttempted == 1) {
                     countDownTimer.cancel();
-                    if (call_from==submit_rate)
+                    if (call_from == submit_rate)
                         displayRatingDialog(learningQuestionsList.get(getAdapterPosition()), getAdapterPosition(), this);
                     onIconClick.onSubmitClick(learningQuestions.getQuestion_id(), isSolvedRight);
                 }

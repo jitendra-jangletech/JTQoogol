@@ -76,7 +76,10 @@ public class AddNewSectionDialog extends DialogFragment implements TextWatcher {
                 mBinding.tilSectionMarks.setHint("Question Marks");
                 mBinding.sectionRadioGroup.setVisibility(View.GONE);
                 mBinding.tilQuestDuration.setVisibility(View.VISIBLE);
-                mBinding.etQuestDuration.setText(duration);
+                if (duration != null && duration.isEmpty())
+                    mBinding.etQuestDuration.setText("25");
+                else
+                    mBinding.etQuestDuration.setText(duration);
             }
 
             mBinding.btnSave.setOnClickListener(v -> {

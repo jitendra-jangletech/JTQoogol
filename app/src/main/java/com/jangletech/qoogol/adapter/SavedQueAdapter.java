@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.ClipData;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -37,15 +36,12 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.card.MaterialCardView;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.VideoActivity;
-import com.jangletech.qoogol.activities.MainActivity;
-import com.jangletech.qoogol.activities.PracticeTestActivity;
 import com.jangletech.qoogol.database.repo.AppRepository;
 import com.jangletech.qoogol.databinding.RatingFeedbackBinding;
 import com.jangletech.qoogol.databinding.SavedItemBinding;
 import com.jangletech.qoogol.dialog.LikeListingDialog;
 import com.jangletech.qoogol.dialog.ProgressDialog;
 import com.jangletech.qoogol.model.LearningQuestions;
-import com.jangletech.qoogol.model.LearningQuestionsNew;
 import com.jangletech.qoogol.model.ProcessQuestion;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.retrofit.ApiInterface;
@@ -72,7 +68,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 
 import static com.jangletech.qoogol.util.Constant.FILL_THE_BLANKS;
-import static com.jangletech.qoogol.util.Constant.IMAGE;
 import static com.jangletech.qoogol.util.Constant.LEARNING;
 import static com.jangletech.qoogol.util.Constant.LONG_ANSWER;
 import static com.jangletech.qoogol.util.Constant.MATCH_PAIR;
@@ -80,7 +75,6 @@ import static com.jangletech.qoogol.util.Constant.MATCH_PAIR_IMAGE;
 import static com.jangletech.qoogol.util.Constant.MCQ;
 import static com.jangletech.qoogol.util.Constant.MCQ_IMAGE;
 import static com.jangletech.qoogol.util.Constant.MCQ_IMAGE_WITH_TEXT;
-import static com.jangletech.qoogol.util.Constant.ONE_LINE_ANSWER;
 import static com.jangletech.qoogol.util.Constant.SCQ;
 import static com.jangletech.qoogol.util.Constant.SCQ_IMAGE;
 import static com.jangletech.qoogol.util.Constant.SCQ_IMAGE_WITH_TEXT;
@@ -141,7 +135,7 @@ public class SavedQueAdapter extends RecyclerView.Adapter<SavedQueAdapter.ViewHo
 
             hideLayouts();
 
-            if (learningQuestions.getQuestion()!=null && learningQuestions.getQuestion().contains("$")) {
+            if (learningQuestions.getQuestion() != null && learningQuestions.getQuestion().contains("$")) {
                 holder.learningItemBinding.questionMathview.setVisibility(View.VISIBLE);
             } else {
                 holder.learningItemBinding.questionTextview.setVisibility(View.VISIBLE);
@@ -167,7 +161,7 @@ public class SavedQueAdapter extends RecyclerView.Adapter<SavedQueAdapter.ViewHo
                     @Override
                     public void imageClick(Uri media, int position) {
                         try {
-                            if (UtilHelper.isImage(media,activity)) {
+                            if (UtilHelper.isImage(media, activity)) {
                                 Bundle bundle = new Bundle();
                                 bundle.putSerializable("urilist", (Serializable) imgList);
                                 bundle.putInt("position", 0);
@@ -206,10 +200,12 @@ public class SavedQueAdapter extends RecyclerView.Adapter<SavedQueAdapter.ViewHo
                     }
 
                     @Override
-                    public void addClick(Uri media, int position) { }
+                    public void addClick(Uri media, int position) {
+                    }
 
                     @Override
-                    public void actionRemoved(int position) {              }
+                    public void actionRemoved(int position) {
+                    }
                 });
 
                 learningItemBinding.imgRecycler.setVisibility(View.VISIBLE);
@@ -288,8 +284,11 @@ public class SavedQueAdapter extends RecyclerView.Adapter<SavedQueAdapter.ViewHo
 
     public interface onIconClick {
         void onCommentClick(int questionId);
+
         void onShareClick(int questionId);
+
         void onSubmitClick(int questionId, int isRight);
+
         void onLikeClick(String userId);
 
     }
@@ -350,10 +349,10 @@ public class SavedQueAdapter extends RecyclerView.Adapter<SavedQueAdapter.ViewHo
                 LearningQuestions learningQuestionsNew = learningQuestionsList.get(getAdapterPosition());
                 if (learningQuestionsNew.getIsSave().equalsIgnoreCase("true")) {
                     learningQuestionsNew.setIs_fav("false");
-                    ProcessQuestionAPI(learningQuestionsNew.getQuestion_id(), 0, "save","","",getAdapterPosition(),"");
+                    ProcessQuestionAPI(learningQuestionsNew.getQuestion_id(), 0, "save", "", "", getAdapterPosition(), "");
                 } else {
                     learningQuestionsNew.setIs_fav("true");
-                    ProcessQuestionAPI(learningQuestionsNew.getQuestion_id(), 1, "save","","",getAdapterPosition(),"");
+                    ProcessQuestionAPI(learningQuestionsNew.getQuestion_id(), 1, "save", "", "", getAdapterPosition(), "");
                 }
             });
 
@@ -371,16 +370,16 @@ public class SavedQueAdapter extends RecyclerView.Adapter<SavedQueAdapter.ViewHo
             learningItemBinding.like.setOnClickListener(v -> {
                 LearningQuestions learningQuestions = learningQuestionsList.get(getAdapterPosition());
                 if (learningQuestions.getIs_liked().equalsIgnoreCase("true")) {
-                    ProcessQuestionAPI(learningQuestions.getQuestion_id(), 0, "like","","",getAdapterPosition(),"");
+                    ProcessQuestionAPI(learningQuestions.getQuestion_id(), 0, "like", "", "", getAdapterPosition(), "");
                 } else {
-                    ProcessQuestionAPI(learningQuestions.getQuestion_id(), 1, "like","","",getAdapterPosition(),"");
+                    ProcessQuestionAPI(learningQuestions.getQuestion_id(), 1, "like", "", "", getAdapterPosition(), "");
                 }
             });
 
             learningItemBinding.likeValue.setOnClickListener(v -> {
                 LearningQuestions learningQuestions = learningQuestionsList.get(getAdapterPosition());
                 if (!learningQuestions.getLikes().equalsIgnoreCase("0")) {
-                    LikeListingDialog listingDialog = new LikeListingDialog(false,activity,learningQuestions.getQuestion_id(),this::onItemCLick);
+                    LikeListingDialog listingDialog = new LikeListingDialog(false, activity, learningQuestions.getQuestion_id(), this::onItemCLick);
                     listingDialog.show();
                 }
             });
@@ -393,9 +392,9 @@ public class SavedQueAdapter extends RecyclerView.Adapter<SavedQueAdapter.ViewHo
             learningItemBinding.favorite.setOnClickListener(v -> {
                 LearningQuestions learningQuestions = learningQuestionsList.get(getAdapterPosition());
                 if (learningQuestions.getIs_fav().equalsIgnoreCase("true")) {
-                    ProcessQuestionAPI(learningQuestions.getQuestion_id(), 0, "fav","","",getAdapterPosition(),"");
+                    ProcessQuestionAPI(learningQuestions.getQuestion_id(), 0, "fav", "", "", getAdapterPosition(), "");
                 } else {
-                    ProcessQuestionAPI(learningQuestions.getQuestion_id(), 1, "fav","","",getAdapterPosition(),"");
+                    ProcessQuestionAPI(learningQuestions.getQuestion_id(), 1, "fav", "", "", getAdapterPosition(), "");
                 }
             });
 
@@ -963,7 +962,7 @@ public class SavedQueAdapter extends RecyclerView.Adapter<SavedQueAdapter.ViewHo
                     Toast.makeText(activity, "Please enter answer first.", Toast.LENGTH_SHORT).show();
                 } else {
                     isAttempted = 1;
-                    ProcessQuestionAPI(learningQuestions.getQuestion_id(), 0, SHORT_ANSWER,"","",getAdapterPosition(),learningItemBinding.singleLine.getText().toString());
+                    ProcessQuestionAPI(learningQuestions.getQuestion_id(), 0, SHORT_ANSWER, "", "", getAdapterPosition(), learningItemBinding.singleLine.getText().toString());
                 }
 
             } else if (learningQuestions.getQue_option_type().equalsIgnoreCase(LONG_ANSWER)) {
@@ -971,7 +970,7 @@ public class SavedQueAdapter extends RecyclerView.Adapter<SavedQueAdapter.ViewHo
                     Toast.makeText(activity, "Please enter answer first.", Toast.LENGTH_SHORT).show();
                 } else {
                     isAttempted = 1;
-                    ProcessQuestionAPI(learningQuestions.getQuestion_id(), 0, LONG_ANSWER,"","",getAdapterPosition(), learningItemBinding.multiLine.getText().toString());
+                    ProcessQuestionAPI(learningQuestions.getQuestion_id(), 0, LONG_ANSWER, "", "", getAdapterPosition(), learningItemBinding.multiLine.getText().toString());
                 }
 
             } else {
@@ -1104,7 +1103,7 @@ public class SavedQueAdapter extends RecyclerView.Adapter<SavedQueAdapter.ViewHo
                 } else if (learningQuestions.getQue_option_type().equalsIgnoreCase(MATCH_PAIR)) {
                     if (paired.size() != MTP_ans.size()) {
                         Toast.makeText(activity, "Select all pairs first.", Toast.LENGTH_SHORT).show();
-                    }else {
+                    } else {
                         isAttempted = 1;
                         boolean isFound = false;
                         for (Map.Entry<String, String> entry : paired.entrySet()) {
@@ -2171,7 +2170,7 @@ public class SavedQueAdapter extends RecyclerView.Adapter<SavedQueAdapter.ViewHo
             else if (call_from.equalsIgnoreCase("save"))
                 call = apiService.saveQueApi(user_id, que_id, "I", flag);
             else
-                call = apiService.submitSubjectiveQueApi(user_id, que_id, "I",answer);
+                call = apiService.submitSubjectiveQueApi(user_id, que_id, "I", answer);
 
             call.enqueue(new Callback<ProcessQuestion>() {
                 @Override
@@ -2192,18 +2191,19 @@ public class SavedQueAdapter extends RecyclerView.Adapter<SavedQueAdapter.ViewHo
                             learningItemBinding.ratingvalue.setText(response.body().getRatings() != null ? UtilHelper.roundAvoid(response.body().getRatings()) : "0");
 
                             if (call_from.equalsIgnoreCase("like")) {
-                                if (flag==0) {
+                                if (flag == 0) {
                                     Glide.with(activity).load(activity.getResources().getDrawable(R.drawable.ic_like)).into(learningItemBinding.like);
                                     learningQuestionsNew.setIs_liked("false");
                                 } else {
                                     learningQuestionsNew.setIs_liked("true");
                                     Glide.with(activity).load(activity.getResources().getDrawable(R.drawable.ic_thumb_up_black_24dp)).into(learningItemBinding.like);
                                 }
-                            }    if (call_from.equalsIgnoreCase("save")) {
+                            }
+                            if (call_from.equalsIgnoreCase("save")) {
 
                                 ExecutorService executor = Executors.newSingleThreadExecutor();
 
-                                if (flag==0) {
+                                if (flag == 0) {
                                     learningQuestionsNew.setIsSave("false");
                                     learningQuestionsList.set(position, learningQuestionsNew);
 //                                    Glide.with(activity).load(activity.getResources().getDrawable(R.drawable.ic_save_grey)).into(learningItemBinding.saveQue);
@@ -2215,7 +2215,7 @@ public class SavedQueAdapter extends RecyclerView.Adapter<SavedQueAdapter.ViewHo
                                 }
 
                             } else if (call_from.equalsIgnoreCase("fav")) {
-                                if (flag==0) {
+                                if (flag == 0) {
                                     learningQuestionsNew.setIs_fav("false");
                                     Glide.with(activity).load(activity.getResources().getDrawable(R.drawable.ic_fav)).into(learningItemBinding.favorite);
                                 } else {
@@ -2230,7 +2230,7 @@ public class SavedQueAdapter extends RecyclerView.Adapter<SavedQueAdapter.ViewHo
                                 }
                                 learningItemBinding.solutionLayout.setVisibility(View.VISIBLE);
                                 learningItemBinding.solutionDesc.setText(response.body().getA_sub_ans());
-                            } else if  (call_from.equalsIgnoreCase(LONG_ANSWER)) {
+                            } else if (call_from.equalsIgnoreCase(LONG_ANSWER)) {
                                 if (response.body().getSolved_right().equalsIgnoreCase("true")) {
                                     learningItemBinding.multiLine.setBackground(activity.getResources().getDrawable(R.drawable.green_border));
                                 } else {
@@ -2276,7 +2276,7 @@ public class SavedQueAdapter extends RecyclerView.Adapter<SavedQueAdapter.ViewHo
                 ratingFeedbackBinding.submitRating.setOnClickListener(v -> {
                     dialog.dismiss();
                     if (ratingFeedbackBinding.rating.getRating() != 0) {
-                        ProcessQuestionAPI(learningQuestionsNew.getQuestion_id(), 0, "rating", String.valueOf(ratingFeedbackBinding.rating.getRating()), ratingFeedbackBinding.feedback.getText().toString(), position,"");
+                        ProcessQuestionAPI(learningQuestionsNew.getQuestion_id(), 0, "rating", String.valueOf(ratingFeedbackBinding.rating.getRating()), ratingFeedbackBinding.feedback.getText().toString(), position, "");
                     } else {
                         Toast.makeText(activity, "Please add ratings", Toast.LENGTH_SHORT).show();
                     }

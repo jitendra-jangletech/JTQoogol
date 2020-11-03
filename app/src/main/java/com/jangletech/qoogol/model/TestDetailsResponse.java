@@ -8,6 +8,17 @@ import java.util.List;
 
 public class TestDetailsResponse implements Serializable {
 
+    @SerializedName("Message")
+    private String message;
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
     @SerializedName(Constant.tm_id)
     private String tm_id;
 

@@ -644,10 +644,10 @@ public class PractiseViewPagerAdapter extends PagerAdapter
         ConstraintLayout solutionLayout = layout.findViewById(R.id.solution_layout);
         Button btnSubmit = layout.findViewById(R.id.submit);
 
-        loadImage(testQuestionNew.getQ_mcq_op_1(), scq_img1);
-        loadImage(testQuestionNew.getQ_mcq_op_2(), scq_img2);
-        loadImage(testQuestionNew.getQ_mcq_op_3(), scq_img3);
-        loadImage(testQuestionNew.getQ_mcq_op_4(), scq_img4);
+        loadImage(AppUtils.decodedString(testQuestionNew.getQ_mcq_op_1()), scq_img1);
+        loadImage(AppUtils.decodedString(testQuestionNew.getQ_mcq_op_2()), scq_img2);
+        loadImage(AppUtils.decodedString(testQuestionNew.getQ_mcq_op_3()), scq_img3);
+        loadImage(AppUtils.decodedString(testQuestionNew.getQ_mcq_op_4()), scq_img4);
 
         //set answer if already attempted
         if (testQuestionNew.isTtqa_attempted()) {
@@ -1106,61 +1106,67 @@ public class PractiseViewPagerAdapter extends PagerAdapter
         Log.e(TAG, "initScq Option 3 : " + testQuestionNew.getQ_mcq_op_3());
         Log.e(TAG, "initScq Option 4 : " + testQuestionNew.getQ_mcq_op_4());
 
-        String opt1 = AppUtils.decodedString(testQuestionNew.getQ_mcq_op_1());
-        String opt2 = AppUtils.decodedString(testQuestionNew.getQ_mcq_op_2());
-        String opt3 = AppUtils.decodedString(testQuestionNew.getQ_mcq_op_3());
-        String opt4 = AppUtils.decodedString(testQuestionNew.getQ_mcq_op_4());
+        if (testQuestionNew.getQue_option_type().equalsIgnoreCase(Constant.SCQ)) {
+            String opt1 = AppUtils.decodedString(testQuestionNew.getQ_mcq_op_1());
+            String opt2 = AppUtils.decodedString(testQuestionNew.getQ_mcq_op_2());
+            String opt3 = AppUtils.decodedString(testQuestionNew.getQ_mcq_op_3());
+            String opt4 = AppUtils.decodedString(testQuestionNew.getQ_mcq_op_4());
 
-        if (testQuestionNew.getQ_mcq_op_1().contains("\\")) {
-            scq1.setVisibility(View.GONE);
-            scq1Math.setVisibility(View.VISIBLE);
-            scq1Math.setText(opt1);
+            if (testQuestionNew.getQ_mcq_op_1().contains("\\")) {
+                scq1.setVisibility(View.GONE);
+                scq1Math.setVisibility(View.VISIBLE);
+                scq1Math.setText(opt1);
+            } else {
+                scq1Math.setVisibility(View.GONE);
+                scq1.setVisibility(View.VISIBLE);
+                scq1.setText(opt1);
+            }
+
+            if (testQuestionNew.getQ_mcq_op_2().contains("\\")) {
+                scq2.setVisibility(View.GONE);
+                scq2Math.setVisibility(View.VISIBLE);
+                scq2Math.setText(opt2);
+            } else {
+                scq2Math.setVisibility(View.GONE);
+                scq2.setVisibility(View.VISIBLE);
+                scq2.setText(opt2);
+            }
+
+            if (testQuestionNew.getQ_mcq_op_3().contains("\\")) {
+                scq3.setVisibility(View.GONE);
+                scq3Math.setVisibility(View.VISIBLE);
+                scq3Math.setText(opt3);
+            } else {
+                scq3Math.setVisibility(View.GONE);
+                scq3.setVisibility(View.VISIBLE);
+                scq3.setText(opt3);
+            }
+
+            if (testQuestionNew.getQ_mcq_op_4().contains("\\")) {
+                scq4.setVisibility(View.GONE);
+                scq4Math.setVisibility(View.VISIBLE);
+                scq4Math.setText(opt4);
+            } else {
+                scq4Math.setVisibility(View.GONE);
+                scq4.setVisibility(View.VISIBLE);
+                scq4.setText(opt4);
+            }
+
+            if (testQuestionNew.getQ_mcq_op_5().contains("\\")) {
+                scq5.setVisibility(View.GONE);
+                scq5Math.setVisibility(View.VISIBLE);
+                scq5Math.setText(testQuestionNew.getQ_mcq_op_5());
+            } else {
+                scq4Math.setVisibility(View.GONE);
+                scq5.setVisibility(View.VISIBLE);
+                scq5.setText(testQuestionNew.getQ_mcq_op_5());
+            }
+
         } else {
             scq1Math.setVisibility(View.GONE);
-            scq1.setVisibility(View.VISIBLE);
-            scq1.setText(opt1);
-        }
-
-        if (testQuestionNew.getQ_mcq_op_2().contains("\\")) {
-            scq2.setVisibility(View.GONE);
-            scq2Math.setVisibility(View.VISIBLE);
-            scq2Math.setText(opt2);
-        } else {
             scq2Math.setVisibility(View.GONE);
-            scq2.setVisibility(View.VISIBLE);
-            scq2.setText(opt2);
-        }
-
-        if (testQuestionNew.getQ_mcq_op_3().contains("\\")) {
-            scq3.setVisibility(View.GONE);
-            scq3Math.setVisibility(View.VISIBLE);
-            scq3Math.setText(opt3);
-        } else {
-            scq3Math.setVisibility(View.GONE);
-            scq3.setVisibility(View.VISIBLE);
-            scq3.setText(opt3);
-        }
-
-        //scq4Math.setText(testQuestionNew.getQ_mcq_op_4());
-
-        if (testQuestionNew.getQ_mcq_op_4().contains("\\")) {
-            scq4.setVisibility(View.GONE);
-            scq4Math.setVisibility(View.VISIBLE);
-            scq4Math.setText(opt4);
-        } else {
-            scq4Math.setVisibility(View.GONE);
-            scq4.setVisibility(View.VISIBLE);
-            scq4.setText(opt4);
-        }
-
-        if (testQuestionNew.getQ_mcq_op_5().contains("\\")) {
-            scq5.setVisibility(View.GONE);
-            scq5Math.setVisibility(View.VISIBLE);
-            scq5Math.setText(testQuestionNew.getQ_mcq_op_5());
-        } else {
-            scq4Math.setVisibility(View.GONE);
-            scq5.setVisibility(View.VISIBLE);
-            scq5.setText(testQuestionNew.getQ_mcq_op_5());
+            scq1.setText("True");
+            scq2.setText("False");
         }
 
         if (testQuestionNew.getQ_mcq_op_3().isEmpty())

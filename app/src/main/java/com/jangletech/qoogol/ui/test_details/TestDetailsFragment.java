@@ -75,7 +75,7 @@ public class TestDetailsFragment extends BaseFragment {
                 if (qSetList != null) {
                     Log.d(TAG, "onChanged Size : " + qSetList.size());
                     qSets = qSetList;
-                    Log.d(TAG, "onChanged Test Details : "+testDetailsResponse.getTest_description());
+                    Log.d(TAG, "onChanged Test Details : " + testDetailsResponse.getTest_description());
                     mBinding.tvTestDescription.setText(testDetailsResponse.getTest_description());
                     sortQSetList(qSetList);
                 }
@@ -172,7 +172,7 @@ public class TestDetailsFragment extends BaseFragment {
                 } else if (response.body().getResponseCode().equals("501")) {
                     resetSettingAndLogout();
                 } else {
-                    showErrorDialog(requireActivity(), response.body().getResponseCode(), "");
+                    showErrorDialog(requireActivity(), response.body().getResponseCode(), response.body().getMessage());
                 }
 
             }

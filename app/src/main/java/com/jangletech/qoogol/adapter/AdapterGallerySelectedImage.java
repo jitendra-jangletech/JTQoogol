@@ -15,15 +15,12 @@ import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
 import com.jangletech.qoogol.R;
 import com.jangletech.qoogol.util.UtilHelper;
 
 import java.util.List;
 
-import static com.jangletech.qoogol.util.Constant.ADD;
 import static com.jangletech.qoogol.util.Constant.LEARNING;
 
 /*
@@ -78,7 +75,7 @@ public class AdapterGallerySelectedImage extends RecyclerView.Adapter<AdapterGal
     @Override
     public void onBindViewHolder(@NonNull GalleryViewHolder holder, int position) {
         try {
-            if (call_from==LEARNING) {
+            if (call_from == LEARNING) {
                 holder.removeItem.setVisibility(View.GONE);
             }
             CircularProgressDrawable circularProgressDrawable = new CircularProgressDrawable(mContext);
@@ -87,8 +84,8 @@ public class AdapterGallerySelectedImage extends RecyclerView.Adapter<AdapterGal
             circularProgressDrawable.start();
             Uri uri = uriList.get(position);
             if (uri != null) {
-                if (UtilHelper.isAudio(uriList.get(position),mContext)){
-                    loadImage(R.drawable.ic_mp3,holder.image);
+                if (UtilHelper.isAudio(uriList.get(position), mContext)) {
+                    loadImage(R.drawable.ic_mp3, holder.image);
                     holder.play.setVisibility(View.VISIBLE);
                     holder.play.setOnClickListener(v -> {
                         if (isplaying) {
@@ -102,7 +99,7 @@ public class AdapterGallerySelectedImage extends RecyclerView.Adapter<AdapterGal
                             if (uri.getPath() != null && !uri.getPath().isEmpty()) {
                                 try {
                                     mediaPlayer.reset();
-                                    mediaPlayer.setDataSource(mContext,uri);
+                                    mediaPlayer.setDataSource(mContext, uri);
                                     mediaPlayer.prepare();
                                     mediaPlayer.start();
                                 } catch (Exception e) {
@@ -114,9 +111,9 @@ public class AdapterGallerySelectedImage extends RecyclerView.Adapter<AdapterGal
                         }
 
                     });
-                } else if (UtilHelper.isDoc(uriList.get(position),mContext)) {
-                    loadImage(R.drawable.ic_documents,holder.image);
-                }else {
+                } else if (UtilHelper.isDoc(uriList.get(position), mContext)) {
+                    loadImage(R.drawable.ic_documents, holder.image);
+                } else {
                     Glide.with(mContext)
                             .load(uriList.get(position))
                             .dontAnimate()
@@ -137,7 +134,7 @@ public class AdapterGallerySelectedImage extends RecyclerView.Adapter<AdapterGal
             }
 
             holder.removeItem.setOnClickListener(v -> {
-                if (UtilHelper.isAudio(uriList.get(position),mContext)) {
+                if (UtilHelper.isAudio(uriList.get(position), mContext)) {
                     isplaying = false;
                     if (mediaPlayer.isPlaying())
                         mediaPlayer.stop();
@@ -149,7 +146,7 @@ public class AdapterGallerySelectedImage extends RecyclerView.Adapter<AdapterGal
         }
     }
 
-    private void loadImage(int id,ImageView img) {
+    private void loadImage(int id, ImageView img) {
         try {
             RequestOptions options = new RequestOptions()
                     .centerCrop()
