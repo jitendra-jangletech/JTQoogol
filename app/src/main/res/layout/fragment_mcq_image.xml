@@ -31,8 +31,8 @@
                 android:background="@drawable/grey_border"
                 android:gravity="top"
                 android:hint="Question"
-                android:minLines="2"
                 android:maxLines="10"
+                android:minLines="2"
                 android:textColor="@color/colorBlack"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/subject" />
@@ -45,32 +45,31 @@
                 android:background="@drawable/grey_border"
                 android:gravity="top"
                 android:hint="Question description"
-                android:minLines="3"
                 android:maxLines="10"
+                android:minLines="3"
                 android:textColor="@color/colorBlack"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/etQuestion" />
 
 
             <TextView
-                android:layout_marginTop="@dimen/_8sdp"
                 android:id="@+id/add_images"
-                android:textColor="@color/colorSkyBlue"
-                android:text="Add question media"
-                app:layout_constraintTop_toBottomOf="@+id/etQuestionDesc"
-                app:layout_constraintRight_toRightOf="parent"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:text="Add question media"
+                android:textColor="@color/colorSkyBlue"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/etQuestionDesc" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/queimg_recycler"
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_8sdp"
                 android:visibility="gone"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/add_images"
-                android:layout_height="wrap_content"/>
-
+                app:layout_constraintTop_toBottomOf="@+id/add_images" />
 
             <LinearLayout
                 android:id="@+id/imageLayout"
@@ -100,7 +99,6 @@
                         android:layout_marginLeft="@dimen/_4sdp"
                         android:padding="@dimen/_5sdp"
                         android:src="@drawable/add_grey" />
-
                 </LinearLayout>
 
                 <LinearLayout
@@ -131,11 +129,11 @@
                     android:weightSum="2">
 
                     <LinearLayout
-                        android:orientation="vertical"
-                        android:layout_marginRight="@dimen/_4sdp"
-                        android:padding="@dimen/_5sdp"
                         android:layout_width="@dimen/_135sdp"
-                        android:layout_height="@dimen/_135sdp">
+                        android:layout_height="@dimen/_135sdp"
+                        android:layout_marginRight="@dimen/_4sdp"
+                        android:orientation="vertical"
+                        android:padding="@dimen/_5sdp">
 
                         <ImageView
                             android:id="@+id/image3"
@@ -158,92 +156,92 @@
                 </LinearLayout>
 
                 <TextView
-                    android:layout_marginTop="@dimen/_15sdp"
                     android:id="@+id/additional_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:text="Additional Details:"
                     android:textColor="@color/colorBlack"
                     android:textSize="@dimen/_12ssp"
-                    android:text="Additional Details:"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/container"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    app:layout_constraintTop_toBottomOf="@+id/container" />
 
                 <LinearLayout
                     android:id="@+id/marks_layout"
                     android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/additional_label"
-                    android:layout_height="wrap_content">
+                    app:layout_constraintTop_toBottomOf="@+id/additional_label">
 
                     <EditText
-                        android:layout_width="0dp"
                         android:id="@+id/edtmarks"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/_5sdp"
                         android:layout_weight="1"
                         android:hint="Marks"
-                        android:textColor="@color/colorBlack"
-                        android:textSize="@dimen/_12ssp"
                         android:inputType="number"
                         android:maxLength="5"
                         android:text="1"
-                        android:layout_marginRight="@dimen/_5sdp"
-                        android:layout_height="wrap_content"/>
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/_12ssp" />
 
                     <EditText
-                        android:layout_width="0dp"
                         android:id="@+id/edtduration"
-                        android:hint="Duration in Sec"
-                        android:text="25"
-                        android:inputType="number"
-                        android:maxLength="5"
-                        android:textColor="@color/colorBlack"
-                        android:textSize="@dimen/_12ssp"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/_5sdp"
                         android:layout_weight="1"
-                        android:layout_height="wrap_content"/>
+                        android:hint="Duration in Sec"
+                        android:inputType="number"
+                        android:maxLength="5"
+                        android:text="25"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/_12ssp" />
 
                 </LinearLayout>
 
                 <TextView
                     android:id="@+id/diff_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_10sdp"
                     android:text="@string/menu_diff_level"
-                    android:textSize="@dimen/_12ssp"
                     android:textColor="@color/grey"
+                    android:textSize="@dimen/_12ssp"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/marks_layout"
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent"/>
+                    app:layout_constraintTop_toBottomOf="@+id/marks_layout" />
 
                 <RadioGroup
-                    app:layout_constraintTop_toBottomOf="@+id/diff_label"
-                    app:layout_constraintLeft_toLeftOf="parent"
                     android:id="@+id/radioDifflevel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/diff_label">
 
                     <RadioButton
-                        android:layout_marginEnd="@dimen/_15sdp"
                         android:id="@+id/radioEasy"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/_15sdp"
                         android:padding="@dimen/_2sdp"
                         android:text="Easy" />
 
                     <RadioButton
                         android:id="@+id/radioMedium"
-                        android:layout_marginEnd="@dimen/_15sdp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/_15sdp"
                         android:padding="@dimen/_2sdp"
                         android:text="Medium" />
 
                     <RadioButton
                         android:id="@+id/radioHard"
-                        android:layout_marginEnd="@dimen/_15sdp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/_15sdp"
                         android:padding="@dimen/_2sdp"
                         android:text="Hard" />
 
@@ -256,15 +254,15 @@
                     android:layout_marginTop="@dimen/_15sdp"
                     android:hint="@string/select_righ_ans"
                     android:maxLines="1"
-                    android:textSize="@dimen/_12ssp"
                     android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/_12ssp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/radioDifflevel" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/ans_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/ans_layout"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/answer">
 

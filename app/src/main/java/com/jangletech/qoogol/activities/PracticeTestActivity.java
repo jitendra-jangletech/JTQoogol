@@ -146,7 +146,7 @@ public class PracticeTestActivity extends BaseActivity implements
             practiceViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override
                 public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                    Log.d(TAG, "onPageScrolled: " + position);
+                    Log.d(TAG, "onPageScrolled: " + questionsNewList.get(position).getQue_option_type());
                 }
 
                 @Override
