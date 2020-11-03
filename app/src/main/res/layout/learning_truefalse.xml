@@ -356,7 +356,6 @@
                 android:id="@+id/expandable_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/img_recycler">
 
@@ -376,6 +375,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:weightSum="2"
+                        android:visibility="gone"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
 
@@ -388,7 +388,6 @@
                             android:layout_marginRight="@dimen/_5sdp"
                             android:layout_weight="1"
                             android:background="@drawable/grey_round_order"
-                            android:button="@null"
                             android:text="True"
                             android:textAlignment="center"
                             android:textColor="@color/colorSkyBlue"
@@ -404,7 +403,6 @@
                             android:layout_marginTop="@dimen/_15sdp"
                             android:layout_weight="1"
                             android:background="@drawable/grey_round_order"
-                            android:button="@null"
                             android:text="False"
                             android:textAlignment="center"
                             android:textColor="@color/colorSkyBlue"
@@ -414,7 +412,9 @@
 
 
                     <LinearLayout
+                        android:id="@+id/submitlayout"
                         android:layout_width="match_parent"
+                        android:visibility="gone"
                         android:layout_height="wrap_content"
                         app:layout_constraintLeft_toLeftOf="parent"
                         android:weightSum="2"

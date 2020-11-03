@@ -3462,6 +3462,7 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 askDoubts(getAdapterPosition());
             });
 
+
             mBinding.saveQue.setOnClickListener(v -> {
                 saveQue(getAdapterPosition(), this);
             });
@@ -3492,7 +3493,8 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     getAdapterPosition()), getAdapterPosition()));
 
             mBinding.expand.setOnClickListener(v -> {
-                mBinding.expandableLayout.setVisibility(View.VISIBLE);
+                mBinding.trueFalse.setVisibility(View.VISIBLE);
+                mBinding.submitlayout.setVisibility(View.VISIBLE);
                 mBinding.timerLayout.setVisibility(View.VISIBLE);
                 mBinding.close.setVisibility(View.VISIBLE);
                 mBinding.expand.setVisibility(View.GONE);
@@ -3502,7 +3504,8 @@ public class LearningAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             mBinding.close.setOnClickListener(v ->
             {
                 countDownTimer.cancel();
-                mBinding.expandableLayout.setVisibility(View.GONE);
+                mBinding.trueFalse.setVisibility(View.GONE);
+                mBinding.submitlayout.setVisibility(View.GONE);
                 mBinding.timerLayout.setVisibility(View.GONE);
                 mBinding.expand.setVisibility(View.VISIBLE);
                 mBinding.close.setVisibility(View.GONE);
