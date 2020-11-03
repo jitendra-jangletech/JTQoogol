@@ -535,6 +535,7 @@ public class MCQImgTextFragment extends BaseFragment implements QueMediaListener
 
     @Override
     public void onMediaReceived(int requestCode, int resultCode, Intent data, Uri photouri, int optionId) {
+        this.optionId = optionId;
         if (requestCode == GALLERY_REQUEST && resultCode == RESULT_OK && data != null) {
             try {
                 ArrayList<Uri> mArrayUri = new ArrayList<>();

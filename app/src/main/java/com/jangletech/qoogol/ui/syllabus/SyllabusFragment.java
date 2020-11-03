@@ -124,34 +124,30 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
             }
         });
 
-        mViewModel.getPreferences().observe(getViewLifecycleOwner(), new Observer<UserPreferenceResponse>() {
-            @Override
-            public void onChanged(UserPreferenceResponse userPreferences) {
-                if (userPreferences != null) {
-                    response = userPreferences;
+        mViewModel.getPreferences().observe(getViewLifecycleOwner(), userPreferences -> {
+            if (userPreferences != null) {
+                response = userPreferences;
 
-                    Log.d(TAG, "onChanged UeId : " + userPreferences.getSelectedUeId());
+                Log.d(TAG, "onChanged UeId : " + userPreferences.getSelectedUeId());
+                saveString(getActivity(), Constant.selected_ue_id, userPreferences.getSelectedUeId());
+                saveString(getActivity(), Constant.subjectName, userPreferences.getSubjectName());
+                saveString(getActivity(), Constant.chapterName1, userPreferences.getChapterName1());
+                saveString(getActivity(), Constant.chapterName2, userPreferences.getChapterName2());
+                saveString(getActivity(), Constant.chapterName3, userPreferences.getChapterName3());
 
-                    saveString(getActivity(), Constant.selected_ue_id, userPreferences.getSelectedUeId());
-                    saveString(getActivity(), Constant.subjectName, userPreferences.getSubjectName());
-                    saveString(getActivity(), Constant.chapterName1, userPreferences.getChapterName1());
-                    saveString(getActivity(), Constant.chapterName2, userPreferences.getChapterName2());
-                    saveString(getActivity(), Constant.chapterName3, userPreferences.getChapterName3());
+                mBinding.subjectsChipGrp.removeAllViews();
+                mBinding.chapterChipGrp.removeAllViews();
 
-                    mBinding.subjectsChipGrp.removeAllViews();
-                    mBinding.chapterChipGrp.removeAllViews();
+                if (userPreferences.getSubjectList() != null)
+                    prepareSubjectChips(userPreferences.getSubjectList());
+                if (userPreferences.getChapterList() != null)
+                    prepareChapterChips(userPreferences.getChapterList());
 
-                    if (userPreferences.getSubjectList() != null)
-                        prepareSubjectChips(userPreferences.getSubjectList());
-                    if (userPreferences.getChapterList() != null)
-                        prepareChapterChips(userPreferences.getChapterList());
-
-                    params.put(Constant.selected_ue_id, userPreferences.getSelectedUeId());
-                    params.put(Constant.subjectId, userPreferences.getSubjectId());
-                    params.put(Constant.chapterId1, userPreferences.getChapterId1());
-                    params.put(Constant.chapterId2, userPreferences.getChapterId2());
-                    params.put(Constant.chapterId3, userPreferences.getChapterId3());
-                }
+                params.put(Constant.selected_ue_id, userPreferences.getSelectedUeId());
+                params.put(Constant.subjectId, userPreferences.getSubjectId());
+                params.put(Constant.chapterId1, userPreferences.getChapterId1());
+                params.put(Constant.chapterId2, userPreferences.getChapterId2());
+                params.put(Constant.chapterId3, userPreferences.getChapterId3());
             }
         });
 
@@ -163,16 +159,6 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
             AddEduDialog addEduDialog = new AddEduDialog(getActivity(), null, false, this, 0);
             addEduDialog.show();
         });
-
-        /*mBinding.rootLayout.setOnClickListener(v -> {
-            if (response != null) {
-                new EducationListDialog(getActivity(), response.getSelectedUeId(), this)
-                        .show();
-            } else {
-                new EducationListDialog(getActivity(), "", this)
-                        .show();
-            }
-        });*/
     }
 
     private void setEducationListAdapter(List<Education> educationList) {
@@ -225,11 +211,6 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
     }
 
     private void prepareChapterChips(List<SyllabusChapter> list) {
-//        if (list.size() > 0) {
-//            mBinding.chapterLayout.setVisibility(View.VISIBLE);
-//        } else {
-//            mBinding.chapterLayout.setVisibility(View.GONE);
-//        }
         mBinding.chapterChipGrp.removeAllViews();
         for (int i = 0; i < list.size(); i++) {
             Chip chip = (Chip) LayoutInflater.from(mBinding.chapterChipGrp.getContext()).inflate(R.layout.chip_new, mBinding.chapterChipGrp, false);
@@ -287,6 +268,7 @@ public class SyllabusFragment extends BaseFragment implements View.OnClickListen
                 params.get(Constant.chapterId2),
                 params.get(Constant.chapterId3)
         );
+
         call.enqueue(new Callback<UserPreferenceResponse>() {
             @Override
             public void onResponse(Call<UserPreferenceResponse> call, Response<UserPreferenceResponse> response) {

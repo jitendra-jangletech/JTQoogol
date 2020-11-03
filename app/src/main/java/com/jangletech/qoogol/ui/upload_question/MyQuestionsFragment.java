@@ -193,7 +193,5 @@ public class MyQuestionsFragment extends BaseFragment implements MyQuestionsAdap
             Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_mtp_question, bundle);
         else if (learningQuestionsNew.getQue_option_type().equalsIgnoreCase(MATCH_PAIR_IMAGE))
             Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_mcq_image, bundle);
-
-
     }
 }
