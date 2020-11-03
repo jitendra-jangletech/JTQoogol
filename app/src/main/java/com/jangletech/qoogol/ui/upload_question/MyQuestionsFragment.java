@@ -110,15 +110,10 @@ public class MyQuestionsFragment extends BaseFragment implements MyQuestionsAdap
         });
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
 
-    }
 
     private void getData() {
         Call<LearningQuestResponse> call = apiService.fetchMyQuestionsApi(mSettings.getUserId(), mSettings.getUserId(), "", getDeviceId(getActivity()), qoogol, mSettings.getString(Constant.ue_id), String.valueOf(pageCount));
-
         call.enqueue(new Callback<LearningQuestResponse>() {
             @Override
             public void onResponse(Call<LearningQuestResponse> call, retrofit2.Response<LearningQuestResponse> response) {
