@@ -149,7 +149,7 @@ public class ScqUpImageFragment extends BaseFragment implements QueMediaListener
             Uri uri2 = Uri.parse(AppUtils.getMedialUrl(getActivity(), learningQuestionsNew.getMcq2().split(":", -1)[1], learningQuestionsNew.getMcq2().split(":", -1)[2]));
             mOptionsUri[0] = uri2;
             setImage(uri2, mBinding.image2);
-        }
+    }
 
 
         if (!learningQuestionsNew.getMcq3().isEmpty()) {
