@@ -58,12 +58,12 @@ public class ScanQuestionDescFragment extends BaseFragment {
     private static final String TAG = "ScanQuestionDescFragmen";
     private FragmentScanQuestDescBinding mBinding;
 
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_scan_quest_desc, container, false);
         return mBinding.getRoot();
+
     }
 
     @Override
@@ -105,7 +105,7 @@ public class ScanQuestionDescFragment extends BaseFragment {
             }).check();
         });
 
-        mBinding.Gallery.setOnClickListener(v -> {
+        mBinding.gallery.setOnClickListener(v -> {
             Dexter.withActivity(getActivity())
                     .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     .withListener(new PermissionListener() {
@@ -131,6 +131,13 @@ public class ScanQuestionDescFragment extends BaseFragment {
                             Toast.makeText(getActivity(), "Error occurred! ", Toast.LENGTH_SHORT).show())
                     .onSameThread()
                     .check();
+        });
+
+        mBinding.skip.setOnClickListener(v -> {
+            uploadQuestion.setQuestDescription("");
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("Question", uploadQuestion);
+            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_quest_type, bundle);
         });
     }
 
