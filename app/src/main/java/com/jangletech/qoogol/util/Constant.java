@@ -226,7 +226,6 @@ public class Constant {
     public static String LONG_ANSWER = "22";
     public static String FILL_THE_BLANKS = "23";
 
-
     public static final String blob_path = "425E";
     public static final String mdt_type_id = "272";
 

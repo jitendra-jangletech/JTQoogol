@@ -126,17 +126,6 @@ public class PractiseViewPagerAdapter extends PagerAdapter
         LayoutInflater inflater = LayoutInflater.from(context);
         Log.d(TAG, "instantiateItem Position : " + position);
         TestQuestionNew testQuestionNew = testQuestionNewList.get(position);
-        /*if (testQuestionNew.getType().equalsIgnoreCase(Constant.LONG_ANSWER) ||
-                testQuestionNew.getType().equalsIgnoreCase(Constant.SHORT_ANSWER) ||
-                testQuestionNew.getType().equalsIgnoreCase(Constant.FILL_THE_BLANKS) ||
-                testQuestionNew.getType().equalsIgnoreCase(Constant.ONE_LINE_ANSWER)) {
-            ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.practice_subjective, collection, false);
-            initViews(layout, testQuestionNew, position);
-            initSubjective(layout, testQuestionNew);
-            collection.addView(layout);
-            layout.setTag(position);
-            return layout;
-        } else {*/
         if (testQuestionNew.getQue_option_type().equalsIgnoreCase(Constant.SCQ) ||
                 testQuestionNew.getQue_option_type().equalsIgnoreCase(Constant.TRUE_FALSE)) {
             ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.practice_scq, collection, false);
@@ -203,6 +192,15 @@ public class PractiseViewPagerAdapter extends PagerAdapter
             return layout;
         }
 
+        if (testQuestionNew.getQue_option_type().equalsIgnoreCase(Constant.MCQ_IMAGE)) {
+            ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.fragment_mcq_image, collection, false);
+            //initViews(layout, testQuestionNew, position);
+            //initMcqImage(layout, testQuestionNew);
+            //collection.addView(layout);
+            //layout.setTag(position);
+            return layout;
+        }
+
         if (testQuestionNew.getQue_option_type().equalsIgnoreCase(Constant.LONG_ANSWER) ||
                 testQuestionNew.getQue_option_type().equalsIgnoreCase(Constant.SHORT_ANSWER) ||
                 testQuestionNew.getQue_option_type().equalsIgnoreCase(Constant.ONE_LINE_ANSWER)) {
@@ -217,152 +215,158 @@ public class PractiseViewPagerAdapter extends PagerAdapter
     }
 
     private void initMtp(View view, TestQuestionNew testQuestionNew) {
-        isB1Selected = false;
-        isB2Selected = false;
-        isB3Selected = false;
-        isB4Selected = false;
-        initPaired.clear();
-        initMtpAns.clear();
-        setPairAnswers(testQuestionNew);
-        practiceMtpBinding.a1.setOnTouchListener(new ChoiceTouchListener());
-        practiceMtpBinding.a2.setOnTouchListener(new ChoiceTouchListener());
-        practiceMtpBinding.a3.setOnTouchListener(new ChoiceTouchListener());
-        practiceMtpBinding.a4.setOnTouchListener(new ChoiceTouchListener());
+        try {
+            isB1Selected = false;
+            isB2Selected = false;
+            isB3Selected = false;
+            isB4Selected = false;
+            initPaired.clear();
+            initMtpAns.clear();
+            //setPairAnswers(testQuestionNew);
+            practiceMtpBinding.a1.setOnTouchListener(new ChoiceTouchListener());
+            practiceMtpBinding.a2.setOnTouchListener(new ChoiceTouchListener());
+            practiceMtpBinding.a3.setOnTouchListener(new ChoiceTouchListener());
+            practiceMtpBinding.a4.setOnTouchListener(new ChoiceTouchListener());
 
-        practiceMtpBinding.b1.setOnDragListener(new ChoiceDragListener());
-        practiceMtpBinding.b2.setOnDragListener(new ChoiceDragListener());
-        practiceMtpBinding.b3.setOnDragListener(new ChoiceDragListener());
-        practiceMtpBinding.b4.setOnDragListener(new ChoiceDragListener());
+            practiceMtpBinding.b1.setOnDragListener(new ChoiceDragListener());
+            practiceMtpBinding.b2.setOnDragListener(new ChoiceDragListener());
+            practiceMtpBinding.b3.setOnDragListener(new ChoiceDragListener());
+            practiceMtpBinding.b4.setOnDragListener(new ChoiceDragListener());
 
-        practiceMtpBinding.b1text.setOnDragListener(new ChoiceDragListener());
-        practiceMtpBinding.b2text.setOnDragListener(new ChoiceDragListener());
-        practiceMtpBinding.b3text.setOnDragListener(new ChoiceDragListener());
-        practiceMtpBinding.b4text.setOnDragListener(new ChoiceDragListener());
+            practiceMtpBinding.b1text.setOnDragListener(new ChoiceDragListener());
+            practiceMtpBinding.b2text.setOnDragListener(new ChoiceDragListener());
+            practiceMtpBinding.b3text.setOnDragListener(new ChoiceDragListener());
+            practiceMtpBinding.b4text.setOnDragListener(new ChoiceDragListener());
 
-        practiceMtpBinding.a1text.setText(testQuestionNew.getQ_mcq_op_1().split("::")[0]);
-        practiceMtpBinding.a2text.setText(testQuestionNew.getQ_mcq_op_2().split("::")[0]);
-        practiceMtpBinding.a3text.setText(testQuestionNew.getQ_mcq_op_3().split("::")[0]);
-        practiceMtpBinding.a4text.setText(testQuestionNew.getQ_mcq_op_4().split("::")[0]);
+            Log.i(TAG, "initMtp: " + testQuestionNew.getQ_mcq_op_1().split("::")[0]);
 
-        practiceMtpBinding.b1text.setText(testQuestionNew.getQ_mcq_op_1().split("::")[1]);
-        practiceMtpBinding.b2text.setText(testQuestionNew.getQ_mcq_op_2().split("::")[1]);
-        practiceMtpBinding.b3text.setText(testQuestionNew.getQ_mcq_op_3().split("::")[1]);
-        practiceMtpBinding.b4text.setText(testQuestionNew.getQ_mcq_op_4().split("::")[1]);
+            practiceMtpBinding.a1text.setText(testQuestionNew.getQ_mcq_op_1().split("::")[0]);
+            practiceMtpBinding.a2text.setText(testQuestionNew.getQ_mcq_op_2().split("::")[0]);
+            practiceMtpBinding.a3text.setText(testQuestionNew.getQ_mcq_op_3().split("::")[0]);
+            practiceMtpBinding.a4text.setText(testQuestionNew.getQ_mcq_op_4().split("::")[0]);
 
-        //set the pairs Text Only
-        if (testQuestionNew.isTtqa_attempted() && !testQuestionNew.getTtqa_sub_ans().isEmpty()) {
-            String[] selectedOptions = testQuestionNew.getTtqa_sub_ans().split(",", -1);
-            String[] answers = testQuestionNew.getA_sub_ans().split(",", -1);
-            for (String s : selectedOptions) {
-                if (s != null && !s.isEmpty())
-                    initPaired.put(s.split("-", -1)[0].trim(), s.split("-", -1)[1].trim());
-            }
-            for (String s : answers) {
-                if (s != null && !s.isEmpty())
-                    initMtpAns.put(s.split("-", -1)[0].trim(), s.split("-", -1)[1].trim());
-            }
-            Log.d(TAG, "initMtp initPaired : " + initPaired);
-            Log.d(TAG, "initMtp  initMtpAns : " + initMtpAns);
-            for (Map.Entry<String, String> entry : initPaired.entrySet()) {
-                for (Map.Entry<String, String> entryAns : initMtpAns.entrySet()) {
-                    Log.d(TAG, "initMtp Entry key : " + entry.getKey() + entryAns.getKey());
-                    Log.d(TAG, "initMtp Entry value : " + entry.getValue() + entryAns.getValue());
-                    if (entry.getKey().equalsIgnoreCase(entryAns.getKey()) &&
-                            entry.getValue().equalsIgnoreCase(entryAns.getValue())) {
-                        Log.d(TAG, "initMtp Matched : ");
-                        if (entryAns.getValue().equalsIgnoreCase("B1")) {
-                            setRightPair(entryAns.getValue().toLowerCase());
+            practiceMtpBinding.b1text.setText(testQuestionNew.getQ_mcq_op_1().split("::")[1]);
+            practiceMtpBinding.b2text.setText(testQuestionNew.getQ_mcq_op_2().split("::")[1]);
+            practiceMtpBinding.b3text.setText(testQuestionNew.getQ_mcq_op_3().split("::")[1]);
+            practiceMtpBinding.b4text.setText(testQuestionNew.getQ_mcq_op_4().split("::")[1]);
+
+            //set the pairs Text Only
+            if (testQuestionNew.isTtqa_attempted() && !testQuestionNew.getTtqa_sub_ans().isEmpty()) {
+                String[] selectedOptions = testQuestionNew.getTtqa_sub_ans().split(",", -1);
+                String[] answers = testQuestionNew.getA_sub_ans().split(",", -1);
+                for (String s : selectedOptions) {
+                    if (s != null && !s.isEmpty())
+                        initPaired.put(s.split("-", -1)[0].trim(), s.split("-", -1)[1].trim());
+                }
+                for (String s : answers) {
+                    if (s != null && !s.isEmpty())
+                        initMtpAns.put(s.split("-", -1)[0].trim(), s.split("-", -1)[1].trim());
+                }
+                Log.d(TAG, "initMtp initPaired : " + initPaired);
+                Log.d(TAG, "initMtp  initMtpAns : " + initMtpAns);
+                for (Map.Entry<String, String> entry : initPaired.entrySet()) {
+                    for (Map.Entry<String, String> entryAns : initMtpAns.entrySet()) {
+                        Log.d(TAG, "initMtp Entry key : " + entry.getKey() + entryAns.getKey());
+                        Log.d(TAG, "initMtp Entry value : " + entry.getValue() + entryAns.getValue());
+                        if (entry.getKey().equalsIgnoreCase(entryAns.getKey()) &&
+                                entry.getValue().equalsIgnoreCase(entryAns.getValue())) {
+                            Log.d(TAG, "initMtp Matched : ");
+                            if (entryAns.getValue().equalsIgnoreCase("B1")) {
+                                setRightPair(entryAns.getValue().toLowerCase());
+                            }
+                            if (entryAns.getValue().equalsIgnoreCase("B2")) {
+                                setRightPair(entryAns.getValue().toLowerCase());
+                            }
+                            if (entryAns.getValue().equalsIgnoreCase("B3")) {
+                                setRightPair(entryAns.getValue().toLowerCase());
+                                Log.d(TAG, "Matched : " + entry.getKey() + "-" + entry.getValue() + " = " + entryAns.getKey() + " - " + entryAns.getValue());
+                            }
+                            if (entryAns.getValue().equalsIgnoreCase("B4")) {
+                                setRightPair(entryAns.getValue().toLowerCase());
+                            }
+                        } else {
+                            setWrongPair(entryAns.getValue().toLowerCase());
                         }
-                        if (entryAns.getValue().equalsIgnoreCase("B2")) {
-                            setRightPair(entryAns.getValue().toLowerCase());
-                        }
-                        if (entryAns.getValue().equalsIgnoreCase("B3")) {
-                            setRightPair(entryAns.getValue().toLowerCase());
-                            Log.d(TAG, "Matched : " + entry.getKey() + "-" + entry.getValue() + " = " + entryAns.getKey() + " - " + entryAns.getValue());
-                        }
-                        if (entryAns.getValue().equalsIgnoreCase("B4")) {
-                            setRightPair(entryAns.getValue().toLowerCase());
-                        }
-                    } else {
-                        setWrongPair(entryAns.getValue().toLowerCase());
+                    }
+
+                    Log.e(TAG, "initMtp Value : " + entry.getValue());
+                    if (entry.getValue().equalsIgnoreCase("B1")) {
+                        //setmatchedPair(entry.getKey().toLowerCase(), context.getResources().getDrawable(R.drawable.ic_mtp1));
+                        Log.e(TAG, "Pairs :  " + entry.getKey() + " => " + entry.getValue());
+                        practiceMtpBinding.a2Img.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_mtp1));
+                        practiceMtpBinding.b1Img.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_mtp1));
+                    }
+                    if (entry.getValue().equalsIgnoreCase("B2")) {
+                        Log.e(TAG, "Pairs :  " + entry.getKey() + " => " + entry.getValue());
+                        //setmatchedPair(entry.getKey().toLowerCase(), context.getResources().getDrawable(R.drawable.ic_mtp2));
+                        practiceMtpBinding.a3Img.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_mtp2));
+                        practiceMtpBinding.b2Img.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_mtp2));
+                    }
+                    if (entry.getValue().equalsIgnoreCase("B3")) {
+                        Log.e(TAG, "Pairs :  " + entry.getKey() + " => " + entry.getValue());
+                        //setmatchedPair(entry.getKey().toLowerCase(), context.getResources().getDrawable(R.drawable.ic_mtp3));
+                        practiceMtpBinding.b3Img.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_mtp3));
+                        practiceMtpBinding.a1Img.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_mtp3));
+                    }
+                    if (entry.getValue().equalsIgnoreCase("B4")) {
+                        Log.e(TAG, "Pairs :  " + entry.getKey() + " => " + entry.getValue());
+                        //setmatchedPair(entry.getKey().toLowerCase(), context.getResources().getDrawable(R.drawable.ic_mtp4));
+                        practiceMtpBinding.a1Img.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_mtp3));
+                        practiceMtpBinding.b4Img.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_mtp4));
                     }
                 }
-
-                Log.e(TAG, "initMtp Value : " + entry.getValue());
-                if (entry.getValue().equalsIgnoreCase("B1")) {
-                    //setmatchedPair(entry.getKey().toLowerCase(), context.getResources().getDrawable(R.drawable.ic_mtp1));
-                    Log.e(TAG, "Pairs :  " + entry.getKey() + " => " + entry.getValue());
-                    practiceMtpBinding.a2Img.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_mtp1));
-                    practiceMtpBinding.b1Img.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_mtp1));
-                }
-                if (entry.getValue().equalsIgnoreCase("B2")) {
-                    Log.e(TAG, "Pairs :  " + entry.getKey() + " => " + entry.getValue());
-                    //setmatchedPair(entry.getKey().toLowerCase(), context.getResources().getDrawable(R.drawable.ic_mtp2));
-                    practiceMtpBinding.a3Img.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_mtp2));
-                    practiceMtpBinding.b2Img.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_mtp2));
-                }
-                if (entry.getValue().equalsIgnoreCase("B3")) {
-                    Log.e(TAG, "Pairs :  " + entry.getKey() + " => " + entry.getValue());
-                    //setmatchedPair(entry.getKey().toLowerCase(), context.getResources().getDrawable(R.drawable.ic_mtp3));
-                    practiceMtpBinding.b3Img.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_mtp3));
-                    practiceMtpBinding.a1Img.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_mtp3));
-                }
-                if (entry.getValue().equalsIgnoreCase("B4")) {
-                    Log.e(TAG, "Pairs :  " + entry.getKey() + " => " + entry.getValue());
-                    //setmatchedPair(entry.getKey().toLowerCase(), context.getResources().getDrawable(R.drawable.ic_mtp4));
-                    practiceMtpBinding.a1Img.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_mtp3));
-                    practiceMtpBinding.b4Img.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_mtp4));
-                }
             }
+
+            practiceMtpBinding.resetLabel.setOnClickListener(v -> {
+                reset(Constant.MATCH_PAIR);
+            });
+
+            practiceMtpBinding.reset.setOnClickListener(v -> {
+                reset(Constant.MATCH_PAIR);
+            });
+
+            practiceMtpBinding.submit.setOnClickListener(v -> {
+                Log.e(TAG, "initMtp Selection : " + isB1Selected + "," + isB2Selected + "," + isB3Selected + "," + isB4Selected);
+                String selectedPairs = "";
+                if (!isB1Selected || !isB2Selected || !isB3Selected || !isB4Selected) {
+                    showToast("Select all pairs first.");
+                    //Toast.makeText(x, "Select all pairs first.", Toast.LENGTH_SHORT).show();
+                } else {
+                    //isAttempted = 1;
+                    boolean isFound = false;
+                    Log.d(TAG, "initMtp Paired : " + paired);
+                    for (Map.Entry<String, String> entry : paired.entrySet()) {
+                        //Iterator ansIterator = MTP_ans.entrySet().iterator();
+                        String value = entry.getValue();
+                        String key = entry.getKey();
+                        selectedPairs = selectedPairs + key.toUpperCase() + "-" + value.toUpperCase() + ",";
+                        Log.d(TAG, "initMtp Value : " + key + "-" + value);
+                        for (Map.Entry<String, String> ansentry : MTP_ans.entrySet()) {
+                            if (entry.equals(ansentry)) {
+                                isFound = true;
+                                break;
+                            }
+                        }
+                        if (isFound) {
+                            isFound = false;
+                            setRightPair(value);
+                        } else {
+                            // isSolvedRight = 0;
+                            setWrongPair(value);
+                        }
+                    }
+                    Log.d(TAG, "initMtp Ends with Comma : " + selectedPairs.endsWith(","));
+                    if (selectedPairs.startsWith(","))
+                        selectedPairs.replaceFirst(",", "");
+                    if (selectedPairs.endsWith(","))
+                        selectedPairs = selectedPairs.substring(0, selectedPairs.length() - 1);
+
+                    submitAnswerToServer(testQuestionNew, selectedPairs, Constant.MATCH_PAIR);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        practiceMtpBinding.resetLabel.setOnClickListener(v -> {
-            reset(Constant.MATCH_PAIR);
-        });
-
-        practiceMtpBinding.reset.setOnClickListener(v -> {
-            reset(Constant.MATCH_PAIR);
-        });
-
-        practiceMtpBinding.submit.setOnClickListener(v -> {
-            Log.e(TAG, "initMtp Selection : " + isB1Selected + "," + isB2Selected + "," + isB3Selected + "," + isB4Selected);
-            String selectedPairs = "";
-            if (!isB1Selected || !isB2Selected || !isB3Selected || !isB4Selected) {
-                showToast("Select all pairs first.");
-                //Toast.makeText(x, "Select all pairs first.", Toast.LENGTH_SHORT).show();
-            } else {
-                //isAttempted = 1;
-                boolean isFound = false;
-                Log.d(TAG, "initMtp Paired : " + paired);
-                for (Map.Entry<String, String> entry : paired.entrySet()) {
-                    //Iterator ansIterator = MTP_ans.entrySet().iterator();
-                    String value = entry.getValue();
-                    String key = entry.getKey();
-                    selectedPairs = selectedPairs + key.toUpperCase() + "-" + value.toUpperCase() + ",";
-                    Log.d(TAG, "initMtp Value : " + key + "-" + value);
-                    for (Map.Entry<String, String> ansentry : MTP_ans.entrySet()) {
-                        if (entry.equals(ansentry)) {
-                            isFound = true;
-                            break;
-                        }
-                    }
-                    if (isFound) {
-                        isFound = false;
-                        setRightPair(value);
-                    } else {
-                        // isSolvedRight = 0;
-                        setWrongPair(value);
-                    }
-                }
-                Log.d(TAG, "initMtp Ends with Comma : " + selectedPairs.endsWith(","));
-                if (selectedPairs.startsWith(","))
-                    selectedPairs.replaceFirst(",", "");
-                if (selectedPairs.endsWith(","))
-                    selectedPairs = selectedPairs.substring(0, selectedPairs.length() - 1);
-
-                submitAnswerToServer(testQuestionNew, selectedPairs, Constant.MATCH_PAIR);
-            }
-        });
     }
 
     private void setPairAnswers(TestQuestionNew testQuestionNew) {
@@ -383,191 +387,198 @@ public class PractiseViewPagerAdapter extends PagerAdapter
     }
 
     private void initMtpImage(TestQuestionNew testQuestionNew) {
+        try {
+            initPaired.clear();
+            initMtpAns.clear();
 
-        initPaired.clear();
-        initMtpAns.clear();
+            practiceMtpImageBinding.aMtp1.setOnTouchListener(new ChoiceTouchListener());
+            practiceMtpImageBinding.aMtp2.setOnTouchListener(new ChoiceTouchListener());
+            practiceMtpImageBinding.aMtp3.setOnTouchListener(new ChoiceTouchListener());
+            practiceMtpImageBinding.aMtp4.setOnTouchListener(new ChoiceTouchListener());
 
-        practiceMtpImageBinding.aMtp1.setOnTouchListener(new ChoiceTouchListener());
-        practiceMtpImageBinding.aMtp2.setOnTouchListener(new ChoiceTouchListener());
-        practiceMtpImageBinding.aMtp3.setOnTouchListener(new ChoiceTouchListener());
-        practiceMtpImageBinding.aMtp4.setOnTouchListener(new ChoiceTouchListener());
+            practiceMtpImageBinding.bMtp1.setOnDragListener(new ImgChoiceDragListener());
+            practiceMtpImageBinding.bMtp2.setOnDragListener(new ImgChoiceDragListener());
+            practiceMtpImageBinding.bMtp3.setOnDragListener(new ImgChoiceDragListener());
+            practiceMtpImageBinding.bMtp4.setOnDragListener(new ImgChoiceDragListener());
 
-        practiceMtpImageBinding.bMtp1.setOnDragListener(new ImgChoiceDragListener());
-        practiceMtpImageBinding.bMtp2.setOnDragListener(new ImgChoiceDragListener());
-        practiceMtpImageBinding.bMtp3.setOnDragListener(new ImgChoiceDragListener());
-        practiceMtpImageBinding.bMtp4.setOnDragListener(new ImgChoiceDragListener());
+            Log.d(TAG, "initMtpImage: " + Constant.PRODUCTION_BASE_FILE_API + testQuestionNew.getQ_mcq_op_1().split("::", -1)[0]);
+            Glide.with(context).load(Constant.PRODUCTION_BASE_FILE_API + testQuestionNew.getQ_mcq_op_1().split("::", -1)[0].replace("png", "PNG")).into(practiceMtpImageBinding.aMtp1);
+            Glide.with(context).load(Constant.PRODUCTION_BASE_FILE_API + testQuestionNew.getQ_mcq_op_2().split("::", -1)[0].replace("png", "PNG")).into(practiceMtpImageBinding.aMtp2);
+            Glide.with(context).load(Constant.PRODUCTION_BASE_FILE_API + testQuestionNew.getQ_mcq_op_3().split("::", -1)[0].replace("png", "PNG")).into(practiceMtpImageBinding.aMtp3);
 
-        Log.d(TAG, "initMtpImage: " + Constant.PRODUCTION_BASE_FILE_API + testQuestionNew.getQ_mcq_op_1().split("::", -1)[0]);
-        Glide.with(context).load(Constant.PRODUCTION_BASE_FILE_API + testQuestionNew.getQ_mcq_op_1().split("::", -1)[0].replace("png", "PNG")).into(practiceMtpImageBinding.aMtp1);
-        Glide.with(context).load(Constant.PRODUCTION_BASE_FILE_API + testQuestionNew.getQ_mcq_op_2().split("::", -1)[0].replace("png", "PNG")).into(practiceMtpImageBinding.aMtp2);
-        Glide.with(context).load(Constant.PRODUCTION_BASE_FILE_API + testQuestionNew.getQ_mcq_op_3().split("::", -1)[0].replace("png", "PNG")).into(practiceMtpImageBinding.aMtp3);
+            Glide.with(context).load(Constant.PRODUCTION_BASE_FILE_API + testQuestionNew.getQ_mcq_op_1().split("::", -1)[1].replace("png", "PNG")).into(practiceMtpImageBinding.bMtp1);
+            Glide.with(context).load(Constant.PRODUCTION_BASE_FILE_API + testQuestionNew.getQ_mcq_op_2().split("::", -1)[1].replace("png", "PNG")).into(practiceMtpImageBinding.bMtp2);
+            Glide.with(context).load(Constant.PRODUCTION_BASE_FILE_API + testQuestionNew.getQ_mcq_op_3().split("::", -1)[1].replace("png", "PNG")).into(practiceMtpImageBinding.bMtp3);
 
-        Glide.with(context).load(Constant.PRODUCTION_BASE_FILE_API + testQuestionNew.getQ_mcq_op_1().split("::", -1)[1].replace("png", "PNG")).into(practiceMtpImageBinding.bMtp1);
-        Glide.with(context).load(Constant.PRODUCTION_BASE_FILE_API + testQuestionNew.getQ_mcq_op_2().split("::", -1)[1].replace("png", "PNG")).into(practiceMtpImageBinding.bMtp2);
-        Glide.with(context).load(Constant.PRODUCTION_BASE_FILE_API + testQuestionNew.getQ_mcq_op_3().split("::", -1)[1].replace("png", "PNG")).into(practiceMtpImageBinding.bMtp3);
+            if (testQuestionNew.isTtqa_attempted() && !testQuestionNew.getTtqa_sub_ans().isEmpty()) {
+                String[] selectedOptions = testQuestionNew.getTtqa_sub_ans().split(",", -1);
+                String[] answers = testQuestionNew.getA_sub_ans().split(",", -1);
+                for (String s : selectedOptions) {
+                    if (s != null && !s.isEmpty())
+                        initPaired.put(s.split("-", -1)[0].trim(), s.split("-", -1)[1].trim());
+                }
+                for (String s : answers) {
+                    if (s != null && !s.isEmpty())
+                        initMtpAns.put(s.split("-", -1)[0].trim(), s.split("-", -1)[1].trim());
+                }
+                Log.d(TAG, "initMtp initPaired : " + initPaired);
+                Log.d(TAG, "initMtp  initMtpAns : " + initMtpAns);
+                for (Map.Entry<String, String> entry : initPaired.entrySet()) {
 
-        if (testQuestionNew.isTtqa_attempted() && !testQuestionNew.getTtqa_sub_ans().isEmpty()) {
-            String[] selectedOptions = testQuestionNew.getTtqa_sub_ans().split(",", -1);
-            String[] answers = testQuestionNew.getA_sub_ans().split(",", -1);
-            for (String s : selectedOptions) {
-                if (s != null && !s.isEmpty())
-                    initPaired.put(s.split("-", -1)[0].trim(), s.split("-", -1)[1].trim());
-            }
-            for (String s : answers) {
-                if (s != null && !s.isEmpty())
-                    initMtpAns.put(s.split("-", -1)[0].trim(), s.split("-", -1)[1].trim());
-            }
-            Log.d(TAG, "initMtp initPaired : " + initPaired);
-            Log.d(TAG, "initMtp  initMtpAns : " + initMtpAns);
-            for (Map.Entry<String, String> entry : initPaired.entrySet()) {
-
-                for (Map.Entry<String, String> entryAns : initMtpAns.entrySet()) {
-                    Log.d(TAG, "initMtp Entry key : " + entry.getKey() + entryAns.getKey());
-                    Log.d(TAG, "initMtp Entry value : " + entry.getValue() + entryAns.getValue());
-                    if (entry.getKey().equalsIgnoreCase(entryAns.getKey()) &&
-                            entry.getValue().equalsIgnoreCase(entryAns.getValue())) {
-                        Log.d(TAG, "initMtp Matched : ");
-                        if (entryAns.getValue().equalsIgnoreCase("B1")) {
-                            setRightPair(entryAns.getValue().toLowerCase());
+                    for (Map.Entry<String, String> entryAns : initMtpAns.entrySet()) {
+                        Log.d(TAG, "initMtp Entry key : " + entry.getKey() + entryAns.getKey());
+                        Log.d(TAG, "initMtp Entry value : " + entry.getValue() + entryAns.getValue());
+                        if (entry.getKey().equalsIgnoreCase(entryAns.getKey()) &&
+                                entry.getValue().equalsIgnoreCase(entryAns.getValue())) {
+                            Log.d(TAG, "initMtp Matched : ");
+                            if (entryAns.getValue().equalsIgnoreCase("B1")) {
+                                setRightPair(entryAns.getValue().toLowerCase());
+                            }
+                            if (entryAns.getValue().equalsIgnoreCase("B2")) {
+                                setRightPair(entryAns.getValue().toLowerCase());
+                            }
+                            if (entryAns.getValue().equalsIgnoreCase("B3")) {
+                                setRightPair(entryAns.getValue().toLowerCase());
+                            }
+                            if (entryAns.getValue().equalsIgnoreCase("B4")) {
+                                setRightPair(entryAns.getValue().toLowerCase());
+                            }
+                        } else {
+                            setWrongPair(entryAns.getValue().toLowerCase());
                         }
-                        if (entryAns.getValue().equalsIgnoreCase("B2")) {
-                            setRightPair(entryAns.getValue().toLowerCase());
-                        }
-                        if (entryAns.getValue().equalsIgnoreCase("B3")) {
-                            setRightPair(entryAns.getValue().toLowerCase());
-                        }
-                        if (entryAns.getValue().equalsIgnoreCase("B4")) {
-                            setRightPair(entryAns.getValue().toLowerCase());
-                        }
-                    } else {
-                        setWrongPair(entryAns.getValue().toLowerCase());
+                    }
+
+                    Log.e(TAG, "initMtpImage Value : " + entry.getValue());
+                    if (entry.getValue().equalsIgnoreCase("B1")) {
+                        setmatchedPair(entry.getKey().toLowerCase(), context.getResources().getDrawable(R.drawable.ic_mtp1));
+                        practiceMtpBinding.b1Img.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_mtp1));
+                    }
+                    if (entry.getValue().equalsIgnoreCase("B2")) {
+                        setmatchedPair(entry.getKey().toLowerCase(), context.getResources().getDrawable(R.drawable.ic_mtp2));
+                        practiceMtpBinding.b2Img.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_mtp2));
+                    }
+                    if (entry.getValue().equalsIgnoreCase("B3")) {
+                        setmatchedPair(entry.getKey().toLowerCase(), context.getResources().getDrawable(R.drawable.ic_mtp3));
+                        practiceMtpBinding.b3Img.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_mtp3));
+                    }
+                    if (entry.getValue().equalsIgnoreCase("B4")) {
+                        setmatchedPair(entry.getKey().toLowerCase(), context.getResources().getDrawable(R.drawable.ic_mtp4));
+                        practiceMtpBinding.b4Img.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_mtp4));
                     }
                 }
-
-                Log.e(TAG, "initMtpImage Value : " + entry.getValue());
-                if (entry.getValue().equalsIgnoreCase("B1")) {
-                    setmatchedPair(entry.getKey().toLowerCase(), context.getResources().getDrawable(R.drawable.ic_mtp1));
-                    practiceMtpBinding.b1Img.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_mtp1));
-                }
-                if (entry.getValue().equalsIgnoreCase("B2")) {
-                    setmatchedPair(entry.getKey().toLowerCase(), context.getResources().getDrawable(R.drawable.ic_mtp2));
-                    practiceMtpBinding.b2Img.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_mtp2));
-                }
-                if (entry.getValue().equalsIgnoreCase("B3")) {
-                    setmatchedPair(entry.getKey().toLowerCase(), context.getResources().getDrawable(R.drawable.ic_mtp3));
-                    practiceMtpBinding.b3Img.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_mtp3));
-                }
-                if (entry.getValue().equalsIgnoreCase("B4")) {
-                    setmatchedPair(entry.getKey().toLowerCase(), context.getResources().getDrawable(R.drawable.ic_mtp4));
-                    practiceMtpBinding.b4Img.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_mtp4));
-                }
             }
+
+            practiceMtpImageBinding.resetLabel.setOnClickListener(v -> {
+                reset(Constant.MATCH_PAIR_IMAGE);
+            });
+
+            practiceMtpImageBinding.reset.setOnClickListener(v -> {
+                reset(Constant.MATCH_PAIR_IMAGE);
+            });
+
+            practiceMtpImageBinding.submit.setOnClickListener(v -> {
+                String selectedPairs = "";
+                if (!isB1Selected || !isB2Selected || !isB3Selected) {
+                    showToast("Select all pairs first.");
+                } else {
+                    boolean isFound = false;
+                    for (Map.Entry<String, String> entry : imgpaired.entrySet()) {
+                        String value = entry.getValue();
+                        String key = entry.getKey();
+                        selectedPairs = selectedPairs + key.toUpperCase() + "-" + value.toUpperCase() + ",";
+                        Log.d(TAG, "initMtp Value : " + key + "-" + value);
+                        for (Map.Entry<String, String> ansentry : MTP_ans.entrySet()) {
+                            if (entry.equals(ansentry)) {
+                                isFound = true;
+                                break;
+                            }
+                        }
+                        if (isFound) {
+                            isFound = false;
+                            setImgRightPair(value);
+                        } else {
+                            //isSolvedRight = 0;
+                            setImgWrongPair(value);
+                        }
+                    }
+                    //Log.d(TAG, "initMtp Ends with Comma : " + selectedPairs.endsWith(","));
+                    if (!testQuestionNew.getA_sub_ans().contains("A4")) {
+                        selectedPairs.replace("A4", "");
+                        selectedPairs.replace("B4", "");
+                    }
+                    if (selectedPairs.startsWith(","))
+                        selectedPairs.replaceFirst(",", "");
+                    if (selectedPairs.endsWith(","))
+                        selectedPairs = selectedPairs.substring(0, selectedPairs.length() - 1);
+
+                    submitAnswerToServer(testQuestionNew, selectedPairs, Constant.MATCH_PAIR_IMAGE);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        practiceMtpImageBinding.resetLabel.setOnClickListener(v -> {
-            reset(Constant.MATCH_PAIR_IMAGE);
-        });
-
-        practiceMtpImageBinding.reset.setOnClickListener(v -> {
-            reset(Constant.MATCH_PAIR_IMAGE);
-        });
-
-        practiceMtpImageBinding.submit.setOnClickListener(v -> {
-            String selectedPairs = "";
-            if (!isB1Selected || !isB2Selected || !isB3Selected) {
-                showToast("Select all pairs first.");
-            } else {
-                boolean isFound = false;
-                for (Map.Entry<String, String> entry : imgpaired.entrySet()) {
-                    String value = entry.getValue();
-                    String key = entry.getKey();
-                    selectedPairs = selectedPairs + key.toUpperCase() + "-" + value.toUpperCase() + ",";
-                    Log.d(TAG, "initMtp Value : " + key + "-" + value);
-                    for (Map.Entry<String, String> ansentry : MTP_ans.entrySet()) {
-                        if (entry.equals(ansentry)) {
-                            isFound = true;
-                            break;
-                        }
-                    }
-                    if (isFound) {
-                        isFound = false;
-                        setImgRightPair(value);
-                    } else {
-                        //isSolvedRight = 0;
-                        setImgWrongPair(value);
-                    }
-                }
-                //Log.d(TAG, "initMtp Ends with Comma : " + selectedPairs.endsWith(","));
-                if (!testQuestionNew.getA_sub_ans().contains("A4")) {
-                    selectedPairs.replace("A4", "");
-                    selectedPairs.replace("B4", "");
-                }
-                if (selectedPairs.startsWith(","))
-                    selectedPairs.replaceFirst(",", "");
-                if (selectedPairs.endsWith(","))
-                    selectedPairs = selectedPairs.substring(0, selectedPairs.length() - 1);
-
-                submitAnswerToServer(testQuestionNew, selectedPairs, Constant.MATCH_PAIR_IMAGE);
-            }
-        });
     }
 
     private void initFillTheBlanks(ViewGroup layout, TestQuestionNew testQuestionNew) {
-        ConstraintLayout solutionLayout = layout.findViewById(R.id.solution_layout);
-        EditText etFillTheBlanks = layout.findViewById(R.id.fillTheBlanksEditText);
-        ImageView fibImg = layout.findViewById(R.id.fib_img);
-        Log.d(TAG, "FILL_THE_BLANKS");
+        try {
+            ConstraintLayout solutionLayout = layout.findViewById(R.id.solution_layout);
+            EditText etFillTheBlanks = layout.findViewById(R.id.fillTheBlanksEditText);
+            ImageView fibImg = layout.findViewById(R.id.fib_img);
+            Log.d(TAG, "FILL_THE_BLANKS");
 
-        etFillTheBlanks.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            etFillTheBlanks.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-            }
+                }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-            }
+                }
 
-            @Override
-            public void afterTextChanged(Editable s) {
-                testQuestionNew.setTtqa_sub_ans(AppUtils.encodedString(s.toString()));
-            }
-        });
+                @Override
+                public void afterTextChanged(Editable s) {
+                    testQuestionNew.setTtqa_sub_ans(AppUtils.encodedString(s.toString()));
+                }
+            });
 
-        Button btnSubmit = layout.findViewById(R.id.submit);
+            Button btnSubmit = layout.findViewById(R.id.submit);
 
-        if (testQuestionNew.isTtqa_attempted()) {
-            etFillTheBlanks.setText(AppUtils.decodedString(testQuestionNew.getTtqa_sub_ans()));
-            solutionLayout.setVisibility(View.VISIBLE);
-            fibImg.setVisibility(View.VISIBLE);
-            if (testQuestionNew.getA_sub_ans().equalsIgnoreCase(AppUtils.decodedString(testQuestionNew.getTtqa_sub_ans()))) {
-                fibImg.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_right));
-                testQuestionNew.setAnsweredRight(true);
-            } else {
-                fibImg.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_wrong));
-                testQuestionNew.setAnsweredRight(false);
-            }
-        }
-
-        btnSubmit.setOnClickListener(v -> {
-            String strAnswer = etFillTheBlanks.getText().toString().trim();
-            if (strAnswer != null && strAnswer.isEmpty()) {
-                showToast("Please enter answer.");
-            } else {
-                testQuestionNew.setTtqa_attempted(true);
+            if (testQuestionNew.isTtqa_attempted()) {
+                etFillTheBlanks.setText(AppUtils.decodedString(testQuestionNew.getTtqa_sub_ans()));
                 solutionLayout.setVisibility(View.VISIBLE);
                 fibImg.setVisibility(View.VISIBLE);
-                if (strAnswer.equalsIgnoreCase(testQuestionNew.getA_sub_ans())) {
+                if (testQuestionNew.getA_sub_ans().equalsIgnoreCase(AppUtils.decodedString(testQuestionNew.getTtqa_sub_ans()))) {
                     fibImg.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_right));
                     testQuestionNew.setAnsweredRight(true);
                 } else {
                     fibImg.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_wrong));
                     testQuestionNew.setAnsweredRight(false);
                 }
-                submitAnswerToServer(testQuestionNew, testQuestionNew.getTtqa_sub_ans(), Constant.FILL_THE_BLANKS);
             }
-        });
+
+            btnSubmit.setOnClickListener(v -> {
+                String strAnswer = etFillTheBlanks.getText().toString().trim();
+                if (strAnswer != null && strAnswer.isEmpty()) {
+                    showToast("Please enter answer.");
+                } else {
+                    testQuestionNew.setTtqa_attempted(true);
+                    solutionLayout.setVisibility(View.VISIBLE);
+                    fibImg.setVisibility(View.VISIBLE);
+                    if (strAnswer.equalsIgnoreCase(testQuestionNew.getA_sub_ans())) {
+                        fibImg.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_right));
+                        testQuestionNew.setAnsweredRight(true);
+                    } else {
+                        fibImg.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_wrong));
+                        testQuestionNew.setAnsweredRight(false);
+                    }
+                    submitAnswerToServer(testQuestionNew, testQuestionNew.getTtqa_sub_ans(), Constant.FILL_THE_BLANKS);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void setSCQImgAnsIndicator(ImageView scqimgChck1, ImageView scqimgChck2, ImageView scqimgChck3, ImageView scqimgChck4) {
@@ -653,7 +664,98 @@ public class PractiseViewPagerAdapter extends PagerAdapter
         if (testQuestionNew.isTtqa_attempted()) {
             solutionLayout.setVisibility(View.VISIBLE);
             if (!testQuestionNew.getTtqa_sub_ans().isEmpty()) {
-                //Right Answer
+                setRightSCQImg(testQuestionNew.getA_sub_ans(), scqimg_chck1, scqimg_chck2, scqimg_chck3, scqimg_chck4);
+                setWrongSCQImg(testQuestionNew.getTtqa_sub_ans(), scqimg_chck1, scqimg_chck2, scqimg_chck3, scqimg_chck4);
+            }
+        }
+
+        scq_img1.setOnClickListener(v -> {
+            setSCQImgAnsIndicator(scqimg_chck1, scqimg_chck2, scqimg_chck3, scqimg_chck4);
+            setSCQImgLayout(scq_img1, scq_img2, scq_img3, scq_img4);
+            scqimg_ans[0] = "A";
+            scq_img1.setAlpha(130);
+            scqimg_chck1.setVisibility(View.VISIBLE);
+            scqimg_chck1.setImageDrawable(context.getResources().getDrawable(R.drawable.selectmark));
+        });
+
+        scq_img2.setOnClickListener(v -> {
+            setSCQImgAnsIndicator(scqimg_chck1, scqimg_chck2, scqimg_chck3, scqimg_chck4);
+            setSCQImgLayout(scq_img1, scq_img2, scq_img3, scq_img4);
+            scqimg_ans[0] = "B";
+            scq_img2.setAlpha(130);
+            scqimg_chck2.setVisibility(View.VISIBLE);
+            scqimg_chck2.setImageDrawable(context.getResources().getDrawable(R.drawable.selectmark));
+        });
+
+        scq_img3.setOnClickListener(v -> {
+            setSCQImgAnsIndicator(scqimg_chck1, scqimg_chck2, scqimg_chck3, scqimg_chck4);
+            setSCQImgLayout(scq_img1, scq_img2, scq_img3, scq_img4);
+            scqimg_ans[0] = "C";
+            scq_img3.setAlpha(130);
+            scqimg_chck3.setVisibility(View.VISIBLE);
+            scqimg_chck3.setImageDrawable(context.getResources().getDrawable(R.drawable.selectmark));
+        });
+
+        scq_img4.setOnClickListener(v -> {
+            setSCQImgAnsIndicator(scqimg_chck1, scqimg_chck2, scqimg_chck3, scqimg_chck4);
+            setSCQImgLayout(scq_img1, scq_img2, scq_img3, scq_img4);
+            scqimg_ans[0] = "D";
+            scq_img4.setAlpha(130);
+            scqimg_chck4.setVisibility(View.VISIBLE);
+            scqimg_chck4.setImageDrawable(context.getResources().getDrawable(R.drawable.selectmark));
+        });
+
+        btnSubmit.setOnClickListener(v -> {
+            if (!scqimg_ans[0].trim().equalsIgnoreCase("")) {
+                //isAttempted = 1;
+                scqimg_chck1.setVisibility(View.GONE);
+                scqimg_chck1.setVisibility(View.GONE);
+                scqimg_chck1.setVisibility(View.GONE);
+                scqimg_chck1.setVisibility(View.GONE);
+
+                if (scqimg_ans[0].equalsIgnoreCase(testQuestionNew.getA_sub_ans())) {
+                    testQuestionNew.setAnsweredRight(true);
+                    setRightSCQImg(scqimg_ans[0], scqimg_chck1, scqimg_chck2, scqimg_chck3, scqimg_chck4);
+                } else {
+                    // isSolvedRight = 0;
+                    testQuestionNew.setAnsweredRight(false);
+                    setRightSCQImg(testQuestionNew.getA_sub_ans(), scqimg_chck1, scqimg_chck2, scqimg_chck3, scqimg_chck4);
+                    setWrongSCQImg(scqimg_ans[0], scqimg_chck1, scqimg_chck2, scqimg_chck3, scqimg_chck4);
+                }
+                solutionLayout.setVisibility(View.VISIBLE);
+                submitAnswerToServer(testQuestionNew, scqimg_ans[0], Constant.SCQ_IMAGE);
+
+            } else {
+                showToast("Please select atleast one option.");
+            }
+        });
+    }
+
+    private void initMcqImage(ViewGroup layout, TestQuestionNew testQuestionNew) {
+        final String[] scqimg_ans = {""};
+        scqimg_ans[0] = testQuestionNew.getTtqa_sub_ans();
+        ImageView scq_img1 = layout.findViewById(R.id.scqImg1);
+        ImageView scq_img2 = layout.findViewById(R.id.scqImg2);
+        ImageView scq_img3 = layout.findViewById(R.id.scqImg3);
+        ImageView scq_img4 = layout.findViewById(R.id.scqImg4);
+
+        ImageView scqimg_chck1 = layout.findViewById(R.id.scqimg_chck1);
+        ImageView scqimg_chck2 = layout.findViewById(R.id.scqimg_chck2);
+        ImageView scqimg_chck3 = layout.findViewById(R.id.scqimg_chck3);
+        ImageView scqimg_chck4 = layout.findViewById(R.id.scqimg_chck4);
+
+        ConstraintLayout solutionLayout = layout.findViewById(R.id.solution_layout);
+        Button btnSubmit = layout.findViewById(R.id.submit);
+
+        loadImage(AppUtils.decodedString(testQuestionNew.getQ_mcq_op_1()), scq_img1);
+        loadImage(AppUtils.decodedString(testQuestionNew.getQ_mcq_op_2()), scq_img2);
+        loadImage(AppUtils.decodedString(testQuestionNew.getQ_mcq_op_3()), scq_img3);
+        loadImage(AppUtils.decodedString(testQuestionNew.getQ_mcq_op_4()), scq_img4);
+
+        //set answer if already attempted
+        if (testQuestionNew.isTtqa_attempted()) {
+            solutionLayout.setVisibility(View.VISIBLE);
+            if (!testQuestionNew.getTtqa_sub_ans().isEmpty()) {
                 setRightSCQImg(testQuestionNew.getA_sub_ans(), scqimg_chck1, scqimg_chck2, scqimg_chck3, scqimg_chck4);
                 setWrongSCQImg(testQuestionNew.getTtqa_sub_ans(), scqimg_chck1, scqimg_chck2, scqimg_chck3, scqimg_chck4);
             }
@@ -802,225 +904,228 @@ public class PractiseViewPagerAdapter extends PagerAdapter
     }
 
     private void initMcq(ViewGroup layout, TestQuestionNew testQuestionNew) {
-        final String[] mcq_ans = {""};
-        //mcq_ans[0] = testQuestionNew.getTtqa_sub_ans();
-        for (String str : testQuestionNew.getTtqa_sub_ans().split(",")) {
-            Log.e(TAG, "initMcq New Option : " + str);
-            if (str != null && !str.isEmpty())
-                mcq_ans[0] = mcq_ans[0] + str + ",";
-        }
-        if (mcq_ans[0].startsWith(","))
-            mcq_ans[0].replaceFirst(",", "");
-        if (mcq_ans[0].endsWith(",")) {
-            mcq_ans[0] = mcq_ans[0].substring(0, mcq_ans[0].length() - 1);
-        }
-        Log.d(TAG, "initMcq Final Option : " + mcq_ans[0]);
-        TextView mcq1 = layout.findViewById(R.id.mcq1);
-        TextView mcq2 = layout.findViewById(R.id.mcq2);
-        TextView mcq3 = layout.findViewById(R.id.mcq3);
-        TextView mcq4 = layout.findViewById(R.id.mcq4);
-        TextView mcq5 = layout.findViewById(R.id.mcq5);
-
-        MathView mcq1Math = layout.findViewById(R.id.mcq1Math);
-        MathView mcq2Math = layout.findViewById(R.id.mcq2Math);
-        MathView mcq3Math = layout.findViewById(R.id.mcq3Math);
-        MathView mcq4Math = layout.findViewById(R.id.mcq4Math);
-        MathView mcq5Math = layout.findViewById(R.id.mcq5Math);
-
-        ImageView imgCheck1 = layout.findViewById(R.id.mcq1_img);
-        ImageView imgCheck2 = layout.findViewById(R.id.mcq2_img);
-        ImageView imgCheck3 = layout.findViewById(R.id.mcq3_img);
-        ImageView imgCheck4 = layout.findViewById(R.id.mcq4_img);
-        ImageView imgCheck5 = layout.findViewById(R.id.mcq5_img);
-
-        Button btnSubmit = layout.findViewById(R.id.submit);
-        ConstraintLayout solutionLayout = layout.findViewById(R.id.solution_layout);
-
-        ConstraintLayout mcq1Layout = layout.findViewById(R.id.mcq1_layout);
-        ConstraintLayout mcq2Layout = layout.findViewById(R.id.mcq2_layout);
-        ConstraintLayout mcq3Layout = layout.findViewById(R.id.mcq3_layout);
-        ConstraintLayout mcq4Layout = layout.findViewById(R.id.mcq4_layout);
-        ConstraintLayout mcq5Layout = layout.findViewById(R.id.mcq5_layout);
-
-        if (testQuestionNew.getQ_mcq_op_4().isEmpty())
-            mcq4Layout.setVisibility(View.GONE);
-        if (testQuestionNew.getQ_mcq_op_5().isEmpty())
-            mcq5Layout.setVisibility(View.GONE);
-
-        if (testQuestionNew.getQ_mcq_op_1().contains("\\")) {
-            mcq1.setVisibility(View.GONE);
-            mcq1Math.setVisibility(View.VISIBLE);
-            mcq1Math.setText(testQuestionNew.getQ_mcq_op_1());
-        } else {
-            mcq1Math.setVisibility(View.GONE);
-            mcq1.setVisibility(View.VISIBLE);
-            mcq1.setText(testQuestionNew.getQ_mcq_op_1());
-        }
-
-        if (testQuestionNew.getQ_mcq_op_2().contains("\\")) {
-            mcq2.setVisibility(View.GONE);
-            mcq2Math.setVisibility(View.VISIBLE);
-            mcq2Math.setText(testQuestionNew.getQ_mcq_op_2());
-        } else {
-            mcq2Math.setVisibility(View.GONE);
-            mcq2.setVisibility(View.VISIBLE);
-            mcq2.setText(testQuestionNew.getQ_mcq_op_2());
-        }
-
-        if (testQuestionNew.getQ_mcq_op_3().contains("\\")) {
-            mcq3.setVisibility(View.GONE);
-            mcq3Math.setVisibility(View.VISIBLE);
-            mcq3Math.setText(testQuestionNew.getQ_mcq_op_3());
-        } else {
-            mcq3Math.setVisibility(View.GONE);
-            mcq3.setVisibility(View.VISIBLE);
-            mcq3.setText(testQuestionNew.getQ_mcq_op_3());
-        }
-
-        if (testQuestionNew.getQ_mcq_op_4().contains("\\")) {
-            mcq4.setVisibility(View.GONE);
-            mcq4Math.setVisibility(View.VISIBLE);
-            mcq4Math.setText(testQuestionNew.getQ_mcq_op_4());
-        } else {
-            mcq4Math.setVisibility(View.GONE);
-            mcq4.setVisibility(View.VISIBLE);
-            mcq4.setText(testQuestionNew.getQ_mcq_op_4());
-        }
-
-        if (testQuestionNew.getQ_mcq_op_5().contains("\\")) {
-            mcq5.setVisibility(View.GONE);
-            mcq5Math.setVisibility(View.VISIBLE);
-            mcq5Math.setText(testQuestionNew.getQ_mcq_op_5());
-        } else {
-            mcq5Math.setVisibility(View.GONE);
-            mcq5.setVisibility(View.VISIBLE);
-            mcq5.setText(testQuestionNew.getQ_mcq_op_5());
-        }
-
-        if (testQuestionNew.isTtqa_attempted()) {
-            solutionLayout.setVisibility(View.VISIBLE);
-            String[] allAns = {"A", "B", "C", "D"};
-            if (!testQuestionNew.getTtqa_sub_ans().isEmpty()) {
-                for (String s : allAns) {
-                    if (testQuestionNew.getA_sub_ans().contains(s)) {
-                        setRightMCQ(s, imgCheck1, imgCheck2, imgCheck3, imgCheck4);
-                    } else {
-                        setWrongMCQ(s, imgCheck1, imgCheck2, imgCheck3, imgCheck4);
-                    }
-                }
+        try {
+            final String[] mcq_ans = {""};
+            //mcq_ans[0] = testQuestionNew.getTtqa_sub_ans();
+            for (String str : testQuestionNew.getTtqa_sub_ans().split(",")) {
+                Log.e(TAG, "initMcq New Option : " + str);
+                if (str != null && !str.isEmpty())
+                    mcq_ans[0] = mcq_ans[0] + str + ",";
             }
-        }
+            if (mcq_ans[0].startsWith(","))
+                mcq_ans[0].replaceFirst(",", "");
+            if (mcq_ans[0].endsWith(",")) {
+                mcq_ans[0] = mcq_ans[0].substring(0, mcq_ans[0].length() - 1);
+            }
+            Log.d(TAG, "initMcq Final Option : " + mcq_ans[0]);
+            TextView mcq1 = layout.findViewById(R.id.mcq1);
+            TextView mcq2 = layout.findViewById(R.id.mcq2);
+            TextView mcq3 = layout.findViewById(R.id.mcq3);
+            TextView mcq4 = layout.findViewById(R.id.mcq4);
+            TextView mcq5 = layout.findViewById(R.id.mcq5);
 
-        mcq1Layout.setOnClickListener(v -> {
-            setMCQAnsIndicator(imgCheck1, imgCheck2, imgCheck3, imgCheck4);
-            if (!mcq_ans[0].contains("A")) {
-                if (mcq_ans[0].equalsIgnoreCase(""))
-                    mcq_ans[0] = "A";
-                else
-                    mcq_ans[0] = mcq_ans[0] + " A";
-                mcq1Layout.setBackground(context.getResources().getDrawable(R.drawable.grey_border_grey_bg));
+            MathView mcq1Math = layout.findViewById(R.id.mcq1Math);
+            MathView mcq2Math = layout.findViewById(R.id.mcq2Math);
+            MathView mcq3Math = layout.findViewById(R.id.mcq3Math);
+            MathView mcq4Math = layout.findViewById(R.id.mcq4Math);
+            MathView mcq5Math = layout.findViewById(R.id.mcq5Math);
+
+            ImageView imgCheck1 = layout.findViewById(R.id.mcq1_img);
+            ImageView imgCheck2 = layout.findViewById(R.id.mcq2_img);
+            ImageView imgCheck3 = layout.findViewById(R.id.mcq3_img);
+            ImageView imgCheck4 = layout.findViewById(R.id.mcq4_img);
+            ImageView imgCheck5 = layout.findViewById(R.id.mcq5_img);
+
+            Button btnSubmit = layout.findViewById(R.id.submit);
+            ConstraintLayout solutionLayout = layout.findViewById(R.id.solution_layout);
+
+            ConstraintLayout mcq1Layout = layout.findViewById(R.id.mcq1_layout);
+            ConstraintLayout mcq2Layout = layout.findViewById(R.id.mcq2_layout);
+            ConstraintLayout mcq3Layout = layout.findViewById(R.id.mcq3_layout);
+            ConstraintLayout mcq4Layout = layout.findViewById(R.id.mcq4_layout);
+            ConstraintLayout mcq5Layout = layout.findViewById(R.id.mcq5_layout);
+
+            if (testQuestionNew.getQ_mcq_op_4().isEmpty())
+                mcq4Layout.setVisibility(View.GONE);
+            if (testQuestionNew.getQ_mcq_op_5().isEmpty())
+                mcq5Layout.setVisibility(View.GONE);
+
+            if (testQuestionNew.getQ_mcq_op_1().contains("\\")) {
+                mcq1.setVisibility(View.GONE);
+                mcq1Math.setVisibility(View.VISIBLE);
+                mcq1Math.setText(AppUtils.decodedString(testQuestionNew.getQ_mcq_op_1()));
             } else {
-                mcq_ans[0] = mcq_ans[0].replace("A", "");
-                mcq1Layout.setBackground(context.getResources().getDrawable(R.drawable.grey_round_order));
+                mcq1Math.setVisibility(View.GONE);
+                mcq1.setVisibility(View.VISIBLE);
+                mcq1.setText(AppUtils.decodedString(testQuestionNew.getQ_mcq_op_1()));
             }
-        });
 
-        mcq2Layout.setOnClickListener(v -> {
-            setMCQAnsIndicator(imgCheck1, imgCheck2, imgCheck3, imgCheck4);
-            if (!mcq_ans[0].contains("B")) {
-                if (mcq_ans[0].equalsIgnoreCase(""))
-                    mcq_ans[0] = "B";
-                else
-                    mcq_ans[0] = mcq_ans[0] + " B";
-                mcq2Layout.setBackground(context.getResources().getDrawable(R.drawable.grey_border_grey_bg));
+            if (testQuestionNew.getQ_mcq_op_2().contains("\\")) {
+                mcq2.setVisibility(View.GONE);
+                mcq2Math.setVisibility(View.VISIBLE);
+                mcq2Math.setText(AppUtils.decodedString(testQuestionNew.getQ_mcq_op_2()));
             } else {
-                mcq_ans[0] = mcq_ans[0].replace("B", "");
-                mcq2Layout.setBackground(context.getResources().getDrawable(R.drawable.grey_round_order));
+                mcq2Math.setVisibility(View.GONE);
+                mcq2.setVisibility(View.VISIBLE);
+                mcq2.setText(AppUtils.decodedString(testQuestionNew.getQ_mcq_op_2()));
             }
-        });
 
-        mcq3Layout.setOnClickListener(v -> {
-            setMCQAnsIndicator(imgCheck1, imgCheck2, imgCheck3, imgCheck4);
-            if (!mcq_ans[0].contains("C")) {
-                if (mcq_ans[0].equalsIgnoreCase(""))
-                    mcq_ans[0] = "C";
-                else
-                    mcq_ans[0] = mcq_ans[0] + " C";
-                mcq3Layout.setBackground(context.getResources().getDrawable(R.drawable.grey_border_grey_bg));
+            if (testQuestionNew.getQ_mcq_op_3().contains("\\")) {
+                mcq3.setVisibility(View.GONE);
+                mcq3Math.setVisibility(View.VISIBLE);
+                mcq3Math.setText(AppUtils.decodedString(testQuestionNew.getQ_mcq_op_3()));
             } else {
-                mcq_ans[0] = mcq_ans[0].replace("C", "");
-                mcq3Layout.setBackground(context.getResources().getDrawable(R.drawable.grey_round_order));
+                mcq3Math.setVisibility(View.GONE);
+                mcq3.setVisibility(View.VISIBLE);
+                mcq3.setText(AppUtils.decodedString(testQuestionNew.getQ_mcq_op_3()));
             }
-        });
 
-        mcq4Layout.setOnClickListener(v -> {
-            setMCQAnsIndicator(imgCheck1, imgCheck2, imgCheck3, imgCheck4);
-            if (!mcq_ans[0].contains("D")) {
-                if (mcq_ans[0].equalsIgnoreCase(""))
-                    mcq_ans[0] = "D";
-                else
-                    mcq_ans[0] = mcq_ans[0] + " D";
-                mcq4Layout.setBackground(context.getResources().getDrawable(R.drawable.grey_border_grey_bg));
+            if (testQuestionNew.getQ_mcq_op_4().contains("\\")) {
+                mcq4.setVisibility(View.GONE);
+                mcq4Math.setVisibility(View.VISIBLE);
+                mcq4Math.setText(AppUtils.decodedString(testQuestionNew.getQ_mcq_op_4()));
             } else {
-                mcq_ans[0] = mcq_ans[0].replace("D", "");
-                mcq4Layout.setBackground(context.getResources().getDrawable(R.drawable.grey_round_order));
+                mcq4Math.setVisibility(View.GONE);
+                mcq4.setVisibility(View.VISIBLE);
+                mcq4.setText(AppUtils.decodedString(testQuestionNew.getQ_mcq_op_4()));
             }
-        });
 
-        btnSubmit.setOnClickListener(v -> {
-            if (!mcq_ans[0].trim().equalsIgnoreCase("")) {
-                //isAttempted = 1;
-                setMCQAnsIndicator(imgCheck1, imgCheck2, imgCheck3, imgCheck4);
-                String selectedOptions = "";
-                String[] selected_mcq = mcq_ans[0].split("\\s+");
-                String[] right_mcq = testQuestionNew.getA_sub_ans().split(",", -1);
-                for (int i = 0; i < selected_mcq.length; i++) {
-                    Log.e(TAG, "initMcq Selected Items : " + selected_mcq[i]);
-                    if (i != selected_mcq.length - 1) {
-                        selectedOptions = selectedOptions + selected_mcq[i].trim() + ",";
-                    } else {
-                        selectedOptions = selectedOptions + selected_mcq[i].trim();
-                    }
+            if (testQuestionNew.getQ_mcq_op_5().contains("\\")) {
+                mcq5.setVisibility(View.GONE);
+                mcq5Math.setVisibility(View.VISIBLE);
+                mcq5Math.setText(AppUtils.decodedString(testQuestionNew.getQ_mcq_op_5()));
+            } else {
+                mcq5Math.setVisibility(View.GONE);
+                mcq5.setVisibility(View.VISIBLE);
+                mcq5.setText(AppUtils.decodedString(testQuestionNew.getQ_mcq_op_5()));
+            }
 
-                    if (testQuestionNew.getA_sub_ans().contains(selected_mcq[i])) {
-                        setRightMCQ(selected_mcq[i], imgCheck1, imgCheck2, imgCheck3, imgCheck4);
-                    } else {
-                        //isSolvedRight = 0;
-                        setWrongMCQ(selected_mcq[i], imgCheck1, imgCheck2, imgCheck3, imgCheck4);
-                    }
-                }
-
-                for (int i = 0; i < right_mcq.length; i++) {
-                    setRightMCQ(right_mcq[i], imgCheck1, imgCheck2, imgCheck3, imgCheck4);
-                }
+            if (testQuestionNew.isTtqa_attempted()) {
                 solutionLayout.setVisibility(View.VISIBLE);
-                if (selectedOptions.startsWith(","))
-                    selectedOptions = selectedOptions.replaceFirst(",", "");
-                if (selectedOptions.endsWith(","))
-                    selectedOptions = selectedOptions.substring(0, selectedOptions.length() - 1);
-
-                testQuestionNew.setTtqa_mcq_ans_1(false);
-                testQuestionNew.setTtqa_mcq_ans_2(false);
-                testQuestionNew.setTtqa_mcq_ans_3(false);
-                testQuestionNew.setTtqa_mcq_ans_4(false);
-
-                for (String s : selectedOptions.split(",", -1)) {
-                    Log.d(TAG, "initMcq selectedOptions : " + s);
-                    if (s != null && s.equalsIgnoreCase("A"))
-                        testQuestionNew.setTtqa_mcq_ans_1(true);
-                    if (s != null && s.equalsIgnoreCase("B"))
-                        testQuestionNew.setTtqa_mcq_ans_2(true);
-                    if (s != null && s.equalsIgnoreCase("C"))
-                        testQuestionNew.setTtqa_mcq_ans_3(true);
-                    if (s != null && s.equalsIgnoreCase("D"))
-                        testQuestionNew.setTtqa_mcq_ans_4(true);
+                String[] allAns = {"A", "B", "C", "D"};
+                if (!testQuestionNew.getTtqa_sub_ans().isEmpty()) {
+                    for (String s : allAns) {
+                        if (testQuestionNew.getA_sub_ans().contains(s)) {
+                            setRightMCQ(s, imgCheck1, imgCheck2, imgCheck3, imgCheck4);
+                        } else {
+                            setWrongMCQ(s, imgCheck1, imgCheck2, imgCheck3, imgCheck4);
+                        }
+                    }
                 }
-                submitAnswerToServer(testQuestionNew, selectedOptions, Constant.MCQ);
-            } else {
-                showToast("Please select atleast one option.");
-                //Toast.makeText(activity, "Please select atleast one option.", Toast.LENGTH_SHORT).show();
             }
-        });
+
+            mcq1Layout.setOnClickListener(v -> {
+                setMCQAnsIndicator(imgCheck1, imgCheck2, imgCheck3, imgCheck4);
+                if (!mcq_ans[0].contains("A")) {
+                    if (mcq_ans[0].equalsIgnoreCase(""))
+                        mcq_ans[0] = "A";
+                    else
+                        mcq_ans[0] = mcq_ans[0] + " A";
+                    mcq1Layout.setBackground(context.getResources().getDrawable(R.drawable.grey_border_grey_bg));
+                } else {
+                    mcq_ans[0] = mcq_ans[0].replace("A", "");
+                    mcq1Layout.setBackground(context.getResources().getDrawable(R.drawable.grey_round_order));
+                }
+            });
+
+            mcq2Layout.setOnClickListener(v -> {
+                setMCQAnsIndicator(imgCheck1, imgCheck2, imgCheck3, imgCheck4);
+                if (!mcq_ans[0].contains("B")) {
+                    if (mcq_ans[0].equalsIgnoreCase(""))
+                        mcq_ans[0] = "B";
+                    else
+                        mcq_ans[0] = mcq_ans[0] + " B";
+                    mcq2Layout.setBackground(context.getResources().getDrawable(R.drawable.grey_border_grey_bg));
+                } else {
+                    mcq_ans[0] = mcq_ans[0].replace("B", "");
+                    mcq2Layout.setBackground(context.getResources().getDrawable(R.drawable.grey_round_order));
+                }
+            });
+
+            mcq3Layout.setOnClickListener(v -> {
+                setMCQAnsIndicator(imgCheck1, imgCheck2, imgCheck3, imgCheck4);
+                if (!mcq_ans[0].contains("C")) {
+                    if (mcq_ans[0].equalsIgnoreCase(""))
+                        mcq_ans[0] = "C";
+                    else
+                        mcq_ans[0] = mcq_ans[0] + " C";
+                    mcq3Layout.setBackground(context.getResources().getDrawable(R.drawable.grey_border_grey_bg));
+                } else {
+                    mcq_ans[0] = mcq_ans[0].replace("C", "");
+                    mcq3Layout.setBackground(context.getResources().getDrawable(R.drawable.grey_round_order));
+                }
+            });
+
+            mcq4Layout.setOnClickListener(v -> {
+                setMCQAnsIndicator(imgCheck1, imgCheck2, imgCheck3, imgCheck4);
+                if (!mcq_ans[0].contains("D")) {
+                    if (mcq_ans[0].equalsIgnoreCase(""))
+                        mcq_ans[0] = "D";
+                    else
+                        mcq_ans[0] = mcq_ans[0] + " D";
+                    mcq4Layout.setBackground(context.getResources().getDrawable(R.drawable.grey_border_grey_bg));
+                } else {
+                    mcq_ans[0] = mcq_ans[0].replace("D", "");
+                    mcq4Layout.setBackground(context.getResources().getDrawable(R.drawable.grey_round_order));
+                }
+            });
+
+            btnSubmit.setOnClickListener(v -> {
+                if (!mcq_ans[0].trim().equalsIgnoreCase("")) {
+                    //isAttempted = 1;
+                    setMCQAnsIndicator(imgCheck1, imgCheck2, imgCheck3, imgCheck4);
+                    String selectedOptions = "";
+                    String[] selected_mcq = mcq_ans[0].split("\\s+");
+                    String[] right_mcq = testQuestionNew.getA_sub_ans().split(",", -1);
+                    for (int i = 0; i < selected_mcq.length; i++) {
+                        Log.e(TAG, "initMcq Selected Items : " + selected_mcq[i]);
+                        if (i != selected_mcq.length - 1) {
+                            selectedOptions = selectedOptions + selected_mcq[i].trim() + ",";
+                        } else {
+                            selectedOptions = selectedOptions + selected_mcq[i].trim();
+                        }
+
+                        if (testQuestionNew.getA_sub_ans().contains(selected_mcq[i])) {
+                            setRightMCQ(selected_mcq[i], imgCheck1, imgCheck2, imgCheck3, imgCheck4);
+                        } else {
+                            //isSolvedRight = 0;
+                            setWrongMCQ(selected_mcq[i], imgCheck1, imgCheck2, imgCheck3, imgCheck4);
+                        }
+                    }
+
+                    for (int i = 0; i < right_mcq.length; i++) {
+                        setRightMCQ(right_mcq[i], imgCheck1, imgCheck2, imgCheck3, imgCheck4);
+                    }
+                    solutionLayout.setVisibility(View.VISIBLE);
+                    if (selectedOptions.startsWith(","))
+                        selectedOptions = selectedOptions.replaceFirst(",", "");
+                    if (selectedOptions.endsWith(","))
+                        selectedOptions = selectedOptions.substring(0, selectedOptions.length() - 1);
+
+                    testQuestionNew.setTtqa_mcq_ans_1(false);
+                    testQuestionNew.setTtqa_mcq_ans_2(false);
+                    testQuestionNew.setTtqa_mcq_ans_3(false);
+                    testQuestionNew.setTtqa_mcq_ans_4(false);
+
+                    for (String s : selectedOptions.split(",", -1)) {
+                        Log.d(TAG, "initMcq selectedOptions : " + s);
+                        if (s != null && s.equalsIgnoreCase("A"))
+                            testQuestionNew.setTtqa_mcq_ans_1(true);
+                        if (s != null && s.equalsIgnoreCase("B"))
+                            testQuestionNew.setTtqa_mcq_ans_2(true);
+                        if (s != null && s.equalsIgnoreCase("C"))
+                            testQuestionNew.setTtqa_mcq_ans_3(true);
+                        if (s != null && s.equalsIgnoreCase("D"))
+                            testQuestionNew.setTtqa_mcq_ans_4(true);
+                    }
+                    submitAnswerToServer(testQuestionNew, selectedOptions, Constant.MCQ);
+                } else {
+                    showToast("Please select atleast one option.");
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void setRightMCQ(String option, ImageView mcq1Img, ImageView mcq2Img, ImageView mcq3Img, ImageView mcq4Img) {
@@ -1067,189 +1172,193 @@ public class PractiseViewPagerAdapter extends PagerAdapter
 
 
     private void initScq(ViewGroup layout, TestQuestionNew testQuestionNew) {
-        Log.d(TAG, "initScq Item Position : " + getItemPosition(testQuestionNew));
-        boolean isFeedBackEnabled = true;
-        final String[] scq_ans = {""};
-        scq_ans[0] = testQuestionNew.getTtqa_sub_ans();
-        TextView scq1 = layout.findViewById(R.id.scq11);
-        TextView scq2 = layout.findViewById(R.id.scq22);
-        TextView scq3 = layout.findViewById(R.id.scq33);
-        TextView scq4 = layout.findViewById(R.id.scq44);
-        TextView scq5 = layout.findViewById(R.id.scq55);
+        try {
+            Log.d(TAG, "initScq Item Position : " + getItemPosition(testQuestionNew));
+            boolean isFeedBackEnabled = true;
+            final String[] scq_ans = {""};
+            scq_ans[0] = testQuestionNew.getTtqa_sub_ans();
+            TextView scq1 = layout.findViewById(R.id.scq11);
+            TextView scq2 = layout.findViewById(R.id.scq22);
+            TextView scq3 = layout.findViewById(R.id.scq33);
+            TextView scq4 = layout.findViewById(R.id.scq44);
+            TextView scq5 = layout.findViewById(R.id.scq55);
 
-        MathView scq1Math = layout.findViewById(R.id.scq1Math);
-        MathView scq2Math = layout.findViewById(R.id.scq2Math);
-        MathView scq3Math = layout.findViewById(R.id.scq3Math);
-        MathView scq4Math = layout.findViewById(R.id.scq4Math);
-        MathView scq5Math = layout.findViewById(R.id.scq5Math);
+            MathView scq1Math = layout.findViewById(R.id.scq1Math);
+            MathView scq2Math = layout.findViewById(R.id.scq2Math);
+            MathView scq3Math = layout.findViewById(R.id.scq3Math);
+            MathView scq4Math = layout.findViewById(R.id.scq4Math);
+            MathView scq5Math = layout.findViewById(R.id.scq5Math);
 
-        TextView solutionAns = layout.findViewById(R.id.solution_option);
+            TextView solutionAns = layout.findViewById(R.id.solution_option);
 
-        ImageView img1 = layout.findViewById(R.id.scq1_img);
-        ImageView img2 = layout.findViewById(R.id.scq2_img);
-        ImageView img3 = layout.findViewById(R.id.scq3_img);
-        ImageView img4 = layout.findViewById(R.id.scq4_img);
-        ImageView img5 = layout.findViewById(R.id.scq5_img);
+            ImageView img1 = layout.findViewById(R.id.scq1_img);
+            ImageView img2 = layout.findViewById(R.id.scq2_img);
+            ImageView img3 = layout.findViewById(R.id.scq3_img);
+            ImageView img4 = layout.findViewById(R.id.scq4_img);
+            ImageView img5 = layout.findViewById(R.id.scq5_img);
 
-        Button btnSubmit = layout.findViewById(R.id.submit);
+            Button btnSubmit = layout.findViewById(R.id.submit);
 
-        ConstraintLayout scq1Layout = layout.findViewById(R.id.scq1_layout);
-        ConstraintLayout scq2Layout = layout.findViewById(R.id.scq2_layout);
-        ConstraintLayout scq3Layout = layout.findViewById(R.id.scq3_layout);
-        ConstraintLayout scq4Layout = layout.findViewById(R.id.scq4_layout);
-        ConstraintLayout scq5Layout = layout.findViewById(R.id.scq5_layout);
+            ConstraintLayout scq1Layout = layout.findViewById(R.id.scq1_layout);
+            ConstraintLayout scq2Layout = layout.findViewById(R.id.scq2_layout);
+            ConstraintLayout scq3Layout = layout.findViewById(R.id.scq3_layout);
+            ConstraintLayout scq4Layout = layout.findViewById(R.id.scq4_layout);
+            ConstraintLayout scq5Layout = layout.findViewById(R.id.scq5_layout);
 
-        ConstraintLayout solutionLayout = layout.findViewById(R.id.solution_layout);
+            ConstraintLayout solutionLayout = layout.findViewById(R.id.solution_layout);
 
-        Log.e(TAG, "initScq Option 1 : " + testQuestionNew.getQ_mcq_op_1());
-        Log.e(TAG, "initScq Option 2 : " + testQuestionNew.getQ_mcq_op_2());
-        Log.e(TAG, "initScq Option 3 : " + testQuestionNew.getQ_mcq_op_3());
-        Log.e(TAG, "initScq Option 4 : " + testQuestionNew.getQ_mcq_op_4());
+            Log.e(TAG, "initScq Option 1 : " + testQuestionNew.getQ_mcq_op_1());
+            Log.e(TAG, "initScq Option 2 : " + testQuestionNew.getQ_mcq_op_2());
+            Log.e(TAG, "initScq Option 3 : " + testQuestionNew.getQ_mcq_op_3());
+            Log.e(TAG, "initScq Option 4 : " + testQuestionNew.getQ_mcq_op_4());
 
-        if (testQuestionNew.getQue_option_type().equalsIgnoreCase(Constant.SCQ)) {
-            String opt1 = AppUtils.decodedString(testQuestionNew.getQ_mcq_op_1());
-            String opt2 = AppUtils.decodedString(testQuestionNew.getQ_mcq_op_2());
-            String opt3 = AppUtils.decodedString(testQuestionNew.getQ_mcq_op_3());
-            String opt4 = AppUtils.decodedString(testQuestionNew.getQ_mcq_op_4());
+            if (testQuestionNew.getQue_option_type().equalsIgnoreCase(Constant.SCQ)) {
+                String opt1 = AppUtils.decodedString(testQuestionNew.getQ_mcq_op_1());
+                String opt2 = AppUtils.decodedString(testQuestionNew.getQ_mcq_op_2());
+                String opt3 = AppUtils.decodedString(testQuestionNew.getQ_mcq_op_3());
+                String opt4 = AppUtils.decodedString(testQuestionNew.getQ_mcq_op_4());
 
-            if (testQuestionNew.getQ_mcq_op_1().contains("\\")) {
-                scq1.setVisibility(View.GONE);
-                scq1Math.setVisibility(View.VISIBLE);
-                scq1Math.setText(opt1);
+                if (testQuestionNew.getQ_mcq_op_1().contains("\\")) {
+                    scq1.setVisibility(View.GONE);
+                    scq1Math.setVisibility(View.VISIBLE);
+                    scq1Math.setText(opt1);
+                } else {
+                    scq1Math.setVisibility(View.GONE);
+                    scq1.setVisibility(View.VISIBLE);
+                    scq1.setText(opt1);
+                }
+
+                if (testQuestionNew.getQ_mcq_op_2().contains("\\")) {
+                    scq2.setVisibility(View.GONE);
+                    scq2Math.setVisibility(View.VISIBLE);
+                    scq2Math.setText(opt2);
+                } else {
+                    scq2Math.setVisibility(View.GONE);
+                    scq2.setVisibility(View.VISIBLE);
+                    scq2.setText(opt2);
+                }
+
+                if (testQuestionNew.getQ_mcq_op_3().contains("\\")) {
+                    scq3.setVisibility(View.GONE);
+                    scq3Math.setVisibility(View.VISIBLE);
+                    scq3Math.setText(opt3);
+                } else {
+                    scq3Math.setVisibility(View.GONE);
+                    scq3.setVisibility(View.VISIBLE);
+                    scq3.setText(opt3);
+                }
+
+                if (testQuestionNew.getQ_mcq_op_4().contains("\\")) {
+                    scq4.setVisibility(View.GONE);
+                    scq4Math.setVisibility(View.VISIBLE);
+                    scq4Math.setText(opt4);
+                } else {
+                    scq4Math.setVisibility(View.GONE);
+                    scq4.setVisibility(View.VISIBLE);
+                    scq4.setText(opt4);
+                }
+
+                if (testQuestionNew.getQ_mcq_op_5().contains("\\")) {
+                    scq5.setVisibility(View.GONE);
+                    scq5Math.setVisibility(View.VISIBLE);
+                    scq5Math.setText(testQuestionNew.getQ_mcq_op_5());
+                } else {
+                    scq4Math.setVisibility(View.GONE);
+                    scq5.setVisibility(View.VISIBLE);
+                    scq5.setText(testQuestionNew.getQ_mcq_op_5());
+                }
+
             } else {
                 scq1Math.setVisibility(View.GONE);
-                scq1.setVisibility(View.VISIBLE);
-                scq1.setText(opt1);
-            }
-
-            if (testQuestionNew.getQ_mcq_op_2().contains("\\")) {
-                scq2.setVisibility(View.GONE);
-                scq2Math.setVisibility(View.VISIBLE);
-                scq2Math.setText(opt2);
-            } else {
                 scq2Math.setVisibility(View.GONE);
-                scq2.setVisibility(View.VISIBLE);
-                scq2.setText(opt2);
+                scq1.setText("True");
+                scq2.setText("False");
             }
 
-            if (testQuestionNew.getQ_mcq_op_3().contains("\\")) {
-                scq3.setVisibility(View.GONE);
-                scq3Math.setVisibility(View.VISIBLE);
-                scq3Math.setText(opt3);
-            } else {
-                scq3Math.setVisibility(View.GONE);
-                scq3.setVisibility(View.VISIBLE);
-                scq3.setText(opt3);
-            }
+            if (testQuestionNew.getQ_mcq_op_3().isEmpty())
+                scq3Layout.setVisibility(View.GONE);
+            if (testQuestionNew.getQ_mcq_op_4().isEmpty())
+                scq4Layout.setVisibility(View.GONE);
+            if (testQuestionNew.getQ_mcq_op_5().isEmpty())
+                scq5Layout.setVisibility(View.GONE);
 
-            if (testQuestionNew.getQ_mcq_op_4().contains("\\")) {
-                scq4.setVisibility(View.GONE);
-                scq4Math.setVisibility(View.VISIBLE);
-                scq4Math.setText(opt4);
-            } else {
-                scq4Math.setVisibility(View.GONE);
-                scq4.setVisibility(View.VISIBLE);
-                scq4.setText(opt4);
-            }
-
-            if (testQuestionNew.getQ_mcq_op_5().contains("\\")) {
-                scq5.setVisibility(View.GONE);
-                scq5Math.setVisibility(View.VISIBLE);
-                scq5Math.setText(testQuestionNew.getQ_mcq_op_5());
-            } else {
-                scq4Math.setVisibility(View.GONE);
-                scq5.setVisibility(View.VISIBLE);
-                scq5.setText(testQuestionNew.getQ_mcq_op_5());
-            }
-
-        } else {
-            scq1Math.setVisibility(View.GONE);
-            scq2Math.setVisibility(View.GONE);
-            scq1.setText("True");
-            scq2.setText("False");
-        }
-
-        if (testQuestionNew.getQ_mcq_op_3().isEmpty())
-            scq3Layout.setVisibility(View.GONE);
-        if (testQuestionNew.getQ_mcq_op_4().isEmpty())
-            scq4Layout.setVisibility(View.GONE);
-        if (testQuestionNew.getQ_mcq_op_5().isEmpty())
-            scq5Layout.setVisibility(View.GONE);
-
-        solutionAns.setText(testQuestionNew.getA_sub_ans());
-        if (testQuestionNew.isTtqa_attempted()) {
-            solutionLayout.setVisibility(View.VISIBLE);
-            if (!testQuestionNew.getTtqa_sub_ans().isEmpty()) {
-                //Right Answer Given
-                if (testQuestionNew.getTtqa_sub_ans().equalsIgnoreCase(testQuestionNew.getA_sub_ans())) {
-                    setRightSCQ(testQuestionNew.getA_sub_ans(), img1, img2, img3, img4, img5);
-                } else {
-                    setRightSCQ(testQuestionNew.getA_sub_ans(), img1, img2, img3, img4, img5);
-                    setWrongSCQ(testQuestionNew.getTtqa_sub_ans(), img1, img2, img3, img4, img5, false);
-                }
-            }
-        }
-
-        scq1Layout.setOnClickListener(v -> {
-            setSCQAnsIndicator(img1, img2, img3, img4);
-            setLayoutBg(scq1Layout, scq2Layout, scq3Layout, scq4Layout);
-            scq_ans[0] = "A";
-            scq1Layout.setBackground(context.getResources().getDrawable(R.drawable.grey_border_grey_bg));
-        });
-
-        scq2Layout.setOnClickListener(v -> {
-            setLayoutBg(scq1Layout, scq2Layout, scq3Layout, scq4Layout);
-            setSCQAnsIndicator(img1, img2, img3, img4);
-            scq_ans[0] = "B";
-            scq2Layout.setBackground(context.getResources().getDrawable(R.drawable.grey_border_grey_bg));
-        });
-
-        scq3Layout.setOnClickListener(v -> {
-            setLayoutBg(scq1Layout, scq2Layout, scq3Layout, scq4Layout);
-            setSCQAnsIndicator(img1, img2, img3, img4);
-            scq_ans[0] = "C";
-            scq3Layout.setBackground(context.getResources().getDrawable(R.drawable.grey_border_grey_bg));
-        });
-
-        scq4Layout.setOnClickListener(v -> {
-            setLayoutBg(scq1Layout, scq2Layout, scq3Layout, scq4Layout);
-            setSCQAnsIndicator(img1, img2, img3, img4);
-            scq_ans[0] = "D";
-            scq4Layout.setBackground(context.getResources().getDrawable(R.drawable.grey_border_grey_bg));
-        });
-
-        btnSubmit.setOnClickListener(v -> {
-            Log.d(TAG, "initScq Submit Answer : " + scq_ans[0]);
-            if (!scq_ans[0].trim().equalsIgnoreCase("")) {
-                //isAttempted = 1;
-                setSCQAnsIndicator(img1, img2, img3, img4);
-                Log.d(TAG, "scq_ans : " + scq_ans[0]);
-                Log.d(TAG, "getA_sub_ans : " + testQuestionNew.getA_sub_ans());
-                Log.d(TAG, "initScq: " + scq_ans[0].equalsIgnoreCase(testQuestionNew.getA_sub_ans()));
-                if (scq_ans[0].equalsIgnoreCase(testQuestionNew.getA_sub_ans())) {
-                    rightAnswerFeedBack();
-                    testQuestionNew.setAnsweredRight(true);
-                    setRightSCQ(scq_ans[0], img1, img2, img3, img4, img5);
-                } else {
-                    testQuestionNew.setAnsweredRight(false);
-                    //isSolvedRight = 0;
-                    setRightSCQ(testQuestionNew.getA_sub_ans(), img1, img2, img3, img4, img5);
-                    setWrongSCQ(scq_ans[0], img1, img2, img3, img4, img5, true);
-                }
+            solutionAns.setText(testQuestionNew.getA_sub_ans());
+            if (testQuestionNew.isTtqa_attempted()) {
                 solutionLayout.setVisibility(View.VISIBLE);
-
-                //disable answer selection
-                scq1Layout.setEnabled(false);
-                scq2Layout.setEnabled(false);
-                scq3Layout.setEnabled(false);
-                scq4Layout.setEnabled(false);
-                btnSubmit.setEnabled(false);
-
-                submitAnswerToServer(testQuestionNew, scq_ans[0], Constant.SCQ);
-            } else {
-                showToast("Please select atleast one option.");
+                if (!testQuestionNew.getTtqa_sub_ans().isEmpty()) {
+                    //Right Answer Given
+                    if (testQuestionNew.getTtqa_sub_ans().equalsIgnoreCase(testQuestionNew.getA_sub_ans())) {
+                        setRightSCQ(testQuestionNew.getA_sub_ans(), img1, img2, img3, img4, img5);
+                    } else {
+                        setRightSCQ(testQuestionNew.getA_sub_ans(), img1, img2, img3, img4, img5);
+                        setWrongSCQ(testQuestionNew.getTtqa_sub_ans(), img1, img2, img3, img4, img5, false);
+                    }
+                }
             }
-        });
+
+            scq1Layout.setOnClickListener(v -> {
+                setSCQAnsIndicator(img1, img2, img3, img4);
+                setLayoutBg(scq1Layout, scq2Layout, scq3Layout, scq4Layout);
+                scq_ans[0] = "A";
+                scq1Layout.setBackground(context.getResources().getDrawable(R.drawable.grey_border_grey_bg));
+            });
+
+            scq2Layout.setOnClickListener(v -> {
+                setLayoutBg(scq1Layout, scq2Layout, scq3Layout, scq4Layout);
+                setSCQAnsIndicator(img1, img2, img3, img4);
+                scq_ans[0] = "B";
+                scq2Layout.setBackground(context.getResources().getDrawable(R.drawable.grey_border_grey_bg));
+            });
+
+            scq3Layout.setOnClickListener(v -> {
+                setLayoutBg(scq1Layout, scq2Layout, scq3Layout, scq4Layout);
+                setSCQAnsIndicator(img1, img2, img3, img4);
+                scq_ans[0] = "C";
+                scq3Layout.setBackground(context.getResources().getDrawable(R.drawable.grey_border_grey_bg));
+            });
+
+            scq4Layout.setOnClickListener(v -> {
+                setLayoutBg(scq1Layout, scq2Layout, scq3Layout, scq4Layout);
+                setSCQAnsIndicator(img1, img2, img3, img4);
+                scq_ans[0] = "D";
+                scq4Layout.setBackground(context.getResources().getDrawable(R.drawable.grey_border_grey_bg));
+            });
+
+            btnSubmit.setOnClickListener(v -> {
+                Log.d(TAG, "initScq Submit Answer : " + scq_ans[0]);
+                if (!scq_ans[0].trim().equalsIgnoreCase("")) {
+                    //isAttempted = 1;
+                    setSCQAnsIndicator(img1, img2, img3, img4);
+                    Log.d(TAG, "scq_ans : " + scq_ans[0]);
+                    Log.d(TAG, "getA_sub_ans : " + testQuestionNew.getA_sub_ans());
+                    Log.d(TAG, "initScq: " + scq_ans[0].equalsIgnoreCase(testQuestionNew.getA_sub_ans()));
+                    if (scq_ans[0].equalsIgnoreCase(testQuestionNew.getA_sub_ans())) {
+                        rightAnswerFeedBack();
+                        testQuestionNew.setAnsweredRight(true);
+                        setRightSCQ(scq_ans[0], img1, img2, img3, img4, img5);
+                    } else {
+                        testQuestionNew.setAnsweredRight(false);
+                        //isSolvedRight = 0;
+                        setRightSCQ(testQuestionNew.getA_sub_ans(), img1, img2, img3, img4, img5);
+                        setWrongSCQ(scq_ans[0], img1, img2, img3, img4, img5, true);
+                    }
+                    solutionLayout.setVisibility(View.VISIBLE);
+
+                    //disable answer selection
+                    scq1Layout.setEnabled(false);
+                    scq2Layout.setEnabled(false);
+                    scq3Layout.setEnabled(false);
+                    scq4Layout.setEnabled(false);
+                    btnSubmit.setEnabled(false);
+
+                    submitAnswerToServer(testQuestionNew, scq_ans[0], Constant.SCQ);
+                } else {
+                    showToast("Please select atleast one option.");
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void submitAnswerToServer(TestQuestionNew question, String scq_ans, String flag) {
@@ -1492,81 +1601,85 @@ public class PractiseViewPagerAdapter extends PagerAdapter
     }
 
     private void initSubjective(ViewGroup layout, TestQuestionNew testQuestionNew) {
-        TextView tvWordCounter = layout.findViewById(R.id.tvWordCounter);
-        TextView tvFtbWordCounter = layout.findViewById(R.id.tvFtbWordCounter);
-        TextView multi_lineCounter = layout.findViewById(R.id.multi_lineCounter);
-        TextView tvTimer = layout.findViewById(R.id.tvtimer);
-        Button btnSubmit = layout.findViewById(R.id.submit);
-        ConstraintLayout multiLineAnswerLayout = layout.findViewById(R.id.multi_line_answer);
-        ConstraintLayout fillTheBlanksLayout = layout.findViewById(R.id.fill_in_the_blanks_layout);
-        ConstraintLayout solutionLayout = layout.findViewById(R.id.solution_layout);
+        try {
+            TextView tvWordCounter = layout.findViewById(R.id.tvWordCounter);
+            TextView tvFtbWordCounter = layout.findViewById(R.id.tvFtbWordCounter);
+            TextView multi_lineCounter = layout.findViewById(R.id.multi_lineCounter);
+            TextView tvTimer = layout.findViewById(R.id.tvtimer);
+            Button btnSubmit = layout.findViewById(R.id.submit);
+            ConstraintLayout multiLineAnswerLayout = layout.findViewById(R.id.multi_line_answer);
+            ConstraintLayout fillTheBlanksLayout = layout.findViewById(R.id.fill_in_the_blanks_layout);
+            ConstraintLayout solutionLayout = layout.findViewById(R.id.solution_layout);
 
-        EditText etMultiLineAns = layout.findViewById(R.id.multi_line);
-        EditText etSinlgeineAns = layout.findViewById(R.id.fill_in_the_blanks);
+            EditText etMultiLineAns = layout.findViewById(R.id.multi_line);
+            EditText etSinlgeineAns = layout.findViewById(R.id.fill_in_the_blanks);
 
-        String decodedAns = AppUtils.decodedString(testQuestionNew.getTtqa_sub_ans());
+            String decodedAns = AppUtils.decodedString(testQuestionNew.getTtqa_sub_ans());
 
-        int minutes = Integer.parseInt(tvTimer.getText().toString().split(":", -1)[0]);
-        int seconds = Integer.parseInt(tvTimer.getText().toString().split(":", -1)[1]);
-        SubjectiveAnsDialog subjectiveAnsDialog = new SubjectiveAnsDialog(context, decodedAns, "", this);
-        etMultiLineAns.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                etMultiLineAns.requestFocus();
-            }
-        });
-
-        etMultiLineAns.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    etMultiLineAns.clearFocus();
-                    gMinutes = Integer.parseInt(tvTimer.getText().toString().split(":", -1)[0]);
-                    gSeconds = Integer.parseInt(tvTimer.getText().toString().split(":", -1)[1]);
-                    subjectiveAnsDialog.showd(gMinutes, gSeconds);
+            int minutes = Integer.parseInt(tvTimer.getText().toString().split(":", -1)[0]);
+            int seconds = Integer.parseInt(tvTimer.getText().toString().split(":", -1)[1]);
+            SubjectiveAnsDialog subjectiveAnsDialog = new SubjectiveAnsDialog(context, decodedAns, "", this);
+            etMultiLineAns.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    etMultiLineAns.requestFocus();
                 }
-            }
-        });
+            });
 
-        if (testQuestionNew.getQue_option_type().equalsIgnoreCase(Constant.ONE_LINE_ANSWER) ||
-                testQuestionNew.getQue_option_type().equalsIgnoreCase(Constant.FILL_THE_BLANKS)) {
-            Log.d(TAG, "FILL_THE_BLANKS");
-            fillTheBlanksLayout.setVisibility(View.VISIBLE);
-            answerCharCounter(etSinlgeineAns, tvFtbWordCounter, 10, testQuestionNew);
-            etSinlgeineAns.setText(decodedAns);
-        }
-
-        if (testQuestionNew.getQue_option_type().equalsIgnoreCase(Constant.SHORT_ANSWER) ||
-                testQuestionNew.getQue_option_type().equalsIgnoreCase(Constant.LONG_ANSWER)) {
-            Log.d(TAG, "SHORT_ANSWER OR LONG_ANSWER");
-            multiLineAnswerLayout.setVisibility(View.VISIBLE);
-            answerCharCounter(etMultiLineAns, tvWordCounter, 200, testQuestionNew);
-            etMultiLineAns.setText(decodedAns);
-        }
-
-        Log.e(TAG, "initSubjective Condtn : " + testQuestionNew.isTtqa_attempted());
-        if (testQuestionNew.isTtqa_attempted()) {
-            solutionLayout.setVisibility(View.VISIBLE);
-            //Log.d(TAG, "Base 64 : " + testQuestionNew.getTtqa_sub_ans());
-            Log.d(TAG, "Decoded Ans : " + decodedAns);
-            etMultiLineAns.setText(decodedAns);
-        }
-
-        btnSubmit.setOnClickListener(v -> {
-            if (multiLineAnswerLayout.getVisibility() == View.VISIBLE) {
-                if (etMultiLineAns.getText().toString().isEmpty()) {
-                    showToast("Please Enter Answer");
-                } else {
-                    if (etMultiLineAns.getText().toString().equalsIgnoreCase(testQuestionNew.getA_sub_ans())) {
-                        testQuestionNew.setAnsweredRight(true);
-                    } else {
-                        testQuestionNew.setAnsweredRight(false);
+            etMultiLineAns.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if (hasFocus) {
+                        etMultiLineAns.clearFocus();
+                        gMinutes = Integer.parseInt(tvTimer.getText().toString().split(":", -1)[0]);
+                        gSeconds = Integer.parseInt(tvTimer.getText().toString().split(":", -1)[1]);
+                        subjectiveAnsDialog.showd(gMinutes, gSeconds);
                     }
-                    solutionLayout.setVisibility(View.VISIBLE);
-                    submitAnswerToServer(testQuestionNew, testQuestionNew.getTtqa_sub_ans(), "SUBJECTIVE");
                 }
+            });
+
+            if (testQuestionNew.getQue_option_type().equalsIgnoreCase(Constant.ONE_LINE_ANSWER) ||
+                    testQuestionNew.getQue_option_type().equalsIgnoreCase(Constant.FILL_THE_BLANKS)) {
+                Log.d(TAG, "FILL_THE_BLANKS");
+                fillTheBlanksLayout.setVisibility(View.VISIBLE);
+                answerCharCounter(etSinlgeineAns, tvFtbWordCounter, 10, testQuestionNew);
+                etSinlgeineAns.setText(decodedAns);
             }
-        });
+
+            if (testQuestionNew.getQue_option_type().equalsIgnoreCase(Constant.SHORT_ANSWER) ||
+                    testQuestionNew.getQue_option_type().equalsIgnoreCase(Constant.LONG_ANSWER)) {
+                Log.d(TAG, "SHORT_ANSWER OR LONG_ANSWER");
+                multiLineAnswerLayout.setVisibility(View.VISIBLE);
+                answerCharCounter(etMultiLineAns, tvWordCounter, 200, testQuestionNew);
+                etMultiLineAns.setText(decodedAns);
+            }
+
+            Log.e(TAG, "initSubjective Condtn : " + testQuestionNew.isTtqa_attempted());
+            if (testQuestionNew.isTtqa_attempted()) {
+                solutionLayout.setVisibility(View.VISIBLE);
+                //Log.d(TAG, "Base 64 : " + testQuestionNew.getTtqa_sub_ans());
+                Log.d(TAG, "Decoded Ans : " + decodedAns);
+                etMultiLineAns.setText(decodedAns);
+            }
+
+            btnSubmit.setOnClickListener(v -> {
+                if (multiLineAnswerLayout.getVisibility() == View.VISIBLE) {
+                    if (etMultiLineAns.getText().toString().isEmpty()) {
+                        showToast("Please Enter Answer");
+                    } else {
+                        if (etMultiLineAns.getText().toString().equalsIgnoreCase(testQuestionNew.getA_sub_ans())) {
+                            testQuestionNew.setAnsweredRight(true);
+                        } else {
+                            testQuestionNew.setAnsweredRight(false);
+                        }
+                        solutionLayout.setVisibility(View.VISIBLE);
+                        submitAnswerToServer(testQuestionNew, testQuestionNew.getTtqa_sub_ans(), "SUBJECTIVE");
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void setSCQImgTextAnsIndicator(ImageView scqimgImgtextChck1, ImageView scqimgImgtextChck2,
@@ -1634,131 +1747,135 @@ public class PractiseViewPagerAdapter extends PagerAdapter
     }
 
     private void initViews(View layout, TestQuestionNew testQuestionNew, int pos) {
-        TextView tvQuestNo = layout.findViewById(R.id.id_textview);
-        TextView tvQuestion = layout.findViewById(R.id.question_textview);
-        TextView tvMarks = layout.findViewById(R.id.marks_textview);
-        ImageView imgQueDownload = layout.findViewById(R.id.save_que);
-        TextView tvDiffLevel = layout.findViewById(R.id.difflevel_value);
-        TextView tvAttemptedValue = layout.findViewById(R.id.attempted_value);
-        TextView tvRatingValue = layout.findViewById(R.id.ratingvalue);
-        TextView tvLikeValue = layout.findViewById(R.id.like_value);
-        TextView tvCommentValue = layout.findViewById(R.id.comment_value);
-        TextView tvShareValue = layout.findViewById(R.id.share_value);
+        try {
+            TextView tvQuestNo = layout.findViewById(R.id.id_textview);
+            TextView tvQuestion = layout.findViewById(R.id.question_textview);
+            TextView tvMarks = layout.findViewById(R.id.marks_textview);
+            ImageView imgQueDownload = layout.findViewById(R.id.save_que);
+            TextView tvDiffLevel = layout.findViewById(R.id.difflevel_value);
+            TextView tvAttemptedValue = layout.findViewById(R.id.attempted_value);
+            TextView tvRatingValue = layout.findViewById(R.id.ratingvalue);
+            TextView tvLikeValue = layout.findViewById(R.id.like_value);
+            TextView tvCommentValue = layout.findViewById(R.id.comment_value);
+            TextView tvShareValue = layout.findViewById(R.id.share_value);
 
-        ImageView imgDoubts = layout.findViewById(R.id.ask_doubt);
-        ImageView share = layout.findViewById(R.id.share);
-        TextView solutionDesc = layout.findViewById(R.id.solution_option);
-        LinearLayout questLayout = layout.findViewById(R.id.questLayout);
-        MathView questMath = layout.findViewById(R.id.questMathView);
-        ConstraintLayout commentsLayout = layout.findViewById(R.id.comment_layout);
+            ImageView imgDoubts = layout.findViewById(R.id.ask_doubt);
+            ImageView share = layout.findViewById(R.id.share);
+            TextView solutionDesc = layout.findViewById(R.id.solution_option);
+            LinearLayout questLayout = layout.findViewById(R.id.questLayout);
+            MathView questMath = layout.findViewById(R.id.questMathView);
+            ConstraintLayout commentsLayout = layout.findViewById(R.id.comment_layout);
 
-        //Toggle Buttons
-        ToggleButton favorite = layout.findViewById(R.id.favorite);
-        ToggleButton like = layout.findViewById(R.id.like);
-        ToggleButton mark = layout.findViewById(R.id.markToggle);
+            //Toggle Buttons
+            ToggleButton favorite = layout.findViewById(R.id.favorite);
+            ToggleButton like = layout.findViewById(R.id.like);
+            ToggleButton mark = layout.findViewById(R.id.markToggle);
 
-        //set the values
-        if (testQuestionNew.getQ_quest().contains("\\")) {
-            tvQuestion.setVisibility(View.GONE);
-            questMath.setVisibility(View.VISIBLE);
-            questMath.setText(AppUtils.decodedString(testQuestionNew.getQ_quest()));
-        } else {
-            questMath.setVisibility(View.GONE);
-            tvQuestion.setVisibility(View.VISIBLE);
-            tvQuestion.setText(AppUtils.decodedString(testQuestionNew.getQ_quest()));
-        }
-
-        tvQuestNo.setText(String.valueOf(testQuestionNew.getTq_quest_seq_num()));
-        tvMarks.setText("Marks : " + testQuestionNew.getTq_marks());
-        tvDiffLevel.setText(testQuestionNew.getQ_diff_level());
-        tvAttemptedValue.setText(testQuestionNew.getAttended_by());
-        tvRatingValue.setText(testQuestionNew.getRating());
-        tvLikeValue.setText(testQuestionNew.getLikes());
-        tvCommentValue.setText(testQuestionNew.getComments());
-        tvShareValue.setText(testQuestionNew.getShares());
-
-        //set Answer in solution Layout
-        solutionDesc.setText(AppUtils.decodedString(testQuestionNew.getA_sub_ans()));
-
-        if (favorite != null) {
-            favorite.setChecked(testQuestionNew.isQlc_fav_flag() ? true : false);
-            AppUtils.bounceAnim(context, favorite);
-        }
-
-        if (like != null) {
-            like.setChecked(testQuestionNew.isQlc_like_flag() ? true : false);
-            AppUtils.bounceAnim(context, like);
-        }
-
-        if (mark != null) {
-            mark.setChecked(testQuestionNew.isTtqa_marked() ? true : false);
-            AppUtils.bounceAnim(context, mark);
-        }
-
-        if (imgDoubts != null) {
-            imgDoubts.setOnClickListener(v -> {
-                Log.d(TAG, "initViews QId : " + testQuestionNew.getTq_id());
-                Log.d(TAG, "initViews SmId : " + testQuestionNew.getQ_sm_id());
-                new DoubtListingDialog(context, testQuestionNew.getTq_id(), testQuestionNew.getQ_sm_id(), Constant.que_doubts)
-                        .show();
-            });
-        }
-
-        tvLikeValue.setOnClickListener(v -> {
-            if (!testQuestionNew.getLikes().equalsIgnoreCase("0")) {
-                LikeListingDialog listingDialog = new LikeListingDialog(false, context, testQuestionNew.getTq_q_id(), this);
-                listingDialog.show();
+            //set the values
+            if (testQuestionNew.getQ_quest().contains("\\")) {
+                tvQuestion.setVisibility(View.GONE);
+                questMath.setVisibility(View.VISIBLE);
+                questMath.setText(AppUtils.decodedString(testQuestionNew.getQ_quest()));
+            } else {
+                questMath.setVisibility(View.GONE);
+                tvQuestion.setVisibility(View.VISIBLE);
+                tvQuestion.setText(AppUtils.decodedString(testQuestionNew.getQ_quest()));
             }
-        });
 
-        if (imgQueDownload != null)
-            imgQueDownload.setOnClickListener(v -> {
-                showToast("Added to saved questions List.");
+            tvQuestNo.setText(String.valueOf(testQuestionNew.getTq_quest_seq_num()));
+            tvMarks.setText("Marks : " + testQuestionNew.getTq_marks());
+            tvDiffLevel.setText(testQuestionNew.getQ_diff_level());
+            tvAttemptedValue.setText(testQuestionNew.getAttended_by());
+            tvRatingValue.setText(testQuestionNew.getRating());
+            tvLikeValue.setText(testQuestionNew.getLikes());
+            tvCommentValue.setText(testQuestionNew.getComments());
+            tvShareValue.setText(testQuestionNew.getShares());
+
+            //set Answer in solution Layout
+            solutionDesc.setText(AppUtils.decodedString(testQuestionNew.getA_sub_ans()));
+
+            if (favorite != null) {
+                favorite.setChecked(testQuestionNew.isQlc_fav_flag() ? true : false);
+                AppUtils.bounceAnim(context, favorite);
+            }
+
+            if (like != null) {
+                like.setChecked(testQuestionNew.isQlc_like_flag() ? true : false);
+                AppUtils.bounceAnim(context, like);
+            }
+
+            if (mark != null) {
+                mark.setChecked(testQuestionNew.isTtqa_marked() ? true : false);
+                AppUtils.bounceAnim(context, mark);
+            }
+
+            if (imgDoubts != null) {
+                imgDoubts.setOnClickListener(v -> {
+                    Log.d(TAG, "initViews QId : " + testQuestionNew.getTq_id());
+                    Log.d(TAG, "initViews SmId : " + testQuestionNew.getQ_sm_id());
+                    new DoubtListingDialog(context, testQuestionNew.getTq_id(), testQuestionNew.getQ_sm_id(), Constant.que_doubts)
+                            .show();
+                });
+            }
+
+            tvLikeValue.setOnClickListener(v -> {
+                if (!testQuestionNew.getLikes().equalsIgnoreCase("0")) {
+                    LikeListingDialog listingDialog = new LikeListingDialog(false, context, testQuestionNew.getTq_q_id(), this);
+                    listingDialog.show();
+                }
             });
 
-        if (commentsLayout != null)
-            commentsLayout.setOnClickListener(v -> {
-                commentDialog = new CommentDialog(context, testQuestionNew.getTq_q_id(), false, this);
-                commentDialog.show();
-            });
+            if (imgQueDownload != null)
+                imgQueDownload.setOnClickListener(v -> {
+                    showToast("Added to saved questions List.");
+                });
 
-        if (mark != null)
-            mark.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isChecked) {
-                        testQuestionNew.setTtqa_marked(true);
-                    } else {
-                        testQuestionNew.setTtqa_marked(false);
+            if (commentsLayout != null)
+                commentsLayout.setOnClickListener(v -> {
+                    commentDialog = new CommentDialog(context, testQuestionNew.getTq_q_id(), false, this);
+                    commentDialog.show();
+                });
+
+            if (mark != null)
+                mark.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        if (isChecked) {
+                            testQuestionNew.setTtqa_marked(true);
+                        } else {
+                            testQuestionNew.setTtqa_marked(false);
+                        }
+                        AppUtils.bounceAnim(context, mark);
+                        viewPagerClickListener.onMarkQuestion(pos);
                     }
-                    AppUtils.bounceAnim(context, mark);
-                    viewPagerClickListener.onMarkQuestion(pos);
-                }
-            });
+                });
 
-        if (favorite != null)
-            favorite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    AppUtils.bounceAnim(context, favorite);
-                    ProcessQuestionAPI(testQuestionNew.getTq_q_id(), isChecked ? 1 : 0, "fav", 0);
-                }
-            });
+            if (favorite != null)
+                favorite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        AppUtils.bounceAnim(context, favorite);
+                        ProcessQuestionAPI(testQuestionNew.getTq_q_id(), isChecked ? 1 : 0, "fav", 0);
+                    }
+                });
 
-        if (like != null)
-            like.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    AppUtils.bounceAnim(context, like);
-                    int prevLikeCount = Integer.parseInt(tvLikeValue.getText().toString());
-                    ProcessQuestionAPI(testQuestionNew.getTq_q_id(), isChecked ? 1 : 0, "like", prevLikeCount);
-                }
-            });
+            if (like != null)
+                like.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        AppUtils.bounceAnim(context, like);
+                        int prevLikeCount = Integer.parseInt(tvLikeValue.getText().toString());
+                        ProcessQuestionAPI(testQuestionNew.getTq_q_id(), isChecked ? 1 : 0, "like", prevLikeCount);
+                    }
+                });
 
-        if (share != null)
-            share.setOnClickListener(v -> {
-                viewPagerClickListener.onShareClick();
-            });
+            if (share != null)
+                share.setOnClickListener(v -> {
+                    viewPagerClickListener.onShareClick();
+                });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void rightAnswerFeedBack() {
