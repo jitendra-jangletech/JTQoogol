@@ -37,7 +37,7 @@ public class AnsScanDialog extends Dialog {
             listener.onCamScannerClick(id);
         });
 
-        mBinding.Gallery.setOnClickListener(v -> {
+        mBinding.gallery.setOnClickListener(v -> {
             dismiss();
             listener.onGalleryClick(id);
         });

@@ -135,59 +135,68 @@ public class SCQImgTextFragment extends BaseFragment implements QueMediaListener
     }
 
     private void setData(LearningQuestionsNew learningQuestionsNew) {
-        questionId = String.valueOf(learningQuestionsNew.getQuestion_id());
-        subjectId = learningQuestionsNew.getSubject_id();
-        mBinding.subject.setText("Subject : " + learningQuestionsNew.getSubject());
-        mBinding.etQuestion.setText(learningQuestionsNew.getQuestion());
-        mBinding.etQuestionDesc.setText(learningQuestionsNew.getQuestiondesc());
+        try {
+            questionId = String.valueOf(learningQuestionsNew.getQuestion_id());
+            subjectId = learningQuestionsNew.getSubject_id();
+            mBinding.subject.setText("Subject : " + learningQuestionsNew.getSubject());
+            mBinding.etQuestion.setText(learningQuestionsNew.getQuestion());
+            mBinding.etQuestionDesc.setText(learningQuestionsNew.getQuestiondesc());
 
-        Uri uri1 = Uri.parse(AppUtils.getMedialUrl(getActivity(), learningQuestionsNew.getMcq1().split(":", -1)[1], learningQuestionsNew.getMcq1().split(":", -1)[2]));
-        mOptionsUri[0] = uri1;
-        setImage(uri1, mBinding.image1);
-        mBinding.text1.setText(learningQuestionsNew.getMcq1().split(":", -1)[3]);
+          if (!learningQuestionsNew.getMcq1().isEmpty()) {
+              Uri uri1 = Uri.parse(AppUtils.getMedialUrl(getActivity(), learningQuestionsNew.getMcq1().split(":", -1)[1], learningQuestionsNew.getMcq1().split(":", -1)[2]));
+              mOptionsUri[0] = uri1;
+              setImage(uri1, mBinding.image1);
+              mBinding.text1.setText(learningQuestionsNew.getMcq1().split(":", -1)[3]); }
 
-        Uri uri2 = Uri.parse(AppUtils.getMedialUrl(getActivity(), learningQuestionsNew.getMcq2().split(":", -1)[1], learningQuestionsNew.getMcq2().split(":", -1)[2]));
-        mOptionsUri[0] = uri2;
-        setImage(uri2, mBinding.image2);
-        mBinding.text2.setText(learningQuestionsNew.getMcq2().split(":", -1)[3]);
+            if (!learningQuestionsNew.getMcq2().isEmpty()) {
+                Uri uri2 = Uri.parse(AppUtils.getMedialUrl(getActivity(), learningQuestionsNew.getMcq2().split(":", -1)[1], learningQuestionsNew.getMcq2().split(":", -1)[2]));
+                mOptionsUri[0] = uri2;
+                setImage(uri2, mBinding.image2);
+                mBinding.text2.setText(learningQuestionsNew.getMcq2().split(":", -1)[3]); }
 
-        Uri uri3 = Uri.parse(AppUtils.getMedialUrl(getActivity(), learningQuestionsNew.getMcq3().split(":", -1)[1], learningQuestionsNew.getMcq3().split(":", -1)[2]));
-        mOptionsUri[0] = uri3;
-        setImage(uri3, mBinding.image3);
-        mBinding.text3.setText(learningQuestionsNew.getMcq3().split(":", -1)[3]);
+            if (!learningQuestionsNew.getMcq3().isEmpty()) {
+                Uri uri3 = Uri.parse(AppUtils.getMedialUrl(getActivity(), learningQuestionsNew.getMcq3().split(":", -1)[1], learningQuestionsNew.getMcq3().split(":", -1)[2]));
+                mOptionsUri[0] = uri3;
+                setImage(uri3, mBinding.image3);
+                mBinding.text3.setText(learningQuestionsNew.getMcq3().split(":", -1)[3]); }
 
-        Uri uri4 = Uri.parse(AppUtils.getMedialUrl(getActivity(), learningQuestionsNew.getMcq4().split(":", -1)[1], learningQuestionsNew.getMcq4().split(":", -1)[2]));
-        mOptionsUri[0] = uri4;
-        setImage(uri4, mBinding.image4);
-        mBinding.text4.setText(learningQuestionsNew.getMcq4().split(":", -1)[3]);
-
-        mBinding.edtmarks.setText(learningQuestionsNew.getMarks());
-        mBinding.edtduration.setText(learningQuestionsNew.getDuration());
-
-        if (learningQuestionsNew.getDifficulty_level().equalsIgnoreCase("E"))
-            mBinding.radioEasy.setChecked(true);
-        else if (learningQuestionsNew.getDifficulty_level().equalsIgnoreCase("M"))
-            mBinding.radioMedium.setChecked(true);
-        else if (learningQuestionsNew.getDifficulty_level().equalsIgnoreCase("H"))
-            mBinding.radioHard.setChecked(true);
+            if (!learningQuestionsNew.getMcq4().isEmpty()) {
+                Uri uri4 = Uri.parse(AppUtils.getMedialUrl(getActivity(), learningQuestionsNew.getMcq4().split(":", -1)[1], learningQuestionsNew.getMcq4().split(":", -1)[2]));
+                mOptionsUri[0] = uri4;
+                setImage(uri4, mBinding.image4);
+                mBinding.text4.setText(learningQuestionsNew.getMcq4().split(":", -1)[3]); }
 
 
-        if (learningQuestionsNew.getAnswer().equalsIgnoreCase("A"))
-            mBinding.radioA.setChecked(true);
-        else if (learningQuestionsNew.getAnswer().equalsIgnoreCase("B"))
-            mBinding.radioB.setChecked(true);
-        else if (learningQuestionsNew.getAnswer().equalsIgnoreCase("C"))
-            mBinding.radioC.setChecked(true);
-        else if (learningQuestionsNew.getAnswer().equalsIgnoreCase("D"))
-            mBinding.radioD.setChecked(true);
+            mBinding.edtmarks.setText(learningQuestionsNew.getMarks());
+            mBinding.edtduration.setText(learningQuestionsNew.getDuration());
 
-        if (learningQuestionsNew.getQue_images() != null && !learningQuestionsNew.getQue_images().isEmpty()) {
-            String[] stringrray = learningQuestionsNew.getQue_images().split(",");
-            tempimgList = Arrays.asList(stringrray);
-            for (int i = 0; i < stringrray.length; i++) {
-                String s = AppUtils.getMedialUrl(getActivity(), tempimgList.get(i).split(":", -1)[1], tempimgList.get(i).split(":", -1)[2]);
-                setupPreview(Uri.parse(s));
+            if (learningQuestionsNew.getDifficulty_level().equalsIgnoreCase("E"))
+                mBinding.radioEasy.setChecked(true);
+            else if (learningQuestionsNew.getDifficulty_level().equalsIgnoreCase("M"))
+                mBinding.radioMedium.setChecked(true);
+            else if (learningQuestionsNew.getDifficulty_level().equalsIgnoreCase("H"))
+                mBinding.radioHard.setChecked(true);
+
+
+            if (learningQuestionsNew.getAnswer().equalsIgnoreCase("A"))
+                mBinding.radioA.setChecked(true);
+            else if (learningQuestionsNew.getAnswer().equalsIgnoreCase("B"))
+                mBinding.radioB.setChecked(true);
+            else if (learningQuestionsNew.getAnswer().equalsIgnoreCase("C"))
+                mBinding.radioC.setChecked(true);
+            else if (learningQuestionsNew.getAnswer().equalsIgnoreCase("D"))
+                mBinding.radioD.setChecked(true);
+
+            if (learningQuestionsNew.getQue_images() != null && !learningQuestionsNew.getQue_images().isEmpty()) {
+                String[] stringrray = learningQuestionsNew.getQue_images().split(",");
+                tempimgList = Arrays.asList(stringrray);
+                for (int i = 0; i < stringrray.length; i++) {
+                    String s = AppUtils.getMedialUrl(getActivity(), tempimgList.get(i).split(":", -1)[1], tempimgList.get(i).split(":", -1)[2]);
+                    setupPreview(Uri.parse(s));
+                }
             }
+        } catch (Exception e){
+            e.printStackTrace();
         }
     }
 
@@ -197,9 +206,15 @@ public class SCQImgTextFragment extends BaseFragment implements QueMediaListener
             ProgressDialog.getInstance().show(getActivity());
             MultipartBody.Part[] queImagesParts = null;
             String images = "", SCQ1 = "", SCQ2 = "", SCQ3 = "", SCQ4 = "";
+            int size = 0;
+            if ( mAllUri != null && mAllUri.size()>0)
+                size = size+mAllUri.size();
+            if (mOptionsUri !=null && mOptionsUri.length>0)
+                size = size+ mOptionsUri.length;
+
+            queImagesParts = new MultipartBody.Part[size];
             if (mAllUri != null && mAllUri.size() > 0) {
                 try {
-                    queImagesParts = new MultipartBody.Part[mAllUri.size()];
                     for (int index = 0; index < mAllUri.size(); index++) {
                         Uri single_image = mAllUri.get(index);
                         if (!single_image.toString().contains("https")) {
@@ -241,6 +256,15 @@ public class SCQImgTextFragment extends BaseFragment implements QueMediaListener
                         }
                     }
 
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    ProgressDialog.getInstance().dismiss();
+                }
+            }
+
+            if (mOptionsUri!=null && mOptionsUri.length>0) {
+                try {
                     for (int index = 0; index < mOptionsUri.length; index++) {
                         Uri single_image = mOptionsUri[index];
                         if (!single_image.toString().contains("https")) {
@@ -281,7 +305,6 @@ public class SCQImgTextFragment extends BaseFragment implements QueMediaListener
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    ProgressDialog.getInstance().dismiss();
                 }
             }
 

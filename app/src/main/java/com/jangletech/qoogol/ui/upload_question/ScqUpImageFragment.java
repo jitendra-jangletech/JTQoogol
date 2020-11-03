@@ -138,21 +138,31 @@ public class ScqUpImageFragment extends BaseFragment implements QueMediaListener
         mBinding.etQuestion.setText(learningQuestionsNew.getQuestion());
         mBinding.etQuestionDesc.setText(learningQuestionsNew.getQuestiondesc());
 
-        Uri uri1 = Uri.parse(AppUtils.getMedialUrl(getActivity(), learningQuestionsNew.getMcq1().split(":", -1)[1], learningQuestionsNew.getMcq1().split(":", -1)[2]));
-        mOptionsUri[0] = uri1;
-        setImage(uri1, mBinding.image1);
+        if (!learningQuestionsNew.getMcq1().isEmpty()) {
+            Uri uri1 = Uri.parse(AppUtils.getMedialUrl(getActivity(), learningQuestionsNew.getMcq1().split(":", -1)[1], learningQuestionsNew.getMcq1().split(":", -1)[2]));
+            mOptionsUri[0] = uri1;
+            setImage(uri1, mBinding.image1);
+        }
 
-        Uri uri2 = Uri.parse(AppUtils.getMedialUrl(getActivity(), learningQuestionsNew.getMcq2().split(":", -1)[1], learningQuestionsNew.getMcq2().split(":", -1)[2]));
-        mOptionsUri[0] = uri2;
-        setImage(uri2, mBinding.image2);
 
-        Uri uri3 = Uri.parse(AppUtils.getMedialUrl(getActivity(), learningQuestionsNew.getMcq3().split(":", -1)[1], learningQuestionsNew.getMcq3().split(":", -1)[2]));
-        mOptionsUri[0] = uri3;
-        setImage(uri3, mBinding.image3);
+        if (!learningQuestionsNew.getMcq2().isEmpty()) {
+            Uri uri2 = Uri.parse(AppUtils.getMedialUrl(getActivity(), learningQuestionsNew.getMcq2().split(":", -1)[1], learningQuestionsNew.getMcq2().split(":", -1)[2]));
+            mOptionsUri[0] = uri2;
+            setImage(uri2, mBinding.image2);
+        }
 
-        Uri uri4 = Uri.parse(AppUtils.getMedialUrl(getActivity(), learningQuestionsNew.getMcq4().split(":", -1)[1], learningQuestionsNew.getMcq4().split(":", -1)[2]));
-        mOptionsUri[0] = uri4;
-        setImage(uri4, mBinding.image4);
+
+        if (!learningQuestionsNew.getMcq3().isEmpty()) {
+            Uri uri3 = Uri.parse(AppUtils.getMedialUrl(getActivity(), learningQuestionsNew.getMcq3().split(":", -1)[1], learningQuestionsNew.getMcq3().split(":", -1)[2]));
+            mOptionsUri[0] = uri3;
+            setImage(uri3, mBinding.image3);
+        }
+
+        if (!learningQuestionsNew.getMcq4().isEmpty()) {
+            Uri uri4 = Uri.parse(AppUtils.getMedialUrl(getActivity(), learningQuestionsNew.getMcq4().split(":", -1)[1], learningQuestionsNew.getMcq4().split(":", -1)[2]));
+            mOptionsUri[0] = uri4;
+            setImage(uri4, mBinding.image4);
+        }
 
         mBinding.edtmarks.setText(learningQuestionsNew.getMarks());
         mBinding.edtduration.setText(learningQuestionsNew.getDuration());
@@ -189,9 +199,16 @@ public class ScqUpImageFragment extends BaseFragment implements QueMediaListener
             ProgressDialog.getInstance().show(getActivity());
             MultipartBody.Part[] queImagesParts = null;
             String images = "", SCQ1 = "", SCQ2 = "", SCQ3 = "", SCQ4 = "";
+            int size = 0;
+           if ( mAllUri != null && mAllUri.size()>0)
+               size = size+mAllUri.size();
+           if (mOptionsUri !=null && mOptionsUri.length>0)
+               size = size+ mOptionsUri.length;
+
+            queImagesParts = new MultipartBody.Part[size];
+
             if (mAllUri != null && mAllUri.size() > 0) {
                 try {
-                    queImagesParts = new MultipartBody.Part[mAllUri.size()];
                     for (int index = 0; index < mAllUri.size(); index++) {
                         Uri single_image = mAllUri.get(index);
                         if (!single_image.toString().contains("https")) {
@@ -234,47 +251,55 @@ public class ScqUpImageFragment extends BaseFragment implements QueMediaListener
 
                     }
 
-                    for (int index = 0; index < mOptionsUri.length; index++) {
-                        Uri single_image = mOptionsUri[index];
-                        if (!single_image.toString().contains("https")) {
-                            File imageFile = AppUtils.createImageFile(requireActivity(), single_image);
-                            if (!imageFile.exists()) {
-                                imageFile.createNewFile();
-                            }
 
-                            final InputStream imageStream = getActivity().getContentResolver().openInputStream(single_image);
-                            AppUtils.readFully(imageStream, imageFile);
-                            File file = new File(mOptionsUri[index].getPath());
-                            long fileSizeInMB = imageFile.length() / 1048576;
-                            Log.i(TAG, "File Size: " + fileSizeInMB + " MB");
-                            if (fileSizeInMB > new PreferenceManager(getActivity()).getImageSize()) {
-                                Toast.makeText(getActivity(), "Please upload the image of size less than 10MB", Toast.LENGTH_LONG).show();
-                            } else {
-                                RequestBody queBody = null;
-                                if (UtilHelper.isImage(single_image, getActivity())) {
-                                    queBody = RequestBody.create(MediaType.parse("image/*"),
-                                            imageFile);
-                                }
-
-                                queImagesParts[index] = MultipartBody.Part.createFormData("Files",
-                                        imageFile.getName(), queBody);
-                                if (single_image != null) {
-                                    if (index == 0)
-                                        SCQ1 = AppUtils.encodedString(imageFile.getName());
-                                    else if (index == 1)
-                                        SCQ2 = AppUtils.encodedString(imageFile.getName());
-                                    else if (index == 2)
-                                        SCQ3 = AppUtils.encodedString(imageFile.getName());
-                                    else if (index == 3)
-                                        SCQ4 = AppUtils.encodedString(imageFile.getName());
-                                }
-                            }
-                        }
-                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                     ProgressDialog.getInstance().dismiss();
                 }
+            }
+
+            if (mOptionsUri!=null && mOptionsUri.length>0) {
+               try {
+                   for (int index = 0; index < mOptionsUri.length; index++) {
+                       Uri single_image = mOptionsUri[index];
+                       if (!single_image.toString().contains("https")) {
+                           File imageFile = AppUtils.createImageFile(requireActivity(), single_image);
+                           if (!imageFile.exists()) {
+                               imageFile.createNewFile();
+                           }
+
+                           final InputStream imageStream = getActivity().getContentResolver().openInputStream(single_image);
+                           AppUtils.readFully(imageStream, imageFile);
+                           File file = new File(mOptionsUri[index].getPath());
+                           long fileSizeInMB = imageFile.length() / 1048576;
+                           Log.i(TAG, "File Size: " + fileSizeInMB + " MB");
+                           if (fileSizeInMB > new PreferenceManager(getActivity()).getImageSize()) {
+                               Toast.makeText(getActivity(), "Please upload the image of size less than 10MB", Toast.LENGTH_LONG).show();
+                           } else {
+                               RequestBody queBody = null;
+                               if (UtilHelper.isImage(single_image, getActivity())) {
+                                   queBody = RequestBody.create(MediaType.parse("image/*"),
+                                           imageFile);
+                               }
+
+                               queImagesParts[index] = MultipartBody.Part.createFormData("Files",
+                                       imageFile.getName(), queBody);
+                               if (single_image != null) {
+                                   if (index == 0)
+                                       SCQ1 = AppUtils.encodedString(imageFile.getName());
+                                   else if (index == 1)
+                                       SCQ2 = AppUtils.encodedString(imageFile.getName());
+                                   else if (index == 2)
+                                       SCQ3 = AppUtils.encodedString(imageFile.getName());
+                                   else if (index == 3)
+                                       SCQ4 = AppUtils.encodedString(imageFile.getName());
+                               }
+                           }
+                       }
+                   }
+               } catch (Exception e) {
+                   e.printStackTrace();
+               }
             }
 
 

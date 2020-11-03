@@ -46,8 +46,10 @@ public class QuestionTypeFragment extends BaseFragment implements View.OnClickLi
         }
         mBinding.tvSubject.setText(uploadQuestion.getSubjectName());
         mBinding.questionText.setText(uploadQuestion.getQuestDescription());
+
         mBinding.btnNext.setOnClickListener(v -> {
             Bundle bundle = new Bundle();
+            uploadQuestion.setQuestDescription(mBinding.questionText.getText().toString());
             bundle.putSerializable("Question", uploadQuestion);
             bundle.putInt("call_from",ADD);
             if (uploadQuestion.getQuestionType() != null) {

@@ -221,6 +221,7 @@
         android:id="@+id/nav_upload_question"
         android:name="com.jangletech.qoogol.ui.upload_question.UploadQueFragment"
         android:label="@string/upload_que"
+        app:popUpToInclusive="true"
         tools:layout="@layout/fragment_upload_que" />
 
     <fragment

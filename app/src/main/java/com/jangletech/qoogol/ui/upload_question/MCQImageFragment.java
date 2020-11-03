@@ -194,9 +194,15 @@ public class MCQImageFragment extends BaseFragment implements QueMediaListener {
             ProgressDialog.getInstance().show(getActivity());
             MultipartBody.Part[] queImagesParts = null;
             String images = "", SCQ1 = "", SCQ2 = "", SCQ3 = "", SCQ4 = "";
+            int size = 0;
+            if ( mAllUri != null && mAllUri.size()>0)
+                size = size+mAllUri.size();
+            if (mOptionsUri !=null && mOptionsUri.length>0)
+                size = size+ mOptionsUri.length;
+            queImagesParts = new MultipartBody.Part[size];
+
             if (mAllUri != null && mAllUri.size() > 0) {
                 try {
-                    queImagesParts = new MultipartBody.Part[mAllUri.size()];
                     for (int index = 0; index < mAllUri.size(); index++) {
                         Uri single_image = mAllUri.get(index);
                         if (!single_image.toString().contains("https")) {
@@ -238,6 +244,15 @@ public class MCQImageFragment extends BaseFragment implements QueMediaListener {
                         }
                     }
 
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    ProgressDialog.getInstance().dismiss();
+                }
+            }
+
+            if (mOptionsUri!=null && mOptionsUri.length>0) {
+                try {
                     for (int index = 0; index < mOptionsUri.length; index++) {
                         Uri single_image = mOptionsUri[index];
                         if (!single_image.toString().contains("https")) {
@@ -275,12 +290,10 @@ public class MCQImageFragment extends BaseFragment implements QueMediaListener {
                             }
                         }
                     }
-                } catch (Exception e) {
+                }catch (Exception e) {
                     e.printStackTrace();
-                    ProgressDialog.getInstance().dismiss();
                 }
             }
-
 
             RequestBody question_id = RequestBody.create(MediaType.parse("multipart/form-data"), questionId);
             RequestBody userId = RequestBody.create(MediaType.parse("multipart/form-data"), new PreferenceManager(getActivity()).getUserId());
