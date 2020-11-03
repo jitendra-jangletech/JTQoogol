@@ -7,13 +7,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
-import android.widget.AbsListView;
 
-import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
@@ -116,7 +113,11 @@ public class AddQuestionDialog extends Dialog implements AddTestQuestionAdapter.
                 R.layout.dialog_add_question, null, false);
         setContentView(mBinding.getRoot());
         prepareQueCategory();
-        fetchTestQuestList();
+        try {
+            fetchTestQuestList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         mBinding.btnClose.setOnClickListener(v -> {
             dismiss();
@@ -177,18 +178,24 @@ public class AddQuestionDialog extends Dialog implements AddTestQuestionAdapter.
             @Override
             public void onResponse(Call<LearningQuestResponse> call, Response<LearningQuestResponse> response) {
                 ProgressDialog.getInstance().dismiss();
-                if (response.body() != null) {
-                    if (response.body().getResponse().equals("200")) {
-                        learningQuestionsNewList.clear();
-                        learningQuestionsNewList.addAll(response.body().getQuestion_list());
-                        Log.i(TAG, "onResponse List Size : " + learningQuestionsNewList.size());
-                        setTestQuestList(response.body().getQuestion_list());
-                    } else {
-                        AppUtils.showToast(getContext(), response.body().getMessage());
-                        //mBinding.questionRecyclerView.setVisibility(View.GONE);
-                        //mBinding.tvEmptyview.setVisibility(View.VISIBLE);
-                        //mBinding.tvEmptyview.setText("No Questions Found.");
+                try {
+                    if (response.body() != null) {
+                        if (response.body().getResponse() != null &&
+                                response.body().getResponse().equals("200")) {
+                            learningQuestionsNewList.clear();
+                            learningQuestionsNewList.addAll(response.body().getQuestion_list());
+                            Log.i(TAG, "onResponse List Size : " + learningQuestionsNewList.size());
+                            setTestQuestList(response.body().getQuestion_list());
+                        } else {
+                            //AppUtils.showToast(getContext(), response.body().getMessage());
+                            setTestQuestList(response.body().getQuestion_list());
+                            //mBinding.questionRecyclerView.setVisibility(View.GONE);
+                            //mBinding.tvEmptyview.setVisibility(View.VISIBLE);
+                            //mBinding.tvEmptyview.setText("No Questions Found.");
+                        }
                     }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
 

@@ -139,22 +139,10 @@ public class SyllabusDialog extends DialogFragment implements EducationAdapter.E
 
                     Log.d(TAG, "onChanged UeId : " + userPreferences.getSelectedUeId());
 
-                    //saveString(getActivity(), Constant.selected_ue_id, userPreferences.getSelectedUeId());
-                    //saveString(getActivity(), Constant.subjectName, userPreferences.getSubjectName());
-                    //saveString(getActivity(), Constant.chapterName1, userPreferences.getChapterName1());
-                    //saveString(getActivity(), Constant.chapterName2, userPreferences.getChapterName2());
-                    //saveString(getActivity(), Constant.chapterName3, userPreferences.getChapterName3());
-
-                    String subjectName = "";
-                    String chapterName = "";
-                    String subjectId = "";
-                    String chapterId = "";
-
                     TinyDB.getInstance(getActivity()).putString(Constant.subjectName, userPreferences.getSubjectName());
                     TinyDB.getInstance(getActivity()).putString(Constant.subjectId, userPreferences.getSubjectId());
 
                     //TinyDB.get
-
                     TestSubjectChapterMaster testSubjectChapterMaster = new TestSubjectChapterMaster();
                     testSubjectChapterMaster.setSections(userPreferences.getSections());
                     testSubjectChapterMaster.setSubjectName(userPreferences.getSubjectName());

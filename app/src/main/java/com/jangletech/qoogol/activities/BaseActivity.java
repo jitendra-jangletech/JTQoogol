@@ -70,11 +70,6 @@ public class BaseActivity extends AppCompatActivity {
         new PreferenceManager(getApplicationContext()).saveString(key, value);
     }
 
-    /*public String getTestDurationFormat(int minutes){
-        String temp = "";
-        int hours = minutes/60;
-    }*/
-
     @SuppressLint("ClickableViewAccessibility")
     public void showFullScreen(final String profilePath) {
         final Dialog dialog = new Dialog(this, android.R.style.Theme_Light);
@@ -91,8 +86,31 @@ public class BaseActivity extends AppCompatActivity {
                 .dontTransform()
                 .dontAnimate()
                 .into(imageView);
-
         dialog.show();
+    }
+
+    public void showAlert(String msg, String positiveBtnText, DialogInterface.OnClickListener dialogInterface) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogStyle);
+        builder.setTitle("Alert")
+                .setMessage(msg)
+                .setPositiveButton(positiveBtnText, dialogInterface)
+                .setNegativeButton("Cancel", null)
+                .setCancelable(false)
+                .show();
+    }
+
+    public void showAlert(String msg) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogStyle);
+        builder.setTitle("Alert")
+                .setMessage(msg)
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setCancelable(false)
+                .show();
     }
 
     public void noInternetError(Throwable t) {
@@ -193,7 +211,6 @@ public class BaseActivity extends AppCompatActivity {
                         }
                     })
                     .show();
-
         }
     }
 

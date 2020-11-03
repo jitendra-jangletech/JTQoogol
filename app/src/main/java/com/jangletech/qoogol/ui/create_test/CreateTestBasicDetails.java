@@ -15,6 +15,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
@@ -26,8 +28,11 @@ import com.jangletech.qoogol.dialog.SyllabusDialog;
 import com.jangletech.qoogol.model.CreateTestResponse;
 import com.jangletech.qoogol.model.TestModelNew;
 import com.jangletech.qoogol.model.TestSubjectChapterMaster;
+import com.jangletech.qoogol.model.UserPreferenceResponse;
 import com.jangletech.qoogol.retrofit.ApiClient;
 import com.jangletech.qoogol.ui.BaseFragment;
+import com.jangletech.qoogol.ui.educational_info.EducationInfoViewModel;
+import com.jangletech.qoogol.ui.test.my_test.MyTestViewModel;
 import com.jangletech.qoogol.util.AppUtils;
 import com.jangletech.qoogol.util.Constant;
 import com.jangletech.qoogol.util.TinyDB;
@@ -35,6 +40,7 @@ import com.jangletech.qoogol.util.TinyDB;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -48,6 +54,7 @@ public class CreateTestBasicDetails extends BaseFragment implements TextWatcher,
 
     private static final String TAG = "CreateTestBasicDetails";
     private FragmentCreateBasicDetailsBinding mBinding;
+    private EducationInfoViewModel educationInfoViewModel;
     private String difficulty = "", category = "", strTestType = "", strNegativeMarks = "";
     private String chapters = "";
     private LinkedHashMap<String, String> diffLevel = new LinkedHashMap<>();
@@ -57,20 +64,35 @@ public class CreateTestBasicDetails extends BaseFragment implements TextWatcher,
     private LinkedHashMap<String, String> negativeMarks = new LinkedHashMap<>();
     private TestSubjectChapterMaster testSubjectChapterMaster = new TestSubjectChapterMaster();
     private Calendar mcurrentTime;
+    private MyTestViewModel mViewModel;
+    private HashMap<String, String> params = new HashMap<>();
     private TimePickerDialog mTimePicker;
     private String tmId = "";
     private Bundle bundle;
+
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_create_basic_details, container, false);
+        params.put(Constant.selected_ue_id, TinyDB.getInstance(getActivity()).getString(Constant.selected_ue_id));
+        params.put(Constant.appName, Constant.APP_NAME);
+        params.put(Constant.u_user_id, AppUtils.getUserId());
+        params.put(Constant.device_id, AppUtils.getDeviceId());
+        params.put(Constant.CASE, "L");
+        params.put(Constant.subjectId, "");
+        params.put(Constant.chapterId1, "");
+        params.put(Constant.chapterId2, "");
+        params.put(Constant.chapterId3, "");
         return mBinding.getRoot();
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        educationInfoViewModel = ViewModelProviders.of(this).get(EducationInfoViewModel.class);
+        mViewModel = ViewModelProviders.of(this).get(MyTestViewModel.class);
+        fetchUpdatePreferences(params);
         Log.i(TAG, "onActivityCreated Executed: ");
         try {
             bundle = new Bundle();
@@ -99,6 +121,52 @@ public class CreateTestBasicDetails extends BaseFragment implements TextWatcher,
         mBinding.etTotalMarks.addTextChangedListener(this);
         mBinding.etDuration.addTextChangedListener(this);
         mBinding.etNoOfQuests.addTextChangedListener(this);
+
+        mViewModel.getPreferences().observe(getViewLifecycleOwner(), new Observer<UserPreferenceResponse>() {
+            @Override
+            public void onChanged(UserPreferenceResponse userPreferences) {
+                if (userPreferences != null) {
+
+                    Log.d(TAG, "onChanged UeId : " + userPreferences.getSelectedUeId());
+
+                    TinyDB.getInstance(getActivity()).putString(Constant.subjectName, userPreferences.getSubjectName());
+                    TinyDB.getInstance(getActivity()).putString(Constant.subjectId, userPreferences.getSubjectId());
+
+                    //TinyDB.get
+                    TestSubjectChapterMaster testSubjectChapterMaster = new TestSubjectChapterMaster();
+                    testSubjectChapterMaster.setSections(userPreferences.getSections());
+                    testSubjectChapterMaster.setSubjectName(userPreferences.getSubjectName());
+                    testSubjectChapterMaster.setSubjectId(userPreferences.getSubjectId());
+                    testSubjectChapterMaster.setChap1Name(userPreferences.getChapterName1());
+                    testSubjectChapterMaster.setChap1Id(userPreferences.getChapterId1());
+                    testSubjectChapterMaster.setChap2Name(userPreferences.getChapterName2());
+                    testSubjectChapterMaster.setChap2Id(userPreferences.getChapterId2());
+                    testSubjectChapterMaster.setChap3Name(userPreferences.getChapterName3());
+                    testSubjectChapterMaster.setChap3Id(userPreferences.getChapterId3());
+                    testSubjectChapterMaster.setUeId(userPreferences.getSelectedUeId());
+
+                    Gson gson = new Gson();
+                    String json = gson.toJson(testSubjectChapterMaster);
+                    TinyDB.getInstance(getActivity()).putString(Constant.TEST_SUBJECT_CHAP, json);
+
+                    params.put(Constant.selected_ue_id, userPreferences.getSelectedUeId());
+                    params.put(Constant.subjectId, userPreferences.getSubjectId());
+                    params.put(Constant.chapterId1, userPreferences.getChapterId1());
+                    params.put(Constant.chapterId2, userPreferences.getChapterId2());
+                    params.put(Constant.chapterId3, userPreferences.getChapterId3());
+
+                    mBinding.chipSubject.setText(userPreferences.getSubjectName());
+                    List<String> listChapters = new ArrayList<>();
+                    listChapters.add(userPreferences.getChapterName1());
+                    listChapters.add(userPreferences.getChapterName2());
+                    listChapters.add(userPreferences.getChapterName3());
+                    prepareChapteChips(listChapters);
+                    testModelNew.setSm_sub_name(userPreferences.getSubjectName());
+                    testModelNew.setTm_sm_id(userPreferences.getSubjectId());
+                    testModelNew.setTm_cm_id(userPreferences.getChapterId1());
+                }
+            }
+        });
 
         mBinding.etDuration.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -228,6 +296,41 @@ public class CreateTestBasicDetails extends BaseFragment implements TextWatcher,
                 createTest(testModelNew);
             } catch (Exception e) {
                 e.printStackTrace();
+            }
+        });
+    }
+
+    private void fetchUpdatePreferences(HashMap<String, String> params) {
+        Log.d(TAG, "fetchUpdatePreferences PARAMS : " + params);
+        Log.d(TAG, "UEID FMK : " + TinyDB.getInstance(getActivity()).getString(Constant.selected_ue_id));
+        ProgressDialog.getInstance().show(requireActivity());
+        Call<UserPreferenceResponse> call = getApiService().fetchUserSyllabus(
+                params.get(Constant.u_user_id),
+                params.get(Constant.device_id),
+                params.get(Constant.appName),
+                params.get(Constant.CASE),
+                TinyDB.getInstance(getActivity()).getString(Constant.selected_ue_id),
+                params.get(Constant.subjectId),
+                params.get(Constant.chapterId1),
+                params.get(Constant.chapterId2),
+                params.get(Constant.chapterId3)
+        );
+        call.enqueue(new Callback<UserPreferenceResponse>() {
+            @Override
+            public void onResponse(Call<UserPreferenceResponse> call, Response<UserPreferenceResponse> response) {
+                ProgressDialog.getInstance().dismiss();
+                if (response.body() != null && response.body().getResponseCode() == 200) {
+                    mViewModel.setUserPreference(response.body());
+                } else {
+                    AppUtils.showToast(getActivity(), null, response.body().getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserPreferenceResponse> call, Throwable t) {
+                ProgressDialog.getInstance().dismiss();
+                t.printStackTrace();
+                AppUtils.showToast(getActivity(), t, "");
             }
         });
     }

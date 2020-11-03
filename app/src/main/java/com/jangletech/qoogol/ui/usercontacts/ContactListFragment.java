@@ -459,7 +459,6 @@ public class ContactListFragment extends BaseFragment implements ContactListAdap
         } else {
             getVerifyDetails("0", mViewModel.filteredList.subList(mViewModel.firstIndex, mViewModel.filteredList.size()));
         }
-
     }
 
     public void manageEmptyView() {
@@ -487,11 +486,15 @@ public class ContactListFragment extends BaseFragment implements ContactListAdap
             public void onResponse(Call<ContactResponse> call, retrofit2.Response<ContactResponse> response) {
                 try {
                     if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
-                        contactsList.addAll(response.body().getContactList());
-                        mViewModel.pageFetch = response.body().getPagefetch();
-                        mViewModel.firstIndex = mViewModel.lastIndex + 1;
-                        mViewModel.lastIndex = mViewModel.lastIndex + 100;
-                        mAdapter.updateList(contactsList);
+                        Log.d(TAG, "onResponse contactsList :" + contactsList);
+                        Log.d(TAG, "onResponse contactsList1 :" + response.body().getContactList());
+                        if (response.body().getContactList() != null) {
+                            contactsList.addAll(response.body().getContactList());
+                            mViewModel.pageFetch = response.body().getPagefetch();
+                            mViewModel.firstIndex = mViewModel.lastIndex + 1;
+                            mViewModel.lastIndex = mViewModel.lastIndex + 100;
+                            mAdapter.updateList(contactsList);
+                        }
                         manageEmptyView();
                     } else {
                         Toast.makeText(getActivity(), UtilHelper.getAPIError(String.valueOf(response.body())), Toast.LENGTH_SHORT).show();

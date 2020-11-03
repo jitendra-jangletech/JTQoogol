@@ -178,7 +178,7 @@ public class PracticeTestActivity extends BaseActivity implements
                             setupViewPager(startResumeTestResponse);
                         } catch (Exception e) {
                             e.printStackTrace();
-                            //todo finish activity
+                            finish();
                             Log.e(TAG, "onChanged: " + e.getLocalizedMessage());
                         }
                     }
@@ -302,9 +302,18 @@ public class PracticeTestActivity extends BaseActivity implements
                             && response.body().getResponseCode().equals("200")) {
                         mViewModel.setStartResumeTestResponse(response.body());
                         Log.d(TAG, "onResponse Question List Size : " + response.body().getTestQuestionNewList().size());
-                        mViewModel.setTestQuestAnsList(response.body().getTestQuestionNewList());
+                        if (response.body().getTestQuestionNewList().size() > 0) {
+                            mViewModel.setTestQuestAnsList(response.body().getTestQuestionNewList());
+                        } else {
+                            showAlert("No questions added for this test, please try again later.", "Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    finish();
+                                }
+                            });
+                        }
                     } else {
-                        showErrorDialog(PracticeTestActivity.this, response.body().getResponseCode(), "Something went wrong");
+                        showErrorDialog(PracticeTestActivity.this, response.body().getResponseCode(), response.body().getMessage());
                         Log.e(TAG, "onResponse Error : " + response.body().getResponseCode());
                     }
                 }

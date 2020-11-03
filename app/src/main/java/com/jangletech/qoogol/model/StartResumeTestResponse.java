@@ -7,6 +7,17 @@ import java.util.List;
 
 public class StartResumeTestResponse {
 
+    @SerializedName("Message")
+    private String message;
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
     @SerializedName(Constant.tt_id)
     private int ttId;
 
