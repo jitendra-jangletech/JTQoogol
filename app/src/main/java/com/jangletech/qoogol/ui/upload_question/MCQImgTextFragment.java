@@ -139,25 +139,34 @@ public class MCQImgTextFragment extends BaseFragment implements QueMediaListener
         mBinding.etQuestion.setText(learningQuestionsNew.getQuestion());
         mBinding.etQuestionDesc.setText(learningQuestionsNew.getQuestiondesc());
 
-        Uri uri1 = Uri.parse(AppUtils.getMedialUrl(getActivity(), learningQuestionsNew.getMcq1().split(":", -1)[1], learningQuestionsNew.getMcq1().split(":", -1)[2]));
-        mOptionsUri[0] = uri1;
-        setImage(uri1, mBinding.image1);
-        mBinding.text1.setText(learningQuestionsNew.getMcq1().split(":", -1)[3]);
+        if (!learningQuestionsNew.getMcq1().isEmpty()) {
+            Uri uri1 = Uri.parse(AppUtils.getMedialUrl(getActivity(), learningQuestionsNew.getMcq1().split(":", -1)[1], learningQuestionsNew.getMcq1().split(":", -1)[2]));
+            mOptionsUri[0] = uri1;
+            setImage(uri1, mBinding.image1);
+            mBinding.text1.setText(learningQuestionsNew.getMcq1().split(":", -1)[3]);
+        }
 
-        Uri uri2 = Uri.parse(AppUtils.getMedialUrl(getActivity(), learningQuestionsNew.getMcq2().split(":", -1)[1], learningQuestionsNew.getMcq2().split(":", -1)[2]));
-        mOptionsUri[0] = uri2;
-        setImage(uri2, mBinding.image2);
-        mBinding.text2.setText(learningQuestionsNew.getMcq2().split(":", -1)[3]);
+        if (!learningQuestionsNew.getMcq2().isEmpty()) {
+            Uri uri2 = Uri.parse(AppUtils.getMedialUrl(getActivity(), learningQuestionsNew.getMcq2().split(":", -1)[1], learningQuestionsNew.getMcq2().split(":", -1)[2]));
+            mOptionsUri[0] = uri2;
+            setImage(uri2, mBinding.image2);
+            mBinding.text2.setText(learningQuestionsNew.getMcq2().split(":", -1)[3]);
+        }
 
-        Uri uri3 = Uri.parse(AppUtils.getMedialUrl(getActivity(), learningQuestionsNew.getMcq3().split(":", -1)[1], learningQuestionsNew.getMcq3().split(":", -1)[2]));
-        mOptionsUri[0] = uri3;
-        setImage(uri3, mBinding.image3);
-        mBinding.text3.setText(learningQuestionsNew.getMcq3().split(":", -1)[3]);
+        if (!learningQuestionsNew.getMcq3().isEmpty()) {
+            Uri uri3 = Uri.parse(AppUtils.getMedialUrl(getActivity(), learningQuestionsNew.getMcq3().split(":", -1)[1], learningQuestionsNew.getMcq3().split(":", -1)[2]));
+            mOptionsUri[0] = uri3;
+            setImage(uri3, mBinding.image3);
+            mBinding.text3.setText(learningQuestionsNew.getMcq3().split(":", -1)[3]);
+        }
 
-        Uri uri4 = Uri.parse(AppUtils.getMedialUrl(getActivity(), learningQuestionsNew.getMcq4().split(":", -1)[1], learningQuestionsNew.getMcq4().split(":", -1)[2]));
-        mOptionsUri[0] = uri4;
-        setImage(uri4, mBinding.image4);
-        mBinding.text4.setText(learningQuestionsNew.getMcq4().split(":", -1)[3]);
+        if (!learningQuestionsNew.getMcq4().isEmpty()) {
+            Uri uri4 = Uri.parse(AppUtils.getMedialUrl(getActivity(), learningQuestionsNew.getMcq4().split(":", -1)[1], learningQuestionsNew.getMcq4().split(":", -1)[2]));
+            mOptionsUri[0] = uri4;
+            setImage(uri4, mBinding.image4);
+            mBinding.text4.setText(learningQuestionsNew.getMcq4().split(":", -1)[3]);
+
+        }
 
         mBinding.edtmarks.setText(learningQuestionsNew.getMarks());
         mBinding.edtduration.setText(learningQuestionsNew.getDuration());
@@ -526,6 +535,7 @@ public class MCQImgTextFragment extends BaseFragment implements QueMediaListener
 
     @Override
     public void onMediaReceived(int requestCode, int resultCode, Intent data, Uri photouri, int optionId) {
+        this.optionId = optionId;
         if (requestCode == GALLERY_REQUEST && resultCode == RESULT_OK && data != null) {
             try {
                 ArrayList<Uri> mArrayUri = new ArrayList<>();

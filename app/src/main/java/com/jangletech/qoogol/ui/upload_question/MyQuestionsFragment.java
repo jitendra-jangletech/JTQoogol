@@ -50,7 +50,8 @@ public class MyQuestionsFragment extends BaseFragment implements MyQuestionsAdap
     FragmentMyQuestionsBinding mBinding;
     ApiInterface apiService;
     PreferenceManager mSettings;
-    String pageCount = "0";
+    boolean isFirstTime = true;
+    String pageCount = "0",prevCount = "0";
     MyQuestionsAdapter myQuestionsAdapter;
     private Boolean isScrolling = false;
     private boolean isSearching = false;
@@ -63,15 +64,14 @@ public class MyQuestionsFragment extends BaseFragment implements MyQuestionsAdap
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_my_questions, container, false);
+        if (!isFirstTime)
+            pageCount = prevCount;
+
+        initView();
+        getData();
         return mBinding.getRoot();
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        initView();
-        getData();
-    }
 
     private void initView() {
         apiService = ApiClient.getInstance().getApi();
@@ -82,6 +82,7 @@ public class MyQuestionsFragment extends BaseFragment implements MyQuestionsAdap
             pageCount = "0";
             getData();
         });
+
         mBinding.queRecycler.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
@@ -109,15 +110,18 @@ public class MyQuestionsFragment extends BaseFragment implements MyQuestionsAdap
         });
     }
 
+
+
     private void getData() {
         Call<LearningQuestResponse> call = apiService.fetchMyQuestionsApi(mSettings.getUserId(), mSettings.getUserId(), "", getDeviceId(getActivity()), qoogol, mSettings.getString(Constant.ue_id), String.valueOf(pageCount));
-
         call.enqueue(new Callback<LearningQuestResponse>() {
             @Override
             public void onResponse(Call<LearningQuestResponse> call, retrofit2.Response<LearningQuestResponse> response) {
                 try {
                     dismissRefresh(mBinding.queSwiperefresh);
                     if (response.body() != null && response.body().getResponse().equalsIgnoreCase("200")) {
+                        isFirstTime = false;
+                        prevCount = pageCount;
                         pageCount = response.body().getRow_count();
                         setData(response.body().getQuestion_list());
                     }
@@ -189,7 +193,5 @@ public class MyQuestionsFragment extends BaseFragment implements MyQuestionsAdap
             Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_mtp_question, bundle);
         else if (learningQuestionsNew.getQue_option_type().equalsIgnoreCase(MATCH_PAIR_IMAGE))
             Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.nav_mcq_image, bundle);
-
-
     }
 }
