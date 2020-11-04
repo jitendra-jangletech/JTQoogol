@@ -173,14 +173,14 @@ public class MtpQuestFragment extends BaseFragment implements SubjectiveAnsDialo
         mBinding.subject.setText("Subject : " + learningQuestionsNew.getSubject());
         mBinding.etQuestion.setText(learningQuestionsNew.getQuestion());
         mBinding.etQuestionDesc.setText(learningQuestionsNew.getQuestiondesc());
-        mBinding.opa1.setText(learningQuestionsNew.getMcq1().split("::", -1)[0]);
-        mBinding.opb1.setText(learningQuestionsNew.getMcq1().split("::", -1)[1]);
-        mBinding.opa2.setText(learningQuestionsNew.getMcq2().split("::", -1)[0]);
-        mBinding.opa2.setText(learningQuestionsNew.getMcq2().split("::", -1)[1]);
-        mBinding.opa3.setText(learningQuestionsNew.getMcq3().split("::", -1)[0]);
-        mBinding.opb3.setText(learningQuestionsNew.getMcq3().split("::", -1)[1]);
-        mBinding.opa4.setText(learningQuestionsNew.getMcq4().split("::", -1)[0]);
-        mBinding.opb4.setText(learningQuestionsNew.getMcq4().split("::", -1)[1]);
+        mBinding.opa1.setText(learningQuestionsNew.getDecodedMcq1().split("::", -1)[0]);
+        mBinding.opb1.setText(learningQuestionsNew.getDecodedMcq1().split("::", -1)[1]);
+        mBinding.opa2.setText(learningQuestionsNew.getDecodedMcq2().split("::", -1)[0]);
+        mBinding.opa2.setText(learningQuestionsNew.getDecodedMcq2().split("::", -1)[1]);
+        mBinding.opa3.setText(learningQuestionsNew.getDecodedMcq3().split("::", -1)[0]);
+        mBinding.opb3.setText(learningQuestionsNew.getDecodedMcq3().split("::", -1)[1]);
+        mBinding.opa4.setText(learningQuestionsNew.getDecodedMcq4().split("::", -1)[0]);
+        mBinding.opb4.setText(learningQuestionsNew.getDecodedMcq4().split("::", -1)[1]);
         mBinding.edtmarks.setText(learningQuestionsNew.getMarks());
         mBinding.edtduration.setText(learningQuestionsNew.getDuration());
 

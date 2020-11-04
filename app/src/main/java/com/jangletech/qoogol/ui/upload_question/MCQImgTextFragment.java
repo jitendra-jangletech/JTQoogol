@@ -143,28 +143,28 @@ public class MCQImgTextFragment extends BaseFragment implements QueMediaListener
             Uri uri1 = Uri.parse(AppUtils.getMedialUrl(getActivity(), learningQuestionsNew.getMcq1().split(":", -1)[1], learningQuestionsNew.getMcq1().split(":", -1)[2]));
             mOptionsUri[0] = uri1;
             setImage(uri1, mBinding.image1);
-            mBinding.text1.setText(learningQuestionsNew.getMcq1().split(":", -1)[3]);
+            mBinding.text1.setText(AppUtils.decodedString(learningQuestionsNew.getMcq1().split(":", -1)[3]));
         }
 
         if (!learningQuestionsNew.getMcq2().isEmpty()) {
             Uri uri2 = Uri.parse(AppUtils.getMedialUrl(getActivity(), learningQuestionsNew.getMcq2().split(":", -1)[1], learningQuestionsNew.getMcq2().split(":", -1)[2]));
             mOptionsUri[0] = uri2;
             setImage(uri2, mBinding.image2);
-            mBinding.text2.setText(learningQuestionsNew.getMcq2().split(":", -1)[3]);
+            mBinding.text2.setText(AppUtils.decodedString(learningQuestionsNew.getMcq2().split(":", -1)[3]));
         }
 
         if (!learningQuestionsNew.getMcq3().isEmpty()) {
             Uri uri3 = Uri.parse(AppUtils.getMedialUrl(getActivity(), learningQuestionsNew.getMcq3().split(":", -1)[1], learningQuestionsNew.getMcq3().split(":", -1)[2]));
             mOptionsUri[0] = uri3;
             setImage(uri3, mBinding.image3);
-            mBinding.text3.setText(learningQuestionsNew.getMcq3().split(":", -1)[3]);
+            mBinding.text3.setText(AppUtils.decodedString(learningQuestionsNew.getMcq3().split(":", -1)[3]));
         }
 
         if (!learningQuestionsNew.getMcq4().isEmpty()) {
             Uri uri4 = Uri.parse(AppUtils.getMedialUrl(getActivity(), learningQuestionsNew.getMcq4().split(":", -1)[1], learningQuestionsNew.getMcq4().split(":", -1)[2]));
             mOptionsUri[0] = uri4;
             setImage(uri4, mBinding.image4);
-            mBinding.text4.setText(learningQuestionsNew.getMcq4().split(":", -1)[3]);
+            mBinding.text4.setText(AppUtils.decodedString(learningQuestionsNew.getMcq4().split(":", -1)[3]));
 
         }
 
@@ -513,8 +513,7 @@ public class MCQImgTextFragment extends BaseFragment implements QueMediaListener
     private void setImage(Uri path, ImageView img) {
         Glide.with(getActivity())
                 .load(path)
-                .transition(DrawableTransitionOptions.withCrossFade())
-                .diskCacheStrategy(DiskCacheStrategy.DATA)
+                .dontAnimate()
                 .error(R.drawable.ic_broken_image)
                 .into(img);
     }

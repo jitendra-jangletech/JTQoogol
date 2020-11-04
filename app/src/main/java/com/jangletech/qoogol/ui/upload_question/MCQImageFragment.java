@@ -487,8 +487,7 @@ public class MCQImageFragment extends BaseFragment implements QueMediaListener {
     private void setImage(Uri path, ImageView img) {
         Glide.with(getActivity())
                 .load(path)
-                .transition(DrawableTransitionOptions.withCrossFade())
-                .diskCacheStrategy(DiskCacheStrategy.DATA)
+                .dontAnimate()
                 .error(R.drawable.ic_broken_image)
                 .into(img);
     }

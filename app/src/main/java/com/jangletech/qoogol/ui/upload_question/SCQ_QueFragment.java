@@ -129,10 +129,10 @@ public class SCQ_QueFragment extends BaseFragment implements QueMediaListener {
         mBinding.subject.setText("Subject : " + learningQuestionsNew.getSubject());
         mBinding.questionEdittext.setText(learningQuestionsNew.getQuestion());
         mBinding.questiondescEdittext.setText(learningQuestionsNew.getQuestiondesc());
-        mBinding.scq1Edittext.setText(learningQuestionsNew.getMcq1());
-        mBinding.scq2Edittext.setText(learningQuestionsNew.getMcq2());
-        mBinding.scq3Edittext.setText(learningQuestionsNew.getMcq3());
-        mBinding.scq4Edittext.setText(learningQuestionsNew.getMcq4());
+        mBinding.scq1Edittext.setText(learningQuestionsNew.getDecodedMcq1());
+        mBinding.scq2Edittext.setText(learningQuestionsNew.getDecodedMcq2());
+        mBinding.scq3Edittext.setText(learningQuestionsNew.getDecodedMcq3());
+        mBinding.scq4Edittext.setText(learningQuestionsNew.getDecodedMcq4());
         mBinding.edtmarks.setText(learningQuestionsNew.getMarks());
         mBinding.edtduration.setText(learningQuestionsNew.getDuration());
 

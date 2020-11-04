@@ -27,6 +27,7 @@ import static com.jangletech.qoogol.util.Constant.SCQ_IMAGE;
 import static com.jangletech.qoogol.util.Constant.SCQ_IMAGE_WITH_TEXT;
 import static com.jangletech.qoogol.util.Constant.SHORT_ANSWER;
 import static com.jangletech.qoogol.util.Constant.TRUE_FALSE;
+import static com.jangletech.qoogol.util.Constant.mcq;
 
 
 /**
@@ -401,32 +402,49 @@ public class LearningQuestionsNew implements Cloneable, Serializable {
         this.marks = marks;
     }
 
-    public String getMcq1() {
-        return mcq1 != null ? AppUtils.decodedString(mcq1) : "";
+    public String getDecodedMcq1() {
+        return mcq1 != null && !mcq1.isEmpty()? AppUtils.decodedString(mcq1) : "";
     }
+
+    public String getMcq1() {
+        return mcq1 != null ? mcq1 : "";
+    }
+
 
     public void setMcq1(String mcq1) {
         this.mcq1 = mcq1;
     }
 
+    public String getDecodedMcq2() {
+        return mcq2 != null && !mcq2.isEmpty() ? AppUtils.decodedString(mcq2) : "";
+    }
+
     public String getMcq2() {
-        return mcq2 != null ? AppUtils.decodedString(mcq2) : "";
+        return mcq2 != null ? mcq2 : "";
     }
 
     public void setMcq2(String mcq2) {
         this.mcq2 = mcq2;
     }
 
+    public String getDecodedMcq3() {
+        return mcq3 != null && !mcq3.isEmpty()? AppUtils.decodedString(mcq3) : "";
+    }
+
     public String getMcq3() {
-        return mcq3 != null ? AppUtils.decodedString(mcq3) : "";
+        return mcq3 != null && !mcq3.isEmpty()? mcq3 : "";
     }
 
     public void setMcq3(String mcq3) {
         this.mcq3 = mcq3;
     }
 
+    public String getDecodedMcq4() {
+        return mcq4 != null && !mcq4.isEmpty() ? AppUtils.decodedString(mcq4) : "";
+    }
+
     public String getMcq4() {
-        return mcq4 != null ? AppUtils.decodedString(mcq4) : "";
+        return mcq4 != null ? mcq4 : "";
     }
 
     public void setMcq4(String mcq4) {
